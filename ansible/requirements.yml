@@ -1,0 +1,3 @@
+- src: git+https://github.com/magenta-aps/ansible-role-vim.git
+  version: master
+  name: vim

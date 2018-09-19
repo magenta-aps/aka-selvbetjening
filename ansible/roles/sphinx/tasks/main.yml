@@ -1,0 +1,23 @@
+---
+
+- name: Install Python 3
+  apt:
+    name: python3
+    update_cache: true
+
+- name: Install Python Virtual Enviroment
+  apt:
+    name: python3-venv
+
+- name: Install Pip
+  apt:
+    name: python3-pip
+
+
+- name: Install Sphinx
+  pip: 
+    name: Sphinx
+    executable: pip3
+
+
+...
