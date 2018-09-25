@@ -8,7 +8,7 @@ For the Windows equivalent, see [here](https://github.com/magenta-aps/vagrant-an
 
 ### Development:
 - Vagrant is needed to spin up a virtualized enviroment.  
-- Virtualbox see [Magenta Vagrant for more info](https://github.com/magenta-aps/vagrant/blob/master/README.md).
+- Virtualbox see [Magenta Vagrant](https://github.com/magenta-aps/vagrant/blob/master/README.md) for more info.
 
 ## Setup:
 
@@ -23,6 +23,8 @@ For the Windows equivalent, see [here](https://github.com/magenta-aps/vagrant-an
 `vagrant ssh` can then be used to ssh into the machine.
 
 Everything in this folder will be shared with the VM and accessible in the  `/vagrant` folder inside the VM.
+
+running `make runserver` will start up the django server, and it should be assecible from your hos machine on port localhost:8000
 
 ### Production:
 
