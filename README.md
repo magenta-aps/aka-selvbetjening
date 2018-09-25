@@ -8,8 +8,7 @@ For the Windows equivalent, see [here](https://github.com/magenta-aps/vagrant-an
 
 ### Development:
 - Vagrant is needed to spin up a virtualized enviroment.  
-- A Hypervisor(Virtualbox, lxc, libvirt, etc) see [Magenta Vagrant for more info](https://github.com/magenta-aps/vagrant/blob/master/README.md).
-    - If virtualbox is not chosen, some vagrant extensions will be needed.
+- Virtualbox see [Magenta Vagrant for more info](https://github.com/magenta-aps/vagrant/blob/master/README.md).
 
 ## Setup:
 
