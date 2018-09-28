@@ -1,0 +1,35 @@
+{%  load static %}
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+        <title>Sulinal - selvbetjening</title>
+        <meta name="description" content="An audio analyser webapp useful for tuning instruments">
+        <link rel="stylesheet" type="text/css" href="{% static 'website/styles.css' %}" />
+        <link rel="shortcut icon" href="../../static/img/favicon.ico">
+
+    </head>
+    <body>
+
+        <header>
+            <h1>SULINAL Selvbetjening</h1>
+            <article id="langlog">
+                <span style="font-size: .75em;">Sprog:</span>
+                <a href="#" id="lang-gl" title="Kalaalissut">Kalaalissut</a>
+                <a href="#" id="lang-da" class="active" title="Dansk">Dansk</a>
+                <button id="logout">Log ud</button>
+            </article>
+        </header>
+
+        <main>
+
+            <nav>
+                <a href="/indberetning">Indberet fordringer</a>
+            </nav>
+
+        </main>
+
+    </body>
+</html>
