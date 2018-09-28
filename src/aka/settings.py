@@ -13,20 +13,26 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SITE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(SITE_DIR)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-wha^@6y#_a35+7)ifn+01azi58uxp8eyithlj67_jwxuo)1x1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+LOGIN_URL = "http://ip.demo.sullissivik.local/login.aspx"
+SITE_URL = "https://aka.sullissivik.gl"
+
+AUTHENTICATION_BACKENDS = ['aka.authentication.CookieAuthBackend']
+
+# See local_settings_example.py
+SULLISSIVIK_FEDERATION_SERVICE = ''
 
 # Application definition
 
@@ -37,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'akasite',
 ]
 
 MIDDLEWARE = [
@@ -110,4 +117,4 @@ STATIC_URL = '/static/'
 
 LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
 if os.path.exists(LOCAL_SETTINGS_FILE):
-	from .local_settings import * # noqa
+    from .local_settings import *  # noqa

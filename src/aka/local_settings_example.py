@@ -26,3 +26,5 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+SULLISSIVIK_FEDERATION_SERVICE = 'http://example.com?wsdl'
