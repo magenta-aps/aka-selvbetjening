@@ -1,4 +1,4 @@
-{%  load static %}
+{% load static %}
 
 <!doctype html>
 <html lang="en">
@@ -7,8 +7,8 @@
         <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
         <title>Sulinal - selvbetjening</title>
         <meta name="description" content="An audio analyser webapp useful for tuning instruments">
-        <link rel="stylesheet" type="text/css" href="{% static 'website/styles.css' %}" />
-        <link rel="shortcut icon" href="../../static/img/favicon.ico">
+        <link rel="stylesheet" type="text/css" href="{% static 'akasite/css/styles.css' %}" />
+        <link rel="shortcut icon" href="{% static 'akasite/img/favicon.ico' %}">
 
     </head>
     <body>
@@ -26,10 +26,11 @@
         <main>
 
             <nav>
-                <a href="/indberetning">Indberet fordringer</a>
+                <a href="{% url 'akasite:indberetning' %}">Indberet fordringer</a>
             </nav>
 
         </main>
 
+        <script type="text/javascript" src="{% static 'akasite/js/demo.js' %}"></script>
     </body>
 </html>
