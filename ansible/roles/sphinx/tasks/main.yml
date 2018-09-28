@@ -19,5 +19,8 @@
     name: Sphinx
     executable: pip3
 
-
+- name: Install Read The Docs Theme
+  pip: 
+    name: sphinx_rtd_theme
+    executable: pip3
 ...

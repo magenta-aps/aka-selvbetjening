@@ -8,22 +8,28 @@ For the Windows equivalent, see [here](https://github.com/magenta-aps/vagrant-an
 
 ### Development:
 - Vagrant is needed to spin up a virtualized enviroment.  
-- A Hypervisor(Virtualbox, lxc, libvirt, etc) see [Magenta Vagrant for more info](https://github.com/magenta-aps/vagrant/blob/master/README.md).
-    - If virtualbox is not chosen, some vagrant extensions will be needed.
+- Virtualbox see [Magenta Vagrant](https://github.com/magenta-aps/vagrant/blob/master/README.md) for more info.
 
 ## Setup:
 
+### Important files:
+`doc/requirements.txt`: the python requirement file, generated with pip freeze. All packages will be installed by provisioning.
 
 
-### Production:
 
 
 ## Usage:
 ### Development:
-`vagrant up` will spin up a virtual machine and provision it.
+From the vagrant folder:  
+`vagrant up` will spin up a virtual machine and provision it.  
 `vagrant ssh` can then be used to ssh into the machine.
 
-Everything in this folder will be shared with the VM and accessible in the  `/vagrant` folder inside the VM.
+Everything in this(the root folder of this project) folder will be shared with the VM and accessible in the  `/vagrant` folder inside the VM.
+
+From `/vagrant` in the virtual machine:  
+running `make runserver` will start up the django server, and it should be assecible from your host machine on port localhost:8000  
+`make documentation` will run sphinx and generate documentation. accessible as static html files in `vagrant/doc/_build/html`
+
 
 ### Production:
 
