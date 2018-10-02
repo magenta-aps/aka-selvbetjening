@@ -109,6 +109,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+DEFAULT_CHARSET = 'utf-8'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
@@ -117,4 +119,4 @@ STATIC_URL = '/static/'
 
 LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
 if os.path.exists(LOCAL_SETTINGS_FILE):
-    from .local_settings import *  # noqa
+    from aka.local_settings import *  # noqa
