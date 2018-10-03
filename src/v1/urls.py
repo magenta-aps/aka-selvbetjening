@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from v1.views import InkassoSagView
+from v1.inkassosag_views import InkassoSagView
+from v1.debitor_views import DebitorView
 
 urlpatterns = [
     url(r'^inkassosag/', InkassoSagView.as_view()),
+    url(r'^debitor/', DebitorView.as_view()),
 ]
