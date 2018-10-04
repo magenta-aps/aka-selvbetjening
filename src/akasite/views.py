@@ -16,7 +16,8 @@ class Indberetning(TemplateView):
 
 
 class ContentTypeError(Exception):
-    """Exception raised for errors in the charset.
+    """Exception raised for errors in the content-type
+       of the request.
 
     Attributes:
         message -- explanation of the error
