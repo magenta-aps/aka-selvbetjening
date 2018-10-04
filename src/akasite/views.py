@@ -98,12 +98,10 @@ class JSONRestView(View):
             bdy = request.body.decode(contenttype['charset'])
             self.payload = json.loads(bdy)
             retval = HttpResponse()
-        except json.decoder.JSONDecodeError as err:
+        except (ContentTypeError, json.decoder.JSONDecodeError) as e:
             retval = HttpResponseBadRequest(
-                     self.errorResponse('JSONDecodeError. {0}'.format(err)))
-        except ContentTypeError as err:
-            retval = HttpResponseBadRequest(
-                     self.errorResponse('ContentTypeError. {0}'.format(err)))
+                     self.errorResponse(type(e).__name__ + ': {0}'.format(e)),
+                     content_type=JSONRestView.CONTENT_TYPE)
 
         return retval
 
