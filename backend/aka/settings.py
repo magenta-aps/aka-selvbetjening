@@ -37,13 +37,13 @@ SULLISSIVIK_FEDERATION_SERVICE = ''
 # Application definition
 
 INSTALLED_APPS = [
+    'akasite.apps.AkasiteConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'akasite',
 ]
 
 MIDDLEWARE = [
@@ -116,6 +116,7 @@ DEFAULT_CHARSET = 'utf-8'
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '../static/'
 
 LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
 if os.path.exists(LOCAL_SETTINGS_FILE):

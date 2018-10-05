@@ -1,10 +1,9 @@
+from akasite.models import SessionOnlyUser
 from django.contrib.auth import authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
 from django.views.generic import TemplateView
-
-from akasite.models import SessionOnlyUser
 
 
 class AuthenticateMixin(LoginRequiredMixin):
@@ -19,7 +18,7 @@ class AuthenticateMixin(LoginRequiredMixin):
                 request.session['user'] = request.user.dict()
             else:
                 return self.handle_no_permission()
-        return super(AuthenticateMixin, self)\
+        return super(AuthenticateMixin, self) \
             .dispatch(request, *args, **kwargs)
 
     def handle_no_permission(self):
@@ -38,3 +37,11 @@ class TestView(AuthenticateMixin, TemplateView):
         context = {'cpr': self.request.user.cpr}
         context.update(**kwargs)
         return context
+
+
+class IndexView(TemplateView):
+    template_name = 'akasite/index.html'
+
+
+class Indberetning(TemplateView):
+    template_name = 'akasite/indberet_fordring.html'

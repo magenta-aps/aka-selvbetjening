@@ -1,0 +1,24 @@
+---
+
+- name: Install Node.js
+  apt:
+    name: nodejs
+    update_cache: true
+
+- name: Install npm
+  apt: 
+    name: npm
+    update_cache: true
+
+- name: Install Vue.js
+  npm: 
+    name: vue
+    path: "{{ npm_path }}"
+
+- name: Install Vue Cli
+  npm:
+    name: "@vue/cli" 
+    global: yes
+
+
+...
