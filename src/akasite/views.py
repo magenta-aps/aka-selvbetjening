@@ -30,10 +30,10 @@ class ContentTypeError(Exception):
 class JSONRestView(View):
     CONTENT_TYPE = 'application/json'
 
-    def getContenttype(self, requestMETA):
+    def getContenttype(self, contenttypevalue):
         '''
         ------------------------------------------------------------
-        Get content_type.
+        Get content_type, charset etc from Content-Type header string.
         Input: The value of the 'CONTENT_TYPE' key in request.META.
                Expects something like this: 'type/subtype [; charset=xyz]'
         Output: Dict with 2 keys guaranteed present: 'type' and 'charset'.
@@ -44,10 +44,7 @@ class JSONRestView(View):
         '''
         result = {'type': '', 'charset': ''}
 
-        if 'CONTENT_TYPE' not in requestMETA:
-            raise ContentTypeError('No content_type in request.')
-
-        first = requestMETA['CONTENT_TYPE'].split(';')
+        first = contenttypevalue.split(';')
 
         for i in range(1, len(first)):
             if '=' in first[i]:
@@ -76,7 +73,7 @@ class JSONRestView(View):
         Input: Request.
         Output: HTTP Response of some variety.
 
-        Content-type must equal CONTENT_TYPE (see below for what it is).
+        Content-type must equal CONTENT_TYPE.
         charset must have a value.
         ------------------------------------------------------------
         '''
@@ -85,7 +82,10 @@ class JSONRestView(View):
 
         try:
             # Check size of request?
-            contenttype = self.getContenttype(request.META)
+            if 'CONTENT_TYPE' in request.META:
+                contenttype = self.getContenttype(request.META['CONTENT_TYPE'])
+            else:
+                raise ContentTypeError('No content_type in request.')
 
             if contenttype['type'].lower() != \
                JSONRestView.CONTENT_TYPE.lower():
