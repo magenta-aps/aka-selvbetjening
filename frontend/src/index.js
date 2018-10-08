@@ -25,6 +25,7 @@ const router = new VueRouter({
 
 const i18n = new VueI18n({
   locale: 'kl', // set locale
+  fallbackLocale: 'da',
   messages: messages, // set locale messages
 })
 
