@@ -1,10 +1,15 @@
 <template>
 
 
-    <nav class="toc">
-        <h1>Table of contents</h1>        
-        <router-link class="toc-link" to="/form1">Form example 1</router-link>
-        <router-link class="toc-link" to="/form2">Form example 2</router-link>
+    <nav class="toc">  
+        <router-link class="toc-link tile" to="/form1">
+            <img class="tile-icon" src="/static/img/SVG/sullisivik_skatter-afgifter-og-gaeld.svg" alt="">
+            <span>Form example 1</span>
+        </router-link>
+        <router-link class="toc-link tile" to="/form2">
+            <img class="tile-icon" src="/static/img/SVG/sullisivik_skatter-afgifter-og-gaeld.svg" alt="">
+            <span>Form example 2</span>
+        </router-link>
     </nav>
 
 </template>
@@ -17,6 +22,33 @@
 
     .toc-link {
         display: block;
+    }
+
+    /* Tiles */
+
+    .tile,
+    .tile:link,
+    .tile:visited {
+        text-decoration: none;
+        background-color: #31495b;
+        color: #fff;
+        padding: 2.5rem;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: center;
+        margin: 0 0 1rem;
+    }
+
+    .tile:hover,
+    .tile:active {
+        background-color: #83929D;
+    }
+
+    .tile-icon {
+        width: 2rem;
+        height: auto;
+        margin: 0 0 .5rem;
     }
 
 </style>
