@@ -1,13 +1,21 @@
 {
-  "name": "frontend",
+  "name": "aka-frontend",
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.18.0",
     "vue": "^2.5.17"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "css-loader": "^1.0.0",
+    "vue-loader": "^15.4.2",
+    "vue-template-compiler": "^2.5.17",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/webpack/bin/webpack.js  --config ./config/webpack.config.js"
   },
   "author": "Magenta ApS",
   "license": "MPL-2.0",
