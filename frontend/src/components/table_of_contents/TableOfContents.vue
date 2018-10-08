@@ -1,6 +1,5 @@
 <template>
 
-
     <nav class="toc">  
         <router-link class="toc-link tile" to="/form1">
             <img class="tile-icon" src="/static/img/SVG/sullisivik_skatter-afgifter-og-gaeld.svg" alt="">

@@ -7,6 +7,7 @@
                     <img class="globalheader-logo" src="/static/img/sullissivik_logo_gl.svg" alt="Sullissivik">
                 </router-link>
             </h1>
+            <language-toggle></language-toggle>
         </header>
         <main>
             <router-view></router-view>
@@ -14,6 +15,18 @@
     </div>
 
 </template>
+
+<script>
+
+    import LangToggle from './components/language-toggle/LangToggle.vue'
+
+    export default {
+        components: {
+            'language-toggle': LangToggle
+        }
+    }
+
+</script>
 
 <style>
 
