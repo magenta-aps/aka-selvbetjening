@@ -4,10 +4,16 @@
 
         <h1>Halluuuuu</h1>
 
-        <form>
+        <form @submit.prevent="sendFormRequest()">
             <fieldset>
-                <label for="thisinput"></label>
-                <input id="thisinput" type="text">
+                <label for="inputA"></label>
+                <input id="inputA" type="text" name="a" v-model="value_a">
+            </fieldset>
+            <fieldset>
+                <label for="inputB"></label>
+                <input id="inputB" type="text" name="b" v-model="value_b">
+            </fieldset>
+            <fieldset>
                 <input type="submit" value="Send">
             </fieldset>
         </form>
@@ -24,14 +30,16 @@
     export default {
         data: function() { 
             return {
-                
+                value_a: null,
+                value_b: null
             }
         },
         methods: {
-            
-        },
-        created: function() {
-            
+            sendFormRequest: function() {
+                console.log('sending')
+                console.log(this.value_a)
+                console.log(this.value_b)
+            }
         }
     }
 
