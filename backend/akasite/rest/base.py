@@ -7,14 +7,6 @@ from django.utils.decorators import method_decorator
 import json
 
 
-class IndexView(TemplateView):
-    template_name = 'akasite/index.html'
-
-
-class Indberetning(TemplateView):
-    template_name = 'akasite/indberet_fordring.html'
-
-
 class ContentTypeError(Exception):
     """Exception raised for errors in the content-type
        of the request.
@@ -29,6 +21,12 @@ class ContentTypeError(Exception):
 
 class JSONRestView(View):
     CONTENT_TYPE = 'application/json'
+    CONTENT_FILETYPE = 'multipart/form-data'
+
+    def handle_uploaded_file(f):
+        with open('some/file/name.txt', 'wb+') as destination:
+            for chunk in f.chunks():
+                destination.write(chunk)
 
     def getContenttype(self, contenttypevalue):
         '''
@@ -105,38 +103,45 @@ class JSONRestView(View):
 
         return retval
 
+    def postfiles(self, request, *args, **kwargs):
+        '''
+        ------------------------------------------------------------
+        Base class for POST handler.
+        Input: Request.
+        Output: HTTP Response of some variety.
 
-@method_decorator(ensure_csrf_cookie, name='dispatch')
-class InkassoSag(JSONRestView):
-    def get(self, request, *args, **kwargs):
-        dummyresponse = {"serversays": "Hello. You said InkassoSag/GET"}
-        return HttpResponse(json.dumps(dummyresponse),
-                            content_type=JSONRestView.CONTENT_TYPE)
+        Content-type must equal CONTENT_TYPE.
+        charset must have a value.
+        ------------------------------------------------------------
+        '''
 
-    def post(self, request, *args, **kwargs):
-        baseresponse = super().post(request, args, kwargs)
+        self.payload = None
+        self.payload = {}
 
-        if baseresponse.status_code == 200:
-            self.payload["serversays"] = "Hello. You said InkassoSag/POST"
-            return HttpResponse(json.dumps(self.payload),
-                                content_type=JSONRestView.CONTENT_TYPE)
-        else:
-            return baseresponse
+        try:
+            # Check size of request?
+            if 'CONTENT_TYPE' in request.META:
+                contenttype = self.getContenttype(request.META['CONTENT_TYPE'])
+            else:
+                raise ContentTypeError('No content_type in request.')
 
+            self.payload['AKA-Bruger'] = request.META['HTTP_X_AKA_BRUGER']
 
-@method_decorator(ensure_csrf_cookie, name='dispatch')
-class Debitor(JSONRestView):
-    def get(self, request, *args, **kwargs):
-        dummyresponse = {"serversays": "Hello. You said Debitor/GET"}
-        return HttpResponse(json.dumps(dummyresponse),
-                            content_type=JSONRestView.CONTENT_TYPE)
+            if contenttype['type'].lower() != \
+               JSONRestView.CONTENT_TYPE.lower():
+                raise ContentTypeError('Contenttype must be ' +
+                                       JSONRestView.CONTENT_TYPE +
+                                       ', not ' + contenttype['type'])
+            elif contenttype['charset'] in ['', None]:
+                raise ContentTypeError('Charset is missing.')
 
-    def post(self, request, *args, **kwargs):
-        baseresponse = super().post(request, args, kwargs)
+            bdy = request.body.decode(contenttype['charset'])
+            self.payload['bodysize'] = str(len(bdy))
+            retval = HttpResponse()
+        except (ContentTypeError, json.decoder.JSONDecodeError) as e:
+            retval = HttpResponseBadRequest(
+                     self.errorResponse(type(e).__name__ + ': {0}'.format(e)),
+                     content_type=JSONRestView.CONTENT_TYPE)
 
-        if baseresponse.status_code == 200:
-            self.payload["serversays"] = "Hello. You said Debitor/POST"
-            return HttpResponse(json.dumps(self.payload),
-                                content_type=JSONRestView.CONTENT_TYPE)
-        else:
-            return baseresponse
+        return retval
+
