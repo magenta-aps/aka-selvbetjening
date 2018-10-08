@@ -6,7 +6,8 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, '../assets/js'),
-    filename: 'aka.js'
+    filename: 'aka.js',
+    publicPath: '../assets'
   },
   module: {
     rules: [
