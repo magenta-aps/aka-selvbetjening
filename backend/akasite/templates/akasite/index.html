@@ -5,16 +5,16 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-        <title>Sulinal - selvbetjening</title>
-        <meta name="description" content="An audio analyser webapp useful for tuning instruments">
-        <link rel="stylesheet" type="text/css" href="{% static 'akasite/css/styles.css' %}" />
-        <link rel="shortcut icon" href="{% static 'akasite/img/favicon.ico' %}">
+        <title>Sullissivik</title>
+        <meta name="description" content="">
+        <link rel="stylesheet" type="text/css" href="{% static '/css/base-styles.css' %}" />
+        <link rel="shortcut icon" href="{% static '/img/favicon.ico' %}">
 
     </head>
     <body>
 
         <header>
-            <h1>SULINAL Selvbetjening</h1>
+            <h1>Sullissivik selvbetjening</h1>
             <article id="langlog">
                 <span style="font-size: .75em;">Sprog:</span>
                 <a href="#" id="lang-gl" title="Kalaalissut">Kalaalissut</a>
@@ -29,8 +29,10 @@
                 <a href="{% url 'akasite:indberetning' %}">Indberet fordringer</a>
             </nav>
 
+            <div id="aka-app"></div>
+
         </main>
 
-        <script type="text/javascript" src="{% static 'akasite/js/demo.js' %}"></script>
+        <script type="text/javascript" src="{% static '/js/aka.js' %}"></script>
     </body>
 </html>
