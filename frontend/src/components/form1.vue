@@ -36,9 +36,12 @@
         },
         methods: {
             sendFormRequest: function() {
-                console.log('sending')
-                console.log(this.value_a)
-                console.log(this.value_b)
+                axios.post({
+                    data: [
+                        this.value_a,
+                        this.value_b
+                    ]
+                })
             }
         }
     }

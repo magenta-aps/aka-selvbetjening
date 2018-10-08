@@ -1,0 +1,10 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font: 1em/1.4 Helvetica ,Arial ,sans-serif;
+    background-color: #eaecee; 
+    color: #31495B;
+    text-rendering: optimizeLegibility;
+}
