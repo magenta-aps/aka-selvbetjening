@@ -1,5 +1,5 @@
 # Simple makefile to easily access some functionality
-DJANGO 	= python3 backend/manage.py
+DJANGO 	= cd backend && python3 manage.py
 
 
 .PHONY : runserver documentation makemigrations
