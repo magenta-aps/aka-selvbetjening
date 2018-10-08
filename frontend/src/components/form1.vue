@@ -18,6 +18,9 @@
             </fieldset>
         </form>
 
+        <h2>Server response:</h2>
+        <div>{{ response }}</div>
+
     </article>
 
 </template>
@@ -31,17 +34,21 @@
         data: function() { 
             return {
                 value_a: null,
-                value_b: null
+                value_b: null,
+                response: null
             }
         },
         methods: {
             sendFormRequest: function() {
-                axios.post({
-                    data: [
-                        this.value_a,
-                        this.value_b
-                    ]
-                })
+                axios.get('/index')
+                    .then(res => {
+                        console.log('Server response!')
+                        this.response = res
+                    })
+                    .catch(err => {
+                        console.log('there was an error')
+                        this.response = err
+                    })
             }
         }
     }

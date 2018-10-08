@@ -26,6 +26,12 @@ npm run build
 ```
 
 Your new build is a javascript file, `/fontend/assets/js/aka.js`
-You can see an example implementation by finding the HTML file `/frontend/dist/assets/index.html` and opening it in a browser.
-
 Include `aka.js` in your hosted HTML.
+
+
+## Seeing it work in a browser
+
+From the `/vagrant` folder within the virtual machine, run `make runserver`
+Then browse to `localhost:8000/index` to see your code in action.
+
+
