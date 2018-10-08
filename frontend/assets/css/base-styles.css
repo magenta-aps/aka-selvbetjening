@@ -53,8 +53,7 @@ h2 {
 }
 
 form {
-    background-color: #fff;
-    padding: 1rem;
+    margin: 1rem 0;
 }
 
 fieldset {
@@ -77,6 +76,7 @@ textarea {
     border-radius: .175rem;
     padding: .5rem .75rem;
     font-size: 1rem;
+    background-color: #fff;
 }
 
 input[type="text"]:focus,
@@ -112,4 +112,9 @@ input[type="submit"] {
 input[type="submit"]:hover,
 input[type="submit"]:active {
     background-color: #fbb84f;
+}
+
+article {
+    background-color: #fff;
+    padding: 1rem 2rem;
 }
