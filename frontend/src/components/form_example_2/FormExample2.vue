@@ -2,15 +2,13 @@
 
     <article class="test">
 
-        <h1>Halluuuuu</h1>
+        <h1>Form example 2</h1>
 
         <form @submit.prevent="sendFormRequest()">
             <fieldset>
-                <label for="inputA"></label>
+                <label for="inputA">Inputfelt A</label>
                 <input id="inputA" type="text" name="a" v-model="value_a">
-            </fieldset>
-            <fieldset>
-                <label for="inputB"></label>
+                <label for="inputB">Inputfelt B</label>
                 <input id="inputB" type="text" name="b" v-model="value_b">
             </fieldset>
             <fieldset>
@@ -55,11 +53,6 @@
 
 </script>
 
-
 <style>
-
-    .test h1 {
-        
-    }
 
 </style>

@@ -26,12 +26,9 @@ npm run build
 ```
 
 Your new build is a javascript file, `/fontend/assets/js/aka.js`
-Include `aka.js` in your hosted HTML.
 
 
 ## Seeing it work in a browser
 
 From the `/vagrant` folder within the virtual machine, run `make runserver`
-Then browse to `localhost:8000/index` to see your code in action.
-
-
+Then browse to `localhost:8000/index` or `localhost:8000/static/index.html` to see your code in action.
