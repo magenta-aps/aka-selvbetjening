@@ -1,15 +1,15 @@
-from django.views.generic import TemplateView
 from django.views import View
 from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.utils.decorators import method_decorator
+from django.conf import settings
 import json
 import random
+
 
 class ContentTypeError(Exception):
     """Exception raised for errors in the content-type
        of the request.
+
 
     Attributes:
         message -- explanation of the error
@@ -20,8 +20,9 @@ class ContentTypeError(Exception):
 
 
 class JSONRestView(View):
-    RESTCONTENTTYPE = 'application/json'
-    UPLOADFILECONTENTTYPE = 'multipart/form-data'
+    # Set a few content types:
+    CT1 = 'application/json'
+    CT2 = 'multipart/form-data'
 
     def tmpfilename(self):
         return ''.join([
@@ -29,25 +30,30 @@ class JSONRestView(View):
             for i in range(50)
             ])
 
-
     def handle_uploaded_file(self, f, destinationfilename):
         with open(destinationfilename, 'wb+') as destination:
             for chunk in f.chunks():
                 destination.write(chunk)
 
-    def validContenttype(self, metadict, expectedcontenttype, charsetrequired=True):
+    def validContenttype(self, metadict, expectedcontenttype,
+                         charsetrequired=True):
         '''
         ------------------------------------------------------------
         Validate content_type and charset from Content-Type header string.
-        Input: The request.META dict.
-        Output: If all is OK, returns dict with 2 keys guaranteed 
+        Input: The request.META dict, expected contenttype, and whether
+               charset is required or not.
+               E.g validContenttype(request.META,
+                                    JSONRestView.CT1,
+                                    False)
+
+        Output: If all is OK, returns dict with 2 keys guaranteed
                 present: 'type' and 'charset'.
                 They may have no values, though.
                 The key 'type' contains the type/subtype part of
                 content_type (i.e. the main element).
 
                 If errors, i.e. missing or incorrect contenttype,
-                raise ContentType exceptiom.
+                raises ContentType exceptiom.
         ------------------------------------------------------------
         '''
         if 'CONTENT_TYPE' in metadict:
@@ -66,13 +72,22 @@ class JSONRestView(View):
                 result[param[0].strip()] = param[1].strip()
 
         if result['type'].lower() != expectedcontenttype.lower():
-            raise ContentTypeError('ContentType is {0}, expected {1}.'.format(result['type'], expectedcontenttype))
-        if charsetrequired and result['charset'] in ['', None]:
+            raise ContentTypeError('ContentType is {0}, expected {1}.'.
+                                   format(result['type'],
+                                          expectedcontenttype))
+        elif charsetrequired and result['charset'] in ['', None]:
             raise ContentTypeError('Charset is missing.')
 
         return result
 
-    def errorResponse(self, msg):
+    def errorResponse(self, exception):
+        msg = self.errorText('{0} : {1}'.
+                             format(type(exception).__name__, exception))
+
+        return HttpResponseBadRequest(msg,
+                                      content_type=JSONRestView.CT1)
+
+    def errorText(self, msg):
         '''
         ------------------------------------------------------------
         Compose error message.
@@ -90,7 +105,7 @@ class JSONRestView(View):
         Input: Request.
         Output: HTTP Response of some variety.
 
-        Content-type must equal CONTENT_TYPE.
+        Content-type must equal CT1.
         charset must have a value.
         ------------------------------------------------------------
         '''
@@ -99,15 +114,14 @@ class JSONRestView(View):
 
         try:
             # Check size of request?
-            contenttype = self.validContenttype(request.META, JSONRestView.RESTCONTENTTYPE)
+            contenttype = self.validContenttype(request.META,
+                                                JSONRestView.CT1)
 
             bdy = request.body.decode(contenttype['charset'])
             self.payload = json.loads(bdy)
             retval = HttpResponse()
         except (ContentTypeError, json.decoder.JSONDecodeError) as e:
-            retval = HttpResponseBadRequest(
-                     self.errorResponse('{0} : {1}'.format(type(e).__name__, e)),
-                     content_type=JSONRestView.RESTCONTENTTYPE)
+            retval = self.errorResponse(e)
 
         return retval
 
@@ -120,29 +134,33 @@ class JSONRestView(View):
         Input: Request.
         Output: HTTP Response of some variety.
 
-        Content-type must equal UPLOADFILECONTENTTYPE.
+        Content-type must equal CT2.
         ------------------------------------------------------------
         '''
 
         self.payload = None
         self.payload = {}
 
-        destination = './' + self.tmpfilename()
-
         try:
-            i = 0
-            for k,v in request.FILES.items():
-                destfn = destination + str(i) + '.csv'
-                self.handle_uploaded_file(v, destfn)
-                self.payload['file'+str(i)] = v.name + ' moved to ' + destfn
+            self.validContenttype(request.META,
+                                  JSONRestView.CT2,
+                                  False)
 
-            contenttype = self.validContenttype(request.META, JSONRestView.UPLOADFILECONTENTTYPE, False)
+            i = 0
+            for k, v in request.FILES.items():
+                destination = settings.MEDIA_URL + self.tmpfilename() + '.'
+                destination += v.name.replace(' ', '_').replace('/', '_s_')
+                self.handle_uploaded_file(v, destination)
+                self.payload['file'+str(i)] = \
+                    {'originalname': v.name,
+                     'tmpfilename': destination,
+                     'filetype': type(v).__name__,
+                     'contenttype': v.content_type,
+                     'charset': v.charset}
+
             self.payload['AKA-Bruger'] = request.META['HTTP_X_AKA_BRUGER']
             retval = HttpResponse()
         except (ContentTypeError, json.decoder.JSONDecodeError) as e:
-            retval = HttpResponseBadRequest(
-                     self.errorResponse('{0} : {1}'.format(e, type(e).__name__)),
-                     content_type=JSONRestView.RESTCONTENTTYPE)
+            retval = self.errorResponse(e)
 
         return retval
-
