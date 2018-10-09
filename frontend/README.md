@@ -25,6 +25,13 @@ To build the frontend javascript bundle, run
 npm run build
 ```
 
+Alternatively a make-rule has been made in the root Makefile,
+so from the /vagrant folder running:
+```
+make frontend
+```
+(And running make runserver, will also ensure the frontend is built)
+
 Your new build is a javascript file, `/fontend/assets/js/aka.js`
 
 
