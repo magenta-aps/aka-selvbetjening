@@ -1,5 +1,23 @@
+===========
+REST API
+===========
+
+This directory contains documentation necessary to use the REST-interface exposed
+by the backend, without going too much in deatil with the actual implementations.
+
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+   :glob:
+
+   api/*
+   
+   
 
 Anvendelse af Django til REST-api.
+==================================
 
 Vi kræver CSRF-token for alle(?) endpoints.
 
