@@ -9,14 +9,15 @@ class BasicTestCase(TestCase):
         self.c = Client()
         self.url = '/inkassosag'
         self.url2 = '/debitor'
+        self.url3 = '/filupload'
 
     def checkReturnValIsJSON(self, response):
         try:
             charset = response.charset
             jsonobj = json.loads(response.content.decode(charset))
-            json.dumps(jsonobj, indent=4)
+            print(json.dumps(jsonobj, indent=4))
         except json.decoder.JSONDecodeError:
-            self.fail('Dit not get JSON back.')
+            self.fail('Did not get JSON back.')
 
     def test_Get(self):
         response = self.c.get(self.url)
@@ -91,4 +92,27 @@ class BasicTestCase(TestCase):
         ctstring = 'application/json; charset=utf-8'
         response = self.c.post(self.url2, content_type=ctstring, data=jsondata)
         self.assertEqual(response.status_code, 200)
+        self.checkReturnValIsJSON(response)
+
+    # ---------- FILUPLOAD FORMDATA -------------
+    def test_Get_Fileupload(self):
+        response = self.c.get(self.url3)
+        self.assertEqual(response.status_code, 200)
+        self.checkReturnValIsJSON(response)
+
+    # Legal content-type, and some formdata.
+    def test_Post_fileupload_1(self):
+        testfilename = 'akasite/testdata.csv'
+        with open(testfilename) as fp:
+            response = self.c.post(self.url3, {'name': testfilename, 'attachment': fp}, **{'HTTP_X_AKA_BRUGER':'Lim Karsen'})
+        self.assertEqual(response.status_code, 200)
+        self.checkReturnValIsJSON(response)
+
+    # Illegal content-type.
+    def test_Post_fileupload_2(self):
+        rawfiledata = '123;6555;"Michael Neidhardt";"København Ø";;;\n'
+        rawfiledata += '768;098543;"Palle;peter";Ferênc Gülsen";;;'
+        ctstring = 'application/json; charset='
+        response = self.c.post(self.url3, content_type=ctstring, data=rawfiledata, **{'HTTP_X_AKA_BRUGER':'Lim Karsen'})
+        self.assertEqual(response.status_code, 400)
         self.checkReturnValIsJSON(response)

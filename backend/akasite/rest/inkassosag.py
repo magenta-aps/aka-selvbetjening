@@ -10,7 +10,7 @@ class InkassoSag(JSONRestView):
     def get(self, request, *args, **kwargs):
         dummyresponse = {"serversays": "Hello. You said InkassoSag/GET"}
         return HttpResponse(json.dumps(dummyresponse),
-                            content_type=JSONRestView.CONTENT_TYPE)
+                            content_type=JSONRestView.RESTCONTENTTYPE)
 
     def post(self, request, *args, **kwargs):
         baseresponse = super().post(request, args, kwargs)
@@ -18,7 +18,7 @@ class InkassoSag(JSONRestView):
         if baseresponse.status_code == 200:
             self.payload["serversays"] = "Hello. You said InkassoSag/POST"
             return HttpResponse(json.dumps(self.payload),
-                                content_type=JSONRestView.CONTENT_TYPE)
+                                content_type=JSONRestView.RESTCONTENTTYPE)
         else:
             return baseresponse
 
