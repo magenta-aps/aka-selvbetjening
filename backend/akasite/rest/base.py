@@ -138,7 +138,6 @@ class JSONRestView(View):
         ------------------------------------------------------------
         '''
 
-        self.payload = None
         self.payload = {}
 
         try:
@@ -146,17 +145,18 @@ class JSONRestView(View):
                                   JSONRestView.CT2,
                                   False)
 
-            i = 0
+            self.payload['files'] = []
             for k, v in request.FILES.items():
                 destination = settings.MEDIA_URL + self.tmpfilename() + '.'
                 destination += v.name.replace(' ', '_').replace('/', '_s_')
                 self.handle_uploaded_file(v, destination)
-                self.payload['file'+str(i)] = \
+                self.payload['files'].append(
                     {'originalname': v.name,
                      'tmpfilename': destination,
                      'filetype': type(v).__name__,
                      'contenttype': v.content_type,
-                     'charset': v.charset}
+                     'charset': v.charset,
+                     'size': v.size})
 
             self.payload['AKA-Bruger'] = request.META['HTTP_X_AKA_BRUGER']
             retval = HttpResponse()
