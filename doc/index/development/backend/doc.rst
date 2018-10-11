@@ -5,6 +5,9 @@ The REST API is made using a class based view.
 
 Base class is JSONRestView. This handles two forms of POST requests,
 one with an ordinary data payload, and one with uploaded file(s).
+The basic idea is to let the base class interact with Django's request object,
+so that body and/or form fields are converted to JSON, and any files are moved
+to the designated location, which is settings.MEDIA_URL
 
 JSONRestView.post():
 --------------------

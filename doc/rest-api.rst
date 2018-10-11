@@ -3,8 +3,12 @@ Anvendelse af Django til REST-api.
 
 Vi kræver CSRF-token for alle(?) endpoints.
 
-Til en start kan man få et token fra serveren ved at lave en GET til et endpoint der har decoratoren
+Til en start kan man få et token fra serveren ved at lave en GET-request til et endpoint der har decoratoren
 'ensure_csrf_cookie'.
+
+Endpoints:
+  inkassosag - GET, POST
+  filupload - GET, POST 
 
 POSTe til serveren:
   Hvis man submitter en form på almindelig vis, skal den indeholde CSRF-token i et hidden-field

@@ -24,7 +24,7 @@ class JSONRestView(View):
     CT1 = 'application/json'
     CT2 = 'multipart/form-data'
 
-    def tmpfilename(self):
+    def randomstring(self, length=30):
         return ''.join([
             random.choice('abcdefghijklmnopqrstuvwxyz0123456789')
             for i in range(50)
@@ -110,7 +110,7 @@ class JSONRestView(View):
         ------------------------------------------------------------
         '''
 
-        self.payload = None
+        self.payload = {}
 
         try:
             # Check size of request?
@@ -130,6 +130,9 @@ class JSONRestView(View):
         ------------------------------------------------------------
         Base class for POST handler for handling file upload.
         We use multipart/formdata.
+        Django places uploaded files in request.FILES.
+        Additional form fields end up in request.POST. The key is the
+        field name.
 
         Input: Request.
         Output: HTTP Response of some variety.
@@ -145,9 +148,10 @@ class JSONRestView(View):
                                   JSONRestView.CT2,
                                   False)
 
+            self.payload['POST'] = request.POST
             self.payload['files'] = []
             for k, v in request.FILES.items():
-                destination = settings.MEDIA_URL + self.tmpfilename() + '.'
+                destination = settings.MEDIA_URL + self.randomstring() + '.'
                 destination += v.name.replace(' ', '_').replace('/', '_s_')
                 self.handle_uploaded_file(v, destination)
                 self.payload['files'].append(
@@ -160,7 +164,7 @@ class JSONRestView(View):
 
             self.payload['AKA-Bruger'] = request.META['HTTP_X_AKA_BRUGER']
             retval = HttpResponse()
-        except (ContentTypeError, json.decoder.JSONDecodeError) as e:
+        except (ContentTypeError, json.decoder.JSONDecodeError, IOError) as e:
             retval = self.errorResponse(e)
 
         return retval
