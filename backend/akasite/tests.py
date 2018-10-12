@@ -15,7 +15,7 @@ class BasicTestCase(TestCase):
         try:
             charset = response.charset
             jsonobj = json.loads(response.content.decode(charset))
-            #print(json.dumps(jsonobj, indent=4))
+            # print(json.dumps(jsonobj, indent=4))
         except json.decoder.JSONDecodeError:
             self.fail('Did not get JSON back.')
 
@@ -31,22 +31,6 @@ class BasicTestCase(TestCase):
         response = self.c.post(self.url, content_type=ctstring, data=jsondata)
         self.assertEqual(response.status_code, 200)
         self.checkReturnValIsJSON(response)
-
-    # Legal JSON in body, and legal content_type.
-    # This checks that data in inputdata equals what we get in outputdata.
-    # As the backend will not normally return its input like this, the test
-    # will probably be useless when we're closer to production.
-    def test_Post_1B(self):
-        inputdata = '{"sagsnummer": "789321", "fornavn": "Ferênc", "efternavn": "Gülsen"}'
-        ctstring = 'application/json; charset=utf-8'
-        response = self.c.post(self.url, content_type=ctstring, data=inputdata)
-        self.assertEqual(response.status_code, 200)
-        self.checkReturnValIsJSON(response)
-        outputdata = json.loads(response.content.decode(response.charset))
-        inputdatajson = json.loads(inputdata)
-        for key in inputdatajson:
-            self.assertTrue(key in outputdata)
-            self.assertEqual(inputdatajson[key], outputdata[key])
 
     # Illegal JSON in body.
     def test_Post_2(self):

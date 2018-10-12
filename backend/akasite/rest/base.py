@@ -4,7 +4,7 @@ from django.http import HttpResponseBadRequest
 from django.conf import settings
 import json
 import random
-
+import logging
 
 class ContentTypeError(Exception):
     """Exception raised for errors in the content-type
@@ -35,6 +35,19 @@ class JSONRestView(View):
             for chunk in f.chunks():
                 destination.write(chunk)
 
+    def getContenttype(self, headerstring):
+        result = {'type': '', 'charset': ''}
+
+        first = headerstring.split(';')
+        result['type'] = first[0].strip()
+
+        for i in range(1, len(first)):
+            if '=' in first[i]:
+                param = first[i].strip().split('=')
+                result[param[0].strip()] = param[1].strip()
+
+        return result
+
     def validContenttype(self, metadict, expectedcontenttype,
                          charsetrequired=True):
         '''
@@ -57,19 +70,10 @@ class JSONRestView(View):
         ------------------------------------------------------------
         '''
         if 'CONTENT_TYPE' in metadict:
-            contenttype = metadict['CONTENT_TYPE']
+            result = self.getContenttype(metadict['CONTENT_TYPE'])
         else:
             raise ContentTypeError('No content_type in request.')
 
-        result = {'type': '', 'charset': ''}
-
-        first = contenttype.split(';')
-        result['type'] = first[0].strip()
-
-        for i in range(1, len(first)):
-            if '=' in first[i]:
-                param = first[i].strip().split('=')
-                result[param[0].strip()] = param[1].strip()
 
         if result['type'].lower() != expectedcontenttype.lower():
             raise ContentTypeError('ContentType is {0}, expected {1}.'.
@@ -89,7 +93,6 @@ class JSONRestView(View):
 
     def errorText(self, msg):
         '''
-        ------------------------------------------------------------
         Compose error message.
         Input: String containing the message.
         Output: String that is a serialised JSON structure, with the
@@ -98,16 +101,21 @@ class JSONRestView(View):
         '''
         return json.dumps({"status": "Request failed.", "message": msg})
 
+    def getBody(self, request, charset):
+        return json.loads(request.body.decode(charset))
+
+    def getPost(self, request):
+        return request.POST
+
     def post(self, request, *args, **kwargs):
         '''
-        ------------------------------------------------------------
-        Base class for POST handler.
-        Input: Request.
-        Output: HTTP Response of some variety.
+        Base class for POST handler without file upload.
+        For basic JSON POST requests, payload is in request body.
 
-        Content-type must equal CT1.
-        charset must have a value.
-        ------------------------------------------------------------
+        :param request: The request.
+        :type request: HttpRequest.
+        :returns:  HttpResponse, HttpResponseBadRequest
+        :raises: ContentTypeError, json.decoder.JSONDecodeError, IOError
         '''
 
         self.payload = {}
@@ -117,28 +125,31 @@ class JSONRestView(View):
             contenttype = self.validContenttype(request.META,
                                                 JSONRestView.CT1)
 
-            bdy = request.body.decode(contenttype['charset'])
-            self.payload = json.loads(bdy)
+            self.payload = self.getBody(request,
+                                         contenttype['charset'])
+
             retval = HttpResponse()
+            logging.getLogger(__name__).info(json.dumps(self.payload))
         except (ContentTypeError, json.decoder.JSONDecodeError) as e:
             retval = self.errorResponse(e)
+            logging.getLogger(__name__).exception(e)
 
         return retval
 
     def postfile(self, request, *args, **kwargs):
         '''
-        ------------------------------------------------------------
-        Base class for POST handler for handling file upload.
+        Base class for POST handler for file upload.
         We use multipart/formdata.
         Django places uploaded files in request.FILES.
-        Additional form fields end up in request.POST. The key is the
-        field name.
-
-        Input: Request.
-        Output: HTTP Response of some variety.
-
-        Content-type must equal CT2.
-        ------------------------------------------------------------
+        Additional form fields end up in request.POST.
+        Moves any uploaded files in the directory settings.MEDIA_URL.
+        Stores file metadata in self.payload['file'].
+        Stores form fields in self.payload['POST'].
+    
+        :param request: The request.
+        :type request: HttpRequest.
+        :returns:  HttpResponse, HttpResponseBadRequest
+        :raises: ContentTypeError, json.decoder.JSONDecodeError, IOError
         '''
 
         self.payload = {}
@@ -148,8 +159,9 @@ class JSONRestView(View):
                                   JSONRestView.CT2,
                                   False)
 
-            self.payload['POST'] = request.POST
+            self.payload['POST'] = self.getPost(request)
             self.payload['files'] = []
+
             for k, v in request.FILES.items():
                 destination = settings.MEDIA_URL + self.randomstring() + '.'
                 destination += v.name.replace(' ', '_').replace('/', '_s_')
@@ -162,9 +174,11 @@ class JSONRestView(View):
                      'charset': v.charset,
                      'size': v.size})
 
-            self.payload['AKA-Bruger'] = request.META['HTTP_X_AKA_BRUGER']
+            self.authuser = request.META['HTTP_X_AKA_BRUGER']
             retval = HttpResponse()
+            logging.getLogger(__name__).info('Uploaded files: ' + str(len(self.payload['files'])))
         except (ContentTypeError, json.decoder.JSONDecodeError, IOError) as e:
             retval = self.errorResponse(e)
+            logging.getLogger(__name__).exception(e)
 
         return retval
