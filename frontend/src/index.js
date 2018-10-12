@@ -3,9 +3,9 @@ import VueRouter from 'vue-router'
 import VueI18n from 'vue-i18n'
 import { messages } from './i18n/Messages.js'
 import App from './App.vue'
-import TableOfContents from './components/table_of_contents/TableOfContents.vue'
-import FormExample1 from './components/form_example_1/FormExample1.vue'
-import FormExample2 from './components/form_example_2/FormExample2.vue'
+const TableOfContents = () => import('./components/table_of_contents/TableOfContents.vue')
+const FormExample1 = () => import('./components/form_example_1/FormExample1.vue')
+const FormExample2 = () => import('./components/form_example_2/FormExample2.vue')
 
 //
 // Vue.use(VueI18n)
