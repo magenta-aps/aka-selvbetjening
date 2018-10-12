@@ -12,7 +12,12 @@
 
         <div id="aka-app"></div>
 
-        <script type="text/javascript" src="js/aka.js"></script>
+        <!-- Newer browsers with ES module support load this file. -->
+        <script type="module" src="js/aka.esmodules.js"></script>
+
+        <!-- Older browsers load this file (and module-supporting -->
+        <!-- browsers know *not* to load this file). -->
+        <script nomodule src="js/aka.nomodules.js"></script>
 
     </body>
 </html>
