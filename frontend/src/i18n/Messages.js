@@ -11,6 +11,8 @@ export const messages = {
             fordringshaver: 'Fordringshaver',
             anden_fordringshaver: 'Anden fordringshaver',
             debitor: 'Debitor',
+            fordringsgruppe: 'Ekstern fordringsgruppe',
+            fordringstype: 'Ekstern fordringstype',
             gem: 'Gem'
         }
     },
@@ -24,8 +26,10 @@ export const messages = {
         simpel_indberetning: {
             title: 'Peqatigisanut ilitsersuutit',
             fordringshaver: 'Akiligassaqarfigineqartoq',
-            debitor: 'Akiligassalik',
             anden_fordringshaver: 'Akiligassaqarfigineqartoq alla',
+            debitor: 'Akiligassalik',
+            fordringsgruppe: 'Akiitsoqarfimmiit suliassiisutip ataatsimooruffiata suussusaa',
+            fordringstype: 'Akiitsoqarfimmiit suliasiissutit suussusaa',
             gem: 'Toqqoruk'
 
         }

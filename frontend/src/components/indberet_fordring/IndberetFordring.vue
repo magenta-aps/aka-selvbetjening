@@ -1,0 +1,214 @@
+<template>
+
+    <article class="test">
+
+
+        <!--<nav>
+            <a href="{% url 'akasite:index' %}">&lsaquo; Tilbage</a>
+        </nav>-->
+
+        <form action="" method="POST">
+
+            <fieldset>
+                <label for="fordringshaver-input">Fordringshaver</label>
+                <input id="fordringshaver-input" type="text" value="NOGH2342">
+            </fieldset>
+
+            <fieldset>
+                <label for="debitor-input">Debitor</label>
+                <input id="debitor-input" type="text">
+            </fieldset>
+
+            <fieldset>
+                <label for="anden-fordringshaver-input">Anden fordringshaver</label>
+                <input id="anden-fordringshaver-input" type="text">
+            </fieldset>
+
+            <fieldset>
+                <legend>Filer</legend>
+                <label for="upload-fil">Vælg en fil at vedhæfte</label>
+                <input id="upload-fil" type="file">
+                <button style="margin: 1rem 0 0;">Vedhæft fil</button>
+            </fieldset>
+
+            <div style="display: flex; flex-flow: row wrap;">
+                <fieldset style="margin-right: 1rem;">
+                    <label for="ekstern-fordingsgruppe-select">Ekstern fordingsgruppe</label>
+                    <select id="ekstern-fordingsgruppe-select">
+                        <option>Gruppe A</option>
+                        <option>Gruppe B</option>
+                        <option>Gruppe C</option>
+                    </select>
+                </fieldset>
+
+                <fieldset>
+                    <label for="ekstern-fordingstype-select">Ekstern fordingstype</label>
+                    <select id="ekstern-fordingstype-select">
+                        <option>Type A</option>
+                        <option>Type B</option>
+                        <option>Type C</option>
+                    </select>
+                </fieldset>
+            </div>
+
+            <fieldset>
+                <label for="barn-cpr-input">Barns CPR-nummer</label>
+                <input id="barn-cpr-input" type="text">
+            </fieldset>
+
+            <fieldset>
+                <label for="eksternt-sagsnum-input">Eksternt sagsnummer</label>
+                <input id="eksternt-sagsnum-input" type="text">
+            </fieldset>
+
+            <hr>
+
+            <fieldset>
+                <div style="display: flex; flex-flow: row wrap;">
+                    <div style="margin-right: 1rem;">
+                        <label for="hovedstol-input">Hovedstol</label>
+                        <input id="hovedstol-input" type="number" style="width: 7.5rem;"> kr
+                    </div>
+                    <div>
+                        <label for="hovedstol-tekst-input">Posteringstekst</label>
+                        <input id="hovedstol-tekst-input" type="text" style="min-width: 13rem;">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <div style="display: flex; flex-flow: row wrap;">
+                    <div style="margin-right: 1rem;">
+                        <label for="bankrente-input">Bankrente</label>
+                        <input id="bankrente-input" type="number" style="width: 7.5rem;"> kr
+                    </div>
+                    <div>
+                        <label for="bankrente-tekst-input">Posteringstekst</label>
+                        <input id="bankrente-tekst-input" type="text" style="min-width: 13rem;">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <div style="display: flex; flex-flow: row wrap;">
+                    <div style="margin-right: 1rem;">
+                        <label for="bankegebyr-input">Bankgebyr</label>
+                        <input id="bankegebyr-input" type="number" style="width: 7.5rem;"> kr
+                    </div>
+                    <div>
+                        <label for="bankegebyr-tekst-input">Posteringstekst</label>
+                        <input id="bankegebyr-tekst-input" type="text" style="min-width: 13rem;">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <div style="display: flex; flex-flow: row wrap;">
+                    <div style="margin-right: 1rem;">
+                        <label for="rente-input">Rente</label>
+                        <input id="rente-input" type="number" style="width: 7.5rem;"> kr
+                    </div>
+                    <div>
+                        <label for="rente-tekst-input">Posteringstekst</label>
+                        <input id="rente-tekst-input" type="text" style="min-width: 13rem;">
+                    </div>
+                </div>
+            </fieldset>
+
+            <hr>
+
+            <fieldset>
+                <div style="display: flex; flex-flow: row wrap;">
+                    <div style="flex: 0 1 auto; margin-right: 1rem;">
+                        <label for="period-start-input">Periodestart</label>
+                        <input id="period-start-input" type="date">
+                    </div>
+                    <div style="flex: 0 1 auto;">
+                        <label for="period-end-input">Periodeslut</label>
+                        <input id="period-end-input" type="date">
+                    </div>
+                </div>
+            </fieldset>
+
+            <hr>
+
+            <fieldset>
+                <div style="display: flex; flex-flow: row wrap;">
+                    <div style="flex: 0 1 auto; margin-right: 1rem;">
+                        <label for="forfaldsdato-input">Forfaldsdato</label>
+                        <input id="forfaldsdato-input" type="date">
+                    </div>
+                    <div style="flex: 0 1 auto; margin-right: 1rem;">
+                        <label for="betalingsdato-input">Betalingsdato</label>
+                        <input id="betalingsdato-input" type="date">
+                    </div>
+                    <div style="flex: 0 1 auto; margin-right: 1rem;">
+                        <label for="foraldelsesdato-input">Forældelsesdato</label>
+                        <input id="foraldelsesdato-input" type="date">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <label for="kontaktperson-input">Kontaktperson</label>
+                <input id="kontaktperson-input" type="text">
+            </fieldset>
+
+
+            <fieldset>
+                <label for="notat-textarea">Notat</label>
+                <textarea id="notat-textarea"></textarea>
+            </fieldset>
+
+            <fieldset>
+                <label for="meddebitor-textarea">Meddebitorer</label>
+                <p class="helptxt">Adskil kontonumre med komma</p>
+                <textarea id="meddebitor-textarea"></textarea>
+            </fieldset>
+
+            <input type="submit" value="Send">
+            <!-- <a style="margin-left: 1rem;" href="{% url 'akasite:index' %}">Annullér</a> -->
+
+        </form>
+
+
+        <h2>Servere respons:</h2>
+        <div>{{ response }}</div>
+
+    </article>
+
+</template>
+
+
+<script>
+
+    import axios from 'axios'
+    
+    export default {
+        data: function() { 
+            return {
+                value_a: null,
+                value_b: null,
+                response: null
+            }
+        },
+        methods: {
+            sendFormRequest: function() {
+                axios.get('/index')
+                    .then(res => {
+                        console.log('Server response!')
+                        this.response = res
+                    })
+                    .catch(err => {
+                        console.log('there was an error')
+                        this.response = err
+                    })
+            }
+        }
+    }
+
+</script>
+
+<style>
+
+</style>

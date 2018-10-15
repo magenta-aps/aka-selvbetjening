@@ -21,36 +21,60 @@
                 <input id="anden-fordringshaver-input" type="text" v-model="fordringshaver2">
             </fieldset>
 
+            <!--<div style="display: flex; flex-flow: row wrap;">-->
+                <!--<fieldset>-->
+                    <!--<label for="fordringsgruppe">Ekstern fordringsgruppe</label>-->
+                    <!--<select-->
+                            <!--id="fordringsgruppe"-->
+                            <!--v-model="fordringsgruppe"-->
+                            <!--name="fordringsgruppe"-->
+                    <!--&gt;-->
+                        <!--<option v-for="f in Object.keys(dummyfordringsgruppe)">{{ f }}</option>-->
+                    <!--</select>-->
+                <!--</fieldset>-->
+
+                 <!--&lt;!&ndash;This is only shown if there are multiple options&ndash;&gt;-->
+                <!--<fieldset v-if="fordringsgruppe !== null &&-->
+                                <!--dummyfordringsgruppe[fordringsgruppe].length > 1">-->
+                    <!--<label for="fordringstype">Ekstern fordringstype</label>-->
+                    <!--<select-->
+                            <!--id="fordringstype"-->
+                            <!--v-model="fordringstype"-->
+                            <!--name="fordringstype"-->
+                    <!--&gt;-->
+                        <!--<option v-for="t in dummyfordringsgruppe[fordringsgruppe]">{{ t }}</option>-->
+                    <!--</select>-->
+                <!--</fieldset>-->
+            <!--</div>-->
+
+
+
             <div style="display: flex; flex-flow: row wrap;">
                 <fieldset>
-                    <label for="fordringsgruppe">Ekstern fordringsgruppe</label>
+                    <label for="fordringsgruppe">{{ $t("simpel_indberetning.fordringsgruppe") }}</label>
                     <select
                             id="fordringsgruppe"
                             v-model="fordringsgruppe"
                             name="fordringsgruppe"
                     >
-                        <option v-for="f in Object.keys(fordringsgrupper)">{{ f }}</option>
+                        <!--TODO: Flyt logik til metode-->
+                        <option v-for="f in fordringsgrupper" v-bind:value="f">{{f["id"]}} ({{ f["value"] }})</option>
                     </select>
                 </fieldset>
 
-                <!-- This is only shown if there are multiple options-->
-                <fieldset v-if="fordringsgruppe !== null &&
-                                fordringsgrupper[fordringsgruppe].length > 1">
-                    <label for="fordringstype">Ekstern fordringstype</label>
+                <!--This is only shown if there are multiple options-->
+                <fieldset v-if="fordringsgruppe !== null && fordringsgruppe.sub_groups.length > 1">
+                    <label for="fordringstype">{{ $t("simpel_indberetning.fordringstype") }}</label>
                     <select
                             id="fordringstype"
                             v-model="fordringstype"
                             name="fordringstype"
                     >
-                        <option v-for="t in fordringsgrupper[fordringsgruppe]">{{ t }}</option>
+                        <option v-for="t in fordringsgruppe.sub_groups" >{{t["id"]}} ({{ t["value"] }})</option>
                     </select>
                 </fieldset>
+                <!--TODO: Set fordringstype if the above fieldset is not rendered-->
             </div>
-
-            <!--TODO: Set fordringstype if the above fieldset is not rendered-->
-
-
-
 
             <fieldset>
                 <input type="submit" v-bind:value="$t('simpel_indberetning.gem')">
@@ -65,23 +89,48 @@
 <script>
 
     import axios from 'axios'
+    import {groups} from '../../../assets/fordringsgruppe'
+
+    // import api from '../../api'
 
     export default {
         data: function() {
             return {
                 fordringshaver: null,
                 debitor: null,
-                fordringshaver2: null,
-
-                fordringsgrupper: {
-                    "Fordringsgruppe 1": ["Type 1 for fordringsgruppe 1", "Type 2 for fordringsgruppe 1"],
-                    "Fordringsgruppe 2": ["Fordringsgruppe 2"]
-                },
+                fordringsgrupper: groups,
                 fordringsgruppe: null,
                 fordringstype: null,
+                fordringshaver2: null,
+                // testValue: null,
+                // subTest: null,
+                // dummyfordringsgruppe: {
+                //     "Fordringsgruppe 1": ["Type 1 for fordringsgruppe 1", "Type 2 for fordringsgruppe 1"],
+                //     "Fordringsgruppe 2": ["Fordringsgruppe 2"]
+                // },
             }
         },
+        // computed: {
+        //     hideSelector() {
+        //         return this.dummyfordringsgruppe.length > 0
+        //     }
+        // },
+        // mounted () {
+        //     api.getSuperGroups().then(response => {
+        //         this.testValue = response
+        //
+        //         console.log(this.testValue)
+        //
+        //         this.getSubGroup(response[0])
+        //     })
+        // },
         methods: {
+            // getSubGroup (val) {
+            //     console.log('subtest')
+            //     api.getSubGroups(val).then(response => {
+            //         this.subTest = response;
+            //     })
+            // },
             sendFormRequest: function() {
 
                 let formdata = new FormData()
