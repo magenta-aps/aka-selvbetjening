@@ -139,7 +139,7 @@
                 formdata.append('fordringshaver2', this.fordringshaver2)
 
                 axios({
-                    url: '/whatever', /* TODO: Make rest interface and set url */
+                    url: '/inkassosag',
                     data: formdata,
                     method: 'post',
                     headers: {
