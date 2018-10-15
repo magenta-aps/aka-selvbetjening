@@ -52,7 +52,7 @@
                 formdata.append('fordringshaver2', this.fordringshaver2)
 
                 axios({
-                    url: '/filupload',
+                    url: '/inkassosag',
                     data: formdata,
                     method: 'post',
                     headers: {

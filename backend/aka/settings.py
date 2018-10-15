@@ -24,6 +24,34 @@ BASE_DIR = os.path.dirname(SITE_DIR)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters':{
+        'require_debug_false': { # A flag to only log specified in production
+            '()': 'django.utils.log.RequireDebugFalse'
+        },
+        'require_debug_true': { # A flag used for DEBUGGING only logs
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'debug-console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler'
+        },
+    },
+    'loggers': {
+        'akasite': {
+            'handlers': ['debug-console'],
+            'filters': ['require_debug_true'],
+            'level': 'DEBUG'
+        }
+    }
+}
+
 ALLOWED_HOSTS = ['*']
 
 
