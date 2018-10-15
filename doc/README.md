@@ -15,6 +15,21 @@ Mere info her:
 http://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html
 
 Jeg har selv til en start brugt denne syntax til klasser og metoder,
-som Sphinx kan opfatte og formattere pænt.
+som Sphinx genkender:
+    def postfile(self, request, *args, **kwargs):
+        '''
+        Base class for POST handler for file upload.
+        We use multipart/formdata.
+        Django places uploaded files in request.FILES.
+        Additional form fields end up in request.POST.
+        Moves any uploaded files in the directory settings.MEDIA_URL.
+        Stores file metadata in self.payload['file'].
+        Stores form fields in self.payload['POST'].
+    
+        :param request: The request.
+        :type request: HttpRequest.
+        :returns:  HttpResponse, HttpResponseBadRequest
+        :raises: ContentTypeError, json.decoder.JSONDecodeError, IOError
+        '''
 
 
