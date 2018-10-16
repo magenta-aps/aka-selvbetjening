@@ -29,24 +29,24 @@
                             id="fordringsgruppe"
                             v-model="fordringsgruppe"
                             name="fordringsgruppe"
+                            @change="setGroup()"
                     >
-                        <!--TODO: Flyt logik til metode-->
-                        <option v-for="f in fordringsgrupper" v-bind:value="f">{{f["id"]}} ({{ f["value"] }})</option>
+                        <option v-for="f in fordringsgrupper" v-bind:value="f">{{stringRep(f)}})</option>
                     </select>
                 </fieldset>
 
                 <!--This is only shown if there are multiple options-->
-                <fieldset v-if="fordringsgruppe !== null && fordringsgruppe.sub_groups.length > 1">
+                <fieldset v-if="multipleTypes">
                     <label for="fordringstype">{{ $t("simpel_indberetning.fordringstype") }}</label>
                     <select
                             id="fordringstype"
                             v-model="fordringstype"
                             name="fordringstype"
+                            @change="setTypeId()"
                     >
-                        <option v-for="t in fordringsgruppe.sub_groups" >{{t["id"]}} ({{ t["value"] }})</option>
+                        <option v-for="t in fordringsgruppe.sub_groups" v-bind:value="t">{{stringRep(t)}}</option>
                     </select>
                 </fieldset>
-                <!--TODO: Set fordringstype if the above fieldset is not rendered-->
             </div>
 
             <fieldset>
@@ -69,10 +69,13 @@
             return {
                 fordringshaver: null,
                 debitor: null,
+                fordringshaver2: null,
                 fordringsgrupper: groups,
                 fordringsgruppe: null,
+                fordringsgruppe_id: null,
                 fordringstype: null,
-                fordringshaver2: null,
+                fordringstype_id: null,
+                multipleTypes: false,
                 csrftoken: null
                 // testValue: null,
                 // subTest: null,
@@ -97,6 +100,25 @@
         //     })
         // },
         methods: {
+            setTypeId: function() {
+                this.fordringstype_id = this.fordringstype["id"];
+            },
+            setGroupId: function() {
+                this.fordringsgruppe_id = this.fordringsgruppe["id"];
+            },
+            setGroup: function() {
+                if (this.fordringsgruppe["sub_groups"].length === 1) {
+                    this.fordringstype = this.fordringsgruppe["sub_groups"][0];
+                    this.setTypeId();
+                    this.multipleTypes = false;
+                } else {
+                    this.multipleTypes = true;
+                }
+                this.setGroupId();
+            },
+            stringRep: function(dict) {
+                return "" + dict["id"] + " (" + dict["value"] + ")"
+            },
             getCSRFToken: function() {
                 this.csrftoken = document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
             },
@@ -106,9 +128,11 @@
                     fordringshaver: this.fordringshaver,
                     debitor: this.debitor,
                     fordringshaver2: this.fordringshaver2,
-                    fordringsgruppe: this.fordringsgruppe,
-                    fordringstype: this.fordringstype
-                }
+                    // fordringsgruppe: this.fordringsgruppe,
+                    // fordringstype: this.fordringstype,
+                    group_id: this.fordringsgruppe_id,
+                    type_id: this.fordringstype_id,
+                };
 
                 axios({
                     url: '/inkassosag',
