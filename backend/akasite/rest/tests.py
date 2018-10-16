@@ -21,6 +21,7 @@ class BasicTestCase(TestCase):
 
     # Test module JsonValidator.
     # -------------------------- 
+    '''
     def test_Validator_1(self):
         jsonOK =   {"name" : "Eggs", "price" : 34.99, "year": 2018}
         self.assertTrue(self.validator.valid(jsonOK))
@@ -32,7 +33,11 @@ class BasicTestCase(TestCase):
         self.assertFalse(self.validator.valid(jsonFAIL))
         errmsg = self.validator.getLasterror().message
         self.assertTrue(type(errmsg) is str)
+    '''
 
     def test_Validator_3(self):
-        jsonFAIL = {"name" : "Eggs", "price" : "NaN"}
+        jsonFAIL = {'name' : 'Eggs', 'price' : 'blabla', 'year': 'ghjghjghj'}
         self.assertFalse(self.validator.valid(jsonFAIL))
+        errmsg = self.validator.getLasterror().message
+        self.assertTrue(type(errmsg) is str)
+        print(errmsg)

@@ -51,22 +51,20 @@ class JSONRestView(View):
     def validContenttype(self, metadict, expectedcontenttype,
                          charsetrequired=True):
         '''
-        ------------------------------------------------------------
         Validate content_type and charset from Content-Type header string.
-        Input: The request.META dict, expected contenttype, and whether
-               charset is required or not.
-               E.g validContenttype(request.META,
-                                    JSONRestView.CT1,
-                                    False)
 
-        Output: If all is OK, returns dict with 2 keys guaranteed
+        :param metadict: The request.META dict
+        :type metadict: Dictionary
+        :param expectedcontenttype: Expected contenttype
+        :type expectedcontenttype: String
+        :param charsetrequired: Charset required or not
+        :type charsetrequired: Boolean
+        :returns A dict with 2 keys guaranteed
                 present: 'type' and 'charset'.
                 They may have no values, though.
                 The key 'type' contains the type/subtype part of
                 content_type (i.e. the main element).
-
-                If errors, i.e. missing or incorrect contenttype,
-                raises ContentType exceptiom.
+        :raises: ContentTypeError
         ------------------------------------------------------------
         '''
         if 'CONTENT_TYPE' in metadict:
@@ -85,6 +83,14 @@ class JSONRestView(View):
         return result
 
     def errorResponse(self, exception):
+        '''
+        Compose error message from exception.
+
+        :param msg: The error message
+        :type msg: String
+        :returns: HttpResponseBadRequest  containing the exception.
+        ------------------------------------------------------------
+        '''
         msg = self.errorText('{0} : {1}'.
                              format(type(exception).__name__, exception))
 
@@ -93,23 +99,43 @@ class JSONRestView(View):
 
     def errorText(self, msg):
         '''
-        Compose error message.
-        Input: String containing the message.
-        Output: String that is a serialised JSON structure, with the
-                error message incorporated.
+        Create error text as serialised JSON.
+
+        :param msg: The error message
+        :type msg: String
+        :returns: String that is a serialised JSON structure, with the
+                  error message incorporated.
         ------------------------------------------------------------
         '''
         return json.dumps({"status": "Request failed.", "message": msg})
 
     def getBody(self, request, charset):
+        '''
+        Get body of HTTP request.
+
+        :param request: The HttpRequest object
+        :type request: HttpRequest
+        :param charset: The character set of the request
+        :type charset: String
+        :returns: The request body converted to JSON.
+        ------------------------------------------------------------
+        '''
         return json.loads(request.body.decode(charset))
 
     def getPost(self, request):
-        return request.POST
+        '''
+        Get POST data from the HTTP request.
+
+        :param request: The HttpRequest object
+        :type request: HttpRequest
+        :returns: A copy of the POST dict.
+        ------------------------------------------------------------
+        '''
+        return request.POST.copy()
 
     def post(self, request, *args, **kwargs):
         '''
-        Base class for POST handler without file upload.
+        Base method for POST handler without file upload.
         For basic JSON POST requests, payload is in request body.
 
         :param request: The request.
@@ -138,7 +164,7 @@ class JSONRestView(View):
 
     def postfile(self, request, *args, **kwargs):
         '''
-        Base class for POST handler for file upload.
+        Base method for POST handler for file upload.
         We use multipart/formdata.
         Django places uploaded files in request.FILES.
         Additional form fields end up in request.POST.
