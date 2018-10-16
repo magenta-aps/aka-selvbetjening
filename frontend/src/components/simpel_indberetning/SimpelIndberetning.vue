@@ -21,33 +21,6 @@
                 <input id="anden-fordringshaver-input" type="text" v-model="fordringshaver2">
             </fieldset>
 
-            <!--<div style="display: flex; flex-flow: row wrap;">-->
-                <!--<fieldset>-->
-                    <!--<label for="fordringsgruppe">Ekstern fordringsgruppe</label>-->
-                    <!--<select-->
-                            <!--id="fordringsgruppe"-->
-                            <!--v-model="fordringsgruppe"-->
-                            <!--name="fordringsgruppe"-->
-                    <!--&gt;-->
-                        <!--<option v-for="f in Object.keys(dummyfordringsgruppe)">{{ f }}</option>-->
-                    <!--</select>-->
-                <!--</fieldset>-->
-
-                 <!--&lt;!&ndash;This is only shown if there are multiple options&ndash;&gt;-->
-                <!--<fieldset v-if="fordringsgruppe !== null &&-->
-                                <!--dummyfordringsgruppe[fordringsgruppe].length > 1">-->
-                    <!--<label for="fordringstype">Ekstern fordringstype</label>-->
-                    <!--<select-->
-                            <!--id="fordringstype"-->
-                            <!--v-model="fordringstype"-->
-                            <!--name="fordringstype"-->
-                    <!--&gt;-->
-                        <!--<option v-for="t in dummyfordringsgruppe[fordringsgruppe]">{{ t }}</option>-->
-                    <!--</select>-->
-                <!--</fieldset>-->
-            <!--</div>-->
-
-
 
             <div style="display: flex; flex-flow: row wrap;">
                 <fieldset>
@@ -91,8 +64,6 @@
     import axios from 'axios'
     import {groups} from '../../../assets/fordringsgruppe'
 
-    // import api from '../../api'
-
     export default {
         data: function() {
             return {
@@ -126,21 +97,18 @@
         //     })
         // },
         methods: {
-            // getSubGroup (val) {
-            //     console.log('subtest')
-            //     api.getSubGroups(val).then(response => {
-            //         this.subTest = response;
-            //     })
-            // },
             getCSRFToken: function() {
                 this.csrftoken = document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
             },
             sendFormRequest: function() {
 
-                let formdata = new FormData()
-                formdata.append('fordringshaver', this.fordringshaver)
-                formdata.append('debitor', this.debitor)
-                formdata.append('fordringshaver2', this.fordringshaver2)
+                let formdata = {
+                    fordringshaver: this.fordringshaver,
+                    debitor: this.debitor,
+                    fordringshaver2: this.fordringshaver2,
+                    fordringsgruppe: this.fordringsgruppe,
+                    fordringstype: this.fordringstype
+                }
 
                 axios({
                     url: '/inkassosag',
@@ -160,6 +128,9 @@
                     console.log(err.message)
                 })
             }
+        },
+        created: function() {
+            this.getCSRFToken()
         }
     }
 </script>
