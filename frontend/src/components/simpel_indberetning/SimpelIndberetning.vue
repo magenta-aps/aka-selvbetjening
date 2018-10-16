@@ -102,6 +102,7 @@
                 fordringsgruppe: null,
                 fordringstype: null,
                 fordringshaver2: null,
+                csrftoken: null
                 // testValue: null,
                 // subTest: null,
                 // dummyfordringsgruppe: {
@@ -131,6 +132,9 @@
             //         this.subTest = response;
             //     })
             // },
+            getCSRFToken: function() {
+                this.csrftoken = document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+            },
             sendFormRequest: function() {
 
                 let formdata = new FormData()
