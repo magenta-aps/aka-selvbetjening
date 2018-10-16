@@ -17,7 +17,7 @@ class BasicTestCase(TestCase):
         try:
             charset = response.charset
             jsonobj = json.loads(response.content.decode(charset))
-            print(json.dumps(jsonobj, indent=4))
+            # print(json.dumps(jsonobj, indent=4))
         except json.decoder.JSONDecodeError:
             self.fail('Did not get JSON back.')
 
@@ -130,3 +130,6 @@ class BasicTestCase(TestCase):
         response = self.c.post(self.url3, content_type=ctstring, data=rawfiledata, **{'HTTP_X_AKA_BRUGER':'Lim Karsen'})
         self.assertEqual(response.status_code, 400)
         self.checkReturnValIsJSON(response)
+
+    # If using multipart/form-data, and boundarystring is missing, Django crashes with error 500.
+    # Is this intentional?

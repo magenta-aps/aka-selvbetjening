@@ -1,8 +1,10 @@
-import jsonschema
+from jsonschema import Draft4Validator as draftValidator
+
 
 class Validator():
     def __init__():
         pass
+
 
 class JsonValidator(Validator):
     '''
@@ -21,11 +23,29 @@ class JsonValidator(Validator):
     def getLasterror(self):
         return self.lasterror
 
-    def valid(self, object):
-        try:
-            jsonschema.validate(object, self.schema)
-            self.lasterror = None
-            return True
-        except jsonschema.exceptions.ValidationError as err:
-            self.lasterror = err
-            return False
+    def validate(self, object):
+        '''
+        Validate a JSON object.
+
+        :param object: JSON Structure
+        :type object: Python dict.
+        :returns: List of 2-tuples. Each tuple
+                  contains (fieldname, error message).
+        '''
+
+        v = draftValidator(self.schema)
+        errors = sorted(v.iter_errors(object), key=lambda e: e.path)
+
+        if len(errors) == 0:
+            return []
+
+        result = []
+
+        for error in errors:
+            if len(error.absolute_path) > 0:
+                f = error.absolute_path[0]
+            else:
+                f = ''
+            result.append((f, error.message))
+
+        return result
