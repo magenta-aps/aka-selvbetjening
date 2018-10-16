@@ -4,6 +4,7 @@
 DJANGO 	= cd backend && python3 manage.py
 NPM = cd frontend && npm
 FRONTEND_SOURCES = $(shell find frontend/src frontend/assets ! -name aka.js -type f ) 
+FRONTEND_PREREQUISITES = frontend/node_modules frontend/assets/fordringsgruppe.js $(FRONTEND_SOURCES)
 
 
 # .PHONY tells make, that it is not an actual file being built
@@ -19,7 +20,7 @@ runserver : frontend/assets/js/aka.js backend/aka/local_settings.py migrate
 # key, therefore it should be generated, this make-rule will generate it, if it
 # does not exist.
 backend/aka/local_settings.py : 
-	python3 gen_local_settings.py > backend/aka/local_settings.py	
+	python3 makefile-utils/gen_local_settings.py > backend/aka/local_settings.py	
 	
 
 # .PHONY
@@ -39,9 +40,14 @@ frontend : frontend/assets/js/aka.js
 
 # FRONTEND_SOURCES checks if any files used as source files has changed, and compiles
 # the frontend if it has
-frontend/assets/js/aka.js : frontend/node_modules $(FRONTEND_SOURCES)
+frontend/assets/js/aka.js : $(FRONTEND_PREREQUISITES)
 	$(NPM) run build
 
 frontend/node_modules : frontend/package.json
 	$(NPM) update
 	$(NPM) install
+
+# $@ is the target file (fordringsgruppe.js)
+# $< is the prerequisitte (fordringsgruppe.json)
+frontend/assets/fordringsgruppe.js : shared/fordringsgruppe.json
+	makefile-utils/gen_fordringsgruppe_frontend.sh $< > $@

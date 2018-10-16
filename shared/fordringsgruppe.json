@@ -1,5 +1,4 @@
-
-let groups = [
+[
     {
         value: "10/40/50",
         id: "4",
@@ -625,5 +624,3 @@ let groups = [
         ]
     },
 ]
-
-export {groups};
