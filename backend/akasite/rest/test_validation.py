@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.core.files.uploadedfile import UploadedFile
 from akasite.rest.validation import JsonValidator
 
 
