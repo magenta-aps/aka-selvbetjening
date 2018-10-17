@@ -1,4 +1,5 @@
 
+NB: Denne
 Anvendelse af Django til REST-api.
 
 Vi kræver CSRF-token for alle(?) endpoints.

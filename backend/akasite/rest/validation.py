@@ -20,9 +20,6 @@ class JsonValidator(Validator):
     def getSchema(self, schema):
         return self.schema
 
-    def getLasterror(self):
-        return self.lasterror
-
     def validate(self, object):
         '''
         Validate a JSON object.
