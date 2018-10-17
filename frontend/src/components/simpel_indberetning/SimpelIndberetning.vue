@@ -128,10 +128,10 @@
                     fordringshaver: this.fordringshaver,
                     debitor: this.debitor,
                     fordringshaver2: this.fordringshaver2,
-                    // fordringsgruppe: this.fordringsgruppe,
-                    // fordringstype: this.fordringstype,
-                    group_id: this.fordringsgruppe_id,
-                    type_id: this.fordringstype_id,
+                    fordringsgruppe: this.fordringsgruppe_id,
+                    fordringstype: this.fordringstype_id,
+                    // group_id: this.fordringsgruppe_id,
+                    // type_id: this.fordringstype_id,
                 };
 
                 axios({

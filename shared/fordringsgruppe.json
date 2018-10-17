@@ -3,28 +3,28 @@
         value: "10/40/50",
         id: "4",
         sub_groups: [
-            {value: "10/40/50", id: "1"},
+            {value: "10/40/50", id: "1"}
         ]
     },
     {
         value: "ANB_BØRN",
         id: "38",
         sub_groups: [
-            {value: "FORÆLDREBE", id: "1"},
+            {value: "FORÆLDREBE", id: "1"}
         ]
     },
     {
         value: "ANDBOLIG",
         id: "5",
         sub_groups: [
-            {value: "ANDBOLIG", id: "1"},
+            {value: "ANDBOLIG", id: "1"}
         ]
     },
     {
         value: "ARB_SKAFOR",
         id: "36",
         sub_groups: [
-            {value: "ARB_SKAFOR", id: "1"},
+            {value: "ARB_SKAFOR", id: "1"}
         ]
     },
     {
@@ -62,7 +62,7 @@
             {value: "ASKAT2015", id: "29"},
             {value: "ASKAT2016", id: "30"},
             {value: "ASKAT2017", id: "31"},
-            {value: "ASKAT2018", id: "32"},
+            {value: "ASKAT2018", id: "32"}
         ]
     },
     {
@@ -100,7 +100,7 @@
             {value: "BSKAT2015", id: "29"},
             {value: "BSKAT2016", id: "30"},
             {value: "BSKAT2017", id: "31"},
-            {value: "BSKAT2018", id: "32"},
+            {value: "BSKAT2018", id: "32"}
         ]
     },
     {
@@ -108,28 +108,28 @@
         id: "2",
         sub_groups: [
             {value: "BSU", id: "1"},
-            {value: "BSUFORS", id: "2"},
+            {value: "BSUFORS", id: "2"}
         ]
     },
     {
         value: "BØRNEOPSPA",
         id: "20",
         sub_groups: [
-            {value: "BØRNEOPSPA", id: "1"},
+            {value: "BØRNEOPSPA", id: "1"}
         ]
     },
     {
         value: "DAGINST",
         id: "26",
         sub_groups: [
-            {value: "DAGINST", id: "1"},
+            {value: "DAGINST", id: "1"}
         ]
     },
     {
         value: "DCR",
         id: "47",
         sub_groups: [
-            {value: "DCR", id: "1"},
+            {value: "DCR", id: "1"}
         ]
     },
     {
@@ -138,28 +138,28 @@
         sub_groups: [
             {value: "DKDEB MEL", id: "1"},
             {value: "FISKGEBYR", id: "3"},
-            {value: "GRLHJS", id: "2"},
+            {value: "GRLHJS", id: "2"}
         ]
     },
     {
         value: "DIV_KOM",
         id: "43",
         sub_groups: [
-            {value: "AND_FORD", id: "1"},
+            {value: "AND_FORD", id: "1"}
         ]
     },
     {
         value: "ELVA_NUKI",
         id: "9",
         sub_groups: [
-            {value: "ELVA_NUKI", id: "1"},
+            {value: "ELVA_NUKI", id: "1"}
         ]
     },
     {
         value: "EL_VA_KOM",
         id: "10",
         sub_groups: [
-            {value: "ELVA_KOM", id: "1"},
+            {value: "ELVA_KOM", id: "1"}
         ]
     },
     {
@@ -169,14 +169,14 @@
             {value: "ERH_EL_VA", id: "4"},
             {value: "ERH_INDSK", id: "3"},
             {value: "ERH_LEJE", id: "1"},
-            {value: "ERH_VARME", id: "2"},
+            {value: "ERH_VARME", id: "2"}
         ]
     },
     {
         value: "ERSTAT",
         id: "42",
         sub_groups: [
-            {value: "ERSTAT", id: "1"},
+            {value: "ERSTAT", id: "1"}
         ]
     },
     {
@@ -185,14 +185,14 @@
         sub_groups: [
             {value: "DIVINC", id: "3"},
             {value: "ESU", id: "1"},
-            {value: "ESUFORS", id: "2"},
+            {value: "ESUFORS", id: "2"}
         ]
     },
     {
         value: "FAN_REJLÅN",
         id: "31",
         sub_groups: [
-            {value: "FAN_REJLÅN", id: "1"},
+            {value: "FAN_REJLÅN", id: "1"}
         ]
     },
     {
@@ -203,14 +203,14 @@
             {value: "KULTUR_UDV", id: "3"},
             {value: "LØN", id: "5"},
             {value: "SOCIAL", id: "1"},
-            {value: "TEKNIK", id: "2"},
+            {value: "TEKNIK", id: "2"}
         ]
     },
     {
         value: "FOLKEREG",
         id: "39",
         sub_groups: [
-            {value: "FOLKEREG", id: "1"},
+            {value: "FOLKEREG", id: "1"}
         ]
     },
     {
@@ -219,7 +219,7 @@
         sub_groups: [
             {value: "INDSKU_INI", id: "3"},
             {value: "LEJE_INI", id: "1"},
-            {value: "VARME_INI", id: "2"},
+            {value: "VARME_INI", id: "2"}
         ]
     },
     {
@@ -228,63 +228,63 @@
         sub_groups: [
             {value: "INDS_KOM", id: "3"},
             {value: "LEJE_KOM", id: "1"},
-            {value: "VARME_KOM", id: "2"},
+            {value: "VARME_KOM", id: "2"}
         ]
     },
     {
         value: "INDFRI_GAR",
         id: "30",
         sub_groups: [
-            {value: "INDFRI_GAR", id: "1"},
+            {value: "INDFRI_GAR", id: "1"}
         ]
     },
     {
         value: "INFRASTRUK",
         id: "45",
         sub_groups: [
-            {value: "INFRASTRUK", id: "1"},
+            {value: "INFRASTRUK", id: "1"}
         ]
     },
     {
         value: "KLOAKAFG",
         id: "35",
         sub_groups: [
-            {value: "KLOAKAFG", id: "1"},
+            {value: "KLOAKAFG", id: "1"}
         ]
     },
     {
         value: "KOM_ERHLÅN",
         id: "28",
         sub_groups: [
-            {value: "KOM_ERHLÅN", id: "1"},
+            {value: "KOM_ERHLÅN", id: "1"}
         ]
     },
     {
         value: "KOM_HUSLÅN",
         id: "34",
         sub_groups: [
-            {value: "KOM_HUSLÅN", id: "1"},
+            {value: "KOM_HUSLÅN", id: "1"}
         ]
     },
     {
         value: "KULTUR_UV",
         id: "46",
         sub_groups: [
-            {value: "KULTUR_UV", id: "1"},
+            {value: "KULTUR_UV", id: "1"}
         ]
     },
     {
         value: "LEJ/EJE",
         id: "6",
         sub_groups: [
-            {value: "LEJ/EJE", id: "1"},
+            {value: "LEJ/EJE", id: "1"}
         ]
     },
     {
         value: "LEJEKRAV",
         id: "99",
         sub_groups: [
-            {value: "HUSLEJEKAF", id: "1"},
+            {value: "HUSLEJEKAF", id: "1"}
         ]
     },
     {
@@ -304,35 +304,35 @@
             {value: "PIAREERSA", id: "6"},
             {value: "SERVICEFA", id: "9"},
             {value: "SYSTUER", id: "7"},
-            {value: "VÆRFT_REG", id: "11"},
+            {value: "VÆRFT_REG", id: "11"}
         ]
     },
     {
         value: "LTF_BIBLIO",
         id: "25",
         sub_groups: [
-            {value: "LTF_BIBLIO", id: "1"},
+            {value: "LTF_BIBLIO", id: "1"}
         ]
     },
     {
         value: "LTF_ERHUDD",
         id: "22",
         sub_groups: [
-            {value: "LTF_ERHUDD", id: "1"},
+            {value: "LTF_ERHUDD", id: "1"}
         ]
     },
     {
         value: "LTF_ERHVER",
         id: "24",
         sub_groups: [
-            {value: "LTF_ERHVER", id: "1"},
+            {value: "LTF_ERHVER", id: "1"}
         ]
     },
     {
         value: "LTF_HJ_OFF",
         id: "23",
         sub_groups: [
-            {value: "LFT_HJ_OFF", id: "1"},
+            {value: "LFT_HJ_OFF", id: "1"}
         ]
     },
     {
@@ -340,7 +340,7 @@
         id: "21",
         sub_groups: [
             {value: "UDDFOR", id: "1"},
-            {value: "UDDFOR_FM", id: "2"},
+            {value: "UDDFOR_FM", id: "2"}
         ]
     },
     {
@@ -348,14 +348,14 @@
         id: "18",
         sub_groups: [
             {value: "EJ_INDB_LØ", id: "2"},
-            {value: "MGL_LØNTR", id: "1"},
+            {value: "MGL_LØNTR", id: "1"}
         ]
     },
     {
         value: "MID_ERHLÅN",
         id: "29",
         sub_groups: [
-            {value: "MID_ERHLÅN", id: "1"},
+            {value: "MID_ERHLÅN", id: "1"}
         ]
     },
     {
@@ -366,7 +366,7 @@
             {value: "SKAT_DK", id: "3"},
             {value: "SKAT_NORDI", id: "4"},
             {value: "UHB_DK", id: "1"},
-            {value: "UHB_NORDI", id: "2"},
+            {value: "UHB_NORDI", id: "2"}
         ]
     },
     {
@@ -384,7 +384,7 @@
             {value: "QAS", id: "10"},
             {value: "SIS", id: "11"},
             {value: "SKAT", id: "1"},
-            {value: "UNDERHOLD", id: "3"},
+            {value: "UNDERHOLD", id: "3"}
         ]
     },
     {
@@ -394,35 +394,35 @@
             {value: "UDL_ADVOK", id: "4"},
             {value: "UDL_AFG", id: "2"},
             {value: "UDL_SKAT", id: "1"},
-            {value: "UDL_UNDERH", id: "3"},
+            {value: "UDL_UNDERH", id: "3"}
         ]
     },
     {
         value: "PERSONALE",
         id: "48",
         sub_groups: [
-            {value: "PERSONALE", id: "1"},
+            {value: "PERSONALE", id: "1"}
         ]
     },
     {
         value: "PERS_TIL",
         id: "37",
         sub_groups: [
-            {value: "PERS_TIL", id: "1"},
+            {value: "PERS_TIL", id: "1"}
         ]
     },
     {
         value: "POLITIET",
         id: "49",
         sub_groups: [
-            {value: "POLITIET", id: "1"},
+            {value: "POLITIET", id: "1"}
         ]
     },
     {
         value: "RENOVATION",
         id: "11",
         sub_groups: [
-            {value: "RENOVATION", id: "1"},
+            {value: "RENOVATION", id: "1"}
         ]
     },
     {
@@ -459,14 +459,14 @@
             {value: "RSKAT 96", id: "10"},
             {value: "RSKAT 97", id: "11"},
             {value: "RSKAT 98", id: "12"},
-            {value: "RSKAT 99", id: "13"},
+            {value: "RSKAT 99", id: "13"}
         ]
     },
     {
         value: "SALG_EJEND",
         id: "33",
         sub_groups: [
-            {value: "SALG_EJEND", id: "1"},
+            {value: "SALG_EJEND", id: "1"}
         ]
     },
     {
@@ -503,14 +503,14 @@
             {value: "SELSKAT96", id: "10"},
             {value: "SELSKAT97", id: "11"},
             {value: "SELSKAT98", id: "12"},
-            {value: "SELSKAT99", id: "13"},
+            {value: "SELSKAT99", id: "13"}
         ]
     },
     {
         value: "SELVBYGLÅN",
         id: "3",
         sub_groups: [
-            {value: "SELVBYGLÅN", id: "1"},
+            {value: "SELVBYGLÅN", id: "1"}
         ]
     },
     {
@@ -588,21 +588,21 @@
             {value: "TORSK", id: "32"},
             {value: "TORSK-HAV", id: "44"},
             {value: "TORSK-KYST", id: "46"},
-            {value: "UDBYTTE", id: "3"},
+            {value: "UDBYTTE", id: "3"}
         ]
     },
     {
         value: "SKORSTEN",
         id: "27",
         sub_groups: [
-            {value: "SKORSTEN", id: "1"},
+            {value: "SKORSTEN", id: "1"}
         ]
     },
     {
         value: "SUNDHED",
         id: "44",
         sub_groups: [
-            {value: "SUNDHED", id: "1"},
+            {value: "SUNDHED", id: "1"}
         ]
     },
     {
@@ -620,7 +620,7 @@
             {value: "NORDISKE6", id: "12"},
             {value: "PRIVATKRAV", id: "2"},
             {value: "TØNDER", id: "5"},
-            {value: "ULØNTRÆK", id: "4"},
+            {value: "ULØNTRÆK", id: "4"}
         ]
-    },
+    }
 ]
