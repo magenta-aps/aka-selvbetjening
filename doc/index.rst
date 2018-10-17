@@ -9,7 +9,9 @@ Welcome to DjangoTemplate's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
+   :glob:
+    
+   index/*
 
 
 Indices and tables
