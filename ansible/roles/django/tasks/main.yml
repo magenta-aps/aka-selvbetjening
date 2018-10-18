@@ -17,6 +17,7 @@
 - name: Install Django
   pip: 
     name: Django
+    version: < 2.0
     executable: pip3
 
 
