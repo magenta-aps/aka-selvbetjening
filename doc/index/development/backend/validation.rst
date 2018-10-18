@@ -1,15 +1,18 @@
 Validation
 ==========
 
-JSONSchema is a tool for validating JSON structures.
+JSON Schema
+-----------
 
-Official docs:
+JSON Schema is a tool for validating JSON structures.
 
-https://json-schema.org/
+External documentation
 
-https://pypi.org/project/jsonschema/
+https://json-schema.org/ - home of JSON Schema.
 
-https://github.com/ebdrup/json-schema-benchmark
+https://pypi.org/project/jsonschema/ - the Python module.
+
+https://github.com/ebdrup/json-schema-benchmark - some pointers to Javascript modules.
 
 Say you have the following JSON data and a schema for validation:
 

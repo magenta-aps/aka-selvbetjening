@@ -50,6 +50,11 @@ Required headers:
 
     Content-Type = multipart/form-data
 
-    (In POSTMAN you do not set the Content-Type yourself, instead you choose
-    form-data in the body tab and choose 'File' in the key field in the table below)
+Note on using Postman
+---------------------
+
+When doing a POST in Postman, without any file upload, you set Content-Type and X-CSRFTOKEN under the headers tab.
+
+When uploading files through POSTMAN, you do not set the Content-Type yourself, instead you choose
+form-data in the body tab and choose 'File' in the key field in the table below)
 

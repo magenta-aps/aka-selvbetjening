@@ -2,9 +2,11 @@
 System architecture
 ===================
 
-An HTTP request comes in from a caller, which is any component that calls our REST backend.
+The system is designed to act as middleware between users and the Greenland ERP system, Prisme. It is built with Django, and consists of a frontend, for form display and basic validation, and a backend that handles further validation and communication with Prisme. Communication between front and back end is done using AJAX.
 
-The request goes through 4 states, and ends in one of two end states:
+The basic flow is as follows:
+
+An HTTP request comes in from a caller, which under normal circumstances is the frontend, goes through 4 states, and ends in one of two end states:
 
   * 1: Received by the backend/the endpoint called.
   * 2: Converted to internal representation.
@@ -29,13 +31,21 @@ The 3 primary transitions are:
 
   Sending data to (and receiving from?) Prisme.
 
-On any error in one of these transitions, we go to state 5, and if no errors occurred, we transition to state 6.
-Both end states result in an HTTP response being sent to the caller. In case Django crashes, a code 500 is sent to
-the caller, but that is handled for us.
+On any error in one of these transitions, go to state 5; if no errors occurred, go to state 6.
+Both end states result in an HTTP response being sent to the caller.
 
 .. figure:: img/backend-state-diagram.png
 
-The caller is expected to be our own frontend, and in order to minimise risk,
-we use 1 JSONSchema for each form.
+The caller is expected to be our own frontend, and in order to enable uniform validation, we use 1 JSON-Schema for each form.
 This schema is communicated to the frontend, so that form data can be validated.
 The same schema is used in the backend for a second validation. The second validation is made, because we cannot guarantee that data comes from our own frontend, i.e. anyone can post data via curl or Postman.
+
+Django-specifics:
+---------------------
+
+* We do not use models, as there is nothing to store.
+
+* Settings are in backend/aka/settings.py.
+
+* Main urls are in backend/akasite/urls.py.
+
