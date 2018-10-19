@@ -1,13 +1,14 @@
 const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+require("@babel/polyfill")
 
 module.exports = {
   mode: 'production',
-  entry: './src/index.js',
+  entry: ['@babel/polyfill', './src/index.js'],
   output: {
-    path: path.resolve(__dirname, '../assets/js'),
+    path: path.resolve(__dirname, '../assets/js/'),
     filename: 'aka.nomodules.js',
-    publicPath: '../assets'
+    publicPath: '../static/js/'
   },
   module: {
     rules: [
