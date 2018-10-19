@@ -18,6 +18,9 @@ build/Release
 # Dependency directories
 node_modules/
 
+# Webpack build output
+assets/js/
+
 # Optional npm cache directory
 .npm
 

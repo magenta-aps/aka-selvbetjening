@@ -1,0 +1,120 @@
+/*** COLORS ***
+    
+    background white #fff
+    background grey #eaecee
+
+    header bg #63389b
+    darker header bg #42205d
+    desaturated header bg #522e80
+
+    text #31495b
+    slightly lighter text color #465c6c
+
+    link hover #83929D
+    result fitler #d6dbde
+
+    cta #fbb03b
+    cta hover #fbb84f
+
+*/
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font: 1em/1.5 Arial, sans-serif;
+    background-color: #eaecee; 
+    color: #31495b;
+    text-rendering: optimizeLegibility;
+    margin: 0;
+    padding: 0;
+}
+
+a,
+a:link,
+a:visited {
+    color: #31495b;
+}
+
+a:hover,
+a:active {
+    color: #83929D;
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+form {
+    margin: 1rem 0;
+}
+
+fieldset {
+    border: none;
+    margin: 1rem 0;
+}
+
+label {
+    display: block;
+    margin: .5rem 0 0;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="email"],
+input[type="password"],
+textarea {
+    border: solid 1px #d6dbde;
+    border-radius: .175rem;
+    padding: .5rem .75rem;
+    font-size: 1rem;
+    background-color: #fff;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+    border-color: #83929D;
+}
+
+button,
+input[type="submit"] {
+    color: #fff;
+    border: none;
+    padding: .5rem 2rem;
+    font-size: 1rem;
+}
+
+button {
+    background-color: #31495b;
+}
+
+button:hover,
+button:active {
+    background-color: #83929D;
+}
+
+input[type="submit"] {
+    background-color: #fbb03b;
+}
+
+input[type="submit"]:hover,
+input[type="submit"]:active {
+    background-color: #fbb84f;
+}
+
+article {
+    background-color: #fff;
+    padding: 1rem 2rem;
+}

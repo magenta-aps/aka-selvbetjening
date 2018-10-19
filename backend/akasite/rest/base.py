@@ -6,7 +6,7 @@ import json
 import random
 import logging
 
-
+logger = logging.getLogger(__name__)
 class ContentTypeError(Exception):
     """Exception raised for errors in the content-type
        of the request.
@@ -154,10 +154,10 @@ class JSONRestView(View):
                                         contenttype['charset'])
 
             retval = HttpResponse()
-            logging.getLogger(__name__).info(json.dumps(self.payload))
+            logger.info(json.dumps(self.payload))
         except (ContentTypeError, json.decoder.JSONDecodeError) as e:
             retval = self.errorResponse(e)
-            logging.getLogger(__name__).exception(e)
+            logger.exception(e)
 
         return retval
 
@@ -201,10 +201,10 @@ class JSONRestView(View):
 
             self.authuser = request.META['HTTP_X_AKA_BRUGER']
             retval = HttpResponse()
-            logging.getLogger(__name__).info('Uploaded files: ' +
+            logger.info('Uploaded files: ' +
                                              str(len(self.payload['files'])))
         except (ContentTypeError, json.decoder.JSONDecodeError, IOError) as e:
             retval = self.errorResponse(e)
-            logging.getLogger(__name__).exception(e)
+            logger.exception(e)
 
         return retval
