@@ -10,6 +10,7 @@ Top Folder structure:
 - **backend**       (The Django Project)
 
   - **aka**         (The starting point for Django, settings.py, and urls.py)
+
   - **akasite**     (The Django app we develop in)
     
     - **rest**      (The Django views for the REST interface)
@@ -21,6 +22,8 @@ Top Folder structure:
     - **js/app.js** (The compiled Vue app)
   
   - **src**         (The Vue source code)
+
+- **shared**        (Resources shared between frontend and backend)
 
 - **doc**           (The Sphinx documentation)
 
@@ -36,3 +39,5 @@ Top Folder structure:
 - **ansible**       (Configuration of development and production machines)
 
   - **...**
+
+- **makefile-utils** (Utility scripts for the makefile)
