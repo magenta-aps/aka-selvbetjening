@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from akasite.rest import inkassosag, debitor, fileupload
+from akasite.rest import inkassosag, debitor, fileupload, filedownload
 from akasite import htmlviews
 
 app_name = 'akasite'
@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^inkassosag$', inkassosag.InkassoSag.as_view(), name='inkassosag'),
     url(r'^debitor$', debitor.Debitor.as_view(), name='debitor'),
     url(r'^filupload$', fileupload.FileUpload.as_view(), name='filupload'),
+    url(r'^rentenota$', filedownload.FileDownload.as_view(), name='fildownload'),
 ]
