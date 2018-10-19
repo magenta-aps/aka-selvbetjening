@@ -201,7 +201,7 @@ class JSONRestView(View):
 
             self.authuser = request.META['HTTP_X_AKA_BRUGER']
             retval = HttpResponse()
-            logging.getLogger(__name__).info('Uploaded files: ' +
+            logger.info('Uploaded files: ' +
                                              str(len(self.payload['files'])))
         except (ContentTypeError, json.decoder.JSONDecodeError, IOError) as e:
             retval = self.errorResponse(e)
