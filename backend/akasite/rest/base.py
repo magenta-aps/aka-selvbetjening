@@ -205,6 +205,6 @@ class JSONRestView(View):
                                              str(len(self.payload['files'])))
         except (ContentTypeError, json.decoder.JSONDecodeError, IOError) as e:
             retval = self.errorResponse(e)
-            logging.getLogger(__name__).exception(e)
+            logger.exception(e)
 
         return retval
