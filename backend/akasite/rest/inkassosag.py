@@ -11,7 +11,11 @@ import re
 
 logger = logging.getLogger(__name__)
 
-@method_decorator(ensure_csrf_cookie, name='dispatch')
+class FordringsException(Exception):
+    def __init__(self, message):
+        super(FordringsException, self).__init__(message)
+
+
 class InkassoSag(JSONRestView):
     def get(self, request, *args, **kwargs):
         dummyresponse = {"serversays": "Hello. You said InkassoSag/GET"}
@@ -26,33 +30,41 @@ class InkassoSag(JSONRestView):
         if baseresponse.status_code == 200:
 
             logger.info(self.payload)
-            validateFordringsgrupper(self.payload)
+            validationStatus = validateFordringsgrupper(self.payload)
 
-            return HttpResponse(200)
+
+            return HttpResponse(str(validationStatus))
         else:
             return baseresponse
 
 def validateFordringsgrupper(reqJson):
-    fordringsJson = getFordringsgrupper()
     try:
-        fordringsgruppe = getOnlyElement(fordringsJson, reqJson['fordringsgruppe'])
+        fordringsJson = getSharedJson('fordringsgruppe.json')
+        try:
+            fordringsgruppe = getOnlyElement(fordringsJson, reqJson['fordringsgruppe'])
+        except FordringsException as e:
+            return {
+                        'status': False,
+                        'field': 'fordringsgruppe',
+                        'msg': str.format(str(e),'fordringsgruppe')
+                   }
+        try:
+            fordringstype = getOnlyElement(fordringsgruppe['sub_groups'], reqJson['fordringstype'])
+
+        except FordringsException as e:
+            return {
+                        'status': False,
+                        'field': 'fordringstype',
+                        'msg': str.format(str(e),'fordringstype')
+                   }
+
+        return {'status': True}
     except Exception as e:
+        logger.warning("Invalid JSON recieved:"+str(reqJson)+"\n\nException: "+e)
         return {
                     'status': False,
-                    'field': 'fordringsgruppe',
-                    'msg': str.format(e,'fordringsgruppe')
+                    'msg': 'fordringsgruppe or fordringstype missing or not a number'
                }
-    try:
-        fordringstype = getOnlyElement(fordringsgruppe['sub_groups'], reqJson['fordringstype'])
-
-    except Exception as e:
-        return {
-                    'status': False,
-                    'field': 'fordringstype',
-                    'msg': str.format(e,'fordringstype')
-               }
-
-    return {'status': True}
 
 
 
@@ -61,35 +73,31 @@ def validateFordringsgrupper(reqJson):
 def getOnlyElement(l, fordring):
     fordringsList = [x for x in l if x['id']==fordring]
     if len(fordringsList ) < 1:
-        logger.error("The following list:\n"+l+"\n was expected to have 1 "+
+        logger.error("The following list:\n"+str(l)+"\n was expected to have 1 "+
                      "element with the following id: "+fordring+
                      ", but none was found.\n"+
                      "The error might be a user error, if a custom REST-client was used")
-        raise Exception("Error {0} not found")
+        raise FordringsException("Error {0} not found")
 
     elif len(fordringsList ) > 1:
-        logger.error("The following list:\n"+l+"\n was only expected to have 1 "+
-                     "element with the following id: "+fordring+
+        logger.error("The following list:\n"+str(l)+"\n was only expected to have 1 "+
+                     "element with the following id: "+str(fordring)+
                      ", but multiple elements were found")
-        raise Exception("Server Error, multiple {0} fields found")
+        raise FordringsException("Server Error, multiple {0} fields found")
 
     else:
         return fordringsList[0]
 
 
-def quoteJson(unquotedJson):
-    temp1 = unquotedJson.replace(r'id:', r'"id":')
-    temp2 = temp1.replace(r'value:', r'"value":')
-    temp3 = temp2.replace(r'sub_groups:', r'"sub_groups":')
-    return temp3
-
-def getFordringsgrupper():
+def getSharedJson(fileName):
     """
+    This function generates a json(can be used as a dict)
+    from a file shared between the frontend and backend.
+    The file must be in a valid json format.
 
     """
-    with open('../shared/fordringsgruppe.json','r') as jsonfile:
-        validjson = quoteJson(jsonfile.read())
-        return json.loads(validjson)
+    with open('../shared/'+fileName,'r') as jsonfile:
+        return json.loads(jsonfile.read())
 
 
 
