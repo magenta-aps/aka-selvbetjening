@@ -154,7 +154,7 @@ class JSONRestView(View):
                                         contenttype['charset'])
 
             retval = HttpResponse()
-            logging.getLogger(__name__).info(json.dumps(self.payload))
+            logger.info(json.dumps(self.payload))
         except (ContentTypeError, json.decoder.JSONDecodeError) as e:
             retval = self.errorResponse(e)
             logging.getLogger(__name__).exception(e)
