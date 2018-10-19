@@ -6,7 +6,7 @@ import json
 import random
 import logging
 
-
+logger = logging.getLogger(__name__)
 class ContentTypeError(Exception):
     """Exception raised for errors in the content-type
        of the request.
