@@ -52,26 +52,31 @@ class BasicTestCase(TestCase):
         self.assertEqual(len(errors), 2)
 
     def test_Validator_7(self):
-        jsonFAIL = {'name': 'Eggs', 'price': 201.2, 'year': 2022, 'cpr': '010190-1234' }
+        jsonFAIL = {'name': 'Eggs', 'price': 201.2, 'year': 2022,
+                    'cpr': '010190-1234'}
         errors = self.validator.validate(jsonFAIL)
         self.assertEqual(len(errors), 0)
 
     def test_Validator_8(self):
-        jsonFAIL = {'name': 'Eggs', 'price': 201.1, 'year': 2022, 'cpr': '010190-123' }
+        jsonFAIL = {'name': 'Eggs', 'price': 201.1, 'year': 2022,
+                    'cpr': '010190-123'}
         errors = self.validator.validate(jsonFAIL)
         self.assertEqual(len(errors), 1)
 
     def test_Validator_9(self):
-        jsonFAIL = {'name': 'Eggs', 'price': 201.1, 'year': 2022, 'cpr': 'a10190-1234' }
+        jsonFAIL = {'name': 'Eggs', 'price': 201.1, 'year': 2022,
+                    'cpr': 'a10190-1234'}
         errors = self.validator.validate(jsonFAIL)
         self.assertEqual(len(errors), 1)
 
     def test_Validator_10(self):
-        jsonFAIL = {'name': 'Eggs', 'price': 201.1, 'year': 2022, 'cpr': ' 110190-1234' }
+        jsonFAIL = {'name': 'Eggs', 'price': 201.1, 'year': 2022,
+                    'cpr': ' 110190-1234'}
         errors = self.validator.validate(jsonFAIL)
         self.assertEqual(len(errors), 1)
 
     def test_Validator_11(self):
-        jsonFAIL = {'name': 'Eggs', 'price': 201.1, 'year': 2022, 'cpr': ' 110190-1234 ' }
+        jsonFAIL = {'name': 'Eggs', 'price': 201.1, 'year': 2022,
+                    'cpr': ' 110190-1234 '}
         errors = self.validator.validate(jsonFAIL)
         self.assertEqual(len(errors), 1)

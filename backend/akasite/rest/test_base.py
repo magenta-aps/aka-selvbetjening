@@ -1,5 +1,6 @@
 from django.test import TestCase
-from django.test import Client
+from django.http import HttpResponseBadRequest
+from akasite.rest.base import JSONRestView, ContentTypeError
 import json
 import logging
 
@@ -8,128 +9,168 @@ import logging
 class BasicTestCase(TestCase):
     def setUp(self):
         logging.disable(logging.CRITICAL)
-        self.c = Client()
-        self.url = '/inkassosag'
-        self.url2 = '/debitor'
-        self.url3 = '/filupload'
 
     def checkReturnValIsJSON(self, response):
         try:
             charset = response.charset
-            jsonobj = json.loads(response.content.decode(charset))
-            # print(json.dumps(jsonobj, indent=4))
+            json.dumps(json.loads(response.content.decode(charset)), indent=4)
         except json.decoder.JSONDecodeError:
             self.fail('Did not get JSON back.')
 
-    def test_Get(self):
-        response = self.c.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.checkReturnValIsJSON(response)
+    def test_object(self):
+        obj = JSONRestView()
+        self.assertTrue(type(obj) is JSONRestView)
 
-    # Legal JSON in body, and legal content_type.
-    def test_Post_1(self):
-        jsondata = '{"sagsnummer": "789321", "fornavn": "karl"}'
-        ctstring = 'application/json; charset=utf-8'
-        response = self.c.post(self.url, content_type=ctstring, data=jsondata)
-        self.assertEqual(response.status_code, 200)
-        self.checkReturnValIsJSON(response)
+    def test_randomstring(self):
+        obj = JSONRestView()
+        rstr = obj.randomstring(40) 
+        self.assertTrue(type(rstr) is str)
+        self.assertEqual(len(rstr), 40)
 
-    # Illegal JSON in body.
-    def test_Post_2(self):
-        jsondata = '{: "karl"}'
-        ctstring = 'application/json; charset=utf-8'
-        response = self.c.post(self.url, content_type=ctstring, data=jsondata)
-        self.assertEqual(response.status_code, 400)
-        self.checkReturnValIsJSON(response)
+        rstr = obj.randomstring(60) 
+        self.assertTrue(type(rstr) is str)
+        self.assertEqual(len(rstr), 60)
 
-    # Empty JSON in body, legal content-type.
-    # For some reason, the server cannot find content-type in the request,
-    # so this fails, but for an unexpected reason.
-    def test_Post_3(self):
-        jsondata = ''
-        ctstring = 'application/json; charset=utf-8'
-        response = self.c.post(self.url, content_type=ctstring, data=jsondata)
-        self.assertEqual(response.status_code, 400)
-        self.checkReturnValIsJSON(response)
+    def test_contenttype_1A(self):
+        '''
+        Using OK headerstring.
+        Test this according to the rules, as described
+        here:
+        https://tools.ietf.org/html/rfc7231#section-3.1.1.1
+        '''
+        obj = JSONRestView()
+        headerstring = 'application/json;charset=utf-8'
+        ct = obj.getContenttype(headerstring)
+        self.assertTrue(type(ct) is dict)
+        self.assertTrue('type' in ct)
+        self.assertTrue('charset' in ct)
+        self.assertEqual(ct['type'], 'application/json')
+        self.assertEqual(ct['charset'], 'utf-8')
 
-    # Send data as multipart. Should fail, as body will be empty.
-    def test_Post_4(self):
-        response = self.c.post(self.url, {'name': 'john', 'password': 'xy'})
-        self.assertEqual(response.status_code, 400)
-        self.checkReturnValIsJSON(response)
+    def test_contenttype_1B(self):
+        '''
+        Using OK headerstring.
+        Test this according to the rules, as described
+        here:
+        https://tools.ietf.org/html/rfc7231#section-3.1.1.1
+        '''
+        obj = JSONRestView()
+        headerstring = 'application/json; charset=utf-8'
+        ct = obj.getContenttype(headerstring)
+        self.assertTrue(type(ct) is dict)
+        self.assertTrue('type' in ct)
+        self.assertTrue('charset' in ct)
+        self.assertEqual(ct['type'], 'application/json')
+        self.assertEqual(ct['charset'], 'utf-8')
 
-    # Empty charset. Should fail.
-    def test_Post_5(self):
-        jsondata = '{"name" : "karl"}'
-        ctstring = 'application/json; charset='
-        response = self.c.post(self.url, content_type=ctstring, data=jsondata)
-        self.assertEqual(response.status_code, 400)
-        self.checkReturnValIsJSON(response)
+    def test_contenttype_1C(self):
+        '''
+        Using OK headerstring.
+        Test this according to the rules, as described
+        here:
+        https://tools.ietf.org/html/rfc7231#section-3.1.1.1
+        '''
+        obj = JSONRestView()
+        headerstring = 'application/json ;charset=utf-8'
+        ct = obj.getContenttype(headerstring)
+        self.assertTrue(type(ct) is dict)
+        self.assertTrue('type' in ct)
+        self.assertTrue('charset' in ct)
+        self.assertEqual(ct['type'], 'application/json')
+        self.assertEqual(ct['charset'], 'utf-8')
 
-    # No charset. Should fail.
-    def test_Post_6(self):
-        jsondata = '{"name" : "karl"}'
-        ctstring = 'application/json'
-        response = self.c.post(self.url, content_type=ctstring, data=jsondata)
-        self.assertEqual(response.status_code, 400)
-        self.checkReturnValIsJSON(response)
+    def test_contenttype_1D(self):
+        '''
+        Using OK headerstring.
+        Test this according to the rules, as described
+        here:
+        https://tools.ietf.org/html/rfc7231#section-3.1.1.1
+        '''
+        obj = JSONRestView()
+        headerstring = 'application/json ; charset=utf-8'
+        ct = obj.getContenttype(headerstring)
+        self.assertTrue(type(ct) is dict)
+        self.assertTrue('type' in ct)
+        self.assertTrue('charset' in ct)
+        self.assertEqual(ct['type'], 'application/json')
+        self.assertEqual(ct['charset'], 'utf-8')
 
-    # Incorrect content-type, should fail.
-    def test_Post_7(self):
-        jsondata = '{"name" : "karl"}'
-        ctstring = 'text/plain; charset=utf-8'
-        response = self.c.post(self.url, content_type=ctstring, data=jsondata)
-        self.assertEqual(response.status_code, 400)
-        self.checkReturnValIsJSON(response)
+    def test_contenttype_1D(self):
+        '''
+        Using OK headerstring.
+        Test this according to the rules, as described
+        here:
+        https://tools.ietf.org/html/rfc7231#section-3.1.1.1
+        '''
+        obj = JSONRestView()
+        headerstring = 'application/json ;'
+        ct = obj.getContenttype(headerstring)
+        self.assertTrue(type(ct) is dict)
+        self.assertTrue('type' in ct)
+        self.assertTrue('charset' in ct)
+        self.assertEqual(ct['type'], 'application/json')
 
-    # Other charset. Should not fail.
-    def test_Post_8(self):
-        jsondata = '{"name" : "karl"}'
-        ctstring = 'application/json; charset=iso8859-1'
-        response = self.c.post(self.url, content_type=ctstring, data=jsondata)
-        self.assertEqual(response.status_code, 200)
-        self.checkReturnValIsJSON(response)
+    def test_validcontenttype_1(self):
+        ct = JSONRestView.CT1
+        charset = 'utf-8'
+        dict = {'CONTENT_TYPE': ct+';charset='+charset}
+        obj = JSONRestView()
+        res = obj.validContenttype(dict, ct)
+        # self.assertTrue(type(res) is dict) # Why does this fail?
+        self.assertTrue('type' in res)
+        self.assertTrue('charset' in res)
 
-    # ---------- DEBITOR -------------
-    def test_Get_Debitor(self):
-        response = self.c.get(self.url2)
-        self.assertEqual(response.status_code, 200)
-        self.checkReturnValIsJSON(response)
+    def test_validcontenttype_2(self):
+        ct = JSONRestView.CT1
+        charset = 'utf-8'
+        dict = {'wrongkey': ct+';charset='+charset}
+        obj = JSONRestView()
+        try:
+            res = obj.validContenttype(dict, ct)
+            self.fail('Failed to catch missing CONTENT_TYPE key.')
+        except ContentTypeError:
+            pass
 
-    # Legal JSON in body.
-    def test_Post1debitor(self):
-        jsondata = '{"sagsnummer": "789321", "fornavn": "karl"}'
-        ctstring = 'application/json; charset=utf-8'
-        response = self.c.post(self.url2, content_type=ctstring, data=jsondata)
-        self.assertEqual(response.status_code, 200)
-        self.checkReturnValIsJSON(response)
+    def test_validcontenttype_3(self):
+        ct = JSONRestView.CT1
+        dict = {'CONTENT_TYPE': ct+';charset='}
+        obj = JSONRestView()
+        try:
+            res = obj.validContenttype(dict, ct)
+            self.fail('Failed to catch missing charset.')
+        except ContentTypeError:
+            pass
 
-    # ---------- FILUPLOAD FORMDATA -------------
-    def test_Get_Fileupload(self):
-        response = self.c.get(self.url3)
-        self.assertEqual(response.status_code, 200)
-        self.checkReturnValIsJSON(response)
+    def test_validcontenttype_4(self):
+        ct = JSONRestView.CT1
+        dict = {'CONTENT_TYPE': ct}
+        obj = JSONRestView()
+        try:
+            res = obj.validContenttype(dict, ct, False)
+        except ContentTypeError:
+            self.fail('Should not fail on missing charset.')
 
-    # Legal content-type, and some formdata.
-    def test_Post_fileupload_1(self):
-        testfilename = 'akasite/testdata.csv'
-        with open(testfilename) as fp:
-            response = self.c.post(self.url3,
-                                   {'formfelt1': 'indhold, ff1',
-                                    'formfelt2': 'indhold, ff2',
-                                    'attachment': fp},
-                                    **{'HTTP_X_AKA_BRUGER':'Lim Karsen'})
-        self.assertEqual(response.status_code, 200)
-        self.checkReturnValIsJSON(response)
+    def test_contenttypeerror_1(self):
+        exc = ContentTypeError('Testing contenttypeeror.')
+        self.assertTrue(type(exc) is ContentTypeError)
 
-    # Illegal content-type.
-    def test_Post_fileupload_2(self):
-        rawfiledata = '123;6555;"Michael Neidhardt";"København Ø";;;\n'
-        rawfiledata += '768;098543;"Palle;peter";Ferênc Gülsen";;;'
-        ctstring = 'application/json; charset='
-        response = self.c.post(self.url3, content_type=ctstring, data=rawfiledata, **{'HTTP_X_AKA_BRUGER':'Lim Karsen'})
-        self.assertEqual(response.status_code, 400)
-        self.checkReturnValIsJSON(response)
+    def test_contenttypeerror_2(self):
+        msg = 'Testing contenttypeeror.'
+        exc = ContentTypeError(msg)
+        self.assertEqual(exc.message, msg)
 
-    # If using multipart/form-data, and boundarystring is missing, Django crashes with error 500.
-    # Is this intentional?
+    def test_errortext_1(self):
+        obj = JSONRestView()
+        txt = 'Hey ho, testing'
+        et = json.loads(obj.errorText(txt))
+        self.assertTrue('status' in et)
+        self.assertTrue('message' in et)
+        self.assertEqual(et['message'], txt)
+
+    def test_errormessage_1(self):
+        obj = JSONRestView()
+        msg = 'Testing again.'
+        exc = ContentTypeError(msg)
+        er = obj.errorResponse(exc)
+        self.assertTrue(type(er) is HttpResponseBadRequest)
+        self.assertTrue(msg.lower() in er.content.decode('utf-8').lower())

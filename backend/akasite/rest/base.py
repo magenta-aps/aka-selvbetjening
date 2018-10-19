@@ -7,6 +7,8 @@ import random
 import logging
 
 logger = logging.getLogger(__name__)
+
+
 class ContentTypeError(Exception):
     """Exception raised for errors in the content-type
        of the request.
@@ -27,7 +29,7 @@ class JSONRestView(View):
     def randomstring(self, length=30):
         return ''.join([
             random.choice('abcdefghijklmnopqrstuvwxyz0123456789')
-            for i in range(50)
+            for i in range(length)
             ])
 
     def handle_uploaded_file(self, f, destinationfilename):
@@ -202,7 +204,7 @@ class JSONRestView(View):
             self.authuser = request.META['HTTP_X_AKA_BRUGER']
             retval = HttpResponse()
             logger.info('Uploaded files: ' +
-                                             str(len(self.payload['files'])))
+                        str(len(self.payload['files'])))
         except (ContentTypeError, json.decoder.JSONDecodeError, IOError) as e:
             retval = self.errorResponse(e)
             logger.exception(e)
