@@ -1,5 +1,6 @@
 from akasite.rest.base import JSONRestView
 from akasite.rest.prisme import Prisme
+from akasite.rest.utils import AKAUtils
 from django.http import HttpResponse
 from django.http import HttpResponseNotAllowed
 from django.conf import settings
