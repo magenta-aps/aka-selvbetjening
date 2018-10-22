@@ -8,7 +8,7 @@ import App from './App.vue'
 const TableOfContents = () => import('./components/table_of_contents/TableOfContents.vue')
 const FormExample1 = () => import('./components/form_example_1/FormExample1.vue')
 const FormExample2 = () => import('./components/form_example_2/FormExample2.vue')
-const SimpelIndberetning = () => import ('./components/simpel_indberetning/SimpelIndberetning.vue'))
+const SimpelIndberetning = () => import ('./components/simpel_indberetning/SimpelIndberetning.vue')
 const Experiment = () => import('./components/experiment_with_file_upload/Example.vue')
 
 Vue.use(VueRouter)
