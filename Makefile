@@ -47,7 +47,8 @@ frontend/node_modules : frontend/package.json
 	$(NPM) update
 	$(NPM) install
 
-# $@ is the target file (fordringsgruppe.js)
-# $< is the prerequisitte (fordringsgruppe.json)
+# $@ is the target file (shared/fordringsgruppe.js)
+# $< is the prerequisitte (frontend/assets/fordringsgruppe.json) 
+# The second argument is the json variable name
 frontend/assets/fordringsgruppe.js : shared/fordringsgruppe.json
-	makefile-utils/gen_fordringsgruppe_frontend.sh $< > $@
+	makefile-utils/gen_json-variable_for_frontend.sh $< groups > $@
