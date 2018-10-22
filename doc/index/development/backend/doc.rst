@@ -38,15 +38,6 @@ HTTP_ is prepended, dashes are converted to underscores and the whole string is
 
 converted to upper case.
 
-Make sure to use this decorator on any sub class of JSONRestView, 
-
-if you want it protected from CSRF:
-
-  @method_decorator(ensure_csrf_cookie, name='dispatch')
-=======
-NB: Make sure to use this decorator on any sub class of JSONRestView, 
-if you want it protected from CSRF:
-@method_decorator(ensure_csrf_cookie, name='dispatch')
 
 .. automodule:: base
    :members:

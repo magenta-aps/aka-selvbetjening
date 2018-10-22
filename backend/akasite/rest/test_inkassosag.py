@@ -86,3 +86,8 @@ class BasicTestCase(TestCase):
         response = self.c.post(self.url, content_type=ctstring, data=jsondata)
         self.assertEqual(response.status_code, 200)
         self.checkReturnValIsJSON(response)
+
+    def test_Schema(self):
+        response = self.c.get(self.url + '/schema')
+        self.assertEqual(response.status_code, 200)
+        self.checkReturnValIsJSON(response)

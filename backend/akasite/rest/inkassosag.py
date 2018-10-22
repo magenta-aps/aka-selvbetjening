@@ -1,11 +1,24 @@
 from akasite.rest.base import JSONRestView
 import json
 from django.http import HttpResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.utils.decorators import method_decorator
 
 
-@method_decorator(ensure_csrf_cookie, name='dispatch')
+class Schema(JSONRestView):
+    def get(self, request, *args, **kwargs):
+        schema = {
+            'type': 'object',
+            'properties': {
+                'name': {'type': 'string'},
+                'year': {'type': 'number'},
+                'cpr': {'type': 'string', 'pattern': '^[0-9]{6}-[0-9]{4}$'},
+                'height': {'type': 'number'},
+            },
+            'required': ['name', 'year', 'cpr'],
+        }
+
+        return HttpResponse(json.dumps(schema), content_type=JSONRestView.CT1)
+
+
 class InkassoSag(JSONRestView):
     def get(self, request, *args, **kwargs):
         dummyresponse = {"serversays": "Hello. You said InkassoSag/GET"}

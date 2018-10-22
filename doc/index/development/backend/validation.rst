@@ -31,7 +31,7 @@ Say you have the following JSON data and a schema for validation:
             'name': {'type': 'string'},
             'year': {'type': 'number'},
             'cpr': {'type': 'string', 'pattern': '^[0-9]{6}-[0-9]{4}$'},
-            'height': 
+            'height': {'type': 'number'},
         },
         'required': ['name', 'year', 'cpr'],
     }

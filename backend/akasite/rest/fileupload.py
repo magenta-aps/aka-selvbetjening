@@ -1,11 +1,8 @@
 from akasite.rest.base import JSONRestView
 import json
 from django.http import HttpResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.utils.decorators import method_decorator
 
 
-@method_decorator(ensure_csrf_cookie, name='dispatch')
 class FileUpload(JSONRestView):
     def get(self, request, *args, **kwargs):
         dummyresponse = {"serversays": "Hello. You said FileUpload/GET"}
