@@ -5,9 +5,9 @@ module.exports = {
   mode: 'production',
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, '../assets/js'),
-    filename: 'aka.js',
-    publicPath: '../assets'
+    path: path.resolve(__dirname, '../assets/js/'),
+    filename: 'aka.esmodules.js',
+    publicPath: '../static/js/'
   },
   module: {
     rules: [
@@ -18,7 +18,21 @@ module.exports = {
       /*
       {
         test: /\.js$/,
-        loader: 'babel-loader'
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              [
+                "@babel/preset-env",
+                {
+                  targets: {
+                    "esmodules": true
+                  }
+                }
+              ]
+            ]
+          }
+        }
       },
       */
       {

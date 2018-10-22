@@ -1,6 +1,5 @@
 from akasite.rest.base import JSONRestView
 from django.http import HttpResponse
-from django.http import HttpResponseBadRequest
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 import json
@@ -21,7 +20,7 @@ class InkassoSag(JSONRestView):
         dummyresponse = {"serversays": "Hello. You said InkassoSag/GET"}
 
         return HttpResponse(json.dumps(dummyresponse),
-                            content_type=JSONRestView.RESTCONTENTTYPE)
+                            content_type=JSONRestView.CT1)
 
     def post(self, request, *args, **kwargs):
         baseresponse = super().post(request, args, kwargs)
@@ -98,6 +97,5 @@ def getSharedJson(fileName):
     """
     with open('../shared/'+fileName,'r') as jsonfile:
         return json.loads(jsonfile.read())
-
 
 

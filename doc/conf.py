@@ -12,14 +12,16 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../backend/akasite/rest'))
+sys.path.insert(0, os.path.abspath('../backend/akasite'))
+sys.path.insert(0, os.path.abspath('../backend'))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'DjangoTemplate'
+project = 'AKA Selvbetjeningsløsninger'
 copyright = '2018, Magenta ApS'
 author = 'Magenta ApS'
 
@@ -178,6 +180,12 @@ epub_exclude_files = ['search.html']
 
 
 # -- Extension configuration -------------------------------------------------
+
+# In order to work with Django, the settings module must be imported
+os.environ['DJANGO_SETTINGS_MODULE'] = 'aka.settings'
+import django
+django.setup()
+
 
 # -- Options for todo extension ----------------------------------------------
 

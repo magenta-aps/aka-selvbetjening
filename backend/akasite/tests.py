@@ -1,11 +1,13 @@
 from django.test import TestCase
 from django.test import Client
 import json
+import logging
 
 
 # Create your tests here.
 class BasicTestCase(TestCase):
     def setUp(self):
+        logging.disable(logging.CRITICAL)
         self.c = Client()
         self.url = '/inkassosag'
         self.url2 = '/debitor'
@@ -15,7 +17,7 @@ class BasicTestCase(TestCase):
         try:
             charset = response.charset
             jsonobj = json.loads(response.content.decode(charset))
-            print(json.dumps(jsonobj, indent=4))
+            # print(json.dumps(jsonobj, indent=4))
         except json.decoder.JSONDecodeError:
             self.fail('Did not get JSON back.')
 
@@ -50,7 +52,7 @@ class BasicTestCase(TestCase):
         self.assertEqual(response.status_code, 400)
         self.checkReturnValIsJSON(response)
 
-    # Send data as default, i.e. multipart. Should fail, as body will be empty.
+    # Send data as multipart. Should fail, as body will be empty.
     def test_Post_4(self):
         response = self.c.post(self.url, {'name': 'john', 'password': 'xy'})
         self.assertEqual(response.status_code, 400)
@@ -72,8 +74,16 @@ class BasicTestCase(TestCase):
         self.assertEqual(response.status_code, 400)
         self.checkReturnValIsJSON(response)
 
-    # Other charset. Should not fail.
+    # Incorrect content-type, should fail.
     def test_Post_7(self):
+        jsondata = '{"name" : "karl"}'
+        ctstring = 'text/plain; charset=utf-8'
+        response = self.c.post(self.url, content_type=ctstring, data=jsondata)
+        self.assertEqual(response.status_code, 400)
+        self.checkReturnValIsJSON(response)
+
+    # Other charset. Should not fail.
+    def test_Post_8(self):
         jsondata = '{"name" : "karl"}'
         ctstring = 'application/json; charset=iso8859-1'
         response = self.c.post(self.url, content_type=ctstring, data=jsondata)
@@ -104,7 +114,11 @@ class BasicTestCase(TestCase):
     def test_Post_fileupload_1(self):
         testfilename = 'akasite/testdata.csv'
         with open(testfilename) as fp:
-            response = self.c.post(self.url3, {'name': testfilename, 'attachment': fp}, **{'HTTP_X_AKA_BRUGER':'Lim Karsen'})
+            response = self.c.post(self.url3,
+                                   {'formfelt1': 'indhold, ff1',
+                                    'formfelt2': 'indhold, ff2',
+                                    'attachment': fp},
+                                    **{'HTTP_X_AKA_BRUGER':'Lim Karsen'})
         self.assertEqual(response.status_code, 200)
         self.checkReturnValIsJSON(response)
 
@@ -116,3 +130,6 @@ class BasicTestCase(TestCase):
         response = self.c.post(self.url3, content_type=ctstring, data=rawfiledata, **{'HTTP_X_AKA_BRUGER':'Lim Karsen'})
         self.assertEqual(response.status_code, 400)
         self.checkReturnValIsJSON(response)
+
+    # If using multipart/form-data, and boundarystring is missing, Django crashes with error 500.
+    # Is this intentional?
