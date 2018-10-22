@@ -1,7 +1,9 @@
 from django.test import TestCase
 from django.test import Client
+from django.conf import settings
 import json
 import logging
+import os
 
 
 # Create your tests here.
@@ -10,6 +12,11 @@ class BasicTestCase(TestCase):
         logging.disable(logging.CRITICAL)
         self.c = Client()
         self.url = '/filupload'
+
+    def tearDown(self):
+        files = os.listdir(settings.MEDIA_URL)
+        for file in files:
+            os.remove(os.path.join(settings.MEDIA_URL, file))
 
     def checkReturnValIsJSON(self, response):
         try:
@@ -25,7 +32,7 @@ class BasicTestCase(TestCase):
 
     # Legal content-type, and some formdata.
     def test_Post_fileupload_1(self):
-        testfilename = 'akasite/testdata.csv'
+        testfilename = 'akasite/tests/file4test.csv'
         with open(testfilename) as fp:
             response = self.c.post(self.url,
                                    {'formfelt1': 'indhold, ff1',

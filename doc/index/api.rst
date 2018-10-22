@@ -50,8 +50,14 @@ Required headers:
 
     Content-Type = multipart/form-data
 
+/rentenota
+----------
+
+GET: Get rentenota from Prisme. Requires from-date and to-date
+
+
 Note on using Postman
----------------------
+=====================
 
 When doing a POST in Postman, without any file upload, you set Content-Type and X-CSRFTOKEN under the headers tab.
 

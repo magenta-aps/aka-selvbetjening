@@ -42,5 +42,8 @@ converted to upper case.
 .. automodule:: base
    :members:
 
+.. automodule:: fileupload
+   :members:
+
 .. automodule:: inkassosag
    :members:
