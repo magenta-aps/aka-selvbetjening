@@ -1,14 +1,17 @@
-from akasite.rest.base import JSONRestView
 from django.http import HttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
+
 import json
 import logging
 import re
 
-
+# Internal tools
+from akasite.rest.base import JSONRestView
+from akasite.rest.validation import JsonValidator
 
 logger = logging.getLogger(__name__)
+
 
 class FordringsException(Exception):
     def __init__(self, message):
@@ -25,67 +28,88 @@ class InkassoSag(JSONRestView):
     def post(self, request, *args, **kwargs):
         baseresponse = super().post(request, args, kwargs)
 
-
         if baseresponse.status_code == 200:
 
             logger.info(self.payload)
-            validationStatus = validateFordringsgrupper(self.payload)
+            validation1 = validateInkassoJson(self.payload)
+            if validation1 == []:
+                validationStatus = validateFordringsgrupper(self.payload)
+            else:
+                validationStatus = validation1
 
-
-            return HttpResponse(str(validationStatus))
+            return HttpResponse(json.dumps(validationStatus),
+                                content_type=JSONRestView.CT1)
         else:
             return baseresponse
+
+
+def validateInkassoJson(reqJson):
+    jsonSchema = {
+            'type': 'object',
+            'properties': {
+                'fordringshaver':   {'type': 'string'},
+                'debitor':          {'type': 'string'},
+                'fordringshaver2':  {'type': 'string'},
+                'fordringsgruppe':  {'type': 'integer'},
+                'fordringstype':    {'type': 'integer'}
+                },
+            'required': ['fordringshaver',
+                         'debitor',
+                         'fordringshaver2',
+                         'fordringsgruppe',
+                         'fordringstype']
+            }
+
+    return JsonValidator(jsonSchema).validate(reqJson)
+
 
 def validateFordringsgrupper(reqJson):
     try:
         fordringsJson = getSharedJson('fordringsgruppe.json')
-        try:
-            fordringsgruppe = getOnlyElement(fordringsJson, reqJson['fordringsgruppe'])
-        except FordringsException as e:
-            return {
-                        'status': False,
-                        'field': 'fordringsgruppe',
-                        'msg': str.format(str(e),'fordringsgruppe')
-                   }
-        try:
-            fordringstype = getOnlyElement(fordringsgruppe['sub_groups'], reqJson['fordringstype'])
-
-        except FordringsException as e:
-            return {
-                        'status': False,
-                        'field': 'fordringstype',
-                        'msg': str.format(str(e),'fordringstype')
-                   }
-
-        return {'status': True}
+        fordringsgruppe = getOnlyElement(fordringsJson,
+                                         reqJson['fordringsgruppe'])
+        if fordringsgruppe['status']:
+            fordringstype = getOnlyElement(fordringsgruppe['elem']['sub_groups'],
+                                           reqJson['fordringstype'])
+            if fordringstype['status']:
+                return {'status': True}
+            else:
+                return fordringstype
+        else:
+            return fordringsgruppe
     except Exception as e:
         logger.warning("Invalid JSON recieved:"+str(reqJson)+"\n\nException: "+e)
         return {
                     'status': False,
-                    'msg': 'fordringsgruppe or fordringstype missing or not a number'
+                    'msg': 'fordringsgruppe or fordringstype missing or NaN'
                }
 
 
-
-
-
 def getOnlyElement(l, fordring):
-    fordringsList = [x for x in l if x['id']==fordring]
-    if len(fordringsList ) < 1:
-        logger.error("The following list:\n"+str(l)+"\n was expected to have 1 "+
-                     "element with the following id: "+fordring+
-                     ", but none was found.\n"+
-                     "The error might be a user error, if a custom REST-client was used")
-        raise FordringsException("Error {0} not found")
+    fordringsList = [x for x in l if x['id'] == fordring]
+    if len(fordringsList) < 1:
+        logger.error("The following list:\n" + str(l) + "\n was expected to " +
+                     "have 1 element with the following id: " + fordring +
+                     ", but none was found.\n" +
+                     "The error might be a user error, if a custom " +
+                     "REST-client was used")
+        return {
+                    'status': False,
+                    'field': 'fordringsgruppe',
+                    'msg': str.format(str(e), 'fordringsgruppe')
+               }
 
-    elif len(fordringsList ) > 1:
-        logger.error("The following list:\n"+str(l)+"\n was only expected to have 1 "+
-                     "element with the following id: "+str(fordring)+
-                     ", but multiple elements were found")
-        raise FordringsException("Server Error, multiple {0} fields found")
-
+    elif len(fordringsList) > 1:
+        logger.error("The following list:\n" + str(l) + "\n was only " +
+                     "expected to have 1 element with the following id: " +
+                     str(fordring) + ", but multiple elements were found")
+        return {
+                    'status': False,
+                    'field': 'fordringstype',
+                    'msg': str.format(str(e), 'fordringstype')
+               }
     else:
-        return fordringsList[0]
+        return {'status': True, 'elem': fordringsList[0]}
 
 
 def getSharedJson(fileName):
@@ -95,7 +119,5 @@ def getSharedJson(fileName):
     The file must be in a valid json format.
 
     """
-    with open('../shared/'+fileName,'r') as jsonfile:
+    with open('../shared/'+fileName, 'r') as jsonfile:
         return json.loads(jsonfile.read())
-
-
