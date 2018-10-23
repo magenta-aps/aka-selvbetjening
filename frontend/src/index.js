@@ -8,12 +8,14 @@ const TableOfContents = () => import('./components/table_of_contents/TableOfCont
 const FormExample1 = () => import('./components/form_example_1/FormExample1.vue')
 const FormExample2 = () => import('./components/form_example_2/FormExample2.vue')
 const Experiment = () => import('./components/experiment_with_file_upload/Example.vue')
+const GetRentenota = () => import('./components/rentenota/GetRentenota.vue')
 
 Vue.use(VueRouter)
 Vue.use(VueI18n)
 
 const routes = [
   { path: '/', component: TableOfContents },
+  { path: '/getrentenota', component: GetRentenota },
   { path: '/form1', component: FormExample1 },
   { path: '/form2', component: FormExample2 },
   { path: '/upload', component: Experiment }

@@ -48,7 +48,12 @@ h1 {
 }
 
 h2 {
-    font-size: 1rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 1.125rem;
     font-weight: bold;
 }
 
@@ -117,4 +122,18 @@ input[type="submit"]:active {
 article {
     background-color: #fff;
     padding: 1rem 2rem;
+}
+
+th {
+    text-align: left;
+    border-bottom: solid 1px #465c6c;
+}
+
+th,
+td {
+    padding: .25rem .5rem;
+}
+
+address {
+    font-style: normal;
 }
