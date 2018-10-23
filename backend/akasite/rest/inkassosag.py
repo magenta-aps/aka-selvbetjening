@@ -1,11 +1,8 @@
 from akasite.rest.base import JSONRestView
 import json
 from django.http import HttpResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.utils.decorators import method_decorator
 
 
-@method_decorator(ensure_csrf_cookie, name='dispatch')
 class InkassoSag(JSONRestView):
     def get(self, request, *args, **kwargs):
         dummyresponse = {"serversays": "Hello. You said InkassoSag/GET"}
@@ -16,8 +13,8 @@ class InkassoSag(JSONRestView):
         baseresponse = super().post(request, args, kwargs)
 
         if baseresponse.status_code == 200:
-            self.payload["serversays"] = "Hello. You said InkassoSag/POST"
-            return HttpResponse(json.dumps(self.payload),
+            self.data["serversays"] = "Hello. You said InkassoSag/POST"
+            return HttpResponse(json.dumps(self.data),
                                 content_type=JSONRestView.CT1)
         else:
             return baseresponse

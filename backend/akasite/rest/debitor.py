@@ -16,8 +16,8 @@ class Debitor(JSONRestView):
         baseresponse = super().post(request, args, kwargs)
 
         if baseresponse.status_code == 200:
-            self.payload["serversays"] = "Hello. You said Debitor/POST"
-            return HttpResponse(json.dumps(self.payload),
+            self.data["serversays"] = "Hello. You said Debitor/POST"
+            return HttpResponse(json.dumps(self.data),
                                 content_type=JSONRestView.CT1)
         else:
             return baseresponse
