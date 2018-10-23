@@ -30,7 +30,7 @@ class InkassoSag(JSONRestView):
 
         if baseresponse.status_code == 200:
 
-            logger.info(self.payload)
+            logger.debug(self.payload)
             validation1 = validateInkassoJson(self.payload['POST'])
             if validation1 == []:
                 validationStatus = validateFordringsgrupper(self.payload['POST'])
@@ -55,7 +55,6 @@ def validateInkassoJson(reqJson):
                 },
             'required': ['fordringshaver',
                          'debitor',
-                         'fordringshaver2',
                          'fordringsgruppe',
                          'fordringstype']
             }
