@@ -1,7 +1,7 @@
 <template>
 
     <nav class="toc">  
-        <router-link class="toc-link" to="/getrentenota">
+        <router-link class="toc-link" to="/rentenota">
             <span>Hent rentenota</span>
         </router-link>
         <hr>

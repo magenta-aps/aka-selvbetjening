@@ -15,7 +15,7 @@ Vue.use(VueI18n)
 
 const routes = [
   { path: '/', component: TableOfContents },
-  { path: '/getrentenota', component: GetRentenota },
+  { path: '/rentenota', component: GetRentenota },
   { path: '/form1', component: FormExample1 },
   { path: '/form2', component: FormExample2 },
   { path: '/upload', component: Experiment }
