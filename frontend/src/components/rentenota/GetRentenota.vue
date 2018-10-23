@@ -176,10 +176,10 @@
         data: function() { 
             return {
                 csrftoken: null,
-                datefrom: null,
-                dateto: null,
                 rentenota_data: null,
-                today: new Date()
+                today: new Date(),
+                dateto: null,
+                datefrom: null
             }
         },
         computed: {
@@ -216,10 +216,17 @@
             },
             print: function() {
                 window.print()
+            },
+            setDates: function() {
+                let d = new Date()
+                this.dateto = d.toISOString().substr(0,10)
+                d.setMonth( d.getMonth() - 1 )
+                this.datefrom = d.toISOString().substr(0,10)
             }
         },
         created: function() {
             this.getCSRFToken()
+            this.setDates()
         }
     }
 
