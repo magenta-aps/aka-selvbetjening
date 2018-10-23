@@ -1,7 +1,8 @@
 export const messages = {
     da: {
         common: {
-            send: 'Send'
+            send: 'Send',
+            print: 'Print'
         },
         rentenota: {
             title: 'Hent rentenota',
@@ -32,7 +33,8 @@ export const messages = {
     },
     kl: {
         common: {
-            send: 'Sullinnermi'
+            send: 'Send - oversættelse mangler',
+            print: 'Print - oversættelse mangler'
         },
         rentenota: {
             title: 'Hent rentenota - oversættelse mangler',

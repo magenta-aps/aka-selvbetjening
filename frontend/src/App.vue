@@ -48,4 +48,12 @@
         height: auto;
     }
 
+    @media print {
+
+        .globalheader {
+            display: none;
+        }
+            
+    }
+
 </style>

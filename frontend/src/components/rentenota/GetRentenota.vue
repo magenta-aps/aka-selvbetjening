@@ -2,28 +2,36 @@
 
     <article>
 
-        <h1>{{ $t("rentenota.title") }}</h1>
+        <h1 class="rentenota-title">{{ $t("rentenota.title") }}</h1>
 
         <div class="rentenota-main">
 
-            <form @submit.prevent="requestRentenota()" class="dateform">
+            <div class="rentenota-actions">
 
-                <fieldset>
-                    <label for="date-from">{{ $t("rentenota.datefrom") }}</label>
-                    <input type="date" id="date-from" v-model="datefrom">
-                    <label for="date-to">{{ $t("rentenota.dateto") }}</label>
-                    <input type="date" id="date-to" v-model="dateto">
-                </fieldset>
+                <form @submit.prevent="requestRentenota()" class="rentenota-dateform">
+                    <fieldset>
+                        <label for="date-from">{{ $t("rentenota.datefrom") }}</label>
+                        <input type="date" id="date-from" v-model="datefrom">
+                    </fieldset>
+                    <fieldset>
+                        <label for="date-to">{{ $t("rentenota.dateto") }}</label>
+                        <input type="date" id="date-to" v-model="dateto">
+                    </fieldset>
+                    <fieldset>
+                        <input type="submit" :value="$t('common.send')">
+                    </fieldset>
+                </form>
 
-                <fieldset>
-                    <input type="submit" :value="$t('common.send')">
-                </fieldset>
-
-            </form>
+            </div>
 
             <div v-if="rentenota_data" class="rentenota-data">
 
-                <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
+                <div class="rentenota-data-title">
+                    <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
+                    <div>
+                        <button class="rentenota-btn-print" @click="print()">{{ $t("common.print") }}</button>
+                    </div>
+                </div>
 
                 <p>
                     <strong>Akileraartarnermut Aqutsisoqarfik</strong><br>
@@ -43,7 +51,7 @@
 
                         <h3>Rentenota</h3>
 
-                        <table class="address-table">
+                        <table class="rentenota-address-table">
                             <tr>
                                 <th>{{ $t("rentenota.konto") }}</th>
                                 <td>10276179</td>
@@ -61,7 +69,7 @@
                                 3900 Nuuk
                             </p>
 
-                            <table class="address-table">
+                            <table class="rentenota-address-table">
                                 <tr>
                                     <th>{{ $t("rentenota.telefon") }}</th>
                                     <td>346500</td>
@@ -142,7 +150,7 @@
                         </tr>
                         <tr>
                             <td colspan="10"></td>
-                            <td class="numbercell total">
+                            <td class="numbercell rentenota-total">
                                 {{ total }}
                             </td>
                             <td>
@@ -205,12 +213,13 @@
                 .catch(err => {
                     alert(err.message)
                 })
+            },
+            print: function() {
+                window.print()
             }
-            
         },
         created: function() {
             this.getCSRFToken()
-            console.log(this.today.toLocaleDateString())
         }
     }
 
@@ -219,24 +228,36 @@
 <style>
 
     .rentenota-main {
-        display: flex;
-        flex-flow: row wrap;
+        
     }
 
-    .rentenota-main .rentenota-data {
+    .rentenota-data {
         padding: 1rem;
         border: solid 1px #eaecee;
+        margin: 1rem 0;
     }
 
     .rentenota-main .numbercell {
         text-align: right;
     }
 
-    .rentenota-main .dateform {
-        padding: 0 1rem;
+    .rentenota-dateform {
+        margin: 0;
+        display: flex;
+        flex-flow: row wrap;
+        align-items: flex-end;
     }
 
-    .rentenota-main .total {
+    .rentenota-data-title {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .rentenota-btn-print {
+        float: right;
+    }
+
+    .rentenota-total {
         border-top: solid 1px #465c6c;
         border-bottom: solid .25rem #465c6c;
     }
@@ -247,22 +268,38 @@
         margin: 1rem 0 2rem;
     }
 
-    .rentenota-main .address-table {
+    .rentenota-address-table {
         width: 100%;
     }
 
-    .rentenota-main .address-table th,
-    .rentenota-main .address-table td {
+    .rentenota-address-table th,
+    .rentenota-address-table td {
         padding: 0;
     }
 
-    .rentenota-main .address-table th {
+    .rentenota-address-table th {
         border: none;
         font-weight: normal;
     }
 
-    .rentenota-main .address-table td {
+    .rentenota-address-table td {
         text-align: right;
+    }
+
+    @media print {
+
+        .rentenota-title,
+        .rentenota-actions,
+        .rentenota-btn-print {
+            display: none;
+        }
+
+        .rentenota-data {
+            padding: 0;
+            border: none;
+            margin: 0;
+        }
+            
     }
 
 </style>
