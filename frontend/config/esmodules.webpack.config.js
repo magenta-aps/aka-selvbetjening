@@ -5,9 +5,9 @@ module.exports = {
   mode: 'production',
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, '../assets/js'),
+    path: path.resolve(__dirname, '../assets/js/'),
     filename: 'aka.esmodules.js',
-    publicPath: '../assets'
+    publicPath: '../static/js/'
   },
   module: {
     rules: [
