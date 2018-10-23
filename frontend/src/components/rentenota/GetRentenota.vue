@@ -11,11 +11,11 @@
                 <form @submit.prevent="requestRentenota()" class="rentenota-dateform">
                     <fieldset>
                         <label for="date-from">{{ $t("rentenota.datefrom") }}</label>
-                        <input type="date" id="date-from" v-model="datefrom">
+                        <input type="date" id="date-from" v-model="datefrom" required :max="dateto">
                     </fieldset>
                     <fieldset>
                         <label for="date-to">{{ $t("rentenota.dateto") }}</label>
-                        <input type="date" id="date-to" v-model="dateto">
+                        <input type="date" id="date-to" v-model="dateto" required :max="dateto">
                     </fieldset>
                     <fieldset>
                         <input type="submit" :value="$t('common.send')">
@@ -233,10 +233,6 @@
 </script>
 
 <style>
-
-    .rentenota-main {
-        
-    }
 
     .rentenota-data {
         padding: 1rem;
