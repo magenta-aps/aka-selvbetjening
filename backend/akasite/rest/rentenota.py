@@ -2,6 +2,7 @@ from akasite.rest.base import JSONRestView
 from akasite.rest.prisme import Prisme
 from akasite.rest.utils import AKAUtils
 from django.http import HttpResponse
+from django.http import HttpResponseBadRequest
 from django.http import HttpResponseNotAllowed
 from django.conf import settings
 import os
@@ -49,7 +50,6 @@ class RenteNota(JSONRestView):
         prisme = Prisme()
         data = prisme.getRentenota(fromdate, todate)
         return HttpResponse(json.dumps(data), content_type=JSONRestView.CT1)
-
 
     def post(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['GET'])

@@ -25,5 +25,6 @@ class BasicTestCase(TestCase):
 
     def test_Post(self):
         ctstring = 'application/json; charset=utf-8'
-        response = self.c.post(self.url + '?fromdate=20180101&todate=20180131', content_type=ctstring, data='')
+        response = self.c.post(self.url + '?fromdate=20180101&todate=20180131',
+                               content_type=ctstring, data='')
         self.assertEqual(response.status_code, 405)

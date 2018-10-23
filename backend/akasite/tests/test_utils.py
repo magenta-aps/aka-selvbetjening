@@ -1,7 +1,7 @@
 from django.test import TestCase
 from akasite.rest.utils import AKAUtils
-import json
 import datetime
+
 
 # Create your tests here.
 class BasicTestCase(TestCase):

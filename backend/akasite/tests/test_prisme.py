@@ -1,6 +1,6 @@
 from django.test import TestCase
 from akasite.rest.prisme import Prisme
-import json
+
 
 # Create your tests here.
 class BasicTestCase(TestCase):

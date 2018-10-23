@@ -37,39 +37,39 @@ class Prisme():
         return True
 
     def getRentenota(self, fromdate, todate):
-        post1 = { 'dato': '13/06-18',
-              'postdato': '10/02-18',
-              'bilag': '',
-              'faktura':'',
-              'tekst': '12345678askatrenteMaj',
-              'fradato': '01/05-18',
-              'dage': 31,
-              'grundlag':1234.00,
-              'val': '',
-              'grundlag': 12.34,
-              'beloeb': 61.00,
-        }
-        post2 = { 'dato': '15/06-18',
-              'postdato': '23/03-18',
-              'bilag': 'bilagstekst',
-              'faktura': 'fakturanummer?',
-              'tekst': '12345678askatrenteJuni',
-              'fradato': '01/06-18',
-              'dage': 30,
-              'grundlag':131.00,
-              'val': '',
-              'grundlag': 1.31,
-              'beloeb': 1.00,
-        }
+        post1 = {'dato': '13/06-18',
+                 'postdato': '10/02-18',
+                 'bilag': '',
+                 'faktura': '',
+                 'tekst': '12345678askatrenteMaj',
+                 'fradato': '01/05-18',
+                 'dage': 31,
+                 'grundlag': 1234.00,
+                 'val': '',
+                 'grundlag2': 12.34,
+                 'beloeb': 61.00,
+                 }
+        post2 = {'dato': '15/06-18',
+                 'postdato': '23/03-18',
+                 'bilag': 'bilagstekst',
+                 'faktura': 'fakturanummer?',
+                 'tekst': '12345678askatrenteJuni',
+                 'fradato': '01/06-18',
+                 'dage': 30,
+                 'grundlag': 131.00,
+                 'val': '',
+                 'grundlag2': 1.31,
+                 'beloeb': 1.00,
+                 }
 
-
-        res = { 'firmanavn': 'Grønlands Ejendomsselskab ApS',
-                'adresse':  {
-                             'gade': 'H J Rinksvej 29',
-                             'postnr': '3900',
-                             'by': 'Nuuk',
-                             'land': 'Grønland',
-                            },
-                'poster': [ post1,post2 ] }
+        res = {'firmanavn': 'Grønlands Ejendomsselskab ApS',
+               'adresse': {
+                           'gade': 'H J Rinksvej 29',
+                           'postnr': '3900',
+                           'by': 'Nuuk',
+                           'land': 'Grønland',
+                          },
+               'poster': [post1, post2]
+               }
 
         return res

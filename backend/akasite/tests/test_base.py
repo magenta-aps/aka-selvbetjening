@@ -23,11 +23,11 @@ class BasicTestCase(TestCase):
 
     def test_randomstring(self):
         obj = JSONRestView()
-        rstr = obj.randomstring(40) 
+        rstr = obj.randomstring(40)
         self.assertTrue(type(rstr) is str)
         self.assertEqual(len(rstr), 40)
 
-        rstr = obj.randomstring(60) 
+        rstr = obj.randomstring(60)
         self.assertTrue(type(rstr) is str)
         self.assertEqual(len(rstr), 60)
 
@@ -95,7 +95,7 @@ class BasicTestCase(TestCase):
         self.assertEqual(ct['type'], 'application/json')
         self.assertEqual(ct['charset'], 'utf-8')
 
-    def test_contenttype_1D(self):
+    def test_contenttype_1E(self):
         '''
         Using OK headerstring.
         Test this according to the rules, as described
@@ -126,7 +126,7 @@ class BasicTestCase(TestCase):
         dict = {'wrongkey': ct+';charset='+charset}
         obj = JSONRestView()
         try:
-            res = obj.validContenttype(dict, ct)
+            obj.validContenttype(dict, ct)
             self.fail('Failed to catch missing CONTENT_TYPE key.')
         except ContentTypeError:
             pass
@@ -136,7 +136,7 @@ class BasicTestCase(TestCase):
         dict = {'CONTENT_TYPE': ct+';charset='}
         obj = JSONRestView()
         try:
-            res = obj.validContenttype(dict, ct)
+            obj.validContenttype(dict, ct)
             self.fail('Failed to catch missing charset.')
         except ContentTypeError:
             pass
@@ -146,7 +146,7 @@ class BasicTestCase(TestCase):
         dict = {'CONTENT_TYPE': ct}
         obj = JSONRestView()
         try:
-            res = obj.validContenttype(dict, ct, False)
+            obj.validContenttype(dict, ct, False)
         except ContentTypeError:
             self.fail('Should not fail on missing charset.')
 
