@@ -2,213 +2,148 @@
 
     <article class="test">
 
+        <h1>Simpel indberetning</h1>
 
-        <!--<nav>
-            <a href="{% url 'akasite:index' %}">&lsaquo; Tilbage</a>
-        </nav>-->
-
-        <form action="" method="POST">
+        <form @submit.prevent="sendFormRequest()">
 
             <fieldset>
-                <label for="fordringshaver-input">Fordringshaver</label>
-                <input id="fordringshaver-input" type="text" value="NOGH2342">
+                <label for="fordringshaver-input">{{ $t("simpel_indberetning.fordringshaver") }}</label>
+                <input id="fordringshaver-input" type="text" value="NOGH2342" v-model="fordringshaver">
             </fieldset>
 
             <fieldset>
-                <label for="debitor-input">Debitor</label>
-                <input id="debitor-input" type="text">
+                <label for="debitor-input">{{ $t("simpel_indberetning.debitor") }}</label>
+                <input id="debitor-input" type="text" v-model="debitor">
             </fieldset>
 
             <fieldset>
-                <label for="anden-fordringshaver-input">Anden fordringshaver</label>
-                <input id="anden-fordringshaver-input" type="text">
+                <label for="anden-fordringshaver-input">{{ $t("simpel_indberetning.anden_fordringshaver") }}</label>
+                <input id="anden-fordringshaver-input" type="text" v-model="fordringshaver2">
             </fieldset>
 
+
             <fieldset>
-                <legend>Filer</legend>
-                <label for="upload-fil">Vælg en fil at vedhæfte</label>
-                <input id="upload-fil" type="file">
-                <button style="margin: 1rem 0 0;">Vedhæft fil</button>
+                <input type="file" @change="getFileData($event.target.files)">
             </fieldset>
+
 
             <div style="display: flex; flex-flow: row wrap;">
-                <fieldset style="margin-right: 1rem;">
-                    <label for="ekstern-fordingsgruppe-select">Ekstern fordingsgruppe</label>
-                    <select id="ekstern-fordingsgruppe-select">
-                        <option>Gruppe A</option>
-                        <option>Gruppe B</option>
-                        <option>Gruppe C</option>
+                <fieldset>
+                    <label for="fordringsgruppe">{{ $t("simpel_indberetning.fordringsgruppe") }}</label>
+                    <select
+                            id="fordringsgruppe"
+                            v-model="fordringsgruppe"
+                            name="fordringsgruppe"
+                            @change="setGroup()"
+                    >
+                        <option v-for="f in fordringsgrupper" v-bind:value="f">{{stringRep(f)}})</option>
                     </select>
                 </fieldset>
 
-                <fieldset>
-                    <label for="ekstern-fordingstype-select">Ekstern fordingstype</label>
-                    <select id="ekstern-fordingstype-select">
-                        <option>Type A</option>
-                        <option>Type B</option>
-                        <option>Type C</option>
+                <!--This is only shown if there are multiple options-->
+                <fieldset v-if="multipleTypes">
+                    <label for="fordringstype">{{ $t("simpel_indberetning.fordringstype") }}</label>
+                    <select
+                            id="fordringstype"
+                            v-model="fordringstype"
+                            name="fordringstype"
+                            @change="setTypeId()"
+                    >
+                        <option v-for="t in fordringsgruppe.sub_groups" v-bind:value="t">{{stringRep(t)}}</option>
                     </select>
                 </fieldset>
             </div>
 
             <fieldset>
-                <label for="barn-cpr-input">Barns CPR-nummer</label>
-                <input id="barn-cpr-input" type="text">
+                <input type="submit" v-bind:value="$t('simpel_indberetning.gem')">
             </fieldset>
-
-            <fieldset>
-                <label for="eksternt-sagsnum-input">Eksternt sagsnummer</label>
-                <input id="eksternt-sagsnum-input" type="text">
-            </fieldset>
-
-            <hr>
-
-            <fieldset>
-                <div style="display: flex; flex-flow: row wrap;">
-                    <div style="margin-right: 1rem;">
-                        <label for="hovedstol-input">Hovedstol</label>
-                        <input id="hovedstol-input" type="number" style="width: 7.5rem;"> kr
-                    </div>
-                    <div>
-                        <label for="hovedstol-tekst-input">Posteringstekst</label>
-                        <input id="hovedstol-tekst-input" type="text" style="min-width: 13rem;">
-                    </div>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <div style="display: flex; flex-flow: row wrap;">
-                    <div style="margin-right: 1rem;">
-                        <label for="bankrente-input">Bankrente</label>
-                        <input id="bankrente-input" type="number" style="width: 7.5rem;"> kr
-                    </div>
-                    <div>
-                        <label for="bankrente-tekst-input">Posteringstekst</label>
-                        <input id="bankrente-tekst-input" type="text" style="min-width: 13rem;">
-                    </div>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <div style="display: flex; flex-flow: row wrap;">
-                    <div style="margin-right: 1rem;">
-                        <label for="bankegebyr-input">Bankgebyr</label>
-                        <input id="bankegebyr-input" type="number" style="width: 7.5rem;"> kr
-                    </div>
-                    <div>
-                        <label for="bankegebyr-tekst-input">Posteringstekst</label>
-                        <input id="bankegebyr-tekst-input" type="text" style="min-width: 13rem;">
-                    </div>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <div style="display: flex; flex-flow: row wrap;">
-                    <div style="margin-right: 1rem;">
-                        <label for="rente-input">Rente</label>
-                        <input id="rente-input" type="number" style="width: 7.5rem;"> kr
-                    </div>
-                    <div>
-                        <label for="rente-tekst-input">Posteringstekst</label>
-                        <input id="rente-tekst-input" type="text" style="min-width: 13rem;">
-                    </div>
-                </div>
-            </fieldset>
-
-            <hr>
-
-            <fieldset>
-                <div style="display: flex; flex-flow: row wrap;">
-                    <div style="flex: 0 1 auto; margin-right: 1rem;">
-                        <label for="period-start-input">Periodestart</label>
-                        <input id="period-start-input" type="date">
-                    </div>
-                    <div style="flex: 0 1 auto;">
-                        <label for="period-end-input">Periodeslut</label>
-                        <input id="period-end-input" type="date">
-                    </div>
-                </div>
-            </fieldset>
-
-            <hr>
-
-            <fieldset>
-                <div style="display: flex; flex-flow: row wrap;">
-                    <div style="flex: 0 1 auto; margin-right: 1rem;">
-                        <label for="forfaldsdato-input">Forfaldsdato</label>
-                        <input id="forfaldsdato-input" type="date">
-                    </div>
-                    <div style="flex: 0 1 auto; margin-right: 1rem;">
-                        <label for="betalingsdato-input">Betalingsdato</label>
-                        <input id="betalingsdato-input" type="date">
-                    </div>
-                    <div style="flex: 0 1 auto; margin-right: 1rem;">
-                        <label for="foraldelsesdato-input">Forældelsesdato</label>
-                        <input id="foraldelsesdato-input" type="date">
-                    </div>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <label for="kontaktperson-input">Kontaktperson</label>
-                <input id="kontaktperson-input" type="text">
-            </fieldset>
-
-
-            <fieldset>
-                <label for="notat-textarea">Notat</label>
-                <textarea id="notat-textarea"></textarea>
-            </fieldset>
-
-            <fieldset>
-                <label for="meddebitor-textarea">Meddebitorer</label>
-                <p class="helptxt">Adskil kontonumre med komma</p>
-                <textarea id="meddebitor-textarea"></textarea>
-            </fieldset>
-
-            <input type="submit" value="Send">
-            <!-- <a style="margin-left: 1rem;" href="{% url 'akasite:index' %}">Annullér</a> -->
 
         </form>
-
-
-        <h2>Servere respons:</h2>
-        <div>{{ response }}</div>
 
     </article>
 
 </template>
 
-
 <script>
 
     import axios from 'axios'
-    
+    import {groups} from '../../../assets/fordringsgruppe'
+
     export default {
-        data: function() { 
+        data: function() {
             return {
-                value_a: null,
-                value_b: null,
-                response: null
+                fordringshaver: null,
+                debitor: null,
+                fordringshaver2: null,
+                fordringsgrupper: groups,
+                fordringsgruppe: null,
+                fordringsgruppe_id: null,
+                fordringstype: null,
+                fordringstype_id: null,
+                multipleTypes: false,
+                csrftoken: null
             }
         },
         methods: {
+            setTypeId: function() {
+                this.fordringstype_id = this.fordringstype["id"];
+            },
+            setGroupId: function() {
+                this.fordringsgruppe_id = this.fordringsgruppe["id"];
+            },
+            setGroup: function() {
+                if (this.fordringsgruppe["sub_groups"].length === 1) {
+                    this.fordringstype = this.fordringsgruppe["sub_groups"][0];
+                    this.setTypeId();
+                    this.multipleTypes = false;
+                } else {
+                    this.multipleTypes = true;
+                }
+                this.setGroupId();
+            },
+            stringRep: function(dict) {
+                return "" + dict["id"] + " (" + dict["value"] + ")";
+            },
+            getCSRFToken: function() {
+                this.csrftoken = document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+            },
+            getFileData: function(files) {
+                this.file = files[0]
+            },
             sendFormRequest: function() {
-                axios.get('/index')
-                    .then(res => {
-                        console.log('Server response!')
-                        this.response = res
-                    })
-                    .catch(err => {
-                        console.log('there was an error')
-                        this.response = err
-                    })
+                let formdata = new FormData()
+                formdata.append('fordringshaver', this.fordringshaver)
+                formdata.append('debitor', this.debitor)
+                formdata.append('fordringshaver2', this.fordringshaver2)
+                formdata.append('fordringsgruppe', this.fordringsgruppe_id)
+                formdata.append('fordringsgtype', this.fordringstype_id)
+                formdata.append('file', this.file)
+
+                axios({
+                    url: '/inkassosag',
+                    data: formdata,
+                    method: 'post',
+                    headers: {
+                        'X-CSRFToken': this.csrftoken,
+                        'X-AKA-BRUGER': 'Unknown'
+                    }
+                })
+                .then(res => {
+                    console.log('Server response!');
+                    console.log(res);
+                })
+                .catch(err => {
+                    console.log('there was an error');
+                    console.log(err.message);
+                })
             }
+        },
+        created: function() {
+            this.getCSRFToken();
         }
     }
-
 </script>
 
-<style>
+<style scoped>
 
 </style>

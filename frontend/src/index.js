@@ -3,12 +3,12 @@ import VueRouter from 'vue-router'
 import VueI18n from 'vue-i18n'
 import { messages } from './i18n/Messages.js'
 import App from './App.vue'
-// import IndberetFordring from './components/indberet_fordring/IndberetFordring.vue'
+// import IndberetFordring from './components/indberet_fordring/IndberetFordringTemplate.vue'
 
 const TableOfContents = () => import('./components/table_of_contents/TableOfContents.vue')
 const FormExample1 = () => import('./components/form_example_1/FormExample1.vue')
 const FormExample2 = () => import('./components/form_example_2/FormExample2.vue')
-const SimpelIndberetning = () => import ('./components/simpel_indberetning/SimpelIndberetning.vue')
+const IndberetFordring = () => import ('./components/indberet_fordring/IndberetFordring.vue')
 const Experiment = () => import('./components/experiment_with_file_upload/Example.vue')
 
 Vue.use(VueRouter)
@@ -19,7 +19,7 @@ const routes = [
   { path: '/form1', component: FormExample1 },
   { path: '/form2', component: FormExample2 },
   // {path: '/indberetning', component: IndberetFordring},
-  { path: '/simpel', component: SimpelIndberetning},
+  { path: '/indberetning', component: IndberetFordring},
   { path: '/upload', component: Experiment }
 ]
 
