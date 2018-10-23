@@ -26,14 +26,14 @@ class InkassoSag(JSONRestView):
                             content_type=JSONRestView.CT1)
 
     def post(self, request, *args, **kwargs):
-        baseresponse = super().post(request, args, kwargs)
+        baseresponse = super().postfile(request)
 
         if baseresponse.status_code == 200:
 
             logger.info(self.payload)
-            validation1 = validateInkassoJson(self.payload)
+            validation1 = validateInkassoJson(self.payload['POST'])
             if validation1 == []:
-                validationStatus = validateFordringsgrupper(self.payload)
+                validationStatus = validateFordringsgrupper(self.payload['POST'])
             else:
                 validationStatus = validation1
 

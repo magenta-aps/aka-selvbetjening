@@ -8,7 +8,7 @@ FRONTEND_PREREQUISITES = frontend/node_modules frontend/assets/fordringsgruppe.j
 
 
 # .PHONY tells make, that it is not an actual file being built
-.PHONY : runserver documentation makemigrations frontend migrate
+.PHONY : runserver documentation makemigrations frontend migrate test
 
 # Run the server and make it assecible to the host machine
 # .PHONY
@@ -21,7 +21,10 @@ runserver : frontend/assets/js/aka.js backend/aka/local_settings.py migrate
 # does not exist.
 backend/aka/local_settings.py : 
 	python3 makefile-utils/gen_local_settings.py > backend/aka/local_settings.py	
-	
+
+# .PHONY	
+test: backend/aka/local_settings.py migrate 
+	$(DJANGO) test
 
 # .PHONY
 migrate : backend/aka/local_settings.py
