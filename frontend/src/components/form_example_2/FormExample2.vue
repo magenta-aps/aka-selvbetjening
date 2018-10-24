@@ -51,8 +51,6 @@
             },
             sendFormRequest: function() {
 
-                notify('sending form')
-
                 let formdata = new FormData()
                 formdata.append('value_a', this.value_a)
                 formdata.append('value_b', this.value_b)
@@ -72,6 +70,7 @@
                     }
                 })
                 .then(res => {
+                    notify('The server has responded and it was happy!')
                     console.log('Server response!')
                     console.log(res)
                 })
@@ -84,6 +83,7 @@
         },
         created: function() {
             this.getCSRFToken()
+            notify('Welcome to this page')
         }
     }
 
