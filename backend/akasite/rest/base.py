@@ -7,6 +7,8 @@ import random
 import logging
 
 logger = logging.getLogger(__name__)
+
+
 class ContentTypeError(Exception):
     """Exception raised for errors in the content-type
        of the request.
@@ -49,15 +51,15 @@ class JSONRestView(View):
             raise ContentTypeError('No content_type in request.')
         else:
             result = {'type': '', 'charset': ''}
-    
+
             first = metadict['CONTENT_TYPE'].split(';')
             result['type'] = first[0].strip().lower()
-    
+
             for i in range(1, len(first)):
                 if '=' in first[i]:
                     param = first[i].strip().split('=')
                     result[param[0].strip()] = param[1].strip()
-    
+
             return result
 
     def errorResponse(self, exception):
@@ -132,7 +134,7 @@ class JSONRestView(View):
         '''
         Base method for POST requests.
         We currently only accept
-        a) application/json and 
+        a) application/json and
         b) multipartform-data as content-type.
         If a), data is expected to arrive as serialised JSON in body.
         If b), data is in request.POST, and files are in request.FILES.
@@ -153,19 +155,22 @@ class JSONRestView(View):
         try:
             contenttype = self.getContenttype(request.META)
 
-            if contenttype['type'] == JSONRestView.CT1 and contenttype['charset'] in ['', None]:
+            if contenttype['type'] == JSONRestView.CT1 and \
+               contenttype['charset'] in ['', None]:
                 raise ContentTypeError('Charset missing.')
             elif contenttype['type'] == JSONRestView.CT1:
                 self.data = self.getBody(request,
-                                             contenttype['charset'])
+                                         contenttype['charset'])
             elif contenttype['type'] == JSONRestView.CT2:
                 self.data = self.getPost(request)
                 self.files = self.getFiles(request)
             else:
-                raise ContentTypeError('Content_type incorrect: ' + contenttype['type'])
+                raise ContentTypeError('Content_type incorrect: ' +
+                                       contenttype['type'])
             retval = HttpResponse()
 
-            logger.info('POST: ' + json.dumps(self.data) + '\n' + json.dumps(self.files))
+            logger.info('POST: ' + json.dumps(self.data) + '\n' +
+                        json.dumps(self.files))
         except (ContentTypeError, json.decoder.JSONDecodeError) as e:
             retval = self.errorResponse(e)
             logger.exception(e)
