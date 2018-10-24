@@ -69,8 +69,8 @@ class JSONRestView(View):
         :param msg: The error message
         :type msg: String
         :returns: HttpResponseBadRequest  containing the exception.
-        ------------------------------------------------------------
         '''
+
         msg = self.errorText('{0} : {1}'.
                              format(type(exception).__name__, exception))
 
@@ -85,8 +85,8 @@ class JSONRestView(View):
         :type msg: String
         :returns: String that is a serialised JSON structure, with the
                   error message incorporated.
-        ------------------------------------------------------------
         '''
+
         return json.dumps({"status": "Request failed.", "message": msg})
 
     def getBody(self, request, charset):
@@ -98,8 +98,8 @@ class JSONRestView(View):
         :param charset: The character set of the request
         :type charset: String
         :returns: The request body converted to JSON.
-        ------------------------------------------------------------
         '''
+
         return json.loads(request.body.decode(charset))
 
     def getPost(self, request):
@@ -109,8 +109,8 @@ class JSONRestView(View):
         :param request: The HttpRequest object
         :type request: HttpRequest
         :returns: A copy of the POST dict.
-        ------------------------------------------------------------
         '''
+
         return request.POST.copy()
 
     def getFiles(self, request):
