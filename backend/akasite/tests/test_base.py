@@ -97,6 +97,38 @@ class BasicTestCase(TestCase):
 
     def test_contenttype_1E(self):
         '''
+        Using OK headerstring.
+        Test this according to the rules, as described
+        here:
+        https://tools.ietf.org/html/rfc7231#section-3.1.1.1
+        '''
+        obj = JSONRestView()
+        d = {'CONTENT_TYPE': 'application/json'}
+        ct = obj.getContenttype(d)
+        self.assertTrue(type(ct) is dict)
+        self.assertTrue('type' in ct)
+        self.assertTrue('charset' in ct)
+        self.assertEqual(ct['charset'], '')
+        self.assertEqual(ct['type'], 'application/json')
+
+    def test_contenttype_1F(self):
+        '''
+        Using weird headerstring.
+        Test this according to the rules, as described
+        here:
+        https://tools.ietf.org/html/rfc7231#section-3.1.1.1
+        '''
+        obj = JSONRestView()
+        d = {'CONTENT_TYPE': ''}
+        ct = obj.getContenttype(d)
+        self.assertTrue(type(ct) is dict)
+        self.assertTrue('type' in ct)
+        self.assertTrue('charset' in ct)
+        self.assertEqual(ct['charset'], '')
+        self.assertEqual(ct['type'], '')
+
+    def test_contenttype_1G(self):
+        '''
         Using incorrect key for headerstring.
         '''
         obj = JSONRestView()

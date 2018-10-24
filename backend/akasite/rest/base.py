@@ -52,12 +52,12 @@ class JSONRestView(View):
         else:
             result = {'type': '', 'charset': ''}
 
-            first = metadict['CONTENT_TYPE'].split(';')
-            result['type'] = first[0].strip().lower()
+            parts = metadict['CONTENT_TYPE'].split(';', 1)
+            result['type'] = parts[0].strip().lower()
 
-            for i in range(1, len(first)):
-                if '=' in first[i]:
-                    param = first[i].strip().split('=')
+            for i in range(1, len(parts)):
+                if '=' in parts[i]:
+                    param = parts[i].strip().split('=')
                     result[param[0].strip()] = param[1].strip()
 
             return result
@@ -153,20 +153,20 @@ class JSONRestView(View):
         self.files = []
 
         try:
-            contenttype = self.getContenttype(request.META)
+            content = self.getContenttype(request.META)
 
-            if contenttype['type'] == JSONRestView.CT1 and \
-               contenttype['charset'] in ['', None]:
+            if content['type'] == JSONRestView.CT1 and \
+               content['charset'] in ['', None]:
                 raise ContentTypeError('Charset missing.')
-            elif contenttype['type'] == JSONRestView.CT1:
+            elif content['type'] == JSONRestView.CT1:
                 self.data = self.getBody(request,
-                                         contenttype['charset'])
-            elif contenttype['type'] == JSONRestView.CT2:
+                                         content['charset'])
+            elif content['type'] == JSONRestView.CT2:
                 self.data = self.getPost(request)
                 self.files = self.getFiles(request)
             else:
                 raise ContentTypeError('Content_type incorrect: ' +
-                                       contenttype['type'])
+                                       content['type'])
             retval = HttpResponse()
 
             logger.info('POST: ' + json.dumps(self.data) + '\n' +
