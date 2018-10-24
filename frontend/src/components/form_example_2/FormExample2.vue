@@ -31,6 +31,7 @@
 <script>
 
     import axios from 'axios'
+    import { notify } from '../utils/notify/Notifier.js'
 
     export default {
         data: function() { 
@@ -49,6 +50,8 @@
                 this.file = files[0]
             },
             sendFormRequest: function() {
+
+                notify('sending form')
 
                 let formdata = new FormData()
                 formdata.append('value_a', this.value_a)
