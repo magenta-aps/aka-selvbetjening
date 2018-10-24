@@ -10,11 +10,11 @@ class FileUpload(JSONRestView):
                             content_type=JSONRestView.CT1)
 
     def post(self, request, *args, **kwargs):
-        baseresponse = super().postfile(request, args, kwargs)
+        baseresponse = super().post(request, args, kwargs)
 
         if baseresponse.status_code == 200:
-            self.payload['serversays'] = "Hello. You said FileUpload/POST"
-            return HttpResponse(json.dumps(self.payload),
+            self.data['serversays'] = "Hello. You said FileUpload/POST"
+            return HttpResponse(json.dumps(self.data),
                                 content_type=JSONRestView.CT1)
         else:
             return baseresponse

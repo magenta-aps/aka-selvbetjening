@@ -39,8 +39,8 @@ class BasicTestCase(TestCase):
         https://tools.ietf.org/html/rfc7231#section-3.1.1.1
         '''
         obj = JSONRestView()
-        headerstring = 'application/json;charset=utf-8'
-        ct = obj.getContenttype(headerstring)
+        d = {'CONTENT_TYPE': 'application/json;charset=utf-8'}
+        ct = obj.getContenttype(d)
         self.assertTrue(type(ct) is dict)
         self.assertTrue('type' in ct)
         self.assertTrue('charset' in ct)
@@ -55,8 +55,8 @@ class BasicTestCase(TestCase):
         https://tools.ietf.org/html/rfc7231#section-3.1.1.1
         '''
         obj = JSONRestView()
-        headerstring = 'application/json; charset=utf-8'
-        ct = obj.getContenttype(headerstring)
+        d = {'CONTENT_TYPE': 'application/json; charset=utf-8'}
+        ct = obj.getContenttype(d)
         self.assertTrue(type(ct) is dict)
         self.assertTrue('type' in ct)
         self.assertTrue('charset' in ct)
@@ -71,8 +71,8 @@ class BasicTestCase(TestCase):
         https://tools.ietf.org/html/rfc7231#section-3.1.1.1
         '''
         obj = JSONRestView()
-        headerstring = 'application/json ;charset=utf-8'
-        ct = obj.getContenttype(headerstring)
+        d = {'CONTENT_TYPE': 'application/json ; charset=utf-8'}
+        ct = obj.getContenttype(d)
         self.assertTrue(type(ct) is dict)
         self.assertTrue('type' in ct)
         self.assertTrue('charset' in ct)
@@ -87,68 +87,25 @@ class BasicTestCase(TestCase):
         https://tools.ietf.org/html/rfc7231#section-3.1.1.1
         '''
         obj = JSONRestView()
-        headerstring = 'application/json ; charset=utf-8'
-        ct = obj.getContenttype(headerstring)
+        d = {'CONTENT_TYPE': 'application/json ;'}
+        ct = obj.getContenttype(d)
         self.assertTrue(type(ct) is dict)
         self.assertTrue('type' in ct)
         self.assertTrue('charset' in ct)
+        self.assertEqual(ct['charset'], '')
         self.assertEqual(ct['type'], 'application/json')
-        self.assertEqual(ct['charset'], 'utf-8')
 
     def test_contenttype_1E(self):
         '''
-        Using OK headerstring.
-        Test this according to the rules, as described
-        here:
-        https://tools.ietf.org/html/rfc7231#section-3.1.1.1
+        Using incorrect key for headerstring.
         '''
         obj = JSONRestView()
-        headerstring = 'application/json ;'
-        ct = obj.getContenttype(headerstring)
-        self.assertTrue(type(ct) is dict)
-        self.assertTrue('type' in ct)
-        self.assertTrue('charset' in ct)
-        self.assertEqual(ct['type'], 'application/json')
-
-    def test_validcontenttype_1(self):
-        ct = JSONRestView.CT1
-        charset = 'utf-8'
-        dict = {'CONTENT_TYPE': ct+';charset='+charset}
-        obj = JSONRestView()
-        res = obj.validContenttype(dict, ct)
-        # self.assertTrue(type(res) is dict) # Why does this fail?
-        self.assertTrue('type' in res)
-        self.assertTrue('charset' in res)
-
-    def test_validcontenttype_2(self):
-        ct = JSONRestView.CT1
-        charset = 'utf-8'
-        dict = {'wrongkey': ct+';charset='+charset}
-        obj = JSONRestView()
+        d = {'CONTENT': 'application/json ;'}
         try:
-            obj.validContenttype(dict, ct)
-            self.fail('Failed to catch missing CONTENT_TYPE key.')
+            ct = obj.getContenttype(d)
+            self.fail('Failed to catch incorrect key in dict.')
         except ContentTypeError:
             pass
-
-    def test_validcontenttype_3(self):
-        ct = JSONRestView.CT1
-        dict = {'CONTENT_TYPE': ct+';charset='}
-        obj = JSONRestView()
-        try:
-            obj.validContenttype(dict, ct)
-            self.fail('Failed to catch missing charset.')
-        except ContentTypeError:
-            pass
-
-    def test_validcontenttype_4(self):
-        ct = JSONRestView.CT1
-        dict = {'CONTENT_TYPE': ct}
-        obj = JSONRestView()
-        try:
-            obj.validContenttype(dict, ct, False)
-        except ContentTypeError:
-            self.fail('Should not fail on missing charset.')
 
     def test_contenttypeerror_1(self):
         exc = ContentTypeError('Testing contenttypeeror.')

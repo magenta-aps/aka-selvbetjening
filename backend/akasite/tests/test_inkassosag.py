@@ -49,10 +49,10 @@ class BasicTestCase(TestCase):
         self.assertEqual(response.status_code, 400)
         self.checkReturnValIsJSON(response)
 
-    # Send data as multipart. Should fail, as body will be empty.
+    # Send data as multipart. Should not fail, we accept data in raw body.
     def test_Post_4(self):
         response = self.c.post(self.url, {'name': 'john', 'password': 'xy'})
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 200)
         self.checkReturnValIsJSON(response)
 
     # Empty charset. Should fail.
