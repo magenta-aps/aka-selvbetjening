@@ -1,24 +1,64 @@
 <template>
 
-    <article class="test">
+    <article class="test"> 
+    <!-- 
+        This "class" isn't important now. But you might want to give it a proper name if used for styles 
+    -->
 
         <h1>Inkasso - Opret sag</h1>
+        
+        <!--
+            General notes: 
+            Code looks neat and functional. Good job!
+            But do make use of HTML form validation. It's easy to implement and saves users a lot of headache.
+            
+            The quickest fix is to set the "required" attribute on mandatory input fields. 
+            This will prevent the browser from submitting the form if there are inputs missing. 
+            The browser will gently remind users of this. ( ... I think)
+            
+            This fascinating subject can be studied in detail here :D
+            https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Form_validation#Using_built-in_form_validation        
+        -->
 
         <form @submit.prevent="sendFormRequest()">
 
             <fieldset>
                 <label id="lbl_fordringshaver" for="fordringshaver">{{ $t("simpel_indberetning.fordringshaver") }}</label>
                 <input id="fordringshaver" type="text" value="NOGH2342" v-model="fordringshaver">
+                <!--
+                    The above input elements' value attribute will be ignored because you use v-model. 
+                    You should set the "fordringshaver" variable to be "NOGH2342" instead whenever the value is available
+                -->
 
                 <label id="lbl_debitor" for="debitor">{{ $t("simpel_indberetning.debitor") }}</label>
                 <input id="debitor" type="text" v-model="debitor">
 
                 <label id="lbl_fordringshaver2" for="fordringshaver2">{{ $t("simpel_indberetning.anden_fordringshaver") }}</label>
                 <input id="fordringshaver2" type="text" value="NOGH2342" v-model="fordringshaver2">
+                <!--
+                    Why 2 input fields with the same value? Placeholder code?
+                -->
             </fieldset>
 
 
             <!--TODO: Allow multiple files and show file list-->
+            <!-- 
+               This is actually quite easy. Add the "multiple" attribute  to the input element.
+               Then use getFileData to extract the list of files.
+               The template should magically display it if you add something like
+               ```
+                   <table v-if="files">
+                     <tr v-for="f in files">
+                       <td>{{ f.name }}</td>
+                       <td>{{ f.size }} kB</td>
+                     </tr>
+                   </table>
+               ```
+               Maybe iterating over af Filelist like this will cause you problems. 
+               Then you should convert it to an array in getFileData.
+               See https://developer.mozilla.org/en-US/docs/Web/API/FileList
+               and https://developer.mozilla.org/en-US/docs/Web/API/File for more info on working with files.
+            -->
             <fieldset>
                 <input type="file" @change="getFileData($event.target.files)">
             </fieldset>
@@ -32,6 +72,9 @@
                             v-model="fordringsgruppe"
                             @change="setGroup()"
                     >
+                    <!--
+                        It might be easier to skip setGroup and make "fordringsgruppe_id" a computed value that returns whatever is in "fordringsgruppe" 
+                    -->
                         <option v-for="f in fordringsgrupper" v-bind:value="f">{{stringRep(f)}})</option>
                     </select>
                 </fieldset>
@@ -44,6 +87,9 @@
                             v-model="fordringstype"
                             @change="setTypeId()"
                     >
+                    <!--
+                        As above: It might be easier to skip setTypeId and make "fordringstype_id" a computed value that returns whatever is in "fordringstype" 
+                    -->
                         <option v-for="t in fordringsgruppe.sub_groups" v-bind:value="t">{{stringRep(t)}}</option>
                     </select>
                 </fieldset>
@@ -229,10 +275,17 @@
                 .then(res => {
                     console.log('Server response!');
                     console.log(res);
+                    /* 
+                        You should tell the user that things worked out OK.
+                        We'll need to design a little info popup for that maybe.
+                    */
                 })
                 .catch(err => {
                     console.log('there was an error');
                     console.log(err.message);
+                    /*
+                        You should also tell the user that things didn't work. What happened? And what might they do to improve things?
+                    */
                 })
             }
         },
