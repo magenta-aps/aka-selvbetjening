@@ -4,11 +4,14 @@ Django Vangrant-Ansible Project template
 Basic template cloned from github.com:magenta-aps/vagrant-ansible-example.git
 
 For the Windows equivalent, see [here](https://github.com/magenta-aps/vagrant-ansible-example-windows)
+
+
 ## Requirements:
 
 ### Development:
 - Vagrant is needed to spin up a virtualized enviroment.  
 - Virtualbox see [Magenta Vagrant](https://github.com/magenta-aps/vagrant/blob/master/README.md) for more info.
+
 
 ## Setup:
 
@@ -16,9 +19,8 @@ For the Windows equivalent, see [here](https://github.com/magenta-aps/vagrant-an
 `doc/requirements.txt`: the python requirement file. All packages will be installed by provisioning.
 
 
-
-
 ## Usage:
+
 ### Development:
 From the vagrant folder:  
 `vagrant up` will spin up a virtual machine and provision it.  
@@ -34,7 +36,6 @@ From `/vagrant` in the virtual machine:
 
 ### Production:
 
-
 ### Running specific playbooks:
 
 By default the `default.yml` playbook is run, but any playbook can be run, by
@@ -42,5 +43,3 @@ changing the `PLAYBOOK` environmental variable before running `vagrant provision
 as done by:
 
     PLAYBOOK=demo.yml vagrant provision
-
-

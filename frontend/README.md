@@ -20,7 +20,12 @@ After fetching some npm packages, your project should be set up and ready to bui
 
 ### Building the javascript bundle
 
-To build the frontend javascript bundle, run
+To build the frontend javascript bundle for **development,** run
+```
+npm run dev
+```
+
+To build the frontend javascript bundle for **production,** run
 ```
 npm run build
 ```
@@ -32,13 +37,13 @@ make frontend
 ```
 (And running make runserver, will also ensure the frontend is built)
 
-Your new build is a javascript file, `/fontend/assets/js/aka.js`
+Your new build is a collection of javascript file. For most modern browsers, your index HTML file will need to refer to `/fontend/assets/js/aka.esmodules.js` to initiate the frontend. This file will load other JS dependencies automatically.
 
 
 ### Seeing it work in a browser
 
 From the `/vagrant` folder within the virtual machine, run `make runserver`
-Then browse to `localhost:8000/index` or `localhost:8000/static/index.html` to see your code in action.
+Then browse to `localhost:8000/index` to see your code in action.
 
 
 ## Developing
@@ -51,11 +56,12 @@ For this simple development walkthrough we'll add a new form "page" in the vuejs
   The `<template>` block contains all the HTML that your component uses. This will usually be some `<form>` and associated elements. 
   The `<script>` block contains the Vue instance definition for this particular component. You'll have to define some methods here to enable sending AJAX requests via the form in the template.
   The `<style>` block is where you put CSS styles that are specific to this component.
+  The `<i18n>` block is where you put translation strings that are specific to this component.
   Add form input elements and some AJAX handling scripts to your component, save, and move on ...
 
 3. In `/fontend/src/index.js`, add an `import` statement to the top of the file to import your component at build time. It should look a little something like this:
 ```
-import WhatEverComponent from './components/what-ever/WhatEver.vue'
+const WhatEverComponent = () => import('./components/what-ever/WhatEver.vue')
 ```
 
 4. While still editing `/fontend/src/index.js`, scroll down to the `routes` variable declaration. Here you'll add a route for your component, so Vuejs can display your component at a given browser URL. Add a little route object like this:
@@ -79,37 +85,50 @@ A quick rundown of the most interesting technologies in use in the frontend.
 
 ### Translations
 The frontend is supposed to cater to both Danish and Greenlandic speakers. 
-We have installed [vue-i18n](https://kazupon.github.io/vue-i18n/) to do that.
+We have installed [vue-i18n](https://kazupon.github.io/vue-i18n/) and [vue-i18n-loader](https://github.com/kazupon/vue-i18n-loader) to do that.
 
-In order to create translated text strings, open `/frontend/src/i18n/Messages.js`. It will look a little like this:
+In order to create translated text strings, add strings the `<i18>` block in your VUE component file. It will look a little like this:
 ```
-export const messages = {
-    da: {
-        form2: {
-            title: 'Formular nummer 2',
-            inputa: 'Inputfelt A',
-            inputb: 'Inputfelt B',
-            send: 'Send'
-        }
-    },
-    kl: {
-        form2: {
-            title: 'Peqatigisanut ilitsersuutit',
-            inputa: 'Imminut sullinnermi A',
-            inputb: 'Maannakkut atorneqarnerpaasut B',
-            send: 'Sullinnermi'
+<i18n>
+
+    {
+        "da": {
+            "title": "Formular nummer 2",
+            "inputa": "Inputfelt A",
+            "inputb": "Inputfelt B",
+            "send": "Send"
+        },
+        "kl": {
+            "title": "Peqatigisanut ilitsersuutit",
+            "inputa": "Imminut sullinnermi A",
+            "inputb": "Maannakkut atorneqarnerpaasut B",
+            "send": "Ilitsersuutit"
         }
     }
-}
-```
-The properties `da` and `kl` are objects that contains translated strings for Danish and Greenlandic respectively. Here the Danish string 'Inputfelt A' is referenced in templates by `form2.inputb` and corresponds to the Greenlandic 'Imminut sullinnermi A'. (This is dummy text. I don't know any Greenlandic.)
 
-Adding translated strings is a matter of adding the same property somewhere within BOTH the `da` and `kl` objects and then assigning when different texts.
+</i18n>
+```
+The JSON properties `da` and `kl` contain translated strings for Danish and Greenlandic respectively. Here the Danish string 'Inputfelt A' is referenced in templates by `$t('inputa')` and corresponds to the Greenlandic 'Imminut sullinnermi A'. (This is dummy text. I don't know any Greenlandic.)
+
+Adding translated strings is a matter of adding the same property somewhere within BOTH the `da` and `kl` objects and then assigning them different texts.
 
 #### Using translations
 To use a translated string in a Vuejs component, open your `.vue` file and add `$t("someproperty")` wherever you need it in the `<template>` section of the code. Say, you wanted to add a translated 'Send' button using the message object from above, you would have to write:
 ```
-<button>{{ $t("form2.send") }}</button>
+<template>
+    ...
+    <button>{{ $t("send") }}</button>
+    ...
+</template>
+```
+
+If using translated strings within the `<script>` block, remember to refer to it using `this`.
+```
+<script>
+    ...
+    send_button_value = this.$t('send')
+    ...
+</script>
 ```
 
 
@@ -165,7 +184,24 @@ Since the frontend is a single page web application, it needs internal routing t
 WHen adding a new view, make sure to import it in `/frontend/src/index.js` and add a new route for it. (Check the details in the sections above.) If you need to link to other views using vue-router, check the examples in `/frontend/src/components/table_of_contents/TableOfContents.vue`.
 
 
-
 ### HTML <form> validation
 
 Did you know that you can do basic input validation using native HTML5 attributes on input elements? You can set input fields to be required or conform to formats or regex. [Look it up at https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Form_validation](https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Form_validation).
+
+
+### Notifications in the frontend
+
+There is a little component that enables sending popup notifications in the UI. To use it, import it into the VUE component, where you need it like this:
+```
+<script>
+
+    import { notify } from './components/utils/notify/Notifier.js'
+    ...
+```
+Then use the `notify` method whenever you want to alert the user.
+```
+alertTheUser: function() {
+    notify('You have been alerted.')
+    notify(this.$t('This alert is translated'))
+}
+```
