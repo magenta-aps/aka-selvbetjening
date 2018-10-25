@@ -44,6 +44,11 @@ module.exports = {
           'vue-style-loader',
           'css-loader'
         ]
+      },
+      {
+        resourceQuery: /blockType=i18n/,
+        type: 'javascript/auto',
+        loader: '@kazupon/vue-i18n-loader'
       }
     ]
   },

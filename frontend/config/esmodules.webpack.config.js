@@ -15,32 +15,17 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader'
       },
-      /*
-      {
-        test: /\.js$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              [
-                "@babel/preset-env",
-                {
-                  targets: {
-                    "esmodules": true
-                  }
-                }
-              ]
-            ]
-          }
-        }
-      },
-      */
       {
         test: /\.css$/,
         use: [
           'vue-style-loader',
           'css-loader'
         ]
+      },
+      {
+        resourceQuery: /blockType=i18n/,
+        type: 'javascript/auto',
+        loader: '@kazupon/vue-i18n-loader'
       }
     ]
   },

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueI18n from 'vue-i18n'
-import { messages } from './i18n/Messages.js'
 import App from './App.vue'
 
 const TableOfContents = () => import('./components/table_of_contents/TableOfContents.vue')
@@ -25,8 +24,7 @@ const router = new VueRouter({
 
 const i18n = new VueI18n({
   locale: 'kl', // set locale
-  fallbackLocale: 'da',
-  messages: messages, // set locale messages
+  fallbackLocale: 'da'
 })
 
 const app = new Vue({

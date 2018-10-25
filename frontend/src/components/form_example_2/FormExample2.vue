@@ -2,14 +2,14 @@
 
     <article>
 
-        <h1>{{ $t("form2.title") }}</h1>
+        <h1>{{ $t('title') }}</h1>
 
         <form @submit.prevent="sendFormRequest()">
 
             <fieldset>
-                <label for="inputA">{{ $t("form2.inputa") }}</label>
+                <label for="inputA">{{ $t('inputa') }}</label>
                 <input id="inputA" type="text" name="a" placeholder="test test" v-model="value_a">
-                <label for="inputB">{{ $t("form2.inputb") }}</label>
+                <label for="inputB">{{ $t('inputb') }}</label>
                 <input id="inputB" type="text" name="b" v-model="value_b">
             </fieldset>
 
@@ -18,7 +18,7 @@
             </fieldset>
 
             <fieldset>
-                <input type="submit" :value="$t('form2.send')">
+                <input type="submit" :value="$t('send')">
             </fieldset>
 
         </form>
@@ -83,7 +83,7 @@
         },
         created: function() {
             this.getCSRFToken()
-            notify('Welcome to this page')
+            notify(`Welcome to this page. ${ this.$t('title') }`)
         }
     }
 
@@ -93,3 +93,22 @@
 
 
 </style>
+
+<i18n>
+
+    {
+        "da": {
+            "title": "Formular nummer 2",
+            "inputa": "Inputfelt A",
+            "inputb": "Inputfelt B",
+            "send": "Send"
+        },
+        "kl": {
+            "title": "Peqatigisanut ilitsersuutit",
+            "inputa": "Imminut sullinnermi A",
+            "inputb": "Maannakkut atorneqarnerpaasut B",
+            "send": "Ilitsersuutit"
+        }
+    }
+
+</i18n>
