@@ -1,0 +1,22 @@
+.notification-container {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+.notification {
+    transition: all .5s;
+    padding: .5rem 1rem;
+    background-color: #31495b;
+    color: #fff;
+    margin-top: -5rem;
+    box-shadow: .25rem .5rem .25rem rgba(0,0,0,.1);
+}
+
+.notification.show {
+    margin-top: 0;
+}

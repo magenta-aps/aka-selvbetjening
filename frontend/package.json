@@ -13,6 +13,7 @@
     "@babel/core": "^7.1.2",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
+    "@kazupon/vue-i18n-loader": "^0.3.0",
     "babel-loader": "^8.0.4",
     "css-loader": "^1.0.0",
     "vue-loader": "^15.4.2",
@@ -22,7 +23,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/webpack/bin/webpack.js  --config ./config/esmodules.webpack.config.js && ./node_modules/webpack/bin/webpack.js  --config ./config/nomodules.webpack.config.js"
+    "build": "./node_modules/webpack/bin/webpack.js  --config ./config/esmodules.webpack.config.js && ./node_modules/webpack/bin/webpack.js  --config ./config/nomodules.webpack.config.js",
+    "dev": "./node_modules/webpack/bin/webpack.js  --config ./config/dev.webpack.config.js"
   },
   "author": "Magenta ApS",
   "license": "MPL-2.0",
