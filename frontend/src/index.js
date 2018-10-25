@@ -4,6 +4,8 @@ import VueI18n from 'vue-i18n'
 import App from './App.vue'
 
 const TableOfContents = () => import('./components/table_of_contents/TableOfContents.vue')
+const DesignGuide = () => import('./components/designguide/DesignGuide.vue')
+
 const FormExample1 = () => import('./components/form_example_1/FormExample1.vue')
 const FormExample2 = () => import('./components/form_example_2/FormExample2.vue')
 const Experiment = () => import('./components/experiment_with_file_upload/Example.vue')
@@ -13,6 +15,8 @@ Vue.use(VueI18n)
 
 const routes = [
   { path: '/', component: TableOfContents },
+  { path: '/designguide', component: DesignGuide },
+  
   { path: '/form1', component: FormExample1 },
   { path: '/form2', component: FormExample2 },
   { path: '/upload', component: Experiment }
