@@ -14,8 +14,7 @@
         <router-link class="toc-link" to="/upload">
             <span>Upload files with JSON example</span>
         </router-link>
-        <router-link class="toc-link tile" to="/indberetning">
-            <img class="tile-icon" src="/static/img/SVG/sullisivik_skatter-afgifter-og-gaeld.svg" alt="">
+        <router-link class="toc-link" to="/indberetning">
             <span>Opret sag</span>
         </router-link>
     </nav>
