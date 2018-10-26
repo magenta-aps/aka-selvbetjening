@@ -8,7 +8,7 @@
 
         <h2>Typografi</h2>
 
-        <div class="color--background--light">
+        <div class="color--background--light" style="padding: 2rem; margin: 2rem 0; border: solid 1px #d6dbde;">
             <h1>Heading 1 - Bold 24pt/30pt</h1>
             <h2>Heading 2</h2>
             <h3>Heading 3</h3>

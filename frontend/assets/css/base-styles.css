@@ -1,5 +1,6 @@
 /*
  * COLORS
+ *
     
     background white #fff
     background grey #eaecee
@@ -351,6 +352,15 @@ article {
 
 
 /* 
+ * GRID LAYOUT CLASSES
+ */
+
+.grid {
+    
+}
+
+
+/* 
  * COLOR LAYOUT CLASSES
  */
 
@@ -421,3 +431,4 @@ article {
 .color--link a:visited {
     color: #fff;
 }
+
