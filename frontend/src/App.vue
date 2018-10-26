@@ -46,6 +46,7 @@
         left: 0;
         right: 0;
         width: 100%;
+        z-index: 999;
         box-shadow: 0 .5rem rgba(0,0,0,.1);
     }
 

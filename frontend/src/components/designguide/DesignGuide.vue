@@ -272,7 +272,7 @@
             
         },
         created: function() {
-            notify(`Welcome to this page.`)
+            notify('')
         }
     }
 
