@@ -29,6 +29,9 @@ export function notify(message) {
         notify_el.classList.add('show')
         setTimeout(function() {
             notify_el.classList.remove('show')
+            setTimeout(function() {
+                notify_container.removeChild(notify_el)
+            }, 500)
         }, 7000)
     }, 100)
 
