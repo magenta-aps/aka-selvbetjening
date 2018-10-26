@@ -52,3 +52,41 @@ Required headers:
 
     (In POSTMAN you do not set the Content-Type yourself, instead you choose
     form-data in the body tab and choose 'File' in the key field in the table below)
+
+Getting responses
+=================
+
+The HTTP response should inform the frontend if the request was succesful or not. 
+If the requested data elicits errors, the response should contain JSON with information regarding said errors::
+
+    {
+        "errors": [
+            {
+                "da": "PRISME er ikke tilgængelig i øjeblikket",
+                "kl": "PRISME Illuquarnuulit annuueriset"
+            },
+            {
+                "da": "Dette er den forkerte formular",
+                "kl": "Illuquarnuulit annuuerisetaqaq"
+            }
+            
+        ],
+        "fielderrors": [
+            { 
+                "field_a": {
+                    "da": "Navnet må ikke indeholde disse tegn: @$%&*",
+                    "kl": "Illuquarnuulit annuueriset: @$%&*"
+                },
+                "field_b": {
+                    "da": "Dette felt er obligatorisk",
+                    "kl": "Illuquarnuulit annuueriset"
+                },
+                "field_c": {
+                    "da": "36 er for lavt et tal",
+                    "kl": "Illuquarnuulit 36 annuueriset"
+                }
+            }
+        ]
+    }
+
+Error strings should be send in both Danish (da) and Greenlandic (kl).
