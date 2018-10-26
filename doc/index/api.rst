@@ -71,22 +71,20 @@ If the requested data elicits errors, the response should contain JSON with info
             }
             
         ],
-        "fielderrors": [
-            { 
-                "field_a": {
-                    "da": "Navnet må ikke indeholde disse tegn: @$%&*",
-                    "kl": "Illuquarnuulit annuueriset: @$%&*"
-                },
-                "field_b": {
-                    "da": "Dette felt er obligatorisk",
-                    "kl": "Illuquarnuulit annuueriset"
-                },
-                "field_c": {
-                    "da": "36 er for lavt et tal",
-                    "kl": "Illuquarnuulit 36 annuueriset"
-                }
+        "fielderrors": {
+            "field_a": {
+                "da": "Navnet må ikke indeholde disse tegn: @$%&*",
+                "kl": "Illuquarnuulit annuueriset: @$%&*"
+            },
+            "field_b": {
+                "da": "Dette felt er obligatorisk",
+                "kl": "Illuquarnuulit annuueriset"
+            },
+            "field_c": {
+                "da": "36 er for lavt et tal",
+                "kl": "Illuquarnuulit 36 annuueriset"
             }
-        ]
+        }
     }
 
 Error strings should be send in both Danish (da) and Greenlandic (kl).
