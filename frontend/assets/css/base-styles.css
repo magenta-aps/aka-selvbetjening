@@ -61,7 +61,7 @@ h4,
 .h4 {
     font-weight: bold;
     padding: 0;
-    margin: 1rem 0 .5rem;
+    margin: 1.5rem 0 .75rem;
     display: block;
     line-height: 1.25;
 }
@@ -69,7 +69,7 @@ h4,
 h1,
 .h1 {
     font-size: 1.5rem;
-    margin: 0 0 1rem;
+    margin: 0 0 1.5rem;
 }
 
 h2,
@@ -88,24 +88,30 @@ h4,
     font-size: 1rem;
 }
 
+p {
+    margin: 0 0 0.75rem;
+}
+
 ol,
 ul {
-    padding-left: 1.125rem;
+    padding-left: 1.25rem;
 }
 
 form {
-    margin: 1rem 0;
+    margin: 1.5rem 0;
+    background-color: #fff;
+    padding: .75rem;
 }
 
 fieldset {
     border: none;
-    margin: 1rem 0;
+    margin: 1.5rem 0;
     padding: 0;
 }
 
 label {
     display: block;
-    margin: .5rem 0 0;
+    margin: .75rem 0 0;
 }
 
 input[type="text"],
@@ -116,7 +122,7 @@ input[type="password"],
 textarea {
     border: solid 1px #d6dbde;
     border-radius: .175rem;
-    padding: .5rem .75rem;
+    padding: .75rem .75rem;
     font-size: 1rem;
     background-color: #fff;
 }
@@ -134,9 +140,10 @@ button,
 input[type="submit"] {
     color: #fff;
     border: none;
-    padding: .75rem 2rem;
+    padding: .75rem 2.25rem;
     font-size: 0.875rem;
     cursor: pointer;
+    margin: 0 .75rem .75rem 0;
 }
 
 button {
@@ -157,11 +164,37 @@ input[type="submit"]:active {
     background-color: #fbb84f;
 }
 
-article {
-    background-color: #fff;
-    padding: 1rem 2rem;
+main {
+    padding: .75rem;
+    flex: 1 0 100%;
+    margin-top: 5rem;
 }
 
+article {
+    
+}
+
+hr {
+    border: none;
+    border-top: solid 1px #d6dbde;
+    margin: 2.25rem 0;
+}
+
+footer {
+    background-color: #fff;
+    padding: 1.5rem .75rem 2.25rem;
+}
+
+
+/* 
+ * GENERAL LAYOUT CLASSES
+ */
+
+.wrapper {
+    display: flex;
+    flex-flow: column nowrap;
+    min-height: 100vh;
+}
 
 /* 
  * TAGS LAYOUT CLASSES
@@ -175,7 +208,7 @@ article {
     text-decoration: none;
     display: inline-block;
     padding: .75rem 1.5rem;
-    margin: 0 .5rem .5rem 0;
+    margin: 0 .75rem .75rem 0;
 }
 
 .tag-large:hover,
@@ -191,8 +224,8 @@ article {
     color: #fff;
     text-decoration: none;
     display: inline-block;
-    padding: .125rem .5rem;
-    margin: 0 .5rem .5rem 0;
+    padding: .125rem .75rem;
+    margin: 0 .75rem .75rem 0;
 }
 
 .tag-small:hover,
@@ -207,18 +240,19 @@ article {
  * TILE LAYOUT CLASSES
  */
 
+/* Tile type A */
 .tile-a,
 .tile-a:link,
 .tile-a:visited {
     text-decoration: none;
     background-color: #31495b;
     color: #fff;
-    padding: 2.5rem 2.5rem 3.125rem;
+    padding: 2.25rem 2.25rem 3rem;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
     justify-content: center;
-    margin: 0 0 1rem;
+    margin: 0 0 .75rem;
     font-size: 1.125em;
     text-align: center;
 }
@@ -232,14 +266,15 @@ article {
 .tile-a--icon {
     height: 3rem;
     width: auto;
-    margin: 0 0 1.25rem;
+    margin: 0 0 1.5rem;
 }
 
+/* Tile type B */
 .tile-b {
     display: block;
     background-color: #fff;
     color: #31495b;
-    padding: 1.5rem 2rem;
+    padding: 1.5rem 2.25rem;
 }
 
 .tile-b--header,
@@ -273,15 +308,21 @@ article {
 .tile-b--more:link,
 .tile-b--more:visited {
     opacity: .5;
-    display: block;
-    margin-top: 4rem;
+    display: inline-block;
+    margin-top: 4.5rem;
     text-decoration: underline;
 }
 
+.tile-b--more:hover,
+.tile-b--more:active {
+    opacity: 1;
+}
+
+/* Tile type C */
 .tile-c,
 .tile-c:link,
 .tile-c:visited {
-    padding: 1.5rem 2rem;
+    padding: 1.5rem 2.25rem;
     display: block;
     background-color: #31495b;
     color: #fff;
@@ -291,7 +332,7 @@ article {
 .tile-c--header {
     font-size: 1.5em;
     display: block;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
 }
 
 .tile-c--byline {
@@ -301,13 +342,14 @@ article {
 
 .tile-c--more {
     display: block;
-    margin-top: 4rem;
+    margin-top: 4.5rem;
     opacity: .5;
 }
 
 .tile-c:hover,
 .tile-c:active {
     background-color: #83929D;
+    opacity: 1;
 }
 
 
@@ -316,7 +358,7 @@ article {
  */
 
 .dropdown {
-    padding: .75rem 1.25rem;
+    padding: .75rem 1.5rem;
     background-color: #fff;
     border: none;
     color: #31495b;
@@ -326,12 +368,6 @@ article {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-}
-
-.dropdown--arrow {
-    height: .5rem;
-    width: auto; 
-    margin-left: 1.25rem;
 }
 
 .dropdown:hover,
@@ -346,7 +382,7 @@ article {
  */
 
 .icon {
-    width: 1rem;
+    width: 1.5rem;
     height: auto;
 }
 
@@ -355,8 +391,8 @@ article {
  * GRID LAYOUT CLASSES
  */
 
-.grid {
-    
+.grid > * {
+    margin: 0 0 .75rem;   
 }
 
 
@@ -432,3 +468,58 @@ article {
     color: #fff;
 }
 
+
+/* 
+ * MEDIA QUERIES
+ */
+
+@media screen and (min-width: 35rem) {
+
+    /* 
+    * GRID LAYOUT CLASSES
+    */
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: .75rem;
+    }
+
+    .grid > * {
+        margin: 0;   
+    }
+
+    .grid--3-3 {
+        grid-column: auto/span 2;
+    }
+
+    .grid--2-3 {
+        grid-column: auto;
+    } 
+
+}
+
+@media screen and (min-width: 60rem) {
+
+    article {
+        max-width: 75rem;
+        margin: 0 auto 2.25rem;
+    }
+
+    /* 
+    * GRID LAYOUT CLASSES
+    */
+
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .grid--3-3 {
+        grid-column: auto/span 3;
+    }
+
+    .grid--2-3 {
+        grid-column: auto/span 2;
+    }
+
+}

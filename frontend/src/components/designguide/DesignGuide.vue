@@ -8,46 +8,88 @@
 
         <h2>Typografi</h2>
 
-        <div class="color--background--light" style="padding: 2rem; margin: 2rem 0; border: solid 1px #d6dbde;">
-            <h1>Heading 1 - Bold 24pt/30pt</h1>
-            <h2>Heading 2</h2>
-            <h3>Heading 3</h3>
-            <h4>Heading 4</h4>
-            <p>Body/regular 16pt/24pt</p>
-            <ul>
-                <li>Bullet - regular 16pt/24pt</li>
-                <li>Bullet - regular 16pt/24pt</li>
-                <li>Bullet - regular 16pt/24pt</li>
-            </ul>
-            <ol>
-                <li>Number - regular 16pt/24pt</li>
-                <li>Number - regular 16pt/24pt</li>
-                <li>Number - regular 16pt/24pt</li>
-            </ol>
-            <h1><a href="">Large link - header</a></h1>
-            <a class="h1" href="">Large link - not header</a>
-            <a href="">Small link</a>
-        </div>    
+        <div class="grid">
 
-        <div class="color--header" style="padding: 2rem; margin: 2rem 0;">
-            <h1>Heading 1 - Bold 24pt/30pt</h1>
-            <h2>Heading 2</h2>
-            <h3>Heading 3</h3>
-            <h4>Heading 4</h4>
-            <p>Body/regular 16pt/24pt</p>
-            <ul>
-                <li>Bullet - regular 16pt/24pt</li>
-                <li>Bullet - regular 16pt/24pt</li>
-                <li>Bullet - regular 16pt/24pt</li>
-            </ul>
-            <ol>
-                <li>Number - regular 16pt/24pt</li>
-                <li>Number - regular 16pt/24pt</li>
-                <li>Number - regular 16pt/24pt</li>
-            </ol>
-            <h1><a href="">Large link - header</a></h1>
-            <a class="h1" href="">Large link - not header</a>
-            <a href="">Small link</a>
+            <div class="grid--2-3 color--background--light">
+                <div style="padding: .75rem;">
+                    <h1>Heading 1 - Bold 24pt/30pt</h1>
+                    <h2>Heading 2</h2>
+                    <h3>Heading 3</h3>
+                    <h4>Heading 4</h4>
+                    <p>Body/regular 16pt/24pt</p>
+                    <ul>
+                        <li>Bullet - regular 16pt/24pt</li>
+                        <li>Bullet - regular 16pt/24pt</li>
+                        <li>Bullet - regular 16pt/24pt</li>
+                    </ul>
+                    <ol>
+                        <li>Number - regular 16pt/24pt</li>
+                        <li>Number - regular 16pt/24pt</li>
+                        <li>Number - regular 16pt/24pt</li>
+                    </ol>
+                    <h1><a href="">Large link - header</a></h1>
+                    <a class="h1" href="">Large link - not header</a>
+                    <a href="">Small link</a>
+                </div>
+            </div>    
+
+            <div class="color--header">
+                <div style="padding: .75rem;">
+                    <h1>Heading 1 - Bold 24pt/30pt</h1>
+                    <h2>Heading 2</h2>
+                    <h3>Heading 3</h3>
+                    <h4>Heading 4</h4>
+                    <p>Body/regular 16pt/24pt</p>
+                    <ul>
+                        <li>Bullet - regular 16pt/24pt</li>
+                        <li>Bullet - regular 16pt/24pt</li>
+                        <li>Bullet - regular 16pt/24pt</li>
+                    </ul>
+                    <ol>
+                        <li>Number - regular 16pt/24pt</li>
+                        <li>Number - regular 16pt/24pt</li>
+                        <li>Number - regular 16pt/24pt</li>
+                    </ol>
+                    <h1><a href="">Large link - header</a></h1>
+                    <a class="h1" href="">Large link - not header</a>
+                    <a href="">Small link</a>
+                </div>
+            </div>
+
+        </div>
+
+        <h2>Grid</h2>
+
+        <div class="wrap-this-grid">
+
+            <div class="grid"> 
+                <div class="grid--3-3">
+                    .grid--3-3 - Grid cell that spans the whole width
+                </div>
+                <div>
+                    No class - Grid cell that spans 1/3 of width
+                </div>
+                <div class="grid--2-3">
+                    .grid--2-3 - Grid cell that spans 2/3 of width
+                </div>
+                <div>
+
+                    <div class="grid"> 
+                        <div class="grid--3-3">
+                            Grid within a grid
+                        </div>
+                        <div class="grid--2-3"></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+
+                </div>
+                <div></div>
+                <div></div>
+            </div>
+
         </div>
 
         <h2>Formularer</h2>
@@ -66,8 +108,8 @@
 
             <h3>Knapper</h3>
             <fieldset>
-                <input type="submit" value="Primary CTA">
-                <button>Secondary CTA</button>
+                <input type="submit" value="Primær handling: Send/Gem">
+                <button>Sekundær action: Annullér/Reset</button>
             </fieldset>
 
         </form>
@@ -96,8 +138,8 @@
 
         <h2>Tiles</h2>
 
-        <div style="display: flex; padding: 2rem; background-color: #eaecee;">
-            <div style="margin: 1rem;">
+        <div class="grid">
+            <div>
 
                 <h3>Tile type A</h3>
 
@@ -107,7 +149,7 @@
                 </a>
 
             </div>
-            <div style="margin: 1rem;">
+            <div>
 
                 <h3>Tile type B</h3>
 
@@ -127,7 +169,7 @@
                 </div>
 
             </div>
-            <div style="margin: 1rem;">
+            <div>
 
                 <h3>Tile type C</h3>
 
@@ -144,12 +186,10 @@
 
         <h2>Dropdown handle</h2>
 
-        <div style="padding: 2rem; background-color: #eaecee;">
-            <button class="dropdown">
-                <span>Dropdown static</span>
-                <img class="dropdown--arrow" src="/static/img/SVG/sullisivk_arrow.svg" alt="">
-            </button>
-        </div>
+        <button class="dropdown">
+            <span>Dropdown static</span>
+            <img class="icon" src="/static/img/SVG/sullisivk_arrow.svg" alt="">
+        </button>    
 
         <h2>Ikoner</h2>
         <p>
@@ -232,7 +272,7 @@
             
         },
         created: function() {
-            notify(`Welcome to this page.`)
+            notify('')
         }
     }
 
@@ -249,6 +289,17 @@
         flex: 1 0 13rem;
         height: 5rem;
         padding: 1rem;
+    }
+
+    .wrap-this-grid .grid > div {
+        background-color: #31495b;
+        padding: 1rem;
+        color: #fff;
+    }
+
+    .wrap-this-grid .grid .grid > div {
+        background-color: #83929D;
+        min-height: 3rem;
     }
 
 </style>
