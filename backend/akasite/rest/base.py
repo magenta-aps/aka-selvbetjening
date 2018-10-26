@@ -22,9 +22,15 @@ class ContentTypeError(Exception):
 
 
 class JSONRestView(View):
-    # Set a few content types:
-    CT1 = 'application/json'
-    CT2 = 'multipart/form-data'
+    """REST API base class. Untangles request data and stores any files POSTed.
+
+    Data posted in body or in form fields are made available in self.data.
+
+    Files are stored, and their metadata made available in self.files.
+    """
+
+    CT1 = 'application/json'    # Accepted content-type.
+    CT2 = 'multipart/form-data' # Accepted content-type.
 
     def randomstring(self, length=30):
         return ''.join([
@@ -39,12 +45,13 @@ class JSONRestView(View):
 
     def getContenttype(self, metadict):
         '''
-        Get contenttype, or raise exception if not found.
+        Get contenttype from header.
 
         :param metadict: A dict, e.g. the request.META dict
         :type metadict: Dictionary
         :returns: dict with at least the two keys type and charset.
                   The values of these may be empty.
+        :raises: ContentTypeError
         '''
 
         if 'CONTENT_TYPE' not in metadict:
@@ -108,7 +115,7 @@ class JSONRestView(View):
 
         :param request: The HttpRequest object
         :type request: HttpRequest
-        :returns: A copy of the POST dict.
+        :returns: Dict containing any data from the POST dict.
         '''
 
         return request.POST.copy()
@@ -133,15 +140,16 @@ class JSONRestView(View):
     def post(self, request, *args, **kwargs):
         '''
         Base method for POST requests.
-        We currently only accept
-        a) application/json and
-        b) multipartform-data as content-type.
-        If a), data is expected to arrive as serialised JSON in body.
-        If b), data is in request.POST, and files are in request.FILES.
+        We only accept some content-types.
 
-        In any case, we store the data and/or files in self.data and
+        Stores the data and/or files in self.data and
         self.files, respectively. In self.files, only the file metadata
         is stored.
+
+        Attributes:
+            self.data  - dict: Data sent via request.body or request.POST.
+
+            self.files - list: Metadata for any file(s) sent.
 
         :param request: The request.
         :type request: HttpRequest.

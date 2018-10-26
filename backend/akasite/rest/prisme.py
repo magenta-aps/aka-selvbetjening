@@ -2,13 +2,20 @@ import requests
 
 
 class Prisme():
+    '''Class tohandle communication with Prisme system.
+    '''
+
     def __init__(self):
         pass
 
     def sendToPrisme(self, data):
+        '''Stub
+        '''
         return ''
 
     def receiveFromPrisme(self, url):
+        '''Stub
+        '''
         return ''
 
     def fetchPrismeFile(self, url, localfilename):
@@ -37,6 +44,16 @@ class Prisme():
         return True
 
     def getRentenota(self, fromdate, todate):
+        '''Given a period, will fetch the corresponding rentenote
+        from Prisme.
+
+        :param fromdate: Start date of the period.
+        :type fromdate: string conforming to this date pattern: YYYYMMDD.
+        :param todate: End date of the period.
+        :type todate: string conforming to this date pattern: YYYYMMDD.
+        :returns: rentenota data as a JSON structure.
+        '''
+
         post1 = {'dato': '13/06-18',
                  'postdato': '10/02-18',
                  'bilag': '',

@@ -7,17 +7,23 @@ class Validator():
 
 
 class JsonValidator(Validator):
-    '''
-    JSON Validator, using jsonschema.
+    '''JSON Validator, using jsonschema.
     '''
     def __init__(self, schema):
         self.schema = schema
         self.lasterror = None
 
     def setSchema(self, schema):
+        '''Set the schema used to validate against.
+
+        :param schema: Valid jsonschema schema.
+        :type schema: dict.
+        '''
         self.schema = schema
 
-    def getSchema(self, schema):
+    def getSchema(self):
+        '''Get the current schema used.
+        '''
         return self.schema
 
     def validate(self, object):

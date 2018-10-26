@@ -10,6 +10,9 @@ import json
 
 
 class RenteNota(JSONRestView):
+    '''Handles calls for the Rentenota interface. Gets period data from Prisme.
+    '''
+
     def initiatedownload(self, path, contenttype):
         with open(path, 'rb') as fh:
             response = HttpResponse(fh.read(), content_type=contenttype)
@@ -41,8 +44,7 @@ class RenteNota(JSONRestView):
                                          contenttype)
 
     def get(self, request, *args, **kwargs):
-        '''
-        Get rentenota data for the given interval.
+        '''Get rentenota data for the given interval.
         '''
 
         fromdate = request.GET.get('fromdate', '')
@@ -52,4 +54,7 @@ class RenteNota(JSONRestView):
         return HttpResponse(json.dumps(data), content_type=JSONRestView.CT1)
 
     def post(self, request, *args, **kwargs):
+        '''No POSTing allowed here.
+        '''
+
         return HttpResponseNotAllowed(['GET'])

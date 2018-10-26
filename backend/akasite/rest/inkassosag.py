@@ -4,6 +4,10 @@ from django.http import HttpResponse
 
 
 class Schema(JSONRestView):
+    '''Schema used for validation of inkassosag data.
+
+    Documents what we expect in POST to this endpoint.
+    '''
     def get(self, request, *args, **kwargs):
         schema = {
             'type': 'object',
@@ -21,11 +25,15 @@ class Schema(JSONRestView):
 
 class InkassoSag(JSONRestView):
     def get(self, request, *args, **kwargs):
+        '''GET method.
+        '''
         dummyresponse = {"serversays": "Hello. You said InkassoSag/GET"}
         return HttpResponse(json.dumps(dummyresponse),
                             content_type=JSONRestView.CT1)
 
     def post(self, request, *args, **kwargs):
+        '''POST method.
+        '''
         baseresponse = super().post(request, args, kwargs)
 
         if baseresponse.status_code == 200:

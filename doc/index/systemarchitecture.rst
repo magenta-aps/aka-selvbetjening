@@ -34,11 +34,11 @@ The 3 primary transitions are:
 On any error in one of these transitions, go to state 5; if no errors occurred, go to state 6.
 Both end states result in an HTTP response being sent to the caller.
 
-.. figure:: img/backend-state-diagram.png
+.. figure:: ../img/backend-state-diagram.png
 
-The caller is expected to be our own frontend, and in order to enable uniform validation, we use 1 JSON-Schema for each form.
-This schema is communicated to the frontend, so that form data can be validated.
-The same schema is used in the backend for a second validation. The second validation is made, because we cannot guarantee that data comes from our own frontend, i.e. anyone can post data via curl or Postman.
+The caller is expected to be our own frontend, and in order to enable uniform validation, we use a JSON-Schema for each form.
+This schema is available to the frontend, so that form data can be validated there, if necessary.
+The same schema is used in the backend for a second validation. The second validation is made because we cannot guarantee that data comes from our own frontend, i.e. anyone who can use the frontend can post data directly to the backend.
 
 Django-specifics:
 ---------------------
