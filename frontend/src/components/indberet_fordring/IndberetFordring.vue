@@ -1,39 +1,36 @@
 <template>
 
-    <article class="test"> 
-    <!-- 
-        This "class" isn't important now. But you might want to give it a proper name if used for styles 
-    -->
+    <article class="indberet_fordring">
 
-        <h1>Inkasso - Opret sag</h1>
-        
+        <h1>{{ $t("indberet_fordring.title") }}</h1>
+
         <!--
-            General notes: 
+            General notes:
             Code looks neat and functional. Good job!
             But do make use of HTML form validation. It's easy to implement and saves users a lot of headache.
-            
-            The quickest fix is to set the "required" attribute on mandatory input fields. 
-            This will prevent the browser from submitting the form if there are inputs missing. 
+
+            The quickest fix is to set the "required" attribute on mandatory input fields.
+            This will prevent the browser from submitting the form if there are inputs missing.
             The browser will gently remind users of this. ( ... I think)
-            
+
             This fascinating subject can be studied in detail here :D
-            https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Form_validation#Using_built-in_form_validation        
+            https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Form_validation#Using_built-in_form_validation
         -->
 
         <form @submit.prevent="sendFormRequest()">
 
             <fieldset>
-                <label id="lbl_fordringshaver" for="fordringshaver">{{ $t("simpel_indberetning.fordringshaver") }}</label>
+                <label id="lbl_fordringshaver" for="fordringshaver">{{ $t("indberet_fordring.fordringshaver") }}</label>
                 <input id="fordringshaver" type="text" value="NOGH2342" v-model="fordringshaver">
                 <!--
-                    The above input elements' value attribute will be ignored because you use v-model. 
+                    The above input elements' value attribute will be ignored because you use v-model.
                     You should set the "fordringshaver" variable to be "NOGH2342" instead whenever the value is available
                 -->
 
-                <label id="lbl_debitor" for="debitor">{{ $t("simpel_indberetning.debitor") }}</label>
+                <label id="lbl_debitor" for="debitor">{{ $t("indberet_fordring.debitor") }}</label>
                 <input id="debitor" type="text" v-model="debitor">
 
-                <label id="lbl_fordringshaver2" for="fordringshaver2">{{ $t("simpel_indberetning.anden_fordringshaver") }}</label>
+                <label id="lbl_fordringshaver2" for="fordringshaver2">{{ $t("indberet_fordring.anden_fordringshaver") }}</label>
                 <input id="fordringshaver2" type="text" value="NOGH2342" v-model="fordringshaver2">
                 <!--
                     Why 2 input fields with the same value? Placeholder code?
@@ -42,7 +39,7 @@
 
 
             <!--TODO: Allow multiple files and show file list-->
-            <!-- 
+            <!--
                This is actually quite easy. Add the "multiple" attribute  to the input element.
                Then use getFileData to extract the list of files.
                The template should magically display it if you add something like
@@ -54,7 +51,7 @@
                      </tr>
                    </table>
                ```
-               Maybe iterating over af Filelist like this will cause you problems. 
+               Maybe iterating over af Filelist like this will cause you problems.
                Then you should convert it to an array in getFileData.
                See https://developer.mozilla.org/en-US/docs/Web/API/FileList
                and https://developer.mozilla.org/en-US/docs/Web/API/File for more info on working with files.
@@ -66,30 +63,22 @@
 
             <div style="display: flex; flex-flow: row wrap;">
                 <fieldset>
-                    <label id="lbl_fordringsgruppe" for="fordringsgruppe">{{ $t("simpel_indberetning.fordringsgruppe") }}</label>
+                    <label id="lbl_fordringsgruppe" for="fordringsgruppe">{{ $t("indberet_fordring.fordringsgruppe") }}</label>
                     <select
                             id="fordringsgruppe"
                             v-model="fordringsgruppe"
-                            @change="setGroup()"
                     >
-                    <!--
-                        It might be easier to skip setGroup and make "fordringsgruppe_id" a computed value that returns whatever is in "fordringsgruppe" 
-                    -->
                         <option v-for="f in fordringsgrupper" v-bind:value="f">{{stringRep(f)}})</option>
                     </select>
                 </fieldset>
 
                 <!--This is only shown if there are multiple options-->
                 <fieldset v-if="multipleTypes">
-                    <label id="lbl_fordringstype" for="fordringstype">{{ $t("simpel_indberetning.fordringstype") }}</label>
+                    <label id="lbl_fordringstype" for="fordringstype">{{ $t("indberet_fordring.fordringstype") }}</label>
                     <select
                             id="fordringstype"
                             v-model="fordringstype"
-                            @change="setTypeId()"
                     >
-                    <!--
-                        As above: It might be easier to skip setTypeId and make "fordringstype_id" a computed value that returns whatever is in "fordringstype" 
-                    -->
                         <option v-for="t in fordringsgruppe.sub_groups" v-bind:value="t">{{stringRep(t)}}</option>
                     </select>
                 </fieldset>
@@ -158,7 +147,7 @@
             </fieldset>
 
             <fieldset>
-                <input type="submit" v-bind:value="$t('simpel_indberetning.gem')">
+                <input type="submit" v-bind:value="$t('indberet_fordring.gem')">
             </fieldset>
 
         </form>
@@ -201,30 +190,28 @@
                 kontaktperson: null,
                 noter: null,
 
-                /*TODO: Maybe computed properties?*/
                 fordringsgrupper: groups,
-                fordringstype_id: null,
-                fordringsgruppe_id: null,
-                multipleTypes: false,
                 csrftoken: null
             }
         },
+        computed: {
+            fordringstype_id: function() {
+                return this.getId(this.fordringstype);
+            },
+            fordringsgruppe_id: function() {
+                return this.getId(this.fordringsgruppe);
+            },
+            multipleTypes: function() {
+                return (this.fordringsgruppe !== null
+                        && this.fordringsgruppe["sub_groups"].length > 1)
+            }
+        },
         methods: {
-            setTypeId: function() {
-                this.fordringstype_id = this.fordringstype["id"];
-            },
-            setGroupId: function() {
-                this.fordringsgruppe_id = this.fordringsgruppe["id"];
-            },
-            setGroup: function() {
-                if (this.fordringsgruppe["sub_groups"].length === 1) {
-                    this.fordringstype = this.fordringsgruppe["sub_groups"][0];
-                    this.setTypeId();
-                    this.multipleTypes = false;
-                } else {
-                    this.multipleTypes = true;
+            getId: function(dict) {
+                if ("id" in dict) {
+                    return dict["id"];
                 }
-                this.setGroupId();
+                return null;
             },
             stringRep: function(dict) {
                 return "" + dict["id"] + " (" + dict["value"] + ")";
@@ -275,7 +262,7 @@
                 .then(res => {
                     console.log('Server response!');
                     console.log(res);
-                    /* 
+                    /*
                         You should tell the user that things worked out OK.
                         We'll need to design a little info popup for that maybe.
                     */
