@@ -10,11 +10,12 @@
 
 .notification {
     transition: all .5s;
-    padding: .5rem 1rem;
+    padding: .75rem 1.5rem;
     background-color: #31495b;
     color: #fff;
     margin-top: -5rem;
-    box-shadow: .25rem .5rem .25rem rgba(0,0,0,.1);
+    box-shadow: 0 .5rem rgba(0,0,0,.1);
+    min-height: 2.25rem;
 }
 
 .notification.show {
