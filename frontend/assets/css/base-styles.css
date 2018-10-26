@@ -137,6 +137,7 @@ input[type="submit"] {
     padding: .75rem 2rem;
     font-size: 0.875rem;
     cursor: pointer;
+    margin-right: .5rem;
 }
 
 button {
@@ -160,6 +161,12 @@ input[type="submit"]:active {
 article {
     background-color: #fff;
     padding: 1rem 2rem;
+}
+
+hr {
+    border: none;
+    border-top: solid 1px #d6dbde;
+    margin: 2rem 0;
 }
 
 
@@ -207,6 +214,7 @@ article {
  * TILE LAYOUT CLASSES
  */
 
+/* Tile type A */
 .tile-a,
 .tile-a:link,
 .tile-a:visited {
@@ -235,6 +243,7 @@ article {
     margin: 0 0 1.25rem;
 }
 
+/* Tile type B */
 .tile-b {
     display: block;
     background-color: #fff;
@@ -273,11 +282,17 @@ article {
 .tile-b--more:link,
 .tile-b--more:visited {
     opacity: .5;
-    display: block;
+    display: inline-block;
     margin-top: 4rem;
     text-decoration: underline;
 }
 
+.tile-b--more:hover,
+.tile-b--more:active {
+    opacity: 1;
+}
+
+/* Tile type C */
 .tile-c,
 .tile-c:link,
 .tile-c:visited {
@@ -308,6 +323,7 @@ article {
 .tile-c:hover,
 .tile-c:active {
     background-color: #83929D;
+    opacity: 1;
 }
 
 
@@ -356,7 +372,17 @@ article {
  */
 
 .grid {
-    
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: .5rem;
+}
+
+.grid--3-3 {
+    grid-column: 1 / 4;
+}
+
+.grid--2-3 {
+    grid-column: 1 / 3;
 }
 
 

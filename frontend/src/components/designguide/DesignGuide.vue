@@ -6,6 +6,8 @@
 
         <p>Designguiden fra 1508 <a href="http://sullissivik.designguiden.dk/website">kan findes her.</a></p>
 
+        <hr>
+
         <h2>Typografi</h2>
 
         <div class="color--background--light" style="padding: 2rem; margin: 2rem 0; border: solid 1px #d6dbde;">
@@ -50,6 +52,40 @@
             <a href="">Small link</a>
         </div>
 
+        <hr>
+
+        <h2>Grid</h2>
+
+        <div class="grid"> 
+            <div class="grid--3-3">
+                Grid cell that spans the whole width
+            </div>
+            <div class="grid--2-3">
+                Grid cell that spans 2/3 of width
+            </div>
+            <div>
+                Grid cell that spans 1/3 of width
+            </div>
+            <div>
+
+                <div class="grid"> 
+                    <div class="grid--3-3">
+                        Grid within a grid
+                    </div>
+                    <div class="grid--2-3"></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+
+            </div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <hr>
+
         <h2>Formularer</h2>
 
         <form @submit.prevent="sendFormRequest()">
@@ -66,11 +102,13 @@
 
             <h3>Knapper</h3>
             <fieldset>
-                <input type="submit" value="Primary CTA">
-                <button>Secondary CTA</button>
+                <input type="submit" value="Primær handling: Send/Gem">
+                <button>Sekundær action: Annullér/Reset</button>
             </fieldset>
 
         </form>
+
+        <hr>
 
         <h2>Tags</h2>
 
@@ -93,6 +131,8 @@
             <a class="tag-small" href="#">Offentlig ansat</a>
             <a class="tag-small" href="#">Overenskomstgrupper</a>
         </p>
+
+        <hr>
 
         <h2>Tiles</h2>
 
@@ -142,14 +182,18 @@
             </div>
         </div>
 
+        <hr>
+
         <h2>Dropdown handle</h2>
 
         <div style="padding: 2rem; background-color: #eaecee;">
             <button class="dropdown">
                 <span>Dropdown static</span>
-                <img class="dropdown--arrow" src="/static/img/SVG/sullisivk_arrow.svg" alt="">
+                <img class="icon" src="/static/img/SVG/sullisivk_arrow.svg" alt="">
             </button>
         </div>
+
+        <hr>
 
         <h2>Ikoner</h2>
         <p>
@@ -167,6 +211,8 @@
         <p>
             <img class="icon" src="/static/img/SVG/sullisivk_login.svg" alt="">
         </p>
+
+        <hr>
 
         <h2>Farver</h2>
 
@@ -249,6 +295,17 @@
         flex: 1 0 13rem;
         height: 5rem;
         padding: 1rem;
+    }
+
+    .grid > div {
+        background-color: #31495b;
+        padding: 1rem;
+        color: #fff;
+    }
+
+    .grid .grid > div {
+        background-color: #83929D;
+        min-height: 3rem;
     }
 
 </style>
