@@ -18,7 +18,7 @@
 
 <script>
 
-    import LangToggle from './components/language-toggle/LangToggle.vue'
+    import LangToggle from './components/utils/language-toggle/LangToggle.vue'
 
     export default {
         components: {

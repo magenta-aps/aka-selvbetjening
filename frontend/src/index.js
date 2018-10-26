@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueI18n from 'vue-i18n'
-import { messages } from './i18n/Messages.js'
 import App from './App.vue'
 
 const TableOfContents = () => import('./components/table_of_contents/TableOfContents.vue')
+const DesignGuide = () => import('./components/designguide/DesignGuide.vue')
+
 const FormExample1 = () => import('./components/form_example_1/FormExample1.vue')
 const FormExample2 = () => import('./components/form_example_2/FormExample2.vue')
 const IndberetFordring = () => import ('./components/indberet_fordring/IndberetFordring.vue')
@@ -15,6 +16,8 @@ Vue.use(VueI18n)
 
 const routes = [
   { path: '/', component: TableOfContents },
+  { path: '/designguide', component: DesignGuide },
+  
   { path: '/form1', component: FormExample1 },
   { path: '/form2', component: FormExample2 },
   { path: '/indberetning', component: IndberetFordring},
@@ -27,8 +30,7 @@ const router = new VueRouter({
 
 const i18n = new VueI18n({
   locale: 'kl', // set locale
-  fallbackLocale: 'da',
-  messages: messages, // set locale messages
+  fallbackLocale: 'da'
 })
 
 const app = new Vue({

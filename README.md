@@ -4,21 +4,23 @@ Django Vangrant-Ansible Project template
 Basic template cloned from github.com:magenta-aps/vagrant-ansible-example.git
 
 For the Windows equivalent, see [here](https://github.com/magenta-aps/vagrant-ansible-example-windows)
+
+
 ## Requirements:
 
 ### Development:
 - Vagrant is needed to spin up a virtualized enviroment.  
 - Virtualbox see [Magenta Vagrant](https://github.com/magenta-aps/vagrant/blob/master/README.md) for more info.
 
+
 ## Setup:
 
 ### Important files:
-`doc/requirements.txt`: the python requirement file, generated with pip freeze. All packages will be installed by provisioning.
-
-
+`doc/requirements.txt`: the python requirement file. All packages will be installed by provisioning.
 
 
 ## Usage:
+
 ### Development:
 From the vagrant folder:  
 `vagrant up` will spin up a virtual machine and provision it.  
@@ -27,12 +29,12 @@ From the vagrant folder:
 Everything in this(the root folder of this project) folder will be shared with the VM and accessible in the  `/vagrant` folder inside the VM.
 
 From `/vagrant` in the virtual machine:  
-running `make runserver` will start up the django server, and it should be assecible from your host machine on port localhost:8000  
-`make documentation` will run sphinx and generate documentation. accessible as static html files in `vagrant/doc/_build/html`
-
+- `make runserver`: Will build everything and run the webserver. accessible at localhost:8000 on the host machine
+- `make documentation`: Will generate the static html pages for the documentation. accesible in the folder `doc/_build/html/` (index.html is the frontpage)
+- `make test`: Will run the test-suite.
+- `make frontend`: Will build the frontend components.
 
 ### Production:
-
 
 ### Running specific playbooks:
 
@@ -41,5 +43,3 @@ changing the `PLAYBOOK` environmental variable before running `vagrant provision
 as done by:
 
     PLAYBOOK=demo.yml vagrant provision
-
-
