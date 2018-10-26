@@ -2,7 +2,7 @@
 
     <article class="indberet_fordring">
 
-        <h1>{{ $t("indberet_fordring.title") }}</h1>
+        <h1>{{ $t("title") }}</h1>
 
         <!--
             General notes:
@@ -20,17 +20,17 @@
         <form @submit.prevent="sendFormRequest()">
 
             <fieldset>
-                <label id="lbl_fordringshaver" for="fordringshaver">{{ $t("indberet_fordring.fordringshaver") }}</label>
+                <label id="lbl_fordringshaver" for="fordringshaver">{{ $t("fordringshaver") }}</label>
                 <input id="fordringshaver" type="text" value="NOGH2342" v-model="fordringshaver">
                 <!--
                     The above input elements' value attribute will be ignored because you use v-model.
                     You should set the "fordringshaver" variable to be "NOGH2342" instead whenever the value is available
                 -->
 
-                <label id="lbl_debitor" for="debitor">{{ $t("indberet_fordring.debitor") }}</label>
+                <label id="lbl_debitor" for="debitor">{{ $t("debitor") }}</label>
                 <input id="debitor" type="text" v-model="debitor">
 
-                <label id="lbl_fordringshaver2" for="fordringshaver2">{{ $t("indberet_fordring.anden_fordringshaver") }}</label>
+                <label id="lbl_fordringshaver2" for="fordringshaver2">{{ $t("anden_fordringshaver") }}</label>
                 <input id="fordringshaver2" type="text" value="NOGH2342" v-model="fordringshaver2">
                 <!--
                     Why 2 input fields with the same value? Placeholder code?
@@ -63,7 +63,7 @@
 
             <div style="display: flex; flex-flow: row wrap;">
                 <fieldset>
-                    <label id="lbl_fordringsgruppe" for="fordringsgruppe">{{ $t("indberet_fordring.fordringsgruppe") }}</label>
+                    <label id="lbl_fordringsgruppe" for="fordringsgruppe">{{ $t("fordringsgruppe") }}</label>
                     <select
                             id="fordringsgruppe"
                             v-model="fordringsgruppe"
@@ -74,7 +74,7 @@
 
                 <!--This is only shown if there are multiple options-->
                 <fieldset v-if="multipleTypes">
-                    <label id="lbl_fordringstype" for="fordringstype">{{ $t("indberet_fordring.fordringstype") }}</label>
+                    <label id="lbl_fordringstype" for="fordringstype">{{ $t("fordringstype") }}</label>
                     <select
                             id="fordringstype"
                             v-model="fordringstype"
@@ -86,68 +86,68 @@
 
 
             <fieldset>
-                <label id="lbl_barns_cpr" for="tb_barns_cpr">Barns CPR-nr</label>
+                <label id="lbl_barns_cpr" for="tb_barns_cpr">{{ $t("barns_cpr") }}</label>
                 <input id="tb_barns_cpr" type="text" v-model="barns_cpr">
 
-                <label id="lbl_ekstern_sagsnummer" for="tb_ekstern_sagsnummer">Ekstern sagsnummer</label>
+                <label id="lbl_ekstern_sagsnummer" for="tb_ekstern_sagsnummer">{{ $t("ekstern_sagsnummer") }}</label>
                 <input id="tb_ekstern_sagsnummer" type="text" v-model="ekstern_sagsnummer">
 
-                <label id="lbl_fakturanr" for="tb_fakturanr">Fakturanr</label>
+                <label id="lbl_fakturanr" for="tb_fakturanr">{{ $t("fakturanr") }}</label>
                 <input id="tb_fakturanr" type="text" v-model="fakturanr">
 
-                <label id="lbl_bnr" for="tb_bnr">B-nr</label>
+                <label id="lbl_bnr" for="tb_bnr">{{ $t("bnr") }}</label>
                 <input id="tb_bnr" type="text" v-model="bnr">
             </fieldset>
 
             <fieldset> <!--TODO: Fix wrapping -->
-                <label id="lbl_hovedstol" for="tb_hovedstol">Hovedstol</label>
+                <label id="lbl_hovedstol" for="tb_hovedstol">{{ $t("hovedstol") }}</label>
                 <input id="tb_hovedstol" type="text" v-model="hovedstol">
-                <label id="lbl_hovedstol_posteringstekst" for="tb_hovedstol_posteringstekst">Posteringstekst</label>
+                <label id="lbl_hovedstol_posteringstekst" for="tb_hovedstol_posteringstekst">{{ $t("posteringstekst") }}</label>
                 <input id="tb_hovedstol_posteringstekst" type="text" v-model="hovedstol_posteringstekst">
 
-                <label id="lbl_bankrente" for="tb_bankrente">Bankrente</label>
+                <label id="lbl_bankrente" for="tb_bankrente">{{ $t("bankrente") }}</label>
                 <input id="tb_bankrente" type="text" v-model="bankrente">
-                <label id="lbl_bankrente_posteringstekst" for="tb_bankrente_posteringstekst">Posteringstekst</label>
+                <label id="lbl_bankrente_posteringstekst" for="tb_bankrente_posteringstekst">{{ $t("posteringstekst") }}</label>
                 <input id="tb_bankrente_posteringstekst" type="text" v-model="bankrente_posteringstekst">
 
-                <label id="lbl_bankgebyr" for="tb_bankgebyr">Bankgebyr</label>
+                <label id="lbl_bankgebyr" for="tb_bankgebyr">{{ $t("bankgebyr") }}</label>
                 <input id="tb_bankgebyr" type="text" v-model="bankgebyr">
-                <label id="lbl_bankgebyr_posteringstekst" for="tb_bankgebyr_posteringstekst">Posteringstekst</label>
+                <label id="lbl_bankgebyr_posteringstekst" for="tb_bankgebyr_posteringstekst">{{ $t("posteringstekst") }}</label>
                 <input id="tb_bankgebyr_posteringstekst" type="text" v-model="bankgebyr_posteringstekst">
 
-                <label id="lbl_rente" for="tb_rente">Rente</label>
+                <label id="lbl_rente" for="tb_rente">{{ $t("rente") }}</label>
                 <input id="tb_rente" type="text" v-model="rente">
-                <label id="lbl_rente_posteringstekst" for="tb_rente_posteringstekst">Posteringstekst</label>
+                <label id="lbl_rente_posteringstekst" for="tb_rente_posteringstekst">{{ $t("posteringstekst") }}</label>
                 <input id="tb_rente_posteringstekst" type="text" v-model="rente_posteringstekst">
             </fieldset>
 
             <fieldset> <!--TODO: Fix wrapping -->
-                <label id="lbl_periodestart" for="tb_periodestart">Periodestart</label>
+                <label id="lbl_periodestart" for="tb_periodestart">{{ $t("periodestart") }}</label>
                 <input id="tb_periodestart" type="date" v-model="periodestart">
 
-                <label id="lbl_periodeslut" for="tb_periodeslut">Periodeslut</label>
+                <label id="lbl_periodeslut" for="tb_periodeslut">{{ $t("periodeslut") }}</label>
                 <input id="tb_periodeslut" type="date" v-model="periodeslut">
 
-                <label id="lbl_forfaldsdato" for="tb_forfaldsdato">Forfaldsdato</label>
+                <label id="lbl_forfaldsdato" for="tb_forfaldsdato">{{ $t("forfaldsdato") }}</label>
                 <input id="tb_forfaldsdato" type="date" v-model="forfaldsdato">
 
-                <label id="lbl_betalingsdato" for="tb_betalingsdato">Betalinsgdato</label>
+                <label id="lbl_betalingsdato" for="tb_betalingsdato">{{ $t("betalinsgdato") }}</label>
                 <input id="tb_betalingsdato" type="date" v-model="betalingsdato">
 
-                <label id="lbl_foraeldelsesdato" for="tb_foraeldelsesdato">Forældelsesdato</label>
+                <label id="lbl_foraeldelsesdato" for="tb_foraeldelsesdato">{{ $t("forældelsesdato") }}</label>
                 <input id="tb_foraeldelsesdato" type="date" v-model="foraeldelsesdato">
             </fieldset>
 
             <fieldset>
-                <label id="lbl_kontaktperson" for="tb_kontaktperson">Kontaktperson</label>
+                <label id="lbl_kontaktperson" for="tb_kontaktperson">{{ $t("kontaktperson") }}</label>
                 <input id="tb_kontaktperson" type="text" v-model="kontaktperson">
 
-                <label id="lbl_noter" for="tb_nrtes">Noter</label>
+                <label id="lbl_noter" for="tb_nrtes">{{ $t("noter") }}</label>
                 <input id="tb_nrtes" type="text" v-model="noter">
             </fieldset>
 
             <fieldset>
-                <input type="submit" v-bind:value="$t('indberet_fordring.gem')">
+                <input type="submit" v-bind:value="$t('gem')">
             </fieldset>
 
         </form>
@@ -285,3 +285,60 @@
 <style scoped>
 
 </style>
+
+<i18n>
+    {
+    "da": {
+    "title": "Inkasso - Opret sag",
+    "fordringshaver": "Fordringshaver",
+    "anden_fordringshaver": "Anden fordringshaver",
+    "debitor": "Debitor",
+    "fordringsgruppe": "Ekstern fordringsgruppe",
+    "fordringstype": "Ekstern fordringstype",
+    "barns_cpr": "Barns CPR-nr",
+    "ekstern_sagsnummer": "Ekstern sagsnummer",
+    "fakturanr": "Fakturanr",
+    "bnr": "B-nr",
+    "hovedstol": "Hovedstol",
+    "posteringstekst": "Posteringstekst",
+    "bankrente": "Bankrente",
+    "bankgebyr": "Bankgebyr",
+    "rente": "Rente",
+    "periodestart": "Periodestart",
+    "periodeslut": "Periodeslut",
+    "forfaldsdato": "Forfaldsdato",
+    "betalingsdato": "Betalingsdato",
+    "foraeldelsesdato": "Forældelsesdato",
+    "kontaktperson": "Kontaktperson",
+    "noter": "Noter",
+    "gem": "Gem",
+    "meddebitorer": "Meddebitorer"
+    },
+    "kl": {
+    "title": "Akiliisitsiniarneq - suliamik pilersitsineq",
+    "fordringshaver": "Akiligassaqarfigineqartoq",
+    "anden_fordringshaver": "Akiligassaqarfigineqartoq alla",
+    "debitor": "Akiligassalik",
+    "fordringsgruppe": "Akiitsoqarfimmiit suliassiisutip ataatsimooruffiata suussusaa",
+    "fordringstype": "Akiitsoqarfimmiit suliasiissutit suussusaa",
+    "barns_cpr": "Meeqqap inuup normua",
+    "ekstern_sagsnummer": "Suliassiissutip akiitsoqarfimmiit normua",
+    "fakturanr": "MANGLER",
+    "bnr": "MANGLER",
+    "hovedstol": "Akiitsup toqqammavia",
+    "posteringstekst": "Nalunaarsornerani oqaasertaq",
+    "bankrente": "Aningaaserivimmi erniarititaq",
+    "bankgebyr": "Aningaaserivimmut akiliut",
+    "rente": "Erniarititaq",
+    "periodestart": "Piffissap aallartiffia",
+    "periodeslut": "Piffissap naaffia",
+    "forfaldsdato": "Ulloq akiligassap kingusinnerpaamik akilerneqarfissaa",
+    "betalingsdato": "Ulloq akiliiffik",
+    "foraeldelsesdato": "Pisoqalisoorfissaata ullua ",
+    "kontaktperson": "Inuk atassuteqaataasoq",
+    "noter": "Allaaserisaq",
+    "meddebitorer": "MANGLER",
+    "gem": "Toqqoruk"
+    }
+    }
+</i18n>
