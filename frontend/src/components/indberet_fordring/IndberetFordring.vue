@@ -160,6 +160,7 @@
 
     import axios from 'axios'
     import {groups} from '../../../assets/fordringsgruppe'
+    import { notify } from '../utils/notify/Notifier.js'
 
     export default {
         data: function() {
@@ -208,7 +209,7 @@
         },
         methods: {
             getId: function(dict) {
-                if ("id" in dict) {
+                if (dict !== null && "id" in dict) {
                     return dict["id"];
                 }
                 return null;
@@ -260,24 +261,20 @@
                     }
                 })
                 .then(res => {
+                    notify('The server has responded and it was happy!')
                     console.log('Server response!');
                     console.log(res);
-                    /*
-                        You should tell the user that things worked out OK.
-                        We'll need to design a little info popup for that maybe.
-                    */
+
                 })
                 .catch(err => {
                     console.log('there was an error');
                     console.log(err.message);
-                    /*
-                        You should also tell the user that things didn't work. What happened? And what might they do to improve things?
-                    */
                 })
             }
         },
         created: function() {
             this.getCSRFToken();
+            notify(`Welcome to this page. ${ this.$t('title') }`)
         }
     }
 </script>
@@ -287,58 +284,60 @@
 </style>
 
 <i18n>
+
     {
-    "da": {
-    "title": "Inkasso - Opret sag",
-    "fordringshaver": "Fordringshaver",
-    "anden_fordringshaver": "Anden fordringshaver",
-    "debitor": "Debitor",
-    "fordringsgruppe": "Ekstern fordringsgruppe",
-    "fordringstype": "Ekstern fordringstype",
-    "barns_cpr": "Barns CPR-nr",
-    "ekstern_sagsnummer": "Ekstern sagsnummer",
-    "fakturanr": "Fakturanr",
-    "bnr": "B-nr",
-    "hovedstol": "Hovedstol",
-    "posteringstekst": "Posteringstekst",
-    "bankrente": "Bankrente",
-    "bankgebyr": "Bankgebyr",
-    "rente": "Rente",
-    "periodestart": "Periodestart",
-    "periodeslut": "Periodeslut",
-    "forfaldsdato": "Forfaldsdato",
-    "betalingsdato": "Betalingsdato",
-    "foraeldelsesdato": "Forældelsesdato",
-    "kontaktperson": "Kontaktperson",
-    "noter": "Noter",
-    "gem": "Gem",
-    "meddebitorer": "Meddebitorer"
-    },
-    "kl": {
-    "title": "Akiliisitsiniarneq - suliamik pilersitsineq",
-    "fordringshaver": "Akiligassaqarfigineqartoq",
-    "anden_fordringshaver": "Akiligassaqarfigineqartoq alla",
-    "debitor": "Akiligassalik",
-    "fordringsgruppe": "Akiitsoqarfimmiit suliassiisutip ataatsimooruffiata suussusaa",
-    "fordringstype": "Akiitsoqarfimmiit suliasiissutit suussusaa",
-    "barns_cpr": "Meeqqap inuup normua",
-    "ekstern_sagsnummer": "Suliassiissutip akiitsoqarfimmiit normua",
-    "fakturanr": "MANGLER",
-    "bnr": "MANGLER",
-    "hovedstol": "Akiitsup toqqammavia",
-    "posteringstekst": "Nalunaarsornerani oqaasertaq",
-    "bankrente": "Aningaaserivimmi erniarititaq",
-    "bankgebyr": "Aningaaserivimmut akiliut",
-    "rente": "Erniarititaq",
-    "periodestart": "Piffissap aallartiffia",
-    "periodeslut": "Piffissap naaffia",
-    "forfaldsdato": "Ulloq akiligassap kingusinnerpaamik akilerneqarfissaa",
-    "betalingsdato": "Ulloq akiliiffik",
-    "foraeldelsesdato": "Pisoqalisoorfissaata ullua ",
-    "kontaktperson": "Inuk atassuteqaataasoq",
-    "noter": "Allaaserisaq",
-    "meddebitorer": "MANGLER",
-    "gem": "Toqqoruk"
+        "da": {
+            "title": "Inkasso - Opret sag",
+            "fordringshaver": "Fordringshaver",
+            "anden_fordringshaver": "Anden fordringshaver",
+            "debitor": "Debitor",
+            "fordringsgruppe": "Ekstern fordringsgruppe",
+            "fordringstype": "Ekstern fordringstype",
+            "barns_cpr": "Barns CPR-nr",
+            "ekstern_sagsnummer": "Ekstern sagsnummer",
+            "fakturanr": "Fakturanr",
+            "bnr": "B-nr",
+            "hovedstol": "Hovedstol",
+            "posteringstekst": "Posteringstekst",
+            "bankrente": "Bankrente",
+            "bankgebyr": "Bankgebyr",
+            "rente": "Rente",
+            "periodestart": "Periodestart",
+            "periodeslut": "Periodeslut",
+            "forfaldsdato": "Forfaldsdato",
+            "betalingsdato": "Betalingsdato",
+            "foraeldelsesdato": "Forældelsesdato",
+            "kontaktperson": "Kontaktperson",
+            "noter": "Noter",
+            "gem": "Gem",
+            "meddebitorer": "Meddebitorer"
+        },
+        "kl": {
+            "title": "Akiliisitsiniarneq - suliamik pilersitsineq",
+            "fordringshaver": "Akiligassaqarfigineqartoq",
+            "anden_fordringshaver": "Akiligassaqarfigineqartoq alla",
+            "debitor": "Akiligassalik",
+            "fordringsgruppe": "Akiitsoqarfimmiit suliassiisutip ataatsimooruffiata suussusaa",
+            "fordringstype": "Akiitsoqarfimmiit suliasiissutit suussusaa",
+            "barns_cpr": "Meeqqap inuup normua",
+            "ekstern_sagsnummer": "Suliassiissutip akiitsoqarfimmiit normua",
+            "fakturanr": "MANGLER",
+            "bnr": "MANGLER",
+            "hovedstol": "Akiitsup toqqammavia",
+            "posteringstekst": "Nalunaarsornerani oqaasertaq",
+            "bankrente": "Aningaaserivimmi erniarititaq",
+            "bankgebyr": "Aningaaserivimmut akiliut",
+            "rente": "Erniarititaq",
+            "periodestart": "Piffissap aallartiffia",
+            "periodeslut": "Piffissap naaffia",
+            "forfaldsdato": "Ulloq akiligassap kingusinnerpaamik akilerneqarfissaa",
+            "betalingsdato": "Ulloq akiliiffik",
+            "foraeldelsesdato": "Pisoqalisoorfissaata ullua ",
+            "kontaktperson": "Inuk atassuteqaataasoq",
+            "noter": "Allaaserisaq",
+            "meddebitorer": "MANGLER",
+            "gem": "Toqqoruk"
+        }
     }
-    }
+
 </i18n>
