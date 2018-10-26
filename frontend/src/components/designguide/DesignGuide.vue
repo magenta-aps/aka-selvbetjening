@@ -66,11 +66,11 @@
                 <div class="grid--3-3">
                     .grid--3-3 - Grid cell that spans the whole width
                 </div>
-                <div class="grid--2-3">
-                    .grid--2-3 - Grid cell that spans 2/3 of width
-                </div>
                 <div>
                     No class - Grid cell that spans 1/3 of width
+                </div>
+                <div class="grid--2-3">
+                    .grid--2-3 - Grid cell that spans 2/3 of width
                 </div>
                 <div>
 
