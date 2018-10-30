@@ -63,7 +63,7 @@
                     <select
                             id="fordringsgruppe"
                             v-model="fordringsgruppe"
-                            @change="fordringstype = null"
+                            @change="updateType"
                             xrequired
                     >
                         <option v-for="f in fordringsgrupper" v-bind:value="f">{{stringRep(f)}})</option>
@@ -71,7 +71,7 @@
                 </fieldset>
 
                 <!--This is only shown if there are multiple options-->
-                <fieldset v-if="no_of_types > 1">
+                <fieldset v-if="multipleTypes">
                     <label id="lbl_fordringstype" for="fordringstype">{{ $t("fordringstype") }}</label>
                     <select
                             id="fordringstype"
@@ -232,18 +232,21 @@
             fordringsgruppe_id: function() {
                 return this.getId(this.fordringsgruppe);
             },
-            no_of_types: function() {
-                if (this.fordringsgruppe == null) {
-                    return 0;
-                }
-                let fordringstyper = this.fordringsgruppe["sub_groups"];
-                if (fordringstyper.length === 1) {
-                    this.fordringstype = fordringstyper[0];
-                }
-                return fordringstyper.length
+            multipleTypes: function() {
+                return (this.fordringsgruppe !== null &&
+                    this.fordringsgruppe["sub_groups"].length > 1)
             }
         },
         methods: {
+            updateType: function() {
+                if (this.fordringsgruppe !== null &&
+                    this.fordringsgruppe["sub_groups"].length === 1) {
+                    this.fordringstype = this.fordringsgruppe["sub_groups"][0];
+                }
+                else {
+                    this.fordringstype = null;
+                }
+            },
             getId: function(dict) {
                 if (dict !== null && "id" in dict) {
                     return dict["id"];
