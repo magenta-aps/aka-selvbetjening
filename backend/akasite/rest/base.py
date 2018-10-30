@@ -130,7 +130,7 @@ class JSONRestView(View):
         :returns: A copy of the POST dict.
         ------------------------------------------------------------
         '''
-        return request.POST.copy()
+        return request.POST.copy().dict()
 
     def post(self, request, *args, **kwargs):
         '''
