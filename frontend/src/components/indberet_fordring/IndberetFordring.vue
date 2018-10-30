@@ -63,14 +63,15 @@
                     <select
                             id="fordringsgruppe"
                             v-model="fordringsgruppe"
-                            required
+                            @change="fordringstype = null"
+                            xrequired
                     >
                         <option v-for="f in fordringsgrupper" v-bind:value="f">{{stringRep(f)}})</option>
                     </select>
                 </fieldset>
 
                 <!--This is only shown if there are multiple options-->
-                <fieldset v-if="multipleTypes">
+                <fieldset v-if="no_of_types > 1">
                     <label id="lbl_fordringstype" for="fordringstype">{{ $t("fordringstype") }}</label>
                     <select
                             id="fordringstype"
@@ -231,9 +232,15 @@
             fordringsgruppe_id: function() {
                 return this.getId(this.fordringsgruppe);
             },
-            multipleTypes: function() {
-                return (this.fordringsgruppe !== null
-                        && this.fordringsgruppe["sub_groups"].length > 1)
+            no_of_types: function() {
+                if (this.fordringsgruppe == null) {
+                    return 0;
+                }
+                let fordringstyper = this.fordringsgruppe["sub_groups"];
+                if (fordringstyper.length === 1) {
+                    this.fordringstype = fordringstyper[0];
+                }
+                return fordringstyper.length
             }
         },
         methods: {
