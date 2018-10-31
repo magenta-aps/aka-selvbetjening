@@ -8,7 +8,8 @@ import re
 
 # Internal tools
 from akasite.rest.base import JSONRestView
-from akasite.rest.validation import JsonValidator, Error, Success
+from akasite.rest import validation
+from akasite.rest.validation import Error, Success
 from akasite.helpers.sharedfiles import getSharedJson
 
 logger = logging.getLogger(__name__)
@@ -60,6 +61,7 @@ jsonSchema = {
                      'fordringsgruppe',
                      'fordringstype']
         }
+
 def validateInkassoJson(reqJson):
     '''Validate a dict data-structure for the /inkassosag endpoint
 
@@ -68,8 +70,12 @@ def validateInkassoJson(reqJson):
     :returns: Error, Success
 
     '''
+    __REQUIRED_FIELDS = ['fordringshaver',
+                         'debitor',
+                         'fordringsgruppe',
+                         'fordringstype']
+    return validation.validateRequired(__REQUIRED_FIELDS, reqJson)
 
-    return JsonValidator(jsonSchema).validate(reqJson)
 
 
 def validateFordringsgrupper(reqJson):

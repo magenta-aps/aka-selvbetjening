@@ -1,4 +1,3 @@
-from jsonschema import Draft4Validator as draftValidator
 from django.http import HttpResponse
 
 from akasite.rest.base import JSONRestView
@@ -6,6 +5,7 @@ from akasite.helpers.sharedfiles import getSharedJson
 
 import json
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -78,11 +78,11 @@ class __Result():
 class Success(__Result):
     '''This class represents a validation result that succeeded
 
-    A Success initialization accepts and optional parameter, which is the
+    A Success initialization accepts and parameter, which is the
     object a function would return when everything is successfull.
 
     '''
-    def __init__(self, value=None):
+    def __init__(self, value):
         '''Initialize a Success
 
         :param value: the value returned from a Successfull computation
@@ -178,49 +178,17 @@ class Error(__Result):
 #    Validators    #
 ####################
 
-class Validator():
-    def __init__():
-        pass
+# If you do not know what to return on Success, return the input which
+# would likely be used for further validation
+# eg. validateRequired() returns the requestDict, as it is usually used
+# for the next step in the validation
 
+def validateRequired(requiredFields, requestDict):
+    result = Success(requestDict)
+    for field in requiredFields:
+        if field in requestDict.keys():
+            continue
+        else:
+            result = result.append(Error('required_field',field))
 
-class JsonValidator(Validator):
-    '''
-    JSON Validator, using jsonschema.
-    '''
-    def __init__(self, schema):
-        self.schema = schema
-        self.lasterror = None
-
-    def setSchema(self, schema):
-        self.schema = schema
-
-    def getSchema(self, schema):
-        return self.schema
-
-    def getLasterror(self):
-        return self.lasterror
-
-    def validate(self, object):
-        '''
-        Validate a JSON object.
-
-        :param object: JSON Structure
-        :type object: Python dict.
-        :returns: Validation result (Success() or Error())
-        '''
-
-        v = draftValidator(self.schema)
-        errors = sorted(v.iter_errors(object), key=lambda e: e.path)
-
-        if len(errors) == 0:
-            return Success(object)
-
-        result = Success(object)
-
-        for error in errors:
-            if len(error.absolute_path) > 0:
-                f = error.absolute_path[0]
-                result = result.append(Error(error.message, f))
-            else:
-                result = result.append(Error(error.message))
-        return result
+    return result

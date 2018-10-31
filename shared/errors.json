@@ -14,5 +14,10 @@
     "multiple_fordringsgruppe_found":{
         "da": "Server Error",
         "kl": "Oversættelse Mangler"
+    },
+    
+    "required_field": {
+        "da": "Dette felt er påkrævet",
+        "kl": "Oversættelse Mangler"
     }
 }
