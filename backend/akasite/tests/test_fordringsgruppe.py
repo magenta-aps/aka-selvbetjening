@@ -13,7 +13,7 @@ SCHEMA = {
                     'type': 'string'
                     },
                 'id': {
-                    'type': 'integer'
+                    'type': 'string'
                     },
                 'sub_groups': {
                     'type': 'array',
@@ -24,7 +24,7 @@ SCHEMA = {
                                 'type': 'string'
                                 },
                             'id': {
-                                'type': 'integer'
+                                'type': 'string'
                                 }
                             },
                         'required': ['value','id']
@@ -41,5 +41,5 @@ class FordringsTestCase(TestCase):
         with open('../shared/fordringsgruppe.json', 'r') as jsonfile:
             jsonDict = json.loads(jsonfile.read())
             validation = JsonValidator(SCHEMA).validate(jsonDict)
-            self.assertEqual(len(validation), 0)
+            self.assertTrue(validation.status)
 
