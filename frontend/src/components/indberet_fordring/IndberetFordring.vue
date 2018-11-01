@@ -149,6 +149,16 @@
             </fieldset>
 
             <fieldset>
+                <container v-for="(meddebitor, index) in meddebitorer">
+                    <label v-bind:for="meddebitor.index">Meddebitor {{index +1}}</label>
+                    <container v-bind:id="meddebitor.index">
+                        <input type="text" v-model="meddebitor.cpr" placeholder="CPR" @change.once="addNewMeddebitor">
+                        <input type="text" v-model="meddebitor.cvr" placeholder="CVR">
+                    </container>
+                </container>
+            </fieldset>
+
+            <fieldset>
                 <input type="submit" v-bind:value="$t('gem')">
             </fieldset>
 
@@ -193,6 +203,13 @@
                 foraeldelsesdato: null,
                 kontaktperson: null,
                 noter: null,
+                meddebitorer: [
+                    {
+                        cpr: '',
+                        cvr: ''
+                    },
+
+                ],
 
                 form_fields: ['fordringshaver',
                     'debitor',
@@ -238,6 +255,13 @@
             }
         },
         methods: {
+            addNewMeddebitor: function() {
+                this.meddebitorer.push({
+                    cpr: '',
+                    cvr: ''
+                });
+                console.log("addNew called")
+            },
             updateType: function() {
                 if (this.fordringsgruppe !== null &&
                     this.fordringsgruppe["sub_groups"].length === 1) {
@@ -319,7 +343,7 @@
                     }
                 })
                 .then(res => {
-                    notify('The server has responded and it was happy!')
+                    notify('The server has responded and it was happy!');
                     console.log('Server response!');
                     console.log(res);
 
