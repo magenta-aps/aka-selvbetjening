@@ -260,7 +260,6 @@
                     cpr: '',
                     cvr: ''
                 });
-                console.log("addNew called")
             },
             updateType: function() {
                 if (this.fordringsgruppe !== null &&
@@ -302,6 +301,14 @@
                 }
 
                 this.form_fields.forEach(appendData);
+
+                this.meddebitorer.forEach(function (meddebitor, i ) {
+                    let idx = i + 1;
+                    if (!(meddebitor.cpr==='' || meddebitor.cvr === '')) {
+                        formdata.append('meddebitor' + idx + '_cpr', meddebitor.cpr);
+                        formdata.append('meddebitor' + idx + '_cvr', meddebitor.cvr);
+                    }
+                });
                 return formdata;
             },
             sendFormRequest: function() {
