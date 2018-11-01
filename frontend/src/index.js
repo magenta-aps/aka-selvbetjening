@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueI18n from 'vue-i18n'
 import App from './App.vue'
+import VeeValidate from 'vee-validate'
 
 const TableOfContents = () => import('./components/table_of_contents/TableOfContents.vue')
 const DesignGuide = () => import('./components/designguide/DesignGuide.vue')
@@ -13,6 +14,7 @@ const Experiment = () => import('./components/experiment_with_file_upload/Exampl
 
 Vue.use(VueRouter)
 Vue.use(VueI18n)
+Vue.use(VeeValidate)
 
 const routes = [
   { path: '/', component: TableOfContents },
