@@ -91,4 +91,12 @@
 
     }
 
+    @media print {
+
+        .globalheader {
+            display: none;
+        }
+            
+    }
+
 </style>

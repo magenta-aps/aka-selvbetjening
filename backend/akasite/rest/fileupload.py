@@ -1,23 +1,28 @@
 from akasite.rest.base import JSONRestView
 import json
 from django.http import HttpResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.utils.decorators import method_decorator
 
 
-@method_decorator(ensure_csrf_cookie, name='dispatch')
 class FileUpload(JSONRestView):
+    '''Class to handle files uploaded.
+
+    This is part of the proof of concept.
+    '''
     def get(self, request, *args, **kwargs):
+        '''GET method.
+        '''
         dummyresponse = {"serversays": "Hello. You said FileUpload/GET"}
         return HttpResponse(json.dumps(dummyresponse),
                             content_type=JSONRestView.CT1)
 
     def post(self, request, *args, **kwargs):
-        baseresponse = super().postfile(request, args, kwargs)
+        '''POST method.
+        '''
+        baseresponse = super().post(request, args, kwargs)
 
         if baseresponse.status_code == 200:
-            self.payload['serversays'] = "Hello. You said FileUpload/POST"
-            return HttpResponse(json.dumps(self.payload),
+            self.data['serversays'] = "Hello. You said FileUpload/POST"
+            return HttpResponse(json.dumps(self.data),
                                 content_type=JSONRestView.CT1)
         else:
             return baseresponse
