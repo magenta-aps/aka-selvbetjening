@@ -133,10 +133,10 @@
                 <label id="lbl_forfaldsdato" for="tb_forfaldsdato">{{ $t("forfaldsdato") }}</label>
                 <input id="tb_forfaldsdato" type="date" v-model="forfaldsdato" xrequired>
 
-                <label id="lbl_betalingsdato" for="tb_betalingsdato">{{ $t("betalinsgdato") }}</label>
+                <label id="lbl_betalingsdato" for="tb_betalingsdato">{{ $t("betalingsdato") }}</label>
                 <input id="tb_betalingsdato" type="date" v-model="betalingsdato" xrequired>
 
-                <label id="lbl_foraeldelsesdato" for="tb_foraeldelsesdato">{{ $t("forældelsesdato") }}</label>
+                <label id="lbl_foraeldelsesdato" for="tb_foraeldelsesdato">{{ $t("foraeldelsesdato") }}</label>
                 <input id="tb_foraeldelsesdato" type="date" v-model="foraeldelsesdato" xrequired>
             </fieldset>
 
