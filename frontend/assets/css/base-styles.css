@@ -523,3 +523,17 @@ footer {
     }
 
 }
+
+th {
+    text-align: left;
+    border-bottom: solid 1px #465c6c;
+}
+
+th,
+td {
+    padding: .25rem .5rem;
+}
+
+address {
+    font-style: normal;
+}

@@ -1,4 +1,6 @@
 # Created by https://www.gitignore.io/api/node
+assets/fordringsgruppe.js 
+
 
 ### Node ###
 # Logs
@@ -31,3 +33,6 @@ assets/js/
 .vuepress/dist
 
 # End of https://www.gitignore.io/api/node
+
+# Makefile hack to know when to update npm
+.make-updated-npm

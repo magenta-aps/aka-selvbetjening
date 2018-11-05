@@ -75,18 +75,17 @@
                     console.log(res)
                 })
                 .catch(err => {
+                    notify('The server has responded and it was happy!')
                     console.log('there was an error')
                     console.log(err.message)
                 })
             }
-            
         },
         created: function() {
             this.getCSRFToken()
             notify(`Welcome to this page. ${ this.$t('title') }`)
         }
     }
-
 </script>
 
 <style>
