@@ -146,7 +146,7 @@ class Error(__Result):
             self.errors = [errMsg]
             self.fieldErrors = dict()
         else:
-            self.fieldErrors = dict(field=errMsg)
+            self.fieldErrors = dict({field: errMsg})
             self.errors = []
 
     def append(self, validation):
