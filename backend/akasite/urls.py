@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from akasite.rest import inkassosag, fileupload, rentenota
+from akasite.rest import inkassosag, rentenota
 from akasite import htmlviews
 
 app_name = 'akasite'
