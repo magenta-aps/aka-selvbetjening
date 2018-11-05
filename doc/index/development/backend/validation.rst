@@ -39,6 +39,6 @@ are used as shown in the following example:
             ).toHtmlResponse()
 
 
-.. autoclass:: validation.Result
+.. autoclass:: validation.__Result
    :members:    
 

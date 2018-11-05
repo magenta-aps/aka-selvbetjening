@@ -9,9 +9,6 @@ i.e. inkassosag, rentenota etc., have a subclass each.
 .. automodule:: base
    :members:
 
-.. automodule:: fileupload
-   :members:
-
 .. automodule:: inkassosag
    :members:
 
@@ -24,6 +21,4 @@ i.e. inkassosag, rentenota etc., have a subclass each.
 .. automodule:: utils
    :members:
 
-.. automodule:: validation
-   :members:
 
