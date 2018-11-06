@@ -41,7 +41,7 @@
                The template should magically display it if you add something like
                ```
                    <table v-if="files">
-                     <tr v-for="f in files">
+                     <tr v-for="(f, index) in files" :key="index">
                        <td>{{ f.name }}</td>
                        <td>{{ f.size }} kB</td>
                      </tr>
@@ -134,7 +134,7 @@
                 <input id="tb_forfaldsdato" type="date" v-model="forfaldsdato" xrequired>
 
                 <label id="lbl_betalingsdato" for="tb_betalingsdato">{{ $t("betalingsdato") }}</label>
-                <input id="tb_betalingsdato" type="date" v-model="betalingsdato" xrequired>
+                <input id="tb_betalingsdato" type="date" :class="{submitted: isSubmitted}" v-model="betalingsdato" required>
 
                 <label id="lbl_foraeldelsesdato" for="tb_foraeldelsesdato">{{ $t("foraeldelsesdato") }}</label>
                 <input id="tb_foraeldelsesdato" type="date" v-model="foraeldelsesdato" xrequired>
@@ -150,7 +150,7 @@
 
             <fieldset>
                 <container v-for="(meddebitor, index) in meddebitorer">
-                    <label v-bind:for="meddebitor.index">Meddebitor {{index +1}}</label>
+                    <label v-bind:for="meddebitor.index"> {{ $t("meddebitor") }} {{index +1}}</label>
                     <container v-bind:id="meddebitor.index">
                         <input type="text" v-model="meddebitor.cpr" placeholder="CPR" @change.once="addNewMeddebitor">
                         <input type="text" v-model="meddebitor.cvr" placeholder="CVR">
@@ -400,8 +400,8 @@
             "foraeldelsesdato": "Forældelsesdato",
             "kontaktperson": "Kontaktperson",
             "noter": "Noter",
-            "gem": "Gem",
-            "meddebitorer": "Meddebitorer"
+            "meddebitor": "Meddebitor",
+            "gem": "Gem"
         },
         "kl": {
             "title": "Akiliisitsiniarneq - suliamik pilersitsineq",
@@ -426,7 +426,7 @@
             "foraeldelsesdato": "Pisoqalisoorfissaata ullua ",
             "kontaktperson": "Inuk atassuteqaataasoq",
             "noter": "Allaaserisaq",
-            "meddebitorer": "MANGLER",
+            "meddebitor": "MANGLER",
             "gem": "Toqqoruk"
         }
     }
