@@ -64,9 +64,9 @@ class ResultTestCase(SimpleTestCase):
     def test_map(self):
         ''' Test map works correctly
         '''
-        def f1(x): x+"lambda-applied"
+        def f1(x): return x+"f1-applied"
 
-        def identity(x): x
+        def identity(x): return x
 
         # map with identity never changes anything
         self.assertEqual(self.e1, self.e1.map(identity))
@@ -83,11 +83,11 @@ class ResultTestCase(SimpleTestCase):
     def test_andThen(self):
         ''' Test andThen works correctly
         '''
-        def f1(x): Success(x)
+        def f1(x): return Success(x)
 
-        def f2(x): Error("TEST-UNKNOWN-ID3")
+        def f2(x): return Error("TEST-UNKNOWN-ID3")
 
-        def f3(x): Success('NEW VALUE')
+        def f3(x): return Success('NEW VALUE')
 
         # andThen does not change an Error
         self.assertEqual(self.e1, self.e1.andThen(f1))
