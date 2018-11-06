@@ -214,6 +214,13 @@ class Error(__Result):
 # for the next step in the validation
 
 def validateRequired(requiredFields, requestDict):
+    ''' Validate required fields are present
+
+    :param requiredFields: A list of required fields
+    :type requiredFields: List of Strings
+    :param requestDict: The Dict from the frontend
+    :type requestDict: Dict
+    '''
     result = Success(requestDict)
     for field in requiredFields:
         if field in requestDict.keys():
