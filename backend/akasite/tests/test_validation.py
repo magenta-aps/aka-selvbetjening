@@ -62,12 +62,58 @@ class ResultTestCase(SimpleTestCase):
         d1.update(self.e4.fieldErrors)
         self.assertEqual(e5.append(self.e4).fieldErrors, d1)
 
-    def test_map():
+    def test_map(self):
         ''' Test map works correctly
         '''
+        f1 = lambda x: x+"lambda-applied"
+        identity = lambda x: x
 
-        s1 = Error
+        # map with identity never changes anything
+        self.assertEqual(self.e1, self.e1.map(identity))
+        self.assertEqual(self.s1, self.s1.map(identity))
+
+        # map on an Error does not change it
+        self.assertEqual(self.e1, self.e1.map(f1))
+
+        # map on a Success changes the Success
+        self.assertNotEqual(self.s1, self.s1.map(f1))
+        # map on a Success cannot change make it into and Error
+        self.assertTrue(self.s1.map(f1).status)
+
+    def test_andThen(self):
+        ''' Test andThen works correctly
+        '''
+        f1 = lambda x: Success(x)
+        f2 = lambda x: Error("TEST-UNKNOWN-ID3")
+        f3 = lambda x: Success('NEW VALUE')
+
+        # andThen does not change an Error
+        self.assertEqual(self.e1, self.e1.andThen(f1))
+
+        # andThen only changes the value.
+        # the function given here returns a new Success, with the same value
+        # they should therefore be equal
+        self.assertEqual(self.s1, self.s1.andThen(f1))
+
+        # andThen changes a Success
+        self.assertNotEqual(self.s1, self.s1.andThen(f2))
+        self.assertNotEqual(self.s1, self.s1.andThen(f3))
+
+        # andThen can transform a Success to and Error
+        self.assertFalse(self.s1.andThen(f2).status)
+        self.assertTrue(self.s1.andThen(f3).status)
 
 
+    def test_either(self):
+        ''' Test either works correctly
+        '''
+        # Success.either does not change the Success
+        self.assertEqual(self.s1, self.s1.either(self.s2,self.e1))
+        self.assertEqual(self.s1, self.s1.either(self.e2,self.e1))
 
+        # Either a Success to an Error does not change the Success
+        self.assertEqual(self.s1, self.e1.either(self.s1, self.e1))
+
+        # Either an Error to an Error returns an Error
+        self.assertEqual(self.e3, self.e1.either(self.e2, self.e3))
 
