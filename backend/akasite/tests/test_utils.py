@@ -11,8 +11,8 @@ class BasicTestCase(TestCase):
     # Test module utils.
     # -------------------
     def test_utils_1(self):
-        datestring = '20180513'
-        dd = AKAUtils.datefromstringYMD(datestring)
+        datestring = '2018-05-13'
+        dd = AKAUtils.datefromstring(datestring)
         self.assertTrue(type(dd) is datetime.datetime)
         self.assertEqual(dd.year, 2018)
         self.assertEqual(dd.month, 5)
@@ -20,14 +20,29 @@ class BasicTestCase(TestCase):
 
     def test_utils_2(self):
         try:
-            AKAUtils.datefromstringYMD('20182020')
+            AKAUtils.datefromstring('2018-20-20')
             self.fail('Failed to catch ValueError.')
         except ValueError:
             self.assertTrue(True)
 
     def test_utils_3(self):
         try:
-            AKAUtils.datefromstringYMD('20180250')
+            AKAUtils.datefromstring('2018-02-50')
             self.fail('Failed to catch ValueError.')
         except ValueError:
             self.assertTrue(True)
+
+    def test_utils_4(self):
+        try:
+            AKAUtils.datefromstring('2018-02')
+            self.fail('Failed to catch ValueError.')
+        except ValueError:
+            self.assertTrue(True)
+
+    def test_utils_5(self):
+        datestring1 = '2018-02-01'
+        date = AKAUtils.datefromstring(datestring1)
+        datestring2 = AKAUtils.datetostring(date)
+        self.assertEqual(datestring1, datestring2)
+        print(datestring1 + ' >> ' + datestring2)
+
