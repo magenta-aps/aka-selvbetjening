@@ -1,40 +1,39 @@
 {
   "name": "aka-frontend",
   "version": "1.0.0",
+  "author": "Magenta ApS",
+  "description": "frontend",
+  "license": "MPL-2.0",
   "main": "index.js",
+  "homepage": "https://github.com/magenta-aps/aka-selvbetjening#readme",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0",
     "axios": "^0.18.0",
     "vue": "^2.5.17",
-    "vue-i18n": "^8.1.0",
+    "vue-i18n": "^8.0.0",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
-    "@babel/preset-env": "^7.1.0",
     "@kazupon/vue-i18n-loader": "^0.3.0",
-    "babel-loader": "^8.0.4",
-    "css-loader": "^1.0.0",
-    "vue-loader": "^15.4.2",
-    "vue-template-compiler": "^2.5.17",
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.2"
+    "@vue/cli-plugin-babel": "^3.1.0",
+    "@vue/cli-plugin-eslint": "^3.1.0",
+    "@vue/cli-service": "^3.1.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0-0",
+    "vue-cli-plugin-i18n": "^0.5.1",
+    "vue-template-compiler": "^2.5.17"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/webpack/bin/webpack.js  --config ./config/esmodules.webpack.config.js && ./node_modules/webpack/bin/webpack.js  --config ./config/nomodules.webpack.config.js",
-    "dev": "./node_modules/webpack/bin/webpack.js  --config ./config/dev.webpack.config.js"
-  },
-  "author": "Magenta ApS",
-  "license": "MPL-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/magenta-aps/aka-selvbetjening.git"
   },
   "bugs": {
     "url": "https://github.com/magenta-aps/aka-selvbetjening/issues"
-  },
-  "homepage": "https://github.com/magenta-aps/aka-selvbetjening#readme",
-  "description": "frontend"
+  }
 }
