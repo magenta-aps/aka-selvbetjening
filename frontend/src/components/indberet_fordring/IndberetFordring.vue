@@ -162,9 +162,9 @@
             </fieldset>
 
             <fieldset>
-                <container v-for="(meddebitor, index) in meddebitorer">
+                <div v-for="(meddebitor, index) in meddebitorer">
                     <label v-bind:for="meddebitor.index"> {{ $t("meddebitor") }} {{index +1}}</label>
-                    <container v-bind:id="meddebitor.index">
+                    <div v-bind:id="meddebitor.index">
                         <input type="text"
                                :class="{submitted: isSubmitted}"
                                v-model="meddebitor.cpr"
@@ -178,8 +178,8 @@
                                placeholder="CVR"
                                minlength="8"
                                maxlength="8">
-                    </container>
-                </container>
+                    </div>
+                </div>
             </fieldset>
 
             <fieldset>
