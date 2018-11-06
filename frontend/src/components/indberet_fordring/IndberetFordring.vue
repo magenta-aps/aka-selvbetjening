@@ -177,16 +177,17 @@
             <fieldset>
                 <div v-for="(meddebitor, index) in meddebitorer">
                     <label v-bind:for="meddebitor.index"> {{ $t("meddebitor") }} {{index +1}}</label>
-                    <div v-bind:id="meddebitor.index">
+                    <div v-bind:id="meddebitor.index" @keyup.once="addNewMeddebitor">
                         <input type="text"
                                :class="{submitted: isSubmitted}"
+                               :disabled="meddebitor.cvr !== null && meddebitor.cvr !== ''"
                                v-model="meddebitor.cpr"
                                placeholder="CPR"
                                minlength="10"
-                               maxlength="10"
-                               @change.once="addNewMeddebitor">
+                               maxlength="10">
                         <input type="text"
                                :class="{submitted: isSubmitted}"
+                               :disabled="meddebitor.cpr !== null && meddebitor.cpr !== ''"
                                v-model="meddebitor.cvr"
                                placeholder="CVR"
                                minlength="8"
@@ -350,31 +351,6 @@
             },
             sendFormRequest: function() {
                 let formdata = this.fetchFormData();
-                // formdata.append('fordringshaver', this.fordringshaver);
-                // formdata.append('debitor', this.debitor);
-                // formdata.append('fordringshaver2', this.fordringshaver2);
-                // formdata.append('fordringsgruppe', this.fordringsgruppe_id);
-                // formdata.append('fordringstype', this.fordringstype_id);
-                // formdata.append('file', this.file);
-                // formdata.append('barns_cpr', this.barns_cpr);
-                // formdata.append('ekstern_sagsnummer', this.ekstern_sagsnummer);
-                // formdata.append('fakturanr', this.fakturanr);
-                // formdata.append('bnr', this.bnr);
-                // formdata.append('hovedstol', this.hovedstol);
-                // formdata.append('hovedstol_posteringstekst', this.hovedstol_posteringstekst);
-                // formdata.append('bankrente', this.bankrente);
-                // formdata.append('bankrente_posteringstekst', this.bankrente_posteringstekst);
-                // formdata.append('bankgebyr', this.bankgebyr);
-                // formdata.append('bankgebyr_posteringstekst', this.bankgebyr_posteringstekst);
-                // formdata.append('rente', this.rente);
-                // formdata.append('rente_posteringstekst', this.rente_posteringstekst);
-                // formdata.append('periodestart', this.periodestart);
-                // formdata.append('periodeslut', this.periodeslut);
-                // formdata.append('forfaldsdato', this.forfaldsdato);
-                // formdata.append('betalingsdato', this.betalingsdato);
-                // formdata.append('foraeldelsesdato', this.foraeldelsesdato);
-                // formdata.append('kontaktperson', this.kontaktperson);
-                // formdata.append('noter', this.noter);
 
                 axios({
                     url: '/inkassosag',
@@ -412,9 +388,9 @@
     .submitted:invalid {
         border: 2px solid #D7404D;
     }
-    .visited:invalid {
-        border: 2px solid #D7404D;
-    }
+    input[disabled] {
+        background-color: #d6dbde;
+   }
 </style>
 
 <i18n>
