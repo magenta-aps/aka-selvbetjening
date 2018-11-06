@@ -24,7 +24,12 @@ BASE_DIR = os.path.dirname(SITE_DIR)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+MEDIA_URL = 'uploadedfiles/'
 
+# Where to put the output from tests:
+TEST_OUTPUT_DIR='.'
+TEST_OUTPUT_FILE_NAME='alltestresults.xml'
+TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
 
 LOGGING = {
     'version': 1,
@@ -37,10 +42,21 @@ LOGGING = {
             '()': 'django.utils.log.RequireDebugTrue',
         },
     },
+    'formatters': {
+        'verbose': {
+            'format': '{name} {levelname} {asctime} {module} {funcName} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'debug-console': {
             'level': 'DEBUG',
-            'class': 'logging.StreamHandler'
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
         },
     },
     'loggers': {

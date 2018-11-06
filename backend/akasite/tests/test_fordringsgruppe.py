@@ -1,5 +1,5 @@
 from django.test import TestCase
-from akasite.rest.validation import JsonValidator
+from jsonschema import validate
 import json
 
 
@@ -40,6 +40,8 @@ class FordringsTestCase(TestCase):
     def test_json_valid(self):
         with open('../shared/fordringsgruppe.json', 'r') as jsonfile:
             jsonDict = json.loads(jsonfile.read())
-            validation = JsonValidator(SCHEMA).validate(jsonDict)
-            self.assertTrue(validation.status)
+            try:
+                validation = validate(jsonDict, SCHEMA)
+            except Exception:
+                self.fail('Validation failed.')
 

@@ -1,6 +1,4 @@
 from django.http import HttpResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.utils.decorators import method_decorator
 
 import json
 import logging
@@ -13,6 +11,7 @@ from akasite.rest.validation import Error, Success
 from akasite.helpers.sharedfiles import getSharedJson
 
 logger = logging.getLogger(__name__)
+
 
 class InkassoSag(JSONRestView):
     '''This class handles the REST interface at /inkassosag
@@ -31,15 +30,14 @@ class InkassoSag(JSONRestView):
         :returns: HttpResponse, HttpResponseBadRequest
 
         '''
-        baseresponse = super().postfile(request)
+        baseresponse = super().post(request)
 
         if baseresponse.status_code == 200:
 
-            logger.debug(self.payload)
-            return validateInkassoJson(self.payload['POST']
+            logger.debug(self.data)
+            return validateInkassoJson(self.data
                 ).andThen(validateFordringsgrupper
                 ).toHttpResponse()
-
         else:
             return baseresponse
 
@@ -62,6 +60,7 @@ jsonSchema = {
                      'fordringstype']
         }
 
+
 def validateInkassoJson(reqJson):
     '''Validate a dict data-structure for the /inkassosag endpoint
 
@@ -75,7 +74,6 @@ def validateInkassoJson(reqJson):
                          'fordringsgruppe',
                          'fordringstype']
     return validation.validateRequired(__REQUIRED_FIELDS, reqJson)
-
 
 
 def validateFordringsgrupper(reqJson):

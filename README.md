@@ -10,7 +10,8 @@ For the Windows equivalent, see [here](https://github.com/magenta-aps/vagrant-an
 
 ### Development:
 - Vagrant is needed to spin up a virtualized enviroment.  
-- Virtualbox see [Magenta Vagrant](https://github.com/magenta-aps/vagrant/blob/master/README.md) for more info.
+- Virtualbox  
+see [Vagrant README](https://github.com/magenta-aps/aka-selvbetjening/blob/develop/vagrant/README.md) for installation info.
 
 
 ## Setup:
