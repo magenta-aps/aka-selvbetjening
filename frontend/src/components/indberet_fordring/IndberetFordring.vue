@@ -386,6 +386,7 @@
                 .catch(err => {
                     console.log('there was an error');
                     console.log(err.message);
+                    console.log(err.response.data.fieldErrors)
                 })
             }
         },
