@@ -263,7 +263,8 @@
                 ],
 
                 fordringsgrupper: groups,
-                csrftoken: null
+                csrftoken: null,
+                isSubmitted: false
             }
         },
         computed: {
