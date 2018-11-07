@@ -35,9 +35,10 @@ class InkassoSag(JSONRestView):
         if baseresponse.status_code == 200:
 
             logger.debug(self.data)
-            return validateInkassoJson(self.data
-                ).andThen(validateFordringsgrupper
-                ).toHttpResponse()
+            return (validateInkassoJson(self.data)
+                    .andThen(validateFordringsgrupper)
+                    .toHttpResponse()
+                    )
         else:
             return baseresponse
 
@@ -86,16 +87,15 @@ def validateFordringsgrupper(reqJson):
     '''
     try:
         fordringJson = getSharedJson('fordringsgruppe.json')
-        fordringsgruppe = getOnlyElement(fordringJson,
-                reqJson['fordringsgruppe'], 'fordringsgruppe')
-        return fordringsgruppe.andThen(
-                lambda e:
-                    getOnlyElement(e['sub_groups'], reqJson['fordringstype'],
-                        'fordringstype')
+        return (getOnlyElement(fordringJson, reqJson['fordringsgruppe'],
+                               'fordringsgruppe')
+                .andThen(lambda e: getOnlyElement(e['sub_groups'],
+                                                  reqJson['fordringstype'],
+                                                  'fordringstype'))
                 )
     except Exception as e:
-        logger.warning("Invalid JSON recieved:" + str(reqJson) +
-                "\n\nException: " + str(e))
+        logger.warning("Invalid JSON recieved:" + str(reqJson)
+                       + "\n\nException: " + str(e))
         return Error('fordringsgruppe_or_type_problem')
 
 
@@ -121,17 +121,17 @@ def getOnlyElement(l, fid, fordringsName):
     '''
     fordringsList = [x for x in l if x['id'] == fid]
     if len(fordringsList) < 1:
-        logger.warning("The following list:\n" + str(l) + "\n was expected to " +
-                       "have 1 element with the following id: " + fid +
-                       ", but none was found.\n" +
-                       "The error might be a user error, if a custom " +
-                       "REST-client was used")
+        logger.warning("The following list:\n" + str(l) + "\n was expected to "
+                       + "have 1 element with the following id: " + fid
+                       + ", but none was found.\n"
+                       + "The error might be a user error, if a custom "
+                       + "REST-client was used")
         return Error(fordringsName + '_not_found', fordringsName)
 
     elif len(fordringsList) > 1:
-        logger.error("The following list:\n" + str(l) + "\n was only " +
-                     "expected to have 1 element with the following id: " +
-                     str(fid) + ", but multiple elements were found")
+        logger.error("The following list:\n" + str(l) + "\n was only "
+                     + "expected to have 1 element with the following id: "
+                     + str(fid) + ", but multiple elements were found")
         return Error('multiple_' + fordringsName + '_found', fordringsName)
     else:
         return Success(fordringsList[0])
