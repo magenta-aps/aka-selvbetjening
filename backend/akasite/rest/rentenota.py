@@ -5,8 +5,11 @@ from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponseNotAllowed
 from django.conf import settings
+import logging
 import os
 import json
+
+logger = logging.getLogger(__name__)
 
 
 class RenteNota(JSONRestView):
@@ -43,18 +46,35 @@ class RenteNota(JSONRestView):
             return self.initiatedownload(settings.MEDIA_URL+filename,
                                          contenttype)
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, start, end, *args, **kwargs):
         '''Get rentenota data for the given interval.
+
+        :param request: Djangos request object.
+        :type request: Request object
+        :param start: Start date of this rentenota.
+        :type start: String with date pattern YYYYMMDD
+        :param end: End date of this rentenota.
+        :type end: String with date pattern YYYYMMDD
+        :returns: HttpResponse of some variety.
+        :raises: ValueError.
         '''
 
-        fromdate = request.GET.get('fromdate', '')
-        todate = request.GET.get('todate', '')
-        prisme = Prisme()
-        data = prisme.getRentenota(fromdate, todate)
+        try:
+            fromdate = AKAUtils.datefromstring(start)
+            todate = AKAUtils.datefromstring(end)
+            if fromdate > todate:
+                raise ValueError('Fromdate must be <= todate.')
+        except ValueError as ve:
+            logger.error(str(ve))
+            return self.errorResponse(ve)
+
+        try:
+            prisme = Prisme()
+            data = prisme.getRentenota(fromdate, todate)
+        except Exception as e:
+            logger.error(str(e))
+            return self.errorResponse(e)
+
+        logger.info('Get rentenota from ' + str(fromdate) + ' to ' + str(todate))
+
         return HttpResponse(json.dumps(data), content_type=JSONRestView.CT1)
-
-    def post(self, request, *args, **kwargs):
-        '''No POSTing allowed here.
-        '''
-
-        return HttpResponseNotAllowed(['GET'])

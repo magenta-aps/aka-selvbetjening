@@ -136,7 +136,7 @@ class JSONRestView(View):
 
         return files
 
-    def post(self, request, *args, **kwargs):
+    def basepost(self, request, *args, **kwargs):
         '''
         Base method for POST requests.
         We only accept some content-types.

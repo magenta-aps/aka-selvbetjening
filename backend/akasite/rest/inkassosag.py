@@ -30,7 +30,7 @@ class InkassoSag(JSONRestView):
         :returns: HttpResponse, HttpResponseBadRequest
 
         '''
-        baseresponse = super().post(request)
+        baseresponse = super().basepost(request)
 
         if baseresponse.status_code == 200:
 
