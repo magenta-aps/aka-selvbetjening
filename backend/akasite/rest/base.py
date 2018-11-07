@@ -29,8 +29,8 @@ class JSONRestView(View):
     Files are stored, and their metadata made available in self.files.
     """
 
-    CT1 = 'application/json'    # Accepted content-type.
-    CT2 = 'multipart/form-data' # Accepted content-type.
+    CT1 = 'application/json'        # Accepted content-type.
+    CT2 = 'multipart/form-data'     # Accepted content-type.
 
     def randomstring(self, length=30):
         return ''.join([
@@ -172,12 +172,12 @@ class JSONRestView(View):
                 self.data = self.getPost(request)
                 self.files = self.getFiles(request)
             else:
-                raise ContentTypeError('Content_type incorrect: ' +
-                                       content['type'])
+                raise ContentTypeError('Content_type incorrect: '
+                                       + content['type'])
             retval = HttpResponse()
 
-            logger.info('POST: ' + json.dumps(self.data) + '\n' +
-                        json.dumps(self.files))
+            logger.info('POST: ' + json.dumps(self.data) + '\n'
+                        + json.dumps(self.files))
         except (ContentTypeError, json.decoder.JSONDecodeError) as e:
             retval = self.errorResponse(e)
             logger.exception(e)

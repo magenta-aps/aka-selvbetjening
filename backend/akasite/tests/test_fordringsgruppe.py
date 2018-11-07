@@ -29,14 +29,15 @@ SCHEMA = {
                                 'pattern': '^[0-9][0-9]?$'
                                 }
                             },
-                        'required': ['value','id']
+                        'required': ['value', 'id']
                         },
                     'minItems': 1
                     }
                 },
-            'required': ['value','id','sub_groups']
+            'required': ['value', 'id', 'sub_groups']
             }
         }
+
 
 class FordringsTestCase(TestCase):
     def setUp(self):
@@ -56,12 +57,11 @@ class FordringsTestCase(TestCase):
         # value
 
         ids = [x['id'] for x in self.jsonDict]
-        self.assertEqual(len(ids),len(set(ids)))
+        self.assertEqual(len(ids), len(set(ids)))
 
     def test_unique_sub_group_keys(self):
         for o in self.jsonDict:
             ids = [x['id'] for x in o['sub_groups']]
             errMsg = 'Fordringsgruppe: {0} with id: {1}, sub_groups are not '\
                      'unique.'.format(o['value'], o['id'])
-            self.assertEqual(len(ids),len(set(ids)),
-                    msg=errMsg)
+            self.assertEqual(len(ids), len(set(ids)), msg=errMsg)

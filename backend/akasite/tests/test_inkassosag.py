@@ -76,7 +76,8 @@ class BasicTestCase(TestCase):
         response = self.c.post(self.url, formData)
         self.assertEqual(response.status_code, 400)
         resp_json = self.checkReturnValIsJSON(response)
-        self.assertEqual(list(resp_json['fieldErrors'].keys()), ['fordringstype'])
+        self.assertEqual(list(resp_json['fieldErrors'].keys()),
+                         ['fordringstype'])
 
     def test_invalidRequest4(self):
         # Test fordrings-gruppe and -type errors
@@ -89,7 +90,8 @@ class BasicTestCase(TestCase):
         response = self.c.post(self.url, formData)
         self.assertEqual(response.status_code, 400)
         resp_json = self.checkReturnValIsJSON(response)
-        self.assertEqual(list(resp_json['fieldErrors'].keys()), ['fordringsgruppe'])
+        self.assertEqual(list(resp_json['fieldErrors'].keys()),
+                         ['fordringsgruppe'])
 
     # Test multiple fields with same key
 
