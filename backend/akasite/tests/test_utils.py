@@ -44,5 +44,3 @@ class BasicTestCase(TestCase):
         date = AKAUtils.datefromstring(datestring1)
         datestring2 = AKAUtils.datetostring(date)
         self.assertEqual(datestring1, datestring2)
-        print(datestring1 + ' >> ' + datestring2)
-

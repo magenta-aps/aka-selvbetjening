@@ -3,7 +3,7 @@ from akasite.rest.utils import AKAUtils
 
 
 class Prisme():
-    '''Class tohandle communication with Prisme system.
+    '''Class that handles communication with the Prisme system.
     '''
 
     def __init__(self):

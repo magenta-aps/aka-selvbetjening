@@ -1,8 +1,25 @@
-==========
-Inkasso 
-==========
+=================================
+Inkasso - reporting of *inkasso*
+=================================
 
-REST-api til indberetning af inkasso. 
+Methods:
+--------
+
+  **POST:**
+
+    **Request URL:**
+    
+    * /inkassosag
+    
+    **Request headers:**
+    
+    * Content-Type: multipart/form-data
+    
+    * X-CSRFTOKEN: <tokenvalue>
+    
+    **Response headers:**
+    
+    * Content-Type: application/json
 
 
 Generelle Felter

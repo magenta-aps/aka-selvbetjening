@@ -17,6 +17,18 @@ class RenteNota(JSONRestView):
     '''
 
     def initiatedownload(self, path, contenttype):
+        '''
+        Initiate a download of file at given path,
+        with given contenttype.
+
+        :param path: Full path to the file to be downloaded.
+        :type path: String
+        :param contenttype: Content type of the file to be downloaded.
+        :type contenttype: String
+        :returns: HttpResponse to send to the browser/frontend, so the
+                  download can be started.
+        '''
+
         with open(path, 'rb') as fh:
             response = HttpResponse(fh.read(), content_type=contenttype)
             cd = 'inline; filename=' + os.path.basename(path)
@@ -46,22 +58,22 @@ class RenteNota(JSONRestView):
             return self.initiatedownload(settings.MEDIA_URL+filename,
                                          contenttype)
 
-    def get(self, request, start, end, *args, **kwargs):
+    def get(self, request, startdate, enddate, *args, **kwargs):
         '''Get rentenota data for the given interval.
 
         :param request: Djangos request object.
         :type request: Request object
-        :param start: Start date of this rentenota.
-        :type start: String with date pattern YYYYMMDD
-        :param end: End date of this rentenota.
-        :type end: String with date pattern YYYYMMDD
+        :param startdate: Start date of this rentenota.
+        :type startdate: String (see pattern in URL dispatcher)
+        :param enddate: End date of this rentenota.
+        :type enddate: String (see pattern in URL dispatcher)
         :returns: HttpResponse of some variety.
         :raises: ValueError.
         '''
 
         try:
-            fromdate = AKAUtils.datefromstring(start)
-            todate = AKAUtils.datefromstring(end)
+            fromdate = AKAUtils.datefromstring(startdate)
+            todate = AKAUtils.datefromstring(enddate)
             if fromdate > todate:
                 raise ValueError('Fromdate must be <= todate.')
         except ValueError as ve:
