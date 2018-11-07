@@ -5,7 +5,6 @@ from akasite.helpers.sharedfiles import getSharedJson
 
 import json
 import logging
-import re
 
 logger = logging.getLogger(__name__)
 

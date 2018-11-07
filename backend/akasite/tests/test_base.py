@@ -134,7 +134,7 @@ class BasicTestCase(TestCase):
         obj = JSONRestView()
         d = {'CONTENT': 'application/json ;'}
         try:
-            ct = obj.getContenttype(d)
+            obj.getContenttype(d)
             self.fail('Failed to catch incorrect key in dict.')
         except ContentTypeError:
             pass

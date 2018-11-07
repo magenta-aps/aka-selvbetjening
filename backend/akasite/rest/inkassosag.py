@@ -1,8 +1,4 @@
-from django.http import HttpResponse
-
-import json
 import logging
-import re
 
 # Internal tools
 from akasite.rest.base import JSONRestView

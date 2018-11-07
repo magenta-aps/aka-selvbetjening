@@ -43,7 +43,8 @@ class BasicTestCase(TestCase):
                                content_type=ctstring, data='')
         self.assertEqual(response.status_code, 405)
 
-    # From and to are correct, without content-type and data, but method not allowed.
+    # From and to are correct, without content-type and data,
+    # but method not allowed.
     def test_Post_2(self):
         response = self.c.post(self.url + '/from2018-01-01to2018-01-31')
         self.assertEqual(response.status_code, 405)

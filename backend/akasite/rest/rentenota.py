@@ -3,7 +3,6 @@ from akasite.rest.prisme import Prisme
 from akasite.rest.utils import AKAUtils
 from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
-from django.http import HttpResponseNotAllowed
 from django.conf import settings
 import logging
 import os
@@ -87,6 +86,7 @@ class RenteNota(JSONRestView):
             logger.error(str(e))
             return self.errorResponse(e)
 
-        logger.info('Get rentenota from ' + str(fromdate) + ' to ' + str(todate))
+        logger.info('Get rentenota from ' + str(fromdate) +
+                    ' to ' + str(todate))
 
         return HttpResponse(json.dumps(data), content_type=JSONRestView.CT1)

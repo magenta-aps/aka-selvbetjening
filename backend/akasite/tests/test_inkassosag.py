@@ -1,9 +1,7 @@
 from django.test import TestCase, Client
-from django.conf import settings
 import unittest
 import json
 import logging
-import os
 
 
 # Create your tests here.
