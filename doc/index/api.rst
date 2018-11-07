@@ -8,7 +8,7 @@ by the backend.
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
    :glob:
 
@@ -23,26 +23,6 @@ Send the token as a header with key X-CSRFTOKEN.
 Content-Type must be 'application/json' when not uploading files
 and 'multipart/form-data' when uploading files, even when there is additional data.
 
-
-Making requests
-===============
-
-/inkassosag
------------
-
-POST: Sends data to the server.
-
-Data: Send serialised Form-Data in the body.
-
-GET: Nothing to GET from this endpoint at the moment.
-
-
-/rentenota
-----------
-
-GET: Get rentenota from Prisme. Requires from-date and to-date
-
-POST: Not allowed here.
 
 Notes
 =====
