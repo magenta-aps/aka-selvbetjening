@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
 from django.conf import settings
 import json
+import os
 import random
 import logging
 
@@ -42,6 +43,13 @@ class JSONRestView(View):
         with open(destinationfilename, 'wb+') as destination:
             for chunk in f.chunks():
                 destination.write(chunk)
+
+    def cleanup(self):
+        try:
+            for file in self.files:
+                os.remove(file['tmpfilename'])
+        except (OSError, AttributeError):
+            pass
 
     def getContenttype(self, metadict):
         '''

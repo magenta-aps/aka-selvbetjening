@@ -1,6 +1,10 @@
 from django.test import TestCase, Client
+from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
 import unittest
 import json
+import os
+import random
 import logging
 
 
@@ -93,18 +97,35 @@ class BasicTestCase(TestCase):
 
     # Test multiple fields with same key
 
-    # Legal content-type, and some formdata.
-    @unittest.skip("not working atm")
+    # Legal content-type, formdata and a file.
     def test_Post_fileupload_1(self):
-        testfilename = 'akasite/tests/file4test.csv'
-        with open(testfilename) as fp:
-            response = self.c.post(self.url,
-                                   {'formfelt1': 'indhold, ff1',
-                                    'formfelt2': 'indhold, ff2',
-                                    'attachment': fp},
-                                   **{'HTTP_X_AKA_BRUGER': 'Otto'})
+        # Ensure filename is unique to this session,
+        # so we can check if it was actually uploaded.
+        filename = ''.join([
+            random.choice('abcdefghijklmnopqrstuvwxyz0123456789')
+            for i in range(30)
+            ]) + '.csv'
+        uploadfile = SimpleUploadedFile(filename,
+                                        b"file_content",
+                                        content_type="text/plain/")
+        response = self.c.post(self.url,
+                            {'fordringshaver': 'indhold/fordringshaver',
+                            'fordringsgruppe': '4',
+                            'fordringstype': '1',
+                            'debitor': 'indhold/debitor ',
+                            'attachment': uploadfile})
         self.assertEqual(response.status_code, 200)
         self.checkReturnValIsJSON(response)
+
+        # Test that the file is actually where it should be.
+        # This will not work if we let Django clean up when request is handled.
+        filefound = False
+        files = os.listdir(settings.MEDIA_URL)
+        for file in files:
+            if uploadfile.name in file:
+                filefound = True
+                os.remove(settings.MEDIA_URL + file)
+        self.assertTrue(filefound)
 
     # If using multipart/form-data, and boundarystring is missing,
     # Django crashes with error 500.

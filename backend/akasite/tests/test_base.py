@@ -163,3 +163,10 @@ class BasicTestCase(TestCase):
         er = obj.errorResponse(exc)
         self.assertTrue(type(er) is HttpResponseBadRequest)
         self.assertTrue(msg.lower() in er.content.decode('utf-8').lower())
+
+    def test_cleanup(self):
+        obj = JSONRestView()
+        try:
+            obj.cleanup()
+        except Exception:
+            self.fail('There should be no exception here.')
