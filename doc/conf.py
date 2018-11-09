@@ -14,9 +14,9 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../backend/akasite/helpers'))
-sys.path.insert(0, os.path.abspath('../backend/akasite/rest'))
-sys.path.insert(0, os.path.abspath('../backend/akasite'))
+sys.path.insert(0, os.path.abspath('../backend/aka/helpers'))
+sys.path.insert(0, os.path.abspath('../backend/aka/rest'))
+sys.path.insert(0, os.path.abspath('../backend/aka'))
 sys.path.insert(0, os.path.abspath('../backend'))
 
 

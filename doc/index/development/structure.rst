@@ -11,8 +11,6 @@ Top Folder structure:
 
   - **aka**         (The starting point for Django, settings.py, and urls.py)
 
-  - **akasite**     (The Django app we develop in)
-    
     - **rest**      (The Django views for the REST interface)
 
 - **frontend**      (The Vue project)
