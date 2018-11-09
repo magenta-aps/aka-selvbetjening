@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import VueI18n from 'vue-i18n'
-import './assets/css/base-styles.css'
+import '@/assets/css/base-styles.css'
 
 Vue.use(VueI18n)
 
