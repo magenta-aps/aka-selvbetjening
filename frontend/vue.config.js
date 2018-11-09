@@ -6,5 +6,6 @@ module.exports = {
       localeDir: 'i18n',
       enableInSFC: true
     }
-  }
+  },
+  assetsDir: 'static'
 }
