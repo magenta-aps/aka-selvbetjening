@@ -1,7 +1,5 @@
 <template>
-
     <article>
-
         <h1>Designguide</h1>
 
         <p>Designguiden fra 1508 <a href="http://sullissivik.designguiden.dk/website">kan findes her.</a></p>
@@ -9,7 +7,6 @@
         <h2>Typografi</h2>
 
         <div class="grid">
-
             <div class="grid--2-3 color--background--light">
                 <div style="padding: .75rem;">
                     <h1>Heading 1 - Bold 24pt/30pt</h1>
@@ -31,7 +28,7 @@
                     <a class="h1" href="">Large link - not header</a>
                     <a href="">Small link</a>
                 </div>
-            </div>    
+            </div>
 
             <div class="color--header">
                 <div style="padding: .75rem;">
@@ -62,7 +59,7 @@
 
         <div class="wrap-this-grid">
 
-            <div class="grid"> 
+            <div class="grid">
                 <div class="grid--3-3">
                     .grid--3-3 - Grid cell that spans the whole width
                 </div>
@@ -74,7 +71,7 @@
                 </div>
                 <div>
 
-                    <div class="grid"> 
+                    <div class="grid">
                         <div class="grid--3-3">
                             Grid within a grid
                         </div>
@@ -144,7 +141,7 @@
                 <h3>Tile type A</h3>
 
                 <a class="tile-a">
-                    <img class="tile-a--icon" src="/static/img/SVG/sullisivk_bolig-og-flytning.svg" alt="">
+                    <img class="tile-a--icon" src="@/assets/img/SVG/sullisivk_bolig-og-flytning.svg" alt="">
                     Meld flytning
                 </a>
 
@@ -155,7 +152,7 @@
 
                 <div class="tile-b">
                     <a href="#" class="tile-b--header">
-                        <img class="tile-b--icon" src="/static/img/SVG/sullisivik_skatter-afgifter-og-gaeld_dark.svg" alt="">
+                        <img class="tile-b--icon" src="@/assets/img/SVG/sullisivik_skatter-afgifter-og-gaeld_dark.svg" alt="">
                         <span class="tile-b--headertext">Ineqarneq nuunnerlu</span>
                     </a>
                     <nav class="tile-b--categories">
@@ -188,24 +185,24 @@
 
         <button class="dropdown">
             <span>Dropdown static</span>
-            <img class="icon" src="/static/img/SVG/sullisivk_arrow.svg" alt="">
-        </button>    
+            <img class="icon" src="@/assets/img/SVG/sullisivk_arrow.svg" alt="">
+        </button>
 
         <h2>Ikoner</h2>
         <p>
-            <img class="icon" src="/static/img/SVG/sullisivk_arrow.svg" alt="">
+            <img class="icon" src="@/assets/img/SVG/sullisivk_arrow.svg" alt="">
         </p>
         <p>
-            <img class="icon" src="/static/img/SVG/sullisivk_close.svg" alt="">
+            <img class="icon" src="@/assets/img/SVG/sullisivk_close.svg" alt="">
         </p>
         <p>
-            <img class="icon" src="/static/img/SVG/sullisivk_search-small.svg" alt="">
+            <img class="icon" src="@/assets/img/SVG/sullisivk_search-small.svg" alt="">
         </p>
         <p>
-            <img class="icon" src="/static/img/SVG/sullisivk_Search-large.svg" alt="">
+            <img class="icon" src="@/assets/img/SVG/sullisivk_Search-large.svg" alt="">
         </p>
         <p>
-            <img class="icon" src="/static/img/SVG/sullisivk_login.svg" alt="">
+            <img class="icon" src="@/assets/img/SVG/sullisivk_login.svg" alt="">
         </p>
 
         <h2>Farver</h2>
@@ -245,74 +242,62 @@
             <div class="color--cta--light">
                 .color--cta--light
             </div>
-
         </div>
-
     </article>
-
 </template>
 
-
 <script>
+import { notify } from '@/components/utils/notify/Notifier.js'
 
-    import axios from 'axios'
-    import { notify } from '../utils/notify/Notifier.js'
-
-    export default {
-        data: function() { 
-            return {
-                value_a: null,
-                value_b: null
-            }
-        },
-        methods: {
-            sendFormRequest: function() {
-                notify(`A request was sent`)    
-            }
-            
-        },
-        created: function() {
-            notify('')
-        }
+export default {
+  data () {
+    return {
+      value_a: null,
+      value_b: null
     }
-
+  },
+  methods: {
+    sendFormRequest () {
+      notify(`A request was sent`)
+    }
+  },
+  created () {
+    notify('')
+  }
+}
 </script>
 
 <style>
+.colorswatches {
+  display: flex;
+  flex-flow: row wrap;
+}
 
-    .colorswatches {
-        display: flex;
-        flex-flow: row wrap;
-    }
+.colorswatches > div {
+  flex: 1 0 13rem;
+  height: 5rem;
+  padding: 1rem;
+}
 
-    .colorswatches > div {
-        flex: 1 0 13rem;
-        height: 5rem;
-        padding: 1rem;
-    }
+.wrap-this-grid .grid > div {
+  background-color: #31495b;
+  padding: 1rem;
+  color: #fff;
+}
 
-    .wrap-this-grid .grid > div {
-        background-color: #31495b;
-        padding: 1rem;
-        color: #fff;
-    }
-
-    .wrap-this-grid .grid .grid > div {
-        background-color: #83929D;
-        min-height: 3rem;
-    }
-
+.wrap-this-grid .grid .grid > div {
+  background-color: #83929d;
+  min-height: 3rem;
+}
 </style>
 
 <i18n>
-
-    {
-        "da": {
-            "title": "Designguide"
-        },
-        "kl": {
-            "title": "Designguide - oversættelse mangler"
-        }
+  {
+    "da": {
+      "title": "Designguide"
+    },
+    "kl": {
+      "title": "Designguide - oversættelse mangler"
     }
-
+  }
 </i18n>
