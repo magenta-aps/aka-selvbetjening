@@ -32,13 +32,18 @@ are used as shown in the following example:
         else:
             return Success(e)
 
+    def validateNumber(e):
+        # append takes another Result, and appends the Results
+        return validateEveness(e).append(validateDoubleDigits(e))
+
     def get(request):
         validateFirstElement(request.payload
-            ).andThen(validateEveness
-            ).append(validateDoubleDigits
+            # andThen takes a function to be executed on a Success,
+            # with the value from the Success(value)
+            ).andThen(validateNumber
             ).toHtmlResponse()
 
 
-.. autoclass:: validation.Result
+.. autoclass:: validation.__Result
    :members:    
 

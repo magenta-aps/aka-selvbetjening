@@ -21,15 +21,33 @@
 
             <fieldset>
                 <label id="lbl_fordringshaver" for="fordringshaver">{{ $t("fordringshaver") }}</label>
-                <input id="fordringshaver" type="text" v-model="fordringshaver" xrequired>
+                <input id="fordringshaver"
+                       type="text"
+                       :class="{submitted: isSubmitted}"
+                       v-model="fordringshaver"
+                       required>
 
                 <label id="lbl_debitor" for="debitor">{{ $t("debitor") }}</label>
-                <input id="debitor" type="text" v-model="debitor" xrequired>
+                <input id="debitor"
+                       type="text"
+                       :class="{submitted: isSubmitted}"
+                       v-model="debitor"
+                       required>
 
                 <label id="lbl_fordringshaver2" for="fordringshaver2">{{ $t("anden_fordringshaver") }}</label>
-                <input id="fordringshaver2" type="text" v-model="fordringshaver2">
+                <input id="fordringshaver2"
+                       type="text"
+                       :class="{submitted: isSubmitted}"
+                       v-model="fordringshaver2">
                 <!--
-                    TODO: Placeholder code
+                    TODO: Placeholder code ala:
+                    Vue.component('text-input', {
+                        props: ['name', 'isRequired'],
+                        template: `
+                        <label id="lbl_{{name}}" for="tb_{{name}}">{{name}}</label>
+                        <input id="{{name}}" type="text" :class="{submitted: isSubmitted}" v-model="{{name}}">
+                        `
+                    })
                 -->
             </fieldset>
 
@@ -41,7 +59,7 @@
                The template should magically display it if you add something like
                ```
                    <table v-if="files">
-                     <tr v-for="f in files">
+                     <tr v-for="(f, index) in files" :key="index">
                        <td>{{ f.name }}</td>
                        <td>{{ f.size }} kB</td>
                      </tr>
@@ -53,7 +71,7 @@
                and https://developer.mozilla.org/en-US/docs/Web/API/File for more info on working with files.
             -->
             <fieldset>
-                <input type="file" @change="getFileData($event.target.files)">
+                <input type="file" :class="{submitted: isSubmitted}" @change="getFileData($event.target.files)">
             </fieldset>
 
 
@@ -62,9 +80,10 @@
                     <label id="lbl_fordringsgruppe" for="fordringsgruppe">{{ $t("fordringsgruppe") }}</label>
                     <select
                             id="fordringsgruppe"
+                            :class="{submitted: isSubmitted}"
                             v-model="fordringsgruppe"
                             @change="updateType"
-                            xrequired
+                            required
                     >
                         <option v-for="f in fordringsgrupper" v-bind:value="f">{{stringRep(f)}})</option>
                     </select>
@@ -74,9 +93,10 @@
                 <fieldset v-if="multipleTypes">
                     <label id="lbl_fordringstype" for="fordringstype">{{ $t("fordringstype") }}</label>
                     <select
+                            :class="{submitted: isSubmitted}"
                             id="fordringstype"
                             v-model="fordringstype"
-                            xrequired
+                            required
                     >
                         <option v-for="t in fordringsgruppe.sub_groups"
                                 v-bind:value="t">
@@ -88,78 +108,96 @@
 
 
             <fieldset>
-                <label id="lbl_barns_cpr" for="tb_barns_cpr">{{ $t("barns_cpr") }}</label>
-                <input id="tb_barns_cpr" type="text" v-model="barns_cpr">
+                <label id="lbl_barns_cpr"
+                       for="tb_barns_cpr">{{ $t("barns_cpr") }}</label>
+                <input id="tb_barns_cpr"
+                       type="text"
+                       :class="{submitted: isSubmitted}"
+                       v-model="barns_cpr"
+                       minlength="10"
+                       maxlength="10">
 
                 <label id="lbl_ekstern_sagsnummer" for="tb_ekstern_sagsnummer">{{ $t("ekstern_sagsnummer") }}</label>
-                <input id="tb_ekstern_sagsnummer" type="text" v-model="ekstern_sagsnummer" xrequired>
+                <input id="tb_ekstern_sagsnummer" type="text" :class="{submitted: isSubmitted}" v-model="ekstern_sagsnummer" required>
 
                 <label id="lbl_fakturanr" for="tb_fakturanr">{{ $t("fakturanr") }}</label>
-                <input id="tb_fakturanr" type="text" v-model="fakturanr" xrequired>
+                <input id="tb_fakturanr" type="text" :class="{submitted: isSubmitted}" v-model="fakturanr" required>
 
                 <label id="lbl_bnr" for="tb_bnr">{{ $t("bnr") }}</label>
-                <input id="tb_bnr" type="text" v-model="bnr">
+                <input id="tb_bnr" type="text" :class="{submitted: isSubmitted}" v-model="bnr">
             </fieldset>
 
             <fieldset> <!--TODO: Fix wrapping -->
                 <label id="lbl_hovedstol" for="tb_hovedstol">{{ $t("hovedstol") }}</label>
-                <input id="tb_hovedstol" type="text" v-model="hovedstol" xrequired>
+                <input id="tb_hovedstol" type="text" :class="{submitted: isSubmitted}" v-model="hovedstol" required>
                 <label id="lbl_hovedstol_posteringstekst" for="tb_hovedstol_posteringstekst">{{ $t("posteringstekst") }}</label>
-                <input id="tb_hovedstol_posteringstekst" type="text" v-model="hovedstol_posteringstekst" xrequired>
+                <input id="tb_hovedstol_posteringstekst" type="text" :class="{submitted: isSubmitted}" v-model="hovedstol_posteringstekst" required>
 
                 <label id="lbl_bankrente" for="tb_bankrente">{{ $t("bankrente") }}</label>
-                <input id="tb_bankrente" type="text" v-model="bankrente">
+                <input id="tb_bankrente" type="text" :class="{submitted: isSubmitted}" v-model="bankrente">
                 <label id="lbl_bankrente_posteringstekst" for="tb_bankrente_posteringstekst">{{ $t("posteringstekst") }}</label>
-                <input id="tb_bankrente_posteringstekst" type="text" v-model="bankrente_posteringstekst">
+                <input id="tb_bankrente_posteringstekst" type="text" :class="{submitted: isSubmitted}" v-model="bankrente_posteringstekst">
 
                 <label id="lbl_bankgebyr" for="tb_bankgebyr">{{ $t("bankgebyr") }}</label>
-                <input id="tb_bankgebyr" type="text" v-model="bankgebyr">
+                <input id="tb_bankgebyr" type="text" :class="{submitted: isSubmitted}" v-model="bankgebyr">
                 <label id="lbl_bankgebyr_posteringstekst" for="tb_bankgebyr_posteringstekst">{{ $t("posteringstekst") }}</label>
-                <input id="tb_bankgebyr_posteringstekst" type="text" v-model="bankgebyr_posteringstekst">
+                <input id="tb_bankgebyr_posteringstekst" type="text" :class="{submitted: isSubmitted}" v-model="bankgebyr_posteringstekst">
 
                 <label id="lbl_rente" for="tb_rente">{{ $t("rente") }}</label>
-                <input id="tb_rente" type="text" v-model="rente">
+                <input id="tb_rente" type="text" :class="{submitted: isSubmitted}" v-model="rente">
                 <label id="lbl_rente_posteringstekst" for="tb_rente_posteringstekst">{{ $t("posteringstekst") }}</label>
-                <input id="tb_rente_posteringstekst" type="text" v-model="rente_posteringstekst">
+                <input id="tb_rente_posteringstekst" type="text" :class="{submitted: isSubmitted}" v-model="rente_posteringstekst">
             </fieldset>
 
             <fieldset> <!--TODO: Fix wrapping -->
                 <label id="lbl_periodestart" for="tb_periodestart">{{ $t("periodestart") }}</label>
-                <input id="tb_periodestart" type="date" v-model="periodestart">
+                <input id="tb_periodestart" type="date" :class="{submitted: isSubmitted}" v-model="periodestart">
 
                 <label id="lbl_periodeslut" for="tb_periodeslut">{{ $t("periodeslut") }}</label>
-                <input id="tb_periodeslut" type="date" v-model="periodeslut">
+                <input id="tb_periodeslut" type="date" :class="{submitted: isSubmitted}" v-model="periodeslut">
 
                 <label id="lbl_forfaldsdato" for="tb_forfaldsdato">{{ $t("forfaldsdato") }}</label>
-                <input id="tb_forfaldsdato" type="date" v-model="forfaldsdato" xrequired>
+                <input id="tb_forfaldsdato" type="date" :class="{submitted: isSubmitted}" v-model="forfaldsdato" required>
 
                 <label id="lbl_betalingsdato" for="tb_betalingsdato">{{ $t("betalingsdato") }}</label>
-                <input id="tb_betalingsdato" type="date" v-model="betalingsdato" xrequired>
+                <input id="tb_betalingsdato" type="date" :class="{submitted: isSubmitted}" v-model="betalingsdato" required>
 
                 <label id="lbl_foraeldelsesdato" for="tb_foraeldelsesdato">{{ $t("foraeldelsesdato") }}</label>
-                <input id="tb_foraeldelsesdato" type="date" v-model="foraeldelsesdato" xrequired>
+                <input id="tb_foraeldelsesdato" type="date" :class="{submitted: isSubmitted}" v-model="foraeldelsesdato" required>
             </fieldset>
 
             <fieldset>
                 <label id="lbl_kontaktperson" for="tb_kontaktperson">{{ $t("kontaktperson") }}</label>
-                <input id="tb_kontaktperson" type="text" v-model="kontaktperson">
+                <input id="tb_kontaktperson" type="text" :class="{submitted: isSubmitted}" v-model="kontaktperson">
 
                 <label id="lbl_noter" for="tb_nrtes">{{ $t("noter") }}</label>
-                <input id="tb_nrtes" type="text" v-model="noter">
+                <input id="tb_nrtes" type="text" :class="{submitted: isSubmitted}" v-model="noter">
             </fieldset>
 
             <fieldset>
-                <container v-for="(meddebitor, index) in meddebitorer">
-                    <label v-bind:for="meddebitor.index">Meddebitor {{index +1}}</label>
-                    <container v-bind:id="meddebitor.index">
-                        <input type="text" v-model="meddebitor.cpr" placeholder="CPR" @change.once="addNewMeddebitor">
-                        <input type="text" v-model="meddebitor.cvr" placeholder="CVR">
-                    </container>
-                </container>
+                <div v-for="(meddebitor, index) in meddebitorer">
+                    <label v-bind:for="meddebitor.index"> {{ $t("meddebitor") }} {{index +1}}</label>
+                    <div v-bind:id="meddebitor.index" @keyup.once="addNewMeddebitor">
+                        <input type="text"
+                               :class="{submitted: isSubmitted}"
+                               :disabled="meddebitor.cvr !== null && meddebitor.cvr !== ''"
+                               v-model="meddebitor.cpr"
+                               placeholder="CPR"
+                               minlength="10"
+                               maxlength="10">
+                        <input type="text"
+                               :class="{submitted: isSubmitted}"
+                               :disabled="meddebitor.cpr !== null && meddebitor.cpr !== ''"
+                               v-model="meddebitor.cvr"
+                               placeholder="CVR"
+                               minlength="8"
+                               maxlength="8">
+                    </div>
+                </div>
             </fieldset>
 
             <fieldset>
-                <input type="submit" v-bind:value="$t('gem')">
+                <input type="submit" v-bind:value="$t('gem')" @click="isSubmitted = true">
             </fieldset>
 
         </form>
@@ -370,9 +408,15 @@ export default {
 </script>
 
 <style scoped>
-input:focus:invalid {
-  border: 2px solid #d7404d;
-}
+    input:focus:invalid {
+        border: 2px solid #D7404D;
+    }
+    .submitted:invalid {
+        border: 2px solid #D7404D;
+    }
+    input[disabled] {
+        background-color: #d6dbde;
+   }
 </style>
 
 <i18n>
@@ -401,8 +445,8 @@ input:focus:invalid {
             "foraeldelsesdato": "Forældelsesdato",
             "kontaktperson": "Kontaktperson",
             "noter": "Noter",
-            "gem": "Gem",
-            "meddebitorer": "Meddebitorer"
+            "meddebitor": "Meddebitor",
+            "gem": "Gem"
         },
         "kl": {
             "title": "Akiliisitsiniarneq - suliamik pilersitsineq",
@@ -427,7 +471,7 @@ input:focus:invalid {
             "foraeldelsesdato": "Pisoqalisoorfissaata ullua ",
             "kontaktperson": "Inuk atassuteqaataasoq",
             "noter": "Allaaserisaq",
-            "meddebitorer": "MANGLER",
+            "meddebitor": "MANGLER",
             "gem": "Toqqoruk"
         }
     }

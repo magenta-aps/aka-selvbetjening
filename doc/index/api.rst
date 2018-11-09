@@ -32,17 +32,10 @@ Making requests
 
 POST: Sends data to the server.
 
-Data: Send serialised JSON in the body.
+Data: Send serialised Form-Data in the body.
 
 GET: Nothing to GET from this endpoint at the moment.
 
-
-/filupload
-----------
-
-POST: Send file(s) and possibly other form fields to the server.
-
-GET: Nothing to GET from this endpoint at the moment.
 
 /rentenota
 ----------
