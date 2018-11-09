@@ -7,8 +7,6 @@ import logging
 from pathlib import Path
 
 
-
-# Create your tests here.
 class BasicTestCase(TestCase):
     def setUp(self):
         logging.disable(logging.CRITICAL)
@@ -179,6 +177,6 @@ class BasicTestCase(TestCase):
         tmpfile = settings.MEDIA_URL + obj.randomstring() + '.tmp'
         Path(tmpfile).touch()
         self.assertTrue(Path(tmpfile).is_file())
-        obj.files = [{'tmpfilename' : tmpfile}]
+        obj.files = [{'tmpfilename': tmpfile}]
         obj.cleanup()
         self.assertFalse(Path(tmpfile).is_file())

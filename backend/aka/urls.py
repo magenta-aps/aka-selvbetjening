@@ -23,7 +23,8 @@ from aka.rest import inkassosag, rentenota
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # redirect empty url string to index
-    url(r'^$', RedirectView.as_view(url='/index', permanent=False), name='index'),
+    url(r'^$', RedirectView.as_view(url='/index',
+        permanent=False), name='index'),
     url(r'^index$', htmlviews.IndexView,
         name='index'),
     url(r'^inkassosag$', inkassosag.InkassoSag.as_view(),

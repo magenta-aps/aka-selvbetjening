@@ -109,11 +109,13 @@ class BasicTestCase(TestCase):
                                         b"file_content",
                                         content_type="text/plain/")
         response = self.c.post(self.url,
-                            {'fordringshaver': 'indhold/fordringshaver',
-                            'fordringsgruppe': '4',
-                            'fordringstype': '1',
-                            'debitor': 'indhold/debitor ',
-                            'attachment': uploadfile})
+                               {
+                                   'fordringshaver': 'indhold/fordringshaver',
+                                   'fordringsgruppe': '4',
+                                   'fordringstype': '1',
+                                   'debitor': 'indhold/debitor ',
+                                   'attachment': uploadfile
+                               })
         self.assertEqual(response.status_code, 200)
         self.checkReturnValIsJSON(response)
 
