@@ -3,7 +3,6 @@
     <article class="indberet_fordring">
 
         <h1>{{ $t("title") }}</h1>
-
         <!--
             General notes:
             Code looks neat and functional. Good job!

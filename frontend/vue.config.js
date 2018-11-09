@@ -7,5 +7,16 @@ module.exports = {
       enableInSFC: true
     }
   },
-  assetsDir: 'static'
+  assetsDir: 'static',
+  baseUrl: '/index',
+  devServer: {
+    proxy: {
+      '/inkassosag': {
+        target: 'http://localhost:8000'
+      },
+      '/rentenota': {
+        target: 'http://localhost:8000'
+      }
+    }
+  }
 }
