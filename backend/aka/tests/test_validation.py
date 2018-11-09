@@ -1,5 +1,5 @@
 from django.test import SimpleTestCase
-from aka.rest.validation import Success, Error, validateRequired
+from aka.helpers.validation import Success, Error, validateRequired
 
 
 class ResultTestCase(SimpleTestCase):

@@ -1,5 +1,5 @@
 from django.test import TestCase
-from aka.rest.utils import AKAUtils
+from aka.helpers.utils import AKAUtils
 import datetime
 
 

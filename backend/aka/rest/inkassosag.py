@@ -2,8 +2,8 @@ import logging
 
 # Internal tools
 from aka.rest.base import JSONRestView
-from aka.rest import validation
-from aka.rest.validation import Error, Success
+from aka.helpers import validation
+from aka.helpers.validation import Error, Success
 from aka.helpers.sharedfiles import getSharedJson
 
 logger = logging.getLogger(__name__)
@@ -104,7 +104,7 @@ def getOnlyElement(l, fid, fordringsName):
     Because it can return an error, it returns a Success(Dict) instead
     of just the Dict with the given element.
     An easy way to use the Dict, upon success is using Success.andThen.
-    See :func:`~aka.rest.validation.Success.andThen`
+    See :func:`~aka.helpers.validation.Success.andThen`
 
     :param l: The list to look for the element in
     :type l: List

@@ -1,6 +1,6 @@
 from django.test import TestCase
-from aka.rest.prisme import Prisme
-from aka.rest.utils import AKAUtils
+from aka.helpers.prisme import Prisme
+from aka.helpers.utils import AKAUtils
 
 
 # Create your tests here.

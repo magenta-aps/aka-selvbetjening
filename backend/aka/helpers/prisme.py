@@ -1,5 +1,5 @@
 import requests
-from aka.rest.utils import AKAUtils
+from aka.helpers.utils import AKAUtils
 
 
 class Prisme():
