@@ -10,6 +10,8 @@ module.exports = {
   assetsDir: 'static',
   baseUrl: '/index',
   devServer: {
+    hot: true,
+    hotOnly: true,
     proxy: {
       '/inkassosag': {
         target: 'http://localhost:8000'

@@ -50,7 +50,6 @@
                 -->
             </fieldset>
 
-
             <!--TODO: Allow multiple files and show file list-->
             <!--
                This is actually quite easy. Add the "multiple" attribute  to the input element.

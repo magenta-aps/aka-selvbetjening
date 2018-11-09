@@ -2,7 +2,7 @@
 
     <article>
 
-        <h1 class="rentenota-title">{{ $t("rentenota.title") }}</h1>
+        <h1 class="rentenota-title">{{ $t("rentenota.title") }}cd hej </h1>
 
         <div class="rentenota-main">
 
