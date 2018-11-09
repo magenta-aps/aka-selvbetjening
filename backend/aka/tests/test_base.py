@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.http import HttpResponseBadRequest
-from akasite.rest.base import JSONRestView, ContentTypeError
+from aka.rest.base import JSONRestView, ContentTypeError
 from django.conf import settings
 import json
 import logging

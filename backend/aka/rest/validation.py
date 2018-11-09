@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 
-from akasite.rest.base import JSONRestView
-from akasite.helpers.sharedfiles import getSharedJson
+from aka.rest.base import JSONRestView
+from aka.helpers.sharedfiles import getSharedJson
 
 import json
 import logging
