@@ -3,8 +3,8 @@
 # These are simple shortcuts for commands used alot from specific places
 DJANGO 	= cd backend && python3 manage.py
 NPM = cd frontend && npm
-FRONTEND_SOURCES = $(shell find frontend/src frontend/assets -not \( -path frontend/assets/js -prune \) -type f) 
-FRONTEND_PREREQUISITES = frontend/.make-updated-npm frontend/assets/fordringsgruppe.js $(FRONTEND_SOURCES)
+FRONTEND_SOURCES = $(shell find frontend/src -type f) 
+FRONTEND_PREREQUISITES = frontend/.make-updated-npm frontend/public/index.html frontend/vue.config.js $(FRONTEND_SOURCES)
 
 
 # .PHONY tells make, that it is not an actual file being built
@@ -12,7 +12,7 @@ FRONTEND_PREREQUISITES = frontend/.make-updated-npm frontend/assets/fordringsgru
 
 # Run the server and make it assecible to the host machine
 # .PHONY
-runserver : frontend/assets/js/aka.esmodules.js  backend/aka/local_settings.py migrate
+runserver : frontend/dist/index.html  backend/aka/local_settings.py migrate
 	$(DJANGO) runserver 0.0.0.0:8000
 
 # In order to run the Django project, a local_settings.py file is required
@@ -39,11 +39,11 @@ documentation :
 	make -C doc -f Makefile html
 
 # .PHONY
-frontend : frontend/assets/js/aka.esmodules.js 
+frontend : frontend/dist/index.html 
 
 # FRONTEND_SOURCES checks if any files used as source files has changed, and compiles
 # the frontend if it has
-frontend/assets/js/aka.esmodules.js : $(FRONTEND_PREREQUISITES)
+frontend/dist/index.html : $(FRONTEND_PREREQUISITES)
 	$(NPM) run build
 
 frontend/.make-updated-npm : frontend/package.json

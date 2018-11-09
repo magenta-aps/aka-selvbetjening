@@ -2,7 +2,7 @@
 
     <article>
 
-        <h1 class="rentenota-title">{{ $t("rentenota.title") }}</h1>
+        <h1 class="rentenota-title">{{ $t("rentenota.title") }}cd hej </h1>
 
         <div class="rentenota-main">
 
@@ -169,140 +169,136 @@
 
 
 <script>
+import axios from "axios";
 
-    import axios from 'axios'
-
-    export default {
-        data: function() { 
-            return {
-                csrftoken: null,
-                rentenota_data: null,
-                today: new Date(),
-                dateto: null,
-                datefrom: null
-            }
-        },
-        computed: {
-            total: function() {
-                if (this.rentenota_data) {
-                    let count_total = 0
-                    for (let p of this.rentenota_data.poster) {
-                        count_total += p.beloeb
-                    }
-                    return count_total
-                }
-            }
-        },
-        methods: {
-            getCSRFToken: function() {
-                this.csrftoken = document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-            },
-            requestRentenota: function() {
-
-                axios({
-                    url: `/rentenota/from${ this.datefrom }to${ this.dateto }`,
-                    method: 'get',
-                    headers: {
-                        'X-CSRFToken': this.csrftoken,
-                        'X-AKA-BRUGER': 'Unknown'
-                    }
-                })
-                .then(res => {
-                    this.rentenota_data = res.data
-                })
-                .catch(err => {
-                    alert(err.message)
-                })
-            },
-            print: function() {
-                window.print()
-            },
-            setDates: function() {
-                let d = new Date()
-                this.dateto = d.toISOString().substr(0,10)
-                d.setMonth( d.getMonth() - 1 )
-                this.datefrom = d.toISOString().substr(0,10)
-            }
-        },
-        created: function() {
-            this.getCSRFToken()
-            this.setDates()
+export default {
+  data() {
+    return {
+      csrftoken: null,
+      rentenota_data: null,
+      today: new Date(),
+      dateto: null,
+      datefrom: null
+    };
+  },
+  computed: {
+    total() {
+      if (this.rentenota_data) {
+        let count_total = 0;
+        for (let p of this.rentenota_data.poster) {
+          count_total += p.beloeb;
         }
+        return count_total;
+      }
     }
-
+  },
+  methods: {
+    getCSRFToken() {
+      this.csrftoken = document.cookie.replace(
+        /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
+        "$1"
+      );
+    },
+    requestRentenota() {
+      axios({
+        url: `/rentenota/from${ this.datefrom }to${ this.dateto }`,
+        method: "get",
+        headers: {
+          "X-CSRFToken": this.csrftoken,
+          "X-AKA-BRUGER": "Unknown"
+        }
+      })
+        .then(res => {
+          this.rentenota_data = res.data;
+        })
+        .catch(err => {
+          alert(err.message);
+        });
+    },
+    print: function() {
+      window.print();
+    },
+    setDates: function() {
+      let d = new Date();
+      this.dateto = d.toISOString().substr(0, 10);
+      d.setMonth(d.getMonth() - 1);
+      this.datefrom = d.toISOString().substr(0, 10);
+    }
+  },
+  created() {
+    this.getCSRFToken();
+    this.setDates();
+  }
+};
 </script>
 
 <style>
+.rentenota-data {
+  padding: 1rem;
+  border: solid 1px #eaecee;
+  margin: 1rem 0;
+}
 
-    .rentenota-data {
-        padding: 1rem;
-        border: solid 1px #eaecee;
-        margin: 1rem 0;
-    }
+.rentenota-main .numbercell {
+  text-align: right;
+}
 
-    .rentenota-main .numbercell {
-        text-align: right;
-    }
+.rentenota-dateform {
+  margin: 0;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-end;
+}
 
-    .rentenota-dateform {
-        margin: 0;
-        display: flex;
-        flex-flow: row wrap;
-        align-items: flex-end;
-    }
+.rentenota-data-title {
+  display: flex;
+  justify-content: space-between;
+}
 
-    .rentenota-data-title {
-        display: flex;
-        justify-content: space-between;
-    }
+.rentenota-btn-print {
+  float: right;
+}
 
-    .rentenota-btn-print {
-        float: right;
-    }
+.rentenota-total {
+  border-top: solid 1px #465c6c;
+  border-bottom: solid 0.25rem #465c6c;
+}
 
-    .rentenota-total {
-        border-top: solid 1px #465c6c;
-        border-bottom: solid .25rem #465c6c;
-    }
+.rentenota-main .notaheader {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0 2rem;
+}
 
-    .rentenota-main .notaheader {
-        display: flex;
-        justify-content: space-between;
-        margin: 1rem 0 2rem;
-    }
+.rentenota-address-table {
+  width: 100%;
+}
 
-    .rentenota-address-table {
-        width: 100%;
-    }
+.rentenota-address-table th,
+.rentenota-address-table td {
+  padding: 0;
+}
 
-    .rentenota-address-table th,
-    .rentenota-address-table td {
-        padding: 0;
-    }
+.rentenota-address-table th {
+  border: none;
+  font-weight: normal;
+}
 
-    .rentenota-address-table th {
-        border: none;
-        font-weight: normal;
-    }
+.rentenota-address-table td {
+  text-align: right;
+}
 
-    .rentenota-address-table td {
-        text-align: right;
-    }
+@media print {
+  .rentenota-title,
+  .rentenota-actions,
+  .rentenota-btn-print {
+    display: none;
+  }
 
-    @media print {
-
-        .rentenota-title,
-        .rentenota-actions,
-        .rentenota-btn-print {
-            display: none;
-        }
-
-        .rentenota-data {
-            padding: 0;
-            border: none;
-            margin: 0;
-        }
-            
-    }
-
+  .rentenota-data {
+    padding: 0;
+    border: none;
+    margin: 0;
+  }
+}
 </style>
