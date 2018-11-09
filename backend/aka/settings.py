@@ -60,7 +60,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        'akasite': {
+        'aka': {
             'handlers': ['debug-console'],
             'filters': ['require_debug_true'],
             'level': 'DEBUG'
@@ -74,7 +74,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'akasite.apps.AkasiteConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
