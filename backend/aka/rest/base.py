@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
 from django.conf import settings
 import json
+import os
 import random
 import logging
 
@@ -29,8 +30,8 @@ class JSONRestView(View):
     Files are stored, and their metadata made available in self.files.
     """
 
-    CT1 = 'application/json'    # Accepted content-type.
-    CT2 = 'multipart/form-data' # Accepted content-type.
+    CT1 = 'application/json'        # Accepted content-type.
+    CT2 = 'multipart/form-data'     # Accepted content-type.
 
     def randomstring(self, length=30):
         return ''.join([
@@ -42,6 +43,13 @@ class JSONRestView(View):
         with open(destinationfilename, 'wb+') as destination:
             for chunk in f.chunks():
                 destination.write(chunk)
+
+    def cleanup(self):
+        try:
+            for file in self.files:
+                os.remove(file['tmpfilename'])
+        except (OSError, AttributeError):
+            pass
 
     def getContenttype(self, metadict):
         '''
@@ -136,7 +144,7 @@ class JSONRestView(View):
 
         return files
 
-    def post(self, request, *args, **kwargs):
+    def basepost(self, request, *args, **kwargs):
         '''
         Base method for POST requests.
         We only accept some content-types.
@@ -172,12 +180,12 @@ class JSONRestView(View):
                 self.data = self.getPost(request)
                 self.files = self.getFiles(request)
             else:
-                raise ContentTypeError('Content_type incorrect: ' +
-                                       content['type'])
+                raise ContentTypeError('Content_type incorrect: '
+                                       + content['type'])
             retval = HttpResponse()
 
-            logger.info('POST: ' + json.dumps(self.data) + '\n' +
-                        json.dumps(self.files))
+            logger.info('POST: ' + json.dumps(self.data) + '\n'
+                        + json.dumps(self.files))
         except (ContentTypeError, json.decoder.JSONDecodeError) as e:
             retval = self.errorResponse(e)
             logger.exception(e)

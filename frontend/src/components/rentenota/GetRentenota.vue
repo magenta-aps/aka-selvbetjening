@@ -201,7 +201,7 @@ export default {
     },
     requestRentenota() {
       axios({
-        url: `/rentenota?fromdate=${this.datefrom}&todate=${this.dateto}`,
+        url: `/rentenota/from${ this.datefrom }to${ this.dateto }`,
         method: "get",
         headers: {
           "X-CSRFToken": this.csrftoken,

@@ -1,14 +1,10 @@
-from django.http import HttpResponse
-
-import json
 import logging
-import re
 
 # Internal tools
-from akasite.rest.base import JSONRestView
-from akasite.rest import validation
-from akasite.rest.validation import Error, Success
-from akasite.helpers.sharedfiles import getSharedJson
+from aka.rest.base import JSONRestView
+from aka.helpers import validation
+from aka.helpers.validation import Error, Success
+from aka.helpers.sharedfiles import getSharedJson
 
 logger = logging.getLogger(__name__)
 
@@ -30,14 +26,15 @@ class InkassoSag(JSONRestView):
         :returns: HttpResponse, HttpResponseBadRequest
 
         '''
-        baseresponse = super().post(request)
+        baseresponse = super().basepost(request)
 
         if baseresponse.status_code == 200:
 
             logger.debug(self.data)
-            return validateInkassoJson(self.data
-                ).andThen(validateFordringsgrupper
-                ).toHttpResponse()
+            return (validateInkassoJson(self.data)
+                    .andThen(validateFordringsgrupper)
+                    .toHttpResponse()
+                    )
         else:
             return baseresponse
 
@@ -86,16 +83,15 @@ def validateFordringsgrupper(reqJson):
     '''
     try:
         fordringJson = getSharedJson('fordringsgruppe.json')
-        fordringsgruppe = getOnlyElement(fordringJson,
-                reqJson['fordringsgruppe'], 'fordringsgruppe')
-        return fordringsgruppe.andThen(
-                lambda e:
-                    getOnlyElement(e['sub_groups'], reqJson['fordringstype'],
-                        'fordringstype')
+        return (getOnlyElement(fordringJson, reqJson['fordringsgruppe'],
+                               'fordringsgruppe')
+                .andThen(lambda e: getOnlyElement(e['sub_groups'],
+                                                  reqJson['fordringstype'],
+                                                  'fordringstype'))
                 )
     except Exception as e:
-        logger.warning("Invalid JSON recieved:" + str(reqJson) +
-                "\n\nException: " + str(e))
+        logger.warning("Invalid JSON recieved:" + str(reqJson)
+                       + "\n\nException: " + str(e))
         return Error('fordringsgruppe_or_type_problem')
 
 
@@ -108,7 +104,7 @@ def getOnlyElement(l, fid, fordringsName):
     Because it can return an error, it returns a Success(Dict) instead
     of just the Dict with the given element.
     An easy way to use the Dict, upon success is using Success.andThen.
-    See :func:`~akasite.rest.validation.Success.andThen`
+    See :func:`~aka.helpers.validation.Success.andThen`
 
     :param l: The list to look for the element in
     :type l: List
@@ -121,17 +117,17 @@ def getOnlyElement(l, fid, fordringsName):
     '''
     fordringsList = [x for x in l if x['id'] == fid]
     if len(fordringsList) < 1:
-        logger.warning("The following list:\n" + str(l) + "\n was expected to " +
-                       "have 1 element with the following id: " + fid +
-                       ", but none was found.\n" +
-                       "The error might be a user error, if a custom " +
-                       "REST-client was used")
+        logger.warning("The following list:\n" + str(l) + "\n was expected to "
+                       + "have 1 element with the following id: " + fid
+                       + ", but none was found.\n"
+                       + "The error might be a user error, if a custom "
+                       + "REST-client was used")
         return Error(fordringsName + '_not_found', fordringsName)
 
     elif len(fordringsList) > 1:
-        logger.error("The following list:\n" + str(l) + "\n was only " +
-                     "expected to have 1 element with the following id: " +
-                     str(fid) + ", but multiple elements were found")
+        logger.error("The following list:\n" + str(l) + "\n was only "
+                     + "expected to have 1 element with the following id: "
+                     + str(fid) + ", but multiple elements were found")
         return Error('multiple_' + fordringsName + '_found', fordringsName)
     else:
         return Success(fordringsList[0])

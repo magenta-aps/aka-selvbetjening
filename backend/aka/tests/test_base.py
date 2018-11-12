@@ -1,11 +1,12 @@
 from django.test import TestCase
 from django.http import HttpResponseBadRequest
-from akasite.rest.base import JSONRestView, ContentTypeError
+from aka.rest.base import JSONRestView, ContentTypeError
+from django.conf import settings
 import json
 import logging
+from pathlib import Path
 
 
-# Create your tests here.
 class BasicTestCase(TestCase):
     def setUp(self):
         logging.disable(logging.CRITICAL)
@@ -134,7 +135,7 @@ class BasicTestCase(TestCase):
         obj = JSONRestView()
         d = {'CONTENT': 'application/json ;'}
         try:
-            ct = obj.getContenttype(d)
+            obj.getContenttype(d)
             self.fail('Failed to catch incorrect key in dict.')
         except ContentTypeError:
             pass
@@ -163,3 +164,19 @@ class BasicTestCase(TestCase):
         er = obj.errorResponse(exc)
         self.assertTrue(type(er) is HttpResponseBadRequest)
         self.assertTrue(msg.lower() in er.content.decode('utf-8').lower())
+
+    def test_cleanup_1(self):
+        obj = JSONRestView()
+        try:
+            obj.cleanup()
+        except Exception:
+            self.fail('There should be no exception here.')
+
+    def test_cleanup_2(self):
+        obj = JSONRestView()
+        tmpfile = settings.MEDIA_URL + obj.randomstring() + '.tmp'
+        Path(tmpfile).touch()
+        self.assertTrue(Path(tmpfile).is_file())
+        obj.files = [{'tmpfilename': tmpfile}]
+        obj.cleanup()
+        self.assertFalse(Path(tmpfile).is_file())

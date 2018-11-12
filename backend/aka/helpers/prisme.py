@@ -1,8 +1,9 @@
 import requests
+from aka.helpers.utils import AKAUtils
 
 
 class Prisme():
-    '''Class tohandle communication with Prisme system.
+    '''Class that handles communication with the Prisme system.
     '''
 
     def __init__(self):
@@ -54,7 +55,7 @@ class Prisme():
         :returns: rentenota data as a JSON structure.
         '''
 
-        post1 = {'dato': '13/06-18',
+        post1 = {'dato': AKAUtils.datetostring(fromdate),
                  'postdato': '10/02-18',
                  'bilag': '',
                  'faktura': '',
@@ -66,7 +67,7 @@ class Prisme():
                  'grundlag2': 12.34,
                  'beloeb': 61.00,
                  }
-        post2 = {'dato': '15/06-18',
+        post2 = {'dato': AKAUtils.datetostring(todate),
                  'postdato': '23/03-18',
                  'bilag': 'bilagstekst',
                  'faktura': 'fakturanummer?',

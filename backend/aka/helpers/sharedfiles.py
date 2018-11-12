@@ -13,5 +13,3 @@ def getSharedJson(fileName):
     """
     with open('../shared/'+fileName, 'r') as jsonfile:
         return json.loads(jsonfile.read())
-
-

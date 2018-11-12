@@ -2,8 +2,8 @@ Sphinx/autodoc:
 For at benytte autodoc har jeg gjort følgende:
   I doc/conf.py skal sys.path sættes, så Sphinx kan se alle de directories
   hvor der ligger moduler. Jeg tilføjede disse 3:
-  ../backend/akasite/rest
-  ../backend/akasite
+  ../backend/aka/rest
+  ../backend/aka
   ../backend
 
 I en given rst-fil kan så tilføje disse direktiver, for at få Sphinx til at

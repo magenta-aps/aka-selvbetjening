@@ -27,18 +27,18 @@ DEBUG = True
 MEDIA_URL = 'uploadedfiles/'
 
 # Where to put the output from tests:
-TEST_OUTPUT_DIR='.'
-TEST_OUTPUT_FILE_NAME='alltestresults.xml'
+TEST_OUTPUT_DIR = '.'
+TEST_OUTPUT_FILE_NAME = 'alltestresults.xml'
 TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'filters':{
-        'require_debug_false': { # A flag to only log specified in production
+    'filters': {
+        'require_debug_false': {  # A flag to only log specified in production
             '()': 'django.utils.log.RequireDebugFalse'
         },
-        'require_debug_true': { # A flag used for DEBUGGING only logs
+        'require_debug_true': {  # A flag used for DEBUGGING only logs
             '()': 'django.utils.log.RequireDebugTrue',
         },
     },
@@ -60,7 +60,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        'akasite': {
+        'aka': {
             'handlers': ['debug-console'],
             'filters': ['require_debug_true'],
             'level': 'DEBUG'
@@ -74,7 +74,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'akasite.apps.AkasiteConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

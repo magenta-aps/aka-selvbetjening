@@ -47,5 +47,5 @@ Django-specifics:
 
 * Settings are in backend/aka/settings.py.
 
-* Main urls are in backend/akasite/urls.py.
+* Main urls are in backend/aka/urls.py.
 
