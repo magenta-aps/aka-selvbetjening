@@ -1,6 +1,6 @@
 <template>
 
-    <nav class="toc">  
+    <nav class="toc">
         <router-link class="toc-link" to="/designguide">
             Design guide
         </router-link>
