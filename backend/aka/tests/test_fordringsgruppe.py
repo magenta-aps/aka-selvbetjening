@@ -45,7 +45,7 @@ class FordringsTestCase(TestCase):
             jsonfile = open('../shared/fordringsgruppe.json', 'r')
             self.jsonDict = json.loads(jsonfile.read())
             try:
-                validation = validate(self.jsonDict, SCHEMA)
+                validate(self.jsonDict, SCHEMA)
             except Exception as e:
                 self.fail('Validation failed.\n' + str(e))
         except Exception as e:
