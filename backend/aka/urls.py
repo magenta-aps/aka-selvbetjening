@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.views.generic.base import RedirectView
 
 from aka import htmlviews
-from aka.rest import inkassosag, rentenota
+from aka.rest import inkassosag, rentenota, loentraek, loentraekdistribution
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -29,6 +29,10 @@ urlpatterns = [
         name='index'),
     url(r'^inkassosag$', inkassosag.InkassoSag.as_view(),
         name='inkassosag'),
+    url(r'^loentraek$', loentraek.LoenTraek.as_view(),
+        name='loentraek'),
+    url(r'^loentraekdistribution$', loentraekdistribution.LoenTraekDistribution.as_view(),
+        name='loentraekdistribution'),
     url(r'^rentenota/from([0-9]{4}-[0-9]{2}-[0-9]{2})to([0-9]{4}-[0-9]{2}-[0-9]{2})$',
         rentenota.RenteNota.as_view(),
         name='rentenota (NY18)'),

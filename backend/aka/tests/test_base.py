@@ -1,9 +1,11 @@
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.http import HttpResponseBadRequest
-from aka.rest.base import JSONRestView, ContentTypeError
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
+from aka.rest.base import JSONRestView, ContentTypeError
 import json
 import logging
+import random
 from pathlib import Path
 
 
@@ -180,3 +182,33 @@ class BasicTestCase(TestCase):
         obj.files = [{'tmpfilename': tmpfile}]
         obj.cleanup()
         self.assertFalse(Path(tmpfile).is_file())
+
+    def simulatedFile(self):
+        # Ensure filename is unique to this session,
+        # so we can check if it was actually uploaded.
+        filename = ''.join([
+            random.choice('abcdefghijklmnopqrstuvwxyz0123456789')
+            for i in range(30)
+            ]) + '.csv'
+        return SimpleUploadedFile(filename,
+                                   b"file_content",
+                                   content_type="text/plain/")
+
+    def test_fileupload_1(self):
+        file1 = self.simulatedFile();
+        file2 = self.simulatedFile();
+        factory = RequestFactory()
+        request = factory.post('/', {
+                                     'field1': 'hey',
+                                     'field2': 'ho',
+                                     'attachment1': file1,
+                                     'attachment2': file2,
+                                    }
+
+                              )
+        obj = JSONRestView()
+        response = obj.basepost(request)
+        self.assertTrue(response.status_code, 200)
+        self.assertEqual(len(obj.files), 2)
+        self.assertTrue(obj.files[0]['originalname'] in [file1.name, file2.name])
+        self.assertTrue(obj.files[1]['originalname'] in [file1.name, file2.name])
