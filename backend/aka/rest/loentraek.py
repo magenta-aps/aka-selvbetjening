@@ -19,6 +19,7 @@ class LoenTraek(JSONRestView):
     def post(self, request, *args, **kwargs):
         '''
         Method for POST handler at /loentraek
+        AKA solution 6.2.
 
         :param request: The request.
         :type request: HttpRequest.
@@ -29,7 +30,7 @@ class LoenTraek(JSONRestView):
 
         if baseresponse.status_code == 200:
             logger.debug(self.data)
-            res = validation.validateRequired(['gernummer',
+            res = validation.validateRequired(['cvrnummer',
                                                'traekmaaned',
                                                'traekaar'],
                                               self.data)

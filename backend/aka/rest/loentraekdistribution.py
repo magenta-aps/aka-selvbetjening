@@ -14,9 +14,7 @@ class LoenTraekDistribution(JSONRestView):
 
     The purpose is to get the distribution of pay deductions that was
     used previously, to save the user time when doing loentraek.
-
-    It implements a POST endpoint. It should not be called directly,
-    but is instead called by Django's url handler.
+    Originally created as an endpoint for use in solution 6.2.
     '''
 
     def post(self, request, *args, **kwargs):
@@ -32,17 +30,6 @@ class LoenTraekDistribution(JSONRestView):
 
         if baseresponse.status_code == 200:
             logger.debug(self.data)
-            result = validateInkassoJson(self.data).toHttpResponse()
+            res = validation.validateRequired(['cvrnummer'], self.data)
         else:
             return baseresponse
-
-def validateInkassoJson(reqJson):
-    '''Validate a dict data-structure for the /loentraekdistribution endpoint
-
-    :param reqJson: The Json to be validated
-    :type reqJson: Dict
-    :returns: Error, Success
-
-    '''
-    __REQUIRED_FIELDS = ['gernummer']
-    return validation.validateRequired(__REQUIRED_FIELDS, reqJson)

@@ -45,9 +45,15 @@ class JSONRestView(View):
                 destination.write(chunk)
 
     def cleanup(self):
+        '''
+        Cleanup after file upload.  Removes files from temp folder,
+        and deletes the in-memory file list.
+        '''
+
         try:
             for file in self.files:
                 os.remove(file['tmpfilename'])
+            self.files = []
         except (OSError, AttributeError):
             pass
 

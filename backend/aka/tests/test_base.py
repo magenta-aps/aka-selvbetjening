@@ -195,8 +195,8 @@ class BasicTestCase(TestCase):
                                    b"file_content",
                                    content_type="text/plain/")
 
-    def test_fileupload_1(self):
-        '''Test upload of 2 files in one request.
+    def test_fileupload(self):
+        '''Test upload of files.
         '''
         file1 = self.simulatedFile();
         file2 = self.simulatedFile();
@@ -216,8 +216,28 @@ class BasicTestCase(TestCase):
         self.assertEqual(len(obj.files), 2)
         self.assertTrue(obj.files[0]['originalname'] in [file1.name, file2.name])
         self.assertTrue(obj.files[1]['originalname'] in [file1.name, file2.name])
+        obj.cleanup()
 
-        count = 0
+    def test_cleanup(self):
+        '''Test cleanup after file upload.
+        '''
+        file1 = self.simulatedFile();
+        file2 = self.simulatedFile();
+        factory = RequestFactory()
+        request = factory.post('/', {
+                                     'field1': 'hey',
+                                     'field2': 'ho',
+                                     'attachment1': file1,
+                                     'attachment2': file2,
+                                    }
+
+                              )
+        obj = JSONRestView()
+        response = obj.basepost(request)
+
+        self.assertTrue(response.status_code, 200)
+        self.assertEqual(len(obj.files), 2)
+
         foundfiles = os.listdir(settings.MEDIA_URL)
         self.assertEqual(len(foundfiles), 2)
         obj.cleanup()
