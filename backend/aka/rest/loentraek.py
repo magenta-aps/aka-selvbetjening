@@ -1,6 +1,4 @@
 import logging
-from django.http import HttpResponse
-from django.http import HttpResponseBadRequest
 from aka.rest.base import JSONRestView
 from aka.helpers import validation
 from aka.helpers.prisme import Prisme
@@ -18,8 +16,7 @@ class LoenTraek(JSONRestView):
 
     def post(self, request, *args, **kwargs):
         '''
-        Method for POST handler at /loentraek
-        AKA solution 6.2.
+        POST handler.
 
         :param request: The request.
         :type request: HttpRequest.
@@ -38,7 +35,7 @@ class LoenTraek(JSONRestView):
             if res.status:
                 prisme = Prisme()
                 pres = prisme.sendToPrisme(self.data)
-                return HttpResponse()
+                return self.successResponse('Prisme says OK.')
             else:
                 return res.toHttpResponse()
         else:

@@ -83,6 +83,11 @@ class JSONRestView(View):
 
             return result
 
+    def successResponse(self, msg):
+        msg = json.dumps({"status": "Request succeeded",
+                          "message": msg })
+        return HttpResponse(msg, content_type=JSONRestView.CT1)
+
     def errorResponse(self, exception):
         '''
         Compose error message from exception.
@@ -188,7 +193,7 @@ class JSONRestView(View):
             else:
                 raise ContentTypeError('Content_type incorrect: '
                                        + content['type'])
-            retval = HttpResponse()
+            retval = self.successResponse("OK")
 
             logger.info('POST: ' + json.dumps(self.data) + '\n'
                         + json.dumps(self.files))
