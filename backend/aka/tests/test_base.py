@@ -4,6 +4,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
 from aka.rest.base import JSONRestView, ContentTypeError
 import json
+import os
 import logging
 import random
 from pathlib import Path
@@ -195,6 +196,8 @@ class BasicTestCase(TestCase):
                                    content_type="text/plain/")
 
     def test_fileupload_1(self):
+        '''Test upload of 2 files in one request.
+        '''
         file1 = self.simulatedFile();
         file2 = self.simulatedFile();
         factory = RequestFactory()
@@ -208,7 +211,15 @@ class BasicTestCase(TestCase):
                               )
         obj = JSONRestView()
         response = obj.basepost(request)
+
         self.assertTrue(response.status_code, 200)
         self.assertEqual(len(obj.files), 2)
         self.assertTrue(obj.files[0]['originalname'] in [file1.name, file2.name])
         self.assertTrue(obj.files[1]['originalname'] in [file1.name, file2.name])
+
+        count = 0
+        foundfiles = os.listdir(settings.MEDIA_URL)
+        self.assertEqual(len(foundfiles), 2)
+        obj.cleanup()
+        foundfiles = os.listdir(settings.MEDIA_URL)
+        self.assertEqual(len(foundfiles), 0)
