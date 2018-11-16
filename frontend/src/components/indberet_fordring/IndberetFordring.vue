@@ -3,21 +3,8 @@
     <article class="indberet_fordring">
 
         <h1>{{ $t('title') }}</h1>
-        <!--
-            General notes:
-            Code looks neat and functional. Good job!
-            But do make use of HTML form validation. It's easy to implement and saves users a lot of headache.
-
-            The quickest fix is to set the "required" attribute on mandatory input fields.
-            This will prevent the browser from submitting the form if there are inputs missing.
-            The browser will gently remind users of this. ( ... I think)
-
-            This fascinating subject can be studied in detail here :D
-            https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Form_validation#Using_built-in_form_validation
-        -->
 
         <form @submit.prevent="sendFormRequest()">
-
             <fieldset>
                 <label id="lbl_fordringshaver" for="fordringshaver">{{ $t('fordringshaver') }}</label>
                 <input id="fordringshaver"
@@ -78,7 +65,7 @@
                             @change="updateType"
                             required
                     >
-                        <option v-for="(f, index) in fordringsgrupper" :key="index" v-bind:value="f">{{stringRep(f)}})</option>
+                        <option v-for="(f, index) in fordringsgrupper" :key="index" v-bind:value="f">{{stringRep(f)}}</option>
                     </select>
                 </fieldset>
 
@@ -205,7 +192,16 @@ import axios from 'axios'
 import { groups } from '@/assets/fordringsgruppe'
 import { notify } from '../utils/notify/Notifier.js'
 
+// Vue.component('text-input', {
+//   props: ['name', 'isRequired'],
+//   template: `
+//     <label id="lbl_{{name}}" for="{{name}}">{{name}}</label>
+//     <input id="{{name}}" type="text" :class="{submitted: isSubmitted}" v-model="{{name}}">
+//     `
+// })
+
 export default {
+  // components: {}
   data: function () {
     return {
       fordringshaver: null,
