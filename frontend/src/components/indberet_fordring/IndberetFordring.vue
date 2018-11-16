@@ -376,11 +376,12 @@ export default {
 }
 </script>
 
-<style scoped>
+ <style scoped>
     input:focus:invalid {
         border: 2px solid #D7404D;
     }
-    form.submitted input:invalid {
+    form.submitted input:invalid,
+    form.submitted select:invalid{
        border: 2px solid #D7404D;
     }
     input[disabled] {
