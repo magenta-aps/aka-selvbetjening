@@ -6,32 +6,10 @@
 
         <form @submit.prevent="sendFormRequest()" :class="{submitted: isSubmitted}">
             <fieldset>
-                <label id="lbl_fordringshaver" for="fordringshaver">{{ $t('fordringshaver') }}</label>
-                <input id="fordringshaver"
-                       type="text"
-                       v-model="fordringshaver"
-                       required>
-
-                <label id="lbl_debitor" for="debitor">{{ $t('debitor') }}</label>
-                <input id="debitor"
-                       type="text"
-                       v-model="debitor"
-                       required>
-
-                <label id="lbl_fordringshaver2" for="fordringshaver2">{{ $t('anden_fordringshaver') }}</label>
-                <input id="fordringshaver2"
-                       type="text"
-                       v-model="fordringshaver2">
-                <!--
-                    TODO: Placeholder code ala:
-                    Vue.component('text-input', {
-                        props: ['name', 'isRequired'],
-                        template: `
-                        <label id="lbl_{{name}}" for="{{name}}">{{name}}</label>
-                        <input id="{{name}}" type="text" v-model="{{name}}">
-                        `
-                    })
-                -->
+              <!--Example of SimpleField component in action-->
+              <s-field name="fordringshaver" :label="$t('fordringshaver')" type="text" required v-model="fordringshaver"/>
+              <s-field name="debitor" :label="$t('debitor')" type="text" required v-model="debitor"/>
+              <s-field name="fordringshaver2" :label="$t('anden_fordringshaver')" type="text" v-model="fordringshaver2"/>
             </fieldset>
 
             <table>
@@ -193,7 +171,6 @@ import { notify } from '../utils/notify/Notifier.js'
 // })
 
 export default {
-  // components: {}
   data: function () {
     return {
       fordringshaver: null,
