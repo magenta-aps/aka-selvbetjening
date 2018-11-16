@@ -4,26 +4,23 @@
 
         <h1>{{ $t('title') }}</h1>
 
-        <form @submit.prevent="sendFormRequest()">
+        <form @submit.prevent="sendFormRequest()" :class="{submitted: isSubmitted}">
             <fieldset>
                 <label id="lbl_fordringshaver" for="fordringshaver">{{ $t('fordringshaver') }}</label>
                 <input id="fordringshaver"
                        type="text"
-                       :class="{submitted: isSubmitted}"
                        v-model="fordringshaver"
                        required>
 
                 <label id="lbl_debitor" for="debitor">{{ $t('debitor') }}</label>
                 <input id="debitor"
                        type="text"
-                       :class="{submitted: isSubmitted}"
                        v-model="debitor"
                        required>
 
                 <label id="lbl_fordringshaver2" for="fordringshaver2">{{ $t('anden_fordringshaver') }}</label>
                 <input id="fordringshaver2"
                        type="text"
-                       :class="{submitted: isSubmitted}"
                        v-model="fordringshaver2">
                 <!--
                     TODO: Placeholder code ala:
@@ -31,7 +28,7 @@
                         props: ['name', 'isRequired'],
                         template: `
                         <label id="lbl_{{name}}" for="{{name}}">{{name}}</label>
-                        <input id="{{name}}" type="text" :class="{submitted: isSubmitted}" v-model="{{name}}">
+                        <input id="{{name}}" type="text" v-model="{{name}}">
                         `
                     })
                 -->
@@ -60,7 +57,6 @@
                     <label id="lbl_fordringsgruppe" for="fordringsgruppe">{{ $t('fordringsgruppe') }}</label>
                     <select
                             id="fordringsgruppe"
-                            :class="{submitted: isSubmitted}"
                             v-model="fordringsgruppe"
                             @change="updateType"
                             required
@@ -73,7 +69,6 @@
                 <fieldset v-if="multipleTypes">
                     <label id="lbl_fordringstype" for="fordringstype">{{ $t('fordringstype') }}</label>
                     <select
-                            :class="{submitted: isSubmitted}"
                             id="fordringstype"
                             v-model="fordringstype"
                             required
@@ -92,66 +87,65 @@
                        for="barns_cpr">{{ $t('barns_cpr') }}</label>
                 <input id="barns_cpr"
                        type="text"
-                       :class="{submitted: isSubmitted}"
                        v-model="barns_cpr"
                        minlength="10"
                        maxlength="10">
 
                 <label id="lbl_ekstern_sagsnummer" for="ekstern_sagsnummer">{{ $t('ekstern_sagsnummer') }}</label>
-                <input id="ekstern_sagsnummer" type="text" :class="{submitted: isSubmitted}" v-model="ekstern_sagsnummer" required>
+                <input id="ekstern_sagsnummer" type="text" v-model="ekstern_sagsnummer" required>
 
                 <label id="lbl_fakturanr" for="fakturanr">{{ $t('fakturanr') }}</label>
-                <input id="fakturanr" type="text" :class='{submitted: isSubmitted}' v-model="fakturanr" required>
+                <input id="fakturanr" type="text" v-model="fakturanr" required>
 
                 <label id="lbl_bnr" for="bnr">{{ $t('bnr') }}</label>
-                <input id="bnr" type="text" :class="{submitted: isSubmitted}" v-model="bnr">
+                <input id="bnr" type="text" v-model="bnr">
             </fieldset>
 
             <fieldset> <!--TODO: Fix wrapping -->
                 <label id="lbl_hovedstol" for="hovedstol">{{ $t('hovedstol') }}</label>
-                <input id="hovedstol" type="text" :class="{submitted: isSubmitted}" v-model="hovedstol" required>
+                <input id="hovedstol" type="text" v-model="hovedstol" required>
                 <label id="lbl_hovedstol_posteringstekst" for="hovedstol_posteringstekst">{{ $t('posteringstekst') }}</label>
-                <input id="hovedstol_posteringstekst" type="text" :class="{submitted: isSubmitted}" v-model="hovedstol_posteringstekst" required>
+                <input id="hovedstol_posteringstekst" type="text" v-model="hovedstol_posteringstekst" required>
 
                 <label id="lbl_bankrente" for="bankrente">{{ $t('bankrente') }}</label>
-                <input id="bankrente" type="text" :class="{submitted: isSubmitted}" v-model="bankrente">
+                <input id="bankrente" type="text"  v-model="bankrente">
                 <label id="lbl_bankrente_posteringstekst" for="bankrente_posteringstekst">{{ $t('posteringstekst') }}</label>
-                <input id="bankrente_posteringstekst" type="text" :class="{submitted: isSubmitted}" v-model="bankrente_posteringstekst">
+                <input id="bankrente_posteringstekst" type="text" v-model="bankrente_posteringstekst">
 
                 <label id="lbl_bankgebyr" for="bankgebyr">{{ $t('bankgebyr') }}</label>
-                <input id="bankgebyr" type="text" :class="{submitted: isSubmitted}" v-model="bankgebyr">
+                <input id="bankgebyr" type="text" v-model="bankgebyr">
                 <label id="lbl_bankgebyr_posteringstekst" for="bankgebyr_posteringstekst">{{ $t('posteringstekst') }}</label>
-                <input id="bankgebyr_posteringstekst" type="text" :class="{submitted: isSubmitted}" v-model="bankgebyr_posteringstekst">
+                <input id="bankgebyr_posteringstekst" type="text" v-model="bankgebyr_posteringstekst">
 
                 <label id="lbl_rente" for="rente">{{ $t('rente') }}</label>
-                <input id="rente" type="text" :class="{submitted: isSubmitted}" v-model="rente">
+                <input id="rente" type="text" v-model="rente">
                 <label id="lbl_rente_posteringstekst" for="rente_posteringstekst">{{ $t('posteringstekst') }}</label>
-                <input id="rente_posteringstekst" type="text" :class="{submitted: isSubmitted}" v-model="rente_posteringstekst">
+                <input id="rente_posteringstekst" type="text" v-model="rente_posteringstekst">
             </fieldset>
 
             <fieldset> <!--TODO: Fix wrapping -->
                 <label id="lbl_periodestart" for="periodestart">{{ $t('periodestart') }}</label>
-                <input id="periodestart" type="date" :class="{submitted: isSubmitted}" v-model="periodestart">
+                <input id="periodestart" type="date" v-model="periodestart">
 
                 <label id="lbl_periodeslut" for="periodeslut">{{ $t('periodeslut') }}</label>
-                <input id="periodeslut" type="date" :class="{submitted: isSubmitted}" v-model="periodeslut">
+                <input id="periodeslut" type="date" v-model="periodeslut">
 
                 <label id="lbl_forfaldsdato" for="forfaldsdato">{{ $t('forfaldsdato') }}</label>
-                <input id="forfaldsdato" type="date" :class="{submitted: isSubmitted}" v-model="forfaldsdato" required>
+                <input id="forfaldsdato" type="date" v-model="forfaldsdato" required>
 
                 <label id="lbl_betalingsdato" for="betalingsdato">{{ $t('betalingsdato') }}</label>
-                <input id="betalingsdato" type="date" :class="{submitted: isSubmitted}" v-model="betalingsdato" required>
+                <input id="betalingsdato" type="date" v-model="betalingsdato" required>
 
                 <label id="lbl_foraeldelsesdato" for="foraeldelsesdato">{{ $t('foraeldelsesdato') }}</label>
-                <input id="foraeldelsesdato" type="date" :class="{submitted: isSubmitted}" v-model="foraeldelsesdato" required>
+                <input id="foraeldelsesdato" type="date" v-model="foraeldelsesdato" required>
             </fieldset>
 
             <fieldset>
                 <label id="lbl_kontaktperson" for="kontaktperson">{{ $t('kontaktperson') }}</label>
-                <input id="kontaktperson" type="text" :class="{submitted: isSubmitted}" v-model="kontaktperson">
+                <input id="kontaktperson" type="text" v-model="kontaktperson">
 
                 <label id="lbl_noter" for="noter">{{ $t('noter') }}</label>
-                <input id="noter" type="text" :class="{submitted: isSubmitted}" v-model="noter">
+                <input id="noter" type="text" v-model="noter">
             </fieldset>
 
             <fieldset>
@@ -159,14 +153,12 @@
                     <label v-bind:for="meddebitor.index"> {{ $t('meddebitor') }} {{index +1}}</label>
                     <div v-bind:id="meddebitor.index" @keyup.once="addNewMeddebitor">
                         <input type="text"
-                               :class="{submitted: isSubmitted}"
                                :disabled="meddebitor.cvr !== null && meddebitor.cvr !== ''"
                                v-model="meddebitor.cpr"
                                placeholder="CPR"
                                minlength="10"
                                maxlength="10">
                         <input type="text"
-                               :class="{submitted: isSubmitted}"
                                :disabled="meddebitor.cpr !== null && meddebitor.cpr !== ''"
                                v-model="meddebitor.cvr"
                                placeholder="CVR"
@@ -196,7 +188,7 @@ import { notify } from '../utils/notify/Notifier.js'
 //   props: ['name', 'isRequired'],
 //   template: `
 //     <label id="lbl_{{name}}" for="{{name}}">{{name}}</label>
-//     <input id="{{name}}" type="text" :class="{submitted: isSubmitted}" v-model="{{name}}">
+//     <input id="{{name}}" type="text" v-model="{{name}}">
 //     `
 // })
 
@@ -265,7 +257,8 @@ export default {
       ],
 
       fordringsgrupper: groups,
-      csrftoken: null
+      csrftoken: null,
+      isSubmitted: false
     }
   },
   computed: {
@@ -387,7 +380,7 @@ export default {
     input:focus:invalid {
         border: 2px solid #D7404D;
     }
-    .submitted:invalid {
+    form.submitted input:invalid {
        border: 2px solid #D7404D;
     }
     input[disabled] {
