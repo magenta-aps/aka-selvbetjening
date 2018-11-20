@@ -3,6 +3,8 @@
   <article>
 
     <h1>{{ $t('loentraek.titel2') }}</h1>
+
+    <form>
     <fieldset>
       <input type="submit" :value="$t('common.gem')" @click="isSubmitted = true">
       <button > {{ $t('loentraek.indlaes_fra_fil') }} </button>
@@ -21,15 +23,20 @@
       </tr>
       </thead>
       <tbody>
+      <!--TODO: Is all fields in a row required?-->
       <tr v-for="(aftale, index) in aftaler" :key="index" @keyup.once="addNewRow">
-        <td><input type="text" v-model="aftale.cpr" :minlength="10" :maxlength="10"></td>
+        <td><input type="text" v-model="aftale.cpr" :minlength="10"
+                   :maxlength="10"></td>
         <td><input type="text" v-model="aftale.aftalenr"></td>
-        <td><input type="text" v-model="aftale.loentraek"></td>
-        <td><input type="text" v-model="aftale.nettoloen"></td>
+        <td><input type="text" v-model="aftale.loentraek"
+                   v-bind:required="cprIsFilled(index)"></td>
+        <td><input type="text" v-model="aftale.nettoloen"
+                   v-bind:required="cprIsFilled(index)"></td>
         <!--<td><a @click="deleteFile(index)">{{ $t('inkasso.slet') }}</a></td>-->
       </tr>
       </tbody>
     </table>
+    </form>
   </article>
 
 </template>
@@ -62,6 +69,9 @@ export default {
         loentraek: '',
         nettoloen: ''
       })
+    },
+    cprIsFilled: function (index) {
+      return (this.aftaler[index].cpr !== '')
     },
     getCSRFToken: function () {
       this.csrftoken = document.cookie.replace(
