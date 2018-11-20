@@ -2,7 +2,7 @@
 
   <article>
 
-    <h1>Indberet pr. CPR</h1>
+    <h1>{{ $t('loentraek.titel2') }}</h1>
     <fieldset>
       <input type="submit" :value="$t('common.gem')" @click="isSubmitted = true">
       <button > {{ $t('loentraek.indlaes_fra_fil') }} </button>
@@ -13,7 +13,7 @@
     <table>
       <thead>
       <tr>
-        <th>{{ $t('loentraek.cpr_nr') }}</th>
+        <th>{{ $t('common.cpr_nr') }}</th>
         <th>{{ $t('loentraek.aftalenr') }}</th>
         <th>{{ $t('loentraek.loentraek') }}</th>
         <th>{{ $t('loentraek.nettoloen') }}</th>

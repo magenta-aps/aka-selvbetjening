@@ -2,7 +2,11 @@ export const messages = {
   da: {
     common: {
       send: 'Send',
-      print: 'Print'
+      print: 'Print',
+      gem: 'Gem',
+      indberet: 'Indberet',
+      tilbage: 'Tilbage',
+      cpr_nr: 'CPR-nr'
     },
     rentenota: {
       titel: 'Hent rentenota',
@@ -61,17 +65,25 @@ export const messages = {
     },
     loentraek: {
       titel1: 'Løntræk - Indberet',
+      titel2: 'Løntræk - Indberet pr. CPR-nr.',
       ger_nr: 'GER-nr.',
       traekmaaned: 'Trækmåned',
       loentraek: 'Løntræk',
       fordel_pr_cpr: 'Fordel pr. CPR-nr',
-      indberet: 'Indberet'
+      indlaes_fra_fil: 'Indlæs fra fil',
+      indlaes_fra_forrige_redegoerelse: 'Indlæs fra forrige redegørelse',
+      aftalenr: 'Aftalanr',
+      nettoloen: 'Nettoløn'
     }
   },
   kl: {
     common: {
       send: 'Send - oversættelse mangler',
-      print: 'Print - oversættelse mangler'
+      print: 'Print - oversættelse mangler',
+      gem: 'Toqqoruk',
+      indberet: 'Nalunaarneq',
+      tilbage: 'Uterit',
+      cpr_nr: 'Inuup normua'
     },
     rentenota: {
       title: 'Hent rentenota - oversættelse mangler',
@@ -130,11 +142,15 @@ export const messages = {
     },
     loentraek: {
       titel1: 'Aningaasarsianit ilanngartuineq - Immersoruk',
+      titel2: 'Aningaasarsianit ilanngartuinermi - Inuup normukaarlugit nalunaarsuigit',
       ger_nr: 'GER-normu',
       traekmaaned: 'Qaammat ilanngaanneqarfik',
       loentraek: 'Isumaqatigiissutip aningaasartaa',
       fordel_pr_cpr: 'Inuup normuinut agguataarlugit',
-      indberet: 'Nalunaarneq'
+      indlaes_fra_fil: 'Fiilimit atuaagit',
+      indlaes_fra_forrige_redegoerelse: 'Nalunaarummit siusinnerusumit atuaagit',
+      aftalenr: 'Isumaqatigiissutip normua',
+      nettoloen: 'Aningaasarsiat tunniussat'
     }
   }
 }

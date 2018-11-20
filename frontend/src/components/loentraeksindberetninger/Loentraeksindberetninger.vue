@@ -23,7 +23,7 @@
 
             <fieldset>
                 <button @click.prevent="navigateTo('/loentraeksindberetning/indberet_pr_cpr')"> {{ $t('loentraek.fordel_pr_cpr') }} </button>
-                <input type="submit" :value="$t('loentraek.indberet')" @click="isSubmitted = true">
+                <input type="submit" :value="$t('common.indberet')" @click="isSubmitted = true">
             </fieldset>
 
         </form>
