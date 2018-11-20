@@ -5,7 +5,7 @@ export const messages = {
       print: 'Print'
     },
     rentenota: {
-      title: 'Hent rentenota',
+      titel: 'Hent rentenota',
       datefrom: 'Fra dato',
       dateto: 'Til dato',
       dato: 'Dato',
@@ -58,6 +58,14 @@ export const messages = {
       noter: 'Noter',
       meddebitor: 'Meddebitor',
       gem: 'Gem'
+    },
+    loentraek: {
+      titel1: 'Løntræk - Indberet',
+      ger_nr: 'GER-nr.',
+      traekmaaned: 'Trækmåned',
+      loentraek: 'Løntræk',
+      fordel_pr_cpr: 'Fordel pr. CPR-nr',
+      indberet: 'Indberet'
     }
   },
   kl: {
@@ -119,6 +127,14 @@ export const messages = {
       noter: 'Allaaserisaq',
       meddebitor: 'Meddebitor - oversættelse mangler',
       gem: 'Toqqoruk'
+    },
+    loentraek: {
+      titel1: 'Aningaasarsianit ilanngartuineq - Immersoruk',
+      ger_nr: 'GER-normu',
+      traekmaaned: 'Qaammat ilanngaanneqarfik',
+      loentraek: 'Isumaqatigiissutip aningaasartaa',
+      fordel_pr_cpr: 'Inuup normuinut agguataarlugit',
+      indberet: 'Nalunaarneq'
     }
   }
 }
