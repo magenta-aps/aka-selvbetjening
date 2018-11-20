@@ -1,8 +1,9 @@
 <template>
 
     <div class="locale-changer">
-        <select v-model="$i18n.locale">
-            <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang.code" :class="`option-${ lang.code }`">
+      <span :class="`option-${ selectedLanguage }`"></span>
+        <select v-model="selectedLanguage">
+            <option v-for="(lang, i) in langs" :key="i" :value="lang.code">
                 {{ lang.label }}
             </option>
         </select>
@@ -23,7 +24,14 @@ export default {
           label: 'Dansk',
           code: 'da'
         }
-      ]
+      ],
+      selectedLanguage: localStorage.getItem('language')
+    }
+  },
+  watch: {
+    selectedLanguage (val) {
+      localStorage.setItem('language', val)
+      this.$i18n.locale = val
     }
   }
 }
@@ -31,7 +39,7 @@ export default {
 
 <style scoped>
 .option-da,
-.option-gl {
+.option-kl {
   background: url("../../../assets/img/SVG/flag_gl.svg") no-repeat left center transparent;
   background-size: 1rem auto;
   padding: 0 0 0 1.5rem;

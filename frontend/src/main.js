@@ -9,8 +9,12 @@ import '@/assets/css/base-styles.css'
 Vue.use(VueI18n)
 Vue.component('s-field', SimpleField)
 
+if (localStorage.getItem('language') == null) {
+  localStorage.setItem('language', 'kl')
+}
+
 const i18n = new VueI18n({
-  locale: 'kl', // set locale
+  locale: localStorage.getItem('language'), // set locale
   fallbackLocale: 'da',
   messages
 })
