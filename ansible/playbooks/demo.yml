@@ -9,7 +9,7 @@
 
 ---
 # Run the entire default setup playbook
-- include: default.yml
+- import_playbook: develop.yml
 
 # Run demo specific playbook
 - hosts: all
@@ -20,6 +20,5 @@
   become_user: root
 
   roles:
-  - vim
 
 ...
