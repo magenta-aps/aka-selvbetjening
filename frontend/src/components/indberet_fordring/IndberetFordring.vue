@@ -2,20 +2,20 @@
 
     <article class="indberet_fordring">
 
-        <h1>{{ $t('title') }}</h1>
+        <h1>{{ $t('inkasso.title') }}</h1>
 
         <form @submit.prevent="sendFormRequest()" :class="{submitted: isSubmitted}">
             <fieldset>
-              <s-field name="fordringshaver" :label="$t('fordringshaver')" type="text" required v-model="fordringshaver"/>
-              <s-field name="debitor" :label="$t('debitor')" type="text" required v-model="debitor"/>
-              <s-field name="fordringshaver2" :label="$t('anden_fordringshaver')" type="text" v-model="fordringshaver2"/>
+              <s-field name="fordringshaver" :label="$t('inkasso.fordringshaver')" type="text" required v-model="fordringshaver"/>
+              <s-field name="debitor" :label="$t('inkasso.debitor')" type="text" required v-model="debitor"/>
+              <s-field name="fordringshaver2" :label="$t('inkasso.anden_fordringshaver')" type="text" v-model="fordringshaver2"/>
             </fieldset>
 
             <table>
                 <thead>
                     <tr>
-                        <th>{{ $t('filnavn') }}</th>
-                        <th>{{ $t('stoerelse') }}</th>
+                        <th>{{ $t('inkasso.filnavn') }}</th>
+                        <th>{{ $t('inkasso.stoerelse') }}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -23,7 +23,7 @@
                     <tr v-for="(f, index) in filer" :key="index">
                         <td>{{ f.name }}</td>
                         <td>{{ f.size }} kB</td>
-                        <td><a @click="deleteFile(index)">{{ $t('slet') }}</a></td>
+                        <td><a @click="deleteFile(index)">{{ $t('inkasso.slet') }}</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -31,7 +31,7 @@
 
             <div style="display: flex; flex-flow: row wrap;">
                 <fieldset>
-                    <label id="lbl_fordringsgruppe" for="fordringsgruppe">{{ $t('fordringsgruppe') }}</label>
+                    <label id="lbl_fordringsgruppe" for="fordringsgruppe">{{ $t('inkasso.fordringsgruppe') }}</label>
                     <select
                             id="fordringsgruppe"
                             v-model="fordringsgruppe"
@@ -44,7 +44,7 @@
 
                 <!--This is only shown if there are multiple options-->
                 <fieldset v-if="multipleTypes">
-                    <label id="lbl_fordringstype" for="fordringstype">{{ $t('fordringstype') }}</label>
+                    <label id="lbl_fordringstype" for="fordringstype">{{ $t('inkasso.fordringstype') }}</label>
                     <select
                             id="fordringstype"
                             v-model="fordringstype"
@@ -60,50 +60,50 @@
             </div>
 
             <fieldset>
-                <s-field name="barns_cpr" :label="$t('barns_cpr')" type="text" v-model="barns_cpr"
+                <s-field name="barns_cpr" :label="$t('inkasso.barns_cpr')" type="text" v-model="barns_cpr"
                          minlength="10" maxlength="10"/>
-                <s-field name="ekstern_sagsnummer" :label="$t('ekstern_sagsnummer')" type="text"
+                <s-field name="ekstern_sagsnummer" :label="$t('inkasso.ekstern_sagsnummer')" type="text"
                          v-model="ekstern_sagsnummer" required/>
-                <s-field name="fakturanr" :label="$t('fakturanr')" type="text" v-model="fakturanr" required/>
-                <s-field name="bnr" :label="$t('bnr')" type="text" v-model="bnr"/>
+                <s-field name="fakturanr" :label="$t('inkasso.fakturanr')" type="text" v-model="fakturanr" required/>
+                <s-field name="bnr" :label="$t('inkasso.bnr')" type="text" v-model="bnr"/>
             </fieldset>
 
             <fieldset> <!--TODO: Fix wrapping -->
-                <s-field name="hovedstol" :label="$t('hovedstol')" type="text" v-model="hovedstol" required/>
-                <s-field name="hovedstol_posteringstekst" :label="$t('posteringstekst')" type="text"
+                <s-field name="hovedstol" :label="$t('inkasso.hovedstol')" type="text" v-model="hovedstol" required/>
+                <s-field name="hovedstol_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
                          v-model="hovedstol_posteringstekst" required/>
 
-                <s-field name="bankrente" :label="$t('bankrente')" type="text" v-model="bankrente"/>
-                <s-field name="bankrente_posteringstekst" :label="$t('posteringstekst')" type="text"
+                <s-field name="bankrente" :label="$t('inkasso.bankrente')" type="text" v-model="bankrente"/>
+                <s-field name="bankrente_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
                          v-model="bankrente_posteringstekst"/>
 
-                <s-field name="bankgebyr" :label="$t('bankgebyr')" type="text" v-model="bankgebyr"/>
-                <s-field name="bankgebyr_posteringstekst" :label="$t('posteringstekst')" type="text"
+                <s-field name="bankgebyr" :label="$t('inkasso.bankgebyr')" type="text" v-model="bankgebyr"/>
+                <s-field name="bankgebyr_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
                          v-model="bankgebyr_posteringstekst"/>
 
-                <s-field name="rente" :label="$t('rente')" type="text" v-model="rente"/>
-                <s-field name="rente_posteringstekst" :label="$t('posteringstekst')" type="text"
+                <s-field name="rente" :label="$t('inkasso.rente')" type="text" v-model="rente"/>
+                <s-field name="rente_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
                          v-model="rente_posteringstekst"/>
             </fieldset>
 
             <fieldset>
-                <s-field name="periodestart" :label="$t('periodestart')" type="date" v-model="periodestart"/>
-                <s-field name="periodeslut" :label="$t('periodeslut')" type="date" v-model="periodeslut"/>
-                <s-field name="forfaldsdato" :label="$t('forfaldsdato')" type="date" v-model="forfaldsdato" required/>
-                <s-field name="betalingsdato" :label="$t('betalingsdato')" type="date"
+                <s-field name="periodestart" :label="$t('inkasso.periodestart')" type="date" v-model="periodestart"/>
+                <s-field name="periodeslut" :label="$t('inkasso.periodeslut')" type="date" v-model="periodeslut"/>
+                <s-field name="forfaldsdato" :label="$t('inkasso.forfaldsdato')" type="date" v-model="forfaldsdato" required/>
+                <s-field name="betalingsdato" :label="$t('inkasso.betalingsdato')" type="date"
                          v-model="betalingsdato" required/>
-                <s-field name="foraeldelsesdato" :label="$t('foraeldelsesdato')" type="date"
+                <s-field name="foraeldelsesdato" :label="$t('inkasso.foraeldelsesdato')" type="date"
                          v-model="foraeldelsesdato" required/>
             </fieldset>
 
             <fieldset>
-                <s-field name="kontaktperson" :label="$t('kontaktperson')" type="text" v-model="kontaktperson"/>
-                <s-field name="noter" :label="$t('noter')" type="text" v-model="noter"/>
+                <s-field name="kontaktperson" :label="$t('inkasso.kontaktperson')" type="text" v-model="kontaktperson"/>
+                <s-field name="noter" :label="$t('inkasso.noter')" type="text" v-model="noter"/>
             </fieldset>
 
             <fieldset>
                 <div v-for="(meddebitor, index) in meddebitorer" :key="index">
-                    <label v-bind:for="meddebitor.index"> {{ $t('meddebitor') }} {{index +1}}</label>
+                    <label v-bind:for="meddebitor.index"> {{ $t('inkasso.meddebitor') }} {{index +1}}</label>
                     <div v-bind:id="meddebitor.index" @keyup.once="addNewMeddebitor">
                         <input type="text"
                                :disabled="meddebitor.cvr !== null && meddebitor.cvr !== ''"
@@ -122,7 +122,7 @@
             </fieldset>
 
             <fieldset>
-                <input type="submit" v-bind:value="$t('gem')" @click="isSubmitted = true">
+                <input type="submit" v-bind:value="$t('inkasso.gem')" @click="isSubmitted = true">
             </fieldset>
 
         </form>
@@ -315,7 +315,7 @@ export default {
   },
   created: function () {
     this.getCSRFToken()
-    notify(`Welcome to this page. ${this.$t('title')}`)
+    notify(`Welcome to this page. ${this.$t('inkasso.title')}`)
   }
 }
 </script>
@@ -338,68 +338,3 @@ export default {
         border-bottom: 1px solid #ddd;
     }
 </style>
-
-<i18n>
-
-  {
-    "da": {
-      "title": "Inkasso - Opret sag",
-      "fordringshaver": "Fordringshaver",
-      "anden_fordringshaver": "Anden fordringshaver",
-      "debitor": "Debitor",
-      "fordringsgruppe": "Ekstern fordringsgruppe",
-      "fordringstype": "Ekstern fordringstype",
-      "filnavn": "Filnavn",
-      "stoerelse": "Størrelse",
-      "slet": "Slet",
-      "barns_cpr": "Barns CPR-nr",
-      "ekstern_sagsnummer": "Ekstern sagsnummer",
-      "fakturanr": "Fakturanr",
-      "bnr": "B-nr",
-      "hovedstol": "Hovedstol",
-      "posteringstekst": "Posteringstekst",
-      "bankrente": "Bankrente",
-      "bankgebyr": "Bankgebyr",
-      "rente": "Rente",
-      "periodestart": "Periodestart",
-      "periodeslut": "Periodeslut",
-      "forfaldsdato": "Forfaldsdato",
-      "betalingsdato": "Betalingsdato",
-      "foraeldelsesdato": "Forældelsesdato",
-      "kontaktperson": "Kontaktperson",
-      "noter": "Noter",
-      "meddebitor": "Meddebitor",
-      "gem": "Gem"
-    },
-    "kl": {
-      "title": "Akiliisitsiniarneq - suliamik pilersitsineq",
-      "fordringshaver": "Akiligassaqarfigineqartoq",
-      "anden_fordringshaver": "Akiligassaqarfigineqartoq alla",
-      "debitor": "Akiligassalik",
-      "fordringsgruppe": "Akiitsoqarfimmiit suliassiisutip ataatsimooruffiata suussusaa",
-      "fordringstype": "Akiitsoqarfimmiit suliasiissutit suussusaa",
-      "filnavn": "Fil-ip atia",
-      "stoerelse": "Imartussuseq",
-      "slet": "Nunguteruk",
-      "barns_cpr": "Meeqqap inuup normua",
-      "ekstern_sagsnummer": "Suliassiissutip akiitsoqarfimmiit normua",
-      "fakturanr": "MANGLER",
-      "bnr": "MANGLER",
-      "hovedstol": "Akiitsup toqqammavia",
-      "posteringstekst": "Nalunaarsornerani oqaasertaq",
-      "bankrente": "Aningaaserivimmi erniarititaq",
-      "bankgebyr": "Aningaaserivimmut akiliut",
-      "rente": "Erniarititaq",
-      "periodestart": "Piffissap aallartiffia",
-      "periodeslut": "Piffissap naaffia",
-      "forfaldsdato": "Ulloq akiligassap kingusinnerpaamik akilerneqarfissaa",
-      "betalingsdato": "Ulloq akiliiffik",
-      "foraeldelsesdato": "Pisoqalisoorfissaata ullua ",
-      "kontaktperson": "Inuk atassuteqaataasoq",
-      "noter": "Allaaserisaq",
-      "meddebitor": "MANGLER",
-      "gem": "Toqqoruk"
-    }
-  }
-
-</i18n>
