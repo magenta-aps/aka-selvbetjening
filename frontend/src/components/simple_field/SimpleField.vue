@@ -1,7 +1,8 @@
 <template>
   <div>
     <label :id="'lbl_'+name" :for="name">{{label}}</label>
-    <input :id="name" :type="type" v-model="content" :required="required">
+    <input :id="name" :type="type" v-model="content" :required="required"
+    :minlength="minlength" :maxlength="maxlength">
   </div>
 </template>
 
@@ -19,7 +20,10 @@ export default {
       default: 'text'
     },
     label: String,
-    required: Boolean
+    required: Boolean,
+    minlength: String,
+    maxlength: String
+
   },
   data () {
     return {

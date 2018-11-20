@@ -6,7 +6,6 @@
 
         <form @submit.prevent="sendFormRequest()" :class="{submitted: isSubmitted}">
             <fieldset>
-              <!--Example of SimpleField component in action-->
               <s-field name="fordringshaver" :label="$t('fordringshaver')" type="text" required v-model="fordringshaver"/>
               <s-field name="debitor" :label="$t('debitor')" type="text" required v-model="debitor"/>
               <s-field name="fordringshaver2" :label="$t('anden_fordringshaver')" type="text" v-model="fordringshaver2"/>
@@ -61,69 +60,45 @@
             </div>
 
             <fieldset>
-                <label id="lbl_barns_cpr"
-                       for="barns_cpr">{{ $t('barns_cpr') }}</label>
-                <input id="barns_cpr"
-                       type="text"
-                       v-model="barns_cpr"
-                       minlength="10"
-                       maxlength="10">
-
-                <label id="lbl_ekstern_sagsnummer" for="ekstern_sagsnummer">{{ $t('ekstern_sagsnummer') }}</label>
-                <input id="ekstern_sagsnummer" type="text" v-model="ekstern_sagsnummer" required>
-
-                <label id="lbl_fakturanr" for="fakturanr">{{ $t('fakturanr') }}</label>
-                <input id="fakturanr" type="text" v-model="fakturanr" required>
-
-                <label id="lbl_bnr" for="bnr">{{ $t('bnr') }}</label>
-                <input id="bnr" type="text" v-model="bnr">
+                <s-field name="barns_cpr" :label="$t('barns_cpr')" type="text" v-model="barns_cpr"
+                         minlength="10" maxlength="10"/>
+                <s-field name="ekstern_sagsnummer" :label="$t('ekstern_sagsnummer')" type="text"
+                         v-model="ekstern_sagsnummer" required/>
+                <s-field name="fakturanr" :label="$t('fakturanr')" type="text" v-model="fakturanr" required/>
+                <s-field name="bnr" :label="$t('bnr')" type="text" v-model="bnr"/>
             </fieldset>
 
             <fieldset> <!--TODO: Fix wrapping -->
-                <label id="lbl_hovedstol" for="hovedstol">{{ $t('hovedstol') }}</label>
-                <input id="hovedstol" type="text" v-model="hovedstol" required>
-                <label id="lbl_hovedstol_posteringstekst" for="hovedstol_posteringstekst">{{ $t('posteringstekst') }}</label>
-                <input id="hovedstol_posteringstekst" type="text" v-model="hovedstol_posteringstekst" required>
+                <s-field name="hovedstol" :label="$t('hovedstol')" type="text" v-model="hovedstol" required/>
+                <s-field name="hovedstol_posteringstekst" :label="$t('posteringstekst')" type="text"
+                         v-model="hovedstol_posteringstekst" required/>
 
-                <label id="lbl_bankrente" for="bankrente">{{ $t('bankrente') }}</label>
-                <input id="bankrente" type="text"  v-model="bankrente">
-                <label id="lbl_bankrente_posteringstekst" for="bankrente_posteringstekst">{{ $t('posteringstekst') }}</label>
-                <input id="bankrente_posteringstekst" type="text" v-model="bankrente_posteringstekst">
+                <s-field name="bankrente" :label="$t('bankrente')" type="text" v-model="bankrente"/>
+                <s-field name="bankrente_posteringstekst" :label="$t('posteringstekst')" type="text"
+                         v-model="bankrente_posteringstekst"/>
 
-                <label id="lbl_bankgebyr" for="bankgebyr">{{ $t('bankgebyr') }}</label>
-                <input id="bankgebyr" type="text" v-model="bankgebyr">
-                <label id="lbl_bankgebyr_posteringstekst" for="bankgebyr_posteringstekst">{{ $t('posteringstekst') }}</label>
-                <input id="bankgebyr_posteringstekst" type="text" v-model="bankgebyr_posteringstekst">
+                <s-field name="bankgebyr" :label="$t('bankgebyr')" type="text" v-model="bankgebyr"/>
+                <s-field name="bankgebyr_posteringstekst" :label="$t('posteringstekst')" type="text"
+                         v-model="bankgebyr_posteringstekst"/>
 
-                <label id="lbl_rente" for="rente">{{ $t('rente') }}</label>
-                <input id="rente" type="text" v-model="rente">
-                <label id="lbl_rente_posteringstekst" for="rente_posteringstekst">{{ $t('posteringstekst') }}</label>
-                <input id="rente_posteringstekst" type="text" v-model="rente_posteringstekst">
-            </fieldset>
-
-            <fieldset> <!--TODO: Fix wrapping -->
-                <label id="lbl_periodestart" for="periodestart">{{ $t('periodestart') }}</label>
-                <input id="periodestart" type="date" v-model="periodestart">
-
-                <label id="lbl_periodeslut" for="periodeslut">{{ $t('periodeslut') }}</label>
-                <input id="periodeslut" type="date" v-model="periodeslut">
-
-                <label id="lbl_forfaldsdato" for="forfaldsdato">{{ $t('forfaldsdato') }}</label>
-                <input id="forfaldsdato" type="date" v-model="forfaldsdato" required>
-
-                <label id="lbl_betalingsdato" for="betalingsdato">{{ $t('betalingsdato') }}</label>
-                <input id="betalingsdato" type="date" v-model="betalingsdato" required>
-
-                <label id="lbl_foraeldelsesdato" for="foraeldelsesdato">{{ $t('foraeldelsesdato') }}</label>
-                <input id="foraeldelsesdato" type="date" v-model="foraeldelsesdato" required>
+                <s-field name="rente" :label="$t('rente')" type="text" v-model="rente"/>
+                <s-field name="rente_posteringstekst" :label="$t('posteringstekst')" type="text"
+                         v-model="rente_posteringstekst"/>
             </fieldset>
 
             <fieldset>
-                <label id="lbl_kontaktperson" for="kontaktperson">{{ $t('kontaktperson') }}</label>
-                <input id="kontaktperson" type="text" v-model="kontaktperson">
+                <s-field name="periodestart" :label="$t('periodestart')" type="date" v-model="periodestart"/>
+                <s-field name="periodeslut" :label="$t('periodeslut')" type="date" v-model="periodeslut"/>
+                <s-field name="forfaldsdato" :label="$t('forfaldsdato')" type="date" v-model="forfaldsdato" required/>
+                <s-field name="betalingsdato" :label="$t('betalingsdato')" type="date"
+                         v-model="betalingsdato" required/>
+                <s-field name="foraeldelsesdato" :label="$t('foraeldelsesdato')" type="date"
+                         v-model="foraeldelsesdato" required/>
+            </fieldset>
 
-                <label id="lbl_noter" for="noter">{{ $t('noter') }}</label>
-                <input id="noter" type="text" v-model="noter">
+            <fieldset>
+                <s-field name="kontaktperson" :label="$t('kontaktperson')" type="text" v-model="kontaktperson"/>
+                <s-field name="noter" :label="$t('noter')" type="text" v-model="noter"/>
             </fieldset>
 
             <fieldset>
@@ -161,14 +136,6 @@ import axios from 'axios'
 // The file fordringsgruppe.js below is generated by the command `make frontend`
 import { groups } from '@/assets/fordringsgruppe'
 import { notify } from '../utils/notify/Notifier.js'
-
-// Vue.component('text-input', {
-//   props: ['name', 'isRequired'],
-//   template: `
-//     <label id="lbl_{{name}}" for="{{name}}">{{name}}</label>
-//     <input id="{{name}}" type="text" v-model="{{name}}">
-//     `
-// })
 
 export default {
   data: function () {
@@ -353,7 +320,7 @@ export default {
 }
 </script>
 
- <style scoped>
+ <style>
     input:focus:invalid {
         border: 2px solid #D7404D;
     }
