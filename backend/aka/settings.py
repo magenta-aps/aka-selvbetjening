@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(SITE_DIR)
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 MEDIA_URL = 'uploadedfiles/'
 
@@ -51,12 +51,21 @@ LOGGING = {
             'format': '{levelname} {message}',
             'style': '{',
         },
+        'encrypted': {
+            '()': 'aka.helpers.logging.EncryptedLogFormatterFactory',
+        },
     },
     'handlers': {
         'debug-console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
+            'formatter': 'encrypted'
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'micsdebug.log',
+            'formatter': 'encrypted'
         },
     },
     'loggers': {

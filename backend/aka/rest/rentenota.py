@@ -86,7 +86,7 @@ class RenteNota(JSONRestView):
             logger.error(str(e))
             return self.errorResponse(e)
 
-        logger.info('Get rentenota from ' + str(fromdate) +
+        logger.info('GET rentenota from ' + str(fromdate) +
                     ' to ' + str(todate))
 
         return HttpResponse(json.dumps(data), content_type=JSONRestView.CT1)
