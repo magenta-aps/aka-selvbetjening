@@ -19,6 +19,10 @@
     - name: Update apt cache (if old)
       apt: update_cache=yes cache_valid_time=84600
 
+    - name: Install gpg to encrypt log-entries
+      apt: 
+        name: gpg
+
   post_tasks:
     - name: Install Python Requirements
       pip: 
