@@ -320,20 +320,7 @@ export default {
 }
 </script>
 
- <style>
-    input:focus:invalid {
-        border: 2px solid #D7404D;
-    }
-    form.submitted input:invalid,
-    form.submitted select:invalid{
-       border: 2px solid #D7404D;
-    }
-    input[disabled] {
-        background-color: #d6dbde;
-    }
-    table {
-       border-collapse: collapse;
-    }
+ <style scoped>
     tr {
         border-bottom: 1px solid #ddd;
     }
