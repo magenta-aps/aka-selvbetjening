@@ -2,8 +2,6 @@
 
   <article>
 
-    <h1>{{ $t('loentraek.titel2') }}</h1>
-
     <form>
     <fieldset>
       <input type="submit" :value="$t('common.gem')" @click="isSubmitted = true">
@@ -12,35 +10,57 @@
       <button > {{ $t('loentraek.indlaes_fra_forrige_redegoerelse') }} </button>
     </fieldset>
 
-      <table id="loentraeksberegninger">
-        <tbody>
-          <tr>
-            <td></td>
-            <td> {{ $t('loentraek.fordeling') }}</td>
-            <td> {{ $t('loentraek.fordelt') }}</td>
-            <td> {{ $t('loentraek.difference') }}</td>
-          </tr>
-          <tr>
-            <td> {{ $t('loentraek.loentraek') }}</td>
-            <td> <input type="number" :value="fordeling" disabled></td>
-            <td> <input type="number" :value="fordeling" disabled></td>
-            <td> <input type="number" :value="fordeling" disabled></td>
-          </tr>
-        </tbody>
-      </table>
+      <h1>{{ $t('loentraek.titel2') }}</h1>
 
-    <table>
+          <div class="Rtable Rtable--4cols">
+            <div class="Row Hrow">
+              <div class="Rtable-cell"><strong>{{ $t('common.cpr_nr') }}</strong></div>
+              <div class="Rtable-cell"><strong>{{ $t('loentraek.aftalenr') }}</strong></div>
+              <div class="Rtable-cell"><strong>{{ $t('loentraek.loentraek') }}</strong></div>
+              <div class="Rtable-cell"><strong><strong>{{ $t('loentraek.nettoloen') }}</strong></strong></div>
+            </div>
+
+            <div class="Row" v-for="(aftale, index) in aftaler" :key="index" @keyup.once="addNewRow">
+
+              <div class="Rtable-cell"><input class="flex-input" type="text" v-model="aftale.cpr" :minlength="10"
+                                              :maxlength="10"></div>
+              <div class="Rtable-cell"><input class="flex-input" type="text" v-model="aftale.aftalenr"></div>
+              <div class="Rtable-cell"><input class="flex-input" type="text" v-model="aftale.loentraek"
+                                              v-bind:required="cprIsFilled(index)"></div>
+              <div class="Rtable-cell"><input class="flex-input" type="text" v-model="aftale.nettoloen"
+                                              v-bind:required="cprIsFilled(index)"></div>
+            </div>
+          </div>
+
+          <table id="loentraeksberegninger">
+            <tbody>
+            <tr>
+              <td></td>
+              <td> {{ $t('loentraek.fordeling') }}</td>
+              <td> {{ $t('loentraek.fordelt') }}</td>
+              <td> {{ $t('loentraek.difference') }}</td>
+            </tr>
+            <tr>
+              <td> {{ $t('loentraek.loentraek') }}</td>
+              <td> <input type="number" :value="fordeling" disabled></td>
+              <td> <input type="number" :value="fordeling" disabled></td>
+              <td> <input type="number" :value="fordeling" disabled></td>
+            </tr>
+            </tbody>
+          </table>
+
+<!--    <table>
       <thead>
       <tr>
         <th>{{ $t('common.cpr_nr') }}</th>
         <th>{{ $t('loentraek.aftalenr') }}</th>
         <th>{{ $t('loentraek.loentraek') }}</th>
         <th>{{ $t('loentraek.nettoloen') }}</th>
-        <!--<th></th>-->
+        &lt;!&ndash;<th></th>&ndash;&gt;
       </tr>
       </thead>
       <tbody>
-      <!--TODO: Is all fields in a row required?-->
+      &lt;!&ndash;TODO: Is all fields in a row required?&ndash;&gt;
       <tr v-for="(aftale, index) in aftaler" :key="index" @keyup.once="addNewRow">
         <td><input type="text" v-model="aftale.cpr" :minlength="10"
                    :maxlength="10"></td>
@@ -49,10 +69,10 @@
                    v-bind:required="cprIsFilled(index)"></td>
         <td><input type="text" v-model="aftale.nettoloen"
                    v-bind:required="cprIsFilled(index)"></td>
-        <!--<td><a @click="deleteFile(index)">{{ $t('inkasso.slet') }}</a></td>-->
+        &lt;!&ndash;<td><a @click="deleteFile(index)">{{ $t('inkasso.slet') }}</a></td>&ndash;&gt;
       </tr>
       </tbody>
-    </table>
+    </table>-->
     </form>
   </article>
 
@@ -112,6 +132,19 @@ export default {
 </script>
 
 <style scoped>
+  .Row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .Hrow {
+    border-bottom: solid 1px #465c6c;
+  }
+  .Row > .Rtable-cell  { width: 25%; }
+
+  .flex-input {
+    width: 100%;
+  }
 /*table {*/
   /*padding: 1.875rem;*/
 /*}*/
