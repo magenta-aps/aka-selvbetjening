@@ -69,31 +69,65 @@
             </fieldset>
 
             <fieldset> <!--TODO: Fix wrapping -->
-                <s-field name="hovedstol" :label="$t('inkasso.hovedstol')" type="text" v-model="hovedstol" required/>
-                <s-field name="hovedstol_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
+              <div class="grid" id="posteringer">
+                <div>
+                  <s-field name="hovedstol" :label="$t('inkasso.hovedstol')" type="text" v-model="hovedstol" required/>
+                </div>
+                <div>
+                  <s-field name="hovedstol_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
                          v-model="hovedstol_posteringstekst" required/>
-
+                </div>
+                <div></div>
+                <div>
                 <s-field name="bankrente" :label="$t('inkasso.bankrente')" type="text" v-model="bankrente"/>
+              </div>
+              <div>
                 <s-field name="bankrente_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
                          v-model="bankrente_posteringstekst"/>
-
+              </div>
+              <div></div>
+                <div>
                 <s-field name="bankgebyr" :label="$t('inkasso.bankgebyr')" type="text" v-model="bankgebyr"/>
+                </div>
+                <div>
                 <s-field name="bankgebyr_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
                          v-model="bankgebyr_posteringstekst"/>
-
+                </div>
+                <div></div>
+                <div>
                 <s-field name="rente" :label="$t('inkasso.rente')" type="text" v-model="rente"/>
-                <s-field name="rente_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
+                </div>
+                <div>
+                  <s-field name="rente_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
                          v-model="rente_posteringstekst"/>
+                </div>
+                </div>
+
             </fieldset>
 
             <fieldset>
-                <s-field name="periodestart" :label="$t('inkasso.periodestart')" type="date" v-model="periodestart"/>
-                <s-field name="periodeslut" :label="$t('inkasso.periodeslut')" type="date" v-model="periodeslut"/>
-                <s-field name="forfaldsdato" :label="$t('inkasso.forfaldsdato')" type="date" v-model="forfaldsdato" required/>
-                <s-field name="betalingsdato" :label="$t('inkasso.betalingsdato')" type="date"
-                         v-model="betalingsdato" required/>
-                <s-field name="foraeldelsesdato" :label="$t('inkasso.foraeldelsesdato')" type="date"
-                         v-model="foraeldelsesdato" required/>
+              <!-- TODO: Fix kilometer lange grøndlanske sætninger... -->
+              <div class="grid" id="datofelter">
+                <div>
+                  <s-field name="periodestart" :label="$t('inkasso.periodestart')" type="date" v-model="periodestart"/>
+                </div>
+                <div>
+                  <s-field name="periodeslut" :label="$t('inkasso.periodeslut')" type="date" v-model="periodeslut"/>
+                </div>
+                <div></div>
+                <div>
+                  <s-field name="forfaldsdato" :label="$t('inkasso.forfaldsdato')" type="date" v-model="forfaldsdato" required/>
+                </div>
+                <div>
+                  <s-field name="betalingsdato" :label="$t('inkasso.betalingsdato')" type="date"
+                           v-model="betalingsdato" required/>
+                </div>
+                <div>
+                  <s-field name="foraeldelsesdato" :label="$t('inkasso.foraeldelsesdato')" type="date"
+                           v-model="foraeldelsesdato" required/>
+                </div>
+              </div>
+
             </fieldset>
 
             <fieldset>
@@ -324,4 +358,10 @@ export default {
     tr {
         border-bottom: 1px solid #ddd;
     }
+   #posteringer {
+     max-width: 444px;
+   }
+   #datofelter {
+     max-width: 469px;
+   }
 </style>

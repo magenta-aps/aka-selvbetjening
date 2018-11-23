@@ -111,7 +111,7 @@ fieldset {
 
 label {
     display: block;
-    margin: .75rem 0 0;
+    margin: 20px 0 10px;
 }
 
 input[type="text"],
@@ -125,6 +125,7 @@ textarea {
     padding: .75rem .75rem;
     font-size: 1rem;
     background-color: #fff;
+    height: 46px;
 }
 
 input[type="text"]:focus,
