@@ -3,51 +3,67 @@
   <article>
 
     <form>
-    <fieldset>
+
+      <h1>{{ $t('loentraek.titel2') }}</h1>
+
+      <fieldset>
       <input type="submit" :value="$t('common.gem')" @click="isSubmitted = true">
       <button > {{ $t('loentraek.indlaes_fra_fil') }} </button>
       <button @click.prevent="navigateTo('/loentraeksindberetning')"> {{ $t('common.tilbage') }} </button>
       <button > {{ $t('loentraek.indlaes_fra_forrige_redegoerelse') }} </button>
     </fieldset>
 
-      <h1>{{ $t('loentraek.titel2') }}</h1>
-
-          <div class="Rtable Rtable--4cols">
-            <div class="Row Hrow">
-              <div class="Rtable-cell"><strong>{{ $t('common.cpr_nr') }}</strong></div>
-              <div class="Rtable-cell"><strong>{{ $t('loentraek.aftalenr') }}</strong></div>
-              <div class="Rtable-cell"><strong>{{ $t('loentraek.loentraek') }}</strong></div>
-              <div class="Rtable-cell"><strong><strong>{{ $t('loentraek.nettoloen') }}</strong></strong></div>
-            </div>
-
-            <div class="Row" v-for="(aftale, index) in aftaler" :key="index" @keyup.once="addNewRow">
-
-              <div class="Rtable-cell"><input class="flex-input" type="text" v-model="aftale.cpr" :minlength="10"
-                                              :maxlength="10"></div>
-              <div class="Rtable-cell"><input class="flex-input" type="text" v-model="aftale.aftalenr"></div>
-              <div class="Rtable-cell"><input class="flex-input" type="text" v-model="aftale.loentraek"
-                                              v-bind:required="cprIsFilled(index)"></div>
-              <div class="Rtable-cell"><input class="flex-input" type="text" v-model="aftale.nettoloen"
-                                              v-bind:required="cprIsFilled(index)"></div>
-            </div>
+        <strong>{{ $t('loentraek.loentraek') }}</strong>
+        <div class="flex-table flex-table--3cols" id="loentraeksberegninger">
+          <div class="flex-tr">
+            <div class="flex-table-cell">{{ $t('loentraek.fordeling') }}</div>
+            <div class="flex-table-cell">{{ $t('loentraek.fordelt') }}</div>
+            <div class="flex-table-cell">{{ $t('loentraek.difference') }}</div>
           </div>
 
-          <table id="loentraeksberegninger">
-            <tbody>
-            <tr>
-              <td></td>
-              <td> {{ $t('loentraek.fordeling') }}</td>
-              <td> {{ $t('loentraek.fordelt') }}</td>
-              <td> {{ $t('loentraek.difference') }}</td>
-            </tr>
-            <tr>
-              <td> {{ $t('loentraek.loentraek') }}</td>
-              <td> <input type="number" :value="fordeling" disabled></td>
-              <td> <input type="number" :value="fordeling" disabled></td>
-              <td> <input type="number" :value="fordeling" disabled></td>
-            </tr>
-            </tbody>
-          </table>
+          <div class="flex-tr">
+            <div class="flex-table-cell"><input class="input--flex-width" type="number" :value="fordeling" disabled></div>
+            <div class="flex-table-cell"><input class="input--flex-width" type="number" :value="fordeling" disabled></div>
+            <div class="flex-table-cell"><input class="input--flex-width" type="number" :value="fordeling" disabled></div>
+          </div>
+        </div>
+
+      <!--<table>-->
+        <!--<tbody>-->
+        <!--<tr>-->
+          <!--<td></td>-->
+          <!--<td> {{ $t('loentraek.fordeling') }}</td>-->
+          <!--<td> {{ $t('loentraek.fordelt') }}</td>-->
+          <!--<td> {{ $t('loentraek.difference') }}</td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+          <!--<td> {{ $t('loentraek.loentraek') }}</td>-->
+          <!--<td> <input type="number" :value="fordeling" disabled></td>-->
+          <!--<td> <input type="number" :value="fordeling" disabled></td>-->
+          <!--<td> <input type="number" :value="fordeling" disabled></td>-->
+        <!--</tr>-->
+        <!--</tbody>-->
+      <!--</table>-->
+
+      <div class="flex-table flex-table--4cols" id="indberetningsskema">
+        <div class="flex-tr flex-tr--head">
+          <div class="flex-table-cell"><strong>{{ $t('common.cpr_nr') }}</strong></div>
+          <div class="flex-table-cell"><strong>{{ $t('loentraek.aftalenr') }}</strong></div>
+          <div class="flex-table-cell"><strong>{{ $t('loentraek.loentraek') }}</strong></div>
+          <div class="flex-table-cell"><strong>{{ $t('loentraek.nettoloen') }}</strong></div>
+        </div>
+
+        <div class="flex-tr" v-for="(aftale, index) in aftaler" :key="index" @keyup.once="addNewRow">
+
+          <div class="flex-table-cell"><input class="input--flex-width" type="text" v-model="aftale.cpr" :minlength="10"
+                                              :maxlength="10"></div>
+          <div class="flex-table-cell"><input class="input--flex-width" type="text" v-model="aftale.aftalenr"></div>
+          <div class="flex-table-cell"><input class="input--flex-width" type="text" v-model="aftale.loentraek"
+                                              v-bind:required="cprIsFilled(index)"></div>
+          <div class="flex-table-cell"><input class="input--flex-width" type="text" v-model="aftale.nettoloen"
+                                              v-bind:required="cprIsFilled(index)"></div>
+        </div>
+      </div>
 
 <!--    <table>
       <thead>
@@ -132,19 +148,9 @@ export default {
 </script>
 
 <style scoped>
-  .Row {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .Hrow {
-    border-bottom: solid 1px #465c6c;
-  }
-  .Row > .Rtable-cell  { width: 25%; }
-
-  .flex-input {
-    width: 100%;
-  }
+#loentraeksberegninger {
+  max-width: 400px;
+}
 /*table {*/
   /*padding: 1.875rem;*/
 /*}*/

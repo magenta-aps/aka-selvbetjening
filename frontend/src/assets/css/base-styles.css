@@ -556,14 +556,11 @@ address {
 * Responsive table
 */
 
-.Rtable {
-    display: flex;
-    flex-wrap: wrap;
+.flex-table {
     margin: 0 0 3em 0;
     padding: 0;
-    /*background: #d6dbde;*/
 }
-.Rtable-cell {
+.flex-table-cell {
     box-sizing: border-box;
     flex-grow: 1;
     width: 100%;
@@ -572,10 +569,23 @@ address {
     list-style: none;
 }
 
+.flex-tr {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.flex-tr--head {
+    border-bottom: solid 1px #465c6c;
+}
+
+.input--flex-width {
+    width: 100%;
+}
+
 /* Table column sizing
 ================================== */
-.Rtable--2cols > .Rtable-cell  { width: 50%; }
-.Rtable--3cols > .Rtable-cell  { width: 33.33%; }
-.Rtable--4cols > .Rtable-cell  { width: 25%; }
-.Rtable--5cols > .Rtable-cell  { width: 20%; }
-.Rtable--6cols > .Rtable-cell  { width: 16.6%; }
+.flex-table--2cols .flex-table-cell  { width: 50%; }
+.flex-table--3cols .flex-table-cell  { width: 33.33%; }
+.flex-table--4cols .flex-table-cell  { width: 25%; }
+.flex-table--5cols .flex-table-cell  { width: 20%; }
+.flex-table--6cols .flex-table-cell  { width: 16.6%; }
