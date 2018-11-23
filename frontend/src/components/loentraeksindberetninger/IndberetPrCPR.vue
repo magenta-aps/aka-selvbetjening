@@ -8,7 +8,7 @@
     <fieldset>
       <input type="submit" :value="$t('common.gem')" @click="isSubmitted = true">
       <button > {{ $t('loentraek.indlaes_fra_fil') }} </button>
-      <button > {{ $t('common.tilbage') }} </button>
+      <button @click.prevent="navigateTo('/loentraeksindberetning')"> {{ $t('common.tilbage') }} </button>
       <button > {{ $t('loentraek.indlaes_fra_forrige_redegoerelse') }} </button>
     </fieldset>
 
@@ -82,6 +82,11 @@ export default {
 
   },
   methods: {
+    navigateTo: function (nav) {
+      this.$router.push({
+        path: nav
+      })
+    },
     addNewRow: function () {
       this.aftaler.push({
         cpr: '',
