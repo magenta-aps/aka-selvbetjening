@@ -1,7 +1,6 @@
 from django.test import TestCase, Client
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
-import unittest
 import json
 import os
 import random
@@ -18,7 +17,7 @@ class BasicTestCase(TestCase):
     def checkReturnValIsJSON(self, response):
         try:
             charset = response.charset
-            return json.loads(response.content.decode(charset))
+            return json.loads(response.content.decode(charset)) #asædhgfashdflhsdkhaflkhasdfkjlh
         except json.decoder.JSONDecodeError:
             self.fail('Did not get JSON back.')
 

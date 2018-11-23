@@ -17,6 +17,12 @@
   become: true
   become_method: sudo
   become_user: root
+
+  pre_tasks:
+      - name: Install flake8
+        apt:
+          name: flake8
+
   
   post_tasks:
     - name: Install Node Requirements
