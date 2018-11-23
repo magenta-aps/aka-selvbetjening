@@ -12,6 +12,23 @@
       <button > {{ $t('loentraek.indlaes_fra_forrige_redegoerelse') }} </button>
     </fieldset>
 
+      <table id="loentraeksberegninger">
+        <tbody>
+          <tr>
+            <td></td>
+            <td> {{ $t('loentraek.fordeling') }}</td>
+            <td> {{ $t('loentraek.fordelt') }}</td>
+            <td> {{ $t('loentraek.difference') }}</td>
+          </tr>
+          <tr>
+            <td> {{ $t('loentraek.loentraek') }}</td>
+            <td> <input type="number" :value="fordeling" disabled></td>
+            <td> <input type="number" :value="fordeling" disabled></td>
+            <td> <input type="number" :value="fordeling" disabled></td>
+          </tr>
+        </tbody>
+      </table>
+
     <table>
       <thead>
       <tr>
@@ -48,6 +65,9 @@
 export default {
   data: function () {
     return {
+      fordeling: 0,
+      fordelt: 0,
+      difference: 0,
       aftaler: [
         {
           cpr: '',
@@ -87,5 +107,7 @@ export default {
 </script>
 
 <style scoped>
-
+/*table {*/
+  /*padding: 1.875rem;*/
+/*}*/
 </style>
