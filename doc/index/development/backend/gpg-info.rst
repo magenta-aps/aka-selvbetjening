@@ -1,5 +1,8 @@
-Encryption using GPG
-====================
+Encryption
+==========
+
+Using GPG
+---------
 
 In order to use GnuPG with Python, install gnupg (apt-get?), and
 python-gnupg (pip install python-gnupg==0.4.3).
@@ -101,3 +104,47 @@ GPG commands
     .. code-block:: text
 
         gpg --delete-secret-and-public-key <fingerprint|ID>
+
+Using Postgresql
+----------------
+
+Create a table for the data:
+
+    .. code-block:: sql
+
+        create table privattabel(id serial primary key,
+            username varchar(50),
+            privatedata bytea);
+
+Create a table for the key:
+
+    .. code-block:: sql
+
+        create table publickeys(id serial primary key,
+            keyname varchar(200),
+            fingerprint varchar(200),
+            pubkey varchar);
+
+Create the key pair with gpg, export the public key in ASCII form, and insert
+it into table publickeys.
+Insert encrypted text:
+
+
+    .. code-block:: sql
+
+        insert into privattabel (username, privat)
+            values ('michael',
+            pgp_pub_encrypt('Secret text here.',
+                (select dearmor(pubkey) from publickeys where keyname =
+                'postgresqltestkey')
+                )
+           );
+
+Decrypt the stored text:
+
+    .. code-block:: sql
+
+        select pgp_pub_decrypt(privat,
+            (select dearmor(privatekey) from publickeys where keyname = 'postgresqltestkey'),
+            'testpwd')
+            from privattabel;
