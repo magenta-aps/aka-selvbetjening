@@ -17,24 +17,51 @@ from django.utils.translation import gettext_lazy as _
 
 logging.config.dictConfig({
     'version': 1,
+    'filters': {
+        'require_debug_false': {  # A flag to only log specified in production
+            '()': 'django.utils.log.RequireDebugFalse'
+        },
+        'require_debug_true': {  # A flag used for DEBUGGING only logs
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
     'formatters': {
         'verbose': {
-            'format': '%(name)s: %(message)s'
-        }
+            'format': '{name} {levelname} {asctime} {module} {funcName} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+        'encrypted': {
+            '()': 'aka.helpers.logging.EncryptedLogFormatterFactory',
+        },
     },
     'handlers': {
-        'console': {
+        'debug-console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
+            'formatter': 'encrypted'
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'micsdebug.log',
+            'formatter': 'encrypted'
         },
     },
     'loggers': {
         'zeep.transports': {
             'level': 'DEBUG',
             'propagate': True,
-            'handlers': ['console'],
+            'handlers': ['debug-console'],
         },
+        'aka': {
+            'level': 'DEBUG',
+            'handlers': ['debug-console'],
+            'filters': ['require_debug_true']
+        }
     }
 })
 
