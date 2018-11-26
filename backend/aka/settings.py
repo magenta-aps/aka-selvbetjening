@@ -70,10 +70,10 @@ LOGGING = {
     },
     'loggers': {
         'aka': {
-            'handlers': ['debug-console'],
+            'handlers': ['file'],
             'filters': ['require_debug_true'],
             'level': 'DEBUG'
-        }
+        },
     }
 }
 

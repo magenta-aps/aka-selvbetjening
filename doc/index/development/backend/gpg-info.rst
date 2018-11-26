@@ -40,7 +40,7 @@ GPG commands
 
         Name-Comment: Test key for use with unit testing.
 
-        Name-Email: none@example.org
+        Name-Email: ikkenogen@magenta.dk
 
         Passphrase: testpwd
 
