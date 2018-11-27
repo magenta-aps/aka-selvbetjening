@@ -106,7 +106,6 @@
             </fieldset>
 
             <fieldset>
-              <!-- TODO: Fix kilometer lange grøndlanske sætninger... -->
               <div class="grid" id="datofelter">
                 <div>
                   <s-field name="periodestart" :label="$t('inkasso.periodestart')" type="date" v-model="periodestart"/>
@@ -119,11 +118,11 @@
                   <s-field name="forfaldsdato" :label="$t('inkasso.forfaldsdato')" type="date" v-model="forfaldsdato" required/>
                 </div>
                 <div>
-                  <s-field name="betalingsdato" :label="$t('inkasso.betalingsdato')" type="date"
+                  <s-field name="betalingsdato" style="position: absolute; bottom: 0" :label="$t('inkasso.betalingsdato')" type="date"
                            v-model="betalingsdato" required/>
                 </div>
                 <div>
-                  <s-field name="foraeldelsesdato" :label="$t('inkasso.foraeldelsesdato')" type="date"
+                  <s-field name="foraeldelsesdato" style="position: absolute; bottom: 0" :label="$t('inkasso.foraeldelsesdato')" type="date"
                            v-model="foraeldelsesdato" required/>
                 </div>
               </div>
@@ -363,5 +362,8 @@ export default {
    }
    #datofelter {
      max-width: 469px;
+   }
+   #datofelter > div {
+     position: relative;
    }
 </style>
