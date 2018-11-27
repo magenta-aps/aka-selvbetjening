@@ -169,6 +169,10 @@ table {
     border-collapse: collapse;
 }
 
+input {
+    width: 100%;
+}
+
 input[type="submit"] {
     background-color: #fbb03b;
 }
@@ -488,31 +492,30 @@ footer {
  * MEDIA QUERIES
  */
 
-@media screen and (min-width: 35rem) {
+/*@media screen and (min-width: 35rem) {*/
 
-    /* 
-    * GRID LAYOUT CLASSES
-    */
+    /*!* */
+    /** GRID LAYOUT CLASSES*/
+    /**!*/
 
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-gap: .75rem;
-    }
+    /*.grid {*/
+        /*display: grid;*/
+        /*grid-template-columns: repeat(2, 1fr);*/
+        /*grid-gap: .75rem;*/
+    /*}*/
 
-    .grid > * {
-        margin: 0;   
-    }
+    /*.grid > * {*/
+        /*margin: 0;   */
+    /*}*/
 
-    .grid--3-3 {
-        grid-column: auto/span 2;
-    }
+    /*.grid--3-3 {*/
+        /*grid-column: auto/span 2;*/
+    /*}*/
 
-    .grid--2-3 {
-        grid-column: auto;
-    } 
-
-}
+    /*.grid--2-3 {*/
+        /*grid-column: auto;*/
+    /*}*/
+/*}*/
 
 @media screen and (min-width: 60rem) {
 
@@ -520,23 +523,188 @@ footer {
         max-width: 75rem;
         margin: 0 auto 2.25rem;
     }
+}
 
-    /* 
-    * GRID LAYOUT CLASSES
-    */
+    /*!* */
+    /** GRID LAYOUT CLASSES*/
+    /**!*/
 
-    .grid {
-        grid-template-columns: repeat(3, 1fr);
+    /*.grid {*/
+        /*grid-template-columns: repeat(3, 1fr);*/
+    /*}*/
+
+    /*.grid--3-3 {*/
+        /*grid-column: auto/span 3;*/
+    /*}*/
+
+    /*.grid--2-3 {*/
+        /*grid-column: auto/span 2;*/
+    /*}*/
+
+/*}*/
+
+
+/* ==== GRID SYSTEM ==== */
+
+.container {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.container-fluid {
+    width: 100%;
+}
+
+.row {
+    position: relative;
+    width: 100%;
+}
+
+.row [class^="col"] {
+    float: left;
+    margin: 0.5rem 2%;
+    min-height: 0.125rem;
+}
+
+.col-1,
+.col-2,
+.col-3,
+.col-4,
+.col-5,
+.col-6,
+.col-7,
+.col-8,
+.col-9,
+.col-10,
+.col-11,
+.col-12 {
+    width: 96%;
+}
+
+.col-1-sm {
+    width: 4.33%;
+}
+
+.col-2-sm {
+    width: 12.66%;
+}
+
+.col-3-sm {
+    width: 21%;
+}
+
+.col-4-sm {
+    width: 29.33%;
+}
+
+.col-5-sm {
+    width: 37.66%;
+}
+
+.col-6-sm {
+    width: 46%;
+}
+
+.col-7-sm {
+    width: 54.33%;
+}
+
+.col-8-sm {
+    width: 62.66%;
+}
+
+.col-9-sm {
+    width: 71%;
+}
+
+.col-10-sm {
+    width: 79.33%;
+}
+
+.col-11-sm {
+    width: 87.66%;
+}
+
+.col-12-sm {
+    width: 96%;
+}
+
+.row::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.hidden-sm {
+    display: none;
+}
+
+@media only screen and (min-width: 33.75em) {  /* 540px */
+    .container {
+        width: 80%;
+    }
+}
+
+@media only screen and (min-width: 45em) {  /* 720px */
+    .col-1 {
+        width: 4.33%;
     }
 
-    .grid--3-3 {
-        grid-column: auto/span 3;
+    .col-2 {
+        width: 12.66%;
     }
 
-    .grid--2-3 {
-        grid-column: auto/span 2;
+    .col-3 {
+        width: 21%;
     }
 
+    .col-4 {
+        width: 29.33%;
+    }
+
+    .col-5 {
+        width: 37.66%;
+    }
+
+    .col-6 {
+        width: 46%;
+    }
+
+    .col-7 {
+        width: 54.33%;
+    }
+
+    .col-8 {
+        width: 62.66%;
+    }
+
+    .col-9 {
+        width: 71%;
+    }
+
+    .col-10 {
+        width: 79.33%;
+    }
+
+    .col-11 {
+        width: 87.66%;
+    }
+
+    .col-12 {
+        width: 96%;
+    }
+
+    .hidden-sm {
+        display: block;
+    }
+}
+
+@media only screen and (min-width: 60em) { /* 960px */
+    .container {
+        width: 75%;
+        max-width: 60rem;
+    }
 }
 
 th {
@@ -552,3 +720,41 @@ td {
 address {
     font-style: normal;
 }
+
+/*
+* Responsive table
+*/
+
+.flex-table {
+    margin: 0 0 3em 0;
+    padding: 0;
+}
+.flex-table-cell {
+    box-sizing: border-box;
+    flex-grow: 1;
+    width: 100%;
+    padding: 10px 5px 0 5px;
+    overflow: hidden;
+    list-style: none;
+}
+
+.flex-tr {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.flex-tr--head {
+    border-bottom: solid 1px #465c6c;
+}
+
+.input--flex-width {
+    width: 100%;
+}
+
+/* Table column sizing
+================================== */
+.flex-table--2cols .flex-table-cell  { width: 50%; }
+.flex-table--3cols .flex-table-cell  { width: 33.33%; }
+.flex-table--4cols .flex-table-cell  { width: 25%; }
+.flex-table--5cols .flex-table-cell  { width: 20%; }
+.flex-table--6cols .flex-table-cell  { width: 16.6%; }
