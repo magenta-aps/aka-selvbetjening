@@ -24,6 +24,9 @@ backend/aka/local_settings.py :
 
 # .PHONY	
 test: backend/aka/local_settings.py migrate 
+	-flake8 --format='%(path)s:%(row)d:%(col)d: %(code)s %(text)s' \
+			--exclude=settings.py,local_settings.py,manage.py \
+			backend 
 	$(DJANGO) test
 
 # .PHONY

@@ -73,7 +73,10 @@ export const messages = {
       indlaes_fra_fil: 'Indlæs fra fil',
       indlaes_fra_forrige_redegoerelse: 'Indlæs fra forrige redegørelse',
       aftalenr: 'Aftalanr',
-      nettoloen: 'Nettoløn'
+      nettoloen: 'Nettoløn',
+      fordeling: 'Fordeling',
+      fordelt: 'Fordelt',
+      difference: 'Difference'
     }
   },
   kl: {
@@ -150,7 +153,10 @@ export const messages = {
       indlaes_fra_fil: 'Fiilimit atuaagit',
       indlaes_fra_forrige_redegoerelse: 'Nalunaarummit siusinnerusumit atuaagit',
       aftalenr: 'Isumaqatigiissutip normua',
-      nettoloen: 'Aningaasarsiat tunniussat'
+      nettoloen: 'Aningaasarsiat tunniussat',
+      fordeling: 'Agguaassassaq',
+      fordelt: 'Agguakkat',
+      difference: 'Nikingassutaasut'
     }
   }
 }
