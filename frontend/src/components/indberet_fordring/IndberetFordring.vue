@@ -163,7 +163,9 @@
             </div>
             <div class="row">
               <div class="col-4">
-                <s-field name="noter" :label="$t('inkasso.noter')" type="text" v-model="noter"/>
+                <!--<s-field name="noter" :label="$t('inkasso.noter')" type="text" v-model="noter"/>-->
+                <label for="noter">{{ $t('inkasso.noter') }}</label>
+                <textarea id="noter" cols="50" v-model="noter"></textarea>
               </div>
             </div>
 
