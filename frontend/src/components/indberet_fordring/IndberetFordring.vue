@@ -57,7 +57,7 @@
                   @change="updateType"
                   required
                 >
-                  <option v-for="(f, index) in fordringsgrupper" :key="index" v-bind:value="f">{{stringRep(f)}}</option>
+                  <option v-for="(f, index) in fordringsgrupper" :key="index" :value="f">{{stringRep(f)}}</option>
                 </select>
               </div>
             </div>
@@ -71,7 +71,7 @@
                 >
                   <option v-for="(t, index) in fordringsgruppe.sub_groups"
                           :key="index"
-                          v-bind:value="t">
+                          :value="t">
                     {{stringRep(t)}}
                   </option>
                 </select>
@@ -172,8 +172,8 @@
             <div class="row" v-for="(meddebitor, index) in meddebitorer" :key="index">
                 <div @keyup.once="addNewMeddebitor">
                   <div class="col-4">
-                    <label v-bind:for="meddebitor.index"> {{ $t('inkasso.meddebitor') }} {{index +1}}</label>
-                    <input v-bind:id="meddebitor.index"
+                    <label :for="meddebitor.index"> {{ $t('inkasso.meddebitor') }} {{index +1}}</label>
+                    <input :id="meddebitor.index"
                            type="text"
                            :disabled="meddebitor.cvr !== null && meddebitor.cvr !== ''"
                            v-model="meddebitor.cpr"
@@ -182,7 +182,7 @@
                            maxlength="10">
                   </div>
                   <div class="col-4">
-                    <label style="height: 24px;" v-bind:for="meddebitor.index"></label>
+                    <label style="height: 24px;" class="hidden-sm" :for="meddebitor.index"></label>
                     <input type="text"
                            :disabled="meddebitor.cpr !== null && meddebitor.cpr !== ''"
                            v-model="meddebitor.cvr"
@@ -195,7 +195,7 @@
 
           <div class="row">
             <div class="col-2">
-                <input type="submit" v-bind:value="$t('inkasso.gem')" @click="isSubmitted = true">
+                <input type="submit" :value="$t('inkasso.gem')" @click="isSubmitted = true">
             </div>
           </div>
 

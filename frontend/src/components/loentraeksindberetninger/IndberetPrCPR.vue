@@ -65,9 +65,10 @@
           </div>
         </div>
 
+        <!-- INDBERETNINGSSKEMA -->
         <div class="row">
           <div class="col">
-            <div class="flex-table flex-table--4cols" id="indberetningsskema">
+            <div class="flex-table flex-table--5cols" id="indberetningsskema">
               <div class="flex-tr flex-tr--head">
                 <div class="flex-table-cell">
                   <strong>{{ $t('common.cpr_nr') }}</strong>
@@ -81,12 +82,13 @@
                 <div class="flex-table-cell">
                   <strong>{{ $t('loentraek.nettoloen') }}</strong>
                 </div>
+                <div class="flex-table-cell width-sm">
+                </div>
               </div>
 
               <div class="flex-tr"
                    v-for="(aftale, index) in aftaler"
-                   :key="index"
-                   @keyup.once="addNewRow">
+                   :key="index">
 
                 <div class="flex-table-cell">
                   <input
@@ -120,6 +122,21 @@
                     v-bind:required="cprIsFilled(index)"
                   >
                 </div>
+                <div class="flex-table-cell width-sm y-center">
+                  <a class="tag-small"
+                     @click="removeRow(index)">
+                    x
+                  </a>
+                </div>
+              </div>
+              <div class="flex-tr">
+                <div class="flex-table-cell">
+                  <a class="tag-small" @click="addNewRow">Tilføj</a>
+                </div>
+                <div class="flex-table-cell"></div>
+                <div class="flex-table-cell"></div>
+                <div class="flex-table-cell"></div>
+                <div class="flex-table-cell"></div>
               </div>
             </div>
           </div>
@@ -167,6 +184,9 @@ export default {
         nettoloen: ''
       })
     },
+    removeRow: function (index) {
+      this.aftaler.splice(index, 1)
+    },
     cprIsFilled: function (index) {
       return (this.aftaler[index].cpr !== '')
     },
@@ -187,4 +207,10 @@ export default {
 #loentraeksberegninger {
   max-width: 400px;
 }
+  .width-sm {
+    width: 20px;
+  }
+  .y-center {
+    margin-top: 7px;
+  }
 </style>
