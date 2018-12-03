@@ -1,30 +1,53 @@
 <template>
 
     <article>
+        <form @submit.prevent="sendFormRequest()">
 
         <h1>{{ $t("loentraek.titel1") }}</h1>
 
-        <form @submit.prevent="sendFormRequest()">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-4">
+                <s-field name="ger_nr"
+                         :label="$t('loentraek.ger_nr')"
+                         type="text"
+                         required
+                         v-model="ger_nr"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <!--TODO: Change to https://www.npmjs.com/package/vue-monthly-picker or https://github.com/charliekassel/vuejs-datepicker-->
+                <s-field name="traekmaaned"
+                         :label="$t('loentraek.traekmaaned')"
+                         type="month"
+                         required
+                         v-model="traekmaaned"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <s-field name="loentraek"
+                         :label="$t('loentraek.loentraek')"
+                         type="text"
+                         required v-model="loentraek"
+                />
+              </div>
+            </div>
+          </div>
 
-            <fieldset>
-                <label id="lbl_ger_nr" for="ger_nr">{{ $t("loentraek.ger_nr") }}</label>
-                <input id="ger_nr" type="text" v-model="ger_nr" required>
-            </fieldset>
-
-            <fieldset>
-                <label id="lbl_traekmaaned" for="traekmaaned">{{ $t("loentraek.traekmaaned") }}</label>
-                <input id="traekmaaned" type="month" v-model="traekmaaned" required>
-            </fieldset>
-
-            <fieldset>
-                <label id="lbl_loentraek" for="loentraek">{{ $t("loentraek.loentraek") }}</label>
-                <input id="loentraek" type="text" v-model="loentraek" required>
-            </fieldset>
-
-            <fieldset>
-                <button @click.prevent="navigateTo('/loentraeksindberetning/indberet_pr_cpr')"> {{ $t('loentraek.fordel_pr_cpr') }} </button>
-                <input type="submit" :value="$t('common.indberet')" @click="isSubmitted = true">
-            </fieldset>
+            <div class="row">
+              <div class="col">
+                <button @click.prevent="navigateTo('/loentraeksindberetning/indberet_pr_cpr')">
+                  {{ $t('loentraek.fordel_pr_cpr') }}
+                </button>
+                <button type="submit"
+                        @click="isSubmitted = true">
+                  {{ $t('common.indberet') }}
+                </button>
+              </div>
+            </div>
 
         </form>
 

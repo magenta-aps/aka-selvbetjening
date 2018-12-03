@@ -147,7 +147,8 @@ form.submitted select:invalid{
     border: 2px solid #d7404d;
 }
 input[disabled] {
-    background-color: #d6dbde;
+    /*background-color: #d6dbde;*/
+    background-color: #f5f5f5;
 }
 
 button,
@@ -177,7 +178,8 @@ input {
     width: 100%;
 }
 
-input[type="submit"] {
+input[type="submit"],
+button[type="submit"]{
     background-color: #fbb03b;
 }
 
