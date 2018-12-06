@@ -13,7 +13,7 @@
                     @click="isSubmitted = true">
               {{ $t('common.gem') }}
             </button>
-            <button>
+            <button @click.prevent="navigateTo('/loentraeksindberetning/indberet_med_fil')">
               {{ $t('loentraek.indlaes_fra_fil') }}
             </button>
             <button @click.prevent="navigateTo('/loentraeksindberetning')">

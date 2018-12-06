@@ -6,7 +6,8 @@ export const messages = {
       gem: 'Gem',
       indberet: 'Indberet',
       tilbage: 'Tilbage',
-      cpr_nr: 'CPR-nr'
+      cpr_nr: 'CPR-nr',
+      indlaes: 'Indlæs'
     },
     rentenota: {
       titel: 'Hent rentenota',
@@ -86,7 +87,8 @@ export const messages = {
       gem: 'Toqqoruk',
       indberet: 'Nalunaarneq',
       tilbage: 'Uterit',
-      cpr_nr: 'Inuup normua'
+      cpr_nr: 'Inuup normua',
+      indlaes: 'Indlæs - oversættelse mangler'
     },
     rentenota: {
       title: 'Hent rentenota - oversættelse mangler',

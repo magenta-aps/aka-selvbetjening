@@ -11,6 +11,7 @@ const Experiment = () => import('@/components/experiment_with_file_upload/Exampl
 const GetRentenota = () => import('@/components/rentenota/GetRentenota.vue')
 const Loentraeksindberetning = () => import('@/components/loentraeksindberetninger/Loentraeksindberetninger.vue')
 const IndberetPrCPR = () => import('@/components/loentraeksindberetninger/IndberetPrCPR.vue')
+const IndberetMedFil = () => import('@/components/loentraeksindberetninger/IndberetMedFil.vue')
 
 Vue.use(Router)
 
@@ -55,6 +56,11 @@ export default new Router({
       name: 'indberet_pr_cpr',
       path: '/loentraeksindberetning/indberet_pr_cpr',
       component: IndberetPrCPR
+    },
+    {
+      name: 'indberet_med_fil',
+      path: '/loentraeksindberetning/indberet_med_fil',
+      component: IndberetMedFil
     }
   ]
 })
