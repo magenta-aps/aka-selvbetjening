@@ -205,7 +205,7 @@ export default {
 
 <style scoped>
 #loentraeksberegninger {
-  max-width: 400px;
+  max-width: 25rem;
 }
   .width-sm {
     width: 20px;

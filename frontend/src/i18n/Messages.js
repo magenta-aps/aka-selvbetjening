@@ -7,7 +7,8 @@ export const messages = {
       indberet: 'Indberet',
       tilbage: 'Tilbage',
       cpr_nr: 'CPR-nr',
-      indlaes: 'Indlæs'
+      indlaes: 'Indlæs',
+      fejl: 'Fejl'
     },
     rentenota: {
       titel: 'Hent rentenota',
@@ -78,6 +79,27 @@ export const messages = {
       fordeling: 'Fordeling',
       fordelt: 'Fordelt',
       difference: 'Difference'
+    },
+    beskeder: {
+      ekstern_sagsnummer_findes_allerede: 'Fejl: Fordringshaver har allerede en inkassosag med det angivede eksterne sagsnummer',
+      ekstern_sagsnummer_findes_i_kladde: 'Fejl: Fordringshaver har allerede en inkassosag med det angivede eksterne sagsnummer (under oprettelse)',
+      debitor_forkert_format: 'Værdien i feltet Debitor har forkert format (skal være 8 eller 10 cifre)',
+      arbejdsgiver_ikke_fundet: 'Fejl: Arbejdsgiver ikke fundet ud fra debitor-kontonummer',
+      angiv_debitor: 'Feltet Debitor skal udfyldes',
+      angiv_ekstern_sagsnummer: 'Angiv venligst ekstern sagsnummer',
+      angiv_periodestartdato: 'Angiv venligst periodestartdato',
+      angiv_periodeslutdato: 'Angiv venligst periodeslutdato',
+      angiv_forfaldsdato: 'Angiv venligst forfaldsdato',
+      angiv_betalingsdato: 'Angiv venligst betalingsdato',
+      inkassosag_oprettet: 'Inkasso-sagen er nu blevet oprettet',
+      inkassosag_kvittering_1: 'Kvittering: der blev oprettet',
+      inkassosag_kvittering_2_sing: 'inkassosag',
+      inkassosag_kvittering_2_plur: 'inkassosager',
+      datafil_ikke_indlaest: 'Datafilen blev ikke indlæst',
+      linjer_i_datafil: 'Linjer i datafil',
+      afviste: 'afviste',
+      linjeangivelse_1: 'Fordringshaver angivet på linje',
+      linjeangivelse_2: 'er ikke tilladt'
     }
   },
   kl: {
@@ -88,7 +110,8 @@ export const messages = {
       indberet: 'Nalunaarneq',
       tilbage: 'Uterit',
       cpr_nr: 'Inuup normua',
-      indlaes: 'Indlæs - oversættelse mangler'
+      indlaes: 'Indlæs - oversættelse mangler',
+      fejl: 'Fejl - oversættelse mangler'
     },
     rentenota: {
       title: 'Hent rentenota - oversættelse mangler',
@@ -159,6 +182,27 @@ export const messages = {
       fordeling: 'Agguaassassaq',
       fordelt: 'Agguakkat',
       difference: 'Nikingassutaasut'
+    },
+    beskeder: {
+      ekstern_sagsnummer_findes_allerede: 'Fejl: Fordringshaver har allerede en inkassosag med det angivede eksterne sagsnummer - oversættelse mangler',
+      ekstern_sagsnummer_findes_i_kladde: 'Fejl: Fordringshaver har allerede en inkassosag med det angivede eksterne sagsnummer (under oprettelse) - oversættelse mangler',
+      debitor_forkert_format: 'Værdien i feltet Debitor har forkert format (skal være 8 eller 10 cifre) - oversættelse mangler',
+      arbejdsgiver_ikke_fundet: 'Fejl: Arbejdsgiver ikke fundet ud fra debitor-kontonummer - oversættelse mangler',
+      angiv_debitor: 'Feltet Debitor skal udfyldes - oversættelse mangler',
+      angiv_ekstern_sagsnummer: 'Angiv venligst ekstern sagsnummer - oversættelse mangler',
+      angiv_periodestartdato: 'Angiv venligst periodestartdato - oversættelse mangler',
+      angiv_periodeslutdato: 'Angiv venligst periodeslutdato - oversættelse mangler',
+      angiv_forfaldsdato: 'Angiv venligst forfaldsdato - oversættelse mangler',
+      angiv_betalingsdato: 'Angiv venligst betalingsdato - oversættelse mangler',
+      inkasso_sag_oprettet: 'Inkasso-sagen er nu blevet oprettet - oversættelse mangler',
+      inkassosag_kvittering_1: 'Kvittering: der blev oprettet - oversættelse mangler',
+      inkassosag_kvittering_2_sing: 'inkassosag - oversættelse mangler',
+      inkassosag_kvittering_2_plur: 'inkassosager - oversættelse mangler',
+      datafil_ikke_indlaest: 'Datafilen blev ikke indlæst',
+      linjer_i_datafil: 'Linjer i datafil',
+      afviste: 'afviste',
+      linjeangivelse_1: 'Fordringshaver angivet på linje',
+      linjeangivelse_2: 'er ikke tilladt'
     }
   }
 }
