@@ -30,7 +30,7 @@ export default {
   components: {
     'language-toggle': LangToggle
   }
-};
+}
 </script>
 
 <style>
