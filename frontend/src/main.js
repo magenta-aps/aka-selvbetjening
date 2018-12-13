@@ -2,7 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import VueI18n from 'vue-i18n'
-import VeeValidate from 'vee-validate'
+import VeeValidate, { Validator } from 'vee-validate'
+import attributesDa from './i18n/attributes/da'
+import messagesKl from './i18n/messages/kl'
+import messagesDa from './i18n/messages/da'
+import attributesKl from './i18n/attributes/kl'
 import validationMessagesEn from 'vee-validate/dist/locale/en'
 import validationMessagesDa from 'vee-validate/dist/locale/da'
 import { messages } from './i18n/Messages'
@@ -27,10 +31,34 @@ Vue.use(VeeValidate, {
   i18nRootKey: 'validations', // customize the root path for validation messages.
   i18n,
   dictionary: {
-    kl: validationMessagesEn,
+    kl: validationMessagesEn, // defaults to English. Greenlandic is not supported -- would need pull request to the vee validate team
     da: validationMessagesDa
   }
 })
+
+Validator.extend('age', {
+  validate: (value, [args]) => parseInt(value) >= parseInt(args)
+})
+Validator.extend('eight_or_ten_characters', {
+  validate: (value) => {
+    if (value === undefined || value === null) {
+      return false
+    }
+    return (String(value).length === 8 || String(value).length === 10)
+  }
+})
+
+const dict = {
+  kl: {
+    messages: messagesKl,
+    attributes: attributesKl
+  },
+  da: {
+    messages: messagesDa,
+    attributes: attributesDa
+  }
+}
+Validator.localize(dict)
 
 new Vue({
   router,

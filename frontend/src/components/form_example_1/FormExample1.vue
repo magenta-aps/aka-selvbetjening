@@ -12,7 +12,14 @@
 
                 <label for="inputB">Inputfelt B skal være 8 eller 10 tal</label>
                 <input v-validate="{ regex: /^([0-9]{8}|[0-9]{10})$/ }" id="inputB" type="text" name="b" v-model="value_b">
-              <span>{{ errors.first('b')}}</span>
+
+                <label for="inputC">Inputfelt alder</label>
+                <input v-validate=" 'age:10' " id="inputC" type="number" name="c">
+                <span>{{ errors.first('c')}}</span>
+
+                <label for="debitor">Debitor</label>
+                <input v-validate=" 'eight_or_ten_characters' " id="debitor" type="text" name="debitor">
+                <span>{{ errors.first('debitor')}}</span>
             </fieldset>
             <fieldset>
                 <input type="submit" value="Send">
