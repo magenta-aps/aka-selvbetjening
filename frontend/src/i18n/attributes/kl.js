@@ -1,3 +1,4 @@
 export default {
-  debitor: 'Akiligassalik'
+  debitor: 'Akiligassalik',
+  beloeb: 'Pengebeløb (attribut mangler oversættelse)'
 }

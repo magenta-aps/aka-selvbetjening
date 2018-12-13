@@ -1,3 +1,4 @@
 export default {
-  debitor: 'Debitor'
+  debitor: 'Debitor',
+  beloeb: 'Pengebeløb'
 }

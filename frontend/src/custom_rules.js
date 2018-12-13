@@ -5,9 +5,14 @@ const rules = {
         return false
       }
       return (String(value).length === 8 || String(value).length === 10)
-    },
-    'age': {
-      validate: (value, [args]) => parseInt(value) >= parseInt(args)
+    }
+  },
+  'currency': {
+    validate: (value) => {
+      if (value === undefined || value === null) {
+        return false
+      }
+      return /^([1-9]\d*|0)(,\d+)?$/.test(String(value))
     }
   }
 }
