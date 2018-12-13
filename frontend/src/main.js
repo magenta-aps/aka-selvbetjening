@@ -12,6 +12,7 @@ import validationMessagesDa from 'vee-validate/dist/locale/da'
 import { messages } from './i18n/Messages'
 import SimpleField from '@/components/simple_field/SimpleField'
 import '@/assets/css/base-styles.css'
+import installRules from './custom_rules'
 
 Vue.use(VueI18n)
 
@@ -36,17 +37,7 @@ Vue.use(VeeValidate, {
   }
 })
 
-Validator.extend('age', {
-  validate: (value, [args]) => parseInt(value) >= parseInt(args)
-})
-Validator.extend('eight_or_ten_characters', {
-  validate: (value) => {
-    if (value === undefined || value === null) {
-      return false
-    }
-    return (String(value).length === 8 || String(value).length === 10)
-  }
-})
+installRules(Validator)
 
 const dict = {
   kl: {
