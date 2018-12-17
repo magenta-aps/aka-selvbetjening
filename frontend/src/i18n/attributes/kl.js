@@ -1,5 +1,25 @@
 export default {
   debitor: 'Akiligassalik',
   beloeb: 'Pengebeløb (attribut mangler oversættelse)',
-  fordringshaver: 'Akiligassaqarfigineqartoq'
+  fordringshaver: 'Fordringshaver',
+  anden_fordringshaver: 'Akiligassaqarfigineqartoq alla',
+  fordringsgruppe: 'Akiitsoqarfimmiit suliassiisutip ataatsimooruffiata suussusaa',
+  fordringstype: 'Akiitsoqarfimmiit suliasiissutit suussusaa',
+  barns_cpr: 'Meeqqap inuup normua',
+  ekstern_sagsnummer: 'Suliassiissutip akiitsoqarfimmiit normua',
+  fakturanr: 'Fakturanr - oversættelse mangler',
+  bnr: 'B-nr - oversættelse mangler',
+  hovedstol: 'Akiitsup toqqammavia',
+  posteringstekst: 'Nalunaarsornerani oqaasertaq',
+  bankrente: 'Aningaaserivimmi erniarititaq',
+  bankgebyr: 'Aningaaserivimmut akiliut',
+  rente: 'Erniarititaq',
+  periodestart: 'Piffissap aallartiffia',
+  periodeslut: 'Piffissap naaffia',
+  forfaldsdato: 'Ulloq akiligassap kingusinnerpaamik akilerneqarfissaa',
+  betalingsdato: 'Ulloq akiliiffik',
+  foraeldelsesdato: 'Pisoqalisoorfissaata ullua ',
+  kontaktperson: 'Inuk atassuteqaataasoq',
+  noter: 'Allaaserisaq',
+  meddebitor: 'Meddebitor - oversættelse mangler'
 }

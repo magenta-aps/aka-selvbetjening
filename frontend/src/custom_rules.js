@@ -4,7 +4,8 @@ const rules = {
       if (value === undefined || value === null) {
         return false
       }
-      return (String(value).length === 8 || String(value).length === 10)
+      // return (String(value).length === 8 || String(value).length === 10)
+      return /^(\d{8}|\d{10})$/.test(String(value))
     }
   },
   'currency': {

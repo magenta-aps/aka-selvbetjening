@@ -1,5 +1,25 @@
 export default {
   debitor: 'Debitor',
   beloeb: 'Pengebeløb',
-  fordringshaver: 'Fordringshaver'
+  fordringshaver: 'Fordringshaver',
+  anden_fordringshaver: 'Anden fordringshaver',
+  fordringsgruppe: 'Ekstern fordringsgruppe',
+  fordringstype: 'Ekstern fordringstype',
+  barns_cpr: 'Barns CPR-nr',
+  ekstern_sagsnummer: 'Ekstern sagsnummer',
+  fakturanr: 'Fakturanr',
+  bnr: 'B-nr',
+  hovedstol: 'Hovedstol',
+  posteringstekst: 'Posteringstekst',
+  bankrente: 'Bankrente',
+  bankgebyr: 'Bankgebyr',
+  rente: 'Rente',
+  periodestart: 'Periodestart',
+  periodeslut: 'Periodeslut',
+  forfaldsdato: 'Forfaldsdato',
+  betalingsdato: 'Betalingsdato',
+  foraeldelsesdato: 'Forældelsesdato',
+  kontaktperson: 'Kontaktperson',
+  noter: 'Noter',
+  meddebitor: 'Meddebitor'
 }
