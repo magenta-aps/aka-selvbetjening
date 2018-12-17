@@ -298,16 +298,6 @@ export default {
     }
   },
   methods: {
-    validateBeforeSubmit: function () {
-      this.$validator.validateAll().then((result) => {
-        if (result) {
-          // eslint-disable-next-line
-          alert('Form Submitted!');
-          return
-        }
-        alert('Correct them errors!')
-      })
-    },
     addNewMeddebitor: function () {
       this.meddebitorer.push({
         cpr: '',

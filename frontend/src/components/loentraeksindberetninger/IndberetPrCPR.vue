@@ -95,8 +95,7 @@
                     class="input--flex-width"
                     type="text"
                     v-model="aftale.cpr"
-                    :minlength="10"
-                    :maxlength="10"
+                    v-validate="{digits: 10}"
                   >
                 </div>
                 <div class="flex-table-cell">
@@ -111,7 +110,7 @@
                     class="input--flex-width"
                     type="text"
                     v-model="aftale.loentraek"
-                    v-bind:required="cprIsFilled(index)"
+                    v-validate="{required: cprIsFilled(index)}"
                   >
                 </div>
                 <div class="flex-table-cell">
@@ -119,7 +118,7 @@
                     class="input--flex-width"
                     type="text"
                     v-model="aftale.nettoloen"
-                    v-bind:required="cprIsFilled(index)"
+                    v-validate="{required: cprIsFilled(index)}"
                   >
                 </div>
                 <div class="flex-table-cell width-sm y-center">
