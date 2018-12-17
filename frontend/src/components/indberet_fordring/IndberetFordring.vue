@@ -13,17 +13,17 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-4">
-                <s-field name="fordringshaver" :label="$t('inkasso.fordringshaver')" type="text" :validate="{required: true}" v-model="fordringshaver"/>
+                <s-field name="fordringshaver" :label="$t('attributes.fordringshaver')" type="text" :validate="{required: true}" v-model="fordringshaver"/>
               </div>
             </div>
             <div class="row">
               <div class="col-4">
-                <s-field name="debitor" :label="$t('inkasso.debitor')" type="text" :validate="{required: true, eight_or_ten_characters: true}" v-model="debitor"/>
+                <s-field name="debitor" :label="$t('attributes.debitor')" type="text" :validate="{required: true, eight_or_ten_characters: true}" v-model="debitor"/>
               </div>
             </div>
             <div class="row">
               <div class="col-4">
-                <s-field name="fordringshaver2" :label="$t('inkasso.anden_fordringshaver')" type="text" v-model="fordringshaver2"/>
+                <s-field name="fordringshaver2" :label="$t('attributes.anden_fordringshaver')" type="text" v-model="fordringshaver2"/>
               </div>
             </div>
             </div>
@@ -54,7 +54,7 @@
             </div>
             <div class="row">
               <div class="col-4">
-                <label id="lbl_fordringsgruppe" for="fordringsgruppe">{{ $t('inkasso.fordringsgruppe') }}</label>
+                <label id="lbl_fordringsgruppe" for="fordringsgruppe">{{ $t('attributes.fordringsgruppe') }}</label>
                 <select
                   id="fordringsgruppe"
                   v-model="fordringsgruppe"
@@ -67,7 +67,7 @@
             </div>
             <div class="row" v-if="multipleTypes">
               <div class="col-4">
-                <label id="lbl_fordringstype" for="fordringstype">{{ $t('inkasso.fordringstype') }}</label>
+                <label id="lbl_fordringstype" for="fordringstype">{{ $t('attributes.fordringstype') }}</label>
                 <select
                   id="fordringstype"
                   v-model="fordringstype"
@@ -83,92 +83,92 @@
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="barns_cpr" :label="$t('inkasso.barns_cpr')" type="text" v-model="barns_cpr"
+                <s-field name="barns_cpr" :label="$t('attributes.barns_cpr')" type="text" v-model="barns_cpr"
                          :validate="{digits: 10}"/>
               </div>
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="ekstern_sagsnummer" :label="$t('inkasso.ekstern_sagsnummer')" type="text"
+                <s-field name="ekstern_sagsnummer" :label="$t('attributes.ekstern_sagsnummer')" type="text"
                          v-model="ekstern_sagsnummer" :validate="{required: true}"/>
               </div>
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="fakturanr" :label="$t('inkasso.fakturanr')" type="text" v-model="fakturanr" :validate="{required: true}"/>
+                <s-field name="fakturanr" :label="$t('attributes.fakturanr')" type="text" v-model="fakturanr" :validate="{required: true}"/>
               </div>
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="bnr" :label="$t('inkasso.bnr')" type="text" v-model="bnr"/>
+                <s-field name="bnr" :label="$t('attributes.bnr')" type="text" v-model="bnr"/>
               </div>
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="hovedstol" :label="$t('inkasso.hovedstol')" type="text" v-model="hovedstol" :validate="{required: true, currency: true}"/>
+                <s-field name="hovedstol" :label="$t('attributes.hovedstol')" type="text" v-model="hovedstol" :validate="{required: true, currency: true}"/>
               </div>
               <div class="col-6">
-                <s-field name="hovedstol_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
+                <s-field name="hovedstol_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
                          v-model="hovedstol_posteringstekst" :validate="{required: true}" />
               </div>
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="bankrente" :label="$t('inkasso.bankrente')" type="text" v-model="bankrente"/>
+                <s-field name="bankrente" :label="$t('attributes.bankrente')" type="text" v-model="bankrente"/>
               </div>
               <div class="col-6">
-                <s-field name="bankrente_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
+                <s-field name="bankrente_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
                          v-model="bankrente_posteringstekst"/>
               </div>
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="bankgebyr" :label="$t('inkasso.bankgebyr')" type="text" v-model="bankgebyr" :validate="{currency: true}"/>
+                <s-field name="bankgebyr" :label="$t('attributes.bankgebyr')" type="text" v-model="bankgebyr" :validate="{currency: true}"/>
               </div>
               <div class="col-6">
-                <s-field name="bankgebyr_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
+                <s-field name="bankgebyr_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
                          v-model="bankgebyr_posteringstekst"/>
               </div>
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="rente" :label="$t('inkasso.rente')" type="text" v-model="rente"/>
+                <s-field name="rente" :label="$t('attributes.rente')" type="text" v-model="rente"/>
                 </div>
               <div class="col-6">
-                <s-field name="rente_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
+                <s-field name="rente_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
                          v-model="rente_posteringstekst"/>
               </div>
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="periodestart" :label="$t('inkasso.periodestart')" type="date" v-model="periodestart"/>
+                <s-field name="periodestart" :label="$t('attributes.periodestart')" type="date" v-model="periodestart"/>
               </div>
               <div class="col-3">
-                <s-field name="periodeslut" :label="$t('inkasso.periodeslut')" type="date" v-model="periodeslut"/>
+                <s-field name="periodeslut" :label="$t('attributes.periodeslut')" type="date" v-model="periodeslut"/>
               </div>
               <div class="col-3">
-                <s-field name="forfaldsdato" :label="$t('inkasso.forfaldsdato')" type="date" v-model="forfaldsdato" :validate="{required: true}"/>
+                <s-field name="forfaldsdato" :label="$t('attributes.forfaldsdato')" type="date" v-model="forfaldsdato" :validate="{required: true}"/>
               </div>
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="betalingsdato" :label="$t('inkasso.betalingsdato')" type="date"
+                <s-field name="betalingsdato" :label="$t('attributes.betalingsdato')" type="date"
                          v-model="betalingsdato" :validate="{required: true}"/>
               </div>
               <div class="col-3">
-                <s-field name="foraeldelsesdato" :label="$t('inkasso.foraeldelsesdato')" type="date"
+                <s-field name="foraeldelsesdato" :label="$t('attributes.foraeldelsesdato')" type="date"
                          v-model="foraeldelsesdato" :validate="{required: true}"/>
               </div>
             </div>
             <div class="row">
               <div class="col-4">
-                <s-field name="kontaktperson" :label="$t('inkasso.kontaktperson')" type="text" v-model="kontaktperson"/>
+                <s-field name="kontaktperson" :label="$t('attributes.kontaktperson')" type="text" v-model="kontaktperson"/>
               </div>
             </div>
             <div class="row">
               <div class="col-4">
-                <!--<s-field name="noter" :label="$t('inkasso.noter')" type="text" v-model="noter"/>-->
-                <label for="noter">{{ $t('inkasso.noter') }}</label>
+                <!--<s-field name="noter" :label="$t('attributes.noter')" type="text" v-model="noter"/>-->
+                <label for="noter">{{ $t('attributes.noter') }}</label>
                 <textarea id="noter" cols="50" v-model="noter"></textarea>
               </div>
             </div>
@@ -176,7 +176,7 @@
             <div class="row" v-for="(meddebitor, index) in meddebitorer" :key="index">
                 <div @keyup.once="addNewMeddebitor">
                   <div class="col-4">
-                    <label :for="meddebitor.index"> {{ $t('inkasso.meddebitor') }} {{index +1}}</label>
+                    <label :for="meddebitor.index"> {{ $t('attributes.meddebitor') }} {{index +1}}</label>
                     <input :id="meddebitor.index"
                            type="text"
                            :disabled="meddebitor.cvr !== null && meddebitor.cvr !== ''"

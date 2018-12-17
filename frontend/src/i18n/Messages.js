@@ -1,3 +1,5 @@
+import attributesDa from './attributes/da.js'
+import attributesKl from './attributes/kl.js'
 export const messages = {
   da: {
     common: {
@@ -66,7 +68,8 @@ export const messages = {
       linjer_i_datafil: 'Linjer i datafil',
       afviste: 'afviste',
       linjeangivelse: 'Fordringshaver angivet på linje {0} er ikke tilladt'
-    }
+    },
+    attributes: attributesDa
   },
   kl: {
     common: {
@@ -135,6 +138,7 @@ export const messages = {
       linjer_i_datafil: 'Linjer i datafil',
       afviste: 'afviste',
       linjeangivelse: 'Fordringshaver angivet på linje {0} er ikke tilladt - oversættelse mangler'
-    }
+    },
+    attributes: attributesKl
   }
 }
