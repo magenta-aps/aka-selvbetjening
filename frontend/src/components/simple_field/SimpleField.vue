@@ -1,14 +1,23 @@
 <template>
   <div>
     <label :id="'lbl_'+name" :for="name">{{label}}</label>
-    <input :id="name" :type="type" v-model="content" :required="required"
+    <input :id="name"
+           :name="name"
+           :type="type"
+           v-model="content"
+           v-validate="validate"
     :minlength="minlength" :maxlength="maxlength">
+    <span class="err-msg">{{ errors.first(name)}}</span>
   </div>
 </template>
 
 <script>
 export default {
   name: 'SimpleField',
+
+  inject: {
+    $validator: '$validator'
+  },
 
   props: {
     name: {
@@ -20,10 +29,9 @@ export default {
       default: 'text'
     },
     label: String,
-    required: Boolean,
     minlength: String,
-    maxlength: String
-
+    maxlength: String,
+    validate: Object
   },
   data () {
     return {
@@ -37,3 +45,8 @@ export default {
   }
 }
 </script>
+<style>
+  .err-msg {
+    color: red;
+  }
+</style>

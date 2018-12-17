@@ -1,4 +1,5 @@
 export default {
   debitor: 'Debitor',
-  beloeb: 'Pengebeløb'
+  beloeb: 'Pengebeløb',
+  fordringshaver: 'Fordringshaver'
 }

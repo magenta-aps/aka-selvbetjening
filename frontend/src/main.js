@@ -31,6 +31,7 @@ const i18n = new VueI18n({
 Vue.use(VeeValidate, {
   i18nRootKey: 'validations', // customize the root path for validation messages.
   i18n,
+  validity: true,
   dictionary: {
     kl: validationMessagesEn, // defaults to English. Greenlandic is not supported -- would need pull request to the vee validate team
     da: validationMessagesDa

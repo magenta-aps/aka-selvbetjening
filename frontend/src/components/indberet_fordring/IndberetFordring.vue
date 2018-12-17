@@ -6,15 +6,19 @@
 
           <h1>{{ $t('inkasso.title') }}</h1>
 
+<!--          <ul v-if="isSubmitted">
+            <li v-for="error in errors.items">{{ error.msg }}</li>
+          </ul>-->
+
           <div class="container-fluid">
             <div class="row">
               <div class="col-4">
-                <s-field name="fordringshaver" :label="$t('inkasso.fordringshaver')" type="text" required v-model="fordringshaver"/>
+                <s-field name="fordringshaver" :label="$t('inkasso.fordringshaver')" type="text" :validate="{required: true}" v-model="fordringshaver"/>
               </div>
             </div>
             <div class="row">
               <div class="col-4">
-                <s-field name="debitor" :label="$t('inkasso.debitor')" type="text" required v-model="debitor"/>
+                <s-field name="debitor" :label="$t('inkasso.debitor')" type="text" :validate="{required: true, eight_or_ten_characters: true}" v-model="debitor"/>
               </div>
             </div>
             <div class="row">
@@ -55,7 +59,7 @@
                   id="fordringsgruppe"
                   v-model="fordringsgruppe"
                   @change="updateType"
-                  required
+                  v-validate="{required: true}"
                 >
                   <option v-for="(f, index) in fordringsgrupper" :key="index" :value="f">{{stringRep(f)}}</option>
                 </select>
@@ -67,7 +71,7 @@
                 <select
                   id="fordringstype"
                   v-model="fordringstype"
-                  required
+                  v-validate="{required: true}"
                 >
                   <option v-for="(t, index) in fordringsgruppe.sub_groups"
                           :key="index"
@@ -80,18 +84,18 @@
             <div class="row">
               <div class="col-3">
                 <s-field name="barns_cpr" :label="$t('inkasso.barns_cpr')" type="text" v-model="barns_cpr"
-                         minlength="10" maxlength="10"/>
+                         :validate="{digits: 10}"/>
               </div>
             </div>
             <div class="row">
               <div class="col-3">
                 <s-field name="ekstern_sagsnummer" :label="$t('inkasso.ekstern_sagsnummer')" type="text"
-                         v-model="ekstern_sagsnummer" required/>
+                         v-model="ekstern_sagsnummer" :validate="{required: true}"/>
               </div>
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="fakturanr" :label="$t('inkasso.fakturanr')" type="text" v-model="fakturanr" required/>
+                <s-field name="fakturanr" :label="$t('inkasso.fakturanr')" type="text" v-model="fakturanr" :validate="{required: true}"/>
               </div>
             </div>
             <div class="row">
@@ -101,11 +105,11 @@
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="hovedstol" :label="$t('inkasso.hovedstol')" type="text" v-model="hovedstol" required/>
+                <s-field name="hovedstol" :label="$t('inkasso.hovedstol')" type="text" v-model="hovedstol" :validate="{required: true, currency: true}"/>
               </div>
               <div class="col-6">
                 <s-field name="hovedstol_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
-                         v-model="hovedstol_posteringstekst" required />
+                         v-model="hovedstol_posteringstekst" :validate="{required: true}" />
               </div>
             </div>
             <div class="row">
@@ -119,7 +123,7 @@
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="bankgebyr" :label="$t('inkasso.bankgebyr')" type="text" v-model="bankgebyr"/>
+                <s-field name="bankgebyr" :label="$t('inkasso.bankgebyr')" type="text" v-model="bankgebyr" :validate="{currency: true}"/>
               </div>
               <div class="col-6">
                 <s-field name="bankgebyr_posteringstekst" :label="$t('inkasso.posteringstekst')" type="text"
@@ -143,17 +147,17 @@
                 <s-field name="periodeslut" :label="$t('inkasso.periodeslut')" type="date" v-model="periodeslut"/>
               </div>
               <div class="col-3">
-                <s-field name="forfaldsdato" :label="$t('inkasso.forfaldsdato')" type="date" v-model="forfaldsdato" required/>
+                <s-field name="forfaldsdato" :label="$t('inkasso.forfaldsdato')" type="date" v-model="forfaldsdato" :validate="{required: true}"/>
               </div>
             </div>
             <div class="row">
               <div class="col-3">
                 <s-field name="betalingsdato" :label="$t('inkasso.betalingsdato')" type="date"
-                         v-model="betalingsdato" required/>
+                         v-model="betalingsdato" :validate="{required: true}"/>
               </div>
               <div class="col-3">
                 <s-field name="foraeldelsesdato" :label="$t('inkasso.foraeldelsesdato')" type="date"
-                         v-model="foraeldelsesdato" required/>
+                         v-model="foraeldelsesdato" :validate="{required: true}"/>
               </div>
             </div>
             <div class="row">
@@ -178,17 +182,15 @@
                            :disabled="meddebitor.cvr !== null && meddebitor.cvr !== ''"
                            v-model="meddebitor.cpr"
                            placeholder="CPR"
-                           minlength="10"
-                           maxlength="10">
+                           v-validate="'digits:10'">
                   </div>
                   <div class="col-4">
                     <label style="height: 24px;" class="hidden-sm" :for="meddebitor.index"></label>
                     <input type="text"
                            :disabled="meddebitor.cpr !== null && meddebitor.cpr !== ''"
                            v-model="meddebitor.cvr"
-                           placeholder="CVR"
-                           minlength="8"
-                           maxlength="8">
+                           placeholder="GER"
+                           v-validate="'digits:8'">
                   </div>
                 </div>
             </div>
@@ -210,8 +212,10 @@ import axios from 'axios'
 // The file fordringsgruppe.js below is generated by the command `make frontend`
 import { groups } from '@/assets/fordringsgruppe'
 import { notify } from '../utils/notify/Notifier.js'
+import formValid from '@/mixins/formValid'
 
 export default {
+  mixins: [formValid],
   data: function () {
     return {
       fordringshaver: null,
@@ -294,6 +298,16 @@ export default {
     }
   },
   methods: {
+    validateBeforeSubmit: function () {
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          // eslint-disable-next-line
+          alert('Form Submitted!');
+          return
+        }
+        alert('Correct them errors!')
+      })
+    },
     addNewMeddebitor: function () {
       this.meddebitorer.push({
         cpr: '',
@@ -365,6 +379,11 @@ export default {
       return formdata
     },
     sendFormRequest: function () {
+      if (!this.formValid) {
+        this.$validator.validateAll()
+        return
+      }
+
       let formdata = this.fetchFormData()
 
       axios({
