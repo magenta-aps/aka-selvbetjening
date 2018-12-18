@@ -52,6 +52,7 @@ export const messages = {
       indlaes_fra_forrige_redegoerelse: 'Indlæs fra forrige redegørelse',
       aftalenr: 'Aftalanr',
       nettoloen: 'Nettoløn',
+      loentraek: 'Løntræk',
       fordeling: 'Fordeling',
       fordelt: 'Fordelt',
       difference: 'Difference'
@@ -120,6 +121,7 @@ export const messages = {
       indlaes_fra_forrige_redegoerelse: 'Nalunaarummit siusinnerusumit atuaagit',
       aftalenr: 'Isumaqatigiissutip normua',
       nettoloen: 'Aningaasarsiat tunniussat',
+      loentraek: 'Aningaasarsianit ilanngartuineq',
       fordeling: 'Agguaassassaq',
       fordelt: 'Agguakkat',
       difference: 'Nikingassutaasut'

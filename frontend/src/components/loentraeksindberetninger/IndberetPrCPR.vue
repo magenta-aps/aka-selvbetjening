@@ -39,24 +39,27 @@
                 <div class="flex-table-cell">
                   <input
                     class="input--flex-width"
-                    type="number"
-                    :value="fordeling"
+                    type="text"
+                    v-model="fordeling"
+                    name="fordeling"
+                    v-validate="{currency: true}"
+                  >
+                </div>
+                <div class="flex-table-cell">
+                  <input
+                    class="input--flex-width"
+                    type="text"
+                    :value="fordelt"
+                    name="fordelt"
                     disabled
                   >
                 </div>
                 <div class="flex-table-cell">
                   <input
                     class="input--flex-width"
-                    type="number"
-                    :value="fordeling"
-                    disabled
-                  >
-                </div>
-                <div class="flex-table-cell">
-                  <input
-                    class="input--flex-width"
-                    type="number"
-                    :value="fordeling"
+                    type="text"
+                    :value="difference"
+                    name="difference"
                     disabled
                   >
                 </div>
@@ -94,6 +97,7 @@
                   <input
                     class="input--flex-width"
                     type="text"
+                    name = "cpr_nr"
                     v-model="aftale.cpr"
                     v-validate="{digits: 10}"
                   >
@@ -102,6 +106,7 @@
                   <input
                     class="input--flex-width"
                     type="text"
+                    name="aftalenr"
                     v-model="aftale.aftalenr"
                   >
                 </div>
@@ -109,14 +114,16 @@
                   <input
                     class="input--flex-width"
                     type="text"
+                    name="loentraek"
                     v-model="aftale.loentraek"
-                    v-validate="{required: cprIsFilled(index)}"
+                    v-validate="{required: cprIsFilled(index), currency: true}"
                   >
                 </div>
                 <div class="flex-table-cell">
                   <input
                     class="input--flex-width"
                     type="text"
+                    name="nettoloen"
                     v-model="aftale.nettoloen"
                     v-validate="{required: cprIsFilled(index)}"
                   >
@@ -153,9 +160,7 @@
 export default {
   data: function () {
     return {
-      fordeling: 0,
-      fordelt: 0,
-      difference: 0,
+      fordeling: '0,00',
       aftaler: [
         {
           cpr: '',
@@ -167,9 +172,45 @@ export default {
     }
   },
   computed: {
-
+    fordelt: function () {
+      let result = 0
+      this.aftaler.forEach(function (aftale) {
+        let loentraek = this.toOre(aftale.loentraek)
+        result = result + loentraek
+      }.bind(this))
+      return this.oreToString(result)
+    },
+    difference: function () {
+      return this.oreToString(this.toOre(this.fordeling) - this.toOre(this.fordelt))
+    }
   },
   methods: {
+    toOre: function (str) {
+      var m = /^([1-9]\d{1,2}(?:\.\d{3})+|[1-9]\d*|0)(?:,(\d+))?$/.exec(str)
+      if (m) {
+        let kroner = parseInt(m[1].replace(/\./g, ''))
+        let ore = 0
+        if (m[2]) {
+          if (m[2].length === 1) {
+            ore = parseInt(m[2]) * 10
+          } else {
+            ore = parseInt(m[2])
+          }
+        }
+        return 100 * kroner + ore
+      }
+      return 0
+    },
+    oreToString: function (amount) {
+      let str = String(amount)
+      if (str.length === 1) {
+        return ['0,0', str].join('')
+      } else if (str.length === 2) {
+        return ['0,', str].join('')
+      } else {
+        return [str.slice(0, str.length - 2), ',', str.slice(str.length - 2)].join('')
+      }
+    },
     navigateTo: function (nav) {
       this.$router.push({
         path: nav

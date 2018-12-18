@@ -24,5 +24,8 @@ export default {
   meddebitor: 'Meddebitor',
   ger_nr: 'GER-nr.',
   traekmaaned: 'Trækmåned',
-  loentraek: 'Løntræk'
+  aftalenr: 'Aftalanr',
+  nettoloen: 'Nettoløn',
+  loentraek: 'Løntræk',
+  cpr_nr: 'CPR-nr'
 }

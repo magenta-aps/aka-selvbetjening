@@ -24,5 +24,8 @@ export default {
   meddebitor: 'Meddebitor - oversættelse mangler',
   ger_nr: 'GER-normu',
   traekmaaned: 'Qaammat ilanngaanneqarfik',
-  loentraek: 'Isumaqatigiissutip aningaasartaa'
+  aftalenr: 'Isumaqatigiissutip normua',
+  nettoloen: 'Aningaasarsiat tunniussat',
+  loentraek: 'Aningaasarsianit ilanngartuineq',
+  cpr_nr: 'Inuup normua'
 }
