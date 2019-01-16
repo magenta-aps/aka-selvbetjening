@@ -1,8 +1,8 @@
 Sphinx
 ======
 
-Installs Sphinx  
-(and requriments like python and pip)
+Installs Sphinx - with Read The Docs theme
+(and requirements like python and pip)
 
 Usage
 -----
