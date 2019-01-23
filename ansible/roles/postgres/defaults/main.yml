@@ -1,0 +1,14 @@
+---
+# defaults file for postgres
+
+# Databases are specified as a list of hashes in postgresql_databases.
+# Example:
+#  postgresql_databases:
+#    - database_name: mydatabase
+#      username: mydatabaseuser
+#      password: mydatabasepassword
+#    - database_name: myotherdatabase
+#      username: myotheruser
+#      password: myotherpassword
+
+postgresql_databases: []
