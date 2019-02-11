@@ -99,7 +99,7 @@ ROOT_URLCONF = 'aka.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['../frontend/dist'],
+        'DIRS': [os.path.join(PROJECT_DIR, 'frontend', 'dist')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

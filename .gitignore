@@ -127,3 +127,5 @@ src/venv/
 # mypy
 .mypy_cache/
 
+## Komodo edit ##
+*.komodoproject
