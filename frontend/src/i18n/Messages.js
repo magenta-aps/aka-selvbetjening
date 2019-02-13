@@ -9,6 +9,7 @@ export const messages = {
       indberet: 'Indberet',
       tilbage: 'Tilbage',
       cpr_nr: 'CPR-nr',
+      indlaes: 'Indlæs',
       fejl: 'Fejl'
     },
     rentenota: {
@@ -46,14 +47,12 @@ export const messages = {
     loentraek: {
       titel1: 'Løntræk - Indberet',
       titel2: 'Løntræk - Indberet pr. CPR-nr.',
-      ger_nr: 'GER-nr.',
-      traekmaaned: 'Trækmåned',
-      loentraek: 'Løntræk',
       fordel_pr_cpr: 'Fordel pr. CPR-nr',
       indlaes_fra_fil: 'Indlæs fra fil',
       indlaes_fra_forrige_redegoerelse: 'Indlæs fra forrige redegørelse',
       aftalenr: 'Aftalanr',
       nettoloen: 'Nettoløn',
+      loentraek: 'Løntræk',
       fordeling: 'Fordeling',
       fordelt: 'Fordelt',
       difference: 'Difference'
@@ -79,6 +78,7 @@ export const messages = {
       indberet: 'Nalunaarneq',
       tilbage: 'Uterit',
       cpr_nr: 'Inuup normua',
+      indlaes: 'Indlæs - oversættelse mangler',
       fejl: 'Fejl - oversættelse mangler'
     },
     rentenota: {
@@ -116,14 +116,12 @@ export const messages = {
     loentraek: {
       titel1: 'Aningaasarsianit ilanngartuineq - Immersoruk',
       titel2: 'Aningaasarsianit ilanngartuinermi - Inuup normukaarlugit nalunaarsuigit',
-      ger_nr: 'GER-normu',
-      traekmaaned: 'Qaammat ilanngaanneqarfik',
-      loentraek: 'Isumaqatigiissutip aningaasartaa',
       fordel_pr_cpr: 'Inuup normuinut agguataarlugit',
       indlaes_fra_fil: 'Fiilimit atuaagit',
       indlaes_fra_forrige_redegoerelse: 'Nalunaarummit siusinnerusumit atuaagit',
       aftalenr: 'Isumaqatigiissutip normua',
       nettoloen: 'Aningaasarsiat tunniussat',
+      loentraek: 'Aningaasarsianit ilanngartuineq',
       fordeling: 'Agguaassassaq',
       fordelt: 'Agguakkat',
       difference: 'Nikingassutaasut'

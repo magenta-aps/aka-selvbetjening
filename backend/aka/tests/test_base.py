@@ -1,9 +1,12 @@
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.http import HttpResponseBadRequest
-from aka.rest.base import JSONRestView, ContentTypeError
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
+from aka.rest.base import JSONRestView, ContentTypeError
 import json
+import os
 import logging
+import random
 from pathlib import Path
 
 
@@ -180,3 +183,63 @@ class BasicTestCase(TestCase):
         obj.files = [{'tmpfilename': tmpfile}]
         obj.cleanup()
         self.assertFalse(Path(tmpfile).is_file())
+
+    def simulatedFile(self):
+        # Ensure filename is unique to this session,
+        # so we can check if it was actually uploaded.
+        filename = ''.join([
+            random.choice('abcdefghijklmnopqrstuvwxyz0123456789')
+            for i in range(30)
+            ]) + '.csv'
+        return SimpleUploadedFile(filename,
+                                   b"file_content",
+                                   content_type="text/plain/")
+
+    def test_fileupload(self):
+        '''Test upload of files.
+        '''
+        file1 = self.simulatedFile();
+        file2 = self.simulatedFile();
+        factory = RequestFactory()
+        request = factory.post('/', {
+                                     'field1': 'hey',
+                                     'field2': 'ho',
+                                     'attachment1': file1,
+                                     'attachment2': file2,
+                                    }
+
+                              )
+        obj = JSONRestView()
+        response = obj.basepost(request)
+
+        self.assertTrue(response.status_code, 200)
+        self.assertEqual(len(obj.files), 2)
+        self.assertTrue(obj.files[0]['originalname'] in [file1.name, file2.name])
+        self.assertTrue(obj.files[1]['originalname'] in [file1.name, file2.name])
+        obj.cleanup()
+
+    def test_cleanup(self):
+        '''Test cleanup after file upload.
+        '''
+        file1 = self.simulatedFile();
+        file2 = self.simulatedFile();
+        factory = RequestFactory()
+        request = factory.post('/', {
+                                     'field1': 'hey',
+                                     'field2': 'ho',
+                                     'attachment1': file1,
+                                     'attachment2': file2,
+                                    }
+
+                              )
+        obj = JSONRestView()
+        response = obj.basepost(request)
+
+        self.assertTrue(response.status_code, 200)
+        self.assertEqual(len(obj.files), 2)
+
+        foundfiles = os.listdir(settings.MEDIA_URL)
+        self.assertEqual(len(foundfiles), 2)
+        obj.cleanup()
+        foundfiles = os.listdir(settings.MEDIA_URL)
+        self.assertEqual(len(foundfiles), 0)

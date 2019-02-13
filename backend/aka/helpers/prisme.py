@@ -91,3 +91,29 @@ class Prisme():
                }
 
         return res
+
+    def getLoentraekDistribution(self, gernummer):
+        ''' Given a gernummer, return the previous distribution of 'loentraek'.
+        This is used in loentraek, when the user wants to do the same as they
+        did last time (I think).
+
+        :param gernummer: GER-nummer
+        :type gernummer: ?
+        :returns: ?
+        '''
+        if isinstance(gernummer, str):
+            dummypost = {
+                         'status': 400,
+                         'message': 'Error in communication with Prisme'
+                        }
+        else:
+            dummypost = {'status': 200,
+                    'gernummer': gernummer,
+                    'traekmaaned': 10,
+                    'traekaar': 2018,
+                    'data': [
+                        { 'cprnr': 1010109999, 'aftalenummer': 12, 'loentraek': 120.0, 'nettoloen': 15000}
+                        ]
+                    }
+
+        return dummypost

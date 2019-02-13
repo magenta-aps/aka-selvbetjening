@@ -21,5 +21,11 @@ export default {
   foraeldelsesdato: 'Forældelsesdato',
   kontaktperson: 'Kontaktperson',
   noter: 'Noter',
-  meddebitor: 'Meddebitor'
+  meddebitor: 'Meddebitor',
+  ger_nr: 'GER-nr.',
+  traekmaaned: 'Trækmåned',
+  aftalenr: 'Aftalanr',
+  nettoloen: 'Nettoløn',
+  loentraek: 'Løntræk',
+  cpr_nr: 'CPR-nr'
 }

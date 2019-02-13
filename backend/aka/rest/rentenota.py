@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class RenteNota(JSONRestView):
-    '''Handles calls for the Rentenota interface. Gets period data from Prisme.
+    '''This class handles the REST interface at /rentenota.
     '''
 
     def initiatedownload(self, path, contenttype):

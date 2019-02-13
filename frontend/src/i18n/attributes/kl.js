@@ -21,5 +21,11 @@ export default {
   foraeldelsesdato: 'Pisoqalisoorfissaata ullua ',
   kontaktperson: 'Inuk atassuteqaataasoq',
   noter: 'Allaaserisaq',
-  meddebitor: 'Meddebitor - oversættelse mangler'
+  meddebitor: 'Meddebitor - oversættelse mangler',
+  ger_nr: 'GER-normu',
+  traekmaaned: 'Qaammat ilanngaanneqarfik',
+  aftalenr: 'Isumaqatigiissutip normua',
+  nettoloen: 'Aningaasarsiat tunniussat',
+  loentraek: 'Aningaasarsianit ilanngartuineq',
+  cpr_nr: 'Inuup normua'
 }

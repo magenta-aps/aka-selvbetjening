@@ -13,7 +13,8 @@ const rules = {
       if (value === undefined || value === null) {
         return false
       }
-      return /^([1-9]\d*|0)(,\d+)?$/.test(String(value))
+      return /^([1-9]\d{1,2}(?:\.\d{3})+|[1-9]\d*|0)(,\d{1,2})?$/.test(value)
+      //return /^([1-9]\d*|0)(,\d+)?$/.test(String(value))
     }
   }
 }
