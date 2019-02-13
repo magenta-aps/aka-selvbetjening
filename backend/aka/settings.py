@@ -15,6 +15,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SITE_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SITE_DIR)
+PROJECT_DIR = os.path.dirname(BASE_DIR)
+SHARED_DIR = os.path.join(PROJECT_DIR, "shared")
 
 
 # Quick-start development settings - unsuitable for production
@@ -97,7 +99,7 @@ ROOT_URLCONF = 'aka.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['../frontend/dist'],
+        'DIRS': [os.path.join(PROJECT_DIR, 'frontend', 'dist')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -150,8 +152,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/index/static/'
-STATIC_ROOT = '../static/'
-STATICFILES_DIRS = [ '../frontend/dist/static/' ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [ os.path.join(PROJECT_DIR, 'frontend', 'dist', 'static') ]
 
 LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
 if os.path.exists(LOCAL_SETTINGS_FILE):
