@@ -9,7 +9,7 @@
 
 ---
 # Run the entire default setup playbook
-- include: default.yml
+- import_playbook: default.yml
 
 # Run production specific playbook
 - hosts: all

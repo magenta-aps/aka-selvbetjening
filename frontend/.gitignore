@@ -1,4 +1,6 @@
 # Created by https://www.gitignore.io/api/node
+assets/fordringsgruppe.js 
+
 
 ### Node ###
 # Logs
@@ -18,6 +20,9 @@ build/Release
 # Dependency directories
 node_modules/
 
+# Webpack build output
+assets/js/
+
 # Optional npm cache directory
 .npm
 
@@ -28,3 +33,6 @@ node_modules/
 .vuepress/dist
 
 # End of https://www.gitignore.io/api/node
+
+# Makefile hack to know when to update npm
+.make-updated-npm

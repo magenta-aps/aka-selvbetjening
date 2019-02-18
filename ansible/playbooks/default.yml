@@ -1,10 +1,10 @@
 # Default playbook.
 #
-# Should configure a development setup to the point where a server or
-# equivalent can be started with a single command.
+# The default playbook contains everything which should be used on all 
+# playbooks.
 #
-# For Django projects, this means configured to a point where all there's left
-# to do after running `vagrant ssh`, is running: `python manage.py runserver`.
+# This is created since some of the things used for development is not 
+# necessary for a production system, and should therefore not be installed.
 
 ---
 
@@ -24,15 +24,7 @@
       pip: 
         requirements: /vagrant/doc/requirements.txt
         executable: pip3
-    - name: Install Node Requirements
-      npm:
-        path: "{{ npm_path }}"
   
-  vars:
-    npm_path: /vagrant/frontend
-
   roles:
   - django
-  - sphinx
-  - vue
 ...

@@ -3,13 +3,15 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to DjangoTemplate's documentation!
-==========================================
+Documentation for AKA Selvbetjeningsløsninger
+=============================================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
+   :glob:
+    
+   index/*
 
 
 Indices and tables
