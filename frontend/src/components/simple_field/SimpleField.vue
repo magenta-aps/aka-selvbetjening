@@ -1,3 +1,4 @@
+<!--For documentation see README.md in /frontend-->
 <template>
   <div>
     <label :id="'lbl_'+name" :for="name">{{label}}</label>
