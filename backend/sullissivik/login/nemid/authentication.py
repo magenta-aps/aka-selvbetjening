@@ -2,7 +2,7 @@ from django.conf import settings
 from zeep import Client
 from zeep.helpers import serialize_object
 
-from akasite.models import SessionOnlyUser
+from sullissivik.login.nemid.models import SessionOnlyUser
 
 
 class CookieAuthBackend(object):

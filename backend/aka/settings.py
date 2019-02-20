@@ -75,10 +75,15 @@ ALLOWED_HOSTS = ['*']
 LOGIN_URL = "http://ip.demo.sullissivik.local/login.aspx"
 SITE_URL = "https://aka.sullissivik.gl"
 
-AUTHENTICATION_BACKENDS = ['aka.authentication.CookieAuthBackend']
+AUTHENTICATION_BACKENDS = [
+    'sullissivik.login.nemid.authentication.CookieAuthBackend'
+]
 
 # See local_settings_example.py
-SULLISSIVIK_FEDERATION_SERVICE = ''
+SULLISSIVIK_FEDERATION_SERVICE = (
+    'http://ip.demo.sullissivik.local'
+    '/services/IdentityServiceV2.svc?wsdl'
+)
 
 # Application definition
 
@@ -89,6 +94,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sullissivik.login.nemid',
 ]
 
 MIDDLEWARE = [

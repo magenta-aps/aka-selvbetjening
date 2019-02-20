@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import include, url
 from django.contrib import admin
 from django.views.generic.base import RedirectView
 
@@ -34,4 +34,6 @@ urlpatterns = [
         + 'to([0-9]{4}-[0-9]{2}-[0-9]{2})$',
         rentenota.RenteNota.as_view(),
         name='rentenota (NY18)'),
+    url(r'sullissivik-nemid/',
+         include('sullissivik.login.nemid.urls')),
 ]
