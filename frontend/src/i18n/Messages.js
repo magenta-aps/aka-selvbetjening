@@ -13,7 +13,7 @@ export const messages = {
       fejl: 'Fejl'
     },
     rentenota: {
-      titel: 'Hent rentenota',
+      title: 'Hent rentenota',
       datefrom: 'Fra dato',
       dateto: 'Til dato',
       dato: 'Dato',
