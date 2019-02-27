@@ -10,7 +10,19 @@ export const messages = {
       tilbage: 'Tilbage',
       cpr_nr: 'CPR-nr',
       indlaes: 'Indlæs',
-      fejl: 'Fejl'
+      fejl: 'Fejl',
+      january: 'januar',  
+      february: 'februar', 
+      march: 'marts',    
+      april: 'april',    
+      may: 'maj',      
+      june: 'juni',     
+      july: 'juli',     
+      august: 'august',   
+      september: 'september',
+      october: 'oktober',  
+      november: 'november', 
+      december: 'december'
     },
     rentenota: {
       title: 'Hent rentenota',
@@ -78,7 +90,19 @@ export const messages = {
       tilbage: 'Uterit',
       cpr_nr: 'Inuup normua',
       indlaes: 'Indlæs - oversættelse mangler',
-      fejl: 'Fejl - oversættelse mangler'
+      fejl: 'Fejl - oversættelse mangler',
+      january: 'januar - oversættelse mangler',  
+      february: 'february - oversættelse mangler', 
+      march: 'march - oversættelse mangler',    
+      april: 'april - oversættelse mangler',    
+      may: 'may - oversættelse mangler',      
+      june: 'june - oversættelse mangler',     
+      july: 'july - oversættelse mangler',     
+      august: 'august - oversættelse mangler',   
+      september: 'september - oversættelse mangler',
+      october: 'october - oversættelse mangler',  
+      november: 'november - oversættelse mangler', 
+      december: 'december - oversættelse mangler'
     },
     rentenota: {
       title: 'Hent rentenota - oversættelse mangler',

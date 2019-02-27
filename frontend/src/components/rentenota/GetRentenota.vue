@@ -8,7 +8,7 @@
 
             <div class="rentenota-actions">
                 <p>Selected month: {{ month }}</p>
-                    <month-selector v-model="month"></month-selector>
+                <month-selector v-model="month"></month-selector>
 
                 <form @submit.prevent="requestRentenota()" class="rentenota-dateform">
                     <!--fieldset>
@@ -180,7 +180,8 @@ export default {
       rentenota_data: null,
       today: new Date(),
       dateto: null,
-      datefrom: null
+      datefrom: null,
+      month: 0
     };
   },
   computed: {
