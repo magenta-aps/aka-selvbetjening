@@ -14,8 +14,7 @@ export const messages = {
     },
     rentenota: {
       title: 'Hent rentenota',
-      datefrom: 'Fra dato',
-      dateto: 'Til dato',
+      month: 'Måned',
       dato: 'Dato',
       postdato: 'Postdato',
       bilag: 'Bilag',
@@ -83,8 +82,7 @@ export const messages = {
     },
     rentenota: {
       title: 'Hent rentenota - oversættelse mangler',
-      datefrom: 'Fra dato - oversættelse mangler',
-      dateto: 'Til dato - oversættelse mangler',
+      month: 'Måned - oversættelse mangler',
       dato: 'Dato - oversættelse mangler',
       postdato: 'Postdato - oversættelse mangler',
       bilag: 'Bilag - oversættelse mangler',

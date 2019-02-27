@@ -7,16 +7,14 @@
         <div class="rentenota-main">
 
             <div class="rentenota-actions">
+                <p>Selected month: {{ month }}</p>
+                    <month-selector v-model="month"></month-selector>
 
                 <form @submit.prevent="requestRentenota()" class="rentenota-dateform">
-                    <fieldset>
-                        <label for="date-from">{{ $t("rentenota.datefrom") }}</label>
-                        <input type="date" id="date-from" v-model="datefrom" required :max="dateto">
-                    </fieldset>
-                    <fieldset>
-                        <label for="date-to">{{ $t("rentenota.dateto") }}</label>
-                        <input type="date" id="date-to" v-model="dateto" required :max="dateto">
-                    </fieldset>
+                    <!--fieldset>
+                        <label for="date-to">{{ $t("rentenota.month") }}</label>
+                        <input type="month" id="month" v-model="month" required :max="dateto">
+                    </fieldset-->
                     <fieldset>
                         <input type="submit" :value="$t('common.send')">
                     </fieldset>
@@ -112,7 +110,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="p in rentenota_data.poster">
+                        <tr v-for="p in rentenota_data.poster" :key="p.dato">
                             <td>
                                 {{ p.dato }}
                             </td>
@@ -170,8 +168,12 @@
 
 <script>
 import axios from "axios";
+import Month from '@/components/utils/month-selector/Month.vue'
 
 export default {
+  components: {
+      'month-selector': Month
+  },
   data() {
     return {
       csrftoken: null,

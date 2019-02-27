@@ -2,7 +2,7 @@
 
     <div class="locale-changer">
       <span :class="`option-${ selectedLanguage }`"></span>
-        <select v-model="selectedLanguage">
+        <select class="dropdown" v-model="selectedLanguage">
             <option v-for="(lang, i) in langs" :key="i" :value="lang.code">
                 {{ lang.label }}
             </option>
