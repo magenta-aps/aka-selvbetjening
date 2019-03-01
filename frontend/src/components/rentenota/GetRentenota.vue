@@ -7,8 +7,26 @@
         <div class="rentenota-main">
 
             <div class="rentenota-actions">
-                <p>Selected month: {{ month }}</p>
-                <month-selector v-model="month"></month-selector>
+                <p>Selected month: {{ this.year +' - '+ this.month }}</p>
+                <select v-model="month">
+                    <option value="1" >{{ $t('common.january')      }}</option>
+                    <option value="2" >{{ $t('common.february')     }}</option>
+                    <option value="3" >{{ $t('common.march')        }}</option>
+                    <option value="4" >{{ $t('common.april')        }}</option>
+                    <option value="5" >{{ $t('common.may')          }}</option>
+                    <option value="6" >{{ $t('common.june')         }}</option>
+                    <option value="7" >{{ $t('common.july')         }}</option>
+                    <option value="8" >{{ $t('common.august')       }}</option>
+                    <option value="9" >{{ $t('common.september')    }}</option>
+                    <option value="10">{{ $t('common.october')      }}</option>
+                    <option value="11">{{ $t('common.november')     }}</option>
+                    <option value="12">{{ $t('common.december')     }}</option>
+                </select>
+                <select v-model="year">
+                    <option v-for="y in years" :key=y>
+                        {{ y }}
+                    </option>
+                </select>
 
                 <form @submit.prevent="requestRentenota()" class="rentenota-dateform">
                     <!--fieldset>
@@ -168,20 +186,20 @@
 
 <script>
 import axios from "axios";
-import Month from '@/components/utils/month-selector/Month.vue'
 
 export default {
-  components: {
-      'month-selector': Month
-  },
   data() {
     return {
       csrftoken: null,
       rentenota_data: null,
       today: new Date(),
-      dateto: null,
-      datefrom: null,
-      month: 0
+      years: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(
+        function (a) {
+            return new Date().getFullYear() - a
+        }
+      ),
+      month: new Date().getMonth()+1, //JS months are zero indexed
+      year: new Date().getFullYear()
     };
   },
   computed: {
@@ -204,7 +222,7 @@ export default {
     },
     requestRentenota() {
       axios({
-        url: `/rentenota/from${ this.datefrom }to${ this.dateto }`,
+        url: `/rentenota/${ this.year }-${ this.zeroPadMonth(this.month) }`,
         method: "get",
         headers: {
           "X-CSRFToken": this.csrftoken,
@@ -226,6 +244,9 @@ export default {
       this.dateto = d.toISOString().substr(0, 10);
       d.setMonth(d.getMonth() - 1);
       this.datefrom = d.toISOString().substr(0, 10);
+    },
+    zeroPadMonth: function(x) {
+      return x >= 10 ? String(x) : '0'+String(x)
     }
   },
   created() {
