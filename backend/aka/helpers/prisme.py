@@ -44,18 +44,18 @@ class Prisme():
 
         return True
 
-    def getRentenota(self, fromdate, todate):
+    def getRentenota(self, year, month):
         '''Given a period, will fetch the corresponding rentenote
         from Prisme.
 
-        :param fromdate: Start date of the period.
-        :type fromdate: string conforming to this date pattern: YYYYMMDD.
-        :param todate: End date of the period.
-        :type todate: string conforming to this date pattern: YYYYMMDD.
+        :param year: The year for this rentenota.
+        :type year: string conforming to this date pattern: YYYY.
+        :param month: The month for this rentenota.
+        :type month: string conforming to this date pattern: MM.
         :returns: rentenota data as a JSON structure.
         '''
 
-        post1 = {'dato': AKAUtils.datetostring(fromdate),
+        post1 = {'dato': '10/02-18',
                  'postdato': '10/02-18',
                  'bilag': '',
                  'faktura': '',
@@ -67,7 +67,7 @@ class Prisme():
                  'grundlag2': 12.34,
                  'beloeb': 61.00,
                  }
-        post2 = {'dato': AKAUtils.datetostring(todate),
+        post2 = {'dato': '23/03/18',
                  'postdato': '23/03-18',
                  'bilag': 'bilagstekst',
                  'faktura': 'fakturanummer?',
