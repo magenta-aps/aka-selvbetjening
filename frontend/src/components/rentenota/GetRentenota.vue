@@ -6,36 +6,33 @@
 
         <div class="rentenota-main">
 
-            <div class="rentenota-actions">
-                <p>Selected month: {{ this.year +' - '+ this.month }}</p>
-                <select v-model="month">
-                    <option value="1" >{{ $t('common.january')      }}</option>
-                    <option value="2" >{{ $t('common.february')     }}</option>
-                    <option value="3" >{{ $t('common.march')        }}</option>
-                    <option value="4" >{{ $t('common.april')        }}</option>
-                    <option value="5" >{{ $t('common.may')          }}</option>
-                    <option value="6" >{{ $t('common.june')         }}</option>
-                    <option value="7" >{{ $t('common.july')         }}</option>
-                    <option value="8" >{{ $t('common.august')       }}</option>
-                    <option value="9" >{{ $t('common.september')    }}</option>
-                    <option value="10">{{ $t('common.october')      }}</option>
-                    <option value="11">{{ $t('common.november')     }}</option>
-                    <option value="12">{{ $t('common.december')     }}</option>
-                </select>
-                <select v-model="year">
-                    <option v-for="y in years" :key=y>
-                        {{ y }}
-                    </option>
-                </select>
-
-                <form @submit.prevent="requestRentenota()" class="rentenota-dateform">
-                    <!--fieldset>
-                        <label for="date-to">{{ $t("rentenota.month") }}</label>
-                        <input type="month" id="month" v-model="month" required :max="dateto">
-                    </fieldset-->
-                    <fieldset>
-                        <input type="submit" :value="$t('common.send')">
-                    </fieldset>
+            <div class="rentenota-actions row">
+                <div class="col-4">
+                    <select class="dropdown" v-model="month">
+                        <option value="1" >{{ $t('common.january')      }}</option>
+                        <option value="2" >{{ $t('common.february')     }}</option>
+                        <option value="3" >{{ $t('common.march')        }}</option>
+                        <option value="4" >{{ $t('common.april')        }}</option>
+                        <option value="5" >{{ $t('common.may')          }}</option>
+                        <option value="6" >{{ $t('common.june')         }}</option>
+                        <option value="7" >{{ $t('common.july')         }}</option>
+                        <option value="8" >{{ $t('common.august')       }}</option>
+                        <option value="9" >{{ $t('common.september')    }}</option>
+                        <option value="10">{{ $t('common.october')      }}</option>
+                        <option value="11">{{ $t('common.november')     }}</option>
+                        <option value="12">{{ $t('common.december')     }}</option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <select class="dropdown" v-model="year">
+                        <option v-for="y in years" :key=y>
+                            {{ y }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <button type="submit" @click="requestRentenota">{{ $t('common.send') }}</button>
+                </div>
                 </form>
 
             </div>
