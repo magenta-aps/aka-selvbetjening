@@ -33,8 +33,6 @@
                 <div class="col-4">
                     <button type="submit" @click="requestRentenota">{{ $t('common.send') }}</button>
                 </div>
-                </form>
-
             </div>
 
             <div v-if="rentenota_data" class="rentenota-data">
