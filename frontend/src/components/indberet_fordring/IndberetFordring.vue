@@ -56,6 +56,7 @@
               <div class="col-4">
                 <label id="lbl_fordringsgruppe" for="fordringsgruppe">{{ $t('attributes.fordringsgruppe') }}</label>
                 <select
+                  class="dropdown"
                   id="fordringsgruppe"
                   v-model="fordringsgruppe"
                   @change="updateType"
@@ -69,6 +70,7 @@
               <div class="col-4">
                 <label id="lbl_fordringstype" for="fordringstype">{{ $t('attributes.fordringstype') }}</label>
                 <select
+                  class="dropdown"
                   id="fordringstype"
                   v-model="fordringstype"
                   v-validate="{required: true}"
@@ -197,7 +199,7 @@
 
           <div class="row">
             <div class="col-2">
-                <input type="submit" :value="$t('inkasso.gem')" @click="isSubmitted = true">
+                <input type="submit" :value="$t('common.gem')" @click="isSubmitted = true">
             </div>
           </div>
 
@@ -406,5 +408,8 @@ export default {
  <style scoped>
     tr {
         border-bottom: 1px solid #ddd;
+    }
+    .dropdown {
+      border: 1px solid #EAECEE;
     }
 </style>
