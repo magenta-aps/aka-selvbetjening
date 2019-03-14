@@ -11,12 +11,14 @@ import validationMessagesEn from 'vee-validate/dist/locale/en'
 import validationMessagesDa from 'vee-validate/dist/locale/da'
 import { messages } from './i18n/Messages'
 import SimpleField from '@/components/simple_field/SimpleField'
+import CurrencyField from '@/components/simple_field/CurrencyField'
 import '@/assets/css/base-styles.css'
 import installRules from './custom_rules'
 
 Vue.use(VueI18n)
 
 Vue.component('s-field', SimpleField)
+Vue.component('c-field', CurrencyField)
 
 if (localStorage.getItem('language') == null) {
   localStorage.setItem('language', 'kl')

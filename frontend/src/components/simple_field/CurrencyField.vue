@@ -21,69 +21,73 @@ export default {
   name: 'SimpleField',
 
   inject: {
-	$validator: '$validator'
+    $validator: '$validator'
   },
 
   props: {
-	name: {
-	  type: String,
-	  required: true
-	},
-	type: {
-	  type: String,
-	  default: 'text'
-	},
-	label: String,
-	minlength: String,
-	maxlength: String,
-	validate: Object
+    name: {
+      type: String,
+      required: true
+    },
+    type: {
+      type: String,
+      default: 'text'
+    },
+    label: String,
+    minlength: String,
+    maxlength: String,
+    validate: Object
   },
   methods: {
-	formatCurrency: function (value) {
-	  // This should only format, validation happens afterwards
-	  
-	  if(value.split(',').length === 2 && value.split(',')[1].length > 2){
-		const integers = value.split(',')[0]
-		const decimals = value.split(',')[1]
-		const firstTwo = decimals.substr(0,2)
-		const roundingDecimal = parseInt(decimals.charAt(2),10)
-		if(isNaN(roundingDecimal)){
-		  return value
-		}
-		
-		if(roundingDecimal >= 5){
-		  return integers.concat(",").concat(parseInt(firstTwo,10) + 1)
-		} else {
-		  return integers.concat(",").concat(firstTwo)
-		}
-	  } else {
-		return value
-	  }
+    formatCurrency: function (value) {
+      // This should only format, validation happens
+
+      if(value.split(',').length === 2 && value.split(',')[1].length > 2){
+        const integers = value.split(',')[0]
+        const decimals = value.split(',')[1]
+        const firstTwo = decimals.substr(0,2)
+        const roundingDecimal = parseInt(decimals.charAt(2),10)
+
+        if(isNaN(roundingDecimal)){
+          return value
+        }
+
+        if(roundingDecimal >= 5){
+          const i = String(parseInt(integers + firstTwo,10) + 1)
+          return i.slice(0,-2).concat(',').concat(i.slice(-2))
+        } else {
+          return integers.concat(",").concat(firstTwo)
+        }
+
+      } else {
+        return value
+      }
+    }
   },
   computed: {
-	  displayValue: {
-		get: function() {
-			if(this.isInputActive){
-				return this.content
-			} else {
-				return this.formatCurrency(this.content)
-			}
-		},
-		set: function(newValue) {
-			this.content = newValue
-		}
-	  }
+    displayValue: {
+      get: function() {
+        if(this.isInputActive){
+          return this.content
+        } else {
+          return this.formatCurrency(this.content)
+        }
+      },
+      set: function(newValue) {
+        this.content = newValue
+      }
+    }
   },
   data () {
-	return {
-	  content: '',
-	  isInputActive: false
-	}
+    return {
+      content: '',
+      isInputActive: false
+    }
   },
   watch: {
-	content (val) {
-	  this.$emit('input', val)
-	}
+    content (val) {
+      this.$emit('input', val)
+    }
   }
 }
 </script>

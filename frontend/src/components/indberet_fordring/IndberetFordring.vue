@@ -107,7 +107,7 @@
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="hovedstol" :label="$t('attributes.hovedstol')" type="text" v-model="hovedstol" :validate="{required: true, currency: true}"/>
+                <c-field name="hovedstol" :label="$t('attributes.hovedstol')" type="text" v-model="hovedstol" :validate="{required: true, currency: true}"/>
               </div>
               <div class="col-6">
                 <s-field name="hovedstol_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
@@ -116,7 +116,7 @@
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="bankrente" :label="$t('attributes.bankrente')" type="text" v-model="bankrente"/>
+                <c-field name="bankrente" :label="$t('attributes.bankrente')" type="text" v-model="bankrente"/>
               </div>
               <div class="col-6">
                 <s-field name="bankrente_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
@@ -125,7 +125,7 @@
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="bankgebyr" :label="$t('attributes.bankgebyr')" type="text" v-model="bankgebyr" :validate="{currency: true}"/>
+                <c-field name="bankgebyr" :label="$t('attributes.bankgebyr')" type="text" v-model="bankgebyr" :validate="{currency: true}"/>
               </div>
               <div class="col-6">
                 <s-field name="bankgebyr_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
@@ -134,7 +134,7 @@
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="rente" :label="$t('attributes.rente')" type="text" v-model="rente"/>
+                <c-field name="rente" :label="$t('attributes.rente')" type="text" v-model="rente"/>
                 </div>
               <div class="col-6">
                 <s-field name="rente_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
