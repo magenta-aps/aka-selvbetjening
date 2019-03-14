@@ -116,7 +116,7 @@
             </div>
             <div class="row">
               <div class="col-3">
-                <c-field name="bankrente" :label="$t('attributes.bankrente')" type="text" v-model="bankrente"/>
+                <c-field name="bankrente" :label="$t('attributes.bankrente')" type="text" v-model="bankrente" :validate="{currency: true}"/>
               </div>
               <div class="col-6">
                 <s-field name="bankrente_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"

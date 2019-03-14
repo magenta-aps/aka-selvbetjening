@@ -86,7 +86,7 @@ export default {
   },
   watch: {
     content (val) {
-      this.$emit('input', val)
+      this.$emit('input', this.formatCurrency(val))
     }
   }
 }
