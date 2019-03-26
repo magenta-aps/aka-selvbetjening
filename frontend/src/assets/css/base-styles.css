@@ -386,6 +386,7 @@ footer {
 
 .dropdown {
     padding: .75rem 1.5rem;
+    padding-right: 3em;
     background-color: #fff;
     border: none;
     color: #31495b;
@@ -395,6 +396,14 @@ footer {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+}
+
+select{
+    appearance: none;
+    background: url(/index/static/img/sullisivk_arrow.ad8ca3fb.svg) no-repeat #ddd;
+    background-position-x: right 1em;
+    background-position-y: 50%;
+    background-size: 1.5em;
 }
 
 .dropdown:hover,
