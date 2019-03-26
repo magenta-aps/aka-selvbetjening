@@ -176,7 +176,7 @@
             </div>
 
             <div class="row" v-for="(meddebitor, index) in meddebitorer" :key="index">
-                <div @keyup.once="addNewMeddebitor">
+                <div @input.once="addNewMeddebitor">
                   <div class="col-4">
                     <label :for="meddebitor.index"> {{ $t('attributes.meddebitor') }} {{index +1}}</label>
                     <input :id="meddebitor.index"
