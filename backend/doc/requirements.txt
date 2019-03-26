@@ -2,3 +2,4 @@ Django<2.0,>=1.11
 psycopg2-binary
 requests
 oic
+httpretty

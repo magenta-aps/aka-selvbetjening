@@ -66,6 +66,11 @@ LOGGING = {
             'handlers': ['debug-console'],
             'filters': ['require_debug_true'],
             'level': 'DEBUG'
+        },
+        'oic': {
+            'handlers': ['debug-console'],
+            'filters': ['require_debug_true'],
+            'level': 'DEBUG'
         }
     }
 }

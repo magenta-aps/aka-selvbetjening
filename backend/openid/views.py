@@ -4,6 +4,7 @@ from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import View
+from django.views.generic import TemplateView
 from jwkest.jwk import RSAKey
 from oic.oauth2 import ErrorResponse
 from oic.oic import Client, rndstr
@@ -11,6 +12,7 @@ from oic.utils.authn.client import CLIENT_AUTHN_METHOD
 from django.conf import settings
 from django.contrib import auth
 from oic.oic.message import AuthorizationResponse
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 
 class Login(View):
@@ -21,12 +23,8 @@ class Login(View):
     http_method_names = ['get']
 
     def get(self, request):
-
-        # get the endpoints etc by using discovery
-
         state = rndstr(32)
         nonce = rndstr(32)
-
         args = {'response_type': 'code',
                 'scope': settings.OPENID_CONNECT['scope'],
                 'client_id': 'magenta', # they need to provide us with the client id
@@ -36,13 +34,13 @@ class Login(View):
 
         query = urlencode(args, 'utf-8')
         redirect_url = '{url}?{query}'.format(url=settings.OPENID_CONNECT['authorization_endpoint'], query=query)
-        print(redirect_url)
         request.session['oid_state'] = state
         request.session['oid_nonce'] = nonce
         return HttpResponseRedirect(redirect_url)
 
 
 class Callback(View):
+    http_method_names = ['get']
 
     def get(self, request):
         if 'oid_state' not in request.session:
@@ -58,16 +56,16 @@ class Callback(View):
                         client_cert=settings.OPENID_CONNECT['client_certificate'])
 
         client_configuration = {'client_id': settings.OPENID_CONNECT['client_id'],
-                                'client_secret': settings.OPENID_CONNECT['client_id'],
+                                'client_secret': settings.OPENID_CONNECT['client_secret'],
                                 'token_endpoint_auth_method': 'client_secret_jwt'}
-# this just needs to be the same as the previous callback
+
         client.store_registration_info(client_configuration)
 
         aresp = client.parse_response(AuthorizationResponse, info=request.META['QUERY_STRING'], sformat="urlencoded")
         if isinstance(aresp, ErrorResponse):
             # we got an error from the OP
             # TODO and remove stuff from the session
-            return HttpResponseRedirect(reverse('index'))  # TODO figure out where we should redirect to when errors occur
+            return HttpResponseRedirect(reverse('error'))  # TODO figure out how to add the error
 
         else:
             # we got a valid response
@@ -90,13 +88,22 @@ class Callback(View):
 
             print(resp)
             if isinstance(aresp, ErrorResponse):
-                return HttpResponseRedirect(reverse('index'))
+                return HttpResponseRedirect(reverse('error'))
                 # TODO figure out where we should redirect to when errors occur
             else:
                 userinfo = client.do_user_info_request(state=aresp["state"]) #TODO i think this is just a stub
                 # TODO set some variables in the session to indicate the user is loggedin
                 print(userinfo)
+                #TODO redirect to vue.js app
 
 
 class Logout(View):
+
+    @xframe_options_exempt
+    def get(self, request):
+        print(request.GET)
+        print(request)
+        return
+
+class ErrorPage(TemplateView):
     pass
