@@ -2,201 +2,206 @@
 
     <article class="indberet_fordring">
 
-        <h1>{{ $t("title") }}</h1>
-        <!--
-            General notes:
-            Code looks neat and functional. Good job!
-            But do make use of HTML form validation. It's easy to implement and saves users a lot of headache.
+        <form @submit.prevent="sendFormRequest()" :class="{submitted: isSubmitted}">
 
-            The quickest fix is to set the "required" attribute on mandatory input fields.
-            This will prevent the browser from submitting the form if there are inputs missing.
-            The browser will gently remind users of this. ( ... I think)
+          <h1>{{ $t('inkasso.title') }}</h1>
 
-            This fascinating subject can be studied in detail here :D
-            https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Form_validation#Using_built-in_form_validation
-        -->
+<!--          <ul v-if="isSubmitted">
+            <li v-for="error in errors.items">{{ error.msg }}</li>
+          </ul>-->
 
-        <form @submit.prevent="sendFormRequest()">
-
-            <fieldset>
-                <label id="lbl_fordringshaver" for="fordringshaver">{{ $t("fordringshaver") }}</label>
-                <input id="fordringshaver"
-                       type="text"
-                       :class="{submitted: isSubmitted}"
-                       v-model="fordringshaver"
-                       required>
-
-                <label id="lbl_debitor" for="debitor">{{ $t("debitor") }}</label>
-                <input id="debitor"
-                       type="text"
-                       :class="{submitted: isSubmitted}"
-                       v-model="debitor"
-                       required>
-
-                <label id="lbl_fordringshaver2" for="fordringshaver2">{{ $t("anden_fordringshaver") }}</label>
-                <input id="fordringshaver2"
-                       type="text"
-                       :class="{submitted: isSubmitted}"
-                       v-model="fordringshaver2">
-                <!--
-                    TODO: Placeholder code ala:
-                    Vue.component('text-input', {
-                        props: ['name', 'isRequired'],
-                        template: `
-                        <label id="lbl_{{name}}" for="tb_{{name}}">{{name}}</label>
-                        <input id="{{name}}" type="text" :class="{submitted: isSubmitted}" v-model="{{name}}">
-                        `
-                    })
-                -->
-            </fieldset>
-
-            <!--TODO: Allow multiple files and show file list-->
-            <!--
-               This is actually quite easy. Add the "multiple" attribute  to the input element.
-               Then use getFileData to extract the list of files.
-               The template should magically display it if you add something like
-               ```
-                   <table v-if="files">
-                     <tr v-for="(f, index) in files" :key="index">
-                       <td>{{ f.name }}</td>
-                       <td>{{ f.size }} kB</td>
-                     </tr>
-                   </table>
-               ```
-               Maybe iterating over af Filelist like this will cause you problems.
-               Then you should convert it to an array in getFileData.
-               See https://developer.mozilla.org/en-US/docs/Web/API/FileList
-               and https://developer.mozilla.org/en-US/docs/Web/API/File for more info on working with files.
-            -->
-            <fieldset>
-                <input type="file" :class="{submitted: isSubmitted}" @change="getFileData($event.target.files)">
-            </fieldset>
-
-
-            <div style="display: flex; flex-flow: row wrap;">
-                <fieldset>
-                    <label id="lbl_fordringsgruppe" for="fordringsgruppe">{{ $t("fordringsgruppe") }}</label>
-                    <select
-                            id="fordringsgruppe"
-                            :class="{submitted: isSubmitted}"
-                            v-model="fordringsgruppe"
-                            @change="updateType"
-                            required
-                    >
-                        <option v-for="f in fordringsgrupper" v-bind:value="f">{{stringRep(f)}})</option>
-                    </select>
-                </fieldset>
-
-                <!--This is only shown if there are multiple options-->
-                <fieldset v-if="multipleTypes">
-                    <label id="lbl_fordringstype" for="fordringstype">{{ $t("fordringstype") }}</label>
-                    <select
-                            :class="{submitted: isSubmitted}"
-                            id="fordringstype"
-                            v-model="fordringstype"
-                            required
-                    >
-                        <option v-for="t in fordringsgruppe.sub_groups"
-                                v-bind:value="t">
-                            {{stringRep(t)}}
-                        </option>
-                    </select>
-                </fieldset>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-4">
+                <s-field name="fordringshaver" :label="$t('attributes.fordringshaver')" type="text" :validate="{required: true}" v-model="fordringshaver"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <s-field name="debitor" :label="$t('attributes.debitor')" type="text" :validate="{required: true, eight_or_ten_characters: true}" v-model="debitor"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <s-field name="fordringshaver2" :label="$t('attributes.anden_fordringshaver')" type="text" v-model="fordringshaver2"/>
+              </div>
+            </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <table>
+                  <thead>
+                  <tr>
+                    <th>{{ $t('inkasso.filnavn') }}</th>
+                    <th>{{ $t('inkasso.stoerelse') }}</th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody v-if="filer">
+                  <tr v-for="(f, index) in filer" :key="index">
+                    <td>{{ f.name }}</td>
+                    <td>{{ f.size }} kB</td>
+                    <td><a @click="deleteFile(index)">{{ $t('inkasso.slet') }}</a></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <input type="file" multiple @change="selectFiles($event.target.files)">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <label id="lbl_fordringsgruppe" for="fordringsgruppe">{{ $t('attributes.fordringsgruppe') }}</label>
+                <select
+                  class="dropdown"
+                  id="fordringsgruppe"
+                  v-model="fordringsgruppe"
+                  @change="updateType"
+                  v-validate="{required: true}"
+                >
+                  <option v-for="(f, index) in fordringsgrupper" :key="index" :value="f">{{stringRep(f)}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="row" v-if="multipleTypes">
+              <div class="col-4">
+                <label id="lbl_fordringstype" for="fordringstype">{{ $t('attributes.fordringstype') }}</label>
+                <select
+                  class="dropdown"
+                  id="fordringstype"
+                  v-model="fordringstype"
+                  v-validate="{required: true}"
+                >
+                  <option v-for="(t, index) in fordringsgruppe.sub_groups"
+                          :key="index"
+                          :value="t">
+                    {{stringRep(t)}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <s-field name="barns_cpr" :label="$t('attributes.barns_cpr')" type="text" v-model="barns_cpr"
+                         :validate="{digits: 10}"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <s-field name="ekstern_sagsnummer" :label="$t('attributes.ekstern_sagsnummer')" type="text"
+                         v-model="ekstern_sagsnummer" :validate="{required: true}"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <s-field name="fakturanr" :label="$t('attributes.fakturanr')" type="text" v-model="fakturanr" :validate="{required: true}"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <s-field name="bnr" :label="$t('attributes.bnr')" type="text" v-model="bnr"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <c-field name="hovedstol" :label="$t('attributes.hovedstol')" type="text" v-model="hovedstol" :validate="{required: true, currency: true}"/>
+              </div>
+              <div class="col-6">
+                <s-field name="hovedstol_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
+                         v-model="hovedstol_posteringstekst" :validate="{required: true}" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <c-field name="bankrente" :label="$t('attributes.bankrente')" type="text" v-model="bankrente" :validate="{currency: true}"/>
+              </div>
+              <div class="col-6">
+                <s-field name="bankrente_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
+                         v-model="bankrente_posteringstekst"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <c-field name="bankgebyr" :label="$t('attributes.bankgebyr')" type="text" v-model="bankgebyr" :validate="{currency: true}"/>
+              </div>
+              <div class="col-6">
+                <s-field name="bankgebyr_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
+                         v-model="bankgebyr_posteringstekst"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <c-field name="rente" :label="$t('attributes.rente')" type="text" v-model="rente"/>
+                </div>
+              <div class="col-6">
+                <s-field name="rente_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
+                         v-model="rente_posteringstekst"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <s-field name="periodestart" :label="$t('attributes.periodestart')" type="date" v-model="periodestart"/>
+              </div>
+              <div class="col-3">
+                <s-field name="periodeslut" :label="$t('attributes.periodeslut')" type="date" v-model="periodeslut"/>
+              </div>
+              <div class="col-3">
+                <s-field name="forfaldsdato" :label="$t('attributes.forfaldsdato')" type="date" v-model="forfaldsdato" :validate="{required: true}"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <s-field name="betalingsdato" :label="$t('attributes.betalingsdato')" type="date"
+                         v-model="betalingsdato" :validate="{required: true}"/>
+              </div>
+              <div class="col-3">
+                <s-field name="foraeldelsesdato" :label="$t('attributes.foraeldelsesdato')" type="date"
+                         v-model="foraeldelsesdato" :validate="{required: true}"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <s-field name="kontaktperson" :label="$t('attributes.kontaktperson')" type="text" v-model="kontaktperson"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <!--<s-field name="noter" :label="$t('attributes.noter')" type="text" v-model="noter"/>-->
+                <label for="noter">{{ $t('attributes.noter') }}</label>
+                <textarea id="noter" cols="50" v-model="noter"></textarea>
+              </div>
             </div>
 
-
-            <fieldset>
-                <label id="lbl_barns_cpr"
-                       for="tb_barns_cpr">{{ $t("barns_cpr") }}</label>
-                <input id="tb_barns_cpr"
-                       type="text"
-                       :class="{submitted: isSubmitted}"
-                       v-model="barns_cpr"
-                       minlength="10"
-                       maxlength="10">
-
-                <label id="lbl_ekstern_sagsnummer" for="tb_ekstern_sagsnummer">{{ $t("ekstern_sagsnummer") }}</label>
-                <input id="tb_ekstern_sagsnummer" type="text" :class="{submitted: isSubmitted}" v-model="ekstern_sagsnummer" required>
-
-                <label id="lbl_fakturanr" for="tb_fakturanr">{{ $t("fakturanr") }}</label>
-                <input id="tb_fakturanr" type="text" :class="{submitted: isSubmitted}" v-model="fakturanr" required>
-
-                <label id="lbl_bnr" for="tb_bnr">{{ $t("bnr") }}</label>
-                <input id="tb_bnr" type="text" :class="{submitted: isSubmitted}" v-model="bnr">
-            </fieldset>
-
-            <fieldset> <!--TODO: Fix wrapping -->
-                <label id="lbl_hovedstol" for="tb_hovedstol">{{ $t("hovedstol") }}</label>
-                <input id="tb_hovedstol" type="text" :class="{submitted: isSubmitted}" v-model="hovedstol" required>
-                <label id="lbl_hovedstol_posteringstekst" for="tb_hovedstol_posteringstekst">{{ $t("posteringstekst") }}</label>
-                <input id="tb_hovedstol_posteringstekst" type="text" :class="{submitted: isSubmitted}" v-model="hovedstol_posteringstekst" required>
-
-                <label id="lbl_bankrente" for="tb_bankrente">{{ $t("bankrente") }}</label>
-                <input id="tb_bankrente" type="text" :class="{submitted: isSubmitted}" v-model="bankrente">
-                <label id="lbl_bankrente_posteringstekst" for="tb_bankrente_posteringstekst">{{ $t("posteringstekst") }}</label>
-                <input id="tb_bankrente_posteringstekst" type="text" :class="{submitted: isSubmitted}" v-model="bankrente_posteringstekst">
-
-                <label id="lbl_bankgebyr" for="tb_bankgebyr">{{ $t("bankgebyr") }}</label>
-                <input id="tb_bankgebyr" type="text" :class="{submitted: isSubmitted}" v-model="bankgebyr">
-                <label id="lbl_bankgebyr_posteringstekst" for="tb_bankgebyr_posteringstekst">{{ $t("posteringstekst") }}</label>
-                <input id="tb_bankgebyr_posteringstekst" type="text" :class="{submitted: isSubmitted}" v-model="bankgebyr_posteringstekst">
-
-                <label id="lbl_rente" for="tb_rente">{{ $t("rente") }}</label>
-                <input id="tb_rente" type="text" :class="{submitted: isSubmitted}" v-model="rente">
-                <label id="lbl_rente_posteringstekst" for="tb_rente_posteringstekst">{{ $t("posteringstekst") }}</label>
-                <input id="tb_rente_posteringstekst" type="text" :class="{submitted: isSubmitted}" v-model="rente_posteringstekst">
-            </fieldset>
-
-            <fieldset> <!--TODO: Fix wrapping -->
-                <label id="lbl_periodestart" for="tb_periodestart">{{ $t("periodestart") }}</label>
-                <input id="tb_periodestart" type="date" :class="{submitted: isSubmitted}" v-model="periodestart">
-
-                <label id="lbl_periodeslut" for="tb_periodeslut">{{ $t("periodeslut") }}</label>
-                <input id="tb_periodeslut" type="date" :class="{submitted: isSubmitted}" v-model="periodeslut">
-
-                <label id="lbl_forfaldsdato" for="tb_forfaldsdato">{{ $t("forfaldsdato") }}</label>
-                <input id="tb_forfaldsdato" type="date" :class="{submitted: isSubmitted}" v-model="forfaldsdato" required>
-
-                <label id="lbl_betalingsdato" for="tb_betalingsdato">{{ $t("betalingsdato") }}</label>
-                <input id="tb_betalingsdato" type="date" :class="{submitted: isSubmitted}" v-model="betalingsdato" required>
-
-                <label id="lbl_foraeldelsesdato" for="tb_foraeldelsesdato">{{ $t("foraeldelsesdato") }}</label>
-                <input id="tb_foraeldelsesdato" type="date" :class="{submitted: isSubmitted}" v-model="foraeldelsesdato" required>
-            </fieldset>
-
-            <fieldset>
-                <label id="lbl_kontaktperson" for="tb_kontaktperson">{{ $t("kontaktperson") }}</label>
-                <input id="tb_kontaktperson" type="text" :class="{submitted: isSubmitted}" v-model="kontaktperson">
-
-                <label id="lbl_noter" for="tb_nrtes">{{ $t("noter") }}</label>
-                <input id="tb_nrtes" type="text" :class="{submitted: isSubmitted}" v-model="noter">
-            </fieldset>
-
-            <fieldset>
-                <div v-for="(meddebitor, index) in meddebitorer">
-                    <label v-bind:for="meddebitor.index"> {{ $t("meddebitor") }} {{index +1}}</label>
-                    <div v-bind:id="meddebitor.index" @keyup.once="addNewMeddebitor">
-                        <input type="text"
-                               :class="{submitted: isSubmitted}"
-                               :disabled="meddebitor.cvr !== null && meddebitor.cvr !== ''"
-                               v-model="meddebitor.cpr"
-                               placeholder="CPR"
-                               minlength="10"
-                               maxlength="10">
-                        <input type="text"
-                               :class="{submitted: isSubmitted}"
-                               :disabled="meddebitor.cpr !== null && meddebitor.cpr !== ''"
-                               v-model="meddebitor.cvr"
-                               placeholder="CVR"
-                               minlength="8"
-                               maxlength="8">
-                    </div>
+            <div class="row" v-for="(meddebitor, index) in meddebitorer" :key="index">
+                <div @keyup.once="addNewMeddebitor">
+                  <div class="col-4">
+                    <label :for="meddebitor.index"> {{ $t('attributes.meddebitor') }} {{index +1}}</label>
+                    <input :id="meddebitor.index"
+                           type="text"
+                           :disabled="meddebitor.cvr !== null && meddebitor.cvr !== ''"
+                           v-model="meddebitor.cpr"
+                           placeholder="CPR"
+                           v-validate="'digits:10'">
+                  </div>
+                  <div class="col-4">
+                    <label style="height: 24px;" class="hidden-sm" :for="meddebitor.index"></label>
+                    <input type="text"
+                           :disabled="meddebitor.cpr !== null && meddebitor.cpr !== ''"
+                           v-model="meddebitor.cvr"
+                           placeholder="GER"
+                           v-validate="'digits:8'">
+                  </div>
                 </div>
-            </fieldset>
+            </div>
 
-            <fieldset>
-                <input type="submit" v-bind:value="$t('gem')" @click="isSubmitted = true">
-            </fieldset>
+          <div class="row">
+            <div class="col-2">
+                <input type="submit" :value="$t('common.gem')" @click="isSubmitted = true">
+            </div>
+          </div>
 
         </form>
 
@@ -205,20 +210,23 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from 'axios'
 // The file fordringsgruppe.js below is generated by the command `make frontend`
-import { groups } from "@/assets/fordringsgruppe"
-import { notify } from "../utils/notify/Notifier.js"
+import { groups } from '@/assets/fordringsgruppe'
+import { notify } from '../utils/notify/Notifier.js'
+import formValid from '@/mixins/formValid'
 
 export default {
-  data: function() {
+  mixins: [formValid],
+  data: function () {
     return {
       fordringshaver: null,
       debitor: null,
       fordringshaver2: null,
       fordringsgruppe: null,
       fordringstype: null,
-      fil: null /*TODO: make this a list of files*/,
+      filer: [],
+      valgte_filer: [],
       barns_cpr: null,
       ekstern_sagsnummer: null,
       fakturanr: null,
@@ -240,238 +248,168 @@ export default {
       noter: null,
       meddebitorer: [
         {
-          cpr: "",
-          cvr: ""
+          cpr: '',
+          cvr: ''
         }
       ],
 
       form_fields: [
-        "fordringshaver",
-        "debitor",
-        "fordringshaver2",
-        "fordringsgruppe",
-        "fordringstype",
-        "fil",
-        "barns_cpr",
-        "ekstern_sagsnummer",
-        "fakturanr",
-        "bnr",
-        "hovedstol",
-        "hovedstol_posteringstekst",
-        "bankrente",
-        "bankrente_posteringstekst",
-        "bankgebyr",
-        "bankgebyr_posteringstekst",
-        "rente",
-        "rente_posteringstekst",
-        "periodestart",
-        "periodeslut",
-        "forfaldsdato",
-        "betalingsdato",
-        "foraeldelsesdato",
-        "kontaktperson",
-        "noter"
+        'fordringshaver',
+        'debitor',
+        'fordringshaver2',
+        'fordringsgruppe',
+        'fordringstype',
+        'barns_cpr',
+        'ekstern_sagsnummer',
+        'fakturanr',
+        'bnr',
+        'hovedstol',
+        'hovedstol_posteringstekst',
+        'bankrente',
+        'bankrente_posteringstekst',
+        'bankgebyr',
+        'bankgebyr_posteringstekst',
+        'rente',
+        'rente_posteringstekst',
+        'periodestart',
+        'periodeslut',
+        'forfaldsdato',
+        'betalingsdato',
+        'foraeldelsesdato',
+        'kontaktperson',
+        'noter'
       ],
 
       fordringsgrupper: groups,
-      csrftoken: null
-    };
+      csrftoken: null,
+      isSubmitted: false
+    }
   },
   computed: {
-    fordringstype_id: function() {
-      return this.getId(this.fordringstype);
+    fordringstype_id: function () {
+      return this.getId(this.fordringstype)
     },
-    fordringsgruppe_id: function() {
-      return this.getId(this.fordringsgruppe);
+    fordringsgruppe_id: function () {
+      return this.getId(this.fordringsgruppe)
     },
-    multipleTypes: function() {
+    multipleTypes: function () {
       return (
         this.fordringsgruppe !== null &&
-        this.fordringsgruppe["sub_groups"].length > 1
-      );
+        this.fordringsgruppe['sub_groups'].length > 1
+      )
     }
   },
   methods: {
-    addNewMeddebitor: function() {
+    addNewMeddebitor: function () {
       this.meddebitorer.push({
-        cpr: "",
-        cvr: ""
-      });
+        cpr: '',
+        cvr: ''
+      })
     },
-    updateType: function() {
+    updateType: function () {
       if (
         this.fordringsgruppe !== null &&
-        this.fordringsgruppe["sub_groups"].length === 1
+        this.fordringsgruppe['sub_groups'].length === 1
       ) {
-        this.fordringstype = this.fordringsgruppe["sub_groups"][0];
+        this.fordringstype = this.fordringsgruppe['sub_groups'][0]
       } else {
-        this.fordringstype = null;
+        this.fordringstype = null
       }
     },
-    getId: function(dict) {
-      if (dict !== null && "id" in dict) {
-        return dict["id"];
+    getId: function (dict) {
+      if (dict !== null && 'id' in dict) {
+        return dict['id']
       }
-      return null;
+      return null
     },
-    stringRep: function(dict) {
-      return "" + dict["id"] + " (" + dict["value"] + ")";
+    stringRep: function (dict) {
+      return '' + dict['id'] + ' (' + dict['value'] + ')'
     },
-    getCSRFToken: function() {
+    getCSRFToken: function () {
       this.csrftoken = document.cookie.replace(
-        /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
-        "$1"
-      );
+        /(?:(?:^|.*;\s*)csrftoken\s*=\s*([^;]*).*$)|^.*$/,
+        '$1'
+      )
     },
-    getFileData: function(files) {
-      this.fil = files[0];
+    selectFiles: function (files) {
+      for (var i = 0; i < files.length; i++) {
+        this.filer.push(files[i])
+      }
     },
-    fetchFormData: function() {
-      let formdata = new FormData();
-      let that = this;
-      function appendData(string) {
+    deleteFile: function (index) {
+      this.filer.splice(index, 1)
+    },
+    fetchFormData: function () {
+      let formdata = new FormData()
+
+      let that = this
+      function appendData (string) {
         if (that[string] !== null) {
-          if (string === "fordringsgruppe" || string === "fordringstype") {
-            formdata.append(string, that[string + "_id"]);
+          if (string === 'fordringsgruppe' || string === 'fordringstype') {
+            formdata.append(string, that[string + '_id'])
           } else {
-            formdata.append(string, that[string]);
+            formdata.append(string, that[string])
           }
         }
       }
 
-      this.form_fields.forEach(appendData);
+      this.form_fields.forEach(appendData)
 
-      this.meddebitorer.forEach(function(meddebitor, i) {
-        let idx = i + 1;
-        if (!(meddebitor.cpr === "" || meddebitor.cvr === "")) {
-          formdata.append("meddebitor" + idx + "_cpr", meddebitor.cpr);
-          formdata.append("meddebitor" + idx + "_cvr", meddebitor.cvr);
+      this.filer.forEach(function (fil, i) {
+        let idx = i + 1
+        formdata.append('fil' + idx, fil)
+      })
+
+      this.meddebitorer.forEach(function (meddebitor, i) {
+        let idx = i + 1
+        if (meddebitor.cpr !== '') {
+          formdata.append('meddebitor' + idx + '_cpr', meddebitor.cpr)
+        } else if (meddebitor.cvr !== '') {
+          formdata.append('meddebitor' + idx + '_cvr', meddebitor.cvr)
         }
-      });
-      return formdata;
+      })
+      return formdata
     },
-    sendFormRequest: function() {
-      let formdata = this.fetchFormData();
-      // formdata.append('fordringshaver', this.fordringshaver);
-      // formdata.append('debitor', this.debitor);
-      // formdata.append('fordringshaver2', this.fordringshaver2);
-      // formdata.append('fordringsgruppe', this.fordringsgruppe_id);
-      // formdata.append('fordringstype', this.fordringstype_id);
-      // formdata.append('file', this.file);
-      // formdata.append('barns_cpr', this.barns_cpr);
-      // formdata.append('ekstern_sagsnummer', this.ekstern_sagsnummer);
-      // formdata.append('fakturanr', this.fakturanr);
-      // formdata.append('bnr', this.bnr);
-      // formdata.append('hovedstol', this.hovedstol);
-      // formdata.append('hovedstol_posteringstekst', this.hovedstol_posteringstekst);
-      // formdata.append('bankrente', this.bankrente);
-      // formdata.append('bankrente_posteringstekst', this.bankrente_posteringstekst);
-      // formdata.append('bankgebyr', this.bankgebyr);
-      // formdata.append('bankgebyr_posteringstekst', this.bankgebyr_posteringstekst);
-      // formdata.append('rente', this.rente);
-      // formdata.append('rente_posteringstekst', this.rente_posteringstekst);
-      // formdata.append('periodestart', this.periodestart);
-      // formdata.append('periodeslut', this.periodeslut);
-      // formdata.append('forfaldsdato', this.forfaldsdato);
-      // formdata.append('betalingsdato', this.betalingsdato);
-      // formdata.append('foraeldelsesdato', this.foraeldelsesdato);
-      // formdata.append('kontaktperson', this.kontaktperson);
-      // formdata.append('noter', this.noter);
+    sendFormRequest: function () {
+      if (!this.formValid) {
+        this.$validator.validateAll()
+        return
+      }
+
+      let formdata = this.fetchFormData()
 
       axios({
-        url: "/inkassosag",
+        url: '/inkassosag',
         data: formdata,
-        method: "post",
+        method: 'post',
         headers: {
-          "X-CSRFToken": this.csrftoken,
-          "X-AKA-BRUGER": "Unknown"
+          'X-CSRFToken': this.csrftoken,
+          'X-AKA-BRUGER': 'Unknown'
         }
       })
         .then(res => {
-          notify("The server has responded and it was happy!");
-          console.log("Server response!");
-          console.log(res);
+          notify('The server has responded and it was happy!')
+          console.log('Server response!')
+          console.log(res)
         })
         .catch(err => {
-          console.log("there was an error");
-          console.log(err.message);
-        });
+          console.log('there was an error')
+          console.log(err.message)
+        })
     }
   },
-  created: function() {
-    this.getCSRFToken();
-    notify(`Welcome to this page. ${this.$t("title")}`);
+  created: function () {
+    this.getCSRFToken()
+    notify(`Welcome to this page. ${this.$t('inkasso.title')}`)
   }
-};
+}
 </script>
 
-<style scoped>
-    input:focus:invalid {
-        border: 2px solid #D7404D;
+ <style scoped>
+    tr {
+        border-bottom: 1px solid #ddd;
     }
-    .submitted:invalid {
-        border: 2px solid #D7404D;
+    .dropdown {
+      border: 1px solid #EAECEE;
     }
-    input[disabled] {
-        background-color: #d6dbde;
-   }
 </style>
-
-<i18n>
-
-    {
-        "da": {
-            "title": "Inkasso - Opret sag",
-            "fordringshaver": "Fordringshaver",
-            "anden_fordringshaver": "Anden fordringshaver",
-            "debitor": "Debitor",
-            "fordringsgruppe": "Ekstern fordringsgruppe",
-            "fordringstype": "Ekstern fordringstype",
-            "barns_cpr": "Barns CPR-nr",
-            "ekstern_sagsnummer": "Ekstern sagsnummer",
-            "fakturanr": "Fakturanr",
-            "bnr": "B-nr",
-            "hovedstol": "Hovedstol",
-            "posteringstekst": "Posteringstekst",
-            "bankrente": "Bankrente",
-            "bankgebyr": "Bankgebyr",
-            "rente": "Rente",
-            "periodestart": "Periodestart",
-            "periodeslut": "Periodeslut",
-            "forfaldsdato": "Forfaldsdato",
-            "betalingsdato": "Betalingsdato",
-            "foraeldelsesdato": "Forældelsesdato",
-            "kontaktperson": "Kontaktperson",
-            "noter": "Noter",
-            "meddebitor": "Meddebitor",
-            "gem": "Gem"
-        },
-        "kl": {
-            "title": "Akiliisitsiniarneq - suliamik pilersitsineq",
-            "fordringshaver": "Akiligassaqarfigineqartoq",
-            "anden_fordringshaver": "Akiligassaqarfigineqartoq alla",
-            "debitor": "Akiligassalik",
-            "fordringsgruppe": "Akiitsoqarfimmiit suliassiisutip ataatsimooruffiata suussusaa",
-            "fordringstype": "Akiitsoqarfimmiit suliasiissutit suussusaa",
-            "barns_cpr": "Meeqqap inuup normua",
-            "ekstern_sagsnummer": "Suliassiissutip akiitsoqarfimmiit normua",
-            "fakturanr": "MANGLER",
-            "bnr": "MANGLER",
-            "hovedstol": "Akiitsup toqqammavia",
-            "posteringstekst": "Nalunaarsornerani oqaasertaq",
-            "bankrente": "Aningaaserivimmi erniarititaq",
-            "bankgebyr": "Aningaaserivimmut akiliut",
-            "rente": "Erniarititaq",
-            "periodestart": "Piffissap aallartiffia",
-            "periodeslut": "Piffissap naaffia",
-            "forfaldsdato": "Ulloq akiligassap kingusinnerpaamik akilerneqarfissaa",
-            "betalingsdato": "Ulloq akiliiffik",
-            "foraeldelsesdato": "Pisoqalisoorfissaata ullua ",
-            "kontaktperson": "Inuk atassuteqaataasoq",
-            "noter": "Allaaserisaq",
-            "meddebitor": "MANGLER",
-            "gem": "Toqqoruk"
-        }
-    }
-
-</i18n>

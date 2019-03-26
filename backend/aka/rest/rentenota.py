@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class RenteNota(JSONRestView):
-    '''Handles calls for the Rentenota interface. Gets period data from Prisme.
+    '''This class handles the REST interface at /rentenota.
     '''
 
     def initiatedownload(self, path, contenttype):
@@ -57,36 +57,26 @@ class RenteNota(JSONRestView):
             return self.initiatedownload(settings.MEDIA_URL+filename,
                                          contenttype)
 
-    def get(self, request, startdate, enddate, *args, **kwargs):
+    def get(self, request, year, month, *args, **kwargs):
         '''Get rentenota data for the given interval.
 
         :param request: Djangos request object.
         :type request: Request object
-        :param startdate: Start date of this rentenota.
-        :type startdate: String (see pattern in URL dispatcher)
-        :param enddate: End date of this rentenota.
-        :type enddate: String (see pattern in URL dispatcher)
+        :param year: The year for this rentenota.
+        :type year: String (see pattern in URL dispatcher)
+        :param month: The month for this rentenota.
+        :type month: String (see pattern in URL dispatcher)
         :returns: HttpResponse of some variety.
         :raises: ValueError.
         '''
 
         try:
-            fromdate = AKAUtils.datefromstring(startdate)
-            todate = AKAUtils.datefromstring(enddate)
-            if fromdate > todate:
-                raise ValueError('Fromdate must be <= todate.')
-        except ValueError as ve:
-            logger.error(str(ve))
-            return self.errorResponse(ve)
-
-        try:
             prisme = Prisme()
-            data = prisme.getRentenota(fromdate, todate)
+            data = prisme.getRentenota(year, month)
         except Exception as e:
             logger.error(str(e))
             return self.errorResponse(e)
 
-        logger.info('Get rentenota from ' + str(fromdate) +
-                    ' to ' + str(todate))
+        logger.info('Get rentenota ' + year + '-' + month)
 
         return HttpResponse(json.dumps(data), content_type=JSONRestView.CT1)

@@ -44,18 +44,18 @@ class Prisme():
 
         return True
 
-    def getRentenota(self, fromdate, todate):
+    def getRentenota(self, year, month):
         '''Given a period, will fetch the corresponding rentenote
         from Prisme.
 
-        :param fromdate: Start date of the period.
-        :type fromdate: string conforming to this date pattern: YYYYMMDD.
-        :param todate: End date of the period.
-        :type todate: string conforming to this date pattern: YYYYMMDD.
+        :param year: The year for this rentenota.
+        :type year: string conforming to this date pattern: YYYY.
+        :param month: The month for this rentenota.
+        :type month: string conforming to this date pattern: MM.
         :returns: rentenota data as a JSON structure.
         '''
 
-        post1 = {'dato': AKAUtils.datetostring(fromdate),
+        post1 = {'dato': '10/02-18',
                  'postdato': '10/02-18',
                  'bilag': '',
                  'faktura': '',
@@ -67,7 +67,7 @@ class Prisme():
                  'grundlag2': 12.34,
                  'beloeb': 61.00,
                  }
-        post2 = {'dato': AKAUtils.datetostring(todate),
+        post2 = {'dato': '23/03/18',
                  'postdato': '23/03-18',
                  'bilag': 'bilagstekst',
                  'faktura': 'fakturanummer?',
@@ -91,3 +91,29 @@ class Prisme():
                }
 
         return res
+
+    def getLoentraekDistribution(self, gernummer):
+        ''' Given a gernummer, return the previous distribution of 'loentraek'.
+        This is used in loentraek, when the user wants to do the same as they
+        did last time (I think).
+
+        :param gernummer: GER-nummer
+        :type gernummer: ?
+        :returns: ?
+        '''
+        if isinstance(gernummer, str):
+            dummypost = {
+                         'status': 400,
+                         'message': 'Error in communication with Prisme'
+                        }
+        else:
+            dummypost = {'status': 200,
+                    'gernummer': gernummer,
+                    'traekmaaned': 10,
+                    'traekaar': 2018,
+                    'data': [
+                        { 'cprnr': 1010109999, 'aftalenummer': 12, 'loentraek': 120.0, 'nettoloen': 15000}
+                        ]
+                    }
+
+        return dummypost

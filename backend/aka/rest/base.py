@@ -45,9 +45,15 @@ class JSONRestView(View):
                 destination.write(chunk)
 
     def cleanup(self):
+        '''
+        Cleanup after file upload.  Removes files from temp folder,
+        and deletes the in-memory file list.
+        '''
+
         try:
             for file in self.files:
                 os.remove(file['tmpfilename'])
+            self.files = []
         except (OSError, AttributeError):
             pass
 
@@ -76,6 +82,11 @@ class JSONRestView(View):
                     result[param[0].strip()] = param[1].strip()
 
             return result
+
+    def successResponse(self, msg):
+        msg = json.dumps({"status": "Request succeeded",
+                          "message": msg })
+        return HttpResponse(msg, content_type=JSONRestView.CT1)
 
     def errorResponse(self, exception):
         '''
@@ -182,7 +193,7 @@ class JSONRestView(View):
             else:
                 raise ContentTypeError('Content_type incorrect: '
                                        + content['type'])
-            retval = HttpResponse()
+            retval = self.successResponse("OK")
 
             logger.info('POST: ' + json.dumps(self.data) + '\n'
                         + json.dumps(self.files))
