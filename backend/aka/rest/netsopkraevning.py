@@ -4,7 +4,7 @@ from django.http import HttpResponseBadRequest
 from aka.rest.base import JSONRestView
 from aka.helpers import validation
 from aka.helpers.prisme import Prisme
-from aka.helpers.validation import Error, Success
+from aka.helpers.result import Error, Success
 from aka.helpers.sharedfiles import getSharedJson
 
 logger = logging.getLogger(__name__)
