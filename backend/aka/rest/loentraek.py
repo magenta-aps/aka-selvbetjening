@@ -38,7 +38,7 @@ class LoenTraek(JSONRestView):
             if res.status:
                 prisme = Prisme()
                 pres = prisme.sendToPrisme(self.data)
-                return self.successResponse('Prisme says OK.')
+                return self.successResponse(pres)
             else:
                 return res.toHttpResponse()
         else:

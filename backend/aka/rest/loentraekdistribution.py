@@ -32,10 +32,10 @@ class LoenTraekDistribution(JSONRestView):
 
         '''
 
-        data = [{ 'cprnumber': '1234567890',
-                  'aftalenummer': '15934',
-                  'lontraek': '1500',
-                  'nettolon': '15000'
-                }]
+        data = [{'cprnumber': '1234567890',
+                 'aftalenummer': '15934',
+                 'lontraek': '1500',
+                 'nettolon': '15000'
+                 }]
 
         return HttpResponse(json.dumps(data), content_type=JSONRestView.CT1)
