@@ -1,5 +1,4 @@
 from django.test import TestCase, Client
-import unittest
 import json
 import logging
 
