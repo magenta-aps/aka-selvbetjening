@@ -139,8 +139,7 @@ class Success(__Result):
         return f(self.value)
 
     def toHttpResponse(self):
-        d = {"errors": self.errors, "fieldErrors": self.fieldErrors}
-        return HttpResponse(json.dumps(d), status=200,
+        return HttpResponse(json.dumps(self.value), status=200,
                             content_type=JSONRestView.CT1)
 
     def __str__(self):

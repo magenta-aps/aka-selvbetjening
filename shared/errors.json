@@ -26,6 +26,10 @@
     "from_date_before_to_date":{
         "da": "Fra dato skal være før til dato",
         "kl": "Oversættelse Mangler - Fra dato skal være før til dato"
+    },
+    "invalid_month":{
+        "da": "Invalid måned - skal være mellem 1 og 12",
+        "kl": "Oversættelse Mangler - Invalid måned - skal være mellem 1 og 12"
     }
 
 }
