@@ -1,4 +1,5 @@
 import logging
+import datetime
 
 # Internal tools
 from aka.rest.base import JSONRestView
@@ -32,6 +33,7 @@ class InkassoSag(JSONRestView):
 
             logger.debug(self.data)
             return (validateInkassoJson(self.data)
+                    .andThen(validatePeriodeStartAndEnd) # We use andThen, to ensure fields exist
                     .andThen(validateFordringsgrupper)
                     .toHttpResponse()
                     )
@@ -69,7 +71,9 @@ def validateInkassoJson(reqJson):
     __REQUIRED_FIELDS = ['fordringshaver',
                          'debitor',
                          'fordringsgruppe',
-                         'fordringstype']
+                         'fordringstype',
+                         'periodestart',
+                         'periodeslut']
     return validation.validateRequired(__REQUIRED_FIELDS, reqJson)
 
 
@@ -131,3 +135,16 @@ def getOnlyElement(l, fid, fordringsName):
         return Error('multiple_' + fordringsName + '_found', fordringsName)
     else:
         return Success(fordringsList[0])
+
+def validatePeriodeStartAndEnd(reqJson):
+    ''' Validate that starting of period precedes the end of a given period
+
+    :param reqJson: The json from the http request
+    :type reqJson: Dict
+    '''
+    # TODO Are these fields guarenteed to be here?
+    if reqJson['periodestart'] <= reqJson['periodeslut']:
+        return Success(reqJson)
+    else: 
+        return Error('start_date_before_end_date', 'periodeslut')
+
