@@ -1,6 +1,5 @@
 import requests
-from aka.helpers.result import Error, Success
-from aka.helpers.utils import AKAUtils
+from aka.helpers.result import Success  # , Error
 
 
 class Prisme():
@@ -107,12 +106,16 @@ class Prisme():
                         }
         else:
             dummypost = {'status': 200,
-                    'gernummer': gernummer,
-                    'traekmaaned': 10,
-                    'traekaar': 2018,
-                    'data': [
-                        { 'cprnr': 1010109999, 'aftalenummer': 12, 'loentraek': 120.0, 'nettoloen': 15000}
-                        ]
-                    }
+                         'gernummer': gernummer,
+                         'traekmaaned': 10,
+                         'traekaar': 2018,
+                         'data': [
+                            {'cprnr': 1010109999,
+                             'aftalenummer': 12,
+                             'loentraek': 120.0,
+                             'nettoloen': 15000
+                             }
+                            ]
+                         }
 
         return dummypost
