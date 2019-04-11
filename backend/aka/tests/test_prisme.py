@@ -1,6 +1,5 @@
 from django.test import TestCase
 from aka.helpers.prisme import Prisme
-from aka.helpers.utils import AKAUtils
 
 
 # Create your tests here.
@@ -18,5 +17,5 @@ class BasicTestCase(TestCase):
             self.fail('Failed call to sendToPrisme')
 
     def test_rentenota(self):
-        rn = self.p.getRentenota(('2019','01'))
+        rn = self.p.getRentenota(('2019', '01'))
         self.assertTrue(rn.status)
