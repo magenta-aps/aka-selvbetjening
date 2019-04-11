@@ -41,25 +41,6 @@ class InkassoSag(JSONRestView):
             return baseresponse
 
 
-jsonSchema = {
-        'type': 'object',
-        'properties': {
-            'fordringshaver':   {'type': 'string'},
-            'debitor':          {'type': 'string'},
-            'fordringshaver2':  {'type': 'string'},
-            'fordringsgruppe':  {
-                'type': 'string',
-                'pattern': '[0-9]+'
-                },
-            'fordringstype':    {'type': 'string'}
-            },
-        'required': ['fordringshaver',
-                     'debitor',
-                     'fordringsgruppe',
-                     'fordringstype']
-        }
-
-
 def validateInkassoJson(reqJson):
     '''Validate a dict data-structure for the /inkassosag endpoint
 
