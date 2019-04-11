@@ -15,9 +15,17 @@
         "da": "Server Error",
         "kl": "Oversættelse Mangler"
     },
-    
     "required_field": {
         "da": "Dette felt er påkrævet",
         "kl": "Oversættelse Mangler"
+    },
+    "start_date_before_end_date":{
+        "da": "Start dato skal være før slut dato",
+        "kl": "Oversættelse Mangler - Start dato skal være før slut dato"
+    },
+    "from_date_before_to_date":{
+        "da": "Fra dato skal være før til dato",
+        "kl": "Oversættelse Mangler - Fra dato skal være før til dato"
     }
+
 }
