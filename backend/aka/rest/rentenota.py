@@ -1,14 +1,11 @@
 from aka.rest.base import JSONRestView
 from aka.helpers.prisme import Prisme
-from aka.helpers.utils import AKAUtils
 from aka.helpers.result import Error, Success
 from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
 from django.conf import settings
 import logging
 import os
-import json
-import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -76,24 +73,21 @@ class RenteNota(JSONRestView):
             prisme = Prisme()
             logger.info('Get rentenota ' + year + '-' + month)
 
-
             return (validateInputDate(year, month)
                     .andThen(prisme.getRentenota)
                     .toHttpResponse()
-                   )
-        
+                    )
+
         except Exception as e:
             logger.error(str(e))
             return self.errorResponse(e)
 
-    
+
 def validateInputDate(year, month):
     '''Validate that the input parameter is a valid month and year
 
     '''
     if int(month) > 12 or month == '00':
         return Error('invalid_month')
-    else: 
-        return Success((year,month))
-
-    
+    else:
+        return Success((year, month))
