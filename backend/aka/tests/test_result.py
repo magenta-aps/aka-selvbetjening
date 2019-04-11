@@ -1,5 +1,5 @@
 from django.test import SimpleTestCase
-from aka.helpers.result import Success, Error 
+from aka.helpers.result import Success, Error
 from aka.helpers.validation import validateRequired
 
 

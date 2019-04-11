@@ -1,5 +1,5 @@
 import requests
-from aka.helpers.utils import AKAUtils
+from aka.helpers.result import Success  # , Error
 
 
 class Prisme():
@@ -44,15 +44,13 @@ class Prisme():
 
         return True
 
-    def getRentenota(self, year, month):
+    def getRentenota(self, date):
         '''Given a period, will fetch the corresponding rentenote
         from Prisme.
 
-        :param year: The year for this rentenota.
-        :type year: string conforming to this date pattern: YYYY.
-        :param month: The month for this rentenota.
-        :type month: string conforming to this date pattern: MM.
-        :returns: rentenota data as a JSON structure.
+        :param date: Tuple describing (year, month) of rentenota
+        :type date: Tuple (string YYYY, string MM)
+        :returns: a Result object with the specified data or an error
         '''
 
         post1 = {'dato': '10/02-18',
@@ -90,7 +88,7 @@ class Prisme():
                'poster': [post1, post2]
                }
 
-        return res
+        return Success(res)
 
     def getLoentraekDistribution(self, gernummer):
         ''' Given a gernummer, return the previous distribution of 'loentraek'.
@@ -108,12 +106,16 @@ class Prisme():
                         }
         else:
             dummypost = {'status': 200,
-                    'gernummer': gernummer,
-                    'traekmaaned': 10,
-                    'traekaar': 2018,
-                    'data': [
-                        { 'cprnr': 1010109999, 'aftalenummer': 12, 'loentraek': 120.0, 'nettoloen': 15000}
-                        ]
-                    }
+                         'gernummer': gernummer,
+                         'traekmaaned': 10,
+                         'traekaar': 2018,
+                         'data': [
+                            {'cprnr': 1010109999,
+                             'aftalenummer': 12,
+                             'loentraek': 120.0,
+                             'nettoloen': 15000
+                             }
+                            ]
+                         }
 
         return dummypost

@@ -1,5 +1,4 @@
 from django.test import TestCase, Client
-import unittest
 import json
 import logging
 
@@ -19,10 +18,10 @@ class BasicTestCase(TestCase):
             self.fail('Did not get JSON back.')
 
     def test_validRequest1(self):
-        response = self.c.get(self.url)
+        response = self.c.get(self.url+'/12345678')
         self.assertEqual(response.status_code, 200)
         self.checkReturnValIsJSON(response)
 
     def test_invalidRequest1(self):
-        response = self.c.post(self.url)
+        response = self.c.post(self.url+'/12345678')
         self.assertEqual(response.status_code, 405)

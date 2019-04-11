@@ -1,10 +1,5 @@
-from django.http import HttpResponse
-
-from aka.rest.base import JSONRestView
-from aka.helpers.sharedfiles import getSharedJson
 from aka.helpers.result import Success, Error
 
-import json
 import logging
 
 logger = logging.getLogger(__name__)

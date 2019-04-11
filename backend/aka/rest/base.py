@@ -85,7 +85,7 @@ class JSONRestView(View):
 
     def successResponse(self, msg):
         msg = json.dumps({"status": "Request succeeded",
-                          "message": msg })
+                          "message": msg})
         return HttpResponse(msg, content_type=JSONRestView.CT1)
 
     def errorResponse(self, exception):

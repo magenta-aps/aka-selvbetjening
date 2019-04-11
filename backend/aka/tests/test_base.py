@@ -192,14 +192,14 @@ class BasicTestCase(TestCase):
             for i in range(30)
             ]) + '.csv'
         return SimpleUploadedFile(filename,
-                                   b"file_content",
-                                   content_type="text/plain/")
+                                  b"file_content",
+                                  content_type="text/plain/")
 
     def test_fileupload(self):
         '''Test upload of files.
         '''
-        file1 = self.simulatedFile();
-        file2 = self.simulatedFile();
+        file1 = self.simulatedFile()
+        file2 = self.simulatedFile()
         factory = RequestFactory()
         request = factory.post('/', {
                                      'field1': 'hey',
@@ -207,22 +207,25 @@ class BasicTestCase(TestCase):
                                      'attachment1': file1,
                                      'attachment2': file2,
                                     }
-
-                              )
+                               )
         obj = JSONRestView()
         response = obj.basepost(request)
 
         self.assertTrue(response.status_code, 200)
         self.assertEqual(len(obj.files), 2)
-        self.assertTrue(obj.files[0]['originalname'] in [file1.name, file2.name])
-        self.assertTrue(obj.files[1]['originalname'] in [file1.name, file2.name])
+        self.assertTrue(
+                obj.files[0]['originalname'] in [file1.name, file2.name]
+                )
+        self.assertTrue(
+                obj.files[1]['originalname'] in [file1.name, file2.name]
+                )
         obj.cleanup()
 
     def test_cleanup(self):
         '''Test cleanup after file upload.
         '''
-        file1 = self.simulatedFile();
-        file2 = self.simulatedFile();
+        file1 = self.simulatedFile()
+        file2 = self.simulatedFile()
         factory = RequestFactory()
         request = factory.post('/', {
                                      'field1': 'hey',
@@ -230,8 +233,7 @@ class BasicTestCase(TestCase):
                                      'attachment1': file1,
                                      'attachment2': file2,
                                     }
-
-                              )
+                               )
         obj = JSONRestView()
         response = obj.basepost(request)
 

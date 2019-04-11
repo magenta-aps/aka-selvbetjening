@@ -1,5 +1,4 @@
 import logging
-import datetime
 
 # Internal tools
 from aka.rest.base import JSONRestView
@@ -33,31 +32,12 @@ class InkassoSag(JSONRestView):
 
             logger.debug(self.data)
             return (validateInkassoJson(self.data)
-                    .andThen(validatePeriodeStartAndEnd) # We use andThen, to ensure fields exist
+                    .andThen(validatePeriodeStartAndEnd)
                     .andThen(validateFordringsgrupper)
                     .toHttpResponse()
                     )
         else:
             return baseresponse
-
-
-jsonSchema = {
-        'type': 'object',
-        'properties': {
-            'fordringshaver':   {'type': 'string'},
-            'debitor':          {'type': 'string'},
-            'fordringshaver2':  {'type': 'string'},
-            'fordringsgruppe':  {
-                'type': 'string',
-                'pattern': '[0-9]+'
-                },
-            'fordringstype':    {'type': 'string'}
-            },
-        'required': ['fordringshaver',
-                     'debitor',
-                     'fordringsgruppe',
-                     'fordringstype']
-        }
 
 
 def validateInkassoJson(reqJson):
@@ -136,6 +116,7 @@ def getOnlyElement(l, fid, fordringsName):
     else:
         return Success(fordringsList[0])
 
+
 def validatePeriodeStartAndEnd(reqJson):
     ''' Validate that starting of period precedes the end of a given period
 
@@ -145,6 +126,5 @@ def validatePeriodeStartAndEnd(reqJson):
     # TODO Are these fields guarenteed to be here?
     if reqJson['periodestart'] <= reqJson['periodeslut']:
         return Success(reqJson)
-    else: 
+    else:
         return Error('start_date_before_end_date', 'periodeslut')
-

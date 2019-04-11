@@ -2,8 +2,11 @@ import logging
 from aka.rest.base import JSONRestView
 from aka.helpers import validation
 from aka.helpers.prisme import Prisme
-from aka.helpers.result import Error, Success
-from aka.helpers.sharedfiles import getSharedJson
+# from aka.helpers.result import Error, Success
+# from aka.helpers.sharedfiles import getSharedJson
+
+# When the service is implemented unused imports should be removed,
+# but until then they are just commented out as a reference
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +38,7 @@ class LoenTraek(JSONRestView):
             if res.status:
                 prisme = Prisme()
                 pres = prisme.sendToPrisme(self.data)
-                return self.successResponse('Prisme says OK.')
+                return self.successResponse(pres)
             else:
                 return res.toHttpResponse()
         else:
