@@ -5,14 +5,13 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
-from jwkest.jwk import RSAKey
 from oic.oauth2 import ErrorResponse
 from oic.oic import Client, rndstr
 from oic.utils.authn.client import CLIENT_AUTHN_METHOD
 from django.conf import settings
-from django.contrib import auth
-from oic.oic.message import AuthorizationResponse
+from oic.oic.message import AuthorizationResponse, RegistrationResponse
 from django.views.decorators.clickjacking import xframe_options_exempt
+open_id_settings = settings.OPENID_CONNECT
 
 
 class Login(View):
@@ -23,20 +22,26 @@ class Login(View):
     http_method_names = ['get']
 
     def get(self, request):
+        client_cert = (open_id_settings['client_certificate'], open_id_settings['private_key'])
+        client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=client_cert)
+        provider_info = client.provider_config(open_id_settings['issuer'])
+        client_reg = RegistrationResponse(**{'client_id': open_id_settings['client_id'], 'redirect_uris': [open_id_settings['redirect_uri']]})
+        client.store_registration_info(client_reg)
+
         state = rndstr(32)
         nonce = rndstr(32)
         args = {'response_type': 'code',
                 'scope': settings.OPENID_CONNECT['scope'],
-                'client_id': 'magenta', # they need to provide us with the client id
-                'redirect_uri': request.build_absolute_uri(reverse('openid:callback')),
+                'client_id': settings.OPENID_CONNECT['client_id'],
+                'redirect_uri': settings.OPENID_CONNECT['redirect_uri'],
                 'state': state,
                 'nonce': nonce}
 
-        query = urlencode(args, 'utf-8')
-        redirect_url = '{url}?{query}'.format(url=settings.OPENID_CONNECT['authorization_endpoint'], query=query)
         request.session['oid_state'] = state
         request.session['oid_nonce'] = nonce
-        return HttpResponseRedirect(redirect_url)
+        auth_req = client.construct_AuthorizationRequest(request_args=args)
+        login_url = auth_req.request(client.authorization_endpoint)
+        return HttpResponseRedirect(login_url)
 
 
 class Callback(View):
@@ -52,12 +57,11 @@ class Callback(View):
             # Make sure that nonce is not used twice
             del request.session['oid_nonce']
 
-        client = Client(client_authn_method=CLIENT_AUTHN_METHOD,
-                        client_cert=settings.OPENID_CONNECT['client_certificate'])
+        client_cert = (settings.OPENID_CONNECT['client_certificate'], settings.OPENID_CONNECT['private_key'])
+        client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=client_cert)
 
         client_configuration = {'client_id': settings.OPENID_CONNECT['client_id'],
-                                'client_secret': settings.OPENID_CONNECT['client_secret'],
-                                'token_endpoint_auth_method': 'client_secret_jwt'}
+                                'token_endpoint_auth_method': 'private_key_jwt'}
 
         client.store_registration_info(client_configuration)
 
