@@ -116,33 +116,6 @@
             </div>
             <div class="row">
               <div class="col-3">
-                <c-field name="bankrente" :label="$t('attributes.bankrente')" type="text" v-model="bankrente" :validate="{currency: true}"/>
-              </div>
-              <div class="col-6">
-                <s-field name="bankrente_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
-                         v-model="bankrente_posteringstekst"/>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-3">
-                <c-field name="bankgebyr" :label="$t('attributes.bankgebyr')" type="text" v-model="bankgebyr" :validate="{currency: true}"/>
-              </div>
-              <div class="col-6">
-                <s-field name="bankgebyr_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
-                         v-model="bankgebyr_posteringstekst"/>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-3">
-                <c-field name="rente" :label="$t('attributes.rente')" type="text" v-model="rente"/>
-                </div>
-              <div class="col-6">
-                <s-field name="rente_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
-                         v-model="rente_posteringstekst"/>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-3">
                 <s-field name="periodestart" :label="$t('attributes.periodestart')" type="date" v-model="periodestart"/>
               </div>
               <div class="col-3">
@@ -233,12 +206,6 @@ export default {
       bnr: null,
       hovedstol: null,
       hovedstol_posteringstekst: null,
-      bankrente: null,
-      bankrente_posteringstekst: null,
-      bankgebyr: null,
-      bankgebyr_posteringstekst: null,
-      rente: null,
-      rente_posteringstekst: null,
       periodestart: null,
       periodeslut: null,
       forfaldsdato: null,
@@ -265,12 +232,6 @@ export default {
         'bnr',
         'hovedstol',
         'hovedstol_posteringstekst',
-        'bankrente',
-        'bankrente_posteringstekst',
-        'bankgebyr',
-        'bankgebyr_posteringstekst',
-        'rente',
-        'rente_posteringstekst',
         'periodestart',
         'periodeslut',
         'forfaldsdato',
