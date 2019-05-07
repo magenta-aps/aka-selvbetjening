@@ -109,11 +109,15 @@
                     <thead>
                         <tr>
                             <th>{{ $t("rentenota.dato") }}</th>
+                            <th>{{ $t("rentenota.konto") }}</th>
+                            <th>{{ $t("rentenota.gruppering") }}</th>
                             <th>{{ $t("rentenota.postdato") }}</th>
+                            <th>{{ $t("rentenota.nota") }}</th>
                             <th>{{ $t("rentenota.bilag") }}</th>
                             <th>{{ $t("rentenota.faktura") }}</th>
                             <th>{{ $t("rentenota.tekst") }}</th>
                             <th>{{ $t("rentenota.fradato") }}</th>
+                            <th>{{ $t("rentenota.tildato") }}</th>
                             <th>{{ $t("rentenota.dage") }}</th>
                             <th>{{ $t("rentenota.grundlag") }}</th>
                             <th>{{ $t("rentenota.val") }}</th>
@@ -128,7 +132,16 @@
                                 {{ p.dato }}
                             </td>
                             <td>
+                                {{ p.konto }}
+                            </td>
+                            <td>
+                                {{ p.gruppering }}
+                            </td>
+                            <td>
                                 {{ p.postdato }}
+                            </td>
+                            <td>
+                                {{ p.nota }}
                             </td>
                             <td>
                                 {{ p.bilag }}
@@ -141,6 +154,9 @@
                             </td>
                             <td>
                                 {{ p.fradato }}
+                            </td>
+                            <td>
+                                {{ p.tildato }}
                             </td>
                             <td class="numbercell">
                                 {{ p.dage }}
@@ -160,7 +176,7 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td colspan="10"></td>
+                            <td colspan="14"></td>
                             <td class="numbercell rentenota-total">
                                 {{ total }}
                             </td>
