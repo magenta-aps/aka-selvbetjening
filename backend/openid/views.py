@@ -1,7 +1,6 @@
-from urllib.parse import urlencode
-
+import logging
 from django.core.exceptions import SuspiciousOperation
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
@@ -12,6 +11,7 @@ from django.conf import settings
 from oic.oic.message import AuthorizationResponse, RegistrationResponse
 from django.views.decorators.clickjacking import xframe_options_exempt
 open_id_settings = settings.OPENID_CONNECT
+logger = logging.getLogger(__name__)
 
 
 class Login(View):
@@ -68,6 +68,7 @@ class Callback(View):
         aresp = client.parse_response(AuthorizationResponse, info=request.META['QUERY_STRING'], sformat="urlencoded")
         if isinstance(aresp, ErrorResponse):
             # we got an error from the OP
+            logger.debug('error: {}'.format(str(ErrorResponse)))
             # TODO and remove stuff from the session
             return HttpResponseRedirect(reverse('error'))  # TODO figure out how to add the error
 
@@ -79,18 +80,19 @@ class Callback(View):
                 raise SuspiciousOperation(msg)
 
             provider_info = client.provider_config(settings.OPENID_CONNECT['issuer'])# TODO is this needed?
+            logger.debug('provider info: {}'.format(provider_info))
 
             request_args = {'code': aresp['code'],
                             'redirect_uri': request.build_absolute_uri(reverse('openid:callback'))}
-            # this just needs to be the same as the previous callback
 
+            # this just needs to be the same as the previous callback
             resp = client.do_access_token_request(state=aresp['state'],
                                                   scope=settings.OPENID_CONNECT['scope'],
                                                   request_args=request_args
                                                   #authn_method="client_secret_jwt",
                                                   )
 
-            print(resp)
+            logger.debug('access token responds', resp.status_code)
             if isinstance(aresp, ErrorResponse):
                 return HttpResponseRedirect(reverse('error'))
                 # TODO figure out where we should redirect to when errors occur
@@ -98,6 +100,7 @@ class Callback(View):
                 userinfo = client.do_user_info_request(state=aresp["state"]) #TODO i think this is just a stub
                 # TODO set some variables in the session to indicate the user is loggedin
                 print(userinfo)
+                return JsonResponse(data=userinfo)
                 #TODO redirect to vue.js app
 
 
