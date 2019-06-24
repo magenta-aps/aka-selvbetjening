@@ -50,18 +50,23 @@ class Login(View):
         return HttpResponseRedirect(login_url)
 
 
-class Callback(View):
+class Callback(TemplateView):
     http_method_names = ['get']
+    template_name = 'openid/callback_errors.html'
 
     def get(self, request):
-        if 'oid_state' not in request.session:
-            msg = 'Session `oid_state` does not exist!'
-            raise SuspiciousOperation(msg)
-
         nonce = request.session.get('oid_nonce')
         if nonce:
             # Make sure that nonce is not used twice
             del request.session['oid_nonce']
+        else:
+            del request.session['state']
+            msg = 'Session `oid_nonce` does not exist!'
+            raise SuspiciousOperation(msg)
+
+        if 'oid_state' not in request.session:
+            msg = 'Session `oid_state` does not exist!'
+            raise SuspiciousOperation(msg)
 
         client_cert = (settings.OPENID_CONNECT['client_certificate'], settings.OPENID_CONNECT['private_key'])
         client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=client_cert)
@@ -73,43 +78,49 @@ class Callback(View):
         client.store_registration_info(client_configuration)
 
         aresp = client.parse_response(AuthorizationResponse, info=request.META['QUERY_STRING'], sformat="urlencoded")
+
         if isinstance(aresp, ErrorResponse):
             # we got an error from the OP
-            logger.debug('error: {}'.format(str(ErrorResponse)))
-            # TODO and remove stuff from the session
-            return HttpResponseRedirect(reverse('error'))  # TODO figure out how to add the error
+            del request.session['oid_state']
+            context = self.get_context_data(errors=aresp.to_dict())
+            return self.render_to_response(context)
 
         else:
             # we got a valid response
+            if not aresp.get('state', None):
+                del request.session['oid_state']
+                logger.debug('did not receive state from OP: {}'. format(aresp.to_dict()))
+                context = self.get_context_data(errors=aresp.to_dict())
+                return self.render_to_response(context)
+
             if aresp['state'] != request.session['oid_state']:
+                del request.session['oid_state']
                 msg = 'Session `oid_state` does not match the OID callback state'
-                # TODO and remove stuff from the session
                 raise SuspiciousOperation(msg)
 
-            provider_info = client.provider_config(settings.OPENID_CONNECT['issuer'])# TODO is this needed?
+            provider_info = client.provider_config(settings.OPENID_CONNECT['issuer'])
             logger.debug('provider info: {}'.format(client.config))
 
             request_args = {'code': aresp['code'],
                             'redirect_uri': request.build_absolute_uri(reverse('openid:callback'))}
 
-            # this just needs to be the same as the previous callback
             resp = client.do_access_token_request(state=aresp['state'],
                                                   scope=settings.OPENID_CONNECT['scope'],
                                                   request_args=request_args,
                                                   authn_method="private_key_jwt",
-                                                  authn_endpoint='token'
-                                                  )
+                                                  authn_endpoint='token')
 
-            logger.debug('access token responds', resp.status_code)
-            if isinstance(aresp, ErrorResponse):
-                return HttpResponseRedirect(reverse('error'))
-                # TODO figure out where we should redirect to when errors occur
+            if isinstance(resp, ErrorResponse):
+                logger.debug('error: {}'.format(str(ErrorResponse)))
+                del request.session['oid_state']
+                context = self.get_context_data(errors=aresp.to_dict())
+                return self.render_to_response(context)
             else:
-                userinfo = client.do_user_info_request(state=aresp["state"]) #TODO i think this is just a stub
-                # TODO set some variables in the session to indicate the user is loggedin
+                userinfo = client.do_user_info_request(state=aresp["state"])
                 print(userinfo)
-                return JsonResponse(data=userinfo)
-                #TODO redirect to vue.js app
+                request.session['userinfo'] = userinfo.to_dict()
+                # TODO redirect to vue.js
+                return JsonResponse(data=userinfo.to_json())
 
 
 class Logout(View):
@@ -119,6 +130,3 @@ class Logout(View):
         print(request.GET)
         print(request)
         return
-
-class ErrorPage(TemplateView):
-    pass
