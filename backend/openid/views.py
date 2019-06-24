@@ -60,7 +60,8 @@ class Callback(TemplateView):
             # Make sure that nonce is not used twice
             del request.session['oid_nonce']
         else:
-            del request.session['state']
+            if 'state' in request.session:
+                del request.session['state']
             msg = 'Session `oid_nonce` does not exist!'
             raise SuspiciousOperation(msg)
 
