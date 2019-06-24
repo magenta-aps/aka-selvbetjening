@@ -117,10 +117,11 @@ class Callback(TemplateView):
                 return self.render_to_response(context)
             else:
                 userinfo = client.do_user_info_request(state=aresp["state"])
+                user_info_dict = userinfo.to_dict()
                 print(userinfo)
-                request.session['userinfo'] = userinfo.to_dict()
+                request.session['userinfo'] = user_info_dict
                 # TODO redirect to vue.js
-                return JsonResponse(data=userinfo.to_json())
+                return JsonResponse(data=user_info_dict)
 
 
 class Logout(View):
