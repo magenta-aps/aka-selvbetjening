@@ -119,18 +119,24 @@ class Callback(TemplateView):
             else:
                 userinfo = client.do_user_info_request(state=request.session['oid_state'])
                 user_info_dict = userinfo.to_dict()
-                print(userinfo)
-                request.session['userinfo'] = user_info_dict
+                request.session['user_info'] = user_info_dict
                 # TODO redirect to vue.js
                 # always delete the state so it is not reused
                 del request.session['oid_state']
-                return JsonResponse(data=user_info_dict)
+                # after the oauth flow is done and we have the user_info redirect to the frontpage
+                return HttpResponseRedirect('index')
 
 
 class Logout(View):
 
     @xframe_options_exempt
     def get(self, request):
-        print(request.GET)
-        print(request)
-        return
+        # according to the specs this is rendered in a iframe when the user triggers a logout from OP`s side
+        # do a total cleanup and delete everything related to openID
+        if 'oid_state' in request.session:
+            del request.session['oid_state']
+        if 'oid_nonce' in request.session:
+            del request.session['oid_nonce']
+        if 'user_info' in request.session:
+            del request.session['user_info']
+        return HttpResponseRedirect('index')
