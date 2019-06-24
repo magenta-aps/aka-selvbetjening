@@ -113,10 +113,10 @@ class Callback(TemplateView):
             if isinstance(resp, ErrorResponse):
                 logger.debug('error: {}'.format(str(ErrorResponse)))
                 del request.session['oid_state']
-                context = self.get_context_data(errors=aresp.to_dict())
+                context = self.get_context_data(errors=resp.to_dict())
                 return self.render_to_response(context)
             else:
-                userinfo = client.do_user_info_request(state=aresp["state"])
+                userinfo = client.do_user_info_request(state=resp["state"])
                 user_info_dict = userinfo.to_dict()
                 print(userinfo)
                 request.session['userinfo'] = user_info_dict
