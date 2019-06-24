@@ -110,18 +110,20 @@ class Callback(TemplateView):
                                                   request_args=request_args,
                                                   authn_method="private_key_jwt",
                                                   authn_endpoint='token')
-            # always delete the state so it is not reused
-            del request.session['oid_state']
+
             if isinstance(resp, ErrorResponse):
+                del request.session['oid_state']
                 logger.debug('error: {}'.format(str(ErrorResponse)))
                 context = self.get_context_data(errors=resp.to_dict())
                 return self.render_to_response(context)
             else:
-                userinfo = client.do_user_info_request(state=resp["state"])
+                userinfo = client.do_user_info_request(state=request.session['oid_state'])
                 user_info_dict = userinfo.to_dict()
                 print(userinfo)
                 request.session['userinfo'] = user_info_dict
                 # TODO redirect to vue.js
+                # always delete the state so it is not reused
+                del request.session['oid_state']
                 return JsonResponse(data=user_info_dict)
 
 
