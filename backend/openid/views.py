@@ -110,10 +110,10 @@ class Callback(TemplateView):
                                                   request_args=request_args,
                                                   authn_method="private_key_jwt",
                                                   authn_endpoint='token')
-
+            # always delete the state so it is not reused
+            del request.session['oid_state']
             if isinstance(resp, ErrorResponse):
                 logger.debug('error: {}'.format(str(ErrorResponse)))
-                del request.session['oid_state']
                 context = self.get_context_data(errors=resp.to_dict())
                 return self.render_to_response(context)
             else:
