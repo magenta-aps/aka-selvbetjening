@@ -10,8 +10,13 @@ from oic.utils.authn.client import CLIENT_AUTHN_METHOD
 from django.conf import settings
 from oic.oic.message import AuthorizationResponse, RegistrationResponse
 from django.views.decorators.clickjacking import xframe_options_exempt
+from oic.utils.keyio import keybundle_from_local_file, KeyBundle, KeyJar
+
 open_id_settings = settings.OPENID_CONNECT
 logger = logging.getLogger(__name__)
+kj = KeyJar()
+kb = KeyBundle(source='file://{}'.format(open_id_settings['private_key']), fileformat='der')
+kj.add_kb(issuer='https://loginqa.sullissivik.gl', kb=kb)
 
 
 class Login(View):
@@ -58,7 +63,7 @@ class Callback(View):
             del request.session['oid_nonce']
 
         client_cert = (settings.OPENID_CONNECT['client_certificate'], settings.OPENID_CONNECT['private_key'])
-        client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=client_cert)
+        client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=client_cert, keyjar=kj)
 
         client_configuration = {'client_id': settings.OPENID_CONNECT['client_id'],
                                 'token_endpoint_auth_method': 'private_key_jwt'}
@@ -80,10 +85,11 @@ class Callback(View):
                 raise SuspiciousOperation(msg)
 
             provider_info = client.provider_config(settings.OPENID_CONNECT['issuer'])# TODO is this needed?
-            logger.debug('provider info: {}'.format(provider_info))
+            logger.debug('provider info: {}'.format(client.config))
 
             request_args = {'code': aresp['code'],
                             'redirect_uri': request.build_absolute_uri(reverse('openid:callback'))}
+            client.keyjar.add()
 
             # this just needs to be the same as the previous callback
             resp = client.do_access_token_request(state=aresp['state'],
