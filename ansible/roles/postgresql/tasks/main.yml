@@ -1,0 +1,13 @@
+---
+
+- name: Install postgresql
+  apt:
+    name: postgresql
+    update_cache: true
+
+- name: Install postgresql-devel
+  apt:
+    name: libpq-dev
+    update_cache: true
+
+...
