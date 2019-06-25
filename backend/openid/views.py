@@ -13,11 +13,16 @@ from oic.oic.message import AuthorizationResponse, RegistrationResponse
 from django.views.decorators.clickjacking import xframe_options_exempt
 from oic.utils.keyio import KeyBundle
 
-open_id_settings = settings.OPENID_CONNECT
 logger = logging.getLogger(__name__)
-key = rsa_load(open_id_settings['private_key'])
-kc_rsa = KeyBundle([{'key': key, 'kty': 'RSA', 'use': 'ver'},
-                    {'key': key, 'kty': 'RSA', 'use': 'sig'}])
+
+open_id_settings = {}
+if getattr(settings, 'OPENID_CONNECT', None):
+    # let the application run without the openid setting
+    open_id_settings = settings.OPENID_CONNECT
+
+    key = rsa_load(open_id_settings['private_key'])
+    kc_rsa = KeyBundle([{'key': key, 'kty': 'RSA', 'use': 'ver'},
+                        {'key': key, 'kty': 'RSA', 'use': 'sig'}])
 
 
 class Login(View):
