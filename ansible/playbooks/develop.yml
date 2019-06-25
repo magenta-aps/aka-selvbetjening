@@ -28,6 +28,10 @@
     - name: Install Node Requirements
       npm:
         path: "{{ npm_path }}"
+    - name: Install Python Dev Requirements
+      pip: 
+        requirements: /vagrant/backend/doc/dev-requirements.txt
+        executable: pip3
   
   vars:
     npm_path: /vagrant/frontend
