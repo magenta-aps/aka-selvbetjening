@@ -30,6 +30,10 @@ class __Result():
     chaining works very well with theese methods, they would still need to
     return something.
 
+    The intent of this class, is to free the programmer from thinking about 
+    - or checking - whether or not a validation succeeded or failed, 
+    until the very end, but still making sure errors are not silently ignored.
+
     '''
     def append(self, validation):
         '''Appends Results

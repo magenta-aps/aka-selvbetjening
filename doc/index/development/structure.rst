@@ -1,3 +1,4 @@
+.. _structure:
 
 Structure
 =========
@@ -30,15 +31,17 @@ Top Folder structure:
 
       the frontend does it's own routing, on paths starting with :code:`/index#/`
 
+  - **openid**              (The folder for the openid login-integration)
+
   - **uploadedfiles**       (This folder is required, but not part og git)
 
     The folder is used to place files uploaded by users
     
 - **frontend**              (The Vue project)
 
-  - **assets**              (Contains the files to be served staticly by Django)  
+  - **dist**                (Contains the files to be served staticly by Django)  
 
-    - **js/app.js**         (The compiled Vue app)
+    - **index.html**        (The entry point for the Vue app)
   
   - **src**                 (The Vue source code)
 

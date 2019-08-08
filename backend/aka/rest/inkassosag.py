@@ -31,6 +31,7 @@ class InkassoSag(JSONRestView):
         if baseresponse.status_code == 200:
 
             logger.debug(self.data)
+            # For information on "andThen" see documentation for Result
             return (validateInkassoJson(self.data)
                     .andThen(validatePeriodeStartAndEnd)
                     .andThen(validateFordringsgrupper)

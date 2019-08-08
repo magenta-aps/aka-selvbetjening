@@ -13,6 +13,9 @@ logger = logging.getLogger(__name__)
 # eg. validateRequired() returns the requestDict, as it is usually used
 # for the next step in the validation
 
+# There are more validators in the different rest-views, that are specific for 
+# these views.
+
 
 def validateRequired(requiredFields, requestDict):
     ''' Validate required fields are present
