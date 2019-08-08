@@ -131,6 +131,29 @@ If using translated strings within the `<script>` block, remember to refer to it
 </script>
 ```
 
+### Validation
+We have installed [vee-validate](https://baianat.github.io/vee-validate/) which makes it easy to define cutom validation 
+rules and supports multiple langueages [integrating with vue-i18n](https://baianat.github.io/vee-validate/guide/localization.html#vuei18n-integration).
+
+New custom rules are located in `src/custom_rules.js`. To make new ones just add them to the `rules`-object.
+
+### Generic fields using s-field
+There are a lot of fields in the forms which are similar, so we have refactored these into a custom SimpleField html-tag: 's-field' (defined in `components/simple_field`). 
+E.g.
+```
+<s-field name="bankgebyr" 
+         :label="$t('attributes.bankgebyr')"
+         type="text" v-model="bankgebyr"
+         :validate="{currency: true}"/>
+```
+is short-hand for
+```
+<div>
+  <label id="lbl_bankgebyr" for="bankgebyr">{{ $t('attributes.bankgebyr') }}</label>
+  <input id="bankgebyr" name="bankgebyr" type="text" v-validate="{currency: true}"
+  <span class="err-msg">{{ errors.first('bankgebyr') }}</span>
+</div>.
+```
 
 ### AJAX
 

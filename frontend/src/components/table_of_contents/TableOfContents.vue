@@ -1,6 +1,6 @@
 <template>
 
-    <nav class="toc">  
+    <nav class="toc">
         <router-link class="toc-link" to="/designguide">
             Design guide
         </router-link>
@@ -19,6 +19,9 @@
         </router-link>
         <router-link class="toc-link" to="/indberetning">
             <span>Opret sag</span>
+        </router-link>
+        <router-link class="toc-link" to="/loentraeksindberetning">
+          <span>Indberet løntræk</span>
         </router-link>
     </nav>
 

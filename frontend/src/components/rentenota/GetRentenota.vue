@@ -2,26 +2,37 @@
 
     <article>
 
-        <h1 class="rentenota-title">{{ $t("rentenota.title") }}cd hej </h1>
+        <h1 class="rentenota-title">{{ $t("rentenota.title") }} </h1>
 
         <div class="rentenota-main">
 
-            <div class="rentenota-actions">
-
-                <form @submit.prevent="requestRentenota()" class="rentenota-dateform">
-                    <fieldset>
-                        <label for="date-from">{{ $t("rentenota.datefrom") }}</label>
-                        <input type="date" id="date-from" v-model="datefrom" required :max="dateto">
-                    </fieldset>
-                    <fieldset>
-                        <label for="date-to">{{ $t("rentenota.dateto") }}</label>
-                        <input type="date" id="date-to" v-model="dateto" required :max="dateto">
-                    </fieldset>
-                    <fieldset>
-                        <input type="submit" :value="$t('common.send')">
-                    </fieldset>
-                </form>
-
+            <div class="rentenota-actions row">
+                <div class="col-4">
+                    <select class="dropdown" v-model="month">
+                        <option value="1" >{{ $t('common.january')      }}</option>
+                        <option value="2" >{{ $t('common.february')     }}</option>
+                        <option value="3" >{{ $t('common.march')        }}</option>
+                        <option value="4" >{{ $t('common.april')        }}</option>
+                        <option value="5" >{{ $t('common.may')          }}</option>
+                        <option value="6" >{{ $t('common.june')         }}</option>
+                        <option value="7" >{{ $t('common.july')         }}</option>
+                        <option value="8" >{{ $t('common.august')       }}</option>
+                        <option value="9" >{{ $t('common.september')    }}</option>
+                        <option value="10">{{ $t('common.october')      }}</option>
+                        <option value="11">{{ $t('common.november')     }}</option>
+                        <option value="12">{{ $t('common.december')     }}</option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <select class="dropdown" v-model="year">
+                        <option v-for="y in years" :key=y>
+                            {{ y }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <button type="submit" @click="requestRentenota">{{ $t('common.send') }}</button>
+                </div>
             </div>
 
             <div v-if="rentenota_data" class="rentenota-data">
@@ -112,7 +123,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="p in rentenota_data.poster">
+                        <tr v-for="p in rentenota_data.poster" :key="p.dato">
                             <td>
                                 {{ p.dato }}
                             </td>
@@ -177,8 +188,13 @@ export default {
       csrftoken: null,
       rentenota_data: null,
       today: new Date(),
-      dateto: null,
-      datefrom: null
+      years: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(
+        function (a) {
+            return new Date().getFullYear() - a
+        }
+      ),
+      month: new Date().getMonth()+1, //JS months are zero indexed
+      year: new Date().getFullYear()
     };
   },
   computed: {
@@ -201,7 +217,7 @@ export default {
     },
     requestRentenota() {
       axios({
-        url: `/rentenota/from${ this.datefrom }to${ this.dateto }`,
+        url: `/rentenota/${ this.year }-${ this.zeroPadMonth(this.month) }`,
         method: "get",
         headers: {
           "X-CSRFToken": this.csrftoken,
@@ -223,6 +239,9 @@ export default {
       this.dateto = d.toISOString().substr(0, 10);
       d.setMonth(d.getMonth() - 1);
       this.datefrom = d.toISOString().substr(0, 10);
+    },
+    zeroPadMonth: function(x) {
+      return x >= 10 ? String(x) : '0'+String(x)
     }
   },
   created() {

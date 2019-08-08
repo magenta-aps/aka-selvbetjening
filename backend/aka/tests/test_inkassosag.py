@@ -1,10 +1,13 @@
 from django.test import TestCase, Client
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
+from datetime import date
 import json
 import os
 import random
 import logging
+# Functions to test
+from aka.rest.inkassosag import validatePeriodeStartAndEnd
 
 
 # Create your tests here.
@@ -17,7 +20,7 @@ class BasicTestCase(TestCase):
     def checkReturnValIsJSON(self, response):
         try:
             charset = response.charset
-            return json.loads(response.content.decode(charset)) #asædhgfashdflhsdkhaflkhasdfkjlh
+            return json.loads(response.content.decode(charset))
         except json.decoder.JSONDecodeError:
             self.fail('Did not get JSON back.')
 
@@ -26,7 +29,9 @@ class BasicTestCase(TestCase):
         formData = {'fordringshaver': 'test-fordringshaver',
                     'debitor': 'test-debitor',
                     'fordringsgruppe': '1',
-                    'fordringstype': '1'
+                    'fordringstype': '1',
+                    'periodestart': date(2019, 3, 28),
+                    'periodeslut': date(2019, 3, 28)
                     }
         response = self.c.post(self.url, formData)
         self.assertEqual(response.status_code, 200)
@@ -38,7 +43,9 @@ class BasicTestCase(TestCase):
                     'debitor': 'test-debitor',
                     'fordringsgruppe': '1',
                     'fordringstype': '1',
-                    'fordringshaver2': 'test-fordringshaver2'
+                    'fordringshaver2': 'test-fordringshaver2',
+                    'periodestart': date(2019, 3, 27),
+                    'periodeslut': date(2019, 3, 28)
                     }
         response = self.c.post(self.url, formData)
         self.assertEqual(response.status_code, 200)
@@ -49,7 +56,10 @@ class BasicTestCase(TestCase):
         formData = {'fordringshaver2': 'test-fordringshaver2',
                     'debitor': 'test-debitor',
                     'fordringsgruppe': '1',
-                    'fordringstype': '1'
+                    'fordringstype': '1',
+                    'periodestart': date(2019, 3, 27),
+                    'periodeslut': date(2019, 3, 28)
+
                     }
         response = self.c.post(self.url, formData)
         self.assertEqual(response.status_code, 400)
@@ -59,7 +69,10 @@ class BasicTestCase(TestCase):
         # Test that multiple errors are recieved
         formData = {'fordringshaver2': 'test-fordringshaver2',
                     'fordringsgruppe': '1',
-                    'fordringstype': '1'
+                    'fordringstype': '1',
+                    'periodestart': date(2019, 3, 27),
+                    'periodeslut': date(2019, 3, 28)
+
                     }
         response = self.c.post(self.url, formData)
         self.assertEqual(response.status_code, 400)
@@ -72,7 +85,10 @@ class BasicTestCase(TestCase):
                     'fordringshaver': 'test-fordringshaver',
                     'debitor': 'test-debitor',
                     'fordringsgruppe': '1',
-                    'fordringstype': '10'
+                    'fordringstype': '10',
+                    'periodestart': date(2019, 3, 27),
+                    'periodeslut': date(2019, 3, 28)
+
                     }
         response = self.c.post(self.url, formData)
         self.assertEqual(response.status_code, 400)
@@ -86,7 +102,10 @@ class BasicTestCase(TestCase):
                     'fordringshaver': 'test-fordringshaver',
                     'debitor': 'test-debitor',
                     'fordringsgruppe': '76',
-                    'fordringstype': '1'
+                    'fordringstype': '1',
+                    'periodestart': date(2019, 3, 27),
+                    'periodeslut': date(2019, 3, 28)
+
                     }
         response = self.c.post(self.url, formData)
         self.assertEqual(response.status_code, 400)
@@ -113,7 +132,9 @@ class BasicTestCase(TestCase):
                                    'fordringsgruppe': '4',
                                    'fordringstype': '1',
                                    'debitor': 'indhold/debitor ',
-                                   'attachment': uploadfile
+                                   'attachment': uploadfile,
+                                   'periodestart': date(2019, 3, 27),
+                                   'periodeslut': date(2019, 3, 28)
                                })
         self.assertEqual(response.status_code, 200)
         self.checkReturnValIsJSON(response)
@@ -134,3 +155,20 @@ class BasicTestCase(TestCase):
 
     # IMPORTANT
     # We should test that files are not posted/stored on invalid form-data
+
+    ##############
+    # Validation #
+    ##############
+
+    def test_validateDateOrder(self):
+        # Base cases
+        valid1 = {'periodestart': date(2002, 12, 12),
+                  'periodeslut': date(2003, 12, 12)}
+        valid2 = {'periodestart': date(2002, 12, 12),
+                  'periodeslut': date(2002, 12, 12)}
+        invalid = {'periodestart': date(2003, 12, 12),
+                   'periodeslut': date(2002, 12, 12)}
+
+        self.assertTrue(validatePeriodeStartAndEnd(valid1).status)
+        self.assertTrue(validatePeriodeStartAndEnd(valid2).status)
+        self.assertFalse(validatePeriodeStartAndEnd(invalid).status)

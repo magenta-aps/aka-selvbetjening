@@ -3,7 +3,7 @@ import logging
 # Internal tools
 from aka.rest.base import JSONRestView
 from aka.helpers import validation
-from aka.helpers.validation import Error, Success
+from aka.helpers.result import Error, Success
 from aka.helpers.sharedfiles import getSharedJson
 
 logger = logging.getLogger(__name__)
@@ -32,30 +32,12 @@ class InkassoSag(JSONRestView):
 
             logger.debug(self.data)
             return (validateInkassoJson(self.data)
+                    .andThen(validatePeriodeStartAndEnd)
                     .andThen(validateFordringsgrupper)
                     .toHttpResponse()
                     )
         else:
             return baseresponse
-
-
-jsonSchema = {
-        'type': 'object',
-        'properties': {
-            'fordringshaver':   {'type': 'string'},
-            'debitor':          {'type': 'string'},
-            'fordringshaver2':  {'type': 'string'},
-            'fordringsgruppe':  {
-                'type': 'string',
-                'pattern': '[0-9]+'
-                },
-            'fordringstype':    {'type': 'string'}
-            },
-        'required': ['fordringshaver',
-                     'debitor',
-                     'fordringsgruppe',
-                     'fordringstype']
-        }
 
 
 def validateInkassoJson(reqJson):
@@ -69,7 +51,9 @@ def validateInkassoJson(reqJson):
     __REQUIRED_FIELDS = ['fordringshaver',
                          'debitor',
                          'fordringsgruppe',
-                         'fordringstype']
+                         'fordringstype',
+                         'periodestart',
+                         'periodeslut']
     return validation.validateRequired(__REQUIRED_FIELDS, reqJson)
 
 
@@ -104,7 +88,7 @@ def getOnlyElement(l, fid, fordringsName):
     Because it can return an error, it returns a Success(Dict) instead
     of just the Dict with the given element.
     An easy way to use the Dict, upon success is using Success.andThen.
-    See :func:`~aka.helpers.validation.Success.andThen`
+    See :func:`~aka.helpers.result.Success.andThen`
 
     :param l: The list to look for the element in
     :type l: List
@@ -131,3 +115,16 @@ def getOnlyElement(l, fid, fordringsName):
         return Error('multiple_' + fordringsName + '_found', fordringsName)
     else:
         return Success(fordringsList[0])
+
+
+def validatePeriodeStartAndEnd(reqJson):
+    ''' Validate that starting of period precedes the end of a given period
+
+    :param reqJson: The json from the http request
+    :type reqJson: Dict
+    '''
+    # TODO Are these fields guarenteed to be here?
+    if reqJson['periodestart'] <= reqJson['periodeslut']:
+        return Success(reqJson)
+    else:
+        return Error('start_date_before_end_date', 'periodeslut')
