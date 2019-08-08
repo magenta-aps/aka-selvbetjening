@@ -66,6 +66,11 @@ LOGGING = {
             'handlers': ['debug-console'],
             'filters': ['require_debug_true'],
             'level': 'DEBUG'
+        },
+        'oic': {
+            'handlers': ['debug-console'],
+            'filters': ['require_debug_true'],
+            'level': 'DEBUG'
         }
     }
 }
@@ -82,6 +87,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'openid'
 ]
 
 MIDDLEWARE = [

@@ -22,9 +22,10 @@
   post_tasks:
     - name: Install Python Requirements
       pip: 
-        requirements: /vagrant/doc/requirements.txt
+        requirements: /vagrant/backend/doc/requirements.txt
         executable: pip3
   
   roles:
   - django
+  - postgresql
 ...

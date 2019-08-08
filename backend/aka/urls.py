@@ -13,7 +13,7 @@ Includinganother URLconf
    1. Import the include() function: from django.conf.urls import url, include
    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic.base import RedirectView
 
@@ -29,7 +29,9 @@ from aka.rest import inkassosag, \
                     privatdebitorkonto
 
 
+
 urlpatterns = [
+
    url(r'^admin/',
        admin.site.urls),
    # redirect empty url string to index
@@ -42,6 +44,9 @@ urlpatterns = [
        htmlviews.IndexView,
        name='index'),
 
+   url(r'^oid/', 
+       include('openid.urls', namespace='openid')),
+  
    url(r'^inkassosag$',
        inkassosag.InkassoSag.as_view(),
        name='inkassosag'),
