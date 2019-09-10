@@ -2,7 +2,8 @@ import requests
 from aka.helpers.result import Success  # , Error
 import zeep
 from django.conf import settings
-import xmltodict
+from xmltodict import parse as xml_to_dict
+from dict2xml import dict2xml as dict_to_xml
 
 
 class PrismeException(Exception):
@@ -12,6 +13,63 @@ class PrismeException(Exception):
 
     def __str__(self):
         return f"Error in response from Prisme. Code: {self.code}, Text: {self.text}"
+
+
+class PrismeRequestObject(object):
+    pass
+
+
+class PrismeClaim(PrismeRequestObject):
+
+    def __init__(self, claimant_id, cpr_cvr, external_claimant, claim_group_number, claim_type, child_cpr_cvr, claim_ref, amount_balance, text, created_by, period_start, period_end, due_date, founded_date, notes, codebtors=[], files=[]):
+        self.claimant_id = claimant_id,
+        self.cpr_cvr = cpr_cvr
+        self.external_claimant = external_claimant
+        self.claim_group_number = claim_group_number
+        self.claim_type = claim_type
+        self.child_cpr_cvr = child_cpr_cvr
+        self.claim_ref = claim_ref
+        self.amount_balance = amount_balance
+        self.text = text
+        self.created_by = created_by
+        self.period_start = period_start
+        self.period_end = period_end
+        self.due_date = due_date
+        self.founded_date = founded_date
+        self.notes = notes
+        self.codebtors = codebtors
+        self.files = files
+
+    @property
+    def xml(self):
+        return dict_to_xml({
+            'CustCollClaimantIdentifier': self.claimant_id,
+            'CustCollCprCvr': self.cpr_cvr,
+            'CustCollExternalClaimant': self.external_claimant,
+            'CustCollClaimGroupNumber': self.claim_group_number,
+            'CustCollClaimType': self.claim_type,
+            'CustCollChildCprCvr': self.child_cpr_cvr,
+            'CustCollClaimRef': self.claim_ref,
+            'CustCollAmountBalance': self.amount_balance,
+            'CustCollText': self.text,
+            'CustCollCreatedBy': self.created_by,
+            'CustCollPeriodStart': self.period_start,
+            'CustCollPeriodEnd': self.period_end,
+            'CustCollDueDate': self.due_date,
+            'CustCollFoundedDate': self.founded_date,
+            'Notes': self.notes,
+            'coDebtors': [
+                {'coDebtor': {'CustCollCprCvr': codebtor}}
+                for codebtor in self.codebtors
+            ],
+            'files': [
+                {'file': {
+                    'Name': file.name,
+                    'Content': file.content
+                }}
+                for file in self.files
+            ]
+        }, wrap="CustCollClaimTableFuj")
 
 
 class PrismeReply(object):
@@ -25,9 +83,15 @@ class PrismeReplyObject(object):
     pass
 
 
+class PrismeClaimResponse(PrismeReplyObject):
+    def __init__(self, xml):
+        d = xml_to_dict(xml)
+        self.record_id = d['custCollClaimTableFuj']['RecId']
+
+
 class PrismeClaimant(PrismeReplyObject):
     def __init__(self, xml):
-        d = xmltodict.parse(xml)
+        d = xml_to_dict(xml)
         self.claimant_id = list(d['FujClaimant']['ClaimantId'])
 
 
@@ -60,7 +124,7 @@ class PrismeInterestNote(PrismeReplyObject):
             self.interest_days = data['InterestDays']
 
     def __init__(self, xml):
-        data = xmltodict.parse(xml)
+        data = xml_to_dict(xml)
         self.cust_interest_journal = [
             PrismeInterestNote.PrismeInterestJournal(x)
             for x in data['CustTable']['CustInterestJour']
@@ -121,13 +185,21 @@ class Prisme():
         return outputs
 
 
+    def create_claim(self, claim):
+        if not isinstance(claim, PrismeClaim):
+            raise Exception("claim must be of type PrismeClaim")
+        return self.processService(
+            "createClaim",
+            claim.xml,
+            PrismeClaimResponse
+        )
+
     def check_cvr(self, cvr_number):
         return self.processService(
             "checkCVR",
             f"<FujClaimant><CvrLegalEntity>{cvr_number}</CvrLegalEntity></FujClaimant>",
             PrismeClaimant
         )
-
 
     def get_interest_note(self, customer_id_number, year, month):
         return self.processService(
