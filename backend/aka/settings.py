@@ -161,6 +161,12 @@ STATIC_URL = '/index/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [ os.path.join(PROJECT_DIR, 'frontend', 'dist', 'static') ]
 
+
+PRISME_CONNECT = {
+    'wsdl_file': 'wsdl/GenericService.wsdl'
+}
+
+
 LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
 if os.path.exists(LOCAL_SETTINGS_FILE):
     from .local_settings import *  # noqa
