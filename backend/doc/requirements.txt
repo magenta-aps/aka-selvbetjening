@@ -1,5 +1,8 @@
 Django<2.0,>=1.11
-psycopg2
+psycopg2-binary
 requests
 oic
 httpretty
+lxml>=4.2.5
+zeep
+xmltodict

@@ -1,5 +1,34 @@
 import requests
 from aka.helpers.result import Success  # , Error
+import zeep
+from django.conf import settings
+import xmltodict
+
+
+class PrismeException(Exception):
+    def __init__(self, code, text):
+        self.code = code
+        self.text = text
+
+    def __str__(self):
+        return f"Error in response from Prisme. Code: {self.code}, Text: {self.text}"
+
+
+class PrismeReply(object):
+    def __init__(self, status_code, status_text, xml):
+        self.status_code = status_code
+        self.status_text = status_text
+        self.xml = xml
+
+
+class PrismeReplyObject(object):
+    pass
+
+
+class PrismeClaimant(PrismeReplyObject):
+    def __init__(self, xml):
+        d = xmltodict.parse(xml)
+        self.claimant_id = list(d['FujClaimant']['ClaimantId'])
 
 
 class Prisme():
@@ -7,7 +36,65 @@ class Prisme():
     '''
 
     def __init__(self):
-        pass
+        wsdl = settings.PRISME_CONNECT.wsdl_file
+        self.client = zeep.Client(wsdl=wsdl)
+
+    def create_request_header(self, method, area="SULLISSIVIK", client_version=1):
+        request_header_class = self.client.get_type('tns:GWSRequestHeaderDCFUJ')
+        return request_header_class(
+            clientVersion=client_version,
+            area=area,
+            method=method
+        )
+
+    def create_request_body(self, xml):
+        if type(xml) is not list:
+            xml = [xml]
+        item_class = self.client.get_type("tns:GWSRequestXMLDCFUJ")
+        container_class = self.client.get_type("tns:ArrayOfGWSRequestXMLDCFUJ")
+        return container_class(list([
+            item_class(xml=x) for x in xml
+        ]))
+
+
+    def getServerVersion(self):
+        response = self.client.service.getServerVersion(self.create_request_header("getServerVersion"))
+        return {'version': response.serverVersion, 'description': response.serverVersionDescription}
+
+
+    def processService(self, method, xml):
+        request_class = self.client.get_type("tns:GWSRequestDCFUJ")
+        request = request_class(
+            requestHeader=self.create_request_header(method),
+            xmlCollection=self.create_request_body(xml)
+        )
+        reply = self.client.service.processService(request)
+        # reply is of type GWSReplyDCFUJ
+
+        # reply.status is of type GWSReplyStatusDCFUJ
+        if reply.status.replyCode != 0:
+            raise PrismeException(reply.status.replyCode, reply.staus.replyText)
+
+        # reply_instance if of type GWSReplyInstanceDCFUJ
+        return [
+            PrismeReply(reply_instance.replyCode, reply_instance.replyText, xml)
+            for reply_instance in reply.instanceCollection
+        ]
+
+
+    def check_cvr(self, cvr_number):
+        reply = self.processService(
+            "checkCVR",
+            f"<FujClaimant><CvrLegalEntity>{cvr_number}</CvrLegalEntity></FujClaimant>"
+        )
+        claimants = []
+        for prisme_reply in reply:
+            if prisme_reply.status_code != 0:
+                print(f"Something went wrong: {prisme_reply.status_code}: {prisme_reply.status_text}")
+            else:
+                claimants.append(PrismeClaimant(prisme_reply.xml))
+        return claimants
+
 
     def sendToPrisme(self, data):
         '''Stub
