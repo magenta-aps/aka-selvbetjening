@@ -31,12 +31,73 @@ class PrismeClaimant(PrismeReplyObject):
         self.claimant_id = list(d['FujClaimant']['ClaimantId'])
 
 
+class PrismeInterestNote(PrismeReplyObject):
+
+    class PrismeInterestJournal(PrismeReplyObject):
+        def __init__(self, data):
+            self.updated = data['Updated']
+            self.account_number = data['AccountNum']
+            self.interest_note = data['InterestNote']
+            self.to_date = data['ToDate']
+            self.billing_classification = data['BillingClassification']
+            self.interest_transactions = list([
+                PrismeInterestNote.PrismeInterestTransaction(v)
+                for k, v in data['CustInterestTransactions'].items()
+                if k == 'CustInterestTrans'
+            ])
+
+    class PrismeInterestTransaction(PrismeReplyObject):
+        def __init__(self, data):
+            self.voucher = data['Voucher']
+            self.text = data['Txt']
+            self.due_date = data['DueDate']
+            self.invoice_amount = data['InvoiceAmount']
+            self.interest_amount = data['InterestAmount']
+            self.transaction_date = data['TransDate']
+            self.invoice = data['Invoice']
+            self.calculate_from = data['CalcFrom']
+            self.calculate_to = data['CalcTo']
+            self.interest_days = data['InterestDays']
+
+    def __init__(self, xml):
+        data = xmltodict.parse(xml)
+        self.cust_interest_journal = [
+            PrismeInterestNote.PrismeInterestJournal(x)
+            for x in data['CustTable']['CustInterestJour']
+        ]
+
+
+"""
+<CustInterestJour>
+		<Updated>03-04-2019</Updated>
+		<AccountNum>00000725</AccountNum>
+		<InterestNote>00000001</InterestNote>
+		<ToDate>02-04-2019</ToDate>
+		<BillingClassification>200</BillingClassification>
+		<CustInterestTransactions>
+			<CustInterestTrans>
+				<Voucher>FAK-00000040</Voucher>
+				<Txt>Renter af fakturanummer 00000044 </Txt>
+				<DueDate>02-01-2018</DueDate>
+				<InvoiceAmount>4000.00</InvoiceAmount>
+				<InterestAmount>160.00</InterestAmount>
+				<TransDate>02-01-2018</TransDate>
+				<Invoice>00000044</Invoice>
+				<CalcFrom>01-01-2019</CalcFrom>
+				<CalcTo/>
+				<InterestDays>0</InterestDays>
+			</CustInterestTrans>
+		</CustInterestTransactions>
+	</CustInterestJour>
+"""
+
+
 class Prisme():
     '''Class that handles communication with the Prisme system.
     '''
 
     def __init__(self):
-        wsdl = settings.PRISME_CONNECT.wsdl_file
+        wsdl = settings.PRISME_CONNECT['wsdl_file']
         self.client = zeep.Client(wsdl=wsdl)
 
     def create_request_header(self, method, area="SULLISSIVIK", client_version=1):
@@ -62,7 +123,7 @@ class Prisme():
         return {'version': response.serverVersion, 'description': response.serverVersionDescription}
 
 
-    def processService(self, method, xml):
+    def processService(self, method, xml, reply_container_class):
         request_class = self.client.get_type("tns:GWSRequestDCFUJ")
         request = request_class(
             requestHeader=self.create_request_header(method),
@@ -76,24 +137,29 @@ class Prisme():
             raise PrismeException(reply.status.replyCode, reply.staus.replyText)
 
         # reply_instance if of type GWSReplyInstanceDCFUJ
-        return [
-            PrismeReply(reply_instance.replyCode, reply_instance.replyText, xml)
-            for reply_instance in reply.instanceCollection
-        ]
+        outputs = []
+        for reply_item in reply.instanceCollection:
+            if reply_item.status_code != 0:
+                print(f"Something went wrong: {reply_item.status_code}: {reply_item.status_text}")
+            else:
+                outputs.append(reply_container_class(reply_item.xml))
+        return outputs
 
 
     def check_cvr(self, cvr_number):
-        reply = self.processService(
+        return self.processService(
             "checkCVR",
-            f"<FujClaimant><CvrLegalEntity>{cvr_number}</CvrLegalEntity></FujClaimant>"
+            f"<FujClaimant><CvrLegalEntity>{cvr_number}</CvrLegalEntity></FujClaimant>",
+            PrismeClaimant
         )
-        claimants = []
-        for prisme_reply in reply:
-            if prisme_reply.status_code != 0:
-                print(f"Something went wrong: {prisme_reply.status_code}: {prisme_reply.status_text}")
-            else:
-                claimants.append(PrismeClaimant(prisme_reply.xml))
-        return claimants
+
+
+    def get_interest_note(self, customer_id_number, year, month):
+        return self.processService(
+            "getInterestNote",
+            f"<custInterestJour><CustIdentificationNumber>{customer_id_number}</CustIdentificationNumber><YearMonthFUJ>{year:04d}-{month:02d}</YearMonthFUJ></custInterestJour>",
+            PrismeInterestNote
+        )
 
 
     def sendToPrisme(self, data):
