@@ -166,13 +166,11 @@ class PrismeResponseObject(object):
 class PrismeClaimResponse(PrismeResponseObject):
     def __init__(self, xml):
         d = xml_to_dict(xml)
-        self.record_id = d['custCollClaimTableFuj']['RecId']
+        self.rec_id = d['custCollClaimTableFuj']['RecId']
 
 
-class PrismeImpairmentResponse(PrismeResponseObject):
-    def __init__(self, xml):
-        d = xml_to_dict(xml)
-        self.req_id = d['custCollClaimTableFuj']['RecId']
+class PrismeImpairmentResponse(PrismeClaimResponse):
+    pass
 
 
 class PrismeCvrCheckResponse(PrismeResponseObject):
