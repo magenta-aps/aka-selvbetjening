@@ -1,9 +1,12 @@
+import os
+
 import requests
-from aka.helpers.result import Success  # , Error
 import zeep
+from aka.helpers.result import Success  # , Error
+from aka.helpers.utils import AKAUtils
+from dict2xml import dict2xml as dict_to_xml
 from django.conf import settings
 from xmltodict import parse as xml_to_dict
-from dict2xml import dict2xml as dict_to_xml
 
 
 class PrismeException(Exception):
@@ -38,38 +41,44 @@ class PrismeClaim(PrismeRequestObject):
         self.founded_date = founded_date
         self.notes = notes
         self.codebtors = codebtors
-        self.files = files
+        self.files = files  # List of django.core.files.File
 
     @property
     def xml(self):
         return dict_to_xml({
-            'CustCollClaimantIdentifier': self.claimant_id,
-            'CustCollCprCvr': self.cpr_cvr,
-            'CustCollExternalClaimant': self.external_claimant,
-            'CustCollClaimGroupNumber': self.claim_group_number,
-            'CustCollClaimType': self.claim_type,
-            'CustCollChildCprCvr': self.child_cpr_cvr,
-            'CustCollClaimRef': self.claim_ref,
-            'CustCollAmountBalance': self.amount_balance,
-            'CustCollText': self.text,
-            'CustCollCreatedBy': self.created_by,
-            'CustCollPeriodStart': self.period_start,
-            'CustCollPeriodEnd': self.period_end,
-            'CustCollDueDate': self.due_date,
-            'CustCollFoundedDate': self.founded_date,
-            'Notes': self.notes,
+            'CustCollClaimantIdentifier': self.prepare(self.claimant_id),
+            'CustCollCprCvr': self.prepare(self.cpr_cvr),
+            'CustCollExternalClaimant': self.prepare(self.external_claimant),
+            'CustCollClaimGroupNumber': self.prepare(self.claim_group_number),
+            'CustCollClaimType': self.prepare(self.claim_type),
+            'CustCollChildCprCvr': self.prepare(self.child_cpr_cvr),
+            'CustCollClaimRef': self.prepare(self.claim_ref),
+            'CustCollAmountBalance': self.prepare(self.amount_balance),
+            'CustCollText': self.prepare(self.text),
+            'CustCollCreatedBy': self.prepare(self.created_by),
+            'CustCollPeriodStart': self.prepare(self.period_start),
+            'CustCollPeriodEnd': self.prepare(self.period_end),
+            'CustCollDueDate': self.prepare(self.due_date),
+            'CustCollFoundedDate': self.prepare(self.founded_date),
+            'Notes': self.prepare(self.notes),
             'coDebtors': [
-                {'coDebtor': {'CustCollCprCvr': codebtor}}
+                {'coDebtor': {'CustCollCprCvr': self.prepare(codebtor)}}
                 for codebtor in self.codebtors
             ],
             'files': [
-                {'file': {
-                    'Name': file.name,
-                    'Content': file.content
-                }}
+                {
+                    'file': {
+                        'Name': os.path.basename(file.name),
+                        'Content': AKAUtils.get_file_contents_base64(file)
+                    }
+                }
                 for file in self.files
             ]
         }, wrap="CustCollClaimTableFuj")
+
+    @staticmethod
+    def prepare(value):
+        return '' if value is None else value
 
 
 class PrismeReply(object):

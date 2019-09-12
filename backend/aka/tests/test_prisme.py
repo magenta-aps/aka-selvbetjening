@@ -1,5 +1,9 @@
+from datetime import date
+
+from django.core.files import File
 from django.test import TestCase
-from aka.helpers.prisme import Prisme, PrismeClaimant, PrismeInterestNote
+from aka.helpers.prisme import Prisme, PrismeClaimant, PrismeInterestNote, PrismeClaim
+from xmltodict import parse as xml_to_dict
 
 class BasicTestCase(TestCase):
     def setUp(self):
@@ -116,3 +120,33 @@ class BasicTestCase(TestCase):
         self.assertEqual("01-01-2019", transaction10.calculate_from)
         self.assertEqual(None, transaction10.calculate_to)
         self.assertEqual("0", transaction10.interest_days)
+
+    def test_create_claim_parse(self):
+        attachment = File(open('aka/tests/testfile.pdf'))
+        attachment.close()
+        claim = PrismeClaim(
+            "32SE", "0102030405", "Ekstern fordringshaver", 4, 1, None,
+            1234, 20, "Udlæg for hotdog", "TesterPerson",
+            date(2019, 3, 7), date(2019, 3, 8), date(2019, 4, 1), date(2019, 3, 7),
+            "Den smagte godt", [11223344, 55667788], files=[attachment])
+        data = xml_to_dict(claim.xml)
+        expected = xml_to_dict(self.get_file_contents('aka/tests/claim.xml'))
+        self.compare(expected, data, "")
+
+    @staticmethod
+    def get_file_contents(filename):
+        with open(filename, "r") as f:
+            return f.read()
+
+    def compare(self, a, b, path):
+        self.assertEqual(type(a), type(b), f"mismatch on {path}, different type {type(a)} != {type(b)}")
+        if isinstance(a, list):
+            self.assertEqual(len(a), len(b), f"mismatch on {path}, different length {len(a)} != {len(b)}")
+            for index, item in enumerate(a):
+                self.compare(item, b[index], f"{path}[{index}]")
+        elif isinstance(a, dict):
+            self.compare(a.keys(), b.keys(), f"{path}.keys()")
+            for key in a:
+                self.compare(a[key], b[key], f"{path}[{key}]")
+        else:
+            self.assertEqual(a, b, f"mismatch on {path}, different value {a} != {b}")

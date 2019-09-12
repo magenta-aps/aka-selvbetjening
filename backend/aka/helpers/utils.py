@@ -1,4 +1,5 @@
 import datetime
+import base64
 
 
 class AKAUtils():
@@ -32,3 +33,9 @@ class AKAUtils():
         '''
 
         return datetime.datetime.strftime(date, '%Y-%m-%d')
+
+    @staticmethod
+    def get_file_contents_base64(file):
+        with file.open('rb') as fp:
+            data = fp.read()
+            return base64.b64encode(data).decode("ascii")
