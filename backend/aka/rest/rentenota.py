@@ -70,8 +70,10 @@ class RenteNota(JSONRestView):
         '''
 
         try:
+            year = int(year)
+            month = int(month)
             prisme = Prisme()
-            logger.info('Get rentenota ' + year + '-' + month)
+            logger.info(f'Get rentenota {year}-{month}')
 
             return (validateInputDate(year, month)
                     .andThen(prisme.getRentenota)
@@ -87,7 +89,9 @@ def validateInputDate(year, month):
     '''Validate that the input parameter is a valid month and year
 
     '''
-    if int(month) > 12 or month == '00':
+    if month > 12 or month < 1:
         return Error('invalid_month')
+    # elif year < 1900 or year > 2100:
+    #     return Error('invalid year')
     else:
         return Success((year, month))

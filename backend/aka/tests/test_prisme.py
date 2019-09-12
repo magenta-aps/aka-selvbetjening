@@ -88,8 +88,8 @@ class BasicTestCase(TestCase):
 
     def test_interest_note_response_parse(self):
         response = PrismeInterestNoteResponse(self.get_file_contents('aka/tests/interestnote_response.xml'))
-        self.assertEqual(2, len(response.cust_interest_journal))
-        journal0 = response.cust_interest_journal[0]
+        self.assertEqual(2, len(response.interest_journal))
+        journal0 = response.interest_journal[0]
         self.assertEqual("03-04-2019", journal0.updated)
         self.assertEqual("00000725", journal0.account_number)
         self.assertEqual("00000001", journal0.interest_note)
@@ -105,11 +105,11 @@ class BasicTestCase(TestCase):
         self.assertEqual("160.00", transaction00.interest_amount)
         self.assertEqual("02-01-2018", transaction00.transaction_date)
         self.assertEqual("00000044", transaction00.invoice)
-        self.assertEqual("01-01-2019", transaction00.calculate_from)
-        self.assertEqual(None, transaction00.calculate_to)
+        self.assertEqual("01-01-2019", transaction00.calculate_from_date)
+        self.assertEqual(None, transaction00.calculate_to_date)
         self.assertEqual("0", transaction00.interest_days)
 
-        journal1 = response.cust_interest_journal[1]
+        journal1 = response.interest_journal[1]
         self.assertEqual("03-04-2019", journal1.updated)
         self.assertEqual("00000726", journal1.account_number)
         self.assertEqual("00000002", journal1.interest_note)
@@ -125,8 +125,8 @@ class BasicTestCase(TestCase):
         self.assertEqual("280.00", transaction10.interest_amount)
         self.assertEqual("02-01-2018", transaction10.transaction_date)
         self.assertEqual("00000043", transaction10.invoice)
-        self.assertEqual("01-01-2019", transaction10.calculate_from)
-        self.assertEqual(None, transaction10.calculate_to)
+        self.assertEqual("01-01-2019", transaction10.calculate_from_date)
+        self.assertEqual(None, transaction10.calculate_to_date)
         self.assertEqual("0", transaction10.interest_days)
 
 

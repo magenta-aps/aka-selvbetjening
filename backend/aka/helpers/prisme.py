@@ -197,19 +197,19 @@ class PrismeInterestNoteResponse(PrismeResponseObject):
     class PrismeInterestTransaction(PrismeResponseObject):
         def __init__(self, data):
             self.voucher = data['Voucher']
+            self.invoice = data['Invoice']
             self.text = data['Txt']
-            self.due_date = data['DueDate']
             self.invoice_amount = data['InvoiceAmount']
             self.interest_amount = data['InterestAmount']
+            self.due_date = data['DueDate']
             self.transaction_date = data['TransDate']
-            self.invoice = data['Invoice']
-            self.calculate_from = data['CalcFrom']
-            self.calculate_to = data['CalcTo']
+            self.calculate_from_date = data['CalcFrom']
+            self.calculate_to_date = data['CalcTo']
             self.interest_days = data['InterestDays']
 
     def __init__(self, xml):
         data = xml_to_dict(xml)
-        self.cust_interest_journal = [
+        self.interest_journal = [
             PrismeInterestNoteResponse.PrismeInterestJournal(x)
             for x in data['CustTable']['CustInterestJour']
         ]
@@ -352,6 +352,39 @@ class Prisme():
         :type date: Tuple (string YYYY, string MM)
         :returns: a Result object with the specified data or an error
         '''
+
+        """
+        customer_id_number = '1234'
+        request = PrismeInterestNoteRequest(
+            customer_id_number,
+            date[0],
+            date[1]
+        )
+        prisme = Prisme()
+        response = prisme.get_interest_note(request)
+        # Response is of type PrismeInterestNoteResponse
+
+        posts = []
+        for journal in response.interest_journal:
+            # x = journal.account_number
+            for transaction in journal.interest_transactions:
+                posts.append({
+                    'dato': transaction.due_date,
+                    'fradato': transaction.calculate_from_date,
+                    'postdato': transaction.transaction_date,
+                    'bilag': transaction.voucher,
+                    'faktura': transaction.invoice,
+                    'tekst': transaction.text,
+                    'dage': transaction.interest_days,
+                    'grundlag': transaction.invoice_amount,
+                    'val': '',
+                    'grundlag2': '',
+                    'beloeb': transaction.interest_amount
+                })
+
+        # get cvr number from request?
+        # Lookup name & address
+        """
 
         post1 = {'dato': '10/02-18',
                  'postdato': '10/02-18',
