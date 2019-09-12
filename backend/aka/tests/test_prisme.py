@@ -2,7 +2,7 @@ from datetime import date
 
 from django.core.files import File
 from django.test import TestCase
-from aka.helpers.prisme import Prisme, PrismeClaimant, PrismeInterestNote, PrismeClaim
+from aka.helpers.prisme import Prisme, PrismeCvrCheckResponse, PrismeInterestNoteResponse, PrismeClaimRequest, PrismeImpairmentRequest
 from xmltodict import parse as xml_to_dict
 
 class BasicTestCase(TestCase):
@@ -23,63 +23,22 @@ class BasicTestCase(TestCase):
         self.assertTrue(rn.status)
 
     def test_check_cvr_parse(self):
-        item = PrismeClaimant("""
-            <FujClaimant>
-                <ClaimantId>35SKATDK</ClaimantId>
-                <ClaimantId>35BIDRAGDK</ClaimantId>
-            </FujClaimant>
-        """)
+        item = PrismeCvrCheckResponse(self.get_file_contents('aka/tests/cvrcheck_response.xml'))
         self.assertEqual(2, len(item.claimant_id))
         self.assertEqual("35SKATDK", item.claimant_id[0])
         self.assertEqual("35BIDRAGDK", item.claimant_id[1])
 
+    def test_impairment_parse(self):
+        impairment = PrismeImpairmentRequest('32SE', '12345678', 'ref123', -100.5, 'AKI-000047')
+        self.compare(
+            xml_to_dict(self.get_file_contents('aka/tests/impairment_request.xml')),
+            xml_to_dict(impairment.xml),
+            ""
+        )
+
+
     def test_interest_note_parse(self):
-        item = PrismeInterestNote("""
-            <CustTable>
-                <CustInterestJour>
-                    <Updated>03-04-2019</Updated>
-                    <AccountNum>00000725</AccountNum>
-                    <InterestNote>00000001</InterestNote>
-                    <ToDate>02-04-2019</ToDate>
-                    <BillingClassification>200</BillingClassification>
-                    <CustInterestTransactions>
-                        <CustInterestTrans>
-                            <Voucher>FAK-00000040</Voucher>
-                            <Txt>Renter af fakturanummer 00000044 </Txt>
-                            <DueDate>02-01-2018</DueDate>
-                            <InvoiceAmount>4000.00</InvoiceAmount>
-                            <InterestAmount>160.00</InterestAmount>
-                            <TransDate>02-01-2018</TransDate>
-                            <Invoice>00000044</Invoice>
-                            <CalcFrom>01-01-2019</CalcFrom>
-                            <CalcTo/>
-                            <InterestDays>0</InterestDays>
-                        </CustInterestTrans>
-                    </CustInterestTransactions>
-                </CustInterestJour>
-                <CustInterestJour>
-                    <Updated>03-04-2019</Updated>
-                    <AccountNum>00000726</AccountNum>
-                    <InterestNote>00000002</InterestNote>
-                    <ToDate>02-04-2019</ToDate>
-                    <BillingClassification>200</BillingClassification>
-                    <CustInterestTransactions>
-                        <CustInterestTrans>
-                            <Voucher>FAK-00000039</Voucher>
-                            <Txt>Renter af fakturanummer 00000043 </Txt>
-                            <DueDate>02-01-2018</DueDate>
-                            <InvoiceAmount>7000.00</InvoiceAmount>
-                            <InterestAmount>280.00</InterestAmount>
-                            <TransDate>02-01-2018</TransDate>
-                            <Invoice>00000043</Invoice>
-                            <CalcFrom>01-01-2019</CalcFrom>
-                            <CalcTo/>
-                            <InterestDays>0</InterestDays>
-                        </CustInterestTrans>
-                    </CustInterestTransactions>
-                </CustInterestJour>
-            </CustTable>
-        """)
+        item = PrismeInterestNoteResponse(self.get_file_contents('aka/tests/interestnote_response.xml'))
         self.assertEqual(2, len(item.cust_interest_journal))
         journal0 = item.cust_interest_journal[0]
         self.assertEqual("03-04-2019", journal0.updated)
@@ -124,14 +83,16 @@ class BasicTestCase(TestCase):
     def test_create_claim_parse(self):
         attachment = File(open('aka/tests/testfile.pdf'))
         attachment.close()
-        claim = PrismeClaim(
+        claim = PrismeClaimRequest(
             "32SE", "0102030405", "Ekstern fordringshaver", 4, 1, None,
             1234, 20, "Udlæg for hotdog", "TesterPerson",
             date(2019, 3, 7), date(2019, 3, 8), date(2019, 4, 1), date(2019, 3, 7),
             "Den smagte godt", [11223344, 55667788], files=[attachment])
-        data = xml_to_dict(claim.xml)
-        expected = xml_to_dict(self.get_file_contents('aka/tests/claim.xml'))
-        self.compare(expected, data, "")
+        self.compare(
+            xml_to_dict(self.get_file_contents('aka/tests/claim_request.xml')),
+            xml_to_dict(claim.xml),
+            ""
+        )
 
     @staticmethod
     def get_file_contents(filename):
