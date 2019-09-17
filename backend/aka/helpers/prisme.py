@@ -144,8 +144,8 @@ class PrismeInterestNoteRequest(PrismeRequestObject):
 
     def __init__(self, customer_id_number, year, month):
         self.customer_id_number = customer_id_number
-        self.year = year
-        self.month = month
+        self.year = int(year)
+        self.month = int(month)
 
     @property
     def method(self):
@@ -193,6 +193,7 @@ class PrismeInterestNoteResponse(PrismeResponseObject):
                 for k, v in data['CustInterestTransactions'].items()
                 if k == 'CustInterestTrans'
             ])
+            self.data = data
 
     class PrismeInterestTransaction(PrismeResponseObject):
         def __init__(self, data):
@@ -206,6 +207,7 @@ class PrismeInterestNoteResponse(PrismeResponseObject):
             self.calculate_from_date = data['CalcFrom']
             self.calculate_to_date = data['CalcTo']
             self.interest_days = data['InterestDays']
+            self.data = data
 
     def __init__(self, xml):
         data = xml_to_dict(xml)
@@ -215,13 +217,13 @@ class PrismeInterestNoteResponse(PrismeResponseObject):
         ]
 
 
-class Prisme():
+class Prisme(object):
     '''Class that handles communication with the Prisme system.
     '''
 
     def __init__(self):
         wsdl = settings.PRISME_CONNECT['wsdl_file']
-        self.client = zeep.Client(wsdl=wsdl)
+        # self.client = zeep.Client(wsdl=wsdl)
 
     def create_request_header(self, method, area="SULLISSIVIK", client_version=1):
         request_header_class = self.client.get_type('tns:GWSRequestHeaderDCFUJ')
@@ -242,8 +244,13 @@ class Prisme():
 
 
     def getServerVersion(self):
-        response = self.client.service.getServerVersion(self.create_request_header("getServerVersion"))
-        return {'version': response.serverVersion, 'description': response.serverVersionDescription}
+        response = self.client.service.getServerVersion(
+            self.create_request_header("getServerVersion")
+        )
+        return {
+            'version': response.serverVersion,
+            'description': response.serverVersionDescription
+        }
 
 
     def processService(self, method, xml, reply_container_class):
@@ -252,6 +259,9 @@ class Prisme():
             requestHeader=self.create_request_header(method),
             xmlCollection=self.create_request_body(xml)
         )
+
+
+
         reply = self.client.service.processService(request)
         # reply is of type GWSReplyDCFUJ
 
@@ -263,7 +273,10 @@ class Prisme():
         outputs = []
         for reply_item in reply.instanceCollection:
             if reply_item.status_code != 0:
-                print(f"Something went wrong: {reply_item.status_code}: {reply_item.status_text}")
+                print(
+                    f"Something went wrong: {reply_item.status_code}:"
+                    f" {reply_item.status_text}"
+                )
             else:
                 outputs.append(reply_container_class(reply_item.xml))
         return outputs
@@ -298,7 +311,9 @@ class Prisme():
 
     def get_interest_note(self, interestnote_req):
         if not isinstance(interestnote_req, PrismeInterestNoteRequest):
-            raise Exception("interestnote_req must be of type PrismeInterestNoteRequest")
+            raise Exception(
+                "interestnote_req must be of type PrismeInterestNoteRequest"
+            )
         return self.processService(
             interestnote_req.method,
             interestnote_req.xml,
@@ -353,63 +368,84 @@ class Prisme():
         :returns: a Result object with the specified data or an error
         '''
 
-        """
         customer_id_number = '1234'
-        request = PrismeInterestNoteRequest(
-            customer_id_number,
-            date[0],
-            date[1]
-        )
-        prisme = Prisme()
-        response = prisme.get_interest_note(request)
+        # request = PrismeInterestNoteRequest(
+        #     customer_id_number,
+        #     date[0],
+        #     date[1]
+        # )
+        # response = self.get_interest_note(request)
         # Response is of type PrismeInterestNoteResponse
 
+        """
         posts = []
-        for journal in response.interest_journal:
-            # x = journal.account_number
-            for transaction in journal.interest_transactions:
-                posts.append({
-                    'dato': transaction.due_date,
-                    'fradato': transaction.calculate_from_date,
-                    'postdato': transaction.transaction_date,
-                    'bilag': transaction.voucher,
-                    'faktura': transaction.invoice,
-                    'tekst': transaction.text,
-                    'dage': transaction.interest_days,
-                    'grundlag': transaction.invoice_amount,
-                    'val': '',
-                    'grundlag2': '',
-                    'beloeb': transaction.interest_amount
-                })
-
-        # get cvr number from request?
-        # Lookup name & address
+        for interest_note_response in response:
+            for journal in interest_note_response.interest_journal:
+                x = journal.account_number
+                journaldata = {
+                    k: v
+                    for k, v in journal.data.items()
+                    if k in [
+                        'Updated',
+                        'AccountNum',
+                        'InterestNote',
+                        'ToDate',
+                        'BillingClassification'
+                    ]
+                }
+                for transaction in journal.interest_transactions:
+                    data = {}
+                    data.update(transaction.data)
+                    data.update(journaldata)
+                    posts.append(data)
+                    # posts.append({
+                    #     'dato': journal.updated,
+                    #     'fradato': transaction.calculate_from_date,
+                    #     'postdato': transaction.transaction_date,
+                    #     'bilag': transaction.voucher,
+                    #     'faktura': transaction.invoice,
+                    #     'tekst': transaction.text,
+                    #     'dage': transaction.interest_days,
+                    #     'grundlag': transaction.invoice_amount,
+                    #     'val': '',
+                    #     'grundlag2': '',
+                    #     'beloeb': transaction.interest_amount
+                    # })
+            TODO: Lookup name & address from journaldata['AccountNum']
         """
 
-        post1 = {'dato': '10/02-18',
-                 'postdato': '10/02-18',
-                 'bilag': '',
-                 'faktura': '',
-                 'tekst': '12345678askatrenteMaj',
-                 'fradato': '01/05-18',
-                 'dage': 31,
-                 'grundlag': 1234.00,
-                 'val': '',
-                 'grundlag2': 12.34,
-                 'beloeb': 61.00,
-                 }
-        post2 = {'dato': '23/03/18',
-                 'postdato': '23/03-18',
-                 'bilag': 'bilagstekst',
-                 'faktura': 'fakturanummer?',
-                 'tekst': '12345678askatrenteJuni',
-                 'fradato': '01/06-18',
-                 'dage': 30,
-                 'grundlag': 131.00,
-                 'val': '',
-                 'grundlag2': 1.31,
-                 'beloeb': 1.00,
-                 }
+        posts = [
+            {
+                'Updated': '11/02-18',
+                'AccountNum': '12345678',
+                'BillingClassification': 200,
+                'DueDate': '10/02-18',
+                'InterestNote': '00000002',
+                'TransDate': '10/02-18',
+                'Voucher': '',
+                'Invoice': '',
+                'Txt': '12345678askatrenteMaj',
+                'CalcFrom': '01/05-18',
+                'InterestDays': 31,
+                'InvoiceAmount': 1234.00,
+                'InterestAmount': 61.00,
+            },
+            {
+                'Updated': '11/02-18',
+                'AccountNum': '12345678',
+                'BillingClassification': 200,
+                'DueDate': '23/03/18',
+                'InterestNote': '00000003',
+                'TransDate': '23/03-18',
+                'Voucher': 'bilagstekst',
+                'Invoice': 'fakturanummer?',
+                'Txt': '12345678askatrenteJuni',
+                'CalcFrom': '01/06-18',
+                'InterestDays': 30,
+                'InvoiceAmount': 131.00,
+                'InterestAmount': 1.00,
+            }
+        ]
 
         res = {'firmanavn': 'Grønlands Ejendomsselskab ApS',
                'adresse': {
@@ -418,7 +454,7 @@ class Prisme():
                            'by': 'Nuuk',
                            'land': 'Grønland',
                           },
-               'poster': [post1, post2]
+               'poster': posts
                }
 
         return Success(res)

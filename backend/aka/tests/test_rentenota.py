@@ -33,8 +33,11 @@ class BasicTestCase(TestCase):
     # From and to are correct, but method not allowed.
     def test_Post_1(self):
         ctstring = 'application/json; charset=utf-8'
-        response = self.c.post(self.url + '/2019-01',
-                               content_type=ctstring, data='')
+        response = self.c.post(
+            self.url + '/2019-01',
+            content_type=ctstring,
+            data=''
+        )
         self.assertEqual(response.status_code, 405)
 
     # From and to are correct, without content-type and data,
