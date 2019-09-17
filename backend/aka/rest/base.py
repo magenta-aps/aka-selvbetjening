@@ -189,14 +189,22 @@ class JSONRestView(View):
                                          content['charset'])
             elif content['type'] == JSONRestView.CT2:
                 self.data = self.getPost(request)
-                self.files = self.getFiles(request)
+                # self.files = self.getFiles(request)
+                self.files = request.FILES
             else:
                 raise ContentTypeError('Content_type incorrect: '
                                        + content['type'])
             retval = self.successResponse("OK")
 
-            logger.info('POST: ' + json.dumps(self.data) + '\n'
-                        + json.dumps(self.files))
+            logger.info('POST: ' + json.dumps(self.data) + '\n' + json.dumps([{
+                'originalname': v.name,
+                'filetype': type(v).__name__,
+                'contenttype': v.content_type,
+                'charset': v.charset,
+                'size': v.size
+                }
+                for k, v in request.FILES.items()
+            ]))
         except (ContentTypeError, json.decoder.JSONDecodeError) as e:
             retval = self.errorResponse(e)
             logger.exception(e)

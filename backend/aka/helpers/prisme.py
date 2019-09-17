@@ -50,7 +50,7 @@ class PrismeClaimRequest(PrismeRequestObject):
         self.claim_type = claim_type
         self.child_cpr_cvr = child_cpr_cvr
         self.claim_ref = claim_ref
-        self.amount_balance = amount_balance
+        self.amount_balance = float(amount_balance)
         self.text = text
         self.created_by = created_by
         self.period_start = period_start
@@ -59,7 +59,12 @@ class PrismeClaimRequest(PrismeRequestObject):
         self.founded_date = founded_date
         self.notes = notes
         self.codebtors = codebtors
-        self.files = files  # List of django.core.files.File
+        self.files = []
+        for file in files:
+            self.files.append((
+                os.path.basename(file.name),
+                AKAUtils.get_file_contents_base64(file)
+            ))
 
     @property
     def method(self):
@@ -90,8 +95,8 @@ class PrismeClaimRequest(PrismeRequestObject):
             'files': [
                 {
                     'file': {
-                        'Name': os.path.basename(file.name),
-                        'Content': AKAUtils.get_file_contents_base64(file)
+                        'Name': file[0],
+                        'Content': file[1]
                     }
                 }
                 for file in self.files
@@ -260,8 +265,6 @@ class Prisme(object):
             xmlCollection=self.create_request_body(xml)
         )
 
-
-
         reply = self.client.service.processService(request)
         # reply is of type GWSReplyDCFUJ
 
@@ -323,7 +326,6 @@ class Prisme(object):
 
 
 
-
     def sendToPrisme(self, data):
         '''Stub
         '''
@@ -358,6 +360,43 @@ class Prisme(object):
                     destination.write(block)
 
         return True
+
+    def postClaim(self, data, files):
+
+        def get_codebtors(data):
+            codebtors = []
+            for i in range(1, 1000):
+                if "meddebitor%d_cpr" % i in data:
+                    codebtors.append(data["meddebitor%d_cpr" % i])
+                elif "meddebitor%d_cvr" % i in data:
+                    codebtors.append(data["meddebitor%d_cvr" % i])
+                else:
+                    break
+            return codebtors
+
+        claim = PrismeClaimRequest(
+            claimant_id=data.get('fordringshaver'),
+            cpr_cvr=data.get('debitor'),
+            external_claimant=data.get('fordringshaver2'),
+            claim_group_number=data.get('fordringsgruppe'),
+            claim_type=data.get('fordringstype'),
+            child_cpr_cvr=data.get('barns_cpr'),
+            claim_ref=data.get('ekstern_sagsnummer'),
+            amount_balance=data.get('hovedstol'),
+            text=data.get('hovedstol_posteringstekst'),
+            created_by=data.get('kontaktperson'),
+            period_start=data.get('periodestart'),
+            period_end=data.get('periodeslut'),
+            due_date=data.get('forfaldsdato'),
+            founded_date=data.get('betalingsdato'),
+            notes=data.get('noter'),
+            codebtors=get_codebtors(data),
+            files=[file for name, file in files.items()]
+        )
+        print(claim.xml)
+        response = self.create_claim(claim)
+        return Success(response[0].rec_id)
+
 
     def getRentenota(self, date):
         '''Given a period, will fetch the corresponding rentenote

@@ -6,6 +6,8 @@ from aka.helpers import validation
 from aka.helpers.result import Error, Success
 from aka.helpers.sharedfiles import getSharedJson
 
+from aka.helpers.prisme import Prisme
+
 logger = logging.getLogger(__name__)
 
 
@@ -27,16 +29,19 @@ class InkassoSag(JSONRestView):
 
         '''
         baseresponse = super().basepost(request)
+        prisme = Prisme()
+        for f in self.files:
+            print(type(f))
 
         if baseresponse.status_code == 200:
 
             logger.debug(self.data)
             # For information on "andThen" see documentation for Result
-            return (validateInkassoJson(self.data)
-                    .andThen(validatePeriodeStartAndEnd)
-                    .andThen(validateFordringsgrupper)
-                    .toHttpResponse()
-                    )
+            result = validateInkassoJson(self.data).andThen(validatePeriodeStartAndEnd).andThen(validateFordringsgrupper)
+
+            if result.status:
+                return prisme.postClaim(self.data, self.files).toHttpResponse()
+            return result.toHttpResponse()
         else:
             return baseresponse
 
@@ -68,12 +73,23 @@ def validateFordringsgrupper(reqJson):
     '''
     try:
         fordringJson = getSharedJson('fordringsgruppe.json')
-        return (getOnlyElement(fordringJson, reqJson['fordringsgruppe'],
-                               'fordringsgruppe')
-                .andThen(lambda e: getOnlyElement(e['sub_groups'],
-                                                  reqJson['fordringstype'],
-                                                  'fordringstype'))
-                )
+
+        result = getOnlyElement(
+            fordringJson,
+            reqJson['fordringsgruppe'],
+            'fordringsgruppe'
+        ).andThen(
+            lambda e: getOnlyElement(
+                e['sub_groups'],
+                reqJson['fordringstype'],
+                'fordringstype'
+            )
+        )
+        if result.status:
+            return Success(reqJson)
+        return result
+
+
     except Exception as e:
         logger.warning("Invalid JSON recieved:" + str(reqJson)
                        + "\n\nException: " + str(e))

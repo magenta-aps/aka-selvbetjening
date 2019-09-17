@@ -191,7 +191,7 @@ import formValid from '@/mixins/formValid'
 
 export default {
   mixins: [formValid],
-  data: function () {
+  data: function() {
     return {
       fordringshaver: null,
       debitor: null,
@@ -247,97 +247,97 @@ export default {
     }
   },
   computed: {
-    fordringstype_id: function () {
-      return this.getId(this.fordringstype)
+    fordringstype_id: function() {
+      return this.getId(this.fordringstype);
     },
-    fordringsgruppe_id: function () {
-      return this.getId(this.fordringsgruppe)
+    fordringsgruppe_id: function() {
+      return this.getId(this.fordringsgruppe);
     },
-    multipleTypes: function () {
+    multipleTypes: function() {
       return (
         this.fordringsgruppe !== null &&
         this.fordringsgruppe['sub_groups'].length > 1
-      )
+      );
     }
   },
   methods: {
-    addNewMeddebitor: function () {
+    addNewMeddebitor: function() {
       this.meddebitorer.push({
         cpr: '',
         cvr: ''
-      })
+      });
     },
-    updateType: function () {
+    updateType: function() {
       if (
         this.fordringsgruppe !== null &&
         this.fordringsgruppe['sub_groups'].length === 1
       ) {
-        this.fordringstype = this.fordringsgruppe['sub_groups'][0]
+        this.fordringstype = this.fordringsgruppe['sub_groups'][0];
       } else {
-        this.fordringstype = null
+        this.fordringstype = null;
       }
     },
-    getId: function (dict) {
+    getId: function(dict) {
       if (dict !== null && 'id' in dict) {
-        return dict['id']
+        return dict['id'];
       }
-      return null
+      return null;
     },
-    stringRep: function (dict) {
-      return '' + dict['id'] + ' (' + dict['value'] + ')'
+    stringRep: function(dict) {
+      return '' + dict['id'] + ' (' + dict['value'] + ')';
     },
-    getCSRFToken: function () {
+    getCSRFToken: function() {
       this.csrftoken = document.cookie.replace(
         /(?:(?:^|.*;\s*)csrftoken\s*=\s*([^;]*).*$)|^.*$/,
         '$1'
       )
     },
-    selectFiles: function (files) {
+    selectFiles: function(files) {
       for (var i = 0; i < files.length; i++) {
-        this.filer.push(files[i])
+        this.filer.push(files[i]);
       }
     },
-    deleteFile: function (index) {
-      this.filer.splice(index, 1)
+    deleteFile: function(index) {
+      this.filer.splice(index, 1);
     },
-    fetchFormData: function () {
-      let formdata = new FormData()
+    fetchFormData: function() {
+      let formdata = new FormData();
 
-      let that = this
-      function appendData (string) {
+      let that = this;
+      function appendData(string) {
         if (that[string] !== null) {
           if (string === 'fordringsgruppe' || string === 'fordringstype') {
-            formdata.append(string, that[string + '_id'])
+            formdata.append(string, that[string + '_id']);
           } else {
-            formdata.append(string, that[string])
+            formdata.append(string, that[string]);
           }
         }
       }
 
-      this.form_fields.forEach(appendData)
+      this.form_fields.forEach(appendData);
 
-      this.filer.forEach(function (fil, i) {
-        let idx = i + 1
-        formdata.append('fil' + idx, fil)
-      })
+      this.filer.forEach(function(fil, i) {
+        let idx = i + 1;
+        formdata.append('fil' + idx, fil);
+      });
 
-      this.meddebitorer.forEach(function (meddebitor, i) {
-        let idx = i + 1
+      this.meddebitorer.forEach(function(meddebitor, i) {
+        let idx = i + 1;
         if (meddebitor.cpr !== '') {
-          formdata.append('meddebitor' + idx + '_cpr', meddebitor.cpr)
+          formdata.append('meddebitor' + idx + '_cpr', meddebitor.cpr);
         } else if (meddebitor.cvr !== '') {
-          formdata.append('meddebitor' + idx + '_cvr', meddebitor.cvr)
+          formdata.append('meddebitor' + idx + '_cvr', meddebitor.cvr);
         }
-      })
+      });
       return formdata
     },
-    sendFormRequest: function () {
+    sendFormRequest: function() {
       if (!this.formValid) {
-        this.$validator.validateAll()
-        return
+        this.$validator.validateAll();
+        return;
       }
 
-      let formdata = this.fetchFormData()
+      let formdata = this.fetchFormData();
 
       axios({
         url: '/inkassosag',
@@ -349,19 +349,19 @@ export default {
         }
       })
         .then(res => {
-          notify('The server has responded and it was happy!')
-          console.log('Server response!')
-          console.log(res)
+          notify('The server has responded and it was happy!');
+          console.log('Server response!');
+          console.log(res);
         })
         .catch(err => {
-          console.log('there was an error')
-          console.log(err.message)
+          console.log('there was an error');
+          console.log(err.message);
         })
     }
   },
-  created: function () {
-    this.getCSRFToken()
-    notify(`Welcome to this page. ${this.$t('inkasso.title')}`)
+  created: function() {
+    this.getCSRFToken();
+    notify(`Welcome to this page. ${this.$t('inkasso.title')}`);
   }
 }
 </script>

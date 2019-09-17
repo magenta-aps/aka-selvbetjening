@@ -26,7 +26,7 @@ SHARED_DIR = os.path.join(PROJECT_DIR, "shared")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-MEDIA_URL = 'uploadedfiles/'
+MEDIA_URL = BASE_DIR + '/upload/'
 
 # Where to put the output from tests:
 TEST_OUTPUT_DIR = '.'
