@@ -12,25 +12,46 @@ class ErrorJsonResponse(JsonResponse):
 
     status_code = 400
 
-    def __init__(self, error_dict, **kwargs):
+    def __init__(self, errors, field_errors, **kwargs):
         data = {
-            'errors': [],
-            'fieldErrors': {}
+            'errors': errors,
+            'fieldErrors': field_errors
         }
+        super().__init__(data, **kwargs)
+
+    @staticmethod
+    def from_error_dict(error_dict, **kwargs):
+        errors = []
+        field_errors = {}
         for fieldname, errors in error_dict.as_data().items():
             for error in errors:
                 error_ids = error.messages
                 if fieldname == NON_FIELD_ERRORS:
-                    data['errors'] += self.translate(error_ids)
+                    errors += ErrorJsonResponse.translate(error_ids)
                 else:
-                    data['fieldErrors'][fieldname] = self.translate(error_ids)
-        super().__init__(data, **kwargs)
+                    field_errors[fieldname] = ErrorJsonResponse.translate(error_ids)
+        return ErrorJsonResponse(errors, field_errors, **kwargs)
 
-    def translate(self, error_id):
+    @staticmethod
+    def from_error_id(error_id, fieldname=None, **kwargs):
+        errors = []
+        field_errors = {}
+        if fieldname is None or fieldname == NON_FIELD_ERRORS:
+            errors += ErrorJsonResponse.translate(error_id)
+        else:
+            field_errors[fieldname] = ErrorJsonResponse.translate(error_id)
+        return ErrorJsonResponse(errors, field_errors, **kwargs)
+
+    @staticmethod
+    def translate(error_id):
         if type(error_id) == list:
-            return [self.translate(i) for i in error_id]
+            return [ErrorJsonResponse.translate(i) for i in error_id]
         if error_id not in error_definitions:
             logger.error("errorId: \"" + error_id + "\" not found")
             return {"da": error_id, "kl": error_id}
         else:
             return error_definitions[error_id]
+
+    @staticmethod
+    def invalid_month():
+        return ErrorJsonResponse.from_error_id("invalid_month")

@@ -1,13 +1,10 @@
 import logging
 
+from aka.forms import InkassoForm
+from aka.helpers.error import ErrorJsonResponse
 from aka.helpers.prisme import Prisme
 from django.http import JsonResponse
-from django.views.generic import FormView
-
-from aka.forms import InkassoForm
 from django.views.generic.edit import BaseFormView
-
-from aka.helpers.error import ErrorJsonResponse
 
 logger = logging.getLogger(__name__)
 

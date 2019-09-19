@@ -107,3 +107,9 @@ class InkassoForm(forms.Form):
         cleaned_data = super(InkassoForm, self).clean()
         if cleaned_data['periodestart'] > cleaned_data['periodeslut']:
             self.add_error('periodeslut', ValidationError('start_date_before_end_date'))
+
+
+class LoentraekForm(forms.Form):
+    cvrnummer = forms.IntegerField(max_value=99999999)
+    traekmaaned = forms.IntegerField(min_value=1, max_value=12)
+    traekaar = forms.IntegerField(min_value=1900, max_value=2200)

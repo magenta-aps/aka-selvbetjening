@@ -2,12 +2,13 @@ import os
 
 import requests
 import zeep
-from aka.helpers.result import Success  # , Error
 from aka.helpers.utils import AKAUtils
 from dict2xml import dict2xml as dict_to_xml
 from django.conf import settings
 from xmltodict import parse as xml_to_dict
 from datetime import date
+
+from aka.helpers.utils import Singleton
 
 
 class PrismeException(Exception):
@@ -222,9 +223,7 @@ class PrismeInterestNoteResponse(PrismeResponseObject):
         ]
 
 
-class Prisme(object):
-    '''Class that handles communication with the Prisme system.
-    '''
+class Prisme(object, metaclass=Singleton):
 
     def __init__(self):
         wsdl = settings.PRISME_CONNECT['wsdl_file']

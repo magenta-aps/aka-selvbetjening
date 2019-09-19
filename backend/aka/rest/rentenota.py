@@ -1,18 +1,17 @@
-import json
-
-from aka.rest.base import JSONRestView
-from aka.helpers.prisme import Prisme
-from aka.helpers.result import Error, Success
-from django.http import HttpResponse
-from django.http import HttpResponseBadRequest
-from django.conf import settings
 import logging
 import os
+
+from aka.helpers.error import ErrorJsonResponse
+from aka.helpers.prisme import Prisme
+from django.conf import settings
+from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponseBadRequest
+from django.views import View
 
 logger = logging.getLogger(__name__)
 
 
-class RenteNota(JSONRestView):
+class RenteNota(View):
     '''This class handles the REST interface at /rentenota.
     '''
 
@@ -77,11 +76,11 @@ class RenteNota(JSONRestView):
             logger.info(f'Get rentenota {year}-{month}')
 
             if month > 12 or month < 1:
-                return Error.invalid_month().toHttpResponse()
+                return ErrorJsonResponse.invalid_month()
 
             prisme = Prisme()
             response = prisme.getRentenota(year, month)
-            return self.successResponse(response)
+            return JsonResponse(response)
 
         except Exception as e:
             logger.error(str(e))
