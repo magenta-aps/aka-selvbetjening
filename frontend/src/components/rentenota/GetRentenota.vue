@@ -229,7 +229,7 @@ export default {
     },
     requestRentenota() {
       axios({
-        url: `/rentenota/${ this.year }-${ this.zeroPadMonth(this.month) }`,
+        url: `/rentenota/${ this.year }/${ this.zeroPadMonth(this.month) }`,
         method: "get",
         headers: {
           "X-CSRFToken": this.csrftoken,

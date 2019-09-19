@@ -59,7 +59,7 @@ urlpatterns = [
        loentraekdistribution.LoenTraekDistribution.as_view(),
        name='loentraekdistribution'),
 
-   url(r'^rentenota/([0-9]{4})-([0-9]{2})$',
+   url(r'^rentenota/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})$',
        rentenota.RenteNota.as_view(),
        name='rentenota'),
 

@@ -1,3 +1,5 @@
+import json
+
 from aka.rest.base import JSONRestView
 from aka.helpers.prisme import Prisme
 from aka.helpers.result import Error, Success
@@ -72,26 +74,15 @@ class RenteNota(JSONRestView):
         try:
             year = int(year)
             month = int(month)
-            prisme = Prisme()
             logger.info(f'Get rentenota {year}-{month}')
 
-            return (validateInputDate(year, month)
-                    .andThen(prisme.getRentenota)
-                    .toHttpResponse()
-                    )
+            if month > 12 or month < 1:
+                return Error.invalid_month().toHttpResponse()
+
+            prisme = Prisme()
+            response = prisme.getRentenota(year, month)
+            return self.successResponse(response)
 
         except Exception as e:
             logger.error(str(e))
             return self.errorResponse(e)
-
-
-def validateInputDate(year, month):
-    '''Validate that the input parameter is a valid month and year
-
-    '''
-    if month > 12 or month < 1:
-        return Error('invalid_month')
-    # elif year < 1900 or year > 2100:
-    #     return Error('invalid year')
-    else:
-        return Success((year, month))

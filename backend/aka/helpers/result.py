@@ -212,3 +212,7 @@ class Error(__Result):
         d = {"status": self.status, "errors": self.errors,
                                     "fieldErrors": self.fieldErrors}
         return json.dumps(d)
+
+    @staticmethod
+    def invalid_month():
+        return Error('invalid_month')

@@ -393,12 +393,11 @@ class Prisme(object):
             codebtors=get_codebtors(data),
             files=[file for name, file in files.items()]
         )
-        print(claim.xml)
         response = self.create_claim(claim)
-        return Success(response[0].rec_id)
+        return response[0].rec_id
 
 
-    def getRentenota(self, date):
+    def getRentenota(self, year, month):
         '''Given a period, will fetch the corresponding rentenote
         from Prisme.
 
@@ -410,8 +409,8 @@ class Prisme(object):
         customer_id_number = '1234'
         # request = PrismeInterestNoteRequest(
         #     customer_id_number,
-        #     date[0],
-        #     date[1]
+        #     year,
+        #     month
         # )
         # response = self.get_interest_note(request)
         # Response is of type PrismeInterestNoteResponse
@@ -496,7 +495,7 @@ class Prisme(object):
                'poster': posts
                }
 
-        return Success(res)
+        return res
 
     def getLoentraekDistribution(self, gernummer):
         ''' Given a gernummer, return the previous distribution of 'loentraek'.

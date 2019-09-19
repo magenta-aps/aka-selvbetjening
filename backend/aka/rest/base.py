@@ -30,8 +30,8 @@ class JSONRestView(View):
     Files are stored, and their metadata made available in self.files.
     """
 
-    CT1 = 'application/json'        # Accepted content-type.
-    CT2 = 'multipart/form-data'     # Accepted content-type.
+    CONTENT_TYPE_JSON = 'application/json'        # Accepted content-type.
+    CONTENT_TYPE_FORM_DATA = 'multipart/form-data'     # Accepted content-type.
 
     def randomstring(self, length=30):
         return ''.join([
@@ -83,10 +83,12 @@ class JSONRestView(View):
 
             return result
 
-    def successResponse(self, msg):
-        msg = json.dumps({"status": "Request succeeded",
-                          "message": msg})
-        return HttpResponse(msg, content_type=JSONRestView.CT1)
+    def successResponse(self, jsondata):
+        return HttpResponse(
+            json.dumps(jsondata),
+            status=200,
+            content_type=JSONRestView.CONTENT_TYPE_JSON
+        )
 
     def errorResponse(self, exception):
         '''
@@ -101,7 +103,7 @@ class JSONRestView(View):
                              format(type(exception).__name__, exception))
 
         return HttpResponseBadRequest(msg,
-                                      content_type=JSONRestView.CT1)
+                                      content_type=JSONRestView.CONTENT_TYPE_JSON)
 
     def errorText(self, msg):
         '''
@@ -181,20 +183,21 @@ class JSONRestView(View):
         try:
             content = self.getContenttype(request.META)
 
-            if content['type'] == JSONRestView.CT1 and \
+            if content['type'] == JSONRestView.CONTENT_TYPE_JSON and \
                content['charset'] in ['', None]:
                 raise ContentTypeError('Charset missing.')
-            elif content['type'] == JSONRestView.CT1:
+            elif content['type'] == JSONRestView.CONTENT_TYPE_JSON:
                 self.data = self.getBody(request,
                                          content['charset'])
-            elif content['type'] == JSONRestView.CT2:
+            elif content['type'] == JSONRestView.CONTENT_TYPE_FORM_DATA:
                 self.data = self.getPost(request)
                 # self.files = self.getFiles(request)
                 self.files = request.FILES
             else:
                 raise ContentTypeError('Content_type incorrect: '
                                        + content['type'])
-            retval = self.successResponse("OK")
+            retval = self.successResponse({"status": "Request succeeded",
+                                           "message": 'OK'})
 
             logger.info('POST: ' + json.dumps(self.data) + '\n' + json.dumps([{
                 'originalname': v.name,
