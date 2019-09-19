@@ -43,6 +43,13 @@ class ErrorJsonResponse(JsonResponse):
         return ErrorJsonResponse(errors, field_errors, **kwargs)
 
     @staticmethod
+    def from_exception(exception, **kwargs):
+        return ErrorJsonResponse.from_error_id(
+            f"{type(exception).__name__}: {exception}",
+            **kwargs
+        )
+
+    @staticmethod
     def translate(error_id):
         if type(error_id) == list:
             return [ErrorJsonResponse.translate(i) for i in error_id]

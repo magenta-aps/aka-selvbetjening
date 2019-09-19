@@ -15,48 +15,6 @@ class RenteNota(View):
     '''This class handles the REST interface at /rentenota.
     '''
 
-    def initiatedownload(self, path, contenttype):
-        '''
-        Initiate a download of file at given path,
-        with given contenttype.
-
-        :param path: Full path to the file to be downloaded.
-        :type path: String
-        :param contenttype: Content type of the file to be downloaded.
-        :type contenttype: String
-        :returns: HttpResponse to send to the browser/frontend, so the
-                  download can be started.
-        '''
-
-        with open(path, 'rb') as fh:
-            response = HttpResponse(fh.read(), content_type=contenttype)
-            cd = 'inline; filename=' + os.path.basename(path)
-            response['Content-Disposition'] = cd
-            return response
-
-        return HttpResponseBadRequest
-
-    def fetch(self, request, *args, **kwargs):
-        '''
-        As a test, this method expects '?f=url' in the request.
-        It will then download the resource, store it locally
-        and pass it on to the caller.
-
-        How to get the url in real life?
-        How to get the contenttype in real life
-        '''
-
-        prisme = Prisme()
-        # url = prisme.receiveFromPrisme(None)
-        url = request.GET.get('f', '')
-        filename = url.split('/')[-1]
-        filefetched = prisme.fetchPrismeFile(url, settings.MEDIA_URL+filename)
-
-        if filefetched:
-            contenttype = 'application/pdf'  # How to get this in real life?
-            return self.initiatedownload(settings.MEDIA_URL+filename,
-                                         contenttype)
-
     def get(self, request, year, month, *args, **kwargs):
         '''Get rentenota data for the given interval.
 
@@ -84,4 +42,31 @@ class RenteNota(View):
 
         except Exception as e:
             logger.error(str(e))
-            return self.errorResponse(e)
+            return ErrorJsonResponse.from_exception(e)
+
+
+    ## Not really sure why this is here
+    def fetch(self, request, *args, **kwargs):
+        '''
+        As a test, this method expects '?f=url' in the request.
+        It will then download the resource, store it locally
+        and pass it on to the caller.
+
+        How to get the url in real life?
+        How to get the contenttype in real life
+        '''
+
+        prisme = Prisme()
+        # url = prisme.receiveFromPrisme(None)
+        url = request.GET.get('f', '')
+        filename = url.split('/')[-1]
+        filefetched = prisme.fetchPrismeFile(url, settings.MEDIA_URL+filename)
+
+        if filefetched:
+            contenttype = 'application/pdf'  # How to get this in real life?
+            path = settings.MEDIA_URL+filename
+            with open(path, 'rb') as fh:
+                response = HttpResponse(fh.read(), content_type=contenttype)
+                cd = 'inline; filename=' + os.path.basename(path)
+                response['Content-Disposition'] = cd
+                return response

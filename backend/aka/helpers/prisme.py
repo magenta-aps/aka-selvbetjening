@@ -320,44 +320,6 @@ class Prisme(object, metaclass=Singleton):
             PrismeInterestNoteResponse
         )
 
-
-
-
-    def sendToPrisme(self, data):
-        '''Stub
-        '''
-        return ''
-
-    def receiveFromPrisme(self, url):
-        '''Stub
-        '''
-        return ''
-
-    def fetchPrismeFile(self, url, localfilename):
-        '''
-        Fetches a file from url, and stores it in destfolder with the name
-        given as the last part of the url.
-
-        :param url: Where to get the file from.
-        :type url: string.
-        :param localfilename: Full path and name of the file on this server,
-                              i.e. after we fetch and store it.
-        :type localfilename: string.
-        :returns: True if OK, else False.
-        '''
-
-        request = requests.get(url, stream=True)
-
-        if request.status_code != requests.codes.ok:
-            return False
-
-        with open(localfilename, 'wb+') as destination:
-            for block in request.iter_content(1024 * 8):
-                if block:
-                    destination.write(block)
-
-        return True
-
     def postClaim(self, data, files):
 
         def get_codebtors(data):
@@ -493,3 +455,29 @@ class Prisme(object, metaclass=Singleton):
                }
 
         return res
+
+
+    def fetchPrismeFile(self, url, localfilename):
+        '''
+        Fetches a file from url, and stores it in destfolder with the name
+        given as the last part of the url.
+
+        :param url: Where to get the file from.
+        :type url: string.
+        :param localfilename: Full path and name of the file on this server,
+                              i.e. after we fetch and store it.
+        :type localfilename: string.
+        :returns: True if OK, else False.
+        '''
+
+        request = requests.get(url, stream=True)
+
+        if request.status_code != requests.codes.ok:
+            return False
+
+        with open(localfilename, 'wb+') as destination:
+            for block in request.iter_content(1024 * 8):
+                if block:
+                    destination.write(block)
+
+        return True
