@@ -1,11 +1,14 @@
-from django.test import TestCase, Client
-from django.conf import settings
-from django.core.files.uploadedfile import SimpleUploadedFile
-from datetime import date
+import base64
 import json
-import os
-import random
 import logging
+import random
+from datetime import date
+
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase, Client
+from xmltodict import parse as xml_to_dict
+
+
 # Functions to test
 
 
@@ -14,7 +17,7 @@ class BasicTestCase(TestCase):
     def setUp(self):
         logging.disable(logging.CRITICAL)
         self.c = Client()
-        self.url = '/inkassosag'
+        self.url = '/inkassosag?testing=1'
 
     def checkReturnValIsJSON(self, response):
         try:
@@ -88,30 +91,30 @@ class BasicTestCase(TestCase):
         resp_json = self.checkReturnValIsJSON(response)
         self.assertEqual(len(resp_json['fieldErrors']), 6)
 
-    def test_invalidRequest3(self):
-        # Test fordrings-gruppe and -type errors
-        formData = {
-            'fordringshaver2': 'test-fordringshaver2',
-            'fordringshaver': 'test-fordringshaver',
-            'debitor': 'test-debitor',
-            'fordringsgruppe': '1',
-            'fordringstype': '10',
-            'periodestart': date(2019, 3, 27),
-            'periodeslut': date(2019, 3, 28)
-        }
-        response = self.c.post(self.url, formData)
-        self.assertEqual(response.status_code, 400)
-        resp_json = self.checkReturnValIsJSON(response)
-        self.assertEqual(
-            list(resp_json['fieldErrors'].keys()),
-            [
-                'fordringstype',
-                'hovedstol',
-                'kontaktperson',
-                'forfaldsdato',
-                'betalingsdato'
-            ]
-        )
+    # def test_invalidRequest3(self):
+    #     # Test fordrings-gruppe and -type errors
+    #     formData = {
+    #         'fordringshaver2': 'test-fordringshaver2',
+    #         'fordringshaver': 'test-fordringshaver',
+    #         'debitor': 'test-debitor',
+    #         'fordringsgruppe': '1',
+    #         'fordringstype': '10',
+    #         'periodestart': date(2019, 3, 27),
+    #         'periodeslut': date(2019, 3, 28)
+    #     }
+    #     response = self.c.post(self.url, formData)
+    #     self.assertEqual(response.status_code, 400)
+    #     resp_json = self.checkReturnValIsJSON(response)
+    #     self.assertEqual(
+    #         list(resp_json['fieldErrors'].keys()),
+    #         [
+    #             'fordringstype',
+    #             'hovedstol',
+    #             'kontaktperson',
+    #             'forfaldsdato',
+    #             'betalingsdato'
+    #         ]
+    #     )
 
     def test_invalidRequest4(self):
         # Test fordrings-gruppe and -type errors
@@ -172,21 +175,12 @@ class BasicTestCase(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.checkReturnValIsJSON(response)
+        response_json = json.loads(response.content)
 
-        # Test that the file is actually where it should be.
-        # This will not work if we let Django clean up when request is handled.
-        filefound = False
-        files = os.listdir(settings.MEDIA_URL)
-        for file in files:
-            if uploadfile.name in file:
-                filefound = True
-                os.remove(settings.MEDIA_URL + file)
-        self.assertTrue(filefound)
+        prismerequest_data = xml_to_dict(response_json['request'])
 
-    # If using multipart/form-data, and boundarystring is missing,
-    # Django crashes with error 500.
-    # Is this intentional?
+        files = prismerequest_data['CustCollClaimTableFuj']['files']
+        file = files['file']
 
-    # IMPORTANT
-    # We should test that files are not posted/stored on invalid form-data
-
+        self.assertEqual(uploadfile.name, file['Name'])
+        self.assertEqual(base64.b64encode(b'file_content').decode("ascii"), file['Content'])

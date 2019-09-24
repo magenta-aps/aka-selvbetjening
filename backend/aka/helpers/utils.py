@@ -35,6 +35,11 @@ class AKAUtils(object):
         return datetime.datetime.strftime(date, '%Y-%m-%d')
 
     @staticmethod
+    def get_file_contents(filename):
+        with open(filename, "r") as f:
+            return f.read()
+
+    @staticmethod
     def get_file_contents_base64(file):
         with file.open('rb') as fp:
             data = fp.read()

@@ -93,8 +93,8 @@ class InkassoForm(forms.Form):
                 (item['id'], item['value'])
                 for item in subgroup
             ]
-        except Exception as e:
-            print(e)
+        except IndexError:
+            pass
 
     def clean_fordringsgruppe(self):
         value = self.cleaned_data['fordringsgruppe']

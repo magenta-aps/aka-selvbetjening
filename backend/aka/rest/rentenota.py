@@ -41,7 +41,7 @@ class RenteNota(View):
             if year > today.year or (year == today.year and month >= today.month):
                 return ErrorJsonResponse.future_month()
 
-            prisme = Prisme()
+            prisme = Prisme(self.request)
             response = prisme.getRentenota(year, month)
             return JsonResponse(response)
 

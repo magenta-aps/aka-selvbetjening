@@ -25,7 +25,7 @@ class LoenTraek(BaseFormView):
     form_class = LoentraekForm
 
     def form_valid(self, form):
-        prisme = Prisme()
+        prisme = Prisme(self.request)
         value = {}  # some call to prisme
         return JsonResponse(value)
 

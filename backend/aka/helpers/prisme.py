@@ -223,8 +223,12 @@ class PrismeInterestNoteResponse(PrismeResponseObject):
 
 class Prisme(object, metaclass=Singleton):
 
-    def __init__(self):
+    def __init__(self, request=None, testing=None):
         wsdl = settings.PRISME_CONNECT['wsdl_file']
+        if request is not None:
+            self.testing = request.GET.get('testing') == '1'
+        if testing is not None:
+            self.testing = testing
         # self.client = zeep.Client(wsdl=wsdl)
 
     def create_request_header(self, method, area="SULLISSIVIK", client_version=1):
@@ -285,6 +289,8 @@ class Prisme(object, metaclass=Singleton):
     def create_claim(self, claim):
         if not isinstance(claim, PrismeClaimRequest):
             raise Exception("claim must be of type PrismeClaim")
+        if self.testing:
+            return [PrismeClaimResponse(AKAUtils.get_file_contents('aka/tests/claim_response.xml'))]
         return self.processService(
             "createClaim",
             claim.xml,
@@ -352,8 +358,10 @@ class Prisme(object, metaclass=Singleton):
             codebtors=get_codebtors(data),
             files=[file for name, file in files.items()]
         )
-        response = self.create_claim(claim)
-        return response[0].rec_id
+        response = {'rec_id': self.create_claim(claim)[0].rec_id}
+        if self.testing:
+            return {'request': claim.xml, 'response': response}
+        return response
 
 
     def getRentenota(self, year, month):

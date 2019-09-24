@@ -22,7 +22,6 @@ class BasicTestCase(TestCase):
         response = PrismeImpairmentResponse(self.get_file_contents('aka/tests/impairment_response.xml'))
         self.assertEqual("5637238342", response.rec_id)
 
-
     def test_create_claim_request_parse(self):
         attachment = File(open('aka/tests/testfile.pdf'))
         attachment.close()
@@ -41,8 +40,6 @@ class BasicTestCase(TestCase):
         response = PrismeClaimResponse(self.get_file_contents('aka/tests/claim_response.xml'))
         self.assertEqual("5637238342", response.rec_id)
 
-
-
     def test_check_cvr_request_parse(self):
         request = PrismeCvrCheckRequest('12345678')
         self.compare(
@@ -57,8 +54,6 @@ class BasicTestCase(TestCase):
         self.assertEqual("35SKATDK", response.claimant_id[0])
         self.assertEqual("35BIDRAGDK", response.claimant_id[1])
 
-
-
     def test_interest_note_request_parse(self):
         request = PrismeInterestNoteRequest('10977231', 2019, 4)
         self.compare(
@@ -66,7 +61,6 @@ class BasicTestCase(TestCase):
             xml_to_dict(request.xml),
             ""
         )
-
 
     def test_interest_note_response_parse(self):
         response = PrismeInterestNoteResponse(self.get_file_contents('aka/tests/interestnote_response.xml'))
@@ -110,7 +104,6 @@ class BasicTestCase(TestCase):
         self.assertEqual("01-01-2019", transaction10.calculate_from_date)
         self.assertEqual(None, transaction10.calculate_to_date)
         self.assertEqual("0", transaction10.interest_days)
-
 
     @staticmethod
     def get_file_contents(filename):
