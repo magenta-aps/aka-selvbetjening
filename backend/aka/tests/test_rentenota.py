@@ -20,13 +20,19 @@ class BasicTestCase(TestCase):
 
     # Dates OK, good request and 200 return.
     def test_Get_1(self):
-        response = self.c.get(self.url + '/2019-01')
+        response = self.c.get(self.url + '/2019/01')
         self.assertEqual(response.status_code, 200)
         self.checkReturnValIsJSON(response)
 
     # Error in to-date. Returns 400, bad request.
     def test_Get_2(self):
-        response = self.c.get(self.url + '/2019-00')
+        response = self.c.get(self.url + '/2019/00')
+        self.assertEqual(response.status_code, 400)
+        self.checkReturnValIsJSON(response)
+
+    # Error in to-date. Returns 400, bad request.
+    def test_Get_3(self):
+        response = self.c.get(self.url + '/2200/01')
         self.assertEqual(response.status_code, 400)
         self.checkReturnValIsJSON(response)
 
@@ -34,7 +40,7 @@ class BasicTestCase(TestCase):
     def test_Post_1(self):
         ctstring = 'application/json; charset=utf-8'
         response = self.c.post(
-            self.url + '/2019-01',
+            self.url + '/2019/01',
             content_type=ctstring,
             data=''
         )
@@ -43,10 +49,11 @@ class BasicTestCase(TestCase):
     # From and to are correct, without content-type and data,
     # but method not allowed.
     def test_Post_2(self):
-        response = self.c.post(self.url + '/2019-01')
+        response = self.c.post(self.url + '/2019/01')
         self.assertEqual(response.status_code, 405)
 
     # To-date incorrect, so no match in URL dispatcher.
+    # but method not allowed.
     def test_Post_3(self):
-        response = self.c.post(self.url + '/2019-00')
+        response = self.c.post(self.url + '/2019/00')
         self.assertEqual(response.status_code, 405)

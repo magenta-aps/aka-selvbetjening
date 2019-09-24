@@ -13,10 +13,13 @@ class InkassoSag(BaseFormView):
 
     form_class = InkassoForm
 
+    def get(self, *args, **kwargs):
+        return self.http_method_not_allowed(*args, **kwargs)
+
     def form_valid(self, form):
         prisme = Prisme()
         value = prisme.postClaim(form.cleaned_data, form.files)
         return JsonResponse(value)
 
     def form_invalid(self, form):
-        return ErrorJsonResponse(form.errors)
+        return ErrorJsonResponse.from_error_dict(form.errors)

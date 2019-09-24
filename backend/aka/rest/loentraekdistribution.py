@@ -34,4 +34,4 @@ class LoenTraekDistribution(View):
                  'nettolon': '15000'
                  }]
 
-        return JsonResponse(data)
+        return JsonResponse(data, safe=False)

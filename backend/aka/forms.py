@@ -19,7 +19,9 @@ class InkassoForm(forms.Form):
         required=True,
         error_messages={'required': 'required_field'}
     )
-    fordringshaver2 = forms.CharField()
+    fordringshaver2 = forms.CharField(
+        required=False
+    )
     fordringsgruppe = forms.ChoiceField(
         required=True,
         choices=[(item['id'], item['value']) for item in fordringJson],

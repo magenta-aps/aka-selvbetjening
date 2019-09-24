@@ -2,7 +2,6 @@ from datetime import date
 
 from django.core.files import File
 from django.test import TestCase
-from aka.helpers.prisme import Prisme
 from aka.helpers.prisme import PrismeCvrCheckRequest, PrismeCvrCheckResponse
 from aka.helpers.prisme import PrismeInterestNoteRequest, PrismeInterestNoteResponse
 from aka.helpers.prisme import PrismeClaimRequest, PrismeClaimResponse
@@ -10,23 +9,6 @@ from aka.helpers.prisme import PrismeImpairmentRequest, PrismeImpairmentResponse
 from xmltodict import parse as xml_to_dict
 
 class BasicTestCase(TestCase):
-    def setUp(self):
-        self.p = Prisme()
-
-    # Test module Prisme.
-    # -------------------
-    def test_Prisme_1(self):
-        self.assertTrue(type(self.p) is Prisme)
-        try:
-            self.p.sendToPrisme('some data')
-        except Exception:
-            self.fail('Failed call to sendToPrisme')
-
-    def test_rentenota(self):
-        rn = self.p.getRentenota(('2019', '01'))
-        self.assertTrue(rn.status)
-
-
 
     def test_impairment_request_parse(self):
         request = PrismeImpairmentRequest('32SE', '12345678', 'ref123', -100.5, 'AKI-000047')

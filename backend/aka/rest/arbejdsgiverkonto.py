@@ -2,7 +2,7 @@ import logging
 
 # When the service is implemented unused imports should be removed,
 # but until then they are just commented out as a reference
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views import View
 
 logger = logging.getLogger(__name__)
@@ -21,4 +21,4 @@ class Arbejdsgiverkonto(View):
         :returns: HttpResponse, HttpResponseBadRequest
 
         '''
-        return JsonResponse("OK")
+        return JsonResponse("OK", safe=False)

@@ -1,11 +1,13 @@
 import logging
 import os
+from datetime import date
 
 from aka.helpers.error import ErrorJsonResponse
 from aka.helpers.prisme import Prisme
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 from django.http import HttpResponseBadRequest
+from django.utils import timezone
 from django.views import View
 
 logger = logging.getLogger(__name__)
@@ -35,6 +37,9 @@ class RenteNota(View):
 
             if month > 12 or month < 1:
                 return ErrorJsonResponse.invalid_month()
+            today = timezone.now()
+            if year > today.year or (year == today.year and month >= today.month):
+                return ErrorJsonResponse.future_month()
 
             prisme = Prisme()
             response = prisme.getRentenota(year, month)

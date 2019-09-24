@@ -21,26 +21,30 @@ class ErrorJsonResponse(JsonResponse):
 
     @staticmethod
     def from_error_dict(error_dict, **kwargs):
-        errors = []
+        nonfield_errors = []
         field_errors = {}
         for fieldname, errors in error_dict.as_data().items():
             for error in errors:
-                error_ids = error.messages
+                translated = [
+                    ErrorJsonResponse.translate(error_id)
+                    for error_id in error.messages
+                ]
                 if fieldname == NON_FIELD_ERRORS:
-                    errors += ErrorJsonResponse.translate(error_ids)
+                    nonfield_errors += translated
                 else:
-                    field_errors[fieldname] = ErrorJsonResponse.translate(error_ids)
-        return ErrorJsonResponse(errors, field_errors, **kwargs)
+                    field_errors[fieldname] = translated
+        return ErrorJsonResponse(nonfield_errors, field_errors, **kwargs)
 
     @staticmethod
     def from_error_id(error_id, fieldname=None, **kwargs):
-        errors = []
+        nonfield_errors = []
         field_errors = {}
+        translated = ErrorJsonResponse.translate(error_id)
         if fieldname is None or fieldname == NON_FIELD_ERRORS:
-            errors += ErrorJsonResponse.translate(error_id)
+            nonfield_errors.append(translated)
         else:
-            field_errors[fieldname] = ErrorJsonResponse.translate(error_id)
-        return ErrorJsonResponse(errors, field_errors, **kwargs)
+            field_errors[fieldname] = translated
+        return ErrorJsonResponse(nonfield_errors, field_errors, **kwargs)
 
     @staticmethod
     def from_exception(exception, **kwargs):
@@ -62,3 +66,7 @@ class ErrorJsonResponse(JsonResponse):
     @staticmethod
     def invalid_month():
         return ErrorJsonResponse.from_error_id("invalid_month")
+
+    @staticmethod
+    def future_month():
+        return ErrorJsonResponse.from_error_id("future_month")
