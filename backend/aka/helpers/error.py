@@ -70,3 +70,10 @@ class ErrorJsonResponse(JsonResponse):
     @staticmethod
     def future_month():
         return ErrorJsonResponse.from_error_id("future_month")
+
+
+class AccessDeniedJsonResponse(ErrorJsonResponse):
+    status_code = 403
+
+    def __init__(self, **kwargs):
+        super(AccessDeniedJsonResponse, self).__init__(None, None, **kwargs)

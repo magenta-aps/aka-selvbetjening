@@ -52,10 +52,17 @@ class InkassoSag(BaseFormView):
             codebtors=get_codebtors(form.cleaned_data),
             files=[file for name, file in form.files.items()]
         )
-        response = {'rec_id': prisme.create_claim(claim)[0].rec_id}
-        if testing:
-            response = {'request': claim.xml, 'response': response}
-        return JsonResponse(response)
+        print(claim)
+        try:
+            response = {
+                'rec_id': prisme.create_claim(claim)[0].rec_id
+            }
+            if testing:
+                response = {'request': claim.xml, 'response': response}
+            return JsonResponse(response)
+        except Exception as e:
+            print(e)
+            return ErrorJsonResponse.from_exception(e)
 
     def form_invalid(self, form):
         return ErrorJsonResponse.from_error_dict(form.errors)

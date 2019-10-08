@@ -55,8 +55,8 @@ class InkassoForm(forms.Form):
         required=False
     )
     kontaktperson = forms.CharField(
-        required=True,
-        error_messages={'required': 'required_field'}
+        required=False,
+        # error_messages={'required': 'required_field'}
     )
     forfaldsdato = forms.DateField(
         required=True,

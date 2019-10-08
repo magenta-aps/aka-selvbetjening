@@ -17,7 +17,7 @@ class RenteNota(View):
     '''This class handles the REST interface at /rentenota.
     '''
 
-    def get(self, request, cvr, year, month, *args, **kwargs):
+    def get(self, request, year, month, *args, **kwargs):
         '''Get rentenota data for the given interval.
 
         :param request: Djangos request object.
@@ -33,6 +33,15 @@ class RenteNota(View):
         '''
 
         try:
+            if 'user_info' not in request.session:
+                # return AccessDeniedJsonResponse()
+                cvr = '12345678'
+                cpr = '1234567890'
+            else:
+                user_info = request.session['user_info']
+                cvr = user_info.get('cvr')
+                cpr = user_info.get('cpr')
+
             year = int(year)
             month = int(month)
             logger.info(f'Get rentenota {year}-{month}')
@@ -43,47 +52,49 @@ class RenteNota(View):
             if year > today.year or (year == today.year and month >= today.month):
                 return ErrorJsonResponse.future_month()
 
-            customer_data = Dafo().lookup_cvr(cvr)
+            if cvr is not None:
+                customer_data = Dafo().lookup_cvr(cvr)
+            elif cpr is not None:
+                customer_data = Dafo().lookup_cpr(cpr)
 
             prisme = Prisme(self.request)
 
+            posts = []
             # Response is of type PrismeInterestNoteResponse
             try:
                 interest_note_data = prisme.get_interest_note(
                     PrismeInterestNoteRequest(cvr, year, month)
                 )
+                for interest_note_response in interest_note_data:
+                    for journal in interest_note_response.interest_journal:
+                        journaldata = {
+                            k: v
+                            for k, v in journal.data.items()
+                            if k in [
+                                'Updated', 'AccountNum', 'InterestNote',
+                                'ToDate', 'BillingClassification'
+                            ]
+                        }
+                        for transaction in journal.interest_transactions:
+                            data = {}
+                            data.update(transaction.data)
+                            data.update(journaldata)
+                            posts.append(data)
+                            # posts.append({
+                            #     'dato': journal.updated,
+                            #     'fradato': transaction.calculate_from_date,
+                            #     'postdato': transaction.transaction_date,
+                            #     'bilag': transaction.voucher,
+                            #     'faktura': transaction.invoice,
+                            #     'tekst': transaction.text,
+                            #     'dage': transaction.interest_days,
+                            #     'grundlag': transaction.invoice_amount,
+                            #     'val': '',
+                            #     'grundlag2': '',
+                            #     'beloeb': transaction.interest_amount
+                            # })
             except Exception as e:
                 print(e)
-
-            posts = []
-            for interest_note_response in interest_note_data:
-                for journal in interest_note_response.interest_journal:
-                    journaldata = {
-                        k: v
-                        for k, v in journal.data.items()
-                        if k in [
-                            'Updated', 'AccountNum', 'InterestNote',
-                            'ToDate', 'BillingClassification'
-                        ]
-                    }
-                    for transaction in journal.interest_transactions:
-                        data = {}
-                        data.update(transaction.data)
-                        data.update(journaldata)
-                        posts.append(data)
-                        # posts.append({
-                        #     'dato': journal.updated,
-                        #     'fradato': transaction.calculate_from_date,
-                        #     'postdato': transaction.transaction_date,
-                        #     'bilag': transaction.voucher,
-                        #     'faktura': transaction.invoice,
-                        #     'tekst': transaction.text,
-                        #     'dage': transaction.interest_days,
-                        #     'grundlag': transaction.invoice_amount,
-                        #     'val': '',
-                        #     'grundlag2': '',
-                        #     'beloeb': transaction.interest_amount
-                        # })
 
             land_map = {
                 'GL': 'Grønland',

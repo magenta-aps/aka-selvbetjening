@@ -126,6 +126,11 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr v-if="!rentenota_data.poster.length">
+                          <td colspan="14" style="text-align: center">
+                            Ingen poster
+                          </td>
+                        </tr>
                         <tr v-for="p in rentenota_data.poster" :key="p.Updated">
                             <td>
                                 {{ p.Updated }}
@@ -205,7 +210,7 @@ export default {
             return new Date().getFullYear() - a
         }
       ),
-      month: new Date().getMonth()+1, //JS months are zero indexed
+      month: new Date().getMonth(), //JS months are zero indexed. We can only pick prior months
       year: new Date().getFullYear()
     };
   },

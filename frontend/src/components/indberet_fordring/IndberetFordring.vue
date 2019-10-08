@@ -85,14 +85,12 @@
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="barns_cpr" :label="$t('attributes.barns_cpr')" type="text" v-model="barns_cpr"
-                         :validate="{digits: 10}"/>
+                <s-field name="barns_cpr" :label="$t('attributes.barns_cpr')" type="text" v-model="barns_cpr" :validate="{digits: 10}"/>
               </div>
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="ekstern_sagsnummer" :label="$t('attributes.ekstern_sagsnummer')" type="text"
-                         v-model="ekstern_sagsnummer" :validate="{required: true}"/>
+                <s-field name="ekstern_sagsnummer" :label="$t('attributes.ekstern_sagsnummer')" type="text" v-model="ekstern_sagsnummer" :validate="{required: true}"/>
               </div>
             </div>
             <div class="row">
@@ -110,16 +108,15 @@
                 <c-field name="hovedstol" :label="$t('attributes.hovedstol')" type="text" v-model="hovedstol" :validate="{required: true, currency: true}"/>
               </div>
               <div class="col-6">
-                <s-field name="hovedstol_posteringstekst" :label="$t('attributes.posteringstekst')" type="text"
-                         v-model="hovedstol_posteringstekst" :validate="{required: true}" />
+                <s-field name="hovedstol_posteringstekst" :label="$t('attributes.posteringstekst')" type="text" v-model="hovedstol_posteringstekst" :validate="{required: true}" />
               </div>
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="periodestart" :label="$t('attributes.periodestart')" type="date" v-model="periodestart"/>
+                <s-field name="periodestart" :label="$t('attributes.periodestart')" type="date" v-model="periodestart" :validate="{required: true}"/>
               </div>
               <div class="col-3">
-                <s-field name="periodeslut" :label="$t('attributes.periodeslut')" type="date" v-model="periodeslut"/>
+                <s-field name="periodeslut" :label="$t('attributes.periodeslut')" type="date" v-model="periodeslut" :validate="{required: true}"/>
               </div>
               <div class="col-3">
                 <s-field name="forfaldsdato" :label="$t('attributes.forfaldsdato')" type="date" v-model="forfaldsdato" :validate="{required: true}"/>
@@ -127,12 +124,10 @@
             </div>
             <div class="row">
               <div class="col-3">
-                <s-field name="betalingsdato" :label="$t('attributes.betalingsdato')" type="date"
-                         v-model="betalingsdato" :validate="{required: true}"/>
+                <s-field name="betalingsdato" :label="$t('attributes.betalingsdato')" type="date" v-model="betalingsdato" :validate="{required: true}"/>
               </div>
               <div class="col-3">
-                <s-field name="foraeldelsesdato" :label="$t('attributes.foraeldelsesdato')" type="date"
-                         v-model="foraeldelsesdato" :validate="{required: true}"/>
+                <s-field name="foraeldelsesdato" :label="$t('attributes.foraeldelsesdato')" type="date" v-model="foraeldelsesdato" :validate="{required: true}"/>
               </div>
             </div>
             <div class="row">

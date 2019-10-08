@@ -296,12 +296,8 @@ class Prisme(object, metaclass=Singleton):
             requestHeader=self.create_request_header(method),
             xmlCollection=self.create_request_body(xml)
         )
-        try:
-            # reply is of type GWSReplyDCFUJ
-            reply = self.client.service.processService(request)
-        except Exception as e:
-            print(f"exception: {e}")
-            raise e
+        # reply is of type GWSReplyDCFUJ
+        reply = self.client.service.processService(request)
 
         # reply.status is of type GWSReplyStatusDCFUJ
         if reply.status.replyCode != 0:
@@ -312,11 +308,9 @@ class Prisme(object, metaclass=Singleton):
         for reply_item in reply.instanceCollection.GWSReplyInstanceDCFUJ:
             if reply_item.replyCode == 0:
                 outputs.append(reply_container_class(reply_item.xml))
-            elif reply_item.replyCode == 250:
-                pass
             else:
                 raise Exception(
-                    f"Something went wrong: {reply_item.replyCode}:"
+                    f"Prisme error {reply_item.replyCode}:"
                     f" {reply_item.replyText}"
                 )
         return outputs
@@ -325,7 +319,13 @@ class Prisme(object, metaclass=Singleton):
         if not isinstance(claim, PrismeClaimRequest):
             raise Exception("claim must be of type PrismeClaim")
         if self.testing:
-            return [PrismeClaimResponse(AKAUtils.get_file_contents('aka/tests/claim_response.xml'))]
+            print("we are testing")
+            return [
+                PrismeClaimResponse(
+                    AKAUtils.get_file_contents('aka/tests/claim_response.xml')
+                )
+            ]
+        print("we are not testing")
         return self.processService(
             "createClaim",
             claim.xml,
