@@ -1,6 +1,5 @@
 import logging
 import os
-from datetime import date
 
 from aka.helpers.dafo import Dafo
 from aka.helpers.error import ErrorJsonResponse
@@ -8,7 +7,6 @@ from aka.helpers.prisme import Prisme
 from aka.helpers.prisme import PrismeInterestNoteRequest
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse
-from django.http import HttpResponseBadRequest
 from django.utils import timezone
 from django.views import View
 
@@ -19,15 +17,17 @@ class RenteNota(View):
     '''This class handles the REST interface at /rentenota.
     '''
 
-    def get(self, request, year, month, *args, **kwargs):
+    def get(self, request, cvr, year, month, *args, **kwargs):
         '''Get rentenota data for the given interval.
 
         :param request: Djangos request object.
         :type request: Request object
+        :param cvr: The CVR number of the subject
+        :type cvr: eight digits
         :param year: The year for this rentenota.
-        :type year: String (see pattern in URL dispatcher)
+        :type year: four digits
         :param month: The month for this rentenota.
-        :type month: String (see pattern in URL dispatcher)
+        :type month: two digits
         :returns: HttpResponse of some variety.
         :raises: ValueError.
         '''
@@ -35,7 +35,6 @@ class RenteNota(View):
         try:
             year = int(year)
             month = int(month)
-            print(f'Get rentenota {year}-{month}')
             logger.info(f'Get rentenota {year}-{month}')
 
             if month > 12 or month < 1:
@@ -44,19 +43,17 @@ class RenteNota(View):
             if year > today.year or (year == today.year and month >= today.month):
                 return ErrorJsonResponse.future_month()
 
-            customer_id_number = '25052943'
-            customer_data = Dafo().lookup_cvr(customer_id_number)
+            customer_data = Dafo().lookup_cvr(cvr)
 
             prisme = Prisme(self.request)
 
             # Response is of type PrismeInterestNoteResponse
-            interest_note_data = prisme.get_interest_note(
-                PrismeInterestNoteRequest(
-                    customer_id_number,
-                    year,
-                    month
+            try:
+                interest_note_data = prisme.get_interest_note(
+                    PrismeInterestNoteRequest(cvr, year, month)
                 )
-            )
+            except Exception as e:
+                print(e)
 
             posts = []
             for interest_note_response in interest_note_data:

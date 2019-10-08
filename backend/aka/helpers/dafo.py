@@ -33,4 +33,4 @@ class Dafo(object):
         if response.status_code == 200:
             return response.json()
         else:
-            raise Exception("Lookup failed")
+            raise Exception(f"Lookup for cvr {cvr} failed")

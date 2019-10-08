@@ -18,21 +18,27 @@ class BasicTestCase(TestCase):
         except json.decoder.JSONDecodeError:
             self.fail('Did not get JSON back.')
 
-    # Dates OK, good request and 200 return.
+    # Dates OK, invalid cvr
     def test_Get_1(self):
-        response = self.c.get(self.url + '/2019/01')
+        response = self.c.get(self.url + '/12345678/2019/01')
+        self.assertEqual(response.status_code, 400)
+        self.checkReturnValIsJSON(response)
+
+    # Dates OK, valid cvr with no interest notes
+    def test_Get_2(self):
+        response = self.c.get(self.url + '/25052943/2019/01')
         self.assertEqual(response.status_code, 200)
         self.checkReturnValIsJSON(response)
 
     # Error in to-date. Returns 400, bad request.
-    def test_Get_2(self):
-        response = self.c.get(self.url + '/2019/00')
+    def test_Get_3(self):
+        response = self.c.get(self.url + '/25052943/2019/00')
         self.assertEqual(response.status_code, 400)
         self.checkReturnValIsJSON(response)
 
     # Error in to-date. Returns 400, bad request.
-    def test_Get_3(self):
-        response = self.c.get(self.url + '/2200/01')
+    def test_Get_4(self):
+        response = self.c.get(self.url + '/25052943/2200/01')
         self.assertEqual(response.status_code, 400)
         self.checkReturnValIsJSON(response)
 
@@ -40,7 +46,7 @@ class BasicTestCase(TestCase):
     def test_Post_1(self):
         ctstring = 'application/json; charset=utf-8'
         response = self.c.post(
-            self.url + '/2019/01',
+            self.url + '/25052943/2019/01',
             content_type=ctstring,
             data=''
         )
@@ -49,11 +55,11 @@ class BasicTestCase(TestCase):
     # From and to are correct, without content-type and data,
     # but method not allowed.
     def test_Post_2(self):
-        response = self.c.post(self.url + '/2019/01')
+        response = self.c.post(self.url + '/25052943/2019/01')
         self.assertEqual(response.status_code, 405)
 
     # To-date incorrect, so no match in URL dispatcher.
     # but method not allowed.
     def test_Post_3(self):
-        response = self.c.post(self.url + '/2019/00')
+        response = self.c.post(self.url + '/25052943/2019/00')
         self.assertEqual(response.status_code, 405)

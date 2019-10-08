@@ -310,13 +310,15 @@ class Prisme(object, metaclass=Singleton):
         outputs = []
         # reply_item if of type GWSReplyInstanceDCFUJ
         for reply_item in reply.instanceCollection.GWSReplyInstanceDCFUJ:
-            if reply_item.replyCode != 0:
+            if reply_item.replyCode == 0:
+                outputs.append(reply_container_class(reply_item.xml))
+            elif reply_item.replyCode == 250:
+                pass
+            else:
                 raise Exception(
                     f"Something went wrong: {reply_item.replyCode}:"
                     f" {reply_item.replyText}"
                 )
-            else:
-                outputs.append(reply_container_class(reply_item.xml))
         return outputs
 
     def create_claim(self, claim):
