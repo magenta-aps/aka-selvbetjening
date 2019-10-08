@@ -107,7 +107,6 @@ class PrismeClaimRequest(PrismeRequestObject):
         }, wrap="CustCollClaimTableFuj")
 
 
-
 class PrismeImpairmentRequest(PrismeRequestObject):
 
     def __init__(self, claimant_id, cpr_cvr, claim_ref, amount_balance, claim_number_seq):
@@ -228,28 +227,33 @@ class PrismeInterestNoteResponse(PrismeResponseObject):
 class Prisme(object, metaclass=Singleton):
 
     def __init__(self, request=None, testing=None):
-        wsdl = settings.PRISME_CONNECT['wsdl_file']
+        prisme_settings = settings.PRISME_CONNECT
+        wsdl = prisme_settings['wsdl_file']
         if request is not None:
             self.testing = request.GET.get('testing') == '1'
         if testing is not None:
             self.testing = testing
 
         session = Session()
-        # Gør kun dette når der tunnelles igennem,
-        # og vi derfor rammer localhost først
-        # session.verify = False
-        session.proxies = {'http': 'socks5://localhost:8888', 'https': 'socks5://localhost:8888'}
 
-        auth_config = settings.PRISME_CONNECT.get('auth')
-        if auth_config:
-            if 'basic' in auth_config:
-                basic_config = auth_config['basic']
-                session.auth = (f'{basic_config["username"]}@{basic_config["domain"]}', basic_config["password"])
-            elif 'ntlm' in auth_config:
-                ntlm_config = auth_config['ntlm']
+        if 'proxy' in prisme_settings:
+            if 'socks' in prisme_settings['proxy']:
+                proxy = f'socks5://{prisme_settings["proxy"]["socks"]}'
+                session.proxies = {'http': proxy, 'https': proxy}
+
+        auth_settings = prisme_settings.get('auth')
+        if auth_settings:
+            if 'basic' in auth_settings:
+                basic_settings = auth_settings['basic']
+                session.auth = (
+                    f'{basic_settings["username"]}@{basic_settings["domain"]}',
+                    basic_settings["password"]
+                )
+            elif 'ntlm' in auth_settings:
+                ntlm_settings = auth_settings['ntlm']
                 session.auth = HttpNtlmAuth(
-                    f"{ntlm_config['domain']}\\{ntlm_config['username']}",
-                    ntlm_config['password']
+                    f"{ntlm_settings['domain']}\\{ntlm_settings['username']}",
+                    ntlm_settings['password']
                 )
 
         self.client = zeep.Client(

@@ -190,6 +190,9 @@ STATICFILES_DIRS = [ os.path.join(PROJECT_DIR, 'frontend', 'dist', 'static') ]
 
 PRISME_CONNECT = {
     'wsdl_file': 'wsdl/GenericService.wsdl',
+    'proxy': {
+        'socks': ''
+    },
     'auth': {
         'basic': {
             'username': '',
