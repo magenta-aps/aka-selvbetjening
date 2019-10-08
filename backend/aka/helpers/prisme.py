@@ -5,8 +5,12 @@ import zeep
 from aka.helpers.utils import AKAUtils, Singleton
 from dict2xml import dict2xml as dict_to_xml
 from django.conf import settings
+from requests import Session
+from requests_ntlm import HttpNtlmAuth
 from xmltodict import parse as xml_to_dict
 from datetime import date
+
+from zeep.transports import Transport
 
 
 class PrismeException(Exception):
@@ -229,7 +233,32 @@ class Prisme(object, metaclass=Singleton):
             self.testing = request.GET.get('testing') == '1'
         if testing is not None:
             self.testing = testing
-        # self.client = zeep.Client(wsdl=wsdl)
+
+        session = Session()
+        # Gør kun dette når der tunnelles igennem,
+        # og vi derfor rammer localhost først
+        # session.verify = False
+        session.proxies = {'http': 'socks5://localhost:8888', 'https': 'socks5://localhost:8888'}
+
+        auth_config = settings.PRISME_CONNECT.get('auth')
+        if auth_config:
+            if 'basic' in auth_config:
+                basic_config = auth_config['basic']
+                session.auth = (f'{basic_config["username"]}@{basic_config["domain"]}', basic_config["password"])
+            elif 'ntlm' in auth_config:
+                ntlm_config = auth_config['ntlm']
+                session.auth = HttpNtlmAuth(
+                    f"{ntlm_config['domain']}\\{ntlm_config['username']}",
+                    ntlm_config['password']
+                )
+
+        self.client = zeep.Client(
+            wsdl=wsdl,
+            transport=Transport(
+                session=session
+            )
+        )
+        self.client.set_ns_prefix("tns", 'http://schemas.datacontract.org/2004/07/Dynamics.Ax.Application')
 
     def create_request_header(self, method, area="SULLISSIVIK", client_version=1):
         request_header_class = self.client.get_type('tns:GWSRequestHeaderDCFUJ')
@@ -248,7 +277,6 @@ class Prisme(object, metaclass=Singleton):
             item_class(xml=x) for x in xml
         ]))
 
-
     def getServerVersion(self):
         response = self.client.service.getServerVersion(
             self.create_request_header("getServerVersion")
@@ -258,33 +286,34 @@ class Prisme(object, metaclass=Singleton):
             'description': response.serverVersionDescription
         }
 
-
     def processService(self, method, xml, reply_container_class):
         request_class = self.client.get_type("tns:GWSRequestDCFUJ")
         request = request_class(
             requestHeader=self.create_request_header(method),
             xmlCollection=self.create_request_body(xml)
         )
-
-        reply = self.client.service.processService(request)
-        # reply is of type GWSReplyDCFUJ
+        try:
+            # reply is of type GWSReplyDCFUJ
+            reply = self.client.service.processService(request)
+        except Exception as e:
+            print(f"exception: {e}")
+            raise e
 
         # reply.status is of type GWSReplyStatusDCFUJ
         if reply.status.replyCode != 0:
-            raise PrismeException(reply.status.replyCode, reply.staus.replyText)
+            raise PrismeException(reply.status.replyCode, reply.status.replyText)
 
-        # reply_instance if of type GWSReplyInstanceDCFUJ
         outputs = []
-        for reply_item in reply.instanceCollection:
-            if reply_item.status_code != 0:
-                print(
-                    f"Something went wrong: {reply_item.status_code}:"
-                    f" {reply_item.status_text}"
+        # reply_item if of type GWSReplyInstanceDCFUJ
+        for reply_item in reply.instanceCollection.GWSReplyInstanceDCFUJ:
+            if reply_item.replyCode != 0:
+                raise Exception(
+                    f"Something went wrong: {reply_item.replyCode}:"
+                    f" {reply_item.replyText}"
                 )
             else:
                 outputs.append(reply_container_class(reply_item.xml))
         return outputs
-
 
     def create_claim(self, claim):
         if not isinstance(claim, PrismeClaimRequest):
@@ -325,144 +354,6 @@ class Prisme(object, metaclass=Singleton):
             interestnote_req.xml,
             PrismeInterestNoteResponse
         )
-
-    def postClaim(self, data, files):
-
-        def get_codebtors(data):
-            codebtors = []
-            for i in range(1, 1000):
-                if "meddebitor%d_cpr" % i in data:
-                    codebtors.append(data["meddebitor%d_cpr" % i])
-                elif "meddebitor%d_cvr" % i in data:
-                    codebtors.append(data["meddebitor%d_cvr" % i])
-                else:
-                    break
-            return codebtors
-
-        claim = PrismeClaimRequest(
-            claimant_id=data.get('fordringshaver'),
-            cpr_cvr=data.get('debitor'),
-            external_claimant=data.get('fordringshaver2'),
-            claim_group_number=data.get('fordringsgruppe'),
-            claim_type=data.get('fordringstype'),
-            child_cpr_cvr=data.get('barns_cpr'),
-            claim_ref=data.get('ekstern_sagsnummer'),
-            amount_balance=data.get('hovedstol'),
-            text=data.get('hovedstol_posteringstekst'),
-            created_by=data.get('kontaktperson'),
-            period_start=data.get('periodestart'),
-            period_end=data.get('periodeslut'),
-            due_date=data.get('forfaldsdato'),
-            founded_date=data.get('betalingsdato'),
-            notes=data.get('noter'),
-            codebtors=get_codebtors(data),
-            files=[file for name, file in files.items()]
-        )
-        response = {'rec_id': self.create_claim(claim)[0].rec_id}
-        if self.testing:
-            return {'request': claim.xml, 'response': response}
-        return response
-
-
-    def getRentenota(self, year, month):
-        '''Given a period, will fetch the corresponding rentenote
-        from Prisme.
-
-        :param date: Tuple describing (year, month) of rentenota
-        :type date: Tuple (string YYYY, string MM)
-        :returns: a Result object with the specified data or an error
-        '''
-
-        customer_id_number = '1234'
-        # request = PrismeInterestNoteRequest(
-        #     customer_id_number,
-        #     year,
-        #     month
-        # )
-        # response = self.get_interest_note(request)
-        # Response is of type PrismeInterestNoteResponse
-
-        """
-        posts = []
-        for interest_note_response in response:
-            for journal in interest_note_response.interest_journal:
-                x = journal.account_number
-                journaldata = {
-                    k: v
-                    for k, v in journal.data.items()
-                    if k in [
-                        'Updated',
-                        'AccountNum',
-                        'InterestNote',
-                        'ToDate',
-                        'BillingClassification'
-                    ]
-                }
-                for transaction in journal.interest_transactions:
-                    data = {}
-                    data.update(transaction.data)
-                    data.update(journaldata)
-                    posts.append(data)
-                    # posts.append({
-                    #     'dato': journal.updated,
-                    #     'fradato': transaction.calculate_from_date,
-                    #     'postdato': transaction.transaction_date,
-                    #     'bilag': transaction.voucher,
-                    #     'faktura': transaction.invoice,
-                    #     'tekst': transaction.text,
-                    #     'dage': transaction.interest_days,
-                    #     'grundlag': transaction.invoice_amount,
-                    #     'val': '',
-                    #     'grundlag2': '',
-                    #     'beloeb': transaction.interest_amount
-                    # })
-            TODO: Lookup name & address from journaldata['AccountNum']
-        """
-
-        posts = [
-            {
-                'Updated': '11/02-18',
-                'AccountNum': '12345678',
-                'BillingClassification': 200,
-                'DueDate': '10/02-18',
-                'InterestNote': '00000002',
-                'TransDate': '10/02-18',
-                'Voucher': '',
-                'Invoice': '',
-                'Txt': '12345678askatrenteMaj',
-                'CalcFrom': '01/05-18',
-                'InterestDays': 31,
-                'InvoiceAmount': 1234.00,
-                'InterestAmount': 61.00,
-            },
-            {
-                'Updated': '11/02-18',
-                'AccountNum': '12345678',
-                'BillingClassification': 200,
-                'DueDate': '23/03/18',
-                'InterestNote': '00000003',
-                'TransDate': '23/03-18',
-                'Voucher': 'bilagstekst',
-                'Invoice': 'fakturanummer?',
-                'Txt': '12345678askatrenteJuni',
-                'CalcFrom': '01/06-18',
-                'InterestDays': 30,
-                'InvoiceAmount': 131.00,
-                'InterestAmount': 1.00,
-            }
-        ]
-
-        res = {'firmanavn': 'Grønlands Ejendomsselskab ApS',
-               'adresse': {
-                           'gade': 'H J Rinksvej 29',
-                           'postnr': '3900',
-                           'by': 'Nuuk',
-                           'land': 'Grønland',
-                          },
-               'poster': posts
-               }
-
-        return res
 
 
     def fetchPrismeFile(self, url, localfilename):

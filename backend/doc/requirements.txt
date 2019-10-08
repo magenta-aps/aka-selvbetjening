@@ -1,6 +1,7 @@
 Django<3.0,>=2.2
 psycopg2-binary
 requests
+requests_ntlm
 oic
 httpretty
 lxml>=4.2.5

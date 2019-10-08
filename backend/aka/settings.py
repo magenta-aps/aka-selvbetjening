@@ -12,6 +12,32 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+import logging.config
+
+logging.config.dictConfig({
+    'version': 1,
+    'formatters': {
+        'verbose': {
+            'format': '%(name)s: %(message)s'
+        }
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'zeep.transports': {
+            'level': 'DEBUG',
+            'propagate': True,
+            'handlers': ['console'],
+        },
+    }
+})
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SITE_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SITE_DIR)
@@ -163,10 +189,30 @@ STATICFILES_DIRS = [ os.path.join(PROJECT_DIR, 'frontend', 'dist', 'static') ]
 
 
 PRISME_CONNECT = {
-    'wsdl_file': 'wsdl/GenericService.wsdl'
+    'wsdl_file': 'wsdl/GenericService.wsdl',
+    'auth': {
+        'basic': {
+            'username': '',
+            'domain': '',
+            'password': ''
+        }
+    }
+}
+
+DAFO_CONNECT = {
+    'address': {
+        'token': 'https://sts.data.gl/get_token_passive?username={username}&password={password}',
+        'cvr': 'https://data.gl/prisme/cvr/1/{cvr}'
+    },
+    'auth': {
+        'username': '',
+        'password': ''
+    }
 }
 
 
 LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
 if os.path.exists(LOCAL_SETTINGS_FILE):
     from .local_settings import *  # noqa
+
+
