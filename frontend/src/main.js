@@ -15,10 +15,10 @@ import CurrencyField from '@/components/simple_field/CurrencyField'
 import '@/assets/css/base-styles.css'
 import installRules from './custom_rules'
 
-Vue.use(VueI18n)
+Vue.use(VueI18n);
 
-Vue.component('s-field', SimpleField)
-Vue.component('c-field', CurrencyField)
+Vue.component('s-field', SimpleField);
+Vue.component('c-field', CurrencyField);
 
 if (localStorage.getItem('language') == null) {
   localStorage.setItem('language', 'kl')
@@ -28,7 +28,7 @@ const i18n = new VueI18n({
   locale: localStorage.getItem('language'), // set locale
   fallbackLocale: 'da',
   messages
-})
+});
 
 Vue.use(VeeValidate, {
   i18nRootKey: 'validations', // customize the root path for validation messages.
@@ -38,11 +38,11 @@ Vue.use(VeeValidate, {
     kl: validationMessagesEn, // defaults to English. Greenlandic is not supported -- would need pull request to the vee validate team
     da: validationMessagesDa
   }
-})
+});
 
-installRules(Validator)
+installRules(Validator);
 
-const dict = {
+Validator.localize({
   kl: {
     messages: messagesKl,
     attributes: attributesKl
@@ -51,8 +51,7 @@ const dict = {
     messages: messagesDa,
     attributes: attributesDa
   }
-}
-Validator.localize(dict)
+});
 
 new Vue({
   router,

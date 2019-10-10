@@ -39,13 +39,13 @@ class PrismeRequestObject(object):
         if is_amount:
             value = f"{value:.2f}"
         if isinstance(value, date):
-            value = f'{value:%Y-%m-%d}'
+            value = f'{value:%Y-%m-%d}T00:00:00'
         return value
 
 
 class PrismeClaimRequest(PrismeRequestObject):
 
-    def __init__(self, claimant_id, cpr_cvr, external_claimant, claim_group_number, claim_type, child_cpr_cvr, claim_ref, amount_balance, text, created_by, period_start, period_end, due_date, founded_date, notes, codebtors=[], files=[]):
+    def __init__(self, claimant_id, cpr_cvr, external_claimant, claim_group_number, claim_type, child_cpr_cvr, claim_ref, amount_balance, text, created_by, period_start, period_end, due_date, founded_date, obsolete_date, notes, codebtors=[], files=[]):
         self.claimant_id = claimant_id,
         self.cpr_cvr = cpr_cvr
         self.external_claimant = external_claimant
@@ -60,6 +60,7 @@ class PrismeClaimRequest(PrismeRequestObject):
         self.period_end = period_end
         self.due_date = due_date
         self.founded_date = founded_date
+        self.obsolete_date = obsolete_date
         self.notes = notes
         self.codebtors = codebtors
         self.files = []
@@ -90,6 +91,7 @@ class PrismeClaimRequest(PrismeRequestObject):
             'CustCollPeriodEnd': self.prepare(self.period_end),
             'CustCollDueDate': self.prepare(self.due_date),
             'CustCollFoundedDate': self.prepare(self.founded_date),
+            'CustCollObsolescenceDate': self.prepare(self.obsolete_date),
             'Notes': self.prepare(self.notes),
             'coDebtors': [
                 {'coDebtor': {'CustCollCprCvr': self.prepare(codebtor)}}
@@ -173,7 +175,7 @@ class PrismeResponseObject(object):
 class PrismeClaimResponse(PrismeResponseObject):
     def __init__(self, xml):
         d = xml_to_dict(xml)
-        self.rec_id = d['custCollClaimTableFuj']['RecId']
+        self.rec_id = d['CustCollClaimTableFuj']['RecId']
 
 
 class PrismeImpairmentResponse(PrismeClaimResponse):

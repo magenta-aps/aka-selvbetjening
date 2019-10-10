@@ -49,7 +49,7 @@ class RenteNota(View):
             if month > 12 or month < 1:
                 return ErrorJsonResponse.invalid_month()
             today = timezone.now()
-            if year > today.year or (year == today.year and month >= today.month):
+            if year > today.year or (year == today.year and month > today.month):
                 return ErrorJsonResponse.future_month()
 
             if cvr is not None:

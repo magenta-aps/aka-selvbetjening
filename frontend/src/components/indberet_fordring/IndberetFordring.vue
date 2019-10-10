@@ -1,6 +1,6 @@
 <template>
 
-    <article class="indberet_fordring">
+    <article class="indberet_fordring" :key="fordring"  v-if="!submittedSuccessfully">
 
         <form @submit.prevent="sendFormRequest()" :class="{submitted: isSubmitted}">
 
@@ -13,7 +13,7 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-4">
-                <s-field name="fordringshaver" :label="$t('attributes.fordringshaver')" type="text" :validate="{required: true}" v-model="fordringshaver"/>
+                <s-field name="fordringshaver" :label="$t('attributes.fordringshaver')" type="text" v-model="fordringshaver"/>
               </div>
             </div>
             <div class="row">
@@ -55,13 +55,7 @@
             <div class="row">
               <div class="col-4">
                 <label id="lbl_fordringsgruppe" for="fordringsgruppe">{{ $t('attributes.fordringsgruppe') }}</label>
-                <select
-                  class="dropdown"
-                  id="fordringsgruppe"
-                  v-model="fordringsgruppe"
-                  @change="updateType"
-                  v-validate="{required: true}"
-                >
+                <select class="dropdown" id="fordringsgruppe" v-model="fordringsgruppe" @change="updateType" v-validate="{required: true}">
                   <option v-for="(f, index) in fordringsgrupper" :key="index" :value="f">{{stringRep(f)}}</option>
                 </select>
               </div>
@@ -69,12 +63,7 @@
             <div class="row" v-if="multipleTypes">
               <div class="col-4">
                 <label id="lbl_fordringstype" for="fordringstype">{{ $t('attributes.fordringstype') }}</label>
-                <select
-                  class="dropdown"
-                  id="fordringstype"
-                  v-model="fordringstype"
-                  v-validate="{required: true}"
-                >
+                <select class="dropdown" id="fordringstype" v-model="fordringstype" v-validate="{required: true}">
                   <option v-for="(t, index) in fordringsgruppe.sub_groups"
                           :key="index"
                           :value="t">
@@ -147,20 +136,11 @@
                 <div @input.once="addNewMeddebitor">
                   <div class="col-4">
                     <label :for="meddebitor.index"> {{ $t('attributes.meddebitor') }} {{index +1}}</label>
-                    <input :id="meddebitor.index"
-                           type="text"
-                           :disabled="meddebitor.cvr !== null && meddebitor.cvr !== ''"
-                           v-model="meddebitor.cpr"
-                           placeholder="CPR"
-                           v-validate="'digits:10'">
+                    <input :id="meddebitor.index" type="text" :disabled="meddebitor.cvr !== null && meddebitor.cvr !== ''" v-model="meddebitor.cpr" placeholder="CPR" v-validate="'digits:10'">
                   </div>
                   <div class="col-4">
                     <label style="height: 24px;" class="hidden-sm" :for="meddebitor.index"></label>
-                    <input type="text"
-                           :disabled="meddebitor.cpr !== null && meddebitor.cpr !== ''"
-                           v-model="meddebitor.cvr"
-                           placeholder="GER"
-                           v-validate="'digits:8'">
+                    <input type="text" :disabled="meddebitor.cpr !== null && meddebitor.cpr !== ''" v-model="meddebitor.cvr" placeholder="GER" v-validate="'digits:8'">
                   </div>
                 </div>
             </div>
@@ -173,6 +153,25 @@
 
         </form>
 
+    </article>
+
+    <article class="success" v-else>
+      <form>
+      <h1>Indberetning indsendt</h1>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-4">
+            Fordringsnummer: {{ fordringsnummer }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-4">
+            <button @click="reload()">Ny indberetning</button>
+            <router-link to="/" tag="button">Forside</router-link>
+          </div>
+        </div>
+      </div>
+      </form>
     </article>
 
 </template>
@@ -188,6 +187,8 @@ export default {
   mixins: [formValid],
   data: function() {
     return {
+        fordring: 1,
+        fordringsnummer: null,
       fordringshaver: null,
       debitor: null,
       fordringshaver2: null,
@@ -238,7 +239,8 @@ export default {
 
       fordringsgrupper: groups,
       csrftoken: null,
-      isSubmitted: false
+      isSubmitted: false,
+        submittedSuccessfully: false
     }
   },
   computed: {
@@ -335,23 +337,63 @@ export default {
       let formdata = this.fetchFormData();
 
       axios({
-        url: '/inkassosag',
-        data: formdata,
-        method: 'post',
-        headers: {
-          'X-CSRFToken': this.csrftoken,
-          'X-AKA-BRUGER': 'Unknown'
-        }
+          url: '/inkassosag',
+          data: formdata,
+          method: 'post',
+          headers: {
+              'X-CSRFToken': this.csrftoken,
+              'X-AKA-BRUGER': 'Unknown'
+          }
       })
-        .then(res => {
-          notify('The server has responded and it was happy!');
-          console.log('Server response!');
-          console.log(res);
-        })
-        .catch(err => {
-          console.log('there was an error');
-          console.log(err.message);
-        })
+          .then(res => {
+              this.submittedSuccessfully = true;
+              this.fordringsnummer = res.data.rec_id;
+          })
+          .catch(error => {
+              if (error.response) {
+                  var language = localStorage.getItem('language') || 'kl';
+                  var errors = error.response.data['errors'];
+                  var fieldErrors = error.response.data['fieldErrors'];
+                  if (errors) {
+                      errors.forEach(
+                          error => {
+                              console.log(error, language, error[language]);
+                              notify(
+                                  error[language]
+                              )
+                          }
+                      )
+                  }
+                  if (fieldErrors) {
+                      for (let field in fieldErrors) {
+                          if (fieldErrors.hasOwnProperty(field)) {
+                              var translatedField = this._i18n.t('attributes.' + field);
+                              fieldErrors[field].forEach(
+                                  error => {
+                                      notify(
+                                          translatedField + ": " + error[language]
+                                      )
+                                  }
+                              );
+                          }
+                      }
+                  }
+              } else {
+                  notify(error.message);
+              }
+          });
+    },
+    reload: function() {
+        this.form_fields.forEach(function(name) {
+            this[name] = null;
+        }.bind(this));
+        this.filer = [];
+        this.valgte_filer = [];
+        this.meddebitorer = [{cpr: '', cvr: ''}];
+
+        this.fordringsnummer = null;
+        this.fordring += 1;
+        this.submittedSuccessfully = false;
     }
   },
   created: function() {

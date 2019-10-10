@@ -48,14 +48,15 @@ class InkassoSag(BaseFormView):
             period_end=form.cleaned_data.get('periodeslut'),
             due_date=form.cleaned_data.get('forfaldsdato'),
             founded_date=form.cleaned_data.get('betalingsdato'),
+            obsolete_date=form.cleaned_data.get('foraeldelsesdato'),
             notes=form.cleaned_data.get('noter'),
             codebtors=get_codebtors(form.cleaned_data),
             files=[file for name, file in form.files.items()]
         )
-        print(claim)
         try:
+            prisme_reply = prisme.create_claim(claim)[0]
             response = {
-                'rec_id': prisme.create_claim(claim)[0].rec_id
+                'rec_id': prisme_reply.rec_id
             }
             if testing:
                 response = {'request': claim.xml, 'response': response}

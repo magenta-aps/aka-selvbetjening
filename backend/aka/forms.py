@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 
 fordringJson = getSharedJson('fordringsgruppe.json')
 
-
 class InkassoForm(forms.Form):
     fordringshaver = forms.CharField(
         required=True,
@@ -66,6 +65,10 @@ class InkassoForm(forms.Form):
         required=True,
         error_messages={'required': 'required_field'}
     )
+    foraeldelsesdato = forms.DateField(
+        required=True,
+        error_messages={'required': 'required_field'}
+    )
     noter = forms.CharField(
         required=False
     )
@@ -82,17 +85,18 @@ class InkassoForm(forms.Form):
                 self.files,
                 self.add_prefix('fordringsgruppe')
             )
-            # Find out which subgroup exists for this id
-            subgroup = [
-                x['sub_groups']
-                for x in fordringJson
-                if int(x['id']) == int(group_id)
-            ][0]
-            # Set type choices based on this subgroup
-            self.fields['fordringstype'].choices = [
-                (item['id'], item['value'])
-                for item in subgroup
-            ]
+            if group_id is not None:
+                # Find out which subgroup exists for this id
+                subgroup = [
+                    x['sub_groups']
+                    for x in fordringJson
+                    if int(x['id']) == int(group_id)
+                ][0]
+                # Set type choices based on this subgroup
+                self.fields['fordringstype'].choices = [
+                    (item['id'], item['value'])
+                    for item in subgroup
+                ]
         except IndexError:
             pass
 
@@ -104,6 +108,7 @@ class InkassoForm(forms.Form):
         ]
         if len(items) > 1:
             raise ValidationError('multiple_fordringsgruppe_found')
+        return value
 
     def clean(self):
         cleaned_data = super(InkassoForm, self).clean()

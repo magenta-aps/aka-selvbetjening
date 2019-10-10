@@ -102,7 +102,6 @@
                         </address>
 
                     </div>
-
                 </div>
 
                 <table>
@@ -128,7 +127,7 @@
                     <tbody>
                         <tr v-if="!rentenota_data.poster.length">
                           <td colspan="14" style="text-align: center">
-                            Ingen poster
+                            {{ $t("rentenota.ingenposter") }}
                           </td>
                         </tr>
                         <tr v-for="p in rentenota_data.poster" :key="p.Updated">

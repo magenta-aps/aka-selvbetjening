@@ -45,7 +45,8 @@ export const messages = {
       telefon: 'Oq/Telefon',
       fax: 'Fax',
       email: 'Email',
-      webadresse: 'Web-adresse'
+      webadresse: 'Web-adresse',
+      ingenposter: 'Ingen poster'
     },
     form2: {
       title: 'Formular nummer 2',
@@ -125,7 +126,8 @@ export const messages = {
       telefon: 'Oq/Telefon - oversættelse mangler',
       fax: 'Fax - oversættelse mangler',
       email: 'Email - oversættelse mangler',
-      webadresse: 'Web-adresse - oversættelse mangler'
+      webadresse: 'Web-adresse - oversættelse mangler',
+      ingenposter: 'Ingen poster - oversættelse mangler'
     },
     form2: {
       title: 'Sullinnermi Sullinnermi',
