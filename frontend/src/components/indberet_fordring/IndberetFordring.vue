@@ -1,15 +1,8 @@
 <template>
 
   <article class="indberet_fordring" :key="fordring" v-if="!submittedSuccessfully">
-
     <form @submit.prevent="sendFormRequest()" :class="{submitted: isSubmitted}">
-
       <h1>{{ $t('inkasso.title') }}</h1>
-
-      <!--          <ul v-if="isSubmitted">
-                  <li v-for="error in errors.items">{{ error.msg }}</li>
-                </ul>-->
-
       <div class="container-fluid">
         <div class="row">
           <div class="col-4">
@@ -131,11 +124,10 @@
           <textarea id="noter" cols="50" v-model="noter"></textarea>
         </div>
       </div>
-
       <div class="row" v-for="(meddebitor, index) in meddebitorer" :key="index">
         <div @input.once="addNewMeddebitor">
           <div class="col-4">
-            <label :for="meddebitor.index">{{ $t('attributes.meddebitor') }}{{index +1}}</label>
+            <label :for="meddebitor.index">{{ $t('attributes.meddebitor_nr', {nr: index + 1}) }}</label>
             <input :id="meddebitor.index" type="text" :disabled="meddebitor.cvr !== null && meddebitor.cvr !== ''" v-model="meddebitor.cpr" placeholder="CPR" v-validate="'digits:10'">
           </div>
           <div class="col-4">
@@ -144,15 +136,12 @@
           </div>
         </div>
       </div>
-
       <div class="row">
         <div class="col-2">
           <input type="submit" :value="$t('common.gem')" @click="isSubmitted = true">
         </div>
       </div>
-
     </form>
-
   </article>
 
   <article class="success" v-else>
