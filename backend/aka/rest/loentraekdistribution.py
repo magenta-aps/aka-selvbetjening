@@ -1,20 +1,16 @@
 import logging
-import json
-from django.http import HttpResponse
 
-# Internal tools
-from aka.rest.base import JSONRestView
-# from aka.helpers import validation
-# from aka.helpers.result import Error, Success
-# from aka.helpers.sharedfiles import getSharedJson
-
+from django.http import JsonResponse
 # When the service is implemented unused imports should be removed,
 # but until then they are just commented out as a reference
+from django.views import View
+
+# Internal tools
 
 logger = logging.getLogger(__name__)
 
 
-class LoenTraekDistribution(JSONRestView):
+class LoenTraekDistribution(View):
     '''This class handles the REST interface at /loentraekdistribution
 
     The purpose is to get the distribution of pay deductions that was
@@ -38,4 +34,4 @@ class LoenTraekDistribution(JSONRestView):
                  'nettolon': '15000'
                  }]
 
-        return HttpResponse(json.dumps(data), content_type=JSONRestView.CT1)
+        return JsonResponse(data, safe=False)

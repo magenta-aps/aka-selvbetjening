@@ -1,19 +1,14 @@
 import logging
-# from django.http import HttpResponse
-# from django.http import HttpResponseBadRequest
-from aka.rest.base import JSONRestView
-# from aka.helpers import validation
-# from aka.helpers.prisme import Prisme
-# from aka.helpers.result import Error, Success
-# from aka.helpers.sharedfiles import getSharedJson
 
 # When the service is implemented unused imports should be removed,
 # but until then they are just commented out as a reference
+from django.http import JsonResponse, HttpResponse
+from django.views import View
 
 logger = logging.getLogger(__name__)
 
 
-class Privatdebitorkonto(JSONRestView):
+class Privatdebitorkonto(View):
     '''This class handles the REST interface at /privatdebitorkonto.
     '''
 
@@ -27,4 +22,4 @@ class Privatdebitorkonto(JSONRestView):
 
         '''
 
-        return self.successResponse("OK")
+        return JsonResponse("OK", safe=False)

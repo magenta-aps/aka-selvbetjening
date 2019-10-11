@@ -17,7 +17,7 @@ const rules = {
       //return /^([1-9]\d*|0)(,\d+)?$/.test(String(value))
     }
   }
-}
+};
 
 // export an 'install' function.
 export default (Validator) => {
