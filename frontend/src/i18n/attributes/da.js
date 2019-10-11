@@ -22,6 +22,7 @@ export default {
   kontaktperson: 'Kontaktperson',
   noter: 'Noter',
   meddebitor: 'Meddebitor',
+  meddebitor_nr: 'Meddebitor {nr}',
   ger_nr: 'GER-nr.',
   traekmaaned: 'Trækmåned',
   aftalenr: 'Aftalanr',

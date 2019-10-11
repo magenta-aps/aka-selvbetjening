@@ -1,6 +1,18 @@
-# Simple makefile to easily access some functionality
+# Makefile to easily access some functionality
+# Mainly used commands are:
+# 	make [runserver]
+# 	- Which builds frontend code, and starts the django development server
+#
+# 	test
+# 	- Which runs flake8 on the python code and executes the tests in the backend
+#
+# 	documentation
+# 	- Which generates the sphinx documentation (in the doc folder)
+#
+#	frontend 
+#	- Which builds the frontend code
 
-# These are simple shortcuts for commands used alot from specific places
+# These are shortcuts for commands used alot from specific places
 DJANGO 	= cd backend && python3 manage.py
 NPM = cd frontend && npm
 FRONTEND_SOURCES = $(shell find frontend/src -type f) 

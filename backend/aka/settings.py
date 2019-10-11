@@ -12,6 +12,32 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+import logging.config
+
+logging.config.dictConfig({
+    'version': 1,
+    'formatters': {
+        'verbose': {
+            'format': '%(name)s: %(message)s'
+        }
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'zeep.transports': {
+            'level': 'DEBUG',
+            'propagate': True,
+            'handlers': ['console'],
+        },
+    }
+})
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SITE_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SITE_DIR)
@@ -26,7 +52,7 @@ SHARED_DIR = os.path.join(PROJECT_DIR, "shared")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-MEDIA_URL = 'uploadedfiles/'
+MEDIA_URL = BASE_DIR + '/upload/'
 
 # Where to put the output from tests:
 TEST_OUTPUT_DIR = '.'
@@ -66,6 +92,11 @@ LOGGING = {
             'handlers': ['debug-console'],
             'filters': ['require_debug_true'],
             'level': 'DEBUG'
+        },
+        'oic': {
+            'handlers': ['debug-console'],
+            'filters': ['require_debug_true'],
+            'level': 'DEBUG'
         }
     }
 }
@@ -82,6 +113,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'openid'
 ]
 
 MIDDLEWARE = [
@@ -155,6 +187,35 @@ STATIC_URL = '/index/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [ os.path.join(PROJECT_DIR, 'frontend', 'dist', 'static') ]
 
+
+PRISME_CONNECT = {
+    'wsdl_file': 'wsdl/GenericService.wsdl',
+    'proxy': {
+        'socks': ''
+    },
+    'auth': {
+        'basic': {
+            'username': '',
+            'domain': '',
+            'password': ''
+        }
+    }
+}
+
+DAFO_CONNECT = {
+    'address': {
+        'token': 'https://sts.data.gl/get_token_passive?username={username}&password={password}',
+        'cvr': 'https://data.gl/prisme/cvr/1/{cvr}'
+    },
+    'auth': {
+        'username': '',
+        'password': ''
+    }
+}
+
+
 LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
 if os.path.exists(LOCAL_SETTINGS_FILE):
     from .local_settings import *  # noqa
+
+

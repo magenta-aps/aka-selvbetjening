@@ -22,6 +22,7 @@ export default {
   kontaktperson: 'Inuk atassuteqaataasoq',
   noter: 'Allaaserisaq',
   meddebitor: 'Meddebitor - oversættelse mangler',
+  meddebitor_nr: 'Meddebitor {nr} - oversættelse mangler',
   ger_nr: 'GER-normu',
   traekmaaned: 'Qaammat ilanngaanneqarfik',
   aftalenr: 'Isumaqatigiissutip normua',

@@ -60,7 +60,7 @@
 
                     <div>
 
-                        <h3>Rentenota</h3>
+                        <h3>{{ $t("rentenota.rentenota") }}</h3>
 
                         <table class="rentenota-address-table">
                             <tr>
@@ -102,69 +102,85 @@
                         </address>
 
                     </div>
-
                 </div>
 
                 <table>
                     <thead>
                         <tr>
                             <th>{{ $t("rentenota.dato") }}</th>
-                            <th>{{ $t("rentenota.postdato") }}</th>
+                            <th>{{ $t("rentenota.debitorkonto") }}</th>
+                            <th>{{ $t("rentenota.faktureringsklassifikation") }}</th>
                             <th>{{ $t("rentenota.bilag") }}</th>
-                            <th>{{ $t("rentenota.faktura") }}</th>
+                            <th>{{ $t("rentenota.rentenotanummer") }}</th>
                             <th>{{ $t("rentenota.tekst") }}</th>
-                            <th>{{ $t("rentenota.fradato") }}</th>
-                            <th>{{ $t("rentenota.dage") }}</th>
-                            <th>{{ $t("rentenota.grundlag") }}</th>
                             <th>{{ $t("rentenota.val") }}</th>
                             <th>{{ $t("rentenota.grundlag") }}</th>
                             <th>{{ $t("rentenota.beloeb") }}</th>
+                            <th>{{ $t("rentenota.postdato") }}</th>
+                            <th>{{ $t("rentenota.faktura") }}</th>
+                            <th>{{ $t("rentenota.fradato") }}</th>
+                            <th>{{ $t("rentenota.tildato") }}</th>
+                            <th>{{ $t("rentenota.dage") }}</th>
                             <th style="border: none;"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="p in rentenota_data.poster" :key="p.dato">
+                        <tr v-if="!rentenota_data.poster.length">
+                          <td colspan="14" style="text-align: center">
+                            {{ $t("rentenota.ingenposter") }}
+                          </td>
+                        </tr>
+                        <tr v-for="p in rentenota_data.poster" :key="p.Updated">
                             <td>
-                                {{ p.dato }}
+                                {{ p.Updated }}
                             </td>
                             <td>
-                                {{ p.postdato }}
+                                {{ p.AccountNum }}
                             </td>
                             <td>
-                                {{ p.bilag }}
+                                {{ p.BillingClassification }}
                             </td>
                             <td>
-                                {{ p.faktura }}
+                                {{ p.Voucher }}
                             </td>
                             <td>
-                                {{ p.tekst }}
+                                {{ p.InterestNote }}
                             </td>
                             <td>
-                                {{ p.fradato }}
+                                {{ p.Txt }}
                             </td>
                             <td class="numbercell">
-                                {{ p.dage }}
+                                {{ p.DueDate }}
                             </td>
                             <td class="numbercell">
-                                {{ p.grundlag }}
+                                {{ p.InvoiceAmount }}
                             </td>
                             <td class="numbercell">
-                                {{ p.val }}
+                                {{ p.InterestAmount }}
+                            </td>
+                            <td>
+                                {{ p.TransDate }}
+                            </td>
+                            <td>
+                                {{ p.Invoice }}
+                            </td>
+                            <td>
+                                {{ p.CalcFrom }}
+                            </td>
+                            <td>
+                                {{ p.CalcTo }}
                             </td>
                             <td class="numbercell">
-                                {{ p.grundlag2 }}
-                            </td>
-                            <td class="numbercell">
-                                {{ p.beloeb }}
+                                {{ p.InterestDays }}
                             </td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td colspan="10"></td>
+                            <td colspan="8"></td>
                             <td class="numbercell rentenota-total">
                                 {{ total }}
                             </td>
-                            <td>
+                            <td colspan="6">
                                 kr
                             </td>
                         </tr>
@@ -181,73 +197,71 @@
 
 <script>
 import axios from "axios";
+import {notify, notifyError} from '../utils/notify/Notifier.js'
 
 export default {
-  data() {
-    return {
-      csrftoken: null,
-      rentenota_data: null,
-      today: new Date(),
-      years: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(
-        function (a) {
-            return new Date().getFullYear() - a
+    data() {
+        return {
+            csrftoken: null,
+            rentenota_data: null,
+            today: new Date(),
+            years: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map(a => {
+                return new Date().getFullYear() - a
+            }),
+            month: new Date().getMonth(), //JS months are zero indexed. We can only pick prior months
+            year: new Date().getFullYear()
+        };
+    },
+    computed: {
+        total() {
+            if (this.rentenota_data) {
+                let count_total = 0;
+                for (let p of this.rentenota_data.poster) {
+                    count_total += p.InterestAmount;
+                }
+                return count_total;
+            }
         }
-      ),
-      month: new Date().getMonth()+1, //JS months are zero indexed
-      year: new Date().getFullYear()
-    };
-  },
-  computed: {
-    total() {
-      if (this.rentenota_data) {
-        let count_total = 0;
-        for (let p of this.rentenota_data.poster) {
-          count_total += p.beloeb;
+    },
+    methods: {
+        getCSRFToken: function() {
+            this.csrftoken = document.cookie.replace(
+                /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
+                "$1"
+            );
+        },
+        requestRentenota: function() {
+            axios({
+                url: `/rentenota/${this.year}/${this.zeroPadMonth(this.month)}`,
+                method: "get",
+                headers: {
+                    "X-CSRFToken": this.csrftoken,
+                    "X-AKA-BRUGER": "Unknown"
+                }
+            })
+            .then(res => {
+                this.rentenota_data = res.data;
+            })
+            .catch(error => {
+                notifyError(error, localStorage.getItem('language') || 'kl', this._i18n);
+            });
+        },
+        print: function () {
+            window.print();
+        },
+        setDates: function () {
+            let d = new Date();
+            this.year = d.getFullYear();
+            this.month = d.getMonth();
+        },
+        zeroPadMonth: function (x) {
+            return x >= 10 ? String(x) : '0' + String(x)
         }
-        return count_total;
-      }
+    },
+    created: function() {
+        this.getCSRFToken();
+        this.setDates();
     }
-  },
-  methods: {
-    getCSRFToken() {
-      this.csrftoken = document.cookie.replace(
-        /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
-        "$1"
-      );
-    },
-    requestRentenota() {
-      axios({
-        url: `/rentenota/${ this.year }-${ this.zeroPadMonth(this.month) }`,
-        method: "get",
-        headers: {
-          "X-CSRFToken": this.csrftoken,
-          "X-AKA-BRUGER": "Unknown"
-        }
-      })
-        .then(res => {
-          this.rentenota_data = res.data;
-        })
-        .catch(err => {
-          alert(err.message);
-        });
-    },
-    print: function() {
-      window.print();
-    },
-    setDates: function() {
-      let d = new Date();
-      this.dateto = d.toISOString().substr(0, 10);
-      d.setMonth(d.getMonth() - 1);
-      this.datefrom = d.toISOString().substr(0, 10);
-    },
-    zeroPadMonth: function(x) {
-      return x >= 10 ? String(x) : '0'+String(x)
-    }
-  },
-  created() {
-    this.getCSRFToken();
-    this.setDates();
-  }
 };
 </script>
 

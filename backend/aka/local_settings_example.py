@@ -26,3 +26,12 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+OPENID_CONNECT = {
+    'issuer': 'https://loginqa.sullissivik.gl',  # top level url to the issuer, used for autodiscovery
+    'scope': 'openid digitalimik',  # openid is mandatory to indicated is is a openid OP, we need to use digitalimik to get the cpr/cvr number.
+    'client_id': 'some company',  # id of the system (ouath), registered at headnet
+    'client_certificate': '',  # path to client certificate used to secure the communication between the system and OP
+    'private_key': '',  # used for signing messages passed to the OP
+    'redirect_uri': 'https://akaptest.sullissivik.gl/oid/callback/'  # url registered at headnet to redirect the user to after a successfull login at OP
+}

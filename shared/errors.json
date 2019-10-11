@@ -1,6 +1,6 @@
 {
     "eksempel": {
-        "da": "Dette er blot et exempel",
+        "da": "Dette er blot et eksempel",
         "kl": "Oversættelse Mangler"
     },
     "fordringsgruppe_not_found":{
@@ -30,6 +30,10 @@
     "invalid_month":{
         "da": "Invalid måned - skal være mellem 1 og 12",
         "kl": "Oversættelse Mangler - Invalid måned - skal være mellem 1 og 12"
+    },
+    "future_month":{
+        "da": "Ugylding måned - må ikke ligge i fremtiden",
+        "kl": "Oversættelse Mangler"
     }
 
 }
