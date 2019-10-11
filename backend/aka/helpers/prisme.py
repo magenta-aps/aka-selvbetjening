@@ -321,13 +321,11 @@ class Prisme(object, metaclass=Singleton):
         if not isinstance(claim, PrismeClaimRequest):
             raise Exception("claim must be of type PrismeClaim")
         if self.testing:
-            print("we are testing")
             return [
                 PrismeClaimResponse(
                     AKAUtils.get_file_contents('aka/tests/claim_response.xml')
                 )
             ]
-        print("we are not testing")
         return self.processService(
             "createClaim",
             claim.xml,

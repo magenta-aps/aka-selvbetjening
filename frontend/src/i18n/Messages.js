@@ -11,6 +11,7 @@ export const messages = {
       cpr_nr: 'CPR-nr',
       indlaes: 'Indlæs',
       fejl: 'Fejl',
+      forside: 'Forside',
       january: 'januar',
       february: 'februar',
       march: 'marts',
@@ -25,6 +26,7 @@ export const messages = {
       december: 'december'
     },
     rentenota: {
+      rentenota: 'Rentenota',
       title: 'Hent rentenota',
       month: 'Måned',
       dato: 'Dato',
@@ -58,7 +60,10 @@ export const messages = {
       title: 'Inkasso - Opret sag',
       filnavn: 'Filnavn',
       stoerelse: 'Størrelse',
-      slet: 'Slet'
+      slet: 'Slet',
+      success: 'Indberetning indsendt',
+      reload: 'Ny indberetning',
+      nummervisning: 'Fordringsnummer: {nummer}'
     },
     loentraek: {
       titel1: 'Løntræk - Indberet',
@@ -96,6 +101,7 @@ export const messages = {
       cpr_nr: 'Inuup normua',
       indlaes: 'Indlæs - oversættelse mangler',
       fejl: 'Fejl - oversættelse mangler',
+      forside: 'Forside - oversættelse mangler',
       january: 'januar - oversættelse mangler',
       february: 'february - oversættelse mangler',
       march: 'march - oversættelse mangler',
@@ -110,6 +116,7 @@ export const messages = {
       december: 'december - oversættelse mangler'
     },
     rentenota: {
+      rentenota: 'Rentenota - oversættelse mangler',
       title: 'Hent rentenota - oversættelse mangler',
       month: 'Måned - oversættelse mangler',
       dato: 'Dato - oversættelse mangler',
@@ -139,7 +146,10 @@ export const messages = {
       title: 'Akiliisitsiniarneq - suliamik pilersitsineq',
       filnavn: 'Fil-ip atia',
       stoerelse: 'Imartussuseq',
-      slet: 'Nunguteruk'
+      slet: 'Nunguteruk',
+      success: 'Indberetning indsendt - oversættelse mangler',
+      reload: 'Ny indberetning - oversættelse mangler',
+      nummervisning: 'Fordringsnummer: {nummer} - oversættelse mangler'
     },
     loentraek: {
       titel1: 'Aningaasarsianit ilanngartuineq - Immersoruk',

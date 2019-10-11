@@ -60,7 +60,7 @@
 
                     <div>
 
-                        <h3>Rentenota</h3>
+                        <h3>{{ $t("rentenota.rentenota") }}</h3>
 
                         <table class="rentenota-address-table">
                             <tr>
@@ -197,73 +197,71 @@
 
 <script>
 import axios from "axios";
+import {notify, notifyError} from '../utils/notify/Notifier.js'
 
 export default {
-  data() {
-    return {
-      csrftoken: null,
-      rentenota_data: null,
-      today: new Date(),
-      years: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(
-        function (a) {
-            return new Date().getFullYear() - a
+    data() {
+        return {
+            csrftoken: null,
+            rentenota_data: null,
+            today: new Date(),
+            years: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map(a => {
+                return new Date().getFullYear() - a
+            }),
+            month: new Date().getMonth(), //JS months are zero indexed. We can only pick prior months
+            year: new Date().getFullYear()
+        };
+    },
+    computed: {
+        total() {
+            if (this.rentenota_data) {
+                let count_total = 0;
+                for (let p of this.rentenota_data.poster) {
+                    count_total += p.InterestAmount;
+                }
+                return count_total;
+            }
         }
-      ),
-      month: new Date().getMonth(), //JS months are zero indexed. We can only pick prior months
-      year: new Date().getFullYear()
-    };
-  },
-  computed: {
-    total() {
-      if (this.rentenota_data) {
-        let count_total = 0;
-        for (let p of this.rentenota_data.poster) {
-          count_total += p.InterestAmount;
+    },
+    methods: {
+        getCSRFToken: function() {
+            this.csrftoken = document.cookie.replace(
+                /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
+                "$1"
+            );
+        },
+        requestRentenota: function() {
+            axios({
+                url: `/rentenota/${this.year}/${this.zeroPadMonth(this.month)}`,
+                method: "get",
+                headers: {
+                    "X-CSRFToken": this.csrftoken,
+                    "X-AKA-BRUGER": "Unknown"
+                }
+            })
+            .then(res => {
+                this.rentenota_data = res.data;
+            })
+            .catch(error => {
+                notifyError(error, localStorage.getItem('language') || 'kl', this._i18n);
+            });
+        },
+        print: function () {
+            window.print();
+        },
+        setDates: function () {
+            let d = new Date();
+            this.year = d.getFullYear();
+            this.month = d.getMonth();
+        },
+        zeroPadMonth: function (x) {
+            return x >= 10 ? String(x) : '0' + String(x)
         }
-        return count_total;
-      }
+    },
+    created: function() {
+        this.getCSRFToken();
+        this.setDates();
     }
-  },
-  methods: {
-    getCSRFToken() {
-      this.csrftoken = document.cookie.replace(
-        /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
-        "$1"
-      );
-    },
-    requestRentenota() {
-      axios({
-        url: `/rentenota/${ this.year }/${ this.zeroPadMonth(this.month) }`,
-        method: "get",
-        headers: {
-          "X-CSRFToken": this.csrftoken,
-          "X-AKA-BRUGER": "Unknown"
-        }
-      })
-        .then(res => {
-          this.rentenota_data = res.data;
-        })
-        .catch(err => {
-          alert(err.message);
-        });
-    },
-    print: function() {
-      window.print();
-    },
-    setDates: function() {
-      let d = new Date();
-      this.dateto = d.toISOString().substr(0, 10);
-      d.setMonth(d.getMonth() - 1);
-      this.datefrom = d.toISOString().substr(0, 10);
-    },
-    zeroPadMonth: function(x) {
-      return x >= 10 ? String(x) : '0'+String(x)
-    }
-  },
-  created() {
-    this.getCSRFToken();
-    this.setDates();
-  }
 };
 </script>
 
