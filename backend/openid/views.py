@@ -125,7 +125,6 @@ class Callback(TemplateView):
                 userinfo = client.do_user_info_request(state=request.session['oid_state'])
                 user_info_dict = userinfo.to_dict()
                 request.session['user_info'] = user_info_dict
-                # TODO redirect to vue.js
                 # always delete the state so it is not reused
                 del request.session['oid_state']
                 # after the oauth flow is done and we have the user_info redirect to the frontpage
