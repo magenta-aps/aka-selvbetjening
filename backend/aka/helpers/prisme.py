@@ -2,7 +2,6 @@ import os
 
 import requests
 import zeep
-from aka.helpers.utils import AKAUtils, Singleton
 from dict2xml import dict2xml as dict_to_xml
 from django.conf import settings
 from requests import Session
@@ -226,7 +225,7 @@ class PrismeInterestNoteResponse(PrismeResponseObject):
         ]
 
 
-class Prisme(object, metaclass=Singleton):
+class Prisme(object):
 
     def __init__(self, request=None, testing=None):
         prisme_settings = settings.PRISME_CONNECT
