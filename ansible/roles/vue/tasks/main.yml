@@ -13,7 +13,7 @@
 - name: Install Vue.js
   npm: 
     name: vue
-    path: "{{ npm_path }}"
+    path: "{{ frontend_dir }}"
 
 - name: Install Vue Cli
   npm:

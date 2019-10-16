@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 provisioner=(ENV['PROVISIONER'] || 'shell')
-playbook=(ENV['PLAYBOOK'] || 'develop.yml')
+playbook=(ENV['PLAYBOOK'] || 'vagrant.yml')
 migrate_disk=(ENV['MIGRATE_DISK'])
 forward_port=(ENV['FORWARD_PORT'] || true)
 

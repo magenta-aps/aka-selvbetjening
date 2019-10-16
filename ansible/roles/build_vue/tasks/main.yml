@@ -1,0 +1,6 @@
+---
+- name: build vue
+  command: "npm run build"
+  args:
+    chdir: "{{frontend_dir}}"
+...

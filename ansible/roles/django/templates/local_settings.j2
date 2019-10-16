@@ -1,0 +1,12 @@
+SECRET_KEY = '{{secret_key.stdout}}'
+ALLOWED_HOSTS = ['*']
+
+DATABASES = {
+{% for database, settings in django_databases.items() %}
+    '{{ database }}': {
+    {% for key, value in settings.items() %}
+        "{{ key|upper }}": "{{ value }}",
+    {% endfor %}
+    }
+{% endfor %}
+}

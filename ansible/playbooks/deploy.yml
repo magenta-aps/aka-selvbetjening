@@ -1,0 +1,9 @@
+- hosts: akaptest01
+  become: true
+  become_method: sudo
+  become_user: root
+
+  roles:
+    - postgres
+    - deploy
+    - django
