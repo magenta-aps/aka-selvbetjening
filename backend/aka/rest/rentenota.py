@@ -80,19 +80,6 @@ class RenteNota(View):
                             data.update(transaction.data)
                             data.update(journaldata)
                             posts.append(data)
-                            # posts.append({
-                            #     'dato': journal.updated,
-                            #     'fradato': transaction.calculate_from_date,
-                            #     'postdato': transaction.transaction_date,
-                            #     'bilag': transaction.voucher,
-                            #     'faktura': transaction.invoice,
-                            #     'tekst': transaction.text,
-                            #     'dage': transaction.interest_days,
-                            #     'grundlag': transaction.invoice_amount,
-                            #     'val': '',
-                            #     'grundlag2': '',
-                            #     'beloeb': transaction.interest_amount
-                            # })
             except Exception as e:
                 print(e)
 

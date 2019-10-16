@@ -291,7 +291,7 @@ class Prisme(object):
             'description': response.serverVersionDescription
         }
 
-    def processService(self, method, xml, reply_container_class):
+    def process_service(self, method, xml, reply_container_class):
         request_class = self.client.get_type("tns:GWSRequestDCFUJ")
         request = request_class(
             requestHeader=self.create_request_header(method),
@@ -325,7 +325,7 @@ class Prisme(object):
                     AKAUtils.get_file_contents('aka/tests/claim_response.xml')
                 )
             ]
-        return self.processService(
+        return self.process_service(
             "createClaim",
             claim.xml,
             PrismeClaimResponse
@@ -334,7 +334,7 @@ class Prisme(object):
     def create_impariment(self, impairment):
         if not isinstance(impairment, PrismeImpairmentRequest):
             raise Exception("impairment must be of type PrismeImpairment")
-        return self.processService(
+        return self.process_service(
             impairment.method,
             impairment.xml,
             PrismeImpairmentResponse
@@ -343,7 +343,7 @@ class Prisme(object):
     def check_cvr(self, cvr_check):
         if not isinstance(cvr_check, PrismeCvrCheckRequest):
             raise Exception("cvr_check must be of type PrismeCvrCheckRequest")
-        return self.processService(
+        return self.process_service(
             cvr_check.method,
             cvr_check.xml,
             PrismeCvrCheckResponse
@@ -354,7 +354,7 @@ class Prisme(object):
             raise Exception(
                 "interestnote_req must be of type PrismeInterestNoteRequest"
             )
-        return self.processService(
+        return self.process_service(
             interestnote_req.method,
             interestnote_req.xml,
             PrismeInterestNoteResponse
