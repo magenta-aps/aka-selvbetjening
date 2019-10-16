@@ -50,3 +50,8 @@ as done by:
 Basic template cloned from github.com:magenta-aps/vagrant-ansible-example.git
 
 For the Windows equivalent, see [here](https://github.com/magenta-aps/vagrant-ansible-example-windows)
+
+### ansible
+
+deply to testing (vault pass is in bitwarden) 
+ansible-playbook -i akaptest01, -K playbooks/deploy.yml --ask-vault-pass
