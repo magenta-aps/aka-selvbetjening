@@ -18,14 +18,12 @@
   pre_tasks:
     - name: Update apt cache (if old)
       apt: update_cache=yes cache_valid_time=84600
-
-  post_tasks:
-    - name: Install Python Requirements
-      pip: 
-        requirements: /vagrant/backend/doc/requirements.txt
-        executable: pip3
   
   roles:
-  - django
-  - postgresql
+    - postgres
+    - django
+    - sphinx
+    - vue
+    - build_vue
+
 ...

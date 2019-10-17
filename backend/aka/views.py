@@ -3,6 +3,7 @@ import logging
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views import View
+from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
 
 from .forms import InkassoForm
@@ -13,6 +14,10 @@ from .helpers.prisme import PrismeClaimRequest
 from .helpers.prisme import PrismeInterestNoteRequest
 
 logger = logging.getLogger(__name__)
+
+
+class IndexTemplateView(TemplateView):
+    template_name = 'index.html'
 
 
 class ArbejdsgiverkontoView(View):

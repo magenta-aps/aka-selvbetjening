@@ -1,4 +1,4 @@
-Django<3.0,>=2.2
+django==2.2.6
 psycopg2-binary
 requests
 requests_ntlm
@@ -7,3 +7,4 @@ httpretty
 lxml>=4.2.5
 zeep
 xmltodict
+dict2xml
