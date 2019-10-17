@@ -9,7 +9,7 @@ from django.views.generic.edit import BaseFormView
 from .clients.dafo import Dafo
 from .clients.prisme import Prisme, PrismeClaimRequest, PrismeInterestNoteRequest
 from .forms import InkassoForm
-from .utils import ErrorJsonResponse
+from .utils import ErrorJsonResponse, AccessDeniedJsonResponse
 
 logger = logging.getLogger(__name__)
 
@@ -145,13 +145,11 @@ class RenteNotaView(View):
 
         try:
             if 'user_info' not in request.session:
-                # return AccessDeniedJsonResponse()
-                cvr = '12345678'
-                cpr = '1234567890'
+                return AccessDeniedJsonResponse()
             else:
                 user_info = request.session['user_info']
-                cvr = user_info.get('cvr')
-                cpr = user_info.get('cpr')
+                cvr = user_info.get('CVR')
+                cpr = user_info.get('CPR')
 
             year = int(year)
             month = int(month)
