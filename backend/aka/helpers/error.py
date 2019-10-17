@@ -1,6 +1,6 @@
 import logging
 
-from aka.helpers.sharedfiles import getSharedJson
+from .utils import getSharedJson
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.http import JsonResponse
 

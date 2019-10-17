@@ -3,7 +3,7 @@ import logging
 from django import forms
 from django.forms import ValidationError
 
-from .helpers.sharedfiles import getSharedJson
+from .helpers.utils import getSharedJson
 
 logger = logging.getLogger(__name__)
 
