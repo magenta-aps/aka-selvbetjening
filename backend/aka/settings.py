@@ -54,11 +54,6 @@ DEBUG = True
 
 MEDIA_URL = BASE_DIR + '/upload/'
 
-# Where to put the output from tests:
-TEST_OUTPUT_DIR = '.'
-TEST_OUTPUT_FILE_NAME = 'alltestresults.xml'
-TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -107,11 +102,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
     'django.contrib.staticfiles',
     'openid'
 ]
@@ -121,8 +113,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    'openid.middleware.openid.LoggedIn',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -137,7 +128,6 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
@@ -147,31 +137,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'aka.wsgi.application'
 
 
-# Password validation
-# https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'da-dk'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Godthab'
 
 USE_I18N = True
 
@@ -185,8 +156,9 @@ USE_TZ = True
 
 STATIC_URL = '/index/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [ os.path.join(PROJECT_DIR, 'frontend', 'dist', 'static') ]
+STATICFILES_DIRS = [os.path.join(PROJECT_DIR, 'frontend', 'dist', 'static') ]
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # expire session on browser close
 
 PRISME_CONNECT = {
     'wsdl_file': 'wsdl/GenericService.wsdl',
@@ -212,7 +184,7 @@ DAFO_CONNECT = {
         'password': ''
     }
 }
-
+OPENID_CONNECT = {}
 
 LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
 if os.path.exists(LOCAL_SETTINGS_FILE):
