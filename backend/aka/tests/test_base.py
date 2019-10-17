@@ -1,7 +1,7 @@
 import json
 import logging
 
-from aka.helpers.error import ErrorJsonResponse
+from aka.utils import ErrorJsonResponse
 from django.core.exceptions import ValidationError
 from django.forms.utils import ErrorDict, ErrorList
 from django.test import TestCase

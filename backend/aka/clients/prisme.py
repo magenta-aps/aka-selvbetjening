@@ -10,7 +10,7 @@ from requests_ntlm import HttpNtlmAuth
 from xmltodict import parse as xml_to_dict
 from zeep.transports import Transport
 
-from .utils import get_file_contents_base64
+from ..utils import get_file_contents_base64
 
 
 class PrismeException(Exception):

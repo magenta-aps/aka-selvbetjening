@@ -1,9 +1,9 @@
 from datetime import date
 
-from aka.helpers.prisme import PrismeClaimRequest, PrismeClaimResponse
-from aka.helpers.prisme import PrismeCvrCheckRequest, PrismeCvrCheckResponse
-from aka.helpers.prisme import PrismeImpairmentRequest, PrismeImpairmentResponse
-from aka.helpers.prisme import PrismeInterestNoteRequest, PrismeInterestNoteResponse
+from aka.clients.prisme import PrismeClaimRequest, PrismeClaimResponse
+from aka.clients.prisme import PrismeCvrCheckRequest, PrismeCvrCheckResponse
+from aka.clients.prisme import PrismeImpairmentRequest, PrismeImpairmentResponse
+from aka.clients.prisme import PrismeInterestNoteRequest, PrismeInterestNoteResponse
 from django.core.files import File
 from django.test import TestCase
 from xmltodict import parse as xml_to_dict

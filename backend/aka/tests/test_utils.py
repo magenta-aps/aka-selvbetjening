@@ -1,6 +1,6 @@
 import datetime
 
-from aka.helpers.utils import datefromstring, datetostring
+from aka.utils import datefromstring, datetostring
 from django.test import TestCase
 
 

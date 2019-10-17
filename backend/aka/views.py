@@ -6,12 +6,10 @@ from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
 
+from .clients.dafo import Dafo
+from .clients.prisme import Prisme, PrismeClaimRequest, PrismeInterestNoteRequest
 from .forms import InkassoForm
-from .helpers.dafo import Dafo
-from .helpers.error import ErrorJsonResponse
-from .helpers.prisme import Prisme
-from .helpers.prisme import PrismeClaimRequest
-from .helpers.prisme import PrismeInterestNoteRequest
+from .utils import ErrorJsonResponse
 
 logger = logging.getLogger(__name__)
 
