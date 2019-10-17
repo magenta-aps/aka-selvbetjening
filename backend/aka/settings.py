@@ -184,7 +184,7 @@ DAFO_CONNECT = {
         'password': ''
     }
 }
-
+OPENID_CONNECT = {}
 
 LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
 if os.path.exists(LOCAL_SETTINGS_FILE):
