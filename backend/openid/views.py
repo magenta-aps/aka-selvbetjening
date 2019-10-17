@@ -35,8 +35,7 @@ class Login(View):
     """
     http_method_names = ['get']
 
-    def get(self, request):
-
+    def get(self, request, *args, **kwargs):
         client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=client_cert)
         provider_info = client.provider_config(open_id_settings['issuer'])
         client_reg = RegistrationResponse(**{'client_id': open_id_settings['client_id'], 'redirect_uris': [open_id_settings['redirect_uri']]})
@@ -44,7 +43,7 @@ class Login(View):
 
         state = rndstr(32)
         nonce = rndstr(32)
-        args = {'response_type': 'code',
+        request_args = {'response_type': 'code',
                 'scope': settings.OPENID_CONNECT['scope'],
                 'client_id': settings.OPENID_CONNECT['client_id'],
                 'redirect_uri': settings.OPENID_CONNECT['redirect_uri'],
@@ -53,7 +52,7 @@ class Login(View):
 
         request.session['oid_state'] = state
         request.session['oid_nonce'] = nonce
-        auth_req = client.construct_AuthorizationRequest(request_args=args)
+        auth_req = client.construct_AuthorizationRequest(request_args=request_args)
         login_url = auth_req.request(client.authorization_endpoint)
         return HttpResponseRedirect(login_url)
 
