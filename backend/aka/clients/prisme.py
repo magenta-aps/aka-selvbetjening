@@ -80,6 +80,7 @@ class PrismeClaimRequest(PrismeRequestObject):
 
     @property
     def xml(self):
+        # TODO refactor maybe have a list of fields in private attribute instead.
         return dict_to_xml({
             'CustCollClaimantIdentifier': self.prepare(self.claimant_id),
             'CustCollCprCvr': self.prepare(self.cpr_cvr),
@@ -189,6 +190,7 @@ class PrismeInterestNoteRequest(PrismeRequestObject):
 
 
 class PrismeResponseObject(object):
+    # TODO this dosent do anything remove it.
     pass
 
 
@@ -199,17 +201,19 @@ class PrismeClaimResponse(PrismeResponseObject):
 
 
 class PrismeImpairmentResponse(PrismeClaimResponse):
+    #TODO purpose?
     pass
 
 
 class PrismeCvrCheckResponse(PrismeResponseObject):
+    #instead of this could we just have one class and use self._id and figure out the type of xml from the xml content?
     def __init__(self, xml):
         d = xml_to_dict(xml)
         self.claimant_id = list(d['FujClaimant']['ClaimantId'])
 
 
 class PrismeInterestNoteResponse(PrismeResponseObject):
-
+    # TODO class in class and functions in functions are ugly
     class PrismeInterestJournal(PrismeResponseObject):
         def __init__(self, data):
             self.updated = data['Updated']
@@ -221,11 +225,12 @@ class PrismeInterestNoteResponse(PrismeResponseObject):
                 PrismeInterestNoteResponse.PrismeInterestTransaction(v)
                 for k, v in data['CustInterestTransactions'].items()
                 if k == 'CustInterestTrans'
-            ])
+            ])  # TODO you are casting a list to list? list == []
             self.data = data
 
     class PrismeInterestTransaction(PrismeResponseObject):
         def __init__(self, data):
+            # TODO you are unpacking a dictionary...
             self.voucher = data['Voucher']
             self.invoice = data['Invoice']
             self.text = data['Txt']
@@ -249,15 +254,16 @@ class PrismeInterestNoteResponse(PrismeResponseObject):
 class Prisme(object):
 
     def __init__(self, request=None, testing=None):
-        prisme_settings = settings.PRISME_CONNECT
+        prisme_settings = settings.PRISME_CONNECT # TODO should be moved to the top of file.
         wsdl = prisme_settings['wsdl_file']
         if request is not None:
             self.testing = request.GET.get('testing') == '1'
+            # TODO use testing=False instead of parsing in the request
         if testing is not None:
             self.testing = testing
 
         session = Session()
-
+        #TODO create a dedicated method to parse the config and call it from __init__ like def _setup_session() or something
         if 'proxy' in prisme_settings:
             if 'socks' in prisme_settings['proxy']:
                 proxy = f'socks5://{prisme_settings["proxy"]["socks"]}'
@@ -331,6 +337,7 @@ class Prisme(object):
             if reply_item.replyCode == 0:
                 outputs.append(request_object.reply_class(reply_item.xml))
             else:
+                #TODO raise Exception is bad and didnt you createa PrismeExeption?
                 raise Exception(
                     f"Prisme error {reply_item.replyCode}:"
                     f" {reply_item.replyText}"
@@ -355,7 +362,9 @@ class Prisme(object):
 
         if request.status_code != requests.codes.ok:
             return False
-
+        # TODO Why is this ever needed? use a nameTemporary file...
+        # You are overwritning the file if it exists...
+        # You do dont gain anything by writing it to disk instead of returning it to the responds.
         with open(localfilename, 'wb+') as destination:
             for block in request.iter_content(1024 * 8):
                 if block:

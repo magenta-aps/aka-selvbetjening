@@ -13,10 +13,11 @@ from django.test import TestCase, Client, override_settings
 class BasicTestCase(TestCase):
     def setUp(self):
         logging.disable(logging.CRITICAL)
-        self.c = Client()
+        self.c = Client() #TODO not needed
         self.url = '/inkassosag?testing=0'
 
     def checkReturnValIsJSON(self, response):
+        # TODO nasty way to check that exceptions are raise.
         try:
             charset = response.charset
             return json.loads(response.content.decode(charset))

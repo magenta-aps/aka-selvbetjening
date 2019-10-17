@@ -88,6 +88,7 @@ class InkassoSagView(BaseFormView):
         return ErrorJsonResponse.from_error_dict(form.errors)
 
 
+
 class LoenTraekView(View):
 
     def get(self, *args, **kwargs):
