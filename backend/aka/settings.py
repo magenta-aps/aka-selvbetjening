@@ -189,7 +189,7 @@ STATICFILES_DIRS = [ os.path.join(PROJECT_DIR, 'frontend', 'dist', 'static') ]
 
 
 PRISME_CONNECT = {
-    'wsdl_file': 'wsdl/GenericService.wsdl',
+    'wsdl_file': 'https://test.erp.gl/GWCServiceSetup/GenericService.svc?singleWsdl',
     'proxy': {
         'socks': ''
     },
