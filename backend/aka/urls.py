@@ -14,8 +14,6 @@ Includinganother URLconf
    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
-from django.contrib import admin
-from django.views.generic.base import RedirectView
 
 from aka.views import IndexTemplateView
 from aka.rest import inkassosag, \
@@ -31,13 +29,7 @@ from aka.rest import inkassosag, \
 
 
 urlpatterns = [
-
-   url(r'^admin/', admin.site.urls),
-   # redirect empty url string to index
-
-   url(r'^$', RedirectView.as_view(url='/index', permanent=False),name='index'),
-
-   url(r'^index$', IndexTemplateView.as_view(), name='index'),
+   url(r'^$', IndexTemplateView.as_view(), name='index'),
 
    url(r'^oid/', include('openid.urls', namespace='openid')),
   
