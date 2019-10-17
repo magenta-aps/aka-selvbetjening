@@ -62,7 +62,7 @@ class RenteNota(View):
             posts = []
             # Response is of type PrismeInterestNoteResponse
             try:
-                interest_note_data = prisme.get_interest_note(
+                interest_note_data = prisme.process_service(
                     PrismeInterestNoteRequest(cvr, year, month)
                 )
                 for interest_note_response in interest_note_data:

@@ -31,6 +31,10 @@ class PrismeRequestObject(object):
     def xml(self):
         raise NotImplementedError
 
+    @property
+    def reply_class(self):
+        raise NotImplementedError
+
     @staticmethod
     def prepare(value, is_amount=False):
         if value is None:
@@ -107,6 +111,10 @@ class PrismeClaimRequest(PrismeRequestObject):
             ]
         }, wrap="CustCollClaimTableFuj")
 
+    @property
+    def reply_class(self):
+        return PrismeClaimResponse
+
 
 class PrismeImpairmentRequest(PrismeRequestObject):
 
@@ -131,6 +139,10 @@ class PrismeImpairmentRequest(PrismeRequestObject):
             'CustCollClaimNumberSeq': self.prepare(self.claim_number_seq)
         }, wrap='CustCollClaimTableFuj')
 
+    @property
+    def reply_class(self):
+        return PrismeImpairmentResponse
+
 
 class PrismeCvrCheckRequest(PrismeRequestObject):
 
@@ -146,6 +158,10 @@ class PrismeCvrCheckRequest(PrismeRequestObject):
         return dict_to_xml({
             'CvrLegalEntity': self.cvr
         }, wrap='FujClaimant')
+
+    @property
+    def reply_class(self):
+        return PrismeCvrCheckResponse
 
 
 class PrismeInterestNoteRequest(PrismeRequestObject):
@@ -165,6 +181,10 @@ class PrismeInterestNoteRequest(PrismeRequestObject):
             'CustIdentificationNumber': self.customer_id_number,
             'YearMonthFUJ': f"{self.year:04d}-{self.month:02d}"
         }, wrap='custInterestJour')
+
+    @property
+    def reply_class(self):
+        return PrismeInterestNoteResponse
 
 
 class PrismeResponseObject(object):
@@ -282,7 +302,7 @@ class Prisme(object):
             item_class(xml=x) for x in xml
         ]))
 
-    def getServerVersion(self):
+    def get_server_version(self):
         response = self.client.service.getServerVersion(
             self.create_request_header("getServerVersion")
         )
@@ -291,11 +311,11 @@ class Prisme(object):
             'description': response.serverVersionDescription
         }
 
-    def process_service(self, method, xml, reply_container_class):
+    def process_service(self, request_object):
         request_class = self.client.get_type("tns:GWSRequestDCFUJ")
         request = request_class(
-            requestHeader=self.create_request_header(method),
-            xmlCollection=self.create_request_body(xml)
+            requestHeader=self.create_request_header(request_object.method),
+            xmlCollection=self.create_request_body(request_object.xml)
         )
         # reply is of type GWSReplyDCFUJ
         reply = self.client.service.processService(request)
@@ -308,57 +328,13 @@ class Prisme(object):
         # reply_item if of type GWSReplyInstanceDCFUJ
         for reply_item in reply.instanceCollection.GWSReplyInstanceDCFUJ:
             if reply_item.replyCode == 0:
-                outputs.append(reply_container_class(reply_item.xml))
+                outputs.append(request_object.reply_class(reply_item.xml))
             else:
                 raise Exception(
                     f"Prisme error {reply_item.replyCode}:"
                     f" {reply_item.replyText}"
                 )
         return outputs
-
-    def create_claim(self, claim):
-        if not isinstance(claim, PrismeClaimRequest):
-            raise Exception("claim must be of type PrismeClaim")
-        if self.testing:
-            return [
-                PrismeClaimResponse(
-                    AKAUtils.get_file_contents('aka/tests/claim_response.xml')
-                )
-            ]
-        return self.process_service(
-            "createClaim",
-            claim.xml,
-            PrismeClaimResponse
-        )
-
-    def create_impariment(self, impairment):
-        if not isinstance(impairment, PrismeImpairmentRequest):
-            raise Exception("impairment must be of type PrismeImpairment")
-        return self.process_service(
-            impairment.method,
-            impairment.xml,
-            PrismeImpairmentResponse
-        )
-
-    def check_cvr(self, cvr_check):
-        if not isinstance(cvr_check, PrismeCvrCheckRequest):
-            raise Exception("cvr_check must be of type PrismeCvrCheckRequest")
-        return self.process_service(
-            cvr_check.method,
-            cvr_check.xml,
-            PrismeCvrCheckResponse
-        )
-
-    def get_interest_note(self, interestnote_req):
-        if not isinstance(interestnote_req, PrismeInterestNoteRequest):
-            raise Exception(
-                "interestnote_req must be of type PrismeInterestNoteRequest"
-            )
-        return self.process_service(
-            interestnote_req.method,
-            interestnote_req.xml,
-            PrismeInterestNoteResponse
-        )
 
 
     def fetchPrismeFile(self, url, localfilename):

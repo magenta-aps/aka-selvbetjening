@@ -54,7 +54,7 @@ class InkassoSag(BaseFormView):
             files=[file for name, file in form.files.items()]
         )
         try:
-            prisme_reply = prisme.create_claim(claim)[0]
+            prisme_reply = prisme.process_service(claim)[0]
             response = {
                 'rec_id': prisme_reply.rec_id
             }
