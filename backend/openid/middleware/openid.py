@@ -16,7 +16,6 @@ class LoggedIn:
     def __call__(self, request):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
-        # TODO check the session
         if request.path not in self.white_listed_urls and self.enabled is True:
             if 'user_info' not in request.session or not request.session['user_info']:
                 return redirect('openid:login')

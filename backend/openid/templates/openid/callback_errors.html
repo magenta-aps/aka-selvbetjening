@@ -1,3 +1,5 @@
 {% for key, error in errors.items %}
   {{key}} {{error}}
 {% endfor %}
+
+<a href="{% url 'openid:login' %}"><button> Try again</button></a>

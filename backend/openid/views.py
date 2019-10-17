@@ -16,13 +16,17 @@ from oic.utils.keyio import KeyBundle
 logger = logging.getLogger(__name__)
 
 open_id_settings = {}
-if getattr(settings, 'OPENID_CONNECT', None):
+kc_rsa = None
+client_cert = None
+if getattr(settings, 'OPENID_CONNECT', None) and settings.OPENID_CONNECT.get('enabled', True):
     # let the application run without the openid setting
     open_id_settings = settings.OPENID_CONNECT
 
     key = rsa_load(open_id_settings['private_key'])
     kc_rsa = KeyBundle([{'key': key, 'kty': 'RSA', 'use': 'ver'},
                         {'key': key, 'kty': 'RSA', 'use': 'sig'}])
+
+    client_cert = (open_id_settings['client_certificate'], open_id_settings['private_key'])
 
 
 class Login(View):
@@ -33,7 +37,7 @@ class Login(View):
     http_method_names = ['get']
 
     def get(self, request):
-        client_cert = (open_id_settings['client_certificate'], open_id_settings['private_key'])
+
         client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=client_cert)
         provider_info = client.provider_config(open_id_settings['issuer'])
         client_reg = RegistrationResponse(**{'client_id': open_id_settings['client_id'], 'redirect_uris': [open_id_settings['redirect_uri']]})
@@ -59,22 +63,21 @@ class Callback(TemplateView):
     http_method_names = ['get']
     template_name = 'openid/callback_errors.html'
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         nonce = request.session.get('oid_nonce')
         if nonce:
             # Make sure that nonce is not used twice
             del request.session['oid_nonce']
         else:
-            if 'state' in request.session:
-                del request.session['state']
-            msg = 'Session `oid_nonce` does not exist!'
-            raise SuspiciousOperation(msg)
+            if 'oid_state' in request.session:
+                del request.session['oid_state']  # if nonce was missing ensure oid_state is too
+            logger.exception(SuspiciousOperation('Session `oid_nonce` does not exist!'))
+            return HttpResponseRedirect(reverse('openid:login'))
 
         if 'oid_state' not in request.session:
-            msg = 'Session `oid_state` does not exist!'
-            raise SuspiciousOperation(msg)
+            logger.exception(SuspiciousOperation('Session `oid_state` does not exist!'))
+            return HttpResponseRedirect(reverse('openid:login'))
 
-        client_cert = (settings.OPENID_CONNECT['client_certificate'], settings.OPENID_CONNECT['private_key'])
         client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=client_cert)
         client.keyjar[""] = kc_rsa
 
@@ -95,14 +98,14 @@ class Callback(TemplateView):
             # we got a valid response
             if not aresp.get('state', None):
                 del request.session['oid_state']
-                logger.debug('did not receive state from OP: {}'. format(aresp.to_dict()))
+                logger.error('did not receive state from OP: {}'. format(aresp.to_dict()))
                 context = self.get_context_data(errors=aresp.to_dict())
                 return self.render_to_response(context)
 
             if aresp['state'] != request.session['oid_state']:
                 del request.session['oid_state']
-                msg = 'Session `oid_state` does not match the OID callback state'
-                raise SuspiciousOperation(msg)
+                logger.exception(SuspiciousOperation('Session `oid_state` does not match the OID callback state'))
+                return HttpResponseRedirect(reverse('openid:login'))
 
             provider_info = client.provider_config(settings.OPENID_CONNECT['issuer'])
             logger.debug('provider info: {}'.format(client.config))
@@ -118,7 +121,7 @@ class Callback(TemplateView):
 
             if isinstance(resp, ErrorResponse):
                 del request.session['oid_state']
-                logger.debug('error: {}'.format(str(ErrorResponse)))
+                logger.error('Error received from headnet: {}'.format(str(ErrorResponse)))
                 context = self.get_context_data(errors=resp.to_dict())
                 return self.render_to_response(context)
             else:
@@ -128,7 +131,7 @@ class Callback(TemplateView):
                 # always delete the state so it is not reused
                 del request.session['oid_state']
                 # after the oauth flow is done and we have the user_info redirect to the frontpage
-                return HttpResponseRedirect('index')
+                return HttpResponseRedirect(reverse('index'))
 
 
 class Logout(View):
