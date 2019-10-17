@@ -1,8 +1,9 @@
 import logging
 
-from .utils import getSharedJson
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.http import JsonResponse
+
+from .utils import getSharedJson
 
 error_definitions = getSharedJson('errors.json')
 logger = logging.getLogger(__name__)

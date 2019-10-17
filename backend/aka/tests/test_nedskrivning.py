@@ -1,10 +1,8 @@
-import json
 import logging
 
 from django.test import TestCase, Client
 
 
-# Create your tests here.
 class BasicTestCase(TestCase):
     def setUp(self):
         logging.disable(logging.CRITICAL)
