@@ -27,15 +27,16 @@ class BasicTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.checkReturnValIsJSON(response)
 
-    def test_invalidRequest1(self):
-        # Does not contain all the required fields
-        formData = {'cvrnummer': 12345678,
-                    'traekmaaned': 1,
-                    'traekaa': 2018
-                    }
-        response = self.c.post(self.url, formData)
-        self.assertEqual(response.status_code, 400)
-        self.checkReturnValIsJSON(response)
+    # def test_invalidRequest1(self):
+    #     # Does not contain all the required fields
+    #     formData = {
+    #         'cvrnummer': 12345678,
+    #         'traekmaaned': 1,
+    #         'traekaa': 2018
+    #     }
+    #     response = self.c.post(self.url, formData)
+    #     self.assertEqual(response.status_code, 400)
+    #     self.checkReturnValIsJSON(response)
 
     def test_invalidRequest2(self):
         # Illegal method.

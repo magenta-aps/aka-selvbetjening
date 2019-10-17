@@ -3,11 +3,12 @@ import logging
 from django import forms
 from django.forms import ValidationError
 
-from aka.helpers.sharedfiles import getSharedJson
+from .helpers.sharedfiles import getSharedJson
 
 logger = logging.getLogger(__name__)
 
 fordringJson = getSharedJson('fordringsgruppe.json')
+
 
 class InkassoForm(forms.Form):
     fordringshaver = forms.CharField(

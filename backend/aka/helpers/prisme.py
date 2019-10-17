@@ -1,4 +1,5 @@
 import os
+from datetime import date
 
 import requests
 import zeep
@@ -7,9 +8,9 @@ from django.conf import settings
 from requests import Session
 from requests_ntlm import HttpNtlmAuth
 from xmltodict import parse as xml_to_dict
-from datetime import date
-
 from zeep.transports import Transport
+
+from .utils import AKAUtils
 
 
 class PrismeException(Exception):

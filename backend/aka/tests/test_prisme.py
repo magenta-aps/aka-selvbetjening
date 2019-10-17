@@ -28,7 +28,8 @@ class BasicTestCase(TestCase):
         request = PrismeClaimRequest(
             "32SE", "0102030405", "Ekstern fordringshaver", 4, 1, None,
             1234, 20, "Udlæg for hotdog", "TesterPerson",
-            date(2019, 3, 7), date(2019, 3, 8), date(2019, 4, 1), date(2019, 3, 7),
+            date(2019, 3, 7), date(2019, 3, 8), date(2019, 4, 1),
+            date(2019, 3, 7), date(2019, 5, 1),
             "Den smagte godt", [11223344, 55667788], files=[attachment])
         self.compare(
             xml_to_dict(self.get_file_contents('aka/tests/claim_request.xml')),

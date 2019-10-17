@@ -93,7 +93,7 @@ class BasicTestCase(TestCase):
 
 
     def test_invalidRequest4(self):
-        # Test fordrings-gruppe and -type errors
+        # Test fordringsgruppe and -type errors
         formData = {
             'fordringshaver2': 'test-fordringshaver2',
             'fordringshaver': 'test-fordringshaver',
@@ -112,9 +112,9 @@ class BasicTestCase(TestCase):
                 'fordringsgruppe',
                 'fordringstype',
                 'hovedstol',
-                'kontaktperson',
                 'forfaldsdato',
-                'betalingsdato'
+                'betalingsdato',
+                'foraeldelsesdato'
             ]
         )
 
