@@ -19,9 +19,8 @@ open_id_settings = {}
 kc_rsa = None
 client_cert = None
 if getattr(settings, 'OPENID_CONNECT', None) and settings.OPENID_CONNECT.get('enabled', True):
-    # let the application run without the openid setting
+    # if openID is enabled setup the key bundle and client_cert
     open_id_settings = settings.OPENID_CONNECT
-
     key = rsa_load(open_id_settings['private_key'])
     kc_rsa = KeyBundle([{'key': key, 'kty': 'RSA', 'use': 'ver'},
                         {'key': key, 'kty': 'RSA', 'use': 'sig'}])
