@@ -1,7 +1,7 @@
-from django.test import TestCase
-from jsonschema import validate
 import json
 
+from django.test import TestCase
+from jsonschema import validate
 
 # JSonSchema for shared/fordringsgruppe.json
 SCHEMA = {

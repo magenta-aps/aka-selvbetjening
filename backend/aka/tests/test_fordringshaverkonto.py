@@ -1,6 +1,7 @@
-from django.test import TestCase, Client
 import json
 import logging
+
+from django.test import TestCase, Client
 
 
 # Create your tests here.
@@ -16,12 +17,3 @@ class BasicTestCase(TestCase):
             return json.loads(response.content.decode(charset))
         except json.decoder.JSONDecodeError:
             self.fail('Did not get JSON back.')
-
-    def test_validRequest1(self):
-        response = self.c.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.checkReturnValIsJSON(response)
-
-    def test_invalidRequest1(self):
-        response = self.c.post(self.url)
-        self.assertEqual(response.status_code, 405)

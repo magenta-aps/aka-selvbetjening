@@ -1,6 +1,7 @@
-from django.test import TestCase
-from aka.helpers.utils import AKAUtils
 import datetime
+
+from aka.helpers.utils import AKAUtils
+from django.test import TestCase
 
 
 # Create your tests here.

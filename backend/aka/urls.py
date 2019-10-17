@@ -13,11 +13,11 @@ Includinganother URLconf
    1. Import the include() function: from django.conf.urls import url, include
    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from aka.views import IndexTemplateView
 from django.conf.urls import url, include
 
 from .views import ArbejdsgiverkontoView
 from .views import FordringshaverkontoView
+from .views import IndexTemplateView
 from .views import InkassoSagView
 from .views import LoenTraekDistributionView
 from .views import LoenTraekView

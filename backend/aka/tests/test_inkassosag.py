@@ -1,18 +1,15 @@
-import base64
 import json
 import logging
-import random
 from datetime import date
 
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase, Client
-from xmltodict import parse as xml_to_dict
+from django.test import TestCase, Client, override_settings
 
 
 # Functions to test
 
 
 # Create your tests here.
+@override_settings(OPENID_CONNECT={'enabled': False})
 class BasicTestCase(TestCase):
     def setUp(self):
         logging.disable(logging.CRITICAL)

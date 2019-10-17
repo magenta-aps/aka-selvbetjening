@@ -1,16 +1,10 @@
-from django.core.exceptions import ValidationError
-from django.test import TestCase, RequestFactory
-from django.http import HttpResponseBadRequest
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.conf import settings
 import json
-import os
 import logging
-import random
-from pathlib import Path
-from django.forms.utils import ErrorDict, ErrorList
 
 from aka.helpers.error import ErrorJsonResponse
+from django.core.exceptions import ValidationError
+from django.forms.utils import ErrorDict, ErrorList
+from django.test import TestCase
 
 
 class BasicTestCase(TestCase):

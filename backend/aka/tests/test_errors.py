@@ -1,5 +1,6 @@
-from django.test import SimpleTestCase
 import json
+
+from django.test import SimpleTestCase
 
 
 class ErrorsIntegrityTestCase(SimpleTestCase):
