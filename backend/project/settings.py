@@ -135,7 +135,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'aka.wsgi.application'
+WSGI_APPLICATION = 'project.wsgi.application'
 
 
 # Internationalization
