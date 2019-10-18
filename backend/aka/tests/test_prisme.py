@@ -27,11 +27,25 @@ class BasicTestCase(SimpleTestCase):
         attachment = File(open('aka/tests/resources/testfile.pdf'))
         attachment.close()
         request = PrismeClaimRequest(
-            "32SE", "0102030405", "Ekstern fordringshaver", 4, 1, None,
-            1234, 20, "Udlæg for hotdog", "TesterPerson",
-            date(2019, 3, 7), date(2019, 3, 8), date(2019, 4, 1),
-            date(2019, 3, 7), date(2019, 5, 1),
-            "Den smagte godt", [11223344, 55667788], files=[attachment])
+            claimant_id="32SE",
+            cpr_cvr="0102030405",
+            external_claimant="Ekstern fordringshaver",
+            claim_group_number=4,
+            claim_type=1,
+            child_cpr=None,
+            claim_ref=1234,
+            amount_balance=20,
+            text="Udlæg for hotdog",
+            created_by="TesterPerson",
+            period_start=date(2019, 3, 7),
+            period_end=date(2019, 3, 8),
+            due_date=date(2019, 4, 1),
+            founded_date=date(2019, 3, 7),
+            obsolete_date=date(2019, 5, 1),
+            notes="Den smagte godt",
+            codebtors=[11223344, 55667788],
+            files=[attachment]
+        )
         self.compare(
             xml_to_dict(self.get_file_contents('aka/tests/resources/claim_request.xml')),
             xml_to_dict(request.xml),

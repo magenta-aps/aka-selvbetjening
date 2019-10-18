@@ -57,7 +57,7 @@ class InkassoSagView(BaseFormView):
             external_claimant=form.cleaned_data.get('fordringshaver2'),
             claim_group_number=form.cleaned_data.get('fordringsgruppe'),
             claim_type=form.cleaned_data.get('fordringstype'),
-            child_cpr_cvr=form.cleaned_data.get('barns_cpr'),
+            child_cpr=form.cleaned_data.get('barns_cpr'),
             claim_ref=form.cleaned_data.get('ekstern_sagsnummer'),
             amount_balance=form.cleaned_data.get('hovedstol'),
             text=form.cleaned_data.get('hovedstol_posteringstekst'),

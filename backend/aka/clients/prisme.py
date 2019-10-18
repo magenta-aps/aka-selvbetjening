@@ -56,7 +56,7 @@ class PrismeClaimRequest(PrismeRequestObject):
         self.external_claimant = kwargs['external_claimant']
         self.claim_group_number = kwargs['claim_group_number']
         self.claim_type = kwargs['claim_type']
-        self.child_cpr_cvr = kwargs['child_cpr_cvr']
+        self.child_cpr = kwargs['child_cpr']
         self.claim_ref = kwargs['claim_ref']
         self.amount_balance = float(kwargs['amount_balance'])
         self.text = kwargs['text']
@@ -87,7 +87,7 @@ class PrismeClaimRequest(PrismeRequestObject):
             'CustCollExternalClaimant': self.prepare(self.external_claimant),
             'CustCollClaimGroupNumber': self.prepare(self.claim_group_number),
             'CustCollClaimType': self.prepare(self.claim_type),
-            'CustCollChildCprCvr': self.prepare(self.child_cpr_cvr),
+            'CustCollChildCprCvr': self.prepare(self.child_cpr),
             'CustCollClaimRef': self.prepare(self.claim_ref),
             'CustCollAmountBalance': self.prepare(self.amount_balance, is_amount=True),
             'CustCollText': self.prepare(self.text),
