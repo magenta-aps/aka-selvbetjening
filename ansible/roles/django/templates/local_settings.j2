@@ -16,9 +16,9 @@ PRISME_CONNECT = {
     'wsdl_file': 'https://test.erp.gl/GWCServiceSetup/GenericService.svc?singleWsdl',
     'auth': {
         'basic': {
-            'username': '',
+            'username': '{{django_prisme.username}}',
             'domain': 'codmz.local',
-            'password': ''
+            'password': '{{django_prisme.password}}'
         }
     }
 }
@@ -29,7 +29,7 @@ DAFO_CONNECT = {
         'cvr': 'https://data.gl/prisme/cvr/2/{cvr}'
     },
     'auth': {
-        'username': '',
-        'password': ''
+        'username': '{{django_dafo.username}}',
+        'password': '{{django_dafo.password}}'
     }
 }
