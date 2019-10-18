@@ -10,3 +10,26 @@ DATABASES = {
     }
 {% endfor %}
 }
+
+
+PRISME_CONNECT = {
+    'wsdl_file': 'https://test.erp.gl/GWCServiceSetup/GenericService.svc?singleWsdl',
+    'auth': {
+        'basic': {
+            'username': '',
+            'domain': 'codmz.local',
+            'password': ''
+        }
+    }
+}
+
+DAFO_CONNECT = {
+    'address': {
+        'token': 'https://sts.data.gl/get_token_passive?username={username}&password={password}',
+        'cvr': 'https://data.gl/prisme/cvr/2/{cvr}'
+    },
+    'auth': {
+        'username': '',
+        'password': ''
+    }
+}
