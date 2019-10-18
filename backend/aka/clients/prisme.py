@@ -50,37 +50,28 @@ class PrismeRequestObject(object):
 
 class PrismeClaimRequest(PrismeRequestObject):
 
-    def __init__(self, claimant_id, cpr_cvr, external_claimant,
-                 claim_group_number, claim_type, child_cpr_cvr, claim_ref,
-                 amount_balance, text, created_by, period_start,
-                 period_end, due_date, founded_date, obsolete_date,
-                 notes, codebtors=None, files=None):
-        self.claimant_id = claimant_id,
-        self.cpr_cvr = cpr_cvr
-        self.external_claimant = external_claimant
-        self.claim_group_number = claim_group_number
-        self.claim_type = claim_type
-        self.child_cpr_cvr = child_cpr_cvr
-        self.claim_ref = claim_ref
-        self.amount_balance = float(amount_balance)
-        self.text = text
-        self.created_by = created_by
-        self.period_start = period_start
-        self.period_end = period_end
-        self.due_date = due_date
-        self.founded_date = founded_date
-        self.obsolete_date = obsolete_date
-        self.notes = notes
-        if codebtors is None:
-            codebtors = []
-        self.codebtors = codebtors
-        self.files = []
-        if files is not None:
-            for file in files:
-                self.files.append((
-                    os.path.basename(file.name),
-                    get_file_contents_base64(file)
-                ))
+    def __init__(self, **kwargs):
+        self.claimant_id = kwargs['claimant_id'],
+        self.cpr_cvr = kwargs['cpr_cvr']
+        self.external_claimant = kwargs['external_claimant']
+        self.claim_group_number = kwargs['claim_group_number']
+        self.claim_type = kwargs['claim_type']
+        self.child_cpr_cvr = kwargs['child_cpr_cvr']
+        self.claim_ref = kwargs['claim_ref']
+        self.amount_balance = float(kwargs['amount_balance'])
+        self.text = kwargs['text']
+        self.created_by = kwargs['created_by']
+        self.period_start = kwargs['period_start']
+        self.period_end = kwargs['period_end']
+        self.due_date = kwargs['due_date']
+        self.founded_date = kwargs['founded_date']
+        self.obsolete_date = kwargs['obsolete_date']
+        self.notes = kwargs['notes']
+        self.codebtors = kwargs.get('codebtors', [])
+        self.files = [
+            (os.path.basename(file.name), get_file_contents_base64(file))
+            for file in kwargs.get('files', [])
+        ]
 
     @property
     def method(self):
@@ -89,6 +80,7 @@ class PrismeClaimRequest(PrismeRequestObject):
     @property
     def xml(self):
         # TODO refactor maybe have a list of fields in private attribute instead.
+        # Like a mapping between local fields and soap fields?
         return dict_to_xml({
             'CustCollClaimantIdentifier': self.prepare(self.claimant_id),
             'CustCollCprCvr': self.prepare(self.cpr_cvr),
