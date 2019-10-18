@@ -5,7 +5,6 @@ requests_ntlm
 oic
 httpretty
 lxml>=4.2.5
-zeep
-xmltodict
-dict2xml
-csv
+zeep>=3.4.0
+xmltodict>=0.12.0
+dict2xml>=1.6.1
