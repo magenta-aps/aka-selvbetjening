@@ -92,7 +92,6 @@
                     this.submittedSuccessfully = true;
                 })
                 .catch(error => {
-                    console.err(error);
                     notifyError(error, localStorage.getItem('language') || 'kl', this._i18n);
                 });
             },
