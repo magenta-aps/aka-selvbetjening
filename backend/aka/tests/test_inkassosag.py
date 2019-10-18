@@ -38,7 +38,7 @@ class BasicTestCase(SimpleTestCase):
         }
         response = self.client.post(self.url, formData)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content), {'rec_id': '1234'})
+        self.assertEqual(json.loads(response.content), {'rec_id': 1234})
 
     def test_validRequest2(self):
         # Contains all required fields, and some more
@@ -59,7 +59,7 @@ class BasicTestCase(SimpleTestCase):
         }
         response = self.client.post(self.url, formData)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content), {'rec_id': '1234'})
+        self.assertEqual(json.loads(response.content), {'rec_id': 1234})
 
     def test_invalidRequest1(self):
         # Does not contain all required fields
@@ -143,4 +143,4 @@ class BasicTestCase(SimpleTestCase):
         }
         response = self.client.post('/inkassosag/upload', formData)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content), [{'rec_id': '1234'}, {'rec_id': '1234'}])
+        self.assertEqual(json.loads(response.content), [{'rec_id': 1234}, {'rec_id': 1234}])
