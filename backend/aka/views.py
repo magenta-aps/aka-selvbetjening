@@ -9,7 +9,6 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
-from jsonview.views import JsonView
 
 from .clients.dafo import Dafo
 from .clients.prisme import Prisme, PrismeClaimRequest, PrismeInterestNoteRequest
@@ -35,8 +34,7 @@ class FordringshaverkontoView(View):
         return JsonResponse("OK", safe=False)
 
 
-class InkassoSagView(JsonView, BaseFormView):
-
+class InkassoSagView(BaseFormView):
 
     form_class = InkassoForm
 
