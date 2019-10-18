@@ -323,7 +323,7 @@
                 let formdata = this.fetchFormData();
 
                 axios({
-                    url: '/inkassosag?testing=1',
+                    url: '/inkassosag',
                     data: formdata,
                     method: 'post',
                     headers: {

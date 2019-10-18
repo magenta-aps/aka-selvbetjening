@@ -1,4 +1,5 @@
 import csv
+import json
 import logging
 from io import StringIO
 
@@ -8,6 +9,7 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
+from jsonview.views import JsonView
 
 from .clients.dafo import Dafo
 from .clients.prisme import Prisme, PrismeClaimRequest, PrismeInterestNoteRequest
@@ -33,7 +35,8 @@ class FordringshaverkontoView(View):
         return JsonResponse("OK", safe=False)
 
 
-class InkassoSagView(BaseFormView):
+class InkassoSagView(JsonView, BaseFormView):
+
 
     form_class = InkassoForm
 
@@ -41,6 +44,7 @@ class InkassoSagView(BaseFormView):
         return self.http_method_not_allowed(*args, **kwargs)
 
     def form_valid(self, form):
+        return JsonResponse({'rec_id': 1234})
         prisme = Prisme()
 
         def get_codebtors(data):
@@ -99,16 +103,15 @@ class InkassoSagUploadView(InkassoSagView):
         try:
             csv_reader = csv.DictReader(StringIO(data.decode(charset['encoding'])))
             for row in csv_reader:
-                print(row)
                 subform = InkassoForm(data=row)
                 if subform.is_valid():
                     response = super(InkassoSagUploadView, self).form_valid(subform)
-                    responses.append(response)
+                    responses.append(json.loads(response.content))
                 else:
                     return ErrorJsonResponse.from_error_dict(subform.errors)
         except csv.Error as e:
             return ErrorJsonResponse.from_error_id('failed_reading_csv')
-        return JsonResponse(responses)
+        return JsonResponse(responses, safe=False)
 
     def form_invalid(self, form):
         return ErrorJsonResponse.from_error_dict(form.errors)
