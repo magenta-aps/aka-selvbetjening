@@ -1,14 +1,13 @@
 import json
 import logging
 
-from django.test import TestCase, Client
+from django.test import SimpleTestCase
 
 
 # Create your tests here.
-class BasicTestCase(TestCase):
+class BasicTestCase(SimpleTestCase):
     def setUp(self):
         logging.disable(logging.CRITICAL)
-        self.c = Client()
         self.url = '/fordringshaverkonto'
 
     def checkReturnValIsJSON(self, response):

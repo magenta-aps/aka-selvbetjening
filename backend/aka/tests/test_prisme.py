@@ -5,11 +5,11 @@ from aka.clients.prisme import PrismeCvrCheckRequest, PrismeCvrCheckResponse
 from aka.clients.prisme import PrismeImpairmentRequest, PrismeImpairmentResponse
 from aka.clients.prisme import PrismeInterestNoteRequest, PrismeInterestNoteResponse
 from django.core.files import File
-from django.test import TestCase
+from django.test import SimpleTestCase
 from xmltodict import parse as xml_to_dict
 
 
-class BasicTestCase(TestCase):
+class BasicTestCase(SimpleTestCase):
 
     def test_impairment_request_parse(self):
         request = PrismeImpairmentRequest('32SE', '12345678', 'ref123', -100.5, 'AKI-000047')
