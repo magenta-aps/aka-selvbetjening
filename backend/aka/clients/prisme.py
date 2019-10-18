@@ -1,7 +1,6 @@
 import os
 from datetime import date
 
-import requests
 import zeep
 from dict2xml import dict2xml as dict_to_xml
 from django.conf import settings
