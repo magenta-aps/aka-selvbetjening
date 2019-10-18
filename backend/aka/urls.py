@@ -18,7 +18,7 @@ from django.conf.urls import url, include
 from .views import ArbejdsgiverkontoView
 from .views import FordringshaverkontoView
 from .views import IndexTemplateView
-from .views import InkassoSagView
+from .views import InkassoSagView, InkassoSagUploadView
 from .views import LoenTraekDistributionView
 from .views import LoenTraekView
 from .views import NedskrivningView
@@ -34,6 +34,10 @@ urlpatterns = [
    url(r'^inkassosag$',
        InkassoSagView.as_view(),
        name='inkassosag'),
+
+    url(r'^inkassosag/upload',
+        InkassoSagUploadView.as_view(),
+        name='inkassosag-upload'),
 
    url(r'^loentraek$',
        LoenTraekView.as_view(),

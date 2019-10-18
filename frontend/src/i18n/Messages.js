@@ -63,7 +63,8 @@ export const messages = {
       slet: 'Slet',
       success: 'Indberetning indsendt',
       reload: 'Ny indberetning',
-      nummervisning: 'Fordringsnummer: {nummer}'
+      nummervisning: 'Fordringsnummer: {nummer}',
+      nummervisning_pl: 'Fordringsnumre:'
     },
     loentraek: {
       titel1: 'Løntræk - Indberet',
@@ -149,7 +150,8 @@ export const messages = {
       slet: 'Nunguteruk',
       success: 'Indberetning indsendt - oversættelse mangler',
       reload: 'Ny indberetning - oversættelse mangler',
-      nummervisning: 'Fordringsnummer: {nummer} - oversættelse mangler'
+      nummervisning: 'Fordringsnummer: {nummer} - oversættelse mangler',
+      nummervisning_pl: 'Fordringsnumre: - oversættelse mangler'
     },
     loentraek: {
       titel1: 'Aningaasarsianit ilanngartuineq - Immersoruk',

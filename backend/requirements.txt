@@ -8,3 +8,4 @@ lxml>=4.2.5
 zeep
 xmltodict
 dict2xml
+csv

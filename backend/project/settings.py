@@ -187,6 +187,9 @@ DAFO_CONNECT = {
 }
 OPENID_CONNECT = {}
 
+# Max 2 MB - can be lower if we want
+MAX_UPLOAD_FILESIZE = 22097152
+
 LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
 if os.path.exists(LOCAL_SETTINGS_FILE):
     from .local_settings import *  # noqa

@@ -17,9 +17,12 @@
         <router-link class="toc-link" to="/upload">
             <span>Upload files with JSON example</span>
         </router-link>
-        <router-link class="toc-link" to="/indberetning">
-            <span>Opret sag</span>
-        </router-link>
+      <router-link class="toc-link" to="/indberetning">
+        <span>Indberet fordring</span>
+      </router-link>
+      <router-link class="toc-link" to="/indberetning/upload">
+        <span>Upload fordring</span>
+      </router-link>
         <router-link class="toc-link" to="/loentraeksindberetning">
           <span>Indberet løntræk</span>
         </router-link>
