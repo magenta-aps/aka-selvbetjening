@@ -4,10 +4,10 @@ import logging
 from aka.utils import ErrorJsonResponse
 from django.core.exceptions import ValidationError
 from django.forms.utils import ErrorDict, ErrorList
-from django.test import TestCase
+from django.test import SimpleTestCase
 
 
-class BasicTestCase(TestCase):
+class BasicTestCase(SimpleTestCase):
     def setUp(self):
         logging.disable(logging.CRITICAL)
 

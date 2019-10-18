@@ -38,8 +38,7 @@ class InkassoSagView(BaseFormView):
         return self.http_method_not_allowed(*args, **kwargs)
 
     def form_valid(self, form):
-        prisme = Prisme(self.request)
-        testing = self.request.GET.get('testing') == '1'
+        prisme = Prisme()
 
         def get_codebtors(data):
             codebtors = []
@@ -77,11 +76,8 @@ class InkassoSagView(BaseFormView):
             response = {
                 'rec_id': prisme_reply.rec_id
             }
-            if testing:
-                response = {'request': claim.xml, 'response': response}
             return JsonResponse(response)
         except Exception as e:
-            print(e)
             return ErrorJsonResponse.from_exception(e)
 
     def form_invalid(self, form):
@@ -167,7 +163,7 @@ class RenteNotaView(View):
             elif cpr is not None:
                 customer_data = Dafo().lookup_cpr(cpr)
 
-            prisme = Prisme(self.request)
+            prisme = Prisme()
 
             posts = []
             # Response is of type PrismeInterestNoteResponse
@@ -210,5 +206,6 @@ class RenteNotaView(View):
             })
 
         except Exception as e:
+            print(e)
             logger.error(str(e))
             return ErrorJsonResponse.from_exception(e)

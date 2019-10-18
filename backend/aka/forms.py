@@ -6,7 +6,6 @@ from django.forms import ValidationError
 from .utils import getSharedJson
 
 logger = logging.getLogger(__name__)
-
 fordringJson = getSharedJson('fordringsgruppe.json')
 
 

@@ -1,10 +1,10 @@
 import datetime
 
 from aka.utils import datefromstring, datetostring
-from django.test import TestCase
+from django.test import SimpleTestCase
 
 
-class BasicTestCase(TestCase):
+class BasicTestCase(SimpleTestCase):
     def setUp(self):
         pass
 

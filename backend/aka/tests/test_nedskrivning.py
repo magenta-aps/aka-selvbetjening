@@ -1,10 +1,9 @@
 import logging
 
-from django.test import TestCase, Client
+from django.test import SimpleTestCase
 
 
-class BasicTestCase(TestCase):
+class BasicTestCase(SimpleTestCase):
     def setUp(self):
         logging.disable(logging.CRITICAL)
-        self.c = Client()
         self.url = '/nedskrivning'

@@ -1,65 +1,64 @@
 import json
 import logging
 from datetime import date
+from unittest.mock import patch
 
-from django.test import TestCase, Client, override_settings
+from django.test import override_settings, SimpleTestCase
+
+from aka.clients.prisme import Prisme, PrismeClaimResponse
+from aka.utils import error_definitions
 
 
-# Functions to test
-
-
-# Create your tests here.
 @override_settings(OPENID_CONNECT={'enabled': False})
-class BasicTestCase(TestCase):
+class BasicTestCase(SimpleTestCase):
+
     def setUp(self):
         logging.disable(logging.CRITICAL)
-        self.c = Client() #TODO not needed
-        self.url = '/inkassosag?testing=0'
+        self.url = '/inkassosag'
+        soap_patch = patch('aka.clients.prisme.Prisme.process_service')
+        self.mock = soap_patch.start()
+        self.addCleanup(soap_patch.stop)
 
-    def checkReturnValIsJSON(self, response):
-        # TODO nasty way to check that exceptions are raise.
-        try:
-            charset = response.charset
-            return json.loads(response.content.decode(charset))
-        except json.decoder.JSONDecodeError:
-            self.fail('Did not get JSON back.')
+    def test_validRequest1(self):
+        # Contains just the required fields
+        self.mock.return_value = [PrismeClaimResponse(f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")]
+        formData = {
+            'fordringshaver': 'test-fordringshaver',
+            'debitor': 'test-debitor',
+            'fordringsgruppe': '1',
+            'fordringstype': '1',
+            'periodestart': date(2019, 3, 28),
+            'periodeslut': date(2019, 3, 28),
+            'forfaldsdato': date(2019, 3, 28),
+            'betalingsdato': date(2019, 3, 28),
+            'foraeldelsesdato': date(2019, 5, 28),
+            'hovedstol': 100,
+            'kontaktperson': 'Test Testersen'
+        }
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), {'rec_id': '1234'})
 
-    # def test_validRequest1(self):
-    #     # Contains just the required fields
-    #     formData = {
-    #         'fordringshaver': 'test-fordringshaver',
-    #         'debitor': 'test-debitor',
-    #         'fordringsgruppe': '1',
-    #         'fordringstype': '1',
-    #         'periodestart': date(2019, 3, 28),
-    #         'periodeslut': date(2019, 3, 28),
-    #         'forfaldsdato': date(2019, 3, 28),
-    #         'betalingsdato': date(2019, 3, 28),
-    #         'hovedstol': 100,
-    #         'kontaktperson': 'Test Testersen'
-    #     }
-    #     response = self.c.post(self.url, formData)
-    #     self.assertEqual(response.status_code, 200)
-    #     self.checkReturnValIsJSON(response)
-    #
-    # def test_validRequest2(self):
-    #     # Contains all required fields, and some more
-    #     formData = {
-    #         'fordringshaver': 'test-fordringshaver',
-    #         'debitor': 'test-debitor',
-    #         'fordringsgruppe': '1',
-    #         'fordringstype': '1',
-    #         'fordringshaver2': 'test-fordringshaver2',
-    #         'periodestart': date(2019, 3, 27),
-    #         'periodeslut': date(2019, 3, 28),
-    #         'forfaldsdato': date(2019, 3, 28),
-    #         'betalingsdato': date(2019, 3, 28),
-    #         'hovedstol': 100,
-    #         'kontaktperson': 'Test Testersen'
-    #     }
-    #     response = self.c.post(self.url, formData)
-    #     self.assertEqual(response.status_code, 200)
-    #     self.checkReturnValIsJSON(response)
+    def test_validRequest2(self):
+        # Contains all required fields, and some more
+        self.mock.return_value = [PrismeClaimResponse(f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")]
+        formData = {
+            'fordringshaver': 'test-fordringshaver',
+            'debitor': 'test-debitor',
+            'fordringsgruppe': '1',
+            'fordringstype': '1',
+            'fordringshaver2': 'test-fordringshaver2',
+            'periodestart': date(2019, 3, 27),
+            'periodeslut': date(2019, 3, 28),
+            'forfaldsdato': date(2019, 3, 28),
+            'betalingsdato': date(2019, 3, 28),
+            'foraeldelsesdato': date(2019, 5, 28),
+            'hovedstol': 100,
+            'kontaktperson': 'Test Testersen'
+        }
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), {'rec_id': '1234'})
 
     def test_invalidRequest1(self):
         # Does not contain all required fields
@@ -71,9 +70,16 @@ class BasicTestCase(TestCase):
             'periodestart': date(2019, 3, 27),
             'periodeslut': date(2019, 3, 28)
         }
-        response = self.c.post(self.url, formData)
+        response = self.client.post(self.url, formData)
         self.assertEqual(response.status_code, 400)
-        self.checkReturnValIsJSON(response)
+        expected = {'errors': [], 'fieldErrors': {
+            name: [error_definitions['required_field']]
+            for name in ['fordringshaver', 'hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']
+        }}
+        self.assertEqual(
+            json.loads(response.content),
+            expected
+        )
 
     def test_invalidRequest2(self):
         # Test that multiple errors are recieved
@@ -84,11 +90,16 @@ class BasicTestCase(TestCase):
             'periodestart': date(2019, 3, 27),
             'periodeslut': date(2019, 3, 28)
         }
-        response = self.c.post(self.url, formData)
+        response = self.client.post(self.url, formData)
         self.assertEqual(response.status_code, 400)
-        resp_json = self.checkReturnValIsJSON(response)
-        self.assertEqual(len(resp_json['fieldErrors']), 6)
-
+        expected = {'errors': [], 'fieldErrors': {
+            name: [error_definitions['required_field']]
+            for name in ['fordringshaver', 'debitor', 'hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']
+        }}
+        self.assertEqual(
+            json.loads(response.content),
+            expected
+        )
 
     def test_invalidRequest4(self):
         # Test fordringsgruppe and -type errors
@@ -101,21 +112,23 @@ class BasicTestCase(TestCase):
             'periodestart': date(2019, 3, 27),
             'periodeslut': date(2019, 3, 28)
         }
-        response = self.c.post(self.url, formData)
+        response = self.client.post(self.url, formData)
         self.assertEqual(response.status_code, 400)
-        resp_json = self.checkReturnValIsJSON(response)
+        expected = {'errors': [], 'fieldErrors': {
+                    name: [error_definitions['required_field']]
+                    for name in ['hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']
+                }}
+        expected['fieldErrors'].update({
+            'fordringsgruppe': [error_definitions['fordringsgruppe_not_found']],
+            'fordringstype': [error_definitions['fordringstype_not_found']]
+        })
         self.assertEqual(
-            list(resp_json['fieldErrors'].keys()),
-            [
-                'fordringsgruppe',
-                'fordringstype',
-                'hovedstol',
-                'forfaldsdato',
-                'betalingsdato',
-                'foraeldelsesdato'
-            ]
+            json.loads(response.content),
+            expected
         )
 
+
+    #
     # Test multiple fields with same key
     #
     # # Legal content-type, formdata and a file.
@@ -131,7 +144,7 @@ class BasicTestCase(TestCase):
     #         b"file_content",
     #         content_type="text/plain/"
     #     )
-    #     response = self.c.post(
+    #     response = self.client.post(
     #         self.url,
     #         {
     #             'fordringshaver': 'indhold/fordringshaver',

@@ -196,6 +196,10 @@ class PrismeClaimResponse(object):
         d = xml_to_dict(xml)
         self.rec_id = d['CustCollClaimTableFuj']['RecId']
 
+    @staticmethod
+    def test(rec_id):
+        return PrismeClaimResponse(f"<CustCollClaimTableFuj><RecId>{rec_id}</RecId></CustCollClaimTableFuj>")
+
 
 class PrismeImpairmentResponse(PrismeClaimResponse):
     # To be filled out as that interface becomes relevant
@@ -254,9 +258,8 @@ class Prisme(object):
 
     _client = None
 
-    def __init__(self, testing=None):
-        if testing is not None:
-            self.testing = testing
+    def __init__(self):
+        pass
 
     @property
     def client(self):
@@ -331,7 +334,7 @@ class Prisme(object):
             raise PrismeException(reply.status.replyCode, reply.status.replyText)
 
         outputs = []
-        # reply_item if of type GWSReplyInstanceDCFUJ
+        # reply_item is of type GWSReplyInstanceDCFUJ
         for reply_item in reply.instanceCollection.GWSReplyInstanceDCFUJ:
             if reply_item.replyCode == 0:
                 outputs.append(request_object.reply_class(reply_item.xml))

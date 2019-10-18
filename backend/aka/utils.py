@@ -134,4 +134,4 @@ class AccessDeniedJsonResponse(ErrorJsonResponse):
     status_code = 403
 
     def __init__(self, **kwargs):
-        super(AccessDeniedJsonResponse, self).__init__(None, None, **kwargs)
+        super(AccessDeniedJsonResponse, self).__init__(['Access denied'], [], **kwargs)
