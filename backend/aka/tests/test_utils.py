@@ -1,6 +1,10 @@
 import datetime
+import json
 
+from aka.utils import ErrorJsonResponse
 from aka.utils import datefromstring, datetostring
+from django.core.exceptions import ValidationError
+from django.forms.utils import ErrorDict, ErrorList
 from django.test import SimpleTestCase
 
 
@@ -44,3 +48,37 @@ class BasicTestCase(SimpleTestCase):
         date = datefromstring(datestring1)
         datestring2 = datetostring(date)
         self.assertEqual(datestring1, datestring2)
+
+    def test_error_invalid_month(self):
+        response = ErrorJsonResponse.invalid_month()
+        data = json.loads(response.content)
+        self.assertEqual(
+            "Invalid måned - skal være mellem 1 og 12",
+            data['errors'][0]['da']
+        )
+        self.assertEqual(0, len(data['fieldErrors']))
+
+    def test_error_future_month(self):
+        response = ErrorJsonResponse.future_month()
+        data = json.loads(response.content)
+        self.assertEqual(
+            "Ugylding måned - må ikke ligge i fremtiden",
+            data['errors'][0]['da']
+        )
+        self.assertEqual(0, len(data['fieldErrors']))
+
+    def test_error_dict(self):
+        errors = ErrorDict()
+        errors['somefield'] = ErrorList()
+        errors['somefield'].extend(ValidationError('someerror').error_list)
+        response = ErrorJsonResponse.from_error_dict(errors)
+        self.assertEqual(400, response.status_code)
+        self.assertJSONEqual(
+            response.content,
+            {
+                "errors": [],
+                "fieldErrors": {
+                    "somefield": [{"da": "someerror", "kl": "someerror"}]
+                }
+            }
+        )

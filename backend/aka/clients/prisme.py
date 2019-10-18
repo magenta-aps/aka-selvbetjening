@@ -50,7 +50,11 @@ class PrismeRequestObject(object):
 
 class PrismeClaimRequest(PrismeRequestObject):
 
-    def __init__(self, claimant_id, cpr_cvr, external_claimant, claim_group_number, claim_type, child_cpr_cvr, claim_ref, amount_balance, text, created_by, period_start, period_end, due_date, founded_date, obsolete_date, notes, codebtors=[], files=[]):
+    def __init__(self, claimant_id, cpr_cvr, external_claimant,
+                 claim_group_number, claim_type, child_cpr_cvr, claim_ref,
+                 amount_balance, text, created_by, period_start,
+                 period_end, due_date, founded_date, obsolete_date,
+                 notes, codebtors=None, files=None):
         self.claimant_id = claimant_id,
         self.cpr_cvr = cpr_cvr
         self.external_claimant = external_claimant
@@ -67,13 +71,16 @@ class PrismeClaimRequest(PrismeRequestObject):
         self.founded_date = founded_date
         self.obsolete_date = obsolete_date
         self.notes = notes
+        if codebtors is None:
+            codebtors = []
         self.codebtors = codebtors
         self.files = []
-        for file in files:
-            self.files.append((
-                os.path.basename(file.name),
-                get_file_contents_base64(file)
-            ))
+        if files is not None:
+            for file in files:
+                self.files.append((
+                    os.path.basename(file.name),
+                    get_file_contents_base64(file)
+                ))
 
     @property
     def method(self):
