@@ -105,6 +105,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
+    'aka',
     'openid'
 ]
 
@@ -117,7 +118,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'aka.urls'
+ROOT_URLCONF = 'project.urls'
 
 TEMPLATES = [
     {
@@ -134,7 +135,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'aka.wsgi.application'
+WSGI_APPLICATION = 'project.wsgi.application'
 
 
 # Internationalization
@@ -161,7 +162,7 @@ STATICFILES_DIRS = [os.path.join(PROJECT_DIR, 'frontend', 'dist', 'static') ]
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # expire session on browser close
 
 PRISME_CONNECT = {
-    'wsdl_file': 'wsdl/GenericService.wsdl',
+    'wsdl_file': 'https://test.erp.gl/GWCServiceSetup/GenericService.svc?singleWsdl',
     'proxy': {
         'socks': ''
     },
@@ -189,5 +190,3 @@ OPENID_CONNECT = {}
 LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
 if os.path.exists(LOCAL_SETTINGS_FILE):
     from .local_settings import *  # noqa
-
-

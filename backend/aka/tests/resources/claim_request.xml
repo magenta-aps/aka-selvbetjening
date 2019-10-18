@@ -7,11 +7,12 @@
     <CustCollClaimantIdentifier>32SE</CustCollClaimantIdentifier>
     <CustCollCprCvr>0102030405</CustCollCprCvr>
     <CustCollCreatedBy>TesterPerson</CustCollCreatedBy>
-    <CustCollDueDate>2019-04-01</CustCollDueDate>
+    <CustCollDueDate>2019-04-01T00:00:00</CustCollDueDate>
     <CustCollExternalClaimant>Ekstern fordringshaver</CustCollExternalClaimant>
-    <CustCollFoundedDate>2019-03-07</CustCollFoundedDate>
-    <CustCollPeriodEnd>2019-03-08</CustCollPeriodEnd>
-    <CustCollPeriodStart>2019-03-07</CustCollPeriodStart>
+    <CustCollFoundedDate>2019-03-07T00:00:00</CustCollFoundedDate>
+    <CustCollPeriodEnd>2019-03-08T00:00:00</CustCollPeriodEnd>
+    <CustCollPeriodStart>2019-03-07T00:00:00</CustCollPeriodStart>
+    <CustCollObsolescenceDate>2019-05-01T00:00:00</CustCollObsolescenceDate>
     <CustCollText>Udlæg for hotdog</CustCollText>
     <Notes>Den smagte godt</Notes>
     <coDebtors>
