@@ -1,0 +1,10 @@
+django==2.2.6
+psycopg2-binary
+requests
+requests_ntlm
+oic
+httpretty
+lxml>=4.2.5
+zeep
+xmltodict
+dict2xml

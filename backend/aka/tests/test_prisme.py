@@ -1,55 +1,71 @@
 from datetime import date
 
+from aka.clients.prisme import PrismeClaimRequest, PrismeClaimResponse
+from aka.clients.prisme import PrismeCvrCheckRequest, PrismeCvrCheckResponse
+from aka.clients.prisme import PrismeImpairmentRequest, PrismeImpairmentResponse
+from aka.clients.prisme import PrismeInterestNoteRequest, PrismeInterestNoteResponse
 from django.core.files import File
-from django.test import TestCase
-from aka.helpers.prisme import PrismeCvrCheckRequest, PrismeCvrCheckResponse
-from aka.helpers.prisme import PrismeInterestNoteRequest, PrismeInterestNoteResponse
-from aka.helpers.prisme import PrismeClaimRequest, PrismeClaimResponse
-from aka.helpers.prisme import PrismeImpairmentRequest, PrismeImpairmentResponse
+from django.test import SimpleTestCase
 from xmltodict import parse as xml_to_dict
 
-class BasicTestCase(TestCase):
+
+class BasicTestCase(SimpleTestCase):
 
     def test_impairment_request_parse(self):
         request = PrismeImpairmentRequest('32SE', '12345678', 'ref123', -100.5, 'AKI-000047')
         self.compare(
-            xml_to_dict(self.get_file_contents('aka/tests/impairment_request.xml')),
+            xml_to_dict(self.get_file_contents('aka/tests/resources/impairment_request.xml')),
             xml_to_dict(request.xml),
             ""
         )
 
     def test_impairment_response_parse(self):
-        response = PrismeImpairmentResponse(self.get_file_contents('aka/tests/impairment_response.xml'))
+        response = PrismeImpairmentResponse(self.get_file_contents('aka/tests/resources/impairment_response.xml'))
         self.assertEqual("5637238342", response.rec_id)
 
     def test_create_claim_request_parse(self):
-        attachment = File(open('aka/tests/testfile.pdf'))
+        attachment = File(open('aka/tests/resources/testfile.pdf'))
         attachment.close()
         request = PrismeClaimRequest(
-            "32SE", "0102030405", "Ekstern fordringshaver", 4, 1, None,
-            1234, 20, "Udlæg for hotdog", "TesterPerson",
-            date(2019, 3, 7), date(2019, 3, 8), date(2019, 4, 1), date(2019, 3, 7),
-            "Den smagte godt", [11223344, 55667788], files=[attachment])
+            claimant_id="32SE",
+            cpr_cvr="0102030405",
+            external_claimant="Ekstern fordringshaver",
+            claim_group_number=4,
+            claim_type=1,
+            child_cpr=None,
+            claim_ref=1234,
+            amount_balance=20,
+            text="Udlæg for hotdog",
+            created_by="TesterPerson",
+            period_start=date(2019, 3, 7),
+            period_end=date(2019, 3, 8),
+            due_date=date(2019, 4, 1),
+            founded_date=date(2019, 3, 7),
+            obsolete_date=date(2019, 5, 1),
+            notes="Den smagte godt",
+            codebtors=[11223344, 55667788],
+            files=[attachment]
+        )
         self.compare(
-            xml_to_dict(self.get_file_contents('aka/tests/claim_request.xml')),
+            xml_to_dict(self.get_file_contents('aka/tests/resources/claim_request.xml')),
             xml_to_dict(request.xml),
             ""
         )
 
     def test_create_claim_response_parse(self):
-        response = PrismeClaimResponse(self.get_file_contents('aka/tests/claim_response.xml'))
+        response = PrismeClaimResponse(self.get_file_contents('aka/tests/resources/claim_response.xml'))
         self.assertEqual("5637238342", response.rec_id)
 
     def test_check_cvr_request_parse(self):
         request = PrismeCvrCheckRequest('12345678')
         self.compare(
-            xml_to_dict(self.get_file_contents('aka/tests/cvrcheck_request.xml')),
+            xml_to_dict(self.get_file_contents('aka/tests/resources/cvrcheck_request.xml')),
             xml_to_dict(request.xml),
             ""
         )
 
     def test_check_cvr_response_parse(self):
-        response = PrismeCvrCheckResponse(self.get_file_contents('aka/tests/cvrcheck_response.xml'))
+        response = PrismeCvrCheckResponse(self.get_file_contents('aka/tests/resources/cvrcheck_response.xml'))
         self.assertEqual(2, len(response.claimant_id))
         self.assertEqual("35SKATDK", response.claimant_id[0])
         self.assertEqual("35BIDRAGDK", response.claimant_id[1])
@@ -57,13 +73,13 @@ class BasicTestCase(TestCase):
     def test_interest_note_request_parse(self):
         request = PrismeInterestNoteRequest('10977231', 2019, 4)
         self.compare(
-            xml_to_dict(self.get_file_contents('aka/tests/interestnote_request.xml')),
+            xml_to_dict(self.get_file_contents('aka/tests/resources/interestnote_request.xml')),
             xml_to_dict(request.xml),
             ""
         )
 
     def test_interest_note_response_parse(self):
-        response = PrismeInterestNoteResponse(self.get_file_contents('aka/tests/interestnote_response.xml'))
+        response = PrismeInterestNoteResponse(self.get_file_contents('aka/tests/resources/interestnote_response.xml'))
         self.assertEqual(2, len(response.interest_journal))
         journal0 = response.interest_journal[0]
         self.assertEqual("03-04-2019", journal0.updated)

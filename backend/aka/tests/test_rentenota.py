@@ -1,14 +1,27 @@
-from django.test import TestCase
-from django.test import Client
 import json
 import logging
+from unittest.mock import patch
+
+from django.contrib.sessions.middleware import SessionMiddleware
+from django.test import override_settings, SimpleTestCase, RequestFactory
+
+from aka.views import RenteNotaView
+
+from aka.clients.prisme import PrismeInterestNoteResponse
 
 
-class BasicTestCase(TestCase):
+@override_settings(OPENID_CONNECT={'enabled': False})
+class BasicTestCase(SimpleTestCase):
     def setUp(self):
         logging.disable(logging.CRITICAL)
-        self.c = Client()
         self.url = '/rentenota'
+        soap_patch = patch('aka.clients.prisme.Prisme.process_service')
+        self.soapmock = soap_patch.start()
+        self.addCleanup(soap_patch.stop)
+
+        dafo_patch = patch('aka.clients.dafo.Dafo.lookup_cvr')
+        self.dafomock = dafo_patch.start()
+        self.addCleanup(dafo_patch.stop)
 
     def checkReturnValIsJSON(self, response):
         try:
@@ -18,49 +31,29 @@ class BasicTestCase(TestCase):
             self.fail('Did not get JSON back.')
     #
     # # Dates OK, invalid cvr
-    def test_Get_1(self):
+    def test_invalid_cvr(self):
+        expected = {'errors': ['Access denied'], 'fieldErrors': []}
         for y in range(2000, 2019):
             for m in ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']:
-                response = self.c.get(self.url + f'/{y}/{m}')
-        # self.assertEqual(response.status_code, 400)
-        # self.checkReturnValIsJSON(response)
-    #
-    # # Dates OK, valid cvr with no interest notes
-    # def test_Get_2(self):
-    #     response = self.c.get(self.url + '/12227353/2018/01')
-    #     self.assertEqual(response.status_code, 200)
-    #     self.checkReturnValIsJSON(response)
+                response = self.client.get(self.url + f'/{y}/{m}')
+                self.assertEqual(response.status_code, 403)
+                self.assertEqual(json.loads(response.content), expected)
 
-    # # Error in to-date. Returns 400, bad request.
-    # def test_Get_3(self):
-    #     response = self.c.get(self.url + '/25052943/2019/00')
-    #     self.assertEqual(response.status_code, 400)
-    #     self.checkReturnValIsJSON(response)
-    #
-    # # Error in to-date. Returns 400, bad request.
-    # def test_Get_4(self):
-    #     response = self.c.get(self.url + '/25052943/2200/01')
-    #     self.assertEqual(response.status_code, 400)
-    #     self.checkReturnValIsJSON(response)
-    #
-    # # From and to are correct, but method not allowed.
-    # def test_Post_1(self):
-    #     ctstring = 'application/json; charset=utf-8'
-    #     response = self.c.post(
-    #         self.url + '/25052943/2019/01',
-    #         content_type=ctstring,
-    #         data=''
-    #     )
-    #     self.assertEqual(response.status_code, 405)
-    #
-    # # From and to are correct, without content-type and data,
-    # # but method not allowed.
-    # def test_Post_2(self):
-    #     response = self.c.post(self.url + '/25052943/2019/01')
-    #     self.assertEqual(response.status_code, 405)
-    #
-    # # To-date incorrect, so no match in URL dispatcher.
-    # # but method not allowed.
-    # def test_Post_3(self):
-    #     response = self.c.post(self.url + '/25052943/2019/00')
-    #     self.assertEqual(response.status_code, 405)
+    def test_valid_cvr(self):
+        request_factory = RequestFactory()
+        session_handler = SessionMiddleware()
+        self.soapmock.return_value = [PrismeInterestNoteResponse(self.get_file_contents('aka/tests/resources/interestnote_response.xml'))]
+        self.dafomock.return_value = {'navn': 'Test company', 'adresse': 'Test Street 42', 'postnummer': 1234, 'bynavn': 'Test town', 'landekode': 'GL'}
+        for y in range(2000, 2019):
+            for m in ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']:
+                request = request_factory.get(self.url + f'/{y}/{m}')
+                session_handler.process_request(request)
+                request.session['user_info'] = {'CVR': '12345678'}
+                response = RenteNotaView.as_view()(request, y, m)
+                self.assertEqual(response.status_code, 200)
+                self.checkReturnValIsJSON(response)
+
+    @staticmethod
+    def get_file_contents(filename):
+        with open(filename, "r") as f:
+            return f.read()

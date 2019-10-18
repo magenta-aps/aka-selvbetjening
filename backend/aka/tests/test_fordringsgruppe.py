@@ -1,7 +1,7 @@
-from django.test import TestCase
-from jsonschema import validate
 import json
 
+from django.test import SimpleTestCase
+from jsonschema import validate
 
 # JSonSchema for shared/fordringsgruppe.json
 SCHEMA = {
@@ -39,8 +39,11 @@ SCHEMA = {
         }
 
 
-class FordringsTestCase(TestCase):
+class FordringsTestCase(SimpleTestCase):
     def setUp(self):
+        # TODO so you are testing that the test data is correct? remove this test.
+        # if your test data is so complex you need to write tests to validate the test data.
+        # You are doing something wrong.
         try:
             jsonfile = open('../shared/fordringsgruppe.json', 'r')
             self.jsonDict = json.loads(jsonfile.read())

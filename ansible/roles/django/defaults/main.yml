@@ -1,4 +1,16 @@
 ---
-django_version: < 2.0
+django_virtual_env_path: /srv/venv/
+django_requirements_file: /srv/backend/requirements.txt
+django_local_settings_file: /srv/backend/project/local_settings.py
+python_major_version: 3
+django_databases:
+  # please remember to override this!
+  default:
+    user: django
+    password: django
+    name: aka
+    host: localhost
+    engine: django.db.backends.postgresql
 
+restart_apache: False
 ...

@@ -8,7 +8,7 @@
 
 ---
 # Run the entire default setup playbook
-- import_playbook: default.yml
+
 
 # Run production specific playbook
 - hosts: all
@@ -19,6 +19,8 @@
   become_user: root
 
   roles:
-  - vim
+    - postgres
+    - django
+    -
 
 ...

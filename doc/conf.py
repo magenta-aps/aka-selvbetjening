@@ -15,7 +15,6 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../backend/aka/helpers'))
-sys.path.insert(0, os.path.abspath('../backend/aka/rest'))
 sys.path.insert(0, os.path.abspath('../backend/aka'))
 sys.path.insert(0, os.path.abspath('../backend'))
 
@@ -183,7 +182,7 @@ epub_exclude_files = ['search.html']
 # -- Extension configuration -------------------------------------------------
 
 # In order to work with Django, the settings module must be imported
-os.environ['DJANGO_SETTINGS_MODULE'] = 'aka.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'project.settings'
 import django
 django.setup()
 

@@ -3,32 +3,10 @@
 
 - name: Install Postgresql
   apt:
-    name: "{item}"
-    update_cache: true
-  with_items:
-    - postgresql
-    - postgresql-contrib
-    - python-psycopg2
-    - python3-psycopg2
+    name: postgresql
+    state: present
 
-# Create a new database with name "acme"
-- postgresql_db:
-    name: "{{ item.database_name }}"
-  with_items: "{{ postgresql_databases }}"
-
-- name: Create postgresql users
-  become: yes
-  become_user: postgres
-  postgresql_user:
-    name: "{{ item.username }}"
-    password: "{{ item.password }}"
-  with_items: "{{ postgresql_databases }}"
-
-- name: Grant access to databases
-  become: yes
-  become_user: postgres
-  postgresql_privs:
-    db: "{{ item.database_name }}"
-    role: "{{ item.username }}"
-    objs: ALL_IN_SCHEMA
-    privs: "ALL"
+- name: Install psycopg2
+  apt:
+    name: python-psycopg2
+    state: present
