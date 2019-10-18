@@ -32,6 +32,7 @@
   postgresql_user:
     name: "{{django_databases.default.user}}"
     password: "{{django_databases.default.password}}"
+    encrypted: yes
     role_attr_flags: SUPERUSER # needed to create test database
   tags:
     - django
