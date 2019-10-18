@@ -10,7 +10,9 @@ from requests_ntlm import HttpNtlmAuth
 from xmltodict import parse as xml_to_dict
 from zeep.transports import Transport
 
-from ..utils import get_file_contents_base64
+from aka.utils import get_file_contents_base64
+
+prisme_settings = settings.PRISME_CONNECT
 
 
 class PrismeException(Exception):
@@ -189,108 +191,105 @@ class PrismeInterestNoteRequest(PrismeRequestObject):
         return PrismeInterestNoteResponse
 
 
-class PrismeResponseObject(object):
-    # TODO this dosent do anything remove it.
-    pass
-
-
-class PrismeClaimResponse(PrismeResponseObject):
+class PrismeClaimResponse(object):
     def __init__(self, xml):
         d = xml_to_dict(xml)
         self.rec_id = d['CustCollClaimTableFuj']['RecId']
 
 
 class PrismeImpairmentResponse(PrismeClaimResponse):
-    #TODO purpose?
+    # To be filled out as that interface becomes relevant
     pass
 
 
-class PrismeCvrCheckResponse(PrismeResponseObject):
+class PrismeCvrCheckResponse(object):
     #instead of this could we just have one class and use self._id and figure out the type of xml from the xml content?
     def __init__(self, xml):
         d = xml_to_dict(xml)
         self.claimant_id = list(d['FujClaimant']['ClaimantId'])
 
 
-class PrismeInterestNoteResponse(PrismeResponseObject):
-    # TODO class in class and functions in functions are ugly
-    class PrismeInterestJournal(PrismeResponseObject):
-        def __init__(self, data):
-            self.updated = data['Updated']
-            self.account_number = data['AccountNum']
-            self.interest_note = data['InterestNote']
-            self.to_date = data['ToDate']
-            self.billing_classification = data['BillingClassification']
-            self.interest_transactions = list([
-                PrismeInterestNoteResponse.PrismeInterestTransaction(v)
-                for k, v in data['CustInterestTransactions'].items()
-                if k == 'CustInterestTrans'
-            ])  # TODO you are casting a list to list? list == []
-            self.data = data
-
-    class PrismeInterestTransaction(PrismeResponseObject):
-        def __init__(self, data):
-            # TODO you are unpacking a dictionary...
-            self.voucher = data['Voucher']
-            self.invoice = data['Invoice']
-            self.text = data['Txt']
-            self.invoice_amount = data['InvoiceAmount']
-            self.interest_amount = data['InterestAmount']
-            self.due_date = data['DueDate']
-            self.transaction_date = data['TransDate']
-            self.calculate_from_date = data['CalcFrom']
-            self.calculate_to_date = data['CalcTo']
-            self.interest_days = data['InterestDays']
-            self.data = data
+class PrismeInterestNoteResponse(object):
 
     def __init__(self, xml):
         data = xml_to_dict(xml)
         self.interest_journal = [
-            PrismeInterestNoteResponse.PrismeInterestJournal(x)
+            PrismeInterestResponseJournal(x)
             for x in data['CustTable']['CustInterestJour']
         ]
+
+class PrismeInterestResponseJournal(object):
+
+    def __init__(self, data):
+        self.updated = data['Updated']
+        self.account_number = data['AccountNum']
+        self.interest_note = data['InterestNote']
+        self.to_date = data['ToDate']
+        self.billing_classification = data['BillingClassification']
+        self.interest_transactions = [
+            PrismeInterestNoteResponseTransaction(v)
+            for k, v in data['CustInterestTransactions'].items()
+            if k == 'CustInterestTrans'
+        ]
+        self.data = data
+
+class PrismeInterestNoteResponseTransaction(object):
+
+    def __init__(self, data):
+        # TODO you are unpacking a dictionary...
+        self.voucher = data['Voucher']
+        self.invoice = data['Invoice']
+        self.text = data['Txt']
+        self.invoice_amount = data['InvoiceAmount']
+        self.interest_amount = data['InterestAmount']
+        self.due_date = data['DueDate']
+        self.transaction_date = data['TransDate']
+        self.calculate_from_date = data['CalcFrom']
+        self.calculate_to_date = data['CalcTo']
+        self.interest_days = data['InterestDays']
+        self.data = data
 
 
 class Prisme(object):
 
-    def __init__(self, request=None, testing=None):
-        prisme_settings = settings.PRISME_CONNECT # TODO should be moved to the top of file.
-        wsdl = prisme_settings['wsdl_file']
-        if request is not None:
-            self.testing = request.GET.get('testing') == '1'
-            # TODO use testing=False instead of parsing in the request
+    _client = None
+
+    def __init__(self, testing=None):
         if testing is not None:
             self.testing = testing
 
-        session = Session()
-        #TODO create a dedicated method to parse the config and call it from __init__ like def _setup_session() or something
-        if 'proxy' in prisme_settings:
-            if 'socks' in prisme_settings['proxy']:
-                proxy = f'socks5://{prisme_settings["proxy"]["socks"]}'
-                session.proxies = {'http': proxy, 'https': proxy}
+    @property
+    def client(self):
+        if self._client is None:
+            wsdl = prisme_settings['wsdl_file']
+            session = Session()
+            if 'proxy' in prisme_settings:
+                if 'socks' in prisme_settings['proxy']:
+                    proxy = f'socks5://{prisme_settings["proxy"]["socks"]}'
+                    session.proxies = {'http': proxy, 'https': proxy}
 
-        auth_settings = prisme_settings.get('auth')
-        if auth_settings:
-            if 'basic' in auth_settings:
-                basic_settings = auth_settings['basic']
-                session.auth = (
-                    f'{basic_settings["username"]}@{basic_settings["domain"]}',
-                    basic_settings["password"]
+            auth_settings = prisme_settings.get('auth')
+            if auth_settings:
+                if 'basic' in auth_settings:
+                    basic_settings = auth_settings['basic']
+                    session.auth = (
+                        f'{basic_settings["username"]}@{basic_settings["domain"]}',
+                        basic_settings["password"]
+                    )
+                elif 'ntlm' in auth_settings:
+                    ntlm_settings = auth_settings['ntlm']
+                    session.auth = HttpNtlmAuth(
+                        f"{ntlm_settings['domain']}\\{ntlm_settings['username']}",
+                        ntlm_settings['password']
+                    )
+            self._client = zeep.Client(
+                wsdl=wsdl,
+                transport=Transport(
+                    session=session
                 )
-            elif 'ntlm' in auth_settings:
-                ntlm_settings = auth_settings['ntlm']
-                session.auth = HttpNtlmAuth(
-                    f"{ntlm_settings['domain']}\\{ntlm_settings['username']}",
-                    ntlm_settings['password']
-                )
-
-        self.client = zeep.Client(
-            wsdl=wsdl,
-            transport=Transport(
-                session=session
             )
-        )
-        self.client.set_ns_prefix("tns", 'http://schemas.datacontract.org/2004/07/Dynamics.Ax.Application')
+            self._client.set_ns_prefix("tns", 'http://schemas.datacontract.org/2004/07/Dynamics.Ax.Application')
+        return self._client
 
     def create_request_header(self, method, area="SULLISSIVIK", client_version=1):
         request_header_class = self.client.get_type('tns:GWSRequestHeaderDCFUJ')
@@ -337,37 +336,5 @@ class Prisme(object):
             if reply_item.replyCode == 0:
                 outputs.append(request_object.reply_class(reply_item.xml))
             else:
-                #TODO raise Exception is bad and didnt you createa PrismeExeption?
-                raise Exception(
-                    f"Prisme error {reply_item.replyCode}:"
-                    f" {reply_item.replyText}"
-                )
+                raise PrismeException(reply_item.replyCode, reply_item.replyText)
         return outputs
-
-
-    def fetchPrismeFile(self, url, localfilename):
-        '''
-        Fetches a file from url, and stores it in destfolder with the name
-        given as the last part of the url.
-
-        :param url: Where to get the file from.
-        :type url: string.
-        :param localfilename: Full path and name of the file on this server,
-                              i.e. after we fetch and store it.
-        :type localfilename: string.
-        :returns: True if OK, else False.
-        '''
-
-        request = requests.get(url, stream=True)
-
-        if request.status_code != requests.codes.ok:
-            return False
-        # TODO Why is this ever needed? use a nameTemporary file...
-        # You are overwritning the file if it exists...
-        # You do dont gain anything by writing it to disk instead of returning it to the responds.
-        with open(localfilename, 'wb+') as destination:
-            for block in request.iter_content(1024 * 8):
-                if block:
-                    destination.write(block)
-
-        return True
