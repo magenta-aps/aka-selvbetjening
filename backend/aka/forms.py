@@ -1,6 +1,8 @@
 import logging
 
 from django import forms
+from django.conf import settings
+from django.core.validators import FileExtensionValidator
 from django.forms import ValidationError
 
 from .utils import getSharedJson
@@ -11,6 +13,7 @@ fordringJson = getSharedJson('fordringsgruppe.json')
 
 
 class InkassoForm(forms.Form):
+
     fordringshaver = forms.CharField(
         required=True,
         error_messages={'required': 'required_field'}
@@ -25,12 +28,12 @@ class InkassoForm(forms.Form):
     fordringsgruppe = forms.ChoiceField(
         required=True,
         choices=[(item['id'], item['value']) for item in fordringJson],
-        error_messages={'invalid_choice': 'fordringsgruppe_not_found'}
+        error_messages={'invalid_choice': 'fordringsgruppe_not_found', 'required': 'required_field'}
     )
     fordringstype = forms.ChoiceField(
         required=True,
         choices=[],
-        error_messages={'invalid_choice': 'fordringstype_not_found'}
+        error_messages={'invalid_choice': 'fordringstype_not_found', 'required': 'required_field'}
     )
     periodestart = forms.DateField(
         required=True,
@@ -113,11 +116,30 @@ class InkassoForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(InkassoForm, self).clean()
-        if cleaned_data['periodestart'] > cleaned_data['periodeslut']:
+        start = cleaned_data.get('periodestart')
+        end = cleaned_data.get('periodeslut')
+        if start and end and start > end:
             self.add_error('periodeslut', ValidationError('start_date_before_end_date'))
 
 
+class InkassoUploadForm(forms.Form):
+
+    file = forms.FileField(
+        required=True,
+        validators=[
+            FileExtensionValidator(['csv'])
+        ]
+    )
+
+    def clean_file(self):
+        file = self.cleaned_data['file']
+        if file.size > settings.MAX_UPLOAD_FILESIZE:
+            raise ValidationError('file_too_large')
+        return file
+
+
 class LoentraekForm(forms.Form):
+
     cvrnummer = forms.IntegerField(max_value=99999999)
     traekmaaned = forms.IntegerField(min_value=1, max_value=12)
     traekaar = forms.IntegerField(min_value=1900, max_value=2200)

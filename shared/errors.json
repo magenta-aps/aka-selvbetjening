@@ -34,6 +34,14 @@
     "future_month":{
         "da": "Ugylding måned - må ikke ligge i fremtiden",
         "kl": "Oversættelse Mangler"
+    },
+    "file_too_large": {
+        "da": "Den uploadede fil er for stor",
+        "kl": "Oversættelse mangler"
+    },
+    "failed_reading_csv": {
+        "da": "Kunne ikke indlæse csv-filen. Forsøg at gemme filen som UTF-16LE eller UTF-8",
+        "kl": "Oversættelse mangler"
     }
 
 }
