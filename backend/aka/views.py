@@ -6,7 +6,9 @@ from io import StringIO
 import chardet
 from django.http import JsonResponse
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
 
@@ -17,9 +19,12 @@ from .utils import ErrorJsonResponse, AccessDeniedJsonResponse
 
 logger = logging.getLogger(__name__)
 
-
 class IndexTemplateView(TemplateView):
     template_name = 'index.html'
+
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, *args, **kwargs):
+        return super(IndexTemplateView, self).get(*args, **kwargs)
 
 
 class ArbejdsgiverkontoView(View):
