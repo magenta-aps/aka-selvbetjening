@@ -1,4 +1,4 @@
 django_virtual_env_path: /vagrant/venv/
 django_requirements_file: /vagrant/backend/requirements.txt
-django_local_settings_file: /vagrant/backend/aka/local_settings.py
+django_local_settings_file: /vagrant/backend/project/local_settings.py
 frontend_dir: /vagrant/frontend
