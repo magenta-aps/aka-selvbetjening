@@ -47,7 +47,6 @@ class InkassoSagView(BaseFormView):
         return self.http_method_not_allowed(*args, **kwargs)
 
     def form_valid(self, form):
-        return JsonResponse({'rec_id': 1234})
         prisme = Prisme()
 
         def get_codebtors(data):
