@@ -3,6 +3,7 @@ django_virtual_env_path: "{{project_dir}}/venv"
 django_requirements_file: "{{project_dir}}/backend/requirements.txt"
 django_local_settings_file: "{{project_dir}}/backend/project/local_settings.py"
 django_secret_key_file: "{{project_dir}}/backend/project/secret_key.py"
+
 django_databases:
   default:
     user: akap
@@ -16,6 +17,7 @@ django_databases:
     name: aka
     host: localhost
     engine: django.db.backends.postgresql
+
 django_prisme:
   username: !vault |
     $ANSIBLE_VAULT;1.1;AES256
@@ -31,6 +33,7 @@ django_prisme:
     62643763613861633830303433366339646165353666333262656335333739373734643236316130
     3536353662646531310a363633336136336162613836383334366534396637613834636662346231
     37373861313730363736313031633361303965393034616164353333353163336334
+
 django_dafo:
   username: "aka-selfservice@magenta.dk"
   password: !vault |
@@ -40,6 +43,14 @@ django_dafo:
     35346264633035383536373539613033633731646266633537383135306363346134343764626562
     3461373062313038650a383066343238646533303932356433396432306561336166626363323431
     65373165616663373730613938383433323363633833626161633838663736353533
+
+django_openid:
+  issuer: "https://loginqa.sullissivik.gl"
+  scope: "openid digitalimik"
+  client_id: "sullissivik_company_tax"
+  client_certificate: "/etc/ssl/openid/sullissivik_company_tax_test.cert"
+  private_key: "/etc/ssl/openid/sullissivik_company_tax_test.key"
+  redirect_uri: "https://akaptest.sullissivik.gl/oid/callback/"
 
 restart_apache: True
 
