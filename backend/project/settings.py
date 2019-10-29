@@ -193,3 +193,7 @@ MAX_UPLOAD_FILESIZE = 22097152
 LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
 if os.path.exists(LOCAL_SETTINGS_FILE):
     from .local_settings import *  # noqa
+
+SECRET_KEY_FILE = os.path.join(SITE_DIR, "secret_key.py")
+if os.path.exists(SECRET_KEY_FILE):
+    from .secret_key import *  # noqa

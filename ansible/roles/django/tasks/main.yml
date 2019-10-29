@@ -54,11 +54,17 @@
   tags:
     - django
 
-- name: setup django settings
+- name: install django secret key
+  copy:
+    content: "SECRET_KEY = '{{secret_key.stdout}}'"
+    dest: "{{django_secret_key_file}}"
+    force: no  # Very important - do not overwrite if it does not exist
+
+- name: setup django local settings
   template:
     src: templates/local_settings.j2
     dest: "{{django_local_settings_file}}"
-    force: no
+    force: yes
 
 - name: restart apache
   service:
