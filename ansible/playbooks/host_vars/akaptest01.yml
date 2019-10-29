@@ -1,7 +1,8 @@
 project_dir: /srv/aka-selvbetjening/
 django_virtual_env_path: "{{project_dir}}/venv"
 django_requirements_file: "{{project_dir}}/backend/requirements.txt"
-django_local_settings_file: "{{project_dir}}/backend/aka/local_settings.py"
+django_local_settings_file: "{{project_dir}}/backend/project/local_settings.py"
+django_secret_key_file: "{{project_dir}}/backend/project/secret_key.py"
 django_databases:
   default:
     user: akap
