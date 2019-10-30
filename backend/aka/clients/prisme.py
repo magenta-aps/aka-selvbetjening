@@ -215,9 +215,12 @@ class PrismeInterestNoteResponse(object):
 
     def __init__(self, xml):
         data = xml_to_dict(xml)
+        journals = data['CustTable']['CustInterestJour']
+        if type(journals) != list:
+            journals = [journals]
         self.interest_journal = [
             PrismeInterestResponseJournal(x)
-            for x in data['CustTable']['CustInterestJour']
+            for x in journals
         ]
 
 class PrismeInterestResponseJournal(object):
@@ -228,11 +231,13 @@ class PrismeInterestResponseJournal(object):
         self.interest_note = data['InterestNote']
         self.to_date = data['ToDate']
         self.billing_classification = data['BillingClassification']
-        self.interest_transactions = [
-            PrismeInterestNoteResponseTransaction(v)
-            for k, v in data['CustInterestTransactions'].items()
-            if k == 'CustInterestTrans'
-        ]
+        self.interest_transactions = []
+        for k, v in data['CustInterestTransactions'].items():
+            if k == 'CustInterestTrans':
+                if type(v) != list:
+                    v = [v]
+                for transaction in v:
+                    self.interest_transactions.append(PrismeInterestNoteResponseTransaction(transaction))
         self.data = data
 
 class PrismeInterestNoteResponseTransaction(object):
