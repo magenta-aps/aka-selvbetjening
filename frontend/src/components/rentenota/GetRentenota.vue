@@ -217,7 +217,7 @@ export default {
             if (this.rentenota_data) {
                 let count_total = 0;
                 for (let p of this.rentenota_data.poster) {
-                    count_total += p.InterestAmount;
+                    count_total += parseFloat(p.InterestAmount);
                 }
                 return count_total;
             }
