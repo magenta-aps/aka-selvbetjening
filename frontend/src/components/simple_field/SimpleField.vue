@@ -7,7 +7,10 @@
            :type="type"
            v-model="content"
            v-validate="validate"
-    :minlength="minlength" :maxlength="maxlength">
+           :minlength="minlength"
+           :maxlength="maxlength"
+           v-bind:required="required"
+    >
     <span class="err-msg">{{ errors.first(name)}}</span>
   </div>
 </template>
@@ -32,7 +35,8 @@ export default {
     label: String,
     minlength: String,
     maxlength: String,
-    validate: Object
+    validate: Object,
+    required: Boolean
   },
   data () {
     return {
@@ -41,6 +45,7 @@ export default {
   },
   watch: {
     content (val) {
+        console.log("emitting", val);
       this.$emit('input', val)
     }
   }

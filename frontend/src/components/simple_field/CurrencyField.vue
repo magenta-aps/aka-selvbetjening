@@ -11,6 +11,7 @@ This component is a copy of SimpleField, but modified to format Currency fields
 		   @blur="isInputActive = false"
 		   @focus="isInputActive = true"
 		   v-validate="validate"
+       v-bind:required="required"
 	:minlength="minlength" :maxlength="maxlength">
 	<span class="err-msg">{{ errors.first(name)}}</span>
   </div>
@@ -36,7 +37,8 @@ export default {
     label: String,
     minlength: String,
     maxlength: String,
-    validate: Object
+    validate: Object,
+    required: Boolean
   },
   methods: {
     formatCurrency: function (value) {
