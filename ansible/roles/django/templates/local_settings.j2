@@ -1,4 +1,3 @@
-SECRET_KEY = '{{secret_key.stdout}}'
 ALLOWED_HOSTS = ['*']
 
 DATABASES = {
@@ -9,4 +8,35 @@ DATABASES = {
     {% endfor %}
     }
 {% endfor %}
+}
+
+PRISME_CONNECT = {
+    'wsdl_file': 'https://test.erp.gl/GWCServiceSetup/GenericService.svc?singleWsdl',
+    'auth': {
+        'basic': {
+            'username': '{{django_prisme.username}}',
+            'domain': 'codmz.local',
+            'password': '{{django_prisme.password}}'
+        }
+    }
+}
+
+DAFO_CONNECT = {
+    'address': {
+        'token': 'https://sts.data.gl/get_token_passive?username={username}&password={password}',
+        'cvr': 'https://data.gl/prisme/cvr/2/{cvr}'
+    },
+    'auth': {
+        'username': '{{django_dafo.username}}',
+        'password': '{{django_dafo.password}}'
+    }
+}
+
+OPENID_CONNECT = {
+    'issuer': '{{django_openid.issuer}}',  # top level url to the issuer, used for autodiscovery
+    'scope': '{{django_openid.scope}}',  # openid is mandatory to indicated is is a openid OP, we need to use digitalimik to get the cpr/cvr number.
+    'client_id': '{{django_openid.client_id}}',  # id of the system (ouath), registered at headnet
+    'client_certificate': '{{django_openid.client_certificate}}',  # path to client certificate used to secure the communication between the system and OP
+    'private_key': '{{django_openid.private_key}}',  # used for signing messages passed to the OP
+    'redirect_uri': '{{django_openid.redirect_uri}}'  # url registered at headnet to redirect the user to after a successfull login at OP
 }

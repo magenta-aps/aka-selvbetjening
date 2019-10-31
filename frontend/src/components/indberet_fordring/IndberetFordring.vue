@@ -22,30 +22,31 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <table>
-            <thead>
-            <tr>
-              <th>{{ $t('inkasso.filnavn') }}</th>
-              <th>{{ $t('inkasso.stoerelse') }}</th>
-              <th></th>
-            </tr>
-            </thead>
-            <tbody v-if="filer">
-            <tr v-for="(f, index) in filer" :key="index">
-              <td>{{ f.name }}</td>
-              <td>{{ f.size }} kB</td>
-              <td><a @click="deleteFile(index)">{{ $t('inkasso.slet') }}</a>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+          <label id="lbl_dokumentation" for="dokumentation">{{ $t('attributes.dokumentation') }}</label>
+          <input id="dokumentation" type="file" multiple @change="selectFiles($event.target.files)">
         </div>
       </div>
       <div class="row">
-        <div class="col-12">
-          <input type="file" multiple @change="selectFiles($event.target.files)">
-        </div>
+      <div class="col-12">
+        <table>
+          <thead>
+          <tr>
+            <th>{{ $t('inkasso.filnavn') }}</th>
+            <th>{{ $t('inkasso.stoerelse') }}</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody v-if="filer">
+          <tr v-for="(f, index) in filer" :key="index">
+            <td>{{ f.name }}</td>
+            <td>{{ f.size }} kB</td>
+            <td><a @click="deleteFile(index)">{{ $t('inkasso.slet') }}</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
+    </div>
       <div class="row">
         <div class="col-4">
           <label id="lbl_fordringsgruppe" for="fordringsgruppe">{{ $t('attributes.fordringsgruppe') }}</label>
@@ -322,7 +323,7 @@
                 let formdata = this.fetchFormData();
 
                 axios({
-                    url: '/inkassosag?testing=1',
+                    url: '/inkassosag',
                     data: formdata,
                     method: 'post',
                     headers: {

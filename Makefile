@@ -24,29 +24,29 @@ FRONTEND_PREREQUISITES = frontend/.make-updated-npm frontend/public/index.html f
 
 # Run the server and make it assecible to the host machine
 # .PHONY
-runserver : frontend/dist/index.html  backend/aka/local_settings.py migrate
+runserver : frontend/dist/index.html  backend/project/local_settings.py migrate
 	$(DJANGO) runserver 0.0.0.0:8000
 
 # In order to run the Django project, a local_settings.py file is required
 # but this file is not supposed to be checked into git, as it contains a secret
 # key, therefore it should be generated, this make-rule will generate it, if it
 # does not exist.
-backend/aka/local_settings.py : 
-	python3 makefile-utils/gen_local_settings.py > backend/aka/local_settings.py	
+backend/project/local_settings.py :
+	python3 makefile-utils/gen_local_settings.py > backend/project/local_settings.py
 
 # .PHONY	
-test: backend/aka/local_settings.py migrate 
+test: backend/project/local_settings.py migrate
 	-flake8 --format='%(path)s:%(row)d:%(col)d: %(code)s %(text)s' \
 			--exclude=settings.py,local_settings.py,manage.py \
 			backend 
 	$(DJANGO) test
 
 # .PHONY
-migrate : backend/aka/local_settings.py
+migrate : backend/project/local_settings.py
 	$(DJANGO) migrate
 
 # .PHONY
-makemigrations : backend/aka/local_settings.py
+makemigrations : backend/project/local_settings.py
 	$(DJANGO) makemigrations
 
 # .PHONY

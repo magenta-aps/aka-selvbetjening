@@ -7,6 +7,7 @@ const DesignGuide = () => import('@/components/designguide/DesignGuide.vue')
 const FormExample1 = () => import('@/components/form_example_1/FormExample1.vue')
 const FormExample2 = () => import('@/components/form_example_2/FormExample2.vue')
 const IndberetFordring = () => import('@/components/indberet_fordring/IndberetFordring.vue')
+const UploadFordring = () => import('@/components/indberet_fordring/UploadFordring.vue')
 const Experiment = () => import('@/components/experiment_with_file_upload/Example.vue')
 const GetRentenota = () => import('@/components/rentenota/GetRentenota.vue')
 const Loentraeksindberetning = () => import('@/components/loentraeksindberetninger/Loentraeksindberetninger.vue')
@@ -42,6 +43,10 @@ export default new Router({
     {
       path: '/indberetning',
       component: IndberetFordring
+    },
+    {
+      path: '/indberetning/upload',
+      component: UploadFordring
     },
     {
       path: '/upload',

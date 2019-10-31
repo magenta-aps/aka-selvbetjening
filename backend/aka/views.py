@@ -1,21 +1,30 @@
+import csv
+import json
 import logging
+from io import StringIO
 
+import chardet
 from django.http import JsonResponse
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
 
 from .clients.dafo import Dafo
 from .clients.prisme import Prisme, PrismeClaimRequest, PrismeInterestNoteRequest
-from .forms import InkassoForm
+from .forms import InkassoForm, InkassoUploadForm
 from .utils import ErrorJsonResponse, AccessDeniedJsonResponse
 
 logger = logging.getLogger(__name__)
 
-
 class IndexTemplateView(TemplateView):
     template_name = 'index.html'
+
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, *args, **kwargs):
+        return super(IndexTemplateView, self).get(*args, **kwargs)
 
 
 class ArbejdsgiverkontoView(View):
@@ -83,6 +92,31 @@ class InkassoSagView(BaseFormView):
     def form_invalid(self, form):
         return ErrorJsonResponse.from_error_dict(form.errors)
 
+
+class InkassoSagUploadView(InkassoSagView):
+    form_class = InkassoUploadForm
+
+    def form_valid(self, form):
+        csv_file = form.cleaned_data['file']
+        csv_file.seek(0)
+        data = csv_file.read()
+        charset = chardet.detect(data)
+        responses = []
+        try:
+            csv_reader = csv.DictReader(StringIO(data.decode(charset['encoding'])))
+            for row in csv_reader:
+                subform = InkassoForm(data=row)
+                if subform.is_valid():
+                    response = super(InkassoSagUploadView, self).form_valid(subform)
+                    responses.append(json.loads(response.content))
+                else:
+                    return ErrorJsonResponse.from_error_dict(subform.errors)
+        except csv.Error as e:
+            return ErrorJsonResponse.from_error_id('failed_reading_csv')
+        return JsonResponse(responses, safe=False)
+
+    def form_invalid(self, form):
+        return ErrorJsonResponse.from_error_dict(form.errors)
 
 
 class LoenTraekView(View):
@@ -160,8 +194,8 @@ class RenteNotaView(View):
 
             if cvr is not None:
                 customer_data = Dafo().lookup_cvr(cvr)
-            elif cpr is not None:
-                customer_data = Dafo().lookup_cpr(cpr)
+            # elif cpr is not None:
+            #     customer_data = Dafo().lookup_cpr(cpr)
 
             prisme = Prisme()
 
@@ -206,6 +240,5 @@ class RenteNotaView(View):
             })
 
         except Exception as e:
-            print(e)
             logger.error(str(e))
             return ErrorJsonResponse.from_exception(e)

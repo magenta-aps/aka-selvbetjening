@@ -28,5 +28,6 @@ export default {
   aftalenr: 'Aftalanr',
   nettoloen: 'Nettoløn',
   loentraek: 'Løntræk',
-  cpr_nr: 'CPR-nr'
+  cpr_nr: 'CPR-nr',
+  dokumentation: 'Dokumentation'
 }
