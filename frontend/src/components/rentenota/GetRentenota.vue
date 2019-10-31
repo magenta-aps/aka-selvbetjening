@@ -60,16 +60,16 @@
 
                     <div>
 
-                        <h3>{{ $t("rentenota.rentenota") }}</h3>
+                        <h3 v-html='$t("rentenota.rentenota")'></h3>
 
                         <table class="rentenota-address-table">
                             <tr>
-                                <th>{{ $t("rentenota.konto") }}</th>
+                                <th v-html='$t("rentenota.konto")'></th>
                                 <td>10276179</td>
                             </tr>
                             <tr>
-                                <th>{{ $t("rentenota.dato") }}</th>
-                                <td>{{ today.toLocaleDateString() }}</td>
+                                <th v-html='$t("rentenota.dato")'></th>
+                                <td v-html='today.toLocaleDateString()'></td>
                             </tr>
                         </table>
 
@@ -82,19 +82,19 @@
 
                             <table class="rentenota-address-table">
                                 <tr>
-                                    <th>{{ $t("rentenota.telefon") }}</th>
+                                    <th v-html='$t("rentenota.telefon")'></th>
                                     <td>346500</td>
                                 </tr>
                                 <tr>
-                                    <th>{{ $t("rentenota.fax") }}</th>
+                                    <th v-html='$t("rentenota.fax")'></th>
                                     <td>346577</td>
                                 </tr>
                                 <tr>
-                                    <th>{{ $t("rentenota.email") }}</th>
+                                    <th v-html='$t("rentenota.email")'></th>
                                     <td>sulinal@nanoq.gl</td>
                                 </tr>
                                 <tr>
-                                    <th>{{ $t("rentenota.webadresse") }}</th>
+                                    <th v-html='$t("rentenota.webadresse")'></th>
                                     <td>www.aka.gl</td>
                                 </tr>
                             </table>
@@ -107,20 +107,20 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>{{ $t("rentenota.dato") }}</th>
-                            <th>{{ $t("rentenota.debitorkonto") }}</th>
-                            <th>{{ $t("rentenota.faktureringsklassifikation") }}</th>
-                            <th>{{ $t("rentenota.bilag") }}</th>
-                            <th>{{ $t("rentenota.rentenotanummer") }}</th>
-                            <th>{{ $t("rentenota.tekst") }}</th>
-                            <th>{{ $t("rentenota.val") }}</th>
-                            <th>{{ $t("rentenota.grundlag") }}</th>
-                            <th>{{ $t("rentenota.beloeb") }}</th>
-                            <th>{{ $t("rentenota.postdato") }}</th>
-                            <th>{{ $t("rentenota.faktura") }}</th>
-                            <th>{{ $t("rentenota.fradato") }}</th>
-                            <th>{{ $t("rentenota.tildato") }}</th>
-                            <th>{{ $t("rentenota.dage") }}</th>
+                            <th v-html='$t("rentenota.dato")'></th>
+                            <th v-html='$t("rentenota.debitorkonto")'></th>
+                            <th v-html='$t("rentenota.faktureringsklassifikation")'></th>
+                            <th v-html='$t("rentenota.bilag")'></th>
+                            <th v-html='$t("rentenota.rentenotanummer")'></th>
+                            <th v-html='$t("rentenota.tekst")'></th>
+                            <th v-html='$t("rentenota.forfald")'></th>
+                            <th v-html='$t("rentenota.grundlag")'></th>
+                            <th v-html='$t("rentenota.beloeb")'></th>
+                            <th v-html='$t("rentenota.postdato")'></th>
+                            <th v-html='$t("rentenota.faktura")'></th>
+                            <th v-html='$t("rentenota.fradato")'></th>
+                            <th v-html='$t("rentenota.tildato")'></th>
+                            <th v-html='$t("rentenota.dage")'></th>
                             <th style="border: none;"></th>
                         </tr>
                     </thead>
