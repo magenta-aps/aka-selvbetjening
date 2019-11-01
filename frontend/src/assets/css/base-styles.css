@@ -400,7 +400,7 @@ footer {
 
 select{
     appearance: none;
-    background: url(/index/static/img/sullisivk_arrow.ad8ca3fb.svg) no-repeat #ddd;
+    background: url(../img/SVG/sullisivk_arrow.svg) no-repeat #ddd;
     background-position-x: right 1em;
     background-position-y: 50%;
     background-size: 1.5em;

@@ -1,5 +1,6 @@
 ---
 django_virtual_env_path: /srv/venv/
+django_manage_file: /srv/backend/manage.py
 django_requirements_file: /srv/backend/requirements.txt
 django_local_settings_file: /srv/backend/project/local_settings.py
 django_secret_key_file: /srv/backend/project/secret_key.py

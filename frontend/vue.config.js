@@ -8,7 +8,7 @@ module.exports = {
     }
   },
   assetsDir: 'static',
-  baseUrl: '/index',
+  publicPath: '',
   devServer: {
     hot: true,
     hotOnly: true,

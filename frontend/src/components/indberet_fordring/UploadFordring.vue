@@ -6,6 +6,11 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-4">
+            <a href="/static/csv/Fordring.csv">{{ $t('inkasso.template') }}</a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-4">
             <input type="file" name="file" @change="setFileData($event.target.files)">
           </div>
         </div>

@@ -65,6 +65,9 @@
     src: templates/local_settings.j2
     dest: "{{django_local_settings_file}}"
     force: yes
+      -
+- name: Collect static files
+  shell: ". {{django_virtual_env_path}}/bin/activate && python {{django_manage_file}} collectstatic --no-input"
 
 - name: restart apache
   service:
