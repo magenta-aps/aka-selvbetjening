@@ -142,3 +142,24 @@ class LoentraekForm(forms.Form):
     cvrnummer = forms.IntegerField(max_value=99999999)
     traekmaaned = forms.IntegerField(min_value=1, max_value=12)
     traekaar = forms.IntegerField(min_value=1900, max_value=2200)
+
+
+class NedskrivningForm(forms.Form):
+
+    fordringshaver = forms.CharField(
+        required=True,
+        error_messages={'required': 'required_field'}
+    )
+    debitor = forms.CharField(
+        required=True,
+        error_messages={'required': 'required_field'}
+    )
+    ekstern_sagsnummer = forms.CharField(
+        required=False
+    )
+    beloeb = forms.DecimalField(
+        decimal_places=2,
+        required=True,
+        error_messages={'required': 'required_field'}
+    )
+    sekvensnummer = forms.IntegerField

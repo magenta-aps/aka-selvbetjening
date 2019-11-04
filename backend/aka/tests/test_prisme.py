@@ -1,6 +1,6 @@
 from datetime import date
 
-from aka.clients.prisme import PrismeClaimRequest, PrismeClaimResponse
+from aka.clients.prisme import PrismeClaimRequest, PrismeClaimResponse, Prisme
 from aka.clients.prisme import PrismeCvrCheckRequest, PrismeCvrCheckResponse
 from aka.clients.prisme import PrismeImpairmentRequest, PrismeImpairmentResponse
 from aka.clients.prisme import PrismeInterestNoteRequest, PrismeInterestNoteResponse
@@ -10,6 +10,14 @@ from xmltodict import parse as xml_to_dict
 
 
 class BasicTestCase(SimpleTestCase):
+
+    def test_impairment_remote(self):
+        request = PrismeImpairmentRequest('32SE', '12345678', '1234', -100.5, 'AKI-000050')
+        prisme = Prisme()
+        response = prisme.process_service(request)
+        print(response[0].rec_id)
+
+
 
     def test_impairment_request_parse(self):
         request = PrismeImpairmentRequest('32SE', '12345678', 'ref123', -100.5, 'AKI-000047')

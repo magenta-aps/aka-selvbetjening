@@ -129,7 +129,7 @@ class PrismeImpairmentRequest(PrismeRequestObject):
 
     @property
     def method(self):
-        return 'createClaim'
+        return 'createImpairment'
 
     @property
     def xml(self):
@@ -194,14 +194,13 @@ class PrismeClaimResponse(object):
         d = xml_to_dict(xml)
         self.rec_id = d['CustCollClaimTableFuj']['RecId']
 
-    @staticmethod
-    def test(rec_id):
-        return PrismeClaimResponse(f"<CustCollClaimTableFuj><RecId>{rec_id}</RecId></CustCollClaimTableFuj>")
+    @classmethod
+    def test(cls, rec_id):
+        return cls(f"<CustCollClaimTableFuj><RecId>{rec_id}</RecId></CustCollClaimTableFuj>")
 
 
 class PrismeImpairmentResponse(PrismeClaimResponse):
-    # To be filled out as that interface becomes relevant
-    pass
+    pass  # Works just like the superclass
 
 
 class PrismeCvrCheckResponse(object):
@@ -329,6 +328,7 @@ class Prisme(object):
             requestHeader=self.create_request_header(request_object.method),
             xmlCollection=self.create_request_body(request_object.xml)
         )
+        print("Sending:\n%s" % request_object.xml)
         # reply is of type GWSReplyDCFUJ
         reply = self.client.service.processService(request)
 

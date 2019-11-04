@@ -13,7 +13,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
 
 from .clients.dafo import Dafo
-from .clients.prisme import Prisme, PrismeClaimRequest, PrismeInterestNoteRequest
+from .clients.prisme import Prisme, PrismeClaimRequest, PrismeInterestNoteRequest, PrismeImpairmentRequest
 from .forms import InkassoForm, InkassoUploadForm
 from .utils import ErrorJsonResponse, AccessDeniedJsonResponse
 
@@ -139,10 +139,34 @@ class LoenTraekDistributionView(View):
         return JsonResponse(data, safe=False)
 
 
-class NedskrivningView(View):
+class NedskrivningView(BaseFormView):
 
-    def post(self, request, *args, **kwargs):
-        return JsonResponse("OK", safe=False)
+    form_class = NedskrivningForm
+
+    def get(self, *args, **kwargs):
+        return self.http_method_not_allowed(*args, **kwargs)
+
+    def form_valid(self, form):
+        prisme = Prisme()
+
+        claim = PrismeImpairmentRequest(
+            claimant_id=form.cleaned_data.get('fordringshaver'),
+            cpr_cvr=form.cleaned_data.get('debitor'),
+            claim_ref=form.cleaned_data.get('ekstern_sagsnummer'),
+            amount_balance=form.cleaned_data.get('hovedstol'),
+        )
+        try:
+            prisme_reply = prisme.process_service(claim)[0]
+            response = {
+                'rec_id': prisme_reply.rec_id
+            }
+            return JsonResponse(response)
+        except Exception as e:
+            return ErrorJsonResponse.from_exception(e)
+
+    def form_invalid(self, form):
+        return ErrorJsonResponse.from_error_dict(form.errors)
+
 
 
 class NetsopkraevningView(View):
