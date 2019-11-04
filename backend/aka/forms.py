@@ -163,3 +163,19 @@ class NedskrivningForm(forms.Form):
         error_messages={'required': 'required_field'}
     )
     sekvensnummer = forms.IntegerField
+
+
+class NedskrivningUploadForm(forms.Form):
+
+    file = forms.FileField(
+        required=True,
+        validators=[
+            FileExtensionValidator(['csv'])
+        ]
+    )
+
+    def clean_file(self):
+        file = self.cleaned_data['file']
+        if file.size > settings.MAX_UPLOAD_FILESIZE:
+            raise ValidationError('file_too_large')
+        return file

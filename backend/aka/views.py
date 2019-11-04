@@ -168,6 +168,31 @@ class NedskrivningView(BaseFormView):
         return ErrorJsonResponse.from_error_dict(form.errors)
 
 
+class NedskrivningUploadView(NedskrivningView):
+    form_class = InkassoUploadForm
+
+    def form_valid(self, form):
+        csv_file = form.cleaned_data['file']
+        csv_file.seek(0)
+        data = csv_file.read()
+        charset = chardet.detect(data)
+        responses = []
+        try:
+            csv_reader = csv.DictReader(StringIO(data.decode(charset['encoding'])))
+            for row in csv_reader:
+                subform = InkassoForm(data=row)
+                if subform.is_valid():
+                    response = super(NedskrivningUploadView, self).form_valid(subform)
+                    responses.append(json.loads(response.content))
+                else:
+                    return ErrorJsonResponse.from_error_dict(subform.errors)
+        except csv.Error as e:
+            return ErrorJsonResponse.from_error_id('failed_reading_csv')
+        return JsonResponse(responses, safe=False)
+
+    def form_invalid(self, form):
+        return ErrorJsonResponse.from_error_dict(form.errors)
+
 
 class NetsopkraevningView(View):
 
