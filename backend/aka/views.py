@@ -14,7 +14,7 @@ from django.views.generic.edit import BaseFormView
 
 from .clients.dafo import Dafo
 from .clients.prisme import Prisme, PrismeClaimRequest, PrismeInterestNoteRequest, PrismeImpairmentRequest
-from .forms import InkassoForm, InkassoUploadForm
+from .forms import InkassoForm, InkassoUploadForm, NedskrivningForm, NedskrivningUploadForm
 from .utils import ErrorJsonResponse, AccessDeniedJsonResponse
 
 logger = logging.getLogger(__name__)
