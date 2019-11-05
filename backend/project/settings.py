@@ -142,14 +142,11 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 LANGUAGE_CODE = 'da-dk'
-
 TIME_ZONE = 'America/Godthab'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
+LOCALE_PATHS = [ os.path.join(BASE_DIR, 'i18n') ]
 
 
 # Static files (CSS, JavaScript, Images)

@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import TemplateView
-from django.views.generic.edit import BaseFormView
+from django.views.generic.edit import FormView, BaseFormView
 
 from .clients.dafo import Dafo
 from .clients.prisme import Prisme, PrismeClaimRequest, PrismeInterestNoteRequest, PrismeImpairmentRequest
@@ -147,12 +147,10 @@ class LoenTraekDistributionView(View):
         return JsonResponse(data, safe=False)
 
 
-class NedskrivningView(BaseFormView):
+class NedskrivningView(FormView):
 
     form_class = NedskrivningForm
-
-    def get(self, *args, **kwargs):
-        return self.http_method_not_allowed(*args, **kwargs)
+    template_name = 'aka/impairmentForm.html'
 
     def form_valid(self, form):
         prisme = Prisme()
