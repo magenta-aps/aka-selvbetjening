@@ -1,0 +1,40 @@
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+        <title>Sullissivik</title>
+        <meta name="description" content="">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>
+        {% block extra_headers %}{% endblock %}
+    </head>
+    <body>
+        <div class="wrapper">
+            <header class="globalheader">
+                <div class="globalheader-wrapper">
+                    <h1 class="globalheader-heading">
+                        <a href="#" class="router-link-exact-active router-link-active">
+                            <img src="{% static 'img/sullissivik_logo_gl.svg' %}" alt="Sullissivik" class="globalheader-logo">
+                        </a>
+                    </h1>
+                    <div class="locale-changer">
+                        <span class="option-da"></span>
+                        <select class="dropdown">
+                            <option value="kl">Kalaallisut</option>
+                            <option value="da">Dansk</option>
+                        </select>
+                    </div>
+                </div>
+            </header>
+            <main>
+                {% block content %}
+                {% endblock %}
+            </main>
+            <footer>
+                <div class="footer-wrapper">
+                    Footer
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

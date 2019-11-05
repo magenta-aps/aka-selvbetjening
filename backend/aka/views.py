@@ -27,6 +27,14 @@ class IndexTemplateView(TemplateView):
         return super(IndexTemplateView, self).get(*args, **kwargs)
 
 
+class VueTemplateView(TemplateView):
+    template_name = 'vue.html'
+
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, *args, **kwargs):
+        return super(VueTemplateView, self).get(*args, **kwargs)
+
+
 class ArbejdsgiverkontoView(View):
 
     def get(self, request, *args, **kwargs):

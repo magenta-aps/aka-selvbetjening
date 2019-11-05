@@ -17,7 +17,7 @@ from django.conf.urls import url, include
 
 from .views import ArbejdsgiverkontoView
 from .views import FordringshaverkontoView
-from .views import IndexTemplateView
+from .views import IndexTemplateView, VueTemplateView
 from .views import InkassoSagView, InkassoSagUploadView
 from .views import LoenTraekDistributionView
 from .views import LoenTraekView
@@ -27,7 +27,9 @@ from .views import PrivatdebitorkontoView
 from .views import RenteNotaView
 
 urlpatterns = [
-   url(r'^$', IndexTemplateView.as_view(), name='index'),
+    url(r'^$', IndexTemplateView.as_view(), name='index'),
+
+    url(r'^vue/$', VueTemplateView.as_view(), name='index'),
 
    url(r'^oid/', include('openid.urls', namespace='openid')),
 
