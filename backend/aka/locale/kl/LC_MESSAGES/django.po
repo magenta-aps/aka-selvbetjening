@@ -18,8 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: aka/templates/aka/impairmentForm.html:10
-msgid "inkasso.title"
-msgstr "Inkasso - Opret sag"
+msgid "nedskrivning.title"
+msgstr "Nedskrivning - Opret"
 
 #: aka/templates/aka/impairmentForm.html:15
 msgid "attributes.fordringshaver"

@@ -156,15 +156,16 @@ class NedskrivningForm(forms.Form):
     )
     ekstern_sagsnummer = forms.CharField(
         required=True,
-        min=8,
-        max=10,
+        max_length=10,
     )
     beloeb = forms.DecimalField(
         decimal_places=2,
         required=True,
         error_messages={'required': 'required_field'}
     )
-    sekvensnummer = forms.IntegerField()
+    sekvensnummer = forms.CharField(
+        max_length=30
+    )
 
 
 class NedskrivningUploadForm(forms.Form):
