@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_headers %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/toc.css' %}"/>
+{% endblock %}
+
+{% block content %}
+<nav class="toc">
+    <a href="/vue/#/rentenota" class="toc-link">
+        <span>Hent rentenota</span>
+    </a>
+    <hr>
+    <a href="/vue/#/indberetning" class="toc-link">
+        <span>Indberet fordring</span>
+    </a>
+    <a href="/vue/#/indberetning/upload" class="toc-link">
+        <span>Upload fordring</span>
+    </a>
+</nav>
+{% endblock %}

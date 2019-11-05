@@ -8,7 +8,8 @@ module.exports = {
     }
   },
   assetsDir: 'static',
-  publicPath: '',
+  publicPath: '/',
+  indexPath: 'vue.html',
   devServer: {
     hot: true,
     hotOnly: true,

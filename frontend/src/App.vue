@@ -4,9 +4,9 @@
         <header class="globalheader">
             <div class="globalheader-wrapper">
                 <h1 class="globalheader-heading">
-                    <router-link  to="/">
+                    <a href="/">
                         <img class="globalheader-logo" src="./assets/img/sullissivik_logo_gl.svg" alt="Sullissivik">
-                    </router-link>
+                    </a>
                 </h1>
                 <language-toggle></language-toggle>
             </div>
