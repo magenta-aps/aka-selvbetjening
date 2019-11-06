@@ -19,24 +19,24 @@ msgstr ""
 
 #: aka/templates/aka/impairmentForm.html:10
 msgid "nedskrivning.title"
-msgstr "Nedskrivning - Opret"
+msgstr "Nedskrivning - Opret [kl]"
 
 #: aka/templates/aka/impairmentForm.html:15
 msgid "attributes.fordringshaver"
-msgstr "Fordringshaver"
+msgstr "Fordringshaver [kl]"
 
 #: aka/templates/aka/impairmentForm.html:25
 msgid "attributes.debitor"
-msgstr "Debitor"
+msgstr "Debitor [kl]"
 
 #: aka/templates/aka/impairmentForm.html:36
 msgid "attributes.ekstern_sagsnummer"
-msgstr "Ekstern sagsnummer"
+msgstr "Ekstern sagsnummer [kl]"
 
 #: aka/templates/aka/impairmentForm.html:46
 msgid "attributes.beloeb"
-msgstr "Beløb"
+msgstr "Beløb [kl]"
 
 #: aka/templates/aka/impairmentForm.html:54
 msgid "common.gem"
-msgstr "Gem"
+msgstr "Gem [kl]"

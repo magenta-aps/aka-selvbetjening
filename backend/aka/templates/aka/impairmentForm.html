@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-4">
                     <div>
-                        <label id="lbl_fordringshaver" for="{{ form.fordringshaver.id_for_label }}">{% trans 'attributes.fordringshaver' %}</label>
+                        <label id="lbl_fordringshaver" for="{{ form.fordringshaver.id_for_label }}" data-trans="attributes.fordringshaver">{% trans 'attributes.fordringshaver' %}</label>
                         {{ form.fordringshaver }}
                         <span class="err-msg" for="{{ form.fordringshaver.id_for_label }}"></span>
                     </div>
@@ -23,7 +23,7 @@
                 <div class="col-4">
                     <!--s-field name="debitor" :label="$t('attributes.debitor')" type="text" required="true" :validate="{eight_or_ten_characters: true}" v-model="debitor"/-->
                     <div>
-                        <label id="lbl_debitor" for="{{ form.debitor.id_for_label }}">{% trans 'attributes.debitor' %}</label>
+                        <label id="lbl_debitor" for="{{ form.debitor.id_for_label }}" data-trans="attributes.debitor">{% trans 'attributes.debitor' %}</label>
                         {{ form.debitor }}
                         <span class="err-msg" for="{{ form.debitor.id_for_label }}"></span>
                     </div>
@@ -34,7 +34,7 @@
             <div class="col-3">
                 <!--s-field name="ekstern_sagsnummer" :label="$t('attributes.ekstern_sagsnummer')" type="text" v-model="ekstern_sagsnummer" required="true"/-->
                 <div>
-                    <label id="lbl_ekstern_sagsnummer" for="{{ form.ekstern_sagsnummer.id_for_label }}">{% trans 'attributes.ekstern_sagsnummer' %}</label>
+                    <label id="lbl_ekstern_sagsnummer" for="{{ form.ekstern_sagsnummer.id_for_label }}"data-trans="attributes.ekstern_sagsnummer">{% trans 'attributes.ekstern_sagsnummer' %}</label>
                     {{ form.ekstern_sagsnummer }}
                     <span class="err-msg" for="{{ form.ekstern_sagsnummer.id_for_label }}"></span>
                 </div>
@@ -44,7 +44,7 @@
             <div class="col-3">
                 <!--c-field name="beloeb" :label="$t('attributes.beloeb')" type="text" v-model="beloeb" required="true" :validate="{currency: true}"/-->
                 <div>
-                    <label id="lbl_beloeb" for="{{ form.beloeb.id_for_label }}">{% trans 'attributes.beloeb' %}</label>
+                    <label id="lbl_beloeb" for="{{ form.beloeb.id_for_label }}"data-trans="attributes.beloeb">{% trans 'attributes.beloeb' %}</label>
                     {{ form.beloeb }}
                     <span class="err-msg" for="{{ form.beloeb.id_for_label }}"></span>
                 </div>
