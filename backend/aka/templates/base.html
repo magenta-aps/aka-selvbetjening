@@ -11,27 +11,17 @@
         <meta name="description" content="">
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="{% url 'javascript-language-catalog' locale='da' %}"></script>
+        <script type="text/javascript" src="{% url 'javascript-language-catalog' locale='kl' %}"></script>
+        <script type="text/javascript" src="{% static 'js/cookies.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/locale.js' %}"></script>
         {% block extra_headers %}{% endblock %}
         <script type="text/javascript">
-            function getCookie(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) {
-                        var cookie = cookies[i].trim();
-                        // Does this cookie string begin with the name we want?
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
-            $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
-                if (!options.headers) options.headers = {};
-                options.headers["X-CSRFToken"] = getCookie('csrftoken');
+            $(function() {
+                $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+                    if (!options.headers) options.headers = {};
+                    options.headers["X-CSRFToken"] = django.getCookie('csrftoken');
+                });
             });
         </script>
     </head>
@@ -48,7 +38,7 @@
                     </h1>
                     <div class="locale-changer">
                         <span id="locale_flag" class="option-{{LANGUAGE_CODE|split:'-'|first}}"></span>
-                        <select class="dropdown" data-locale-changer="true" data-locale-flag="#locale_flag">
+                        <select class="dropdown" data-locale-changer="true" data-locale-flag="#locale_flag" autocomplete="off">
                             <option value="kl" {% if LANGUAGE_CODE|split:'-'|first == 'kl' %}selected="selected"{% endif %}>Kalaallisut</option>
                             <option value="da" {% if LANGUAGE_CODE|split:'-'|first == 'da' %}selected="selected"{% endif %}>Dansk</option>
                         </select>

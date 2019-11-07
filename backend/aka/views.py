@@ -5,7 +5,8 @@ from io import StringIO
 
 import chardet
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.template import Engine, Context
 from django.utils import timezone
 from django.utils import translation
 from django.utils.decorators import method_decorator
@@ -25,18 +26,13 @@ from .utils import ErrorJsonResponse, AccessDeniedJsonResponse
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
 
-    template_name = "locale.js"
     js_catalog_template = r"""
     {% autoescape off %}
     (function(globals) {
     var django = globals.django || (globals.django = {});
     django.catalog = django.catalog || {};
     {% if catalog_str %}
-    var newcatalog = {{ catalog_str }};
-    django.catalog["{{ locale }}"] = [];
-    for (var key in newcatalog) {
-    django.catalog["{{ locale }}"][key] = newcatalog[key];
-    }
+    django.catalog["{{ locale }}"] = {{ catalog_str }};
     {% endif %}
     }(this));
     {% endautoescape %}
@@ -62,9 +58,8 @@ class CustomJavaScriptCatalog(JavaScriptCatalog):
         return context
 
     def render_to_response(self, context, **response_kwargs):
-        # template = Engine().from_string(self.js_catalog_template)
-        # return HttpResponse(template.render(Context(context)), 'text/javascript; charset="utf-8"')
-        return JsonResponse(context['catalog'])
+        template = Engine().from_string(self.js_catalog_template)
+        return HttpResponse(template.render(Context(context)), 'text/javascript; charset="utf-8"')
 
 
 class SetLanguageView(View):
@@ -212,7 +207,6 @@ class NedskrivningView(FormView):
 
     def form_valid(self, form):
         prisme = Prisme()
-
         claim = PrismeImpairmentRequest(
             claimant_id=form.cleaned_data.get('fordringshaver'),
             cpr_cvr=form.cleaned_data.get('debitor'),
