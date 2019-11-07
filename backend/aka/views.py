@@ -7,9 +7,11 @@ import chardet
 from django.conf import settings
 from django.http import JsonResponse, HttpResponse
 from django.template import Engine, Context
+from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils import translation
 from django.utils.decorators import method_decorator
+from django.utils.translation import gettext_lazy as _
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -17,11 +19,16 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView, BaseFormView
 from django.views.i18n import JavaScriptCatalog
 
-from .clients.dafo import Dafo
-from .clients.prisme import Prisme, PrismeClaimRequest, \
-    PrismeInterestNoteRequest, PrismeImpairmentRequest
-from .forms import InkassoForm, InkassoUploadForm, NedskrivningForm
-from .utils import ErrorJsonResponse, AccessDeniedJsonResponse
+from aka.exceptions import AccessDeniedException
+from aka.clients.dafo import Dafo
+from aka.clients.prisme import Prisme, PrismeClaimRequest, \
+    PrismeInterestNoteRequest, PrismeImpairmentRequest, PrismeNotFoundException
+from aka.forms import InkassoForm, InkassoUploadForm, NedskrivningForm
+from aka.utils import ErrorJsonResponse, AccessDeniedJsonResponse
+
+from aka.mixins import ErrorHandlerMixin
+
+from aka.clients.prisme import PrismeException
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -71,6 +78,7 @@ class SetLanguageView(View):
 
 
 logger = logging.getLogger(__name__)
+
 
 class IndexTemplateView(TemplateView):
     template_name = 'index.html'
@@ -200,30 +208,65 @@ class LoenTraekDistributionView(View):
         return JsonResponse(data, safe=False)
 
 
-class NedskrivningView(FormView):
+class NedskrivningView(ErrorHandlerMixin, FormView):
 
     form_class = NedskrivningForm
     template_name = 'aka/impairmentForm.html'
 
+    def get_claimant_id(self, request):
+        return "12345678"
+        claimant_id = self.request.session['user_info'].get('claimant_id')
+        if claimant_id is None:
+            prisme = Prisme()
+            try:
+                claimant_id = prisme.check_cvr(self.request.session['user_info'].get('CVR'))
+            except PrismeNotFoundException as e:
+                raise AccessDeniedException(e.error_code, **e.params)
+            self.request.session['user_info']['claimant_id'] = claimant_id
+        return claimant_id
+
+    def get(self, request, *args, **kwargs):
+        ####
+        self.request.session['user_info'] = {'CVR': '12479182'}  # 12479182
+        ####
+        self.get_claimant_id(request)
+        return super(NedskrivningView, self).get(request, *args, **kwargs)
+
     def form_valid(self, form):
         prisme = Prisme()
+
+        ####
+        self.request.session['user_info'] = {'CVR': '12479182'}  # 12479182
+        ####
+
+        if 'user_info' not in self.request.session:
+            raise AccessDeniedException('no_cvr')
+
         claim = PrismeImpairmentRequest(
-            claimant_id=form.cleaned_data.get('fordringshaver'),
+            claimant_id=self.get_claimant_id(self.request),
             cpr_cvr=form.cleaned_data.get('debitor'),
             claim_ref=form.cleaned_data.get('ekstern_sagsnummer'),
-            amount_balance=form.cleaned_data.get('hovedstol'),
+            amount_balance=-abs(form.cleaned_data.get('beloeb', 0)),
+            claim_number_seq=form.cleaned_data.get('sekvensnummer')
         )
         try:
             prisme_reply = prisme.process_service(claim)[0]
-            response = {
-                'rec_id': prisme_reply.rec_id
-            }
-            return JsonResponse(response)
-        except Exception as e:
-            return ErrorJsonResponse.from_exception(e)
+            return TemplateResponse(
+                request=self.request,
+                template="aka/success.html",
+                context={
+                    'header': _("nedskrivning.success"),
+                    'text': _("nedskrivning.result") % prisme_reply.rec_id
+                },
+                using=self.template_engine
+            )
+        except PrismeException as e:
+            print(e.code)
+            if e.code == 250:
+                form.add_error('ekstern_sagsnummer', e.message)
+                return self.form_invalid(form)
+            raise e
 
-    def form_invalid(self, form):
-        return ErrorJsonResponse.from_error_dict(form.errors)
 
 
 class NedskrivningUploadView(NedskrivningView):

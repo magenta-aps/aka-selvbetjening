@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block extra_headers %}
+{% endblock %}
+
+{% block content %}
+<article class="success">
+    <form>
+        <h1>{{ header }}</h1>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-4">
+                    {{ message }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    {% if repeat %}<a href="{{ repeat.url }}">{{ repeat.text }}</a>{% endif %}
+                    <a href="{% url 'index' %}" tag="button">{% trans 'common.forside' %}</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</article>
+{% endblock %}

@@ -54,8 +54,19 @@ $(function() {
             const update = function(){
                 const language = $(this).val();
                 flagElements.removeClass().addClass("option-" + language);
-                $("*[data-trans]").each(function () {
-                    this.innerText = django.gettext(language, $(this).attr('data-trans'));
+                $("*[data-trans]").each(function() {
+                    let $this = $(this);
+                    let text = django.gettext(language, $this.attr('data-trans'));
+                    let params = $this.attr('data-trans-params');
+                    if (params) {
+                        params = JSON.parse(params);
+                        for (key in params) {
+                            if (params.hasOwnProperty(key)) {
+                                text = text.replace("{" + key + "}", params[key]);
+                            }
+                        }
+                    }
+                    this.innerText = text;
                 });
                 $.ajax({
                     url: "/language/",

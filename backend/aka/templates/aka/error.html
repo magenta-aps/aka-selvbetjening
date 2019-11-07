@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block extra_headers %}
+{% endblock %}
+
+{% block content %}
+<article class="access-denied">
+    <form>
+        <h1 data-trans="{{ header }}">{% trans header %}</h1>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12" data-trans="{{ error_code }}" data-trans-params="{{ error_params }}">
+                {{ message }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <a href="{% url 'index' %}" class="button">{% trans 'common.forside' %}</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</article>
+{% endblock %}

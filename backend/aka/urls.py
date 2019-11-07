@@ -36,7 +36,7 @@ urlpatterns = [
 
 
     url(r'^$', IndexTemplateView.as_view(), name='index'),
-    url(r'^vue/$', VueTemplateView.as_view(), name='index'),
+    url(r'^vue/$', VueTemplateView.as_view(), name='vue'),
     url(r'^oid/', include('openid.urls', namespace='openid')),
     url(r'^inkassosag$', InkassoSagView.as_view(), name='inkassosag'),
     url(r'^inkassosag/upload', InkassoSagUploadView.as_view(), name='inkassosag-upload'),

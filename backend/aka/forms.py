@@ -146,10 +146,6 @@ class LoentraekForm(forms.Form):
 
 class NedskrivningForm(forms.Form):
 
-    fordringshaver = forms.CharField(
-        required=True,
-        error_messages={'required': 'required_field'}
-    )
     debitor = forms.CharField(
         required=True,
         error_messages={'required': 'required_field'}
@@ -157,6 +153,7 @@ class NedskrivningForm(forms.Form):
     ekstern_sagsnummer = forms.CharField(
         required=True,
         max_length=10,
+        error_messages={'required': 'required_field'}
     )
     beloeb = forms.DecimalField(
         decimal_places=2,

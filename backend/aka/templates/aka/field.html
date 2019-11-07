@@ -1,0 +1,6 @@
+{% load i18n %}
+<div{% if field.errors %} class="has-error"{% endif %}>
+    <label for="{{ field.id_for_label }}" data-trans="{{ key }}">{% trans key %}</label>
+    {{ field }}
+    <span class="err-msg" for="{{ field.id_for_label }}">{{ field.errors }}</span>
+</div>

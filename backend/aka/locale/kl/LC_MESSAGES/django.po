@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-05 09:43+0100\n"
+"POT-Creation-Date: 2019-11-07 12:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,26 +17,48 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: aka/templates/aka/impairmentForm.html:10
+msgid "common.error.generic"
+msgstr "Fejl [kl]"
+
+msgid "common.error.access_denied"
+msgstr "Adgang nægtet [kl]"
+
+#: aka/templates/aka/impairmentForm.html:56
+msgid "common.gem"
+msgstr "Gem [kl]"
+
+msgid "prisme.error"
+msgstr ""
+
+msgid "prisme_250"
+msgstr ""
+
+msgid "prisme.cvrcheck_no_result"
+msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
+
+#: aka/templates/aka/error.html:17 aka/templates/aka/success.html:21
+#, fuzzy
+#| msgid "common.gem"
+msgid "common.forside"
+msgstr "Gem [kl]"
+
+#: aka/templates/aka/impairmentForm.html:12
 msgid "nedskrivning.title"
 msgstr "Nedskrivning - Opret [kl]"
 
-#: aka/templates/aka/impairmentForm.html:15
-msgid "attributes.fordringshaver"
-msgstr "Fordringshaver [kl]"
-
-#: aka/templates/aka/impairmentForm.html:25
+#: aka/templates/aka/impairmentForm.html:18
 msgid "attributes.debitor"
 msgstr "Debitor [kl]"
 
-#: aka/templates/aka/impairmentForm.html:36
+#: aka/templates/aka/impairmentForm.html:29
 msgid "attributes.ekstern_sagsnummer"
 msgstr "Ekstern sagsnummer [kl]"
 
-#: aka/templates/aka/impairmentForm.html:46
+#: aka/templates/aka/impairmentForm.html:39
 msgid "attributes.beloeb"
 msgstr "Beløb [kl]"
 
-#: aka/templates/aka/impairmentForm.html:54
-msgid "common.gem"
-msgstr "Gem [kl]"
+#: aka/templates/aka/impairmentForm.html:48
+msgid "attributes.sekvensnummer"
+msgstr "Sekvensnummer [kl]"
+
