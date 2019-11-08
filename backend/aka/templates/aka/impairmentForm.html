@@ -9,26 +9,26 @@
 <article class="indberet_nedskrivning">
     <form method="post">
         {% csrf_token %}
-        <h1>{% trans 'nedskrivning.title' %}</h1>
+        <h1 data-trans="nedskrivning.title">{% trans 'nedskrivning.title' %}</h1>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.debitor key='attributes.debitor' %}
+                    {% include 'aka/field.html' with field=form.debitor key='nedskrivning.debitor' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.ekstern_sagsnummer key='attributes.ekstern_sagsnummer' %}
+                    {% include 'aka/field.html' with field=form.ekstern_sagsnummer key='nedskrivning.ekstern_sagsnummer' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.beloeb key='attributes.beloeb' %}
+                    {% include 'aka/field.html' with field=form.beloeb key='nedskrivning.beloeb' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.sekvensnummer key='attributes.sekvensnummer' %}
+                    {% include 'aka/field.html' with field=form.sekvensnummer key='nedskrivning.sekvensnummer' %}
                 </div>
             </div>
             <div class="row">

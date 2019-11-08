@@ -27,11 +27,23 @@ msgstr "Adgang nægtet [kl]"
 msgid "common.gem"
 msgstr "Gem [kl]"
 
+msgid "common.forside"
+msgstr "Forside [kl]"
+
+msgid "common.repeat"
+msgstr "Gentag [kl]"
+
+msgid "common.upload.validation"
+msgstr "Der er fejl i det uploadede regneark [kl]:"
+
+msgid "common.upload.validation_item"
+msgstr "Celle {col_letter}{row} ({field}): {message} [kl]"
+
 msgid "prisme.error"
 msgstr ""
 
-msgid "prisme_250"
-msgstr ""
+msgid "prisme.error_250"
+msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber} [kl]"
 
 msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
@@ -39,26 +51,44 @@ msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
 #: aka/templates/aka/error.html:17 aka/templates/aka/success.html:21
 #, fuzzy
 #| msgid "common.gem"
-msgid "common.forside"
-msgstr "Gem [kl]"
+
+msgid "nedskrivning.success"
+msgstr "Nedskrivninger uploadet [kl]"
+
+msgid "nedskrivning.result"
+msgstr "Oprettede nedskrivninger [kl]"
+
+msgid "nedskrivning.errors"
+msgstr "Der opstod følgende fejl: [kl]"
+
+msgid "nedskrivning.error_250"
+msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber} [kl]"
 
 #: aka/templates/aka/impairmentForm.html:12
 msgid "nedskrivning.title"
 msgstr "Nedskrivning - Opret [kl]"
 
+msgid "nedskrivning.template"
+msgstr "Download skabelon [kl]"
+
 #: aka/templates/aka/impairmentForm.html:18
-msgid "attributes.debitor"
+msgid "nedskrivning.debitor"
 msgstr "Debitor [kl]"
 
 #: aka/templates/aka/impairmentForm.html:29
-msgid "attributes.ekstern_sagsnummer"
+msgid "nedskrivning.ekstern_sagsnummer"
 msgstr "Ekstern sagsnummer [kl]"
 
 #: aka/templates/aka/impairmentForm.html:39
-msgid "attributes.beloeb"
+msgid "nedskrivning.beloeb"
 msgstr "Beløb [kl]"
 
 #: aka/templates/aka/impairmentForm.html:48
-msgid "attributes.sekvensnummer"
+msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnummer [kl]"
 
+msgid "required"
+msgstr "Dette felt er påkrævet. [kl]"
+
+msgid "invalid_extension"
+msgstr "Filendelse '{extension}' er ikke tilladt. Tilladte filendelser er: '{allowed_extensions}' [kl]."

@@ -22,7 +22,7 @@ from .views import IndexTemplateView, VueTemplateView
 from .views import InkassoSagView, InkassoSagUploadView
 from .views import LoenTraekDistributionView
 from .views import LoenTraekView
-from .views import NedskrivningView
+from .views import NedskrivningView, NedskrivningUploadView
 from .views import NetsopkraevningView
 from .views import PrivatdebitorkontoView
 from .views import RenteNotaView
@@ -44,6 +44,7 @@ urlpatterns = [
     url(r'^loentraekdistribution/([0-9]{8})$', LoenTraekDistributionView.as_view(), name='loentraekdistribution'),
     url(r'^rentenota/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})$', RenteNotaView.as_view(), name='rentenota'),
     url(r'^nedskrivning$', NedskrivningView.as_view(), name='nedskrivning'),
+    url(r'^nedskrivning/upload$', NedskrivningUploadView.as_view(), name='nedskrivning-upload'),
     url(r'^netsopkraevning$', NetsopkraevningView.as_view(), name='netsopkraevning'),
     url(r'^fordringshaverkonto$', FordringshaverkontoView.as_view(), name='fordringshaverkonto'),
     url(r'^arbejdsgiverkonto$', ArbejdsgiverkontoView.as_view(), name='arbejdsgiverkonto'),

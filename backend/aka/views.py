@@ -30,6 +30,8 @@ from aka.mixins import ErrorHandlerMixin
 
 from aka.clients.prisme import PrismeException
 
+from aka.forms import NedskrivningUploadForm
+
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
 
@@ -232,6 +234,16 @@ class NedskrivningView(ErrorHandlerMixin, FormView):
         self.get_claimant_id(request)
         return super(NedskrivningView, self).get(request, *args, **kwargs)
 
+    def send_impairment(self, form, prisme):
+        claim = PrismeImpairmentRequest(
+            claimant_id=self.get_claimant_id(self.request),
+            cpr_cvr=form.cleaned_data.get('debitor'),
+            claim_ref=form.cleaned_data.get('ekstern_sagsnummer'),
+            amount_balance=-abs(form.cleaned_data.get('beloeb', 0)),
+            claim_number_seq=form.cleaned_data.get('sekvensnummer')
+        )
+        return prisme.process_service(claim)[0].rec_id
+
     def form_valid(self, form):
         prisme = Prisme()
 
@@ -242,57 +254,52 @@ class NedskrivningView(ErrorHandlerMixin, FormView):
         if 'user_info' not in self.request.session:
             raise AccessDeniedException('no_cvr')
 
-        claim = PrismeImpairmentRequest(
-            claimant_id=self.get_claimant_id(self.request),
-            cpr_cvr=form.cleaned_data.get('debitor'),
-            claim_ref=form.cleaned_data.get('ekstern_sagsnummer'),
-            amount_balance=-abs(form.cleaned_data.get('beloeb', 0)),
-            claim_number_seq=form.cleaned_data.get('sekvensnummer')
-        )
         try:
-            prisme_reply = prisme.process_service(claim)[0]
+            rec_id = self.send_impairment(form, prisme)
             return TemplateResponse(
                 request=self.request,
-                template="aka/success.html",
+                template="aka/impairmentSuccess.html",
                 context={
-                    'header': _("nedskrivning.success"),
-                    'text': _("nedskrivning.result") % prisme_reply.rec_id
+                    'rec_ids': [rec_id]
                 },
                 using=self.template_engine
             )
         except PrismeException as e:
-            print(e.code)
             if e.code == 250:
-                form.add_error('ekstern_sagsnummer', e.message)
+                # form.add_error('ekstern_sagsnummer', 'nedskrivning.error_250', e.params)
+                v = e.as_validationerror
+                form.add_error('ekstern_sagsnummer', v)
                 return self.form_invalid(form)
             raise e
 
 
 
 class NedskrivningUploadView(NedskrivningView):
-    form_class = InkassoUploadForm
+    form_class = NedskrivningUploadForm
+    template_name = 'aka/uploadImpairmentForm.html'
 
     def form_valid(self, form):
-        csv_file = form.cleaned_data['file']
-        csv_file.seek(0)
-        data = csv_file.read()
-        charset = chardet.detect(data)
-        responses = []
-        try:
-            csv_reader = csv.DictReader(StringIO(data.decode(charset['encoding'])))
-            for row in csv_reader:
-                subform = InkassoForm(data=row)
-                if subform.is_valid():
-                    response = super(NedskrivningUploadView, self).form_valid(subform)
-                    responses.append(json.loads(response.content))
+        rec_ids = []
+        prisme = Prisme()
+        errors = []
+        for subform in form.subforms:
+            try:
+                rec_ids.append(self.send_impairment(subform, prisme))
+            except PrismeException as e:
+                if e.code == 250:
+                    errors.append({'key': 'nedskrivning.error_250', 'params': e.params})
                 else:
-                    return ErrorJsonResponse.from_error_dict(subform.errors)
-        except csv.Error as e:
-            return ErrorJsonResponse.from_error_id('failed_reading_csv')
-        return JsonResponse(responses, safe=False)
+                    raise e
 
-    def form_invalid(self, form):
-        return ErrorJsonResponse.from_error_dict(form.errors)
+        return TemplateResponse(
+            request=self.request,
+            template="aka/impairmentSuccess.html",
+            context={
+                'rec_ids': rec_ids,
+                'errors': errors
+            },
+            using=self.template_engine
+        )
 
 
 class NetsopkraevningView(View):
@@ -370,6 +377,7 @@ class RenteNotaView(View):
                             data.update(transaction.data)
                             data.update(journaldata)
                             posts.append(data)
+
             except Exception as e:
                 print(e)
 

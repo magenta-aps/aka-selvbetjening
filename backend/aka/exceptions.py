@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 
@@ -15,6 +16,10 @@ class AkaException(Exception):
             return _(self.error_code).format(**self.params)
         except KeyError as e:
             return _(self.error_code)
+
+    @property
+    def as_validationerror(self):
+        return ValidationError(self.message, self.error_code, self.params)
 
 
 class AccessDeniedException(AkaException):

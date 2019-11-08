@@ -3,6 +3,7 @@ import datetime
 import json
 import os
 import logging
+from math import floor
 
 from django.conf import settings
 
@@ -61,6 +62,21 @@ def getSharedJson(fileName):
     file_path = os.path.join(settings.SHARED_DIR, fileName)
     with open(file_path, 'r', encoding="utf8") as jsonfile:
         return json.loads(jsonfile.read())
+
+
+def get_ordereddict_key_index(ordereddict, key):
+    for index, k in enumerate(ordereddict):
+        if k == key:
+            return index
+    raise ValueError
+
+
+def spreadsheet_col_letter(col_index):
+    alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    length = len(alphabet)
+    if col_index >= length:
+        return spreadsheet_col_letter(floor(col_index / 26) - 1) + alphabet[col_index % length]
+    return alphabet[col_index]
 
 
 error_definitions = getSharedJson('errors.json')

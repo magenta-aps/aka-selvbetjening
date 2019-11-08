@@ -1,11 +1,16 @@
+import csv
 import logging
 
+import chardet
 from django import forms
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from django.forms import ValidationError
+from io import StringIO
+from django.utils.translation import gettext_lazy as _
 
-from .utils import getSharedJson
+from .utils import getSharedJson, get_ordereddict_key_index, \
+    spreadsheet_col_letter
 
 logger = logging.getLogger(__name__)
 fordringJson = getSharedJson('fordringsgruppe.json')
@@ -148,20 +153,21 @@ class NedskrivningForm(forms.Form):
 
     debitor = forms.CharField(
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'common.required'}
     )
     ekstern_sagsnummer = forms.CharField(
         required=True,
         max_length=10,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'common.required'}
     )
     beloeb = forms.DecimalField(
         decimal_places=2,
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'common.required'}
     )
     sekvensnummer = forms.CharField(
-        max_length=30
+        max_length=30,
+        error_messages={'required': 'common.required'}
     )
 
 
@@ -171,11 +177,48 @@ class NedskrivningUploadForm(forms.Form):
         required=True,
         validators=[
             FileExtensionValidator(['csv'])
-        ]
+        ],
     )
 
     def clean_file(self):
         file = self.cleaned_data['file']
         if file.size > settings.MAX_UPLOAD_FILESIZE:
             raise ValidationError('file_too_large')
+
+        file.seek(0)
+        data = file.read()
+        charset = chardet.detect(data)
+        rows = []
+        subforms = []
+        try:
+            csv_reader = csv.DictReader(StringIO(data.decode(charset['encoding'])))
+            rows = [row for row in csv_reader]  # Catch csv reading errors early
+        except csv.Error as e:
+            self.add_error(None, "failed_reading_csv")
+        for row_index, row in enumerate(rows, start=1):
+            subform = NedskrivningForm(data=row)
+            if not subform.is_valid():  # Catch row errors early
+                for field, errorlist in subform.errors.items():
+                    try:
+                        col_index = get_ordereddict_key_index(row, field)
+                    except ValueError:
+                        col_index = None
+                    for error in errorlist:
+                        self.add_error(
+                            None,
+                            ValidationError(
+                                _("common.upload.validation_item"),
+                                "common.upload.validation_item",
+                                {
+                                    'field': field,
+                                    'message': error,
+                                    'row': row_index,
+                                    'col': col_index,
+                                    'col_letter': spreadsheet_col_letter(col_index)
+                                }
+                            )
+                        )
+            subforms.append(subform)
+        self.subforms = subforms
+
         return file

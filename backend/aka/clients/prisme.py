@@ -1,4 +1,5 @@
 import os
+import re
 from datetime import date
 
 import zeep
@@ -18,17 +19,26 @@ prisme_settings = settings.PRISME_CONNECT
 class PrismeException(AkaException):
 
     title = "prisme.error"
+    error_250_re = re.compile(r'Der findes ikke en inkassosag med det eksterne ref.nr. (.*)')
 
     def __init__(self, code, text):
-        super(PrismeException, self).__init__(f"prisme_{code}", text=text)
+        super(PrismeException, self).__init__(f"prisme.error_{code}", text=text)
         self.code = int(code)
         self.text = text
+        try:
+            if self.code == 250:
+                match = self.error_250_re.search(text)
+                self.params['refnumber'] = match.group(1)
+        except Exception as e:
+            print(e)
+            pass
 
     @property
     def message(self):
         msg = super(PrismeException, self).message
-        if msg == self.error_code:  # If there is no message for this error
+        if msg == self.error_code:  # If there is no translated message for this error
             return self.text
+        return msg
 
     def __str__(self):
         return f"Error in response from Prisme. Code: {self.code}, Text: {self.text}"
