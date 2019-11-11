@@ -157,7 +157,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
-STATICFILES_DIRS = [os.path.join(PROJECT_DIR, 'frontend', 'dist', 'static')]
+STATICFILES_DIRS = [os.path.join(PROJECT_DIR, 'frontend', 'dist', 'static'), os.path.join(PROJECT_DIR, 'frontend', 'dist')]
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # expire session on browser close
 
