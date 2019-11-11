@@ -172,14 +172,16 @@ textarea:focus {
 }
 form.submitted input:invalid,
 form.submitted select:invalid,
-input:focus:invalid {
+input:focus:invalid,
+.has-error input, .has-error select {
     border:2px solid #d7404d
 }
 input[disabled] {
     background-color:#f5f5f5
 }
 button,
-input[type=submit] {
+input[type=submit],
+a.button {
     color:#fff;
     border:none;
     padding:.75rem 2.25rem;
@@ -187,11 +189,15 @@ input[type=submit] {
     cursor:pointer;
     margin:0 .75rem .75rem 0
 }
-button {
-    background-color:#31495b
+button,
+a.button {
+    background-color:#31495b;
+    text-decoration:none;
 }
 button:active,
-button:hover {
+button:hover,
+a.button:active,
+a.button:hover {
     background-color:#83929d
 }
 table {

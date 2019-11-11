@@ -1,0 +1,94 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-07 12:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "common.error.generic"
+msgstr "Fejl [kl]"
+
+msgid "common.error.access_denied"
+msgstr "Adgang nægtet [kl]"
+
+#: aka/templates/aka/impairmentForm.html:56
+msgid "common.gem"
+msgstr "Gem [kl]"
+
+msgid "common.forside"
+msgstr "Forside [kl]"
+
+msgid "common.repeat"
+msgstr "Gentag [kl]"
+
+msgid "common.upload.validation"
+msgstr "Der er fejl i det uploadede regneark [kl]:"
+
+msgid "common.upload.validation_item"
+msgstr "Celle {col_letter}{row} ({field}): {message} [kl]"
+
+msgid "prisme.error"
+msgstr ""
+
+msgid "prisme.error_250"
+msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber} [kl]"
+
+msgid "prisme.cvrcheck_no_result"
+msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
+
+#: aka/templates/aka/error.html:17 aka/templates/aka/success.html:21
+#, fuzzy
+#| msgid "common.gem"
+
+msgid "nedskrivning.success"
+msgstr "Nedskrivninger uploadet [kl]"
+
+msgid "nedskrivning.result"
+msgstr "Oprettede nedskrivninger [kl]"
+
+msgid "nedskrivning.errors"
+msgstr "Der opstod følgende fejl: [kl]"
+
+msgid "nedskrivning.error_250"
+msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber} [kl]"
+
+#: aka/templates/aka/impairmentForm.html:12
+msgid "nedskrivning.title"
+msgstr "Nedskrivning - Opret [kl]"
+
+msgid "nedskrivning.template"
+msgstr "Download skabelon [kl]"
+
+#: aka/templates/aka/impairmentForm.html:18
+msgid "nedskrivning.debitor"
+msgstr "Debitor [kl]"
+
+#: aka/templates/aka/impairmentForm.html:29
+msgid "nedskrivning.ekstern_sagsnummer"
+msgstr "Ekstern sagsnummer [kl]"
+
+#: aka/templates/aka/impairmentForm.html:39
+msgid "nedskrivning.beloeb"
+msgstr "Beløb [kl]"
+
+#: aka/templates/aka/impairmentForm.html:48
+msgid "nedskrivning.sekvensnummer"
+msgstr "Sekvensnummer [kl]"
+
+msgid "required"
+msgstr "Dette felt er påkrævet. [kl]"
+
+msgid "invalid_extension"
+msgstr "Filendelse '{extension}' er ikke tilladt. Tilladte filendelser er: '{allowed_extensions}' [kl]."

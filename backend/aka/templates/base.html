@@ -1,4 +1,8 @@
 {% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% load aka_tags %}
+
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -6,22 +10,37 @@
         <title>Sullissivik</title>
         <meta name="description" content="">
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="{% url 'javascript-language-catalog' locale='da' %}"></script>
+        <script type="text/javascript" src="{% url 'javascript-language-catalog' locale='kl' %}"></script>
+        <script type="text/javascript" src="{% static 'js/cookies.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/locale.js' %}"></script>
         {% block extra_headers %}{% endblock %}
+        <script type="text/javascript">
+            $(function() {
+                $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+                    if (!options.headers) options.headers = {};
+                    options.headers["X-CSRFToken"] = django.getCookie('csrftoken');
+                });
+            });
+        </script>
     </head>
     <body>
+
+    {% csrf_token %}
         <div class="wrapper">
             <header class="globalheader">
                 <div class="globalheader-wrapper">
                     <h1 class="globalheader-heading">
-                        <a href="#" class="router-link-exact-active router-link-active">
+                        <a href="{% url 'index' %}" class="router-link-exact-active router-link-active">
                             <img src="{% static 'img/sullissivik_logo_gl.svg' %}" alt="Sullissivik" class="globalheader-logo">
                         </a>
                     </h1>
                     <div class="locale-changer">
-                        <span class="option-da"></span>
-                        <select class="dropdown">
-                            <option value="kl">Kalaallisut</option>
-                            <option value="da">Dansk</option>
+                        <span id="locale_flag" class="option-{{LANGUAGE_CODE|split:'-'|first}}"></span>
+                        <select class="dropdown" data-locale-changer="true" data-locale-flag="#locale_flag" autocomplete="off">
+                            <option value="kl" {% if LANGUAGE_CODE|split:'-'|first == 'kl' %}selected="selected"{% endif %}>Kalaallisut</option>
+                            <option value="da" {% if LANGUAGE_CODE|split:'-'|first == 'da' %}selected="selected"{% endif %}>Dansk</option>
                         </select>
                     </div>
                 </div>

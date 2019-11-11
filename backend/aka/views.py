@@ -4,20 +4,83 @@ import logging
 from io import StringIO
 
 import chardet
-from django.http import JsonResponse
+from django.conf import settings
+from django.http import JsonResponse, HttpResponse
+from django.template import Engine, Context
+from django.template.response import TemplateResponse
 from django.utils import timezone
+from django.utils import translation
 from django.utils.decorators import method_decorator
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import TemplateView
-from django.views.generic.edit import BaseFormView
+from django.views.generic.edit import FormView, BaseFormView
+from django.views.i18n import JavaScriptCatalog
 
-from .clients.dafo import Dafo
-from .clients.prisme import Prisme, PrismeClaimRequest, PrismeInterestNoteRequest
-from .forms import InkassoForm, InkassoUploadForm
-from .utils import ErrorJsonResponse, AccessDeniedJsonResponse
+from aka.exceptions import AccessDeniedException
+from aka.clients.dafo import Dafo
+from aka.clients.prisme import Prisme, PrismeClaimRequest, \
+    PrismeInterestNoteRequest, PrismeImpairmentRequest, PrismeNotFoundException
+from aka.forms import InkassoForm, InkassoUploadForm, NedskrivningForm
+from aka.utils import ErrorJsonResponse, AccessDeniedJsonResponse
+
+from aka.mixins import ErrorHandlerMixin
+
+from aka.clients.prisme import PrismeException
+
+from aka.forms import NedskrivningUploadForm
+
+
+class CustomJavaScriptCatalog(JavaScriptCatalog):
+
+    js_catalog_template = r"""
+    {% autoescape off %}
+    (function(globals) {
+    var django = globals.django || (globals.django = {});
+    django.catalog = django.catalog || {};
+    {% if catalog_str %}
+    django.catalog["{{ locale }}"] = {{ catalog_str }};
+    {% endif %}
+    }(this));
+    {% endautoescape %}
+    """
+
+    def get(self, request, locale, *args, **kwargs):
+        domain = kwargs.get('domain', self.domain)
+        self.locale = locale
+        # If packages are not provided, default to all installed packages, as
+        # DjangoTranslation without localedirs harvests them all.
+        packages = kwargs.get('packages', '')
+        packages = packages.split('+') if packages else self.packages
+        paths = self.get_paths(packages) if packages else None
+        self.translation = DjangoTranslation(locale, domain=domain, localedirs=paths)
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        context = {'locale': self.locale}
+        context.update(super(CustomJavaScriptCatalog, self).get_context_data(**kwargs))
+        context['catalog_str'] = json.dumps(context['catalog'], sort_keys=True, indent=2) if context['catalog'] else None
+        context['formats_str'] = json.dumps(context['formats'], sort_keys=True, indent=2)
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        template = Engine().from_string(self.js_catalog_template)
+        return HttpResponse(template.render(Context(context)), 'text/javascript; charset="utf-8"')
+
+
+class SetLanguageView(View):
+    def post(self, request, *args, **kwargs):
+        language = request.POST.get('language', settings.LANGUAGE_CODE)
+        translation.activate(language)
+        request.session[translation.LANGUAGE_SESSION_KEY] = language
+        return JsonResponse("OK", safe=False)
+
 
 logger = logging.getLogger(__name__)
+
 
 class IndexTemplateView(TemplateView):
     template_name = 'index.html'
@@ -147,10 +210,96 @@ class LoenTraekDistributionView(View):
         return JsonResponse(data, safe=False)
 
 
-class NedskrivningView(View):
+class NedskrivningView(ErrorHandlerMixin, FormView):
 
-    def post(self, request, *args, **kwargs):
-        return JsonResponse("OK", safe=False)
+    form_class = NedskrivningForm
+    template_name = 'aka/impairmentForm.html'
+
+    def get_claimant_id(self, request):
+        return "12345678"
+        claimant_id = self.request.session['user_info'].get('claimant_id')
+        if claimant_id is None:
+            prisme = Prisme()
+            try:
+                claimant_id = prisme.check_cvr(self.request.session['user_info'].get('CVR'))
+            except PrismeNotFoundException as e:
+                raise AccessDeniedException(e.error_code, **e.params)
+            self.request.session['user_info']['claimant_id'] = claimant_id
+        return claimant_id
+
+    def get(self, request, *args, **kwargs):
+        ####
+        self.request.session['user_info'] = {'CVR': '12479182'}  # 12479182
+        ####
+        self.get_claimant_id(request)
+        return super(NedskrivningView, self).get(request, *args, **kwargs)
+
+    def send_impairment(self, form, prisme):
+        claim = PrismeImpairmentRequest(
+            claimant_id=self.get_claimant_id(self.request),
+            cpr_cvr=form.cleaned_data.get('debitor'),
+            claim_ref=form.cleaned_data.get('ekstern_sagsnummer'),
+            amount_balance=-abs(form.cleaned_data.get('beloeb', 0)),
+            claim_number_seq=form.cleaned_data.get('sekvensnummer')
+        )
+        return prisme.process_service(claim)[0].rec_id
+
+    def form_valid(self, form):
+        prisme = Prisme()
+
+        ####
+        self.request.session['user_info'] = {'CVR': '12479182'}  # 12479182
+        ####
+
+        if 'user_info' not in self.request.session:
+            raise AccessDeniedException('no_cvr')
+
+        try:
+            rec_id = self.send_impairment(form, prisme)
+            return TemplateResponse(
+                request=self.request,
+                template="aka/impairmentSuccess.html",
+                context={
+                    'rec_ids': [rec_id]
+                },
+                using=self.template_engine
+            )
+        except PrismeException as e:
+            if e.code == 250:
+                # form.add_error('ekstern_sagsnummer', 'nedskrivning.error_250', e.params)
+                v = e.as_validationerror
+                form.add_error('ekstern_sagsnummer', v)
+                return self.form_invalid(form)
+            raise e
+
+
+
+class NedskrivningUploadView(NedskrivningView):
+    form_class = NedskrivningUploadForm
+    template_name = 'aka/uploadImpairmentForm.html'
+
+    def form_valid(self, form):
+        rec_ids = []
+        prisme = Prisme()
+        errors = []
+        for subform in form.subforms:
+            try:
+                rec_ids.append(self.send_impairment(subform, prisme))
+            except PrismeException as e:
+                if e.code == 250:
+                    errors.append({'key': 'nedskrivning.error_250', 'params': e.params})
+                else:
+                    raise e
+
+        return TemplateResponse(
+            request=self.request,
+            template="aka/impairmentSuccess.html",
+            context={
+                'rec_ids': rec_ids,
+                'errors': errors
+            },
+            using=self.template_engine
+        )
 
 
 class NetsopkraevningView(View):
@@ -228,6 +377,7 @@ class RenteNotaView(View):
                             data.update(transaction.data)
                             data.update(journaldata)
                             posts.append(data)
+
             except Exception as e:
                 print(e)
 

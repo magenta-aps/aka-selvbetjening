@@ -42,6 +42,14 @@
     "failed_reading_csv": {
         "da": "Kunne ikke indlæse csv-filen. Forsøg at gemme filen som UTF-16LE eller UTF-8",
         "kl": "Oversættelse mangler"
+    },
+    "no_cvr": {
+        "da": "CVR-nummer ikke modtaget",
+        "kl": "Oversættelse mangler"
+    },
+    "cvrcheck_no_result": {
+        "da": "CVR-nummeret {cvr} blev ikke fundet i systemet",
+        "kl": "Oversættelse mangler"
     }
 
 }
