@@ -265,7 +265,7 @@ export default {
       return null;
     },
     stringRep: function (dict) {
-      return '' + dict['value'] + ' (' + dict['id'] + ')';
+      return '' + dict['name'] + ' (' + (dict['id'] || dict['type_id']) + ')';
     },
     getCSRFToken: function () {
       this.csrftoken = document.cookie.replace(
@@ -285,13 +285,24 @@ export default {
       let formdata = new FormData();
       this.form_fields.forEach(string => {
         if (this[string] !== null) {
-          if (string === 'fordringsgruppe' || string === 'fordringstype') {
-            formdata.append(string, this[string + '_id']);
-          } else {
+          if (string !== 'fordringsgruppe' && string !== 'fordringstype') {
             formdata.append(string, this[string]);
           }
         }
       });
+      console.log(groups);
+      console.log(this.form_fields);
+      let group_id = this['fordringsgruppe'];
+      let type_id = this['fordringstype'];
+      console.log("group_id",group_id);
+      console.log("type_id",type_id);
+      let type = groups[group_id]['sub_groups'][type_id];
+      console.log("type",type);
+
+
+        formdata.append('fordringsgruppe_id', group_id);
+        formdata.append('fordringsgruppe', type['group_id']);
+        formdata.append('fordringstype', type['type_id']);
 
       this.filer.forEach(function (fil, i) {
         let idx = i + 1;
