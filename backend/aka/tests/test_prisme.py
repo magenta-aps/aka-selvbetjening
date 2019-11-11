@@ -1,6 +1,6 @@
 from datetime import date
 
-from aka.clients.prisme import PrismeClaimRequest, PrismeClaimResponse
+from aka.clients.prisme import PrismeClaimRequest, PrismeClaimResponse, Prisme
 from aka.clients.prisme import PrismeCvrCheckRequest, PrismeCvrCheckResponse
 from aka.clients.prisme import PrismeImpairmentRequest, PrismeImpairmentResponse
 from aka.clients.prisme import PrismeInterestNoteRequest, PrismeInterestNoteResponse

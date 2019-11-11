@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 import logging.config
+from django.utils.translation import gettext_lazy as _
 
 logging.config.dictConfig({
     'version': 1,
@@ -112,6 +113,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'openid.middleware.openid.LoggedIn',
@@ -142,14 +144,15 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 LANGUAGE_CODE = 'da-dk'
-
 TIME_ZONE = 'America/Godthab'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
+LOCALE_PATHS = [ os.path.join(BASE_DIR, 'i18n') ]
+LANGUAGES = [
+    ('da', _('Danish')),
+    ('kl', _('Greenlandic')),
+]
 
 
 # Static files (CSS, JavaScript, Images)

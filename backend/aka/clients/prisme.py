@@ -1,26 +1,51 @@
 import os
+import re
 from datetime import date
 
 import zeep
+from aka.exceptions import AkaException
+from aka.utils import get_file_contents_base64
 from dict2xml import dict2xml as dict_to_xml
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 from requests import Session
 from requests_ntlm import HttpNtlmAuth
 from xmltodict import parse as xml_to_dict
 from zeep.transports import Transport
 
-from aka.utils import get_file_contents_base64
-
 prisme_settings = settings.PRISME_CONNECT
 
 
-class PrismeException(Exception):
+class PrismeException(AkaException):
+
+    title = "prisme.error"
+    error_250_re = re.compile(r'Der findes ikke en inkassosag med det eksterne ref.nr. (.*)')
+
     def __init__(self, code, text):
-        self.code = code
+        super(PrismeException, self).__init__(f"prisme.error_{code}", text=text)
+        self.code = int(code)
         self.text = text
+        try:
+            if self.code == 250:
+                match = self.error_250_re.search(text)
+                self.params['refnumber'] = match.group(1)
+        except Exception as e:
+            print(e)
+            pass
+
+    @property
+    def message(self):
+        msg = super(PrismeException, self).message
+        if msg == self.error_code:  # If there is no translated message for this error
+            return self.text
+        return msg
 
     def __str__(self):
         return f"Error in response from Prisme. Code: {self.code}, Text: {self.text}"
+
+
+class PrismeNotFoundException(AkaException):
+    pass
 
 
 class PrismeRequestObject(object):
@@ -129,7 +154,7 @@ class PrismeImpairmentRequest(PrismeRequestObject):
 
     @property
     def method(self):
-        return 'createClaim'
+        return 'createImpairment'
 
     @property
     def xml(self):
@@ -189,31 +214,42 @@ class PrismeInterestNoteRequest(PrismeRequestObject):
         return PrismeInterestNoteResponse
 
 
-class PrismeClaimResponse(object):
-    def __init__(self, xml):
+class PrismeResponseObject(object):
+    def __init__(self, request, xml):
+        self.request = request
+        self.xml = xml
+
+
+class PrismeClaimResponse(PrismeResponseObject):
+    def __init__(self, request, xml):
+        super(PrismeClaimResponse, self).__init__(request, xml)
         d = xml_to_dict(xml)
         self.rec_id = d['CustCollClaimTableFuj']['RecId']
 
-    @staticmethod
-    def test(rec_id):
-        return PrismeClaimResponse(f"<CustCollClaimTableFuj><RecId>{rec_id}</RecId></CustCollClaimTableFuj>")
+    @classmethod
+    def test(cls, rec_id):
+        return cls(f"<CustCollClaimTableFuj><RecId>{rec_id}</RecId></CustCollClaimTableFuj>")
 
 
 class PrismeImpairmentResponse(PrismeClaimResponse):
-    # To be filled out as that interface becomes relevant
-    pass
+    pass  # Works just like the superclass
 
 
-class PrismeCvrCheckResponse(object):
+
+class PrismeCvrCheckResponse(PrismeResponseObject):
     #instead of this could we just have one class and use self._id and figure out the type of xml from the xml content?
-    def __init__(self, xml):
+    def __init__(self, request, xml):
+        super(PrismeCvrCheckResponse, self).__init__(request, xml)
         d = xml_to_dict(xml)
+        if d.get('FujClaimant') is None or d['FujClaimant'].get('ClaimantId') is None:
+            raise PrismeNotFoundException('prisme.cvrcheck_no_result', cvr=request.cvr)
         self.claimant_id = list(d['FujClaimant']['ClaimantId'])
 
 
-class PrismeInterestNoteResponse(object):
+class PrismeInterestNoteResponse(PrismeResponseObject):
 
-    def __init__(self, xml):
+    def __init__(self, request, xml):
+        super(PrismeInterestNoteResponse, self).__init__(request, xml)
         data = xml_to_dict(xml)
         journals = data['CustTable']['CustInterestJour']
         if type(journals) != list:
@@ -329,6 +365,7 @@ class Prisme(object):
             requestHeader=self.create_request_header(request_object.method),
             xmlCollection=self.create_request_body(request_object.xml)
         )
+        print("Sending:\n%s" % request_object.xml)
         # reply is of type GWSReplyDCFUJ
         reply = self.client.service.processService(request)
 
@@ -340,7 +377,11 @@ class Prisme(object):
         # reply_item is of type GWSReplyInstanceDCFUJ
         for reply_item in reply.instanceCollection.GWSReplyInstanceDCFUJ:
             if reply_item.replyCode == 0:
-                outputs.append(request_object.reply_class(reply_item.xml))
+                outputs.append(request_object.reply_class(request_object, reply_item.xml))
             else:
                 raise PrismeException(reply_item.replyCode, reply_item.replyText)
         return outputs
+
+    def check_cvr(self, cvr):
+        response = self.process_service(PrismeCvrCheckRequest(cvr))
+        return response[0].claimant_id
