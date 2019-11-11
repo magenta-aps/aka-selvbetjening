@@ -22,12 +22,13 @@ class BasicTestCase(SimpleTestCase):
 
     def test_validRequest1(self):
         # Contains just the required fields
-        self.mock.return_value = [PrismeClaimResponse(f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")]
+        self.mock.return_value = [PrismeClaimResponse(None, f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")]
         formData = {
             'fordringshaver': 'test-fordringshaver',
             'debitor': 'test-debitor',
             'fordringsgruppe': '1',
             'fordringstype': '1',
+            'fordringsgruppe_id': '3',
             'periodestart': date(2019, 3, 28),
             'periodeslut': date(2019, 3, 28),
             'forfaldsdato': date(2019, 3, 28),
@@ -38,16 +39,17 @@ class BasicTestCase(SimpleTestCase):
         }
         response = self.client.post(self.url, formData)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content), {'rec_id': 1234})
+        self.assertEqual(json.loads(response.content), {'rec_id': '1234'})
 
     def test_validRequest2(self):
         # Contains all required fields, and some more
-        self.mock.return_value = [PrismeClaimResponse(f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")]
+        self.mock.return_value = [PrismeClaimResponse(None, f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")]
         formData = {
             'fordringshaver': 'test-fordringshaver',
             'debitor': 'test-debitor',
             'fordringsgruppe': '1',
             'fordringstype': '1',
+            'fordringsgruppe_id': '3',
             'fordringshaver2': 'test-fordringshaver2',
             'periodestart': date(2019, 3, 27),
             'periodeslut': date(2019, 3, 28),
@@ -59,7 +61,7 @@ class BasicTestCase(SimpleTestCase):
         }
         response = self.client.post(self.url, formData)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content), {'rec_id': 1234})
+        self.assertEqual(json.loads(response.content), {'rec_id': '1234'})
 
     def test_invalidRequest1(self):
         # Does not contain all required fields
@@ -68,6 +70,7 @@ class BasicTestCase(SimpleTestCase):
             'debitor': 'test-debitor',
             'fordringsgruppe': '1',
             'fordringstype': '1',
+            'fordringsgruppe_id': '3',
             'periodestart': date(2019, 3, 27),
             'periodeslut': date(2019, 3, 28)
         }
@@ -88,6 +91,7 @@ class BasicTestCase(SimpleTestCase):
             'fordringshaver2': 'test-fordringshaver2',
             'fordringsgruppe': '1',
             'fordringstype': '1',
+            'fordringsgruppe_id': '3',
             'periodestart': date(2019, 3, 27),
             'periodeslut': date(2019, 3, 28)
         }
@@ -108,8 +112,9 @@ class BasicTestCase(SimpleTestCase):
             'fordringshaver2': 'test-fordringshaver2',
             'fordringshaver': 'test-fordringshaver',
             'debitor': 'test-debitor',
-            'fordringsgruppe': '76',
-            'fordringstype': '1',
+            'fordringsgruppe': '100',
+            'fordringstype': '100',
+            'fordringsgruppe_id': '13',
             'periodestart': date(2019, 3, 27),
             'periodeslut': date(2019, 3, 28)
         }
@@ -130,7 +135,7 @@ class BasicTestCase(SimpleTestCase):
 
     def test_validUploadRequest2(self):
         # Contains all required fields, and some more
-        self.mock.return_value = [PrismeClaimResponse(f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")]
+        self.mock.return_value = [PrismeClaimResponse(None, f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")]
         fp = open('aka/tests/resources/inkasso.csv', "rb")
         uploadfile = SimpleUploadedFile(
             'test.csv',
@@ -143,4 +148,4 @@ class BasicTestCase(SimpleTestCase):
         }
         response = self.client.post('/inkassosag/upload', formData)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content), [{'rec_id': 1234}, {'rec_id': 1234}])
+        self.assertEqual(json.loads(response.content), [{'rec_id': '1234'}, {'rec_id': '1234'}])
