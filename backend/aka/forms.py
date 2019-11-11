@@ -96,7 +96,7 @@ class InkassoForm(forms.Form):
             group_id = self.fields['fordringsgruppe_id'].widget.value_from_datadict(
                 self.data,
                 self.files,
-                self.add_prefix('fordringsgruppe')
+                self.add_prefix('fordringsgruppe_id')
             )
             if group_id is not None:
                 # Find out which subgroup exists for this id
@@ -107,11 +107,11 @@ class InkassoForm(forms.Form):
                 ][0]
                 # Set type choices based on this subgroup
                 self.fields['fordringsgruppe'].choices = [
-                    (item['id'], item['group_id'])
+                    (item['group_id'], item['group_id'])
                     for item in subgroup
                 ]
                 self.fields['fordringstype'].choices = [
-                    (item['id'], item['type_id'])
+                    (item['type_id'], item['type_id'])
                     for item in subgroup
                 ]
         except IndexError:
