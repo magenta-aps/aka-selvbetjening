@@ -4,33 +4,35 @@ import logging
 from io import StringIO
 
 import chardet
+from aka.clients.dafo import Dafo
+from aka.clients.prisme import Prisme,PrismeException, PrismeNotFoundException
+from aka.clients.prisme import PrismeClaimRequest
+from aka.clients.prisme import PrismeInterestNoteRequest
+from aka.clients.prisme import PrismeImpairmentRequest
+from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
+from aka.exceptions import AccessDeniedException
+from aka.forms import InkassoForm, InkassoUploadForm, NedskrivningForm
+from aka.forms import LoentraekForm
+from aka.forms import LoentraekFormItem
+from aka.forms import NedskrivningUploadForm
+from aka.mixins import ErrorHandlerMixin
+from aka.utils import ErrorJsonResponse, AccessDeniedJsonResponse
 from django.conf import settings
+from django.forms import formset_factory
 from django.http import JsonResponse, HttpResponse
 from django.template import Engine, Context
 from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils import translation
+from django.utils.datetime_safe import date
 from django.utils.decorators import method_decorator
-from django.utils.translation import gettext_lazy as _
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView, BaseFormView
 from django.views.i18n import JavaScriptCatalog
-
-from aka.exceptions import AccessDeniedException
-from aka.clients.dafo import Dafo
-from aka.clients.prisme import Prisme, PrismeClaimRequest, \
-    PrismeInterestNoteRequest, PrismeImpairmentRequest, PrismeNotFoundException
-from aka.forms import InkassoForm, InkassoUploadForm, NedskrivningForm
-from aka.utils import ErrorJsonResponse, AccessDeniedJsonResponse
-
-from aka.mixins import ErrorHandlerMixin
-
-from aka.clients.prisme import PrismeException
-
-from aka.forms import NedskrivningUploadForm
+from extra_views import FormSetView
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -190,13 +192,65 @@ class InkassoSagUploadView(InkassoSagView):
         return ErrorJsonResponse.from_error_dict(form.errors)
 
 
-class LoenTraekView(View):
+class LoenTraekView(FormSetView, FormView):
 
-    def get(self, *args, **kwargs):
-        return self.http_method_not_allowed(*args, **kwargs)
+    form_class = LoentraekForm
+    template_name = 'aka/payrollForm.html'
+
+    def get_formset(self):
+        return formset_factory(LoentraekFormItem, **self.get_factory_kwargs())
+
 
     def post(self, request, *args, **kwargs):
-        return JsonResponse("OK", safe=False)
+        form = self.get_form()
+        formset = self.construct_formset()
+        if form.is_valid() and formset.is_valid():
+            return self.form_valid(form, formset)
+        else:
+            return self.form_invalid(form, formset)
+
+    def form_valid(self, form, formset):
+        prisme = Prisme()
+
+        ####
+        self.request.session['user_info'] = {'CVR': '12479182'}  # 12479182
+        ####
+
+        if 'user_info' not in self.request.session:
+            raise AccessDeniedException('no_cvr')
+
+        try:
+            payroll = PrismePayrollRequest(
+                cvr=self.request.session['user_info']['CVR'],
+                date=form.cleaned_data['date'],
+                received_date=date.today(),
+                amount=form.cleaned_data['total_amount'],
+                lines=[
+                    PrismePayrollRequestLine(
+                        subform.cleaned_data.get('cpr_cvr'),
+                        subform.cleaned_data.get('agreement_number'),
+                        subform.cleaned_data.get('amount'),
+                        subform.cleaned_data.get('net_salary')
+                    ) for subform in formset
+                ]
+            )
+            rec_id = prisme.process_service(payroll)[0].rec_id
+            return TemplateResponse(
+                request=self.request,
+                template="aka/payrollSuccess.html",
+                context={
+                    'rec_ids': [rec_id]
+                },
+                using=self.template_engine
+            )
+        except PrismeException as e:
+            print(e.code)
+            raise e
+
+    def form_invalid(self, form, formset):
+        return self.render_to_response(
+            self.get_context_data(form=form, formset=formset)
+        )
 
 
 class LoenTraekDistributionView(View):
@@ -216,14 +270,14 @@ class NedskrivningView(ErrorHandlerMixin, FormView):
     template_name = 'aka/impairmentForm.html'
 
     def get_claimant_id(self, request):
-        claimant_id = self.request.session['user_info'].get('claimant_id')
+        claimant_id = request.session['user_info'].get('claimant_id')
         if claimant_id is None:
             prisme = Prisme()
             try:
-                claimant_id = prisme.check_cvr(self.request.session['user_info'].get('CVR'))
+                claimant_id = prisme.check_cvr(request.session['user_info'].get('CVR'))
             except PrismeNotFoundException as e:
                 raise AccessDeniedException(e.error_code, **e.params)
-            self.request.session['user_info']['claimant_id'] = claimant_id
+            request.session['user_info']['claimant_id'] = claimant_id
         return claimant_id
 
     def get(self, request, *args, **kwargs):

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block extra_headers %}
+{% endblock %}
+
+{% block content %}
+    <article class="indberet_loentraek">
+        <form method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <h1 data-trans="loentraek.title">{% trans 'loentraek.title' %}</h1>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-4">
+                        {% include 'aka/field.html' with field=form.date key='loentraek.date' %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        {% include 'aka/field.html' with field=form.total_amount key='loentraek.total_amount' %}
+                    </div>
+                </div>
+
+                {% for subform in formset %}
+                    <div class="row">
+                        <div class="col-3" data-trans="loentraek.cpr_cvr">{% trans 'loentraek.cpr_cvr' %}</div>
+                        <div class="col-3" data-trans="loentraek.agreement_number">{% trans 'loentraek.agreement_number' %}</div>
+                        <div class="col-3" data-trans="loentraek.amount">{% trans 'loentraek.amount' %}</div>
+                        <div class="col-3" data-trans="loentraek.net_salary">{% trans 'loentraek.net_salary' %}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            {% include 'aka/field.html' with field=subform.cpr_cvr %}
+                        </div>
+                        <div class="col-3">
+                            {% include 'aka/field.html' with field=subform.agreement_number %}
+                        </div>
+                        <div class="col-3">
+                            {% include 'aka/field.html' with field=subform.amount %}
+                        </div>
+                        <div class="col-3">
+                            {% include 'aka/field.html' with field=subform.net_salary %}
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <div class="row">
+                    <div class="col-2">
+                        <input type="submit" value="{% trans 'common.gem' %}" @click="isSubmitted = true">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </article>
+{% endblock %}

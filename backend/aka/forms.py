@@ -5,7 +5,7 @@ import chardet
 from django import forms
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
-from django.forms import ValidationError
+from django.forms import ValidationError, formset_factory
 from io import StringIO
 from django.utils.translation import gettext_lazy as _
 
@@ -153,9 +153,46 @@ class InkassoUploadForm(forms.Form):
 
 class LoentraekForm(forms.Form):
 
-    cvrnummer = forms.IntegerField(max_value=99999999)
-    traekmaaned = forms.IntegerField(min_value=1, max_value=12)
-    traekaar = forms.IntegerField(min_value=1900, max_value=2200)
+    date = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        input_formats=['%Y-%m-%d'],
+        required=True,
+        error_messages={'required': 'common.required'}
+    )
+
+    total_amount = forms.DecimalField(
+        decimal_places=2,
+        required=True,
+        error_messages={'required': 'common.required'}
+    )
+
+
+class LoentraekFormItem(forms.Form):
+
+    cpr_cvr = forms.CharField(
+        required=True,
+        error_messages={'required': 'required_field'}
+    )
+
+    agreement_number = forms.CharField(
+        required=True,
+        error_messages={'required': 'required_field'}
+    )
+
+    amount = forms.DecimalField(
+        decimal_places=2,
+        required=True,
+        error_messages={'required': 'common.required'}
+    )
+
+    net_salary = forms.DecimalField(
+        decimal_places=2,
+        required=True,
+        error_messages={'required': 'common.required'}
+    )
+
+
+LoentraekItemFormItem = formset_factory(LoentraekFormItem)
 
 
 class NedskrivningForm(forms.Form):

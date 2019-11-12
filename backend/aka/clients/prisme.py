@@ -225,10 +225,10 @@ class PrismePayrollRequest(PrismeRequestObject):
 
     wrap = 'custPayRollFromEmployerHeader'
 
-    def __init__(self, cvr, date, recieved_date, amount, lines):
+    def __init__(self, cvr, date, received_date, amount, lines):
         self.cvr = cvr
         self.date = date
-        self.received_date = recieved_date
+        self.received_date = received_date
         self.amount = amount
         if type(lines) != list:
             lines = [lines]
