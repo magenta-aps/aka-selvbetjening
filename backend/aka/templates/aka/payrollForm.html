@@ -3,6 +3,7 @@
 {% load i18n %}
 
 {% block extra_headers %}
+    <script type="text/javascript" src="{% static 'js/payroll.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -23,28 +24,21 @@
                     </div>
                 </div>
 
-                {% for subform in formset %}
-                    <div class="row">
-                        <div class="col-3" data-trans="loentraek.cpr_cvr">{% trans 'loentraek.cpr_cvr' %}</div>
-                        <div class="col-3" data-trans="loentraek.agreement_number">{% trans 'loentraek.agreement_number' %}</div>
-                        <div class="col-3" data-trans="loentraek.amount">{% trans 'loentraek.amount' %}</div>
-                        <div class="col-3" data-trans="loentraek.net_salary">{% trans 'loentraek.net_salary' %}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-3">
-                            {% include 'aka/field.html' with field=subform.cpr_cvr %}
-                        </div>
-                        <div class="col-3">
-                            {% include 'aka/field.html' with field=subform.agreement_number %}
-                        </div>
-                        <div class="col-3">
-                            {% include 'aka/field.html' with field=subform.amount %}
-                        </div>
-                        <div class="col-3">
-                            {% include 'aka/field.html' with field=subform.net_salary %}
-                        </div>
-                    </div>
-                {% endfor %}
+                <div class="row">
+                    <div class="col-3" data-trans="loentraek.cpr_cvr">{% trans 'loentraek.cpr_cvr' %}</div>
+                    <div class="col-3" data-trans="loentraek.agreement_number">{% trans 'loentraek.agreement_number' %}</div>
+                    <div class="col-3" data-trans="loentraek.amount">{% trans 'loentraek.amount' %}</div>
+                    <div class="col-3" data-trans="loentraek.net_salary">{% trans 'loentraek.net_salary' %}</div>
+                </div>
+                <div id="formsetContainer">
+                    {% for subform in formset %}
+                        {% include 'aka/payrollSubForm.html' with subform=subform %}
+                    {% endfor %}
+                </div>
+                <div id="formsetPrototype" style="display: none">
+                    {% include 'aka/payrollSubForm.html' with subform=formset.empty_form %}
+                </div>
+                <button type="button" id="add-row" class="button">+</button>
 
                 <div class="row">
                     <div class="col-2">
