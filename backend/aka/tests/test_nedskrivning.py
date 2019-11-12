@@ -1,13 +1,15 @@
 import json
 import logging
 
-from aka.clients.prisme import PrismeImpairmentResponse
-from aka.tests.mixins import SoapTestMixin
+from aka.clients.prisme import PrismeImpairmentRequest, PrismeImpairmentResponse
+from aka.tests.mixins import TestMixin
 from django.test import SimpleTestCase
 from lxml import etree
+from xmltodict import parse as xml_to_dict
 
 
-class BasicTestCase(SoapTestMixin, SimpleTestCase):
+class BasicTestCase(TestMixin, SimpleTestCase):
+
     def setUp(self):
         logging.disable(logging.CRITICAL)
         self.url = '/nedskrivning'
@@ -17,6 +19,24 @@ class BasicTestCase(SoapTestMixin, SimpleTestCase):
         ]
         self.cvrcheck_mock = self.mock_soap('aka.clients.prisme.Prisme.check_cvr')
         self.cvrcheck_mock.return_value = '12345678'  # claimant_id
+
+
+    ### PRISME INTERFACE TESTS ###
+
+    def test_impairment_request_parse(self):
+        request = PrismeImpairmentRequest('32SE', '12345678', 'ref123', -100.5, 'AKI-000047')
+        self.compare(
+            xml_to_dict(self.get_file_contents('aka/tests/resources/impairment_request.xml')),
+            xml_to_dict(request.xml),
+            ""
+        )
+
+    def test_impairment_response_parse(self):
+        response = PrismeImpairmentResponse(None, self.get_file_contents('aka/tests/resources/impairment_response.xml'))
+        self.assertEqual("5637238342", response.rec_id)
+
+
+    ### POSITIVE TESTS ###
 
     def test_validRequest1(self):
         # Contains just the required fields
@@ -30,6 +50,7 @@ class BasicTestCase(SoapTestMixin, SimpleTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content), {'rec_id': 1234})
 
+    ### NEGATIVE TESTS ###
 
     def test_invalidRequest1(self):
         # Contains just the required fields
