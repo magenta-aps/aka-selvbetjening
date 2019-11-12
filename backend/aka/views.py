@@ -234,14 +234,14 @@ class NedskrivningView(ErrorHandlerMixin, FormView):
         return super(NedskrivningView, self).get(request, *args, **kwargs)
 
     def send_impairment(self, form, prisme):
-        claim = PrismeImpairmentRequest(
+        impairment = PrismeImpairmentRequest(
             claimant_id=self.get_claimant_id(self.request),
             cpr_cvr=form.cleaned_data.get('debitor'),
             claim_ref=form.cleaned_data.get('ekstern_sagsnummer'),
             amount_balance=-abs(form.cleaned_data.get('beloeb', 0)),
             claim_number_seq=form.cleaned_data.get('sekvensnummer')
         )
-        return prisme.process_service(claim)[0].rec_id
+        return prisme.process_service(impairment)[0].rec_id
 
     def form_valid(self, form):
         prisme = Prisme()
