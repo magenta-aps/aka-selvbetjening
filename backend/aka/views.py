@@ -216,7 +216,6 @@ class NedskrivningView(ErrorHandlerMixin, FormView):
     template_name = 'aka/impairmentForm.html'
 
     def get_claimant_id(self, request):
-        return "12345678"
         claimant_id = self.request.session['user_info'].get('claimant_id')
         if claimant_id is None:
             prisme = Prisme()
@@ -266,9 +265,7 @@ class NedskrivningView(ErrorHandlerMixin, FormView):
             )
         except PrismeException as e:
             if e.code == 250:
-                # form.add_error('ekstern_sagsnummer', 'nedskrivning.error_250', e.params)
-                v = e.as_validationerror
-                form.add_error('ekstern_sagsnummer', v)
+                form.add_error('ekstern_sagsnummer', e.as_validationerror)
                 return self.form_invalid(form)
             raise e
 
@@ -358,28 +355,24 @@ class RenteNotaView(View):
 
             posts = []
             # Response is of type PrismeInterestNoteResponse
-            try:
-                interest_note_data = prisme.process_service(
-                    PrismeInterestNoteRequest(cvr, year, month)
-                )
-                for interest_note_response in interest_note_data:
-                    for journal in interest_note_response.interest_journal:
-                        journaldata = {
-                            k: v
-                            for k, v in journal.data.items()
-                            if k in [
-                                'Updated', 'AccountNum', 'InterestNote',
-                                'ToDate', 'BillingClassification'
-                            ]
-                        }
-                        for transaction in journal.interest_transactions:
-                            data = {}
-                            data.update(transaction.data)
-                            data.update(journaldata)
-                            posts.append(data)
-
-            except Exception as e:
-                print(e)
+            interest_note_data = prisme.process_service(
+                PrismeInterestNoteRequest(cvr, year, month)
+            )
+            for interest_note_response in interest_note_data:
+                for journal in interest_note_response.interest_journal:
+                    journaldata = {
+                        k: v
+                        for k, v in journal.data.items()
+                        if k in [
+                            'Updated', 'AccountNum', 'InterestNote',
+                            'ToDate', 'BillingClassification'
+                        ]
+                    }
+                    for transaction in journal.interest_transactions:
+                        data = {}
+                        data.update(transaction.data)
+                        data.update(journaldata)
+                        posts.append(data)
 
             land_map = {
                 'GL': 'Grønland',

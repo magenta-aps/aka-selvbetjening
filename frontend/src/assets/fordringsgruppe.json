@@ -1,627 +1,1092 @@
 [
-    {
-        "value": "10/40/50",
-        "id": "4",
-        "sub_groups": [
-            {"value": "10/40/50", "id": "1"}
-        ]
-    },
-    {
-        "value": "ANB_BØRN",
-        "id": "38",
-        "sub_groups": [
-            {"value": "FORÆLDREBE", "id": "1"}
-        ]
-    },
-    {
-        "value": "ANDBOLIG",
-        "id": "5",
-        "sub_groups": [
-            {"value": "ANDBOLIG", "id": "1"}
-        ]
-    },
-    {
-        "value": "ARB_SKAFOR",
-        "id": "36",
-        "sub_groups": [
-            {"value": "ARB_SKAFOR", "id": "1"}
-        ]
-    },
-    {
-        "value": "ASKAT",
-        "id": "12",
-        "sub_groups": [
-            {"value": "ASKAT1987", "id": "1"},
-            {"value": "ASKAT1988", "id": "2"},
-            {"value": "ASKAT1989", "id": "3"},
-            {"value": "ASKAT1990", "id": "4"},
-            {"value": "ASKAT1991", "id": "5"},
-            {"value": "ASKAT1992", "id": "6"},
-            {"value": "ASKAT1993", "id": "7"},
-            {"value": "ASKAT1994", "id": "8"},
-            {"value": "ASKAT1995", "id": "9"},
-            {"value": "ASKAT1996", "id": "10"},
-            {"value": "ASKAT1997", "id": "11"},
-            {"value": "ASKAT1998", "id": "12"},
-            {"value": "ASKAT1999", "id": "13"},
-            {"value": "ASKAT2000", "id": "14"},
-            {"value": "ASKAT2001", "id": "15"},
-            {"value": "ASKAT2002", "id": "16"},
-            {"value": "ASKAT2003", "id": "17"},
-            {"value": "ASKAT2004", "id": "18"},
-            {"value": "ASKAT2005", "id": "19"},
-            {"value": "ASKAT2006", "id": "20"},
-            {"value": "ASKAT2007", "id": "21"},
-            {"value": "ASKAT2008", "id": "22"},
-            {"value": "ASKAT2009", "id": "23"},
-            {"value": "ASKAT2010", "id": "24"},
-            {"value": "ASKAT2011", "id": "25"},
-            {"value": "ASKAT2012", "id": "26"},
-            {"value": "ASKAT2013", "id": "27"},
-            {"value": "ASKAT2014", "id": "28"},
-            {"value": "ASKAT2015", "id": "29"},
-            {"value": "ASKAT2016", "id": "30"},
-            {"value": "ASKAT2017", "id": "31"},
-            {"value": "ASKAT2018", "id": "32"}
-        ]
-    },
-    {
-        "value": "BSKAT",
-        "id": "13",
-        "sub_groups": [
-            {"value": "BSKAT1987", "id": "1"},
-            {"value": "BSKAT1988", "id": "2"},
-            {"value": "BSKAT1989", "id": "3"},
-            {"value": "BSKAT1990", "id": "4"},
-            {"value": "BSKAT1991", "id": "5"},
-            {"value": "BSKAT1992", "id": "6"},
-            {"value": "BSKAT1993", "id": "7"},
-            {"value": "BSKAT1994", "id": "8"},
-            {"value": "BSKAT1995", "id": "9"},
-            {"value": "BSKAT1996", "id": "10"},
-            {"value": "BSKAT1997", "id": "11"},
-            {"value": "BSKAT1998", "id": "12"},
-            {"value": "BSKAT1999", "id": "13"},
-            {"value": "BSKAT2000", "id": "14"},
-            {"value": "BSKAT2001", "id": "15"},
-            {"value": "BSKAT2002", "id": "16"},
-            {"value": "BSKAT2003", "id": "17"},
-            {"value": "BSKAT2004", "id": "18"},
-            {"value": "BSKAT2005", "id": "19"},
-            {"value": "BSKAT2006", "id": "20"},
-            {"value": "BSKAT2007", "id": "21"},
-            {"value": "BSKAT2008", "id": "22"},
-            {"value": "BSKAT2009", "id": "23"},
-            {"value": "BSKAT2010", "id": "24"},
-            {"value": "BSKAT2011", "id": "25"},
-            {"value": "BSKAT2012", "id": "26"},
-            {"value": "BSKAT2013", "id": "27"},
-            {"value": "BSKAT2014", "id": "28"},
-            {"value": "BSKAT2015", "id": "29"},
-            {"value": "BSKAT2016", "id": "30"},
-            {"value": "BSKAT2017", "id": "31"},
-            {"value": "BSKAT2018", "id": "32"}
-        ]
-    },
-    {
-        "value": "BSU",
-        "id": "2",
-        "sub_groups": [
-            {"value": "BSU", "id": "1"},
-            {"value": "BSUFORS", "id": "2"}
-        ]
-    },
-    {
-        "value": "BØRNEOPSPA",
-        "id": "20",
-        "sub_groups": [
-            {"value": "BØRNEOPSPA", "id": "1"}
-        ]
-    },
-    {
-        "value": "DAGINST",
-        "id": "26",
-        "sub_groups": [
-            {"value": "DAGINST", "id": "1"}
-        ]
-    },
-    {
-        "value": "DCR",
-        "id": "47",
-        "sub_groups": [
-            {"value": "DCR", "id": "1"}
-        ]
-    },
-    {
-        "value": "DIVERSE",
-        "id": "52",
-        "sub_groups": [
-            {"value": "DKDEB MEL", "id": "1"},
-            {"value": "FISKGEBYR", "id": "3"},
-            {"value": "GRLHJS", "id": "2"}
-        ]
-    },
-    {
-        "value": "DIV_KOM",
-        "id": "43",
-        "sub_groups": [
-            {"value": "AND_FORD", "id": "1"}
-        ]
-    },
-    {
-        "value": "ELVA_NUKI",
-        "id": "9",
-        "sub_groups": [
-            {"value": "ELVA_NUKI", "id": "1"}
-        ]
-    },
-    {
-        "value": "EL_VA_KOM",
-        "id": "10",
-        "sub_groups": [
-            {"value": "ELVA_KOM", "id": "1"}
-        ]
-    },
-    {
-        "value": "ERH_LEJE",
-        "id": "32",
-        "sub_groups": [
-            {"value": "ERH_EL_VA", "id": "4"},
-            {"value": "ERH_INDSK", "id": "3"},
-            {"value": "ERH_LEJE", "id": "1"},
-            {"value": "ERH_VARME", "id": "2"}
-        ]
-    },
-    {
-        "value": "ERSTAT",
-        "id": "42",
-        "sub_groups": [
-            {"value": "ERSTAT", "id": "1"}
-        ]
-    },
-    {
-        "value": "ESU",
-        "id": "1",
-        "sub_groups": [
-            {"value": "DIVINC", "id": "3"},
-            {"value": "ESU", "id": "1"},
-            {"value": "ESUFORS", "id": "2"}
-        ]
-    },
-    {
-        "value": "FAN_REJLÅN",
-        "id": "31",
-        "sub_groups": [
-            {"value": "FAN_REJLÅN", "id": "1"}
-        ]
-    },
-    {
-        "value": "FM_UDB_KOM",
-        "id": "40",
-        "sub_groups": [
-            {"value": "BOGHOLDER", "id": "4"},
-            {"value": "KULTUR_UDV", "id": "3"},
-            {"value": "LØN", "id": "5"},
-            {"value": "SOCIAL", "id": "1"},
-            {"value": "TEKNIK", "id": "2"}
-        ]
-    },
-    {
-        "value": "FOLKEREG",
-        "id": "39",
-        "sub_groups": [
-            {"value": "FOLKEREG", "id": "1"}
-        ]
-    },
-    {
-        "value": "HUSLEJEINI",
-        "id": "7",
-        "sub_groups": [
-            {"value": "INDSKU_INI", "id": "3"},
-            {"value": "LEJE_INI", "id": "1"},
-            {"value": "VARME_INI", "id": "2"}
-        ]
-    },
-    {
-        "value": "HUSLEJEKOM",
-        "id": "8",
-        "sub_groups": [
-            {"value": "INDS_KOM", "id": "3"},
-            {"value": "LEJE_KOM", "id": "1"},
-            {"value": "VARME_KOM", "id": "2"}
-        ]
-    },
-    {
-        "value": "INDFRI_GAR",
-        "id": "30",
-        "sub_groups": [
-            {"value": "INDFRI_GAR", "id": "1"}
-        ]
-    },
-    {
-        "value": "INFRASTRUK",
-        "id": "45",
-        "sub_groups": [
-            {"value": "INFRASTRUK", "id": "1"}
-        ]
-    },
-    {
-        "value": "KLOAKAFG",
-        "id": "35",
-        "sub_groups": [
-            {"value": "KLOAKAFG", "id": "1"}
-        ]
-    },
-    {
-        "value": "KOM_ERHLÅN",
-        "id": "28",
-        "sub_groups": [
-            {"value": "KOM_ERHLÅN", "id": "1"}
-        ]
-    },
-    {
-        "value": "KOM_HUSLÅN",
-        "id": "34",
-        "sub_groups": [
-            {"value": "KOM_HUSLÅN", "id": "1"}
-        ]
-    },
-    {
-        "value": "KULTUR_UV",
-        "id": "46",
-        "sub_groups": [
-            {"value": "KULTUR_UV", "id": "1"}
-        ]
-    },
-    {
-        "value": "LEJ/EJE",
-        "id": "6",
-        "sub_groups": [
-            {"value": "LEJ/EJE", "id": "1"}
-        ]
-    },
-    {
-        "value": "LEJEKRAV",
-        "id": "99",
-        "sub_groups": [
-            {"value": "HUSLEJEKAF", "id": "1"}
-        ]
-    },
-    {
-        "value": "LEV_YDELSE",
-        "id": "41",
-        "sub_groups": [
-            {"value": "AFFALDSAFG", "id": "3"},
-            {"value": "BRANDMATR", "id": "2"},
-            {"value": "BYGGEMODN", "id": "13"},
-            {"value": "CONTAINER", "id": "8"},
-            {"value": "ENTREPRENØ", "id": "14"},
-            {"value": "FRITIDUNDV", "id": "12"},
-            {"value": "HJ_HJÆLP", "id": "5"},
-            {"value": "HUSDYR", "id": "1"},
-            {"value": "KIRKEGÅRD", "id": "10"},
-            {"value": "LEV_MAD", "id": "4"},
-            {"value": "PIAREERSA", "id": "6"},
-            {"value": "SERVICEFA", "id": "9"},
-            {"value": "SYSTUER", "id": "7"},
-            {"value": "VÆRFT_REG", "id": "11"}
-        ]
-    },
-    {
-        "value": "LTF_BIBLIO",
-        "id": "25",
-        "sub_groups": [
-            {"value": "LTF_BIBLIO", "id": "1"}
-        ]
-    },
-    {
-        "value": "LTF_ERHUDD",
-        "id": "22",
-        "sub_groups": [
-            {"value": "LTF_ERHUDD", "id": "1"}
-        ]
-    },
-    {
-        "value": "LTF_ERHVER",
-        "id": "24",
-        "sub_groups": [
-            {"value": "LTF_ERHVER", "id": "1"}
-        ]
-    },
-    {
-        "value": "LTF_HJ_OFF",
-        "id": "23",
-        "sub_groups": [
-            {"value": "LFT_HJ_OFF", "id": "1"}
-        ]
-    },
-    {
-        "value": "LTF_UDDSTØ",
-        "id": "21",
-        "sub_groups": [
-            {"value": "UDDFOR", "id": "1"},
-            {"value": "UDDFOR_FM", "id": "2"}
-        ]
-    },
-    {
-        "value": "LØNTRÆK",
-        "id": "18",
-        "sub_groups": [
-            {"value": "EJ_INDB_LØ", "id": "2"},
-            {"value": "MGL_LØNTR", "id": "1"}
-        ]
-    },
-    {
-        "value": "MID_ERHLÅN",
-        "id": "29",
-        "sub_groups": [
-            {"value": "MID_ERHLÅN", "id": "1"}
-        ]
-    },
-    {
-        "value": "NOR_FORD",
-        "id": "19",
-        "sub_groups": [
-            {"value": "NORDEN", "id": "5"},
-            {"value": "SKAT_DK", "id": "3"},
-            {"value": "SKAT_NORDI", "id": "4"},
-            {"value": "UHB_DK", "id": "1"},
-            {"value": "UHB_NORDI", "id": "2"}
-        ]
-    },
-    {
-        "value": "OPKRÆV_DK",
-        "id": "50",
-        "sub_groups": [
-            {"value": "AAS", "id": "5"},
-            {"value": "ADVOKAT", "id": "4"},
-            {"value": "AFGIFTER", "id": "2"},
-            {"value": "KAN", "id": "6"},
-            {"value": "NAN", "id": "7"},
-            {"value": "NUU", "id": "12"},
-            {"value": "PAA", "id": "8"},
-            {"value": "QAQ", "id": "9"},
-            {"value": "QAS", "id": "10"},
-            {"value": "SIS", "id": "11"},
-            {"value": "SKAT", "id": "1"},
-            {"value": "UNDERHOLD", "id": "3"}
-        ]
-    },
-    {
-        "value": "OPKRÆV_UDL",
-        "id": "51",
-        "sub_groups": [
-            {"value": "UDL_ADVOK", "id": "4"},
-            {"value": "UDL_AFG", "id": "2"},
-            {"value": "UDL_SKAT", "id": "1"},
-            {"value": "UDL_UNDERH", "id": "3"}
-        ]
-    },
-    {
-        "value": "PERSONALE",
-        "id": "48",
-        "sub_groups": [
-            {"value": "PERSONALE", "id": "1"}
-        ]
-    },
-    {
-        "value": "PERS_TIL",
-        "id": "37",
-        "sub_groups": [
-            {"value": "PERS_TIL", "id": "1"}
-        ]
-    },
-    {
-        "value": "POLITIET",
-        "id": "49",
-        "sub_groups": [
-            {"value": "POLITIET", "id": "1"}
-        ]
-    },
-    {
-        "value": "RENOVATION",
-        "id": "11",
-        "sub_groups": [
-            {"value": "RENOVATION", "id": "1"}
-        ]
-    },
-    {
-        "value": "RESTSKAT",
-        "id": "14",
-        "sub_groups": [
-            {"value": "RSKAT 00", "id": "14"},
-            {"value": "RSKAT 01", "id": "15"},
-            {"value": "RSKAT 02", "id": "16"},
-            {"value": "RSKAT 03", "id": "17"},
-            {"value": "RSKAT 04", "id": "18"},
-            {"value": "RSKAT 05", "id": "19"},
-            {"value": "RSKAT 06", "id": "20"},
-            {"value": "RSKAT 07", "id": "21"},
-            {"value": "RSKAT 08", "id": "22"},
-            {"value": "RSKAT 09", "id": "23"},
-            {"value": "RSKAT 10", "id": "24"},
-            {"value": "RSKAT 11", "id": "25"},
-            {"value": "RSKAT 12", "id": "26"},
-            {"value": "RSKAT 13", "id": "27"},
-            {"value": "RSKAT 14", "id": "28"},
-            {"value": "RSKAT 15", "id": "29"},
-            {"value": "RSKAT 16", "id": "30"},
-            {"value": "RSKAT 17", "id": "31"},
-            {"value": "RSKAT 87", "id": "1"},
-            {"value": "RSKAT 88", "id": "2"},
-            {"value": "RSKAT 89", "id": "3"},
-            {"value": "RSKAT 90", "id": "4"},
-            {"value": "RSKAT 91", "id": "5"},
-            {"value": "RSKAT 92", "id": "6"},
-            {"value": "RSKAT 93", "id": "7"},
-            {"value": "RSKAT 94", "id": "8"},
-            {"value": "RSKAT 95", "id": "9"},
-            {"value": "RSKAT 96", "id": "10"},
-            {"value": "RSKAT 97", "id": "11"},
-            {"value": "RSKAT 98", "id": "12"},
-            {"value": "RSKAT 99", "id": "13"}
-        ]
-    },
-    {
-        "value": "SALG_EJEND",
-        "id": "33",
-        "sub_groups": [
-            {"value": "SALG_EJEND", "id": "1"}
-        ]
-    },
-    {
-        "value": "SELSKAT",
-        "id": "15",
-        "sub_groups": [
-            {"value": "SELSKAT00", "id": "14"},
-            {"value": "SELSKAT01", "id": "15"},
-            {"value": "SELSKAT02", "id": "16"},
-            {"value": "SELSKAT03", "id": "17"},
-            {"value": "SELSKAT04", "id": "18"},
-            {"value": "SELSKAT05", "id": "19"},
-            {"value": "SELSKAT06", "id": "20"},
-            {"value": "SELSKAT07", "id": "21"},
-            {"value": "SELSKAT08", "id": "22"},
-            {"value": "SELSKAT09", "id": "23"},
-            {"value": "SELSKAT10", "id": "24"},
-            {"value": "SELSKAT11", "id": "25"},
-            {"value": "SELSKAT12", "id": "26"},
-            {"value": "SELSKAT13", "id": "27"},
-            {"value": "SELSKAT14", "id": "28"},
-            {"value": "SELSKAT15", "id": "29"},
-            {"value": "SELSKAT16", "id": "30"},
-            {"value": "SELSKAT17", "id": "31"},
-            {"value": "SELSKAT87", "id": "1"},
-            {"value": "SELSKAT88", "id": "2"},
-            {"value": "SELSKAT89", "id": "3"},
-            {"value": "SELSKAT90", "id": "4"},
-            {"value": "SELSKAT91", "id": "5"},
-            {"value": "SELSKAT92", "id": "6"},
-            {"value": "SELSKAT93", "id": "7"},
-            {"value": "SELSKAT94", "id": "8"},
-            {"value": "SELSKAT95", "id": "9"},
-            {"value": "SELSKAT96", "id": "10"},
-            {"value": "SELSKAT97", "id": "11"},
-            {"value": "SELSKAT98", "id": "12"},
-            {"value": "SELSKAT99", "id": "13"}
-        ]
-    },
-    {
-        "value": "SELVBYGLÅN",
-        "id": "3",
-        "sub_groups": [
-            {"value": "SELVBYGLÅN", "id": "1"}
-        ]
-    },
-    {
-        "value": "SKATTER",
-        "id": "16",
-        "sub_groups": [
-            {"value": "AEB", "id": "5"},
-            {"value": "AFGBØDE", "id": "17"},
-            {"value": "AGEBYR", "id": "23"},
-            {"value": "AMA", "id": "6"},
-            {"value": "AMARENTE", "id": "27"},
-            {"value": "ASKATBØDE", "id": "15"},
-            {"value": "ASKATRENTE", "id": "24"},
-            {"value": "AUTOMAT", "id": "7"},
-            {"value": "B-SKAT", "id": "1"},
-            {"value": "BINGO", "id": "11"},
-            {"value": "BLÅHVIL-GR", "id": "66"},
-            {"value": "BLÅHVIL-UD", "id": "68"},
-            {"value": "BSKATRENTE", "id": "26"},
-            {"value": "DRIKKEVAR", "id": "8"},
-            {"value": "FOR_MEGET", "id": "21"},
-            {"value": "GEBYR", "id": "19"},
-            {"value": "GULDLAKSGR", "id": "70"},
-            {"value": "GULDLAKSUD", "id": "72"},
-            {"value": "HAVNEAFG", "id": "9"},
-            {"value": "HFI-AFGIFT", "id": "29"},
-            {"value": "INCMOT", "id": "12"},
-            {"value": "INDAFG", "id": "10"},
-            {"value": "ISVAND", "id": "28"},
-            {"value": "KAM-HAV", "id": "60"},
-            {"value": "KAM-KYST", "id": "62"},
-            {"value": "KRABBER", "id": "64"},
-            {"value": "KULLER", "id": "34"},
-            {"value": "KULLER-HAV", "id": "52"},
-            {"value": "KULLER-KYS", "id": "54"},
-            {"value": "LODDE", "id": "31"},
-            {"value": "MAKREL", "id": "22"},
-            {"value": "RBLÅHVI-GR", "id": "67"},
-            {"value": "RBLÅHVI-UD", "id": "69"},
-            {"value": "REJE", "id": "13"},
-            {"value": "REJER-HAV", "id": "40"},
-            {"value": "REJER-KYST", "id": "42"},
-            {"value": "RENTER", "id": "18"},
-            {"value": "RESTSKAT", "id": "2"},
-            {"value": "RGULDLAKSG", "id": "71"},
-            {"value": "RGULDLAKSU", "id": "73"},
-            {"value": "RKAM-HAV", "id": "61"},
-            {"value": "RKAM-KYST", "id": "63"},
-            {"value": "RKRABBER", "id": "65"},
-            {"value": "RKULLER", "id": "35"},
-            {"value": "RKULLER-HA", "id": "53"},
-            {"value": "RKULLER-KY", "id": "55"},
-            {"value": "ROYALTY", "id": "4"},
-            {"value": "RREJER-HAV", "id": "41"},
-            {"value": "RREJER-KYS", "id": "43"},
-            {"value": "RRØDFISK", "id": "39"},
-            {"value": "RRØDFISK-H", "id": "49"},
-            {"value": "RRØDFISK-K", "id": "51"},
-            {"value": "RSEJ", "id": "37"},
-            {"value": "RSEJ-HAV", "id": "57"},
-            {"value": "RSEJ-KYST", "id": "59"},
-            {"value": "RTORSK", "id": "33"},
-            {"value": "RTORSK-HAV", "id": "45"},
-            {"value": "RTORSK-KYS", "id": "47"},
-            {"value": "RØDFISK", "id": "38"},
-            {"value": "RØDFISK-HA", "id": "48"},
-            {"value": "RØDFISK-KY", "id": "50"},
-            {"value": "SEJ", "id": "36"},
-            {"value": "SEJ-HAV", "id": "56"},
-            {"value": "SEJ-KYST", "id": "58"},
-            {"value": "SILD", "id": "30"},
-            {"value": "SKATBØDE", "id": "16"},
-            {"value": "STEMPEL", "id": "14"},
-            {"value": "TILLÆG", "id": "20"},
-            {"value": "TORSK", "id": "32"},
-            {"value": "TORSK-HAV", "id": "44"},
-            {"value": "TORSK-KYST", "id": "46"},
-            {"value": "UDBYTTE", "id": "3"}
-        ]
-    },
-    {
-        "value": "SKORSTEN",
-        "id": "27",
-        "sub_groups": [
-            {"value": "SKORSTEN", "id": "1"}
-        ]
-    },
-    {
-        "value": "SUNDHED",
-        "id": "44",
-        "sub_groups": [
-            {"value": "SUNDHED", "id": "1"}
-        ]
-    },
-    {
-        "value": "UNDERHOLD",
-        "id": "17",
-        "sub_groups": [
-            {"value": "A-BIDRAG", "id": "3"},
-            {"value": "ABIDRAG", "id": "1"},
-            {"value": "NORDISKE", "id": "6"},
-            {"value": "NORDISKE1", "id": "7"},
-            {"value": "NORDISKE2", "id": "8"},
-            {"value": "NORDISKE3", "id": "9"},
-            {"value": "NORDISKE4", "id": "10"},
-            {"value": "NORDISKE5", "id": "11"},
-            {"value": "NORDISKE6", "id": "12"},
-            {"value": "PRIVATKRAV", "id": "2"},
-            {"value": "TØNDER", "id": "5"},
-            {"value": "ULØNTRÆK", "id": "4"}
-        ]
-    }
+  {
+    "name": "01UBIDRAG",
+    "id": 1,
+    "sub_groups": [
+      {
+        "name": "ABIDRAG",
+        "group_id": 17,
+        "type_id": 1
+      },
+      {
+        "name": "NORDISKE",
+        "group_id": 17,
+        "type_id": 6
+      },
+      {
+        "name": "NORDISKE1",
+        "group_id": 17,
+        "type_id": 7
+      },
+      {
+        "name": "NORDISKE2",
+        "group_id": 17,
+        "type_id": 8
+      },
+      {
+        "name": "NORDISKE3",
+        "group_id": 17,
+        "type_id": 9
+      },
+      {
+        "name": "NORDISKE4",
+        "group_id": 17,
+        "type_id": 10
+      },
+      {
+        "name": "NORDISKE6",
+        "group_id": 17,
+        "type_id": 12
+      },
+      {
+        "name": "PRIVATKRAV",
+        "group_id": 17,
+        "type_id": 2
+      },
+      {
+        "name": "TØNDER",
+        "group_id": 17,
+        "type_id": 5
+      },
+      {
+        "name": "ULØNTRÆK",
+        "group_id": 17,
+        "type_id": 4
+      }
+    ]
+  },
+  {
+    "name": "02RSKAT",
+    "id": 2,
+    "sub_groups": [
+      {
+        "name": "RSKAT 00",
+        "group_id": 14,
+        "type_id": 14
+      },
+      {
+        "name": "RSKAT 01",
+        "group_id": 14,
+        "type_id": 15
+      },
+      {
+        "name": "RSKAT 02",
+        "group_id": 14,
+        "type_id": 16
+      },
+      {
+        "name": "RSKAT 03",
+        "group_id": 14,
+        "type_id": 17
+      },
+      {
+        "name": "RSKAT 04",
+        "group_id": 14,
+        "type_id": 18
+      },
+      {
+        "name": "RSKAT 05",
+        "group_id": 14,
+        "type_id": 19
+      },
+      {
+        "name": "RSKAT 06",
+        "group_id": 14,
+        "type_id": 20
+      },
+      {
+        "name": "RSKAT 07",
+        "group_id": 14,
+        "type_id": 21
+      },
+      {
+        "name": "RSKAT 08",
+        "group_id": 14,
+        "type_id": 22
+      },
+      {
+        "name": "RSKAT 09",
+        "group_id": 14,
+        "type_id": 23
+      },
+      {
+        "name": "RSKAT 10",
+        "group_id": 14,
+        "type_id": 24
+      },
+      {
+        "name": "RSKAT 11",
+        "group_id": 14,
+        "type_id": 25
+      },
+      {
+        "name": "RSKAT 12",
+        "group_id": 14,
+        "type_id": 26
+      },
+      {
+        "name": "RSKAT 13",
+        "group_id": 14,
+        "type_id": 27
+      },
+      {
+        "name": "RSKAT 14",
+        "group_id": 14,
+        "type_id": 28
+      },
+      {
+        "name": "RSKAT 15",
+        "group_id": 14,
+        "type_id": 29
+      },
+      {
+        "name": "RSKAT 16",
+        "group_id": 14,
+        "type_id": 30
+      },
+      {
+        "name": "RSKAT 17",
+        "group_id": 14,
+        "type_id": 31
+      },
+      {
+        "name": "RSKAT 18",
+        "group_id": 14,
+        "type_id": 32
+      },
+      {
+        "name": "RSKAT 19",
+        "group_id": 14,
+        "type_id": 33
+      },
+      {
+        "name": "RSKAT 95",
+        "group_id": 14,
+        "type_id": 9
+      },
+      {
+        "name": "RSKAT 97",
+        "group_id": 14,
+        "type_id": 11
+      },
+      {
+        "name": "RSKAT 98",
+        "group_id": 14,
+        "type_id": 12
+      },
+      {
+        "name": "RSKAT 99",
+        "group_id": 14,
+        "type_id": 13
+      }
+    ]
+  },
+  {
+    "name": "03ESU",
+    "id": 3,
+    "sub_groups": [
+      {
+        "name": "DIVINC",
+        "group_id": 1,
+        "type_id": 3
+      },
+      {
+        "name": "ESU",
+        "group_id": 1,
+        "type_id": 1
+      }
+    ]
+  },
+  {
+    "name": "04ASKAT",
+    "id": 4,
+    "sub_groups": [
+      {
+        "name": "ASKAT1998",
+        "group_id": 12,
+        "type_id": 12
+      },
+      {
+        "name": "ASKAT1999",
+        "group_id": 12,
+        "type_id": 13
+      },
+      {
+        "name": "ASKAT2000",
+        "group_id": 12,
+        "type_id": 14
+      },
+      {
+        "name": "ASKAT2001",
+        "group_id": 12,
+        "type_id": 15
+      },
+      {
+        "name": "ASKAT2002",
+        "group_id": 12,
+        "type_id": 16
+      },
+      {
+        "name": "ASKAT2003",
+        "group_id": 12,
+        "type_id": 17
+      },
+      {
+        "name": "ASKAT2004",
+        "group_id": 12,
+        "type_id": 18
+      },
+      {
+        "name": "ASKAT2005",
+        "group_id": 12,
+        "type_id": 19
+      },
+      {
+        "name": "ASKAT2006",
+        "group_id": 12,
+        "type_id": 20
+      },
+      {
+        "name": "ASKAT2007",
+        "group_id": 12,
+        "type_id": 21
+      },
+      {
+        "name": "ASKAT2008",
+        "group_id": 12,
+        "type_id": 22
+      },
+      {
+        "name": "ASKAT2009",
+        "group_id": 12,
+        "type_id": 23
+      },
+      {
+        "name": "ASKAT2010",
+        "group_id": 12,
+        "type_id": 24
+      },
+      {
+        "name": "ASKAT2011",
+        "group_id": 12,
+        "type_id": 25
+      },
+      {
+        "name": "ASKAT2012",
+        "group_id": 12,
+        "type_id": 26
+      },
+      {
+        "name": "ASKAT2013",
+        "group_id": 12,
+        "type_id": 27
+      },
+      {
+        "name": "ASKAT2014",
+        "group_id": 12,
+        "type_id": 28
+      },
+      {
+        "name": "ASKAT2015",
+        "group_id": 12,
+        "type_id": 29
+      },
+      {
+        "name": "ASKAT2016",
+        "group_id": 12,
+        "type_id": 30
+      },
+      {
+        "name": "ASKAT2017",
+        "group_id": 12,
+        "type_id": 31
+      },
+      {
+        "name": "ASKAT2018",
+        "group_id": 12,
+        "type_id": 32
+      },
+      {
+        "name": "ASKAT2019",
+        "group_id": 12,
+        "type_id": 33
+      },
+      {
+        "name": "ASKATud år",
+        "group_id": 12,
+        "type_id": 34
+      },
+      {
+        "name": "BSKAT2014",
+        "group_id": 13,
+        "type_id": 28
+      },
+      {
+        "name": "BSKAT2015",
+        "group_id": 13,
+        "type_id": 29
+      },
+      {
+        "name": "BSKAT2018",
+        "group_id": 13,
+        "type_id": 32
+      },
+      {
+        "name": "BSKAT2019",
+        "group_id": 13,
+        "type_id": 30
+      },
+      {
+        "name": "BSKAT2020",
+        "group_id": 13,
+        "type_id": 31
+      }
+    ]
+  },
+  {
+    "name": "05SELSKAT",
+    "id": 5,
+    "sub_groups": [
+      {
+        "name": "SELSKAT04",
+        "group_id": 15,
+        "type_id": 18
+      },
+      {
+        "name": "SELSKAT05",
+        "group_id": 15,
+        "type_id": 19
+      },
+      {
+        "name": "SELSKAT07",
+        "group_id": 15,
+        "type_id": 21
+      },
+      {
+        "name": "SELSKAT08",
+        "group_id": 15,
+        "type_id": 22
+      },
+      {
+        "name": "SELSKAT09",
+        "group_id": 15,
+        "type_id": 23
+      },
+      {
+        "name": "SELSKAT10",
+        "group_id": 15,
+        "type_id": 24
+      },
+      {
+        "name": "SELSKAT11",
+        "group_id": 15,
+        "type_id": 25
+      },
+      {
+        "name": "SELSKAT12",
+        "group_id": 15,
+        "type_id": 26
+      },
+      {
+        "name": "SELSKAT13",
+        "group_id": 15,
+        "type_id": 27
+      },
+      {
+        "name": "SELSKAT14",
+        "group_id": 15,
+        "type_id": 28
+      },
+      {
+        "name": "SELSKAT15",
+        "group_id": 15,
+        "type_id": 29
+      },
+      {
+        "name": "SELSKAT16",
+        "group_id": 15,
+        "type_id": 30
+      },
+      {
+        "name": "SELSKAT17",
+        "group_id": 15,
+        "type_id": 31
+      },
+      {
+        "name": "SELSKAT18",
+        "group_id": 15,
+        "type_id": 32
+      },
+      {
+        "name": "SELSKAT19",
+        "group_id": 15,
+        "type_id": 33
+      }
+    ]
+  },
+  {
+    "name": "06HUS",
+    "id": 6,
+    "sub_groups": [
+      {
+        "name": "ERH_LEJE",
+        "group_id": 32,
+        "type_id": 1
+      },
+      {
+        "name": "HUSLEJEKAF",
+        "group_id": 99,
+        "type_id": 1
+      },
+      {
+        "name": "INDS_KOM",
+        "group_id": 8,
+        "type_id": 3
+      },
+      {
+        "name": "INDSKU_INI",
+        "group_id": 7,
+        "type_id": 3
+      },
+      {
+        "name": "LEJ/EJE",
+        "group_id": 6,
+        "type_id": 1
+      },
+      {
+        "name": "LEJE_INI",
+        "group_id": 7,
+        "type_id": 1
+      },
+      {
+        "name": "LEJE_KOM",
+        "group_id": 8,
+        "type_id": 1
+      },
+      {
+        "name": "VARME_INI",
+        "group_id": 7,
+        "type_id": 2
+      },
+      {
+        "name": "VARME_KOM",
+        "group_id": 8,
+        "type_id": 2
+      }
+    ]
+  },
+  {
+    "name": "07SKATR",
+    "id": 7,
+    "sub_groups": [
+      {
+        "name": "RENTER",
+        "group_id": 16,
+        "type_id": 18
+      }
+    ]
+  },
+  {
+    "name": "08DIVKR",
+    "id": 8,
+    "sub_groups": [
+      {
+        "name": "AFFALDSAFG",
+        "group_id": 41,
+        "type_id": 3
+      },
+      {
+        "name": "AND_FORD",
+        "group_id": 43,
+        "type_id": 1
+      },
+      {
+        "name": "ARB_SKAFOR",
+        "group_id": 36,
+        "type_id": 1
+      },
+      {
+        "name": "BRANDMATR",
+        "group_id": 41,
+        "type_id": 2
+      },
+      {
+        "name": "BYGGEMODN",
+        "group_id": 41,
+        "type_id": 13
+      },
+      {
+        "name": "CONTAINER",
+        "group_id": 41,
+        "type_id": 8
+      },
+      {
+        "name": "ENTREPRENØ",
+        "group_id": 41,
+        "type_id": 14
+      },
+      {
+        "name": "FOLKEREG",
+        "group_id": 39,
+        "type_id": 1
+      },
+      {
+        "name": "FRITIDUNDV",
+        "group_id": 41,
+        "type_id": 12
+      },
+      {
+        "name": "HJ_HJÆLP",
+        "group_id": 41,
+        "type_id": 5
+      },
+      {
+        "name": "HUSDYR",
+        "group_id": 41,
+        "type_id": 1
+      },
+      {
+        "name": "KULTUR_UV",
+        "group_id": 46,
+        "type_id": 1
+      },
+      {
+        "name": "PIAREERSA",
+        "group_id": 41,
+        "type_id": 6
+      },
+      {
+        "name": "SERVICEFA",
+        "group_id": 41,
+        "type_id": 9
+      },
+      {
+        "name": "SYSTUER",
+        "group_id": 41,
+        "type_id": 7
+      },
+      {
+        "name": "VÆRFT_REG",
+        "group_id": 41,
+        "type_id": 11
+      }
+    ]
+  },
+  {
+    "name": "09HJÆLPT",
+    "id": 9,
+    "sub_groups": [
+      {
+        "name": "LFT_HJ_OFF",
+        "group_id": 23,
+        "type_id": 1
+      },
+      {
+        "name": "PERS_TIL",
+        "group_id": 37,
+        "type_id": 1
+      }
+    ]
+  },
+  {
+    "name": "10STUDIE",
+    "id": 10,
+    "sub_groups": [
+      {
+        "name": "LTF_ERHUDD",
+        "group_id": 22,
+        "type_id": 2
+      },
+      {
+        "name": "UDDFOR",
+        "group_id": 21,
+        "type_id": 1
+      },
+      {
+        "name": "UDDFOR_FM",
+        "group_id": 21,
+        "type_id": 2
+      }
+    ]
+  },
+  {
+    "name": "11DAGINST",
+    "id": 11,
+    "sub_groups": [
+      {
+        "name": "DAGINST",
+        "group_id": 26,
+        "type_id": 1
+      }
+    ]
+  },
+  {
+    "name": "12RENO",
+    "id": 12,
+    "sub_groups": [
+      {
+        "name": "KLOAKAFG",
+        "group_id": 35,
+        "type_id": 1
+      },
+      {
+        "name": "RENOVATION",
+        "group_id": 11,
+        "type_id": 1
+      }
+    ]
+  },
+  {
+    "name": "13KELÅN",
+    "id": 13,
+    "sub_groups": [
+      {
+        "name": "KOM_ERHLÅN",
+        "group_id": 28,
+        "type_id": 1
+      },
+      {
+        "name": "MID_ERHLÅN",
+        "group_id": 29,
+        "type_id": 1
+      }
+    ]
+  },
+  {
+    "name": "14DIVSELSTY",
+    "id": 14,
+    "sub_groups": [
+      {
+        "name": "AEB",
+        "group_id": 16,
+        "type_id": 5
+      },
+      {
+        "name": "AFGBØDE",
+        "group_id": 16,
+        "type_id": 17
+      },
+      {
+        "name": "AGEBYR",
+        "group_id": 16,
+        "type_id": 23
+      },
+      {
+        "name": "AMA udenår",
+        "group_id": 16,
+        "type_id": 6
+      },
+      {
+        "name": "AMA2001",
+        "group_id": 16,
+        "type_id": 40
+      },
+      {
+        "name": "AMA2006",
+        "group_id": 16,
+        "type_id": 41
+      },
+      {
+        "name": "AMA2007",
+        "group_id": 16,
+        "type_id": 42
+      },
+      {
+        "name": "AMA2008",
+        "group_id": 16,
+        "type_id": 43
+      },
+      {
+        "name": "AMA2009",
+        "group_id": 16,
+        "type_id": 44
+      },
+      {
+        "name": "AMA2010",
+        "group_id": 16,
+        "type_id": 45
+      },
+      {
+        "name": "AMA2011",
+        "group_id": 16,
+        "type_id": 46
+      },
+      {
+        "name": "AMA2012",
+        "group_id": 16,
+        "type_id": 47
+      },
+      {
+        "name": "AMA2013",
+        "group_id": 16,
+        "type_id": 48
+      },
+      {
+        "name": "AMA2014",
+        "group_id": 16,
+        "type_id": 49
+      },
+      {
+        "name": "AMA2015",
+        "group_id": 16,
+        "type_id": 50
+      },
+      {
+        "name": "AMA2016",
+        "group_id": 16,
+        "type_id": 51
+      },
+      {
+        "name": "AMA2017",
+        "group_id": 16,
+        "type_id": 52
+      },
+      {
+        "name": "AMA2018",
+        "group_id": 16,
+        "type_id": 53
+      },
+      {
+        "name": "AMA2019",
+        "group_id": 16,
+        "type_id": 54
+      },
+      {
+        "name": "AMARENTE",
+        "group_id": 16,
+        "type_id": 27
+      },
+      {
+        "name": "ASKATBØDE",
+        "group_id": 16,
+        "type_id": 15
+      },
+      {
+        "name": "ASKATRENTE",
+        "group_id": 16,
+        "type_id": 24
+      },
+      {
+        "name": "AUTOMAT",
+        "group_id": 16,
+        "type_id": 7
+      },
+      {
+        "name": "BINGO",
+        "group_id": 16,
+        "type_id": 11
+      },
+      {
+        "name": "Blåhvillin",
+        "group_id": 16,
+        "type_id": 74
+      },
+      {
+        "name": "B-SKAT",
+        "group_id": 16,
+        "type_id": 1
+      },
+      {
+        "name": "BSKATRENTE",
+        "group_id": 16,
+        "type_id": 26
+      },
+      {
+        "name": "DCR",
+        "group_id": 47,
+        "type_id": 1
+      },
+      {
+        "name": "DRIKKEVARE",
+        "group_id": 16,
+        "type_id": 8
+      },
+      {
+        "name": "FISKEGEBYR",
+        "group_id": 52,
+        "type_id": 3
+      },
+      {
+        "name": "FOR_MEGET",
+        "group_id": 16,
+        "type_id": 21
+      },
+      {
+        "name": "GEBYR",
+        "group_id": 16,
+        "type_id": 19
+      },
+      {
+        "name": "GRLHJS",
+        "group_id": 52,
+        "type_id": 2
+      },
+      {
+        "name": "GULDLAKS",
+        "group_id": 16,
+        "type_id": 75
+      },
+      {
+        "name": "Havneafg",
+        "group_id": 16,
+        "type_id": 78
+      },
+      {
+        "name": "HELLEFISKE",
+        "group_id": 16,
+        "type_id": 29
+      },
+      {
+        "name": "HUSLEJESEL",
+        "group_id": 16,
+        "type_id": 16
+      },
+      {
+        "name": "INCMOT",
+        "group_id": 16,
+        "type_id": 12
+      },
+      {
+        "name": "INDAFG",
+        "group_id": 16,
+        "type_id": 10
+      },
+      {
+        "name": "INFRASTRUK",
+        "group_id": 45,
+        "type_id": 1
+      },
+      {
+        "name": "ISVAND",
+        "group_id": 16,
+        "type_id": 28
+      },
+      {
+        "name": "KAMMUSLING",
+        "group_id": 16,
+        "type_id": 76
+      },
+      {
+        "name": "KRABBER",
+        "group_id": 16,
+        "type_id": 64
+      },
+      {
+        "name": "KULLER",
+        "group_id": 16,
+        "type_id": 34
+      },
+      {
+        "name": "LODDE",
+        "group_id": 16,
+        "type_id": 31
+      },
+      {
+        "name": "LTF_BIBLIO",
+        "group_id": 25,
+        "type_id": 1
+      },
+      {
+        "name": "MAKREL",
+        "group_id": 16,
+        "type_id": 22
+      },
+      {
+        "name": "MILJØAFG",
+        "group_id": 16,
+        "type_id": 75
+      },
+      {
+        "name": "REJEAFGIFT",
+        "group_id": 16,
+        "type_id": 13
+      },
+      {
+        "name": "RESTSKAT",
+        "group_id": 16,
+        "type_id": 2
+      },
+      {
+        "name": "ROYALTY",
+        "group_id": 16,
+        "type_id": 4
+      },
+      {
+        "name": "RØDFISK",
+        "group_id": 16,
+        "type_id": 39
+      },
+      {
+        "name": "RÅSTOF",
+        "group_id": 16,
+        "type_id": 77
+      },
+      {
+        "name": "SEJ",
+        "group_id": 16,
+        "type_id": 36
+      },
+      {
+        "name": "SILD",
+        "group_id": 16,
+        "type_id": 30
+      },
+      {
+        "name": "SKATBØDE",
+        "group_id": 16,
+        "type_id": 16
+      },
+      {
+        "name": "STEMPEL",
+        "group_id": 16,
+        "type_id": 14
+      },
+      {
+        "name": "SUNDHED",
+        "group_id": 44,
+        "type_id": 1
+      },
+      {
+        "name": "TILLÆG",
+        "group_id": 16,
+        "type_id": 20
+      },
+      {
+        "name": "TORSK",
+        "group_id": 16,
+        "type_id": 32
+      },
+      {
+        "name": "UDBYTTE",
+        "group_id": 16,
+        "type_id": 3
+      }
+    ]
+  },
+  {
+    "name": "15BSU",
+    "id": 15,
+    "sub_groups": [
+      {
+        "name": "10/40/50",
+        "group_id": 4,
+        "type_id": 1
+      },
+      {
+        "name": "BSU",
+        "group_id": 2,
+        "type_id": 1
+      },
+      {
+        "name": "BSUFORS",
+        "group_id": 2,
+        "type_id": 2
+      },
+      {
+        "name": "KOM_HUSLÅN",
+        "group_id": 34,
+        "type_id": 1
+      }
+    ]
+  },
+  {
+    "name": "16SELVBYGL",
+    "id": 16,
+    "sub_groups": [
+      {
+        "name": "SELVBYGLÅN",
+        "group_id": 3,
+        "type_id": 1
+      }
+    ]
+  },
+  {
+    "name": "17ELVAND",
+    "id": 17,
+    "sub_groups": [
+      {
+        "name": "ELVA_KOM",
+        "group_id": 10,
+        "type_id": 1
+      },
+      {
+        "name": "ELVA_NUKI",
+        "group_id": 9,
+        "type_id": 1
+      }
+    ]
+  },
+  {
+    "name": "18FORÆLDRE",
+    "id": 18,
+    "sub_groups": [
+      {
+        "name": "FORÆLDREBE",
+        "group_id": 38,
+        "type_id": 1
+      }
+    ]
+  },
+  {
+    "name": "19NKRAV",
+    "id": 19,
+    "sub_groups": [
+      {
+        "name": "NORDEN",
+        "group_id": 19,
+        "type_id": 5
+      },
+      {
+        "name": "SKAT_DK",
+        "group_id": 19,
+        "type_id": 3
+      },
+      {
+        "name": "SKAT_NORDI",
+        "group_id": 19,
+        "type_id": 4
+      },
+      {
+        "name": "UHB_DK",
+        "group_id": 19,
+        "type_id": 1
+      },
+      {
+        "name": "UHB_NORDI",
+        "group_id": 19,
+        "type_id": 2
+      }
+    ]
+  },
+  {
+    "name": "20ØRESTANCER",
+    "id": 20,
+    "sub_groups": [
+      {
+        "name": "BOGHOLDER",
+        "group_id": 40,
+        "type_id": 4
+      },
+      {
+        "name": "EJ_INDB_LØ",
+        "group_id": 18,
+        "type_id": 2
+      },
+      {
+        "name": "ERSTAT",
+        "group_id": 42,
+        "type_id": 1
+      },
+      {
+        "name": "LØN",
+        "group_id": 40,
+        "type_id": 5
+      },
+      {
+        "name": "SKORSTEN",
+        "group_id": 27,
+        "type_id": 1
+      }
+    ]
+  }
 ]
-

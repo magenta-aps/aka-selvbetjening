@@ -20,7 +20,7 @@ class BasicTestCase(SimpleTestCase):
         )
 
     def test_impairment_response_parse(self):
-        response = PrismeImpairmentResponse(self.get_file_contents('aka/tests/resources/impairment_response.xml'))
+        response = PrismeImpairmentResponse(None, self.get_file_contents('aka/tests/resources/impairment_response.xml'))
         self.assertEqual("5637238342", response.rec_id)
 
     def test_create_claim_request_parse(self):
@@ -53,7 +53,7 @@ class BasicTestCase(SimpleTestCase):
         )
 
     def test_create_claim_response_parse(self):
-        response = PrismeClaimResponse(self.get_file_contents('aka/tests/resources/claim_response.xml'))
+        response = PrismeClaimResponse(None, self.get_file_contents('aka/tests/resources/claim_response.xml'))
         self.assertEqual("5637238342", response.rec_id)
 
     def test_check_cvr_request_parse(self):
@@ -65,7 +65,7 @@ class BasicTestCase(SimpleTestCase):
         )
 
     def test_check_cvr_response_parse(self):
-        response = PrismeCvrCheckResponse(self.get_file_contents('aka/tests/resources/cvrcheck_response.xml'))
+        response = PrismeCvrCheckResponse(None, self.get_file_contents('aka/tests/resources/cvrcheck_response.xml'))
         self.assertEqual(2, len(response.claimant_id))
         self.assertEqual("35SKATDK", response.claimant_id[0])
         self.assertEqual("35BIDRAGDK", response.claimant_id[1])
@@ -79,7 +79,7 @@ class BasicTestCase(SimpleTestCase):
         )
 
     def test_interest_note_response_parse(self):
-        response = PrismeInterestNoteResponse(self.get_file_contents('aka/tests/resources/interestnote_response.xml'))
+        response = PrismeInterestNoteResponse(None, self.get_file_contents('aka/tests/resources/interestnote_response.xml'))
         self.assertEqual(2, len(response.interest_journal))
         journal0 = response.interest_journal[0]
         self.assertEqual("03-04-2019", journal0.updated)

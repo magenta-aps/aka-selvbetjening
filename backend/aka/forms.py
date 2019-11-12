@@ -29,9 +29,14 @@ class InkassoForm(forms.Form):
     fordringshaver2 = forms.CharField(
         required=False
     )
+    fordringsgruppe_id = forms.ChoiceField(
+        required=True,
+        choices=[(item['id'], item['name']) for item in fordringJson],
+        error_messages={'invalid_choice': 'fordringsgruppe_not_found', 'required': 'required_field'}
+    )
     fordringsgruppe = forms.ChoiceField(
         required=True,
-        choices=[(item['id'], item['value']) for item in fordringJson],
+        choices=[],
         error_messages={'invalid_choice': 'fordringsgruppe_not_found', 'required': 'required_field'}
     )
     fordringstype = forms.ChoiceField(
@@ -88,10 +93,10 @@ class InkassoForm(forms.Form):
     def set_typefield_choices(self):
         try:
             # Get selected group id
-            group_id = self.fields['fordringsgruppe'].widget.value_from_datadict(
+            group_id = self.fields['fordringsgruppe_id'].widget.value_from_datadict(
                 self.data,
                 self.files,
-                self.add_prefix('fordringsgruppe')
+                self.add_prefix('fordringsgruppe_id')
             )
             if group_id is not None:
                 # Find out which subgroup exists for this id
@@ -101,8 +106,12 @@ class InkassoForm(forms.Form):
                     if int(x['id']) == int(group_id)
                 ][0]
                 # Set type choices based on this subgroup
+                self.fields['fordringsgruppe'].choices = [
+                    (item['group_id'], item['group_id'])
+                    for item in subgroup
+                ]
                 self.fields['fordringstype'].choices = [
-                    (item['id'], item['value'])
+                    (item['type_id'], item['type_id'])
                     for item in subgroup
                 ]
         except IndexError:
