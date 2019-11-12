@@ -7,7 +7,6 @@ from aka.exceptions import AkaException
 from aka.utils import get_file_contents_base64
 from dict2xml import dict2xml as dict_to_xml
 from django.conf import settings
-from django.utils.translation import gettext_lazy as _
 from requests import Session
 from requests_ntlm import HttpNtlmAuth
 from xmltodict import parse as xml_to_dict
@@ -214,26 +213,84 @@ class PrismeInterestNoteRequest(PrismeRequestObject):
         return PrismeInterestNoteResponse
 
 
+class PrismePayrollRequest(PrismeRequestObject):
+    def __init__(self, cvr, date, recieved_date, amount, lines):
+        self.cvr = cvr
+        self.date = date
+        self.received_date = recieved_date
+        self.amount = amount
+        if type(lines) != list:
+            lines = [lines]
+        self.lines = lines
+
+    @property
+    def method(self):
+        return 'getInterestNote'
+
+    @property
+    def xml(self):
+        return dict_to_xml({
+            'GERCVR': self.cvr,
+            'Date': self.prepare(self.date),
+            'ReceivedDate': self.prepare(self.received_date),
+            'TotalAmount': self.prepare(self.amount),
+            'custPayRollFromEmployerLines': [line.xml for line in self.lines]
+        }, wrap='custPayRollFromEmployerHeader')
+
+    @property
+    def reply_class(self):
+        return PrismeInterestNoteResponse
+
+
+class PrismePayrollRequestLine(PrismeRequestObject):
+
+    def __init__(self, cpr_cvr, agreement_number, amount, net_salary):
+        self.cpr_cvr = cpr_cvr
+        self.agreement_number = agreement_number
+        self.amount = amount
+        self.net_salary = net_salary
+
+    @property
+    def xml(self):
+        return dict_to_xml({
+            'CprCvrEntity': self.prepare(self.cpr_cvr),
+            'AgreementNumber': self.prepare(self.agreement_number),
+            'Amount': self.prepare(self.amount),
+            'NetSalary': self.prepare(self.net_salary),
+        }, wrap='custPayRollFromEmployerLine')
+
+
 class PrismeResponseObject(object):
+
     def __init__(self, request, xml):
         self.request = request
         self.xml = xml
 
 
-class PrismeClaimResponse(PrismeResponseObject):
+class PrismeRecIdResponse(PrismeResponseObject):
+
+    response_tag = ''
+
     def __init__(self, request, xml):
-        super(PrismeClaimResponse, self).__init__(request, xml)
+        super(PrismeRecIdResponse, self).__init__(request, xml)
         d = xml_to_dict(xml)
-        self.rec_id = d['CustCollClaimTableFuj']['RecId']
+        self.rec_id = d[self.response_tag]['RecId']
 
     @classmethod
     def test(cls, rec_id):
-        return cls(f"<CustCollClaimTableFuj><RecId>{rec_id}</RecId></CustCollClaimTableFuj>")
+        return cls(f"<{cls.response_tag}><RecId>{rec_id}</RecId></{cls.response_tag}>")
 
 
-class PrismeImpairmentResponse(PrismeClaimResponse):
-    pass  # Works just like the superclass
+class PrismeClaimResponse(PrismeRecIdResponse):
+    response_tag = 'CustCollClaimTableFuj'
 
+
+class PrismeImpairmentResponse(PrismeRecIdResponse):
+    response_tag = 'CustCollClaimTableFuj'
+
+
+class PrismePayrollResponse(PrismeRecIdResponse):
+    response_tag = 'CustPayrollFromEmployerHeaderFUJ'
 
 
 class PrismeCvrCheckResponse(PrismeResponseObject):
@@ -259,6 +316,7 @@ class PrismeInterestNoteResponse(PrismeResponseObject):
             for x in journals
         ]
 
+
 class PrismeInterestResponseJournal(object):
 
     def __init__(self, data):
@@ -275,6 +333,7 @@ class PrismeInterestResponseJournal(object):
                 for transaction in v:
                     self.interest_transactions.append(PrismeInterestNoteResponseTransaction(transaction))
         self.data = data
+
 
 class PrismeInterestNoteResponseTransaction(object):
 
