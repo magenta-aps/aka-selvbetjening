@@ -7,7 +7,6 @@
         {% if field.errors %}
             <ul class="errorlist">
                 {% for error in field.errors.as_data %}
-                    {{ error|analyze }}
                     <li {% if error.code %}data-trans="{{ error.code }}"{% endif %} {% if error.params %}data-trans-params="{{ error.params|json }}"{% endif %}>
                         {% if error.code %}
                             {% trans error.code as error_message %}
