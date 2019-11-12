@@ -74,6 +74,8 @@ class PrismeRequestObject(object):
 
 class PrismeClaimRequest(PrismeRequestObject):
 
+    wrap = 'CustCollClaimTableFuj'
+
     def __init__(self, **kwargs):
         self.claimant_id = kwargs['claimant_id'],
         self.cpr_cvr = kwargs['cpr_cvr']
@@ -135,7 +137,7 @@ class PrismeClaimRequest(PrismeRequestObject):
                 }
                 for file in self.files
             ]
-        }, wrap="CustCollClaimTableFuj")
+        }, wrap=self.wrap)
 
     @property
     def reply_class(self):
@@ -143,6 +145,8 @@ class PrismeClaimRequest(PrismeRequestObject):
 
 
 class PrismeImpairmentRequest(PrismeRequestObject):
+
+    wrap = 'CustCollClaimTableFuj'
 
     def __init__(self, claimant_id, cpr_cvr, claim_ref, amount_balance, claim_number_seq):
         self.claimant_id = claimant_id
@@ -163,7 +167,7 @@ class PrismeImpairmentRequest(PrismeRequestObject):
             'CustCollClaimRef': self.prepare(self.claim_ref),
             'CustCollAmountBalance': self.prepare(self.amount_balance, is_amount=True),
             'CustCollClaimNumberSeq': self.prepare(self.claim_number_seq)
-        }, wrap='CustCollClaimTableFuj')
+        }, wrap=self.wrap)
 
     @property
     def reply_class(self):
@@ -171,6 +175,8 @@ class PrismeImpairmentRequest(PrismeRequestObject):
 
 
 class PrismeCvrCheckRequest(PrismeRequestObject):
+
+    wrap = 'FujClaimant'
 
     def __init__(self, cvr):
         self.cvr = cvr
@@ -183,7 +189,7 @@ class PrismeCvrCheckRequest(PrismeRequestObject):
     def xml(self):
         return dict_to_xml({
             'CvrLegalEntity': self.cvr
-        }, wrap='FujClaimant')
+        }, wrap=self.wrap)
 
     @property
     def reply_class(self):
@@ -191,6 +197,8 @@ class PrismeCvrCheckRequest(PrismeRequestObject):
 
 
 class PrismeInterestNoteRequest(PrismeRequestObject):
+
+    wrap = 'custInterestJour'
 
     def __init__(self, customer_id_number, year, month):
         self.customer_id_number = customer_id_number
@@ -206,7 +214,7 @@ class PrismeInterestNoteRequest(PrismeRequestObject):
         return dict_to_xml({
             'CustIdentificationNumber': self.customer_id_number,
             'YearMonthFUJ': f"{self.year:04d}-{self.month:02d}"
-        }, wrap='custInterestJour')
+        }, wrap=self.wrap)
 
     @property
     def reply_class(self):
@@ -214,6 +222,9 @@ class PrismeInterestNoteRequest(PrismeRequestObject):
 
 
 class PrismePayrollRequest(PrismeRequestObject):
+
+    wrap = 'custPayRollFromEmployerHeader'
+
     def __init__(self, cvr, date, recieved_date, amount, lines):
         self.cvr = cvr
         self.date = date
@@ -233,9 +244,11 @@ class PrismePayrollRequest(PrismeRequestObject):
             'GERCVR': self.cvr,
             'Date': self.prepare(self.date),
             'ReceivedDate': self.prepare(self.received_date),
-            'TotalAmount': self.prepare(self.amount),
-            'custPayRollFromEmployerLines': [line.xml for line in self.lines]
-        }, wrap='custPayRollFromEmployerHeader')
+            'TotalAmount': self.prepare(self.amount, is_amount=True),
+            'custPayRollFromEmployerLines': {
+                PrismePayrollRequestLine.wrap: [line.dict for line in self.lines]
+            }
+        }, wrap=self.wrap)
 
     @property
     def reply_class(self):
@@ -244,6 +257,8 @@ class PrismePayrollRequest(PrismeRequestObject):
 
 class PrismePayrollRequestLine(PrismeRequestObject):
 
+    wrap = 'custPayRollFromEmployerLine'
+
     def __init__(self, cpr_cvr, agreement_number, amount, net_salary):
         self.cpr_cvr = cpr_cvr
         self.agreement_number = agreement_number
@@ -251,13 +266,17 @@ class PrismePayrollRequestLine(PrismeRequestObject):
         self.net_salary = net_salary
 
     @property
-    def xml(self):
-        return dict_to_xml({
+    def dict(self):
+        return {
             'CprCvrEntity': self.prepare(self.cpr_cvr),
             'AgreementNumber': self.prepare(self.agreement_number),
-            'Amount': self.prepare(self.amount),
-            'NetSalary': self.prepare(self.net_salary),
-        }, wrap='custPayRollFromEmployerLine')
+            'Amount': self.prepare(self.amount, is_amount=True),
+            'NetSalary': self.prepare(self.net_salary, is_amount=True),
+        }
+
+    @property
+    def xml(self):
+        return dict_to_xml(self.dict, wrap=self.wrap)
 
 
 class PrismeResponseObject(object):
