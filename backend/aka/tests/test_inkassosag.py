@@ -9,12 +9,12 @@ from aka.tests.mixins import TestMixin
 from aka.utils import error_definitions
 from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import override_settings, SimpleTestCase
+from django.test import override_settings, TestCase
 from xmltodict import parse as xml_to_dict
 
 
 @override_settings(OPENID_CONNECT={'enabled': False})
-class BasicTestCase(TestMixin, SimpleTestCase):
+class BasicTestCase(TestMixin, TestCase):
 
     def setUp(self):
         logging.disable(logging.CRITICAL)
@@ -22,6 +22,7 @@ class BasicTestCase(TestMixin, SimpleTestCase):
         soap_patch = patch('aka.clients.prisme.Prisme.process_service')
         self.mock = soap_patch.start()
         self.addCleanup(soap_patch.stop)
+
 
     ### PRISME INTERFACE TESTS ###
 
@@ -120,6 +121,7 @@ class BasicTestCase(TestMixin, SimpleTestCase):
         response = self.client.post('/inkassosag/upload', formData)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content), [{'rec_id': '1234'}, {'rec_id': '1234'}])
+
 
     ### NEGATIVE TESTS ###
 

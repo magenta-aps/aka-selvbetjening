@@ -15,7 +15,7 @@
                 <div class="col-12">
                     {% if rec_ids %}
                         <span data-trans="nedskrivning.result">{% trans 'nedskrivning.result' %}</span>
-                        <ul>
+                        <ul class="success-list">
                             {% for rec_id in rec_ids %}
                                 <li>{{ rec_id }}</li>
                             {% endfor %}
@@ -23,7 +23,7 @@
                     {% endif %}
                     {% if errors %}
                         <span data-trans="nedskrivning.errors">{% trans 'nedskrivning.errors' %}</span>
-                        <ul>
+                        <ul class="error-list">
                         {% for error in errors %}
                             {% trans error.key as error_message %}
                             <li data-trans="{{ error.key }}" data-trans-params="{{ error.params|json }}">{{ error_message|format:error.params }}</li>

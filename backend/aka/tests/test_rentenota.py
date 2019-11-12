@@ -4,13 +4,13 @@ from unittest.mock import patch
 
 from aka.clients.prisme import PrismeInterestNoteRequest, PrismeInterestNoteResponse
 from aka.tests.mixins import TestMixin
-from django.test import SimpleTestCase
+from django.test import TestCase
 from django.test import override_settings
 from xmltodict import parse as xml_to_dict
 
 
 @override_settings(OPENID_CONNECT={'enabled': False})
-class BasicTestCase(TestMixin, SimpleTestCase):
+class BasicTestCase(TestMixin, TestCase):
 
     def setUp(self):
         logging.disable(logging.CRITICAL)
@@ -22,6 +22,7 @@ class BasicTestCase(TestMixin, SimpleTestCase):
         dafo_patch = patch('aka.clients.dafo.Dafo.lookup_cvr')
         self.dafomock = dafo_patch.start()
         self.addCleanup(dafo_patch.stop)
+
 
     ### PRISME INTERFACE TESTS ###
 
@@ -76,6 +77,7 @@ class BasicTestCase(TestMixin, SimpleTestCase):
         self.assertEqual(None, transaction10.calculate_to_date)
         self.assertEqual("0", transaction10.interest_days)
 
+
     ### POSITIVE TESTS ###
 
     def checkReturnValIsJSON(self, response):
@@ -84,6 +86,7 @@ class BasicTestCase(TestMixin, SimpleTestCase):
             json.dumps(json.loads(response.content.decode(charset)), indent=4)
         except json.decoder.JSONDecodeError:
             self.fail('Did not get JSON back.')
+
 
     ### NEGATIVE TESTS ###
 

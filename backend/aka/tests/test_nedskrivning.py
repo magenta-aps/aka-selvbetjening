@@ -3,12 +3,12 @@ import logging
 
 from aka.clients.prisme import PrismeImpairmentRequest, PrismeImpairmentResponse
 from aka.tests.mixins import TestMixin
-from django.test import SimpleTestCase
+from django.test import TestCase
 from lxml import etree
 from xmltodict import parse as xml_to_dict
 
 
-class BasicTestCase(TestMixin, SimpleTestCase):
+class BasicTestCase(TestMixin, TestCase):
 
     def setUp(self):
         logging.disable(logging.CRITICAL)
@@ -48,7 +48,11 @@ class BasicTestCase(TestMixin, SimpleTestCase):
         }
         response = self.client.post(self.url, formData)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content), {'rec_id': 1234})
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        el = root.xpath("//ul[@class='success-list']/li")
+        self.assertEqual(1, len(el))
+        self.assertEqual('1234', el[0].text)
+
 
     ### NEGATIVE TESTS ###
 
