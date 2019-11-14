@@ -72,6 +72,8 @@ def get_ordereddict_key_index(ordereddict, key):
 
 
 def spreadsheet_col_letter(col_index):
+    if col_index is None:
+        return None
     alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     length = len(alphabet)
     if col_index >= length:

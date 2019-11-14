@@ -44,8 +44,14 @@ msgstr "Der er ingen rækker i det uploadede regneark"
 msgid "common.upload.no_encoding"
 msgstr "Kunne ikke finde tegnkodningen i det uploadede regneark. Er det en korrekt CSV-fil?"
 
+msgid "common.upload.read_error"
+msgstr "Kunne ikke læse CSV-filen. Er det en korrekt formatteret CSV-fil?"
+
 msgid "common.upload.validation_item"
 msgstr "Celle {col_letter}{row} ({field}): {message}"
+
+msgid "common.upload.validation_header"
+msgstr "Der mangler en kolonne med navnet '{field}'"
 
 msgid "common.upload.template"
 msgstr "Download skabelon"

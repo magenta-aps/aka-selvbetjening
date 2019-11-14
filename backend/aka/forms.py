@@ -19,6 +19,59 @@ logger = logging.getLogger(__name__)
 fordringJson = getSharedJson('fordringsgruppe.json')
 
 
+class CsvUploadMixin(object):
+
+    def clean_file(self):
+        file = self.cleaned_data['file']
+        if file.size > settings.MAX_UPLOAD_FILESIZE:
+            raise ValidationError('file_too_large')
+
+        file.seek(0)
+        data = file.read()
+        charset = chardet.detect(data)
+        if charset is None or charset['encoding'] is None:
+            raise ValidationError(_("common.upload.no_encoding"), "common.upload.no_encoding")
+        subforms = []
+        try:
+            csv_reader = csv.DictReader(StringIO(data.decode(charset['encoding'])))
+            rows = [row for row in csv_reader]  # Catch csv reading errors early
+        except csv.Error as e:
+            print(e)
+            raise ValidationError(_("common.upload.read_error", "common.upload.read_error"))
+        if len(rows) == 0:
+            raise ValidationError(_("common.upload.empty"), "common.upload.empty")
+
+        for row_index, row in enumerate(rows, start=1):
+            subform = self.subform_class(data=row)
+            if not subform.is_valid():  # Catch row errors early
+                for field, errorlist in subform.errors.items():
+                    if 'required_field' in errorlist:
+                        raise ValidationError(
+                            _("common.upload.validation_header"),
+                            "common.upload.validation_header",
+                            {'field': field}
+                        )
+                    try:
+                        col_index = get_ordereddict_key_index(row, field)
+                    except ValueError:
+                        col_index = None
+                    for error in errorlist:
+                        raise ValidationError(
+                            _("common.upload.validation_item"),
+                            "common.upload.validation_item",
+                            {
+                                'field': field,
+                                'message': error,
+                                'row': row_index,
+                                'col': col_index,
+                                'col_letter': spreadsheet_col_letter(col_index)
+                            }
+                        )
+            subforms.append(subform)
+        self.subforms = subforms
+        return file
+
+
 class InkassoForm(forms.Form):
 
     fordringshaver = forms.CharField(
@@ -189,67 +242,6 @@ class LoentraekForm(forms.Form):
         return True
 
 
-class LoentraekUploadForm(LoentraekForm):
-
-    file = forms.FileField(
-        required=True,
-        validators=[
-            FileExtensionValidator(['csv'])
-        ]
-    )
-
-    def clean_file(self):
-        file = self.cleaned_data['file']
-        if file.size > settings.MAX_UPLOAD_FILESIZE:
-            raise ValidationError('file_too_large')
-
-        file.seek(0)
-        data = file.read()
-        charset = chardet.detect(data)
-        if charset is None or charset['encoding'] is None:
-            raise ValidationError(_("common.upload.no_encoding"), "common.upload.no_encoding")
-
-        print(charset)
-        rows = []
-        subforms = []
-        try:
-            csv_reader = csv.DictReader(StringIO(data.decode(charset['encoding'])))
-            rows = [row for row in csv_reader]  # Catch csv reading errors early
-        except csv.Error as e:
-            self.add_error(None, "failed_reading_csv")
-        if len(rows) == 0:
-            self.add_error('file', ValidationError(
-                _("common.upload.empty"),
-                "common.upload.empty")
-            )
-        for row_index, row in enumerate(rows, start=1):
-            subform = LoentraekFormItem(data=row)
-            if not subform.is_valid():  # Catch row errors early
-                for field, errorlist in subform.errors.items():
-                    try:
-                        col_index = get_ordereddict_key_index(row, field)
-                    except ValueError:
-                        col_index = None
-                    for error in errorlist:
-                        self.add_error(
-                            None,
-                            ValidationError(
-                                _("common.upload.validation_item"),
-                                "common.upload.validation_item",
-                                {
-                                    'field': field,
-                                    'message': error,
-                                    'row': row_index,
-                                    'col': col_index,
-                                    'col_letter': spreadsheet_col_letter(col_index)
-                                }
-                            )
-                        )
-            subforms.append(subform)
-        self.subforms = subforms
-
-        return file
-
 
 class LoentraekFormItem(forms.Form):
 
@@ -277,6 +269,19 @@ class LoentraekFormItem(forms.Form):
     )
 
 
+class LoentraekUploadForm(CsvUploadMixin, LoentraekForm):
+
+    file = forms.FileField(
+        required=True,
+        validators=[
+            FileExtensionValidator(['csv'])
+        ]
+    )
+
+    subform_class = LoentraekFormItem
+
+
+
 class NedskrivningForm(forms.Form):
 
     debitor = forms.CharField(
@@ -299,7 +304,7 @@ class NedskrivningForm(forms.Form):
     )
 
 
-class NedskrivningUploadForm(forms.Form):
+class NedskrivningUploadForm(CsvUploadMixin, forms.Form):
 
     file = forms.FileField(
         required=True,
@@ -308,51 +313,4 @@ class NedskrivningUploadForm(forms.Form):
         ],
     )
 
-    def clean_file(self):
-        print("clean_file")
-        file = self.cleaned_data['file']
-        if file.size > settings.MAX_UPLOAD_FILESIZE:
-            raise ValidationError('file_too_large')
-
-        file.seek(0)
-        data = file.read()
-        charset = chardet.detect(data)
-        rows = []
-        subforms = []
-        try:
-            csv_reader = csv.DictReader(StringIO(data.decode(charset['encoding'])))
-            rows = [row for row in csv_reader]  # Catch csv reading errors early
-        except csv.Error as e:
-            self.add_error('file', "failed_reading_csv")
-        if len(rows) == 0:
-            self.add_error('file', ValidationError(
-                _("common.upload.empty"),
-                "common.upload.empty")
-            )
-        for row_index, row in enumerate(rows, start=1):
-            subform = NedskrivningForm(data=row)
-            if not subform.is_valid():  # Catch row errors early
-                for field, errorlist in subform.errors.items():
-                    try:
-                        col_index = get_ordereddict_key_index(row, field)
-                    except ValueError:
-                        col_index = None
-                    for error in errorlist:
-                        self.add_error(
-                            None,
-                            ValidationError(
-                                _("common.upload.validation_item"),
-                                "common.upload.validation_item",
-                                {
-                                    'field': field,
-                                    'message': error,
-                                    'row': row_index,
-                                    'col': col_index,
-                                    'col_letter': spreadsheet_col_letter(col_index)
-                                }
-                            )
-                        )
-            subforms.append(subform)
-        self.subforms = subforms
-
-        return file
+    subform_class = NedskrivningForm
