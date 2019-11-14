@@ -11,10 +11,9 @@ from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismeImpairmentRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
 from aka.exceptions import AccessDeniedException
-from aka.forms import InkassoForm, InkassoUploadForm, NedskrivningForm
-from aka.forms import LoentraekForm
-from aka.forms import LoentraekFormItem
-from aka.forms import NedskrivningUploadForm
+from aka.forms import InkassoForm, InkassoUploadForm
+from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
+from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
 from aka.utils import ErrorJsonResponse, AccessDeniedJsonResponse
 from django.conf import settings
@@ -192,7 +191,7 @@ class InkassoSagUploadView(InkassoSagView):
         return ErrorJsonResponse.from_error_dict(form.errors)
 
 
-class LoenTraekView(FormSetView, FormView):
+class LoentraekView(FormSetView, FormView):
 
     form_class = LoentraekForm
     template_name = 'aka/payroll/payrollForm.html'
@@ -237,7 +236,7 @@ class LoenTraekView(FormSetView, FormView):
             rec_id = prisme.process_service(payroll)[0].rec_id
             return TemplateResponse(
                 request=self.request,
-                template="aka/payrollSuccess.html",
+                template="aka/payroll/payrollSuccess.html",
                 context={
                     'rec_ids': [rec_id]
                 },
@@ -251,6 +250,25 @@ class LoenTraekView(FormSetView, FormView):
         return self.render_to_response(
             self.get_context_data(form=form, formset=formset)
         )
+
+
+class LoentraekUploadView(LoentraekView):
+    form_class = LoentraekUploadForm
+    template_name = 'aka/payroll/uploadPayrollForm.html'
+
+    def forms_valid(self, forms):
+        for subform in forms:
+            if not subform.is_valid():
+                return False
+        return True
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            formset = form.subforms
+            if self.forms_valid(form.subforms) and form.check_sum(form.subforms, True):
+                return self.form_valid(form, form.subforms)
+        return self.form_invalid(form, form.subforms)
 
 
 class LoenTraekDistributionView(View):

@@ -189,11 +189,66 @@ class LoentraekForm(forms.Form):
         return True
 
 
+class LoentraekUploadForm(LoentraekForm):
+
+    file = forms.FileField(
+        required=True,
+        validators=[
+            FileExtensionValidator(['csv'])
+        ]
+    )
+
+    def clean_file(self):
+        file = self.cleaned_data['file']
+        if file.size > settings.MAX_UPLOAD_FILESIZE:
+            raise ValidationError('file_too_large')
+
+        file.seek(0)
+        data = file.read()
+        charset = chardet.detect(data)
+        rows = []
+        subforms = []
+        try:
+            csv_reader = csv.DictReader(StringIO(data.decode(charset['encoding'])))
+            rows = [row for row in csv_reader]  # Catch csv reading errors early
+        except csv.Error as e:
+            self.add_error(None, "failed_reading_csv")
+        for row_index, row in enumerate(rows, start=1):
+            subform = LoentraekFormItem(data=row)
+            if not subform.is_valid():  # Catch row errors early
+                for field, errorlist in subform.errors.items():
+                    try:
+                        col_index = get_ordereddict_key_index(row, field)
+                    except ValueError:
+                        col_index = None
+                    for error in errorlist:
+                        self.add_error(
+                            None,
+                            ValidationError(
+                                _("common.upload.validation_item"),
+                                "common.upload.validation_item",
+                                {
+                                    'field': field,
+                                    'message': error,
+                                    'row': row_index,
+                                    'col': col_index,
+                                    'col_letter': spreadsheet_col_letter(col_index)
+                                }
+                            )
+                        )
+            subforms.append(subform)
+        self.subforms = subforms
+
+        return file
+
+
 class LoentraekFormItem(forms.Form):
 
     cpr = forms.CharField(
         required=True,
         error_messages={'required': 'required_field'},
+        min_length=10,
+        max_length=10
     )
     agreement_number = forms.CharField(
         required=True,
