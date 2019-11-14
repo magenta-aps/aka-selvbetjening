@@ -15,7 +15,7 @@ class BasicTestCase(TestMixin, TestCase):
 
     def setUp(self):
         logging.disable(logging.CRITICAL)
-        self.url = '/loentraek'
+        self.url = '/loentraek/upload'
         self.service_mock = self.mock_soap('aka.clients.prisme.Prisme.process_service')
         self.service_mock.return_value = [
             PrismePayrollResponse(None, f"<CustPayrollFromEmployerHeaderFUJ><RecId>1234</RecId></CustPayrollFromEmployerHeaderFUJ>")
@@ -28,6 +28,8 @@ class BasicTestCase(TestMixin, TestCase):
     ### PRISME INTERFACE TESTS ###
 
     def test_create_payroll_request_parse(self):
+        attachment = File(open('aka/tests/resources/testfile.pdf'))
+        attachment.close()
         request = PrismePayrollRequest(
             '10147573',
             date(2019, 11, 1),
@@ -52,32 +54,15 @@ class BasicTestCase(TestMixin, TestCase):
 
     def test_payroll_success(self):
         # Contains just the required fields
+        file = File(open('aka/tests/resources/payroll.csv', 'rb'))
         formData = {
             'year': 2019,
             'month': 11,
             'total_amount': '1000',
-            'form-0-cpr': '1234567890',
-            'form-0-agreement_number': '1',
-            'form-0-amount': 200,
-            'form-0-net_salary': 40000,
-            'form-1-cpr': '1234567891',
-            'form-1-agreement_number': '2',
-            'form-1-amount': 200,
-            'form-1-net_salary': 40000,
-            'form-2-cpr': '1234567891',
-            'form-2-agreement_number': '3',
-            'form-2-amount': 200,
-            'form-2-net_salary': 40000,
-            'form-3-cpr': '1234567891',
-            'form-3-agreement_number': '4',
-            'form-3-amount': 400,
-            'form-3-net_salary': 40000,
-            'form-TOTAL_FORMS': 4,
-            'form-INITIAL_FORMS': 0,
-            'form-MIN_NUM_FORMS': 0,
-            'form-MAX_NUM_FORMS': 1000,
+            'file': file
         }
         response = self.client.post(self.url, formData)
+        file.close()
         self.assertEqual(response.status_code, 200)
         root = etree.fromstring(response.content, etree.HTMLParser())
         el = root.xpath("//ul[@class='success-list']/li")
@@ -146,82 +131,33 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
 
     def test_payroll_failure_4(self):
+        file = File(open('aka/tests/resources/payroll.csv', 'rb'))
         formData = {
             'year': 2019,
             'month': 11,
-            'total_amount': 200,
-            'form-0-agreement_number': '1',
-            'form-0-amount': 200,
-            'form-0-net_salary': 40000,
-            'form-TOTAL_FORMS': 1,
-            'form-INITIAL_FORMS': 0,
-            'form-MIN_NUM_FORMS': 0,
-            'form-MAX_NUM_FORMS': 1000,
+            'total_amount': '1200',
+            'file': file
         }
         response = self.client.post(self.url, formData)
-        self.assertEqual(response.status_code, 200)
-        root = etree.fromstring(response.content, etree.HTMLParser())
-        erroritems = root.xpath("//div[@data-field='id_form-0-cpr']//ul[@class='errorlist']/li")
-        self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
-
-    def test_payroll_failure_5(self):
-        formData = {
-            'year': 2019,
-            'month': 11,
-            'total_amount': 200,
-            'form-0-cpr': '1234567890',
-            'form-0-amount': 1000,
-            'form-0-net_salary': 40000,
-            'form-TOTAL_FORMS': 1,
-            'form-INITIAL_FORMS': 0,
-            'form-MIN_NUM_FORMS': 0,
-            'form-MAX_NUM_FORMS': 1000,
-        }
-        response = self.client.post(self.url, formData)
-        self.assertEqual(response.status_code, 200)
-        root = etree.fromstring(response.content, etree.HTMLParser())
-        erroritems = root.xpath("//div[@data-field='id_form-0-agreement_number']//ul[@class='errorlist']/li")
-        self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
-
-    def test_payroll_failure_6(self):
-        formData = {
-            'year': 2019,
-            'month': 11,
-            'total_amount': 200,
-            'form-0-cpr': '1234567890',
-            'form-0-agreement_number': '1',
-            'form-0-net_salary': 40000,
-            'form-TOTAL_FORMS': 1,
-            'form-INITIAL_FORMS': 0,
-            'form-MIN_NUM_FORMS': 0,
-            'form-MAX_NUM_FORMS': 1000,
-        }
-        response = self.client.post(self.url, formData)
-        self.assertEqual(response.status_code, 200)
-        root = etree.fromstring(response.content, etree.HTMLParser())
-        erroritems = root.xpath("//div[@data-field='id_form-0-amount']//ul[@class='errorlist']/li")
-        self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
-
-    def test_payroll_failure_7(self):
-        formData = {
-            'year': 2019,
-            'month': 11,
-            'total_amount': '1000',
-            'form-0-cpr': '1234567890',
-            'form-0-agreement_number': '1',
-            'form-0-amount': 200,
-            'form-0-net_salary': 40000,
-            'form-TOTAL_FORMS': 1,
-            'form-INITIAL_FORMS': 0,
-            'form-MIN_NUM_FORMS': 0,
-            'form-MAX_NUM_FORMS': 1000,
-        }
-        response = self.client.post(self.url, formData)
+        file.close()
         self.assertEqual(response.status_code, 200)
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_total_amount']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
         self.assertEqual('loentraek.sum_mismatch', erroritems[0].attrib.get('data-trans'))
+
+    def test_payroll_failure_5(self):
+        file = File(open('aka/tests/resources/incorrect.csv', 'rb'))
+        formData = {
+            'year': 2019,
+            'month': 11,
+            'total_amount': '1000',
+            'file': file
+        }
+        response = self.client.post(self.url, formData)
+        file.close()
+        self.assertEqual(response.status_code, 200)
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        erroritems = root.xpath("//div[@data-field='id_file']//ul[@class='errorlist']/li")
+        self.assertEqual(1, len(erroritems))
+        self.assertEqual('common.upload.no_encoding', erroritems[0].attrib.get('data-trans'))
