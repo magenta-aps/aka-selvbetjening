@@ -37,7 +37,7 @@ $(function(){
 
     const form = $("#mainform");
     form.submit(function(event){
-        let errors = {};
+        /*let errors = {};
 
         var field = $("#id_total_amount");
         field.each(function() {
@@ -45,13 +45,12 @@ $(function(){
                 errors[this.id] = ['loentraek.sum_mismatch'];
             }
         });
-
         if (Object.keys(errors).length) {
             event.preventDefault();
             for (field in errors) {
                 if (errors.hasOwnProperty(field)) {
                     const fieldContainer = $('[data-field="'+field+'"]');
-                    let errorList = fieldContainer.find("err-msg");
+                    let errorList = fieldContainer.find(".err-msg");
                     errorList.empty();
                     for (let i = 0; i < errors[field].length; i++) {
                         let item = $("<li>");
@@ -64,6 +63,6 @@ $(function(){
                 }
             }
             return false;
-        }
+        }*/
     });
 });

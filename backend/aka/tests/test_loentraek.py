@@ -85,3 +85,145 @@ class BasicTestCase(TestMixin, TestCase):
         el = root.xpath("//ul[@class='success-list']/li")
         self.assertEqual(1, len(el))
         self.assertEqual('1234', el[0].text)
+
+    ### NEGATIVE TESTS
+
+    def test_payroll_failure_1(self):
+        formData = {
+            'month': 11,
+            'total_amount': 200,
+            'form-0-cpr': '1234567890',
+            'form-0-agreement_number': '1',
+            'form-0-amount': 200,
+            'form-0-net_salary': 40000,
+            'form-TOTAL_FORMS': 1,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+        }
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        erroritems = root.xpath("//div[@data-field='id_year']//ul[@class='errorlist']/li")
+        self.assertEqual(1, len(erroritems))
+        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+
+    def test_payroll_failure_2(self):
+        formData = {
+            'year': 2019,
+            'total_amount': 200,
+            'form-0-agreement_number': '1',
+            'form-0-amount': 200,
+            'form-0-net_salary': 40000,
+            'form-TOTAL_FORMS': 1,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+        }
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        erroritems = root.xpath("//div[@data-field='id_month']//ul[@class='errorlist']/li")
+        self.assertEqual(1, len(erroritems))
+        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+
+    def test_payroll_failure_3(self):
+        formData = {
+            'year': 2019,
+            'month': 11,
+            'form-0-cpr': '1234567890',
+            'form-0-agreement_number': '1',
+            'form-0-amount': 200,
+            'form-0-net_salary': 40000,
+            'form-TOTAL_FORMS': 1,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+        }
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        erroritems = root.xpath("//div[@data-field='id_total_amount']//ul[@class='errorlist']/li")
+        self.assertEqual(1, len(erroritems))
+        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+
+    def test_payroll_failure_4(self):
+        formData = {
+            'year': 2019,
+            'month': 11,
+            'total_amount': 200,
+            'form-0-agreement_number': '1',
+            'form-0-amount': 200,
+            'form-0-net_salary': 40000,
+            'form-TOTAL_FORMS': 1,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+        }
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        erroritems = root.xpath("//div[@data-field='id_form-0-cpr']//ul[@class='errorlist']/li")
+        self.assertEqual(1, len(erroritems))
+        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+
+    def test_payroll_failure_5(self):
+        formData = {
+            'year': 2019,
+            'month': 11,
+            'total_amount': 200,
+            'form-0-cpr': '1234567890',
+            'form-0-amount': 1000,
+            'form-0-net_salary': 40000,
+            'form-TOTAL_FORMS': 1,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+        }
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        erroritems = root.xpath("//div[@data-field='id_form-0-agreement_number']//ul[@class='errorlist']/li")
+        self.assertEqual(1, len(erroritems))
+        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+
+    def test_payroll_failure_6(self):
+        formData = {
+            'year': 2019,
+            'month': 11,
+            'total_amount': 200,
+            'form-0-cpr': '1234567890',
+            'form-0-agreement_number': '1',
+            'form-0-net_salary': 40000,
+            'form-TOTAL_FORMS': 1,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+        }
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        erroritems = root.xpath("//div[@data-field='id_form-0-amount']//ul[@class='errorlist']/li")
+        self.assertEqual(1, len(erroritems))
+        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+
+    def test_payroll_failure_7(self):
+        formData = {
+            'year': 2019,
+            'month': 11,
+            'total_amount': '1000',
+            'form-0-cpr': '1234567890',
+            'form-0-agreement_number': '1',
+            'form-0-amount': 200,
+            'form-0-net_salary': 40000,
+            'form-TOTAL_FORMS': 1,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+        }
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        erroritems = root.xpath("//div[@data-field='id_total_amount']//ul[@class='errorlist']/li")
+        self.assertEqual(1, len(erroritems))
+        self.assertEqual('loentraek.sum_mismatch', erroritems[0].attrib.get('data-trans'))
