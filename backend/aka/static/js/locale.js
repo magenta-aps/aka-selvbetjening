@@ -76,9 +76,11 @@ $(function() {
                         csrftoken: $("input[name='csrfmiddlewaretoken']").val()
                     }
                 });
+                django.language = language;
             };
             $(this).change(update);
         });
         django.jsi18n_initialized = true;
+        django.language = $("*[data-locale-changer]").val();
     }
 });

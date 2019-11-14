@@ -229,7 +229,9 @@ class LoenTraekView(FormSetView, FormView):
                         subform.cleaned_data.get('agreement_number'),
                         subform.cleaned_data.get('amount'),
                         subform.cleaned_data.get('net_salary')
-                    ) for subform in formset
+                    )
+                    for subform in formset
+                    if subform.cleaned_data
                 ]
             )
             rec_id = prisme.process_service(payroll)[0].rec_id

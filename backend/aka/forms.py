@@ -1,4 +1,5 @@
 import csv
+import json
 import logging
 
 import chardet
@@ -173,11 +174,13 @@ class LoentraekForm(forms.Form):
         decimal_places=2,
         required=True,
         error_messages={'required': 'common.required'},
-        min_value=0.01
+        min_value=0.01,
     )
 
     def check_sum(self, formset, add_error=True):
-        formset_sum = sum([subform.cleaned_data['amount'] for subform in formset])
+        formset_sum = sum([subform.cleaned_data['amount']
+                           for subform in formset
+                           if subform.cleaned_data])
         total = self.cleaned_data['total_amount']
         if formset_sum != total:
             if add_error:
