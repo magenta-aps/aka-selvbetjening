@@ -200,14 +200,12 @@ class LoenTraekView(FormSetView, FormView):
     def get_formset(self):
         return formset_factory(LoentraekFormItem, **self.get_factory_kwargs())
 
-
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         formset = self.construct_formset()
-        if form.is_valid() and formset.is_valid():
+        if form.is_valid() and formset.is_valid() and form.check_sum(formset, True):
             return self.form_valid(form, formset)
-        else:
-            return self.form_invalid(form, formset)
+        return self.form_invalid(form, formset)
 
     def form_valid(self, form, formset):
         prisme = Prisme()
@@ -222,7 +220,7 @@ class LoenTraekView(FormSetView, FormView):
         try:
             payroll = PrismePayrollRequest(
                 cvr=self.request.session['user_info']['CVR'],
-                date=form.cleaned_data['date'],
+                date=date(int(form.cleaned_data['year']), int(form.cleaned_data['month']), 1),
                 received_date=date.today(),
                 amount=form.cleaned_data['total_amount'],
                 lines=[

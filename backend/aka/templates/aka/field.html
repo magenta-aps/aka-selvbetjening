@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load aka_tags %}
-<div{% if field.errors %} class="has-error"{% endif %}>
+<div class="input{% if field.errors %} has-error{% endif %}">
     {% if key %}
         <label for="{{ field.id_for_label }}" data-trans="{{ key }}">{% trans key %}</label>
     {% endif %}

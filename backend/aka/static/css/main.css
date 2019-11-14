@@ -216,6 +216,10 @@ input[type=submit]:active,
 input[type=submit]:hover {
     background-color:#fbb84f
 }
+
+div.input {
+    display: inline-block;
+}
 main {
     padding:.75rem;
     -webkit-box-flex:1;

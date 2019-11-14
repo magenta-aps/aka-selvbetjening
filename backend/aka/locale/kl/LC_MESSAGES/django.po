@@ -52,6 +52,37 @@ msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
 #, fuzzy
 #| msgid "common.gem"
 
+
+msgid "loentraek.title"
+msgstr "Indberet løntræk [kl]"
+
+msgid "loentraek.year"
+msgstr "År [kl]"
+
+msgid "loentraek.month"
+msgstr "Måned [kl]"
+
+msgid "loentraek.total_amount"
+msgstr "Totalt beløb [kl]"
+
+msgid "loentraek.cpr_cvr"
+msgstr "CPR/CVR [kl]"
+
+msgid "loentraek.agreement_number"
+msgstr "Aftalenummer [kl]"
+
+msgid "loentraek.amount"
+msgstr "Løntræk [kl]"
+
+msgid "loentraek.net_salary"
+msgstr "Nettoløn [kl]"
+
+msgid "loentraek.sum_mismatch"
+msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækker [kl]"
+
+
+
+
 msgid "nedskrivning.success"
 msgstr "Nedskrivninger uploadet [kl]"
 

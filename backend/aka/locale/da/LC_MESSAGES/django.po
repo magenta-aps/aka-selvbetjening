@@ -51,6 +51,37 @@ msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet"
 
 
+# 6.2
+
+msgid "loentraek.title"
+msgstr "Indberet løntræk"
+
+msgid "loentraek.year"
+msgstr "År"
+
+msgid "loentraek.month"
+msgstr "Måned"
+
+msgid "loentraek.total_amount"
+msgstr "Totalt beløb"
+
+msgid "loentraek.cpr_cvr"
+msgstr "CPR/CVR"
+
+msgid "loentraek.agreement_number"
+msgstr "Aftalenummer"
+
+msgid "loentraek.amount"
+msgstr "Løntræk"
+
+msgid "loentraek.net_salary"
+msgstr "Nettoløn"
+
+msgid "loentraek.sum_mismatch"
+msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækker"
+
+
+# 6.4
 msgid "nedskrivning.success"
 msgstr "Nedskrivninger uploadet"
 

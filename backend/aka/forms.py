@@ -7,6 +7,8 @@ from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from django.forms import ValidationError, formset_factory
 from io import StringIO
+
+from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 
 from .utils import getSharedJson, get_ordereddict_key_index, \
@@ -153,18 +155,35 @@ class InkassoUploadForm(forms.Form):
 
 class LoentraekForm(forms.Form):
 
-    date = forms.DateField(
-        widget=forms.DateInput(attrs={'type': 'date'}),
-        input_formats=['%Y-%m-%d'],
+    year = forms.ChoiceField(
+        choices=[(x, x) for x in range(date.today().year - 10, date.today().year + 1)],
         required=True,
-        error_messages={'required': 'common.required'}
+        error_messages={'required': 'common.required'},
+        widget=forms.Select(attrs={'class': 'dropdown'}),
+        initial=date.today().year
     )
-
+    month = forms.ChoiceField(
+        choices=[(x, x) for x in range(1, 13)],
+        required=True,
+        error_messages={'required': 'common.required'},
+        widget=forms.Select(attrs={'class': 'dropdown'}),
+        initial=date.today().month
+    )
     total_amount = forms.DecimalField(
         decimal_places=2,
         required=True,
-        error_messages={'required': 'common.required'}
+        error_messages={'required': 'common.required'},
+        min_value=0.01
     )
+
+    def check_sum(self, formset, add_error=True):
+        formset_sum = sum([subform.cleaned_data['amount'] for subform in formset])
+        total = self.cleaned_data['total_amount']
+        if formset_sum != total:
+            if add_error:
+                self.add_error('total_amount', ValidationError(_('loentraek.sum_mismatch'), 'loentraek.sum_mismatch'))
+            return False
+        return True
 
 
 class LoentraekFormItem(forms.Form):
@@ -173,26 +192,22 @@ class LoentraekFormItem(forms.Form):
         required=True,
         error_messages={'required': 'required_field'}
     )
-
     agreement_number = forms.CharField(
         required=True,
         error_messages={'required': 'required_field'}
     )
-
     amount = forms.DecimalField(
         decimal_places=2,
         required=True,
-        error_messages={'required': 'common.required'}
+        error_messages={'required': 'common.required'},
+        min_value=0.01
     )
-
     net_salary = forms.DecimalField(
         decimal_places=2,
-        required=True,
-        error_messages={'required': 'common.required'}
+        required=False,
+        error_messages={'required': 'common.required'},
+        min_value=0.01
     )
-
-
-LoentraekItemFormItem = formset_factory(LoentraekFormItem)
 
 
 class NedskrivningForm(forms.Form):
