@@ -191,9 +191,9 @@ class LoentraekForm(forms.Form):
 
 class LoentraekFormItem(forms.Form):
 
-    cpr_cvr = forms.CharField(
+    cpr = forms.CharField(
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'required_field'},
     )
     agreement_number = forms.CharField(
         required=True,

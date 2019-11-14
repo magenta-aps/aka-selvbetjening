@@ -65,8 +65,8 @@ msgstr "Måned"
 msgid "loentraek.total_amount"
 msgstr "Totalt beløb"
 
-msgid "loentraek.cpr_cvr"
-msgstr "CPR/CVR"
+msgid "loentraek.cpr"
+msgstr "CPR"
 
 msgid "loentraek.agreement_number"
 msgstr "Aftalenummer"

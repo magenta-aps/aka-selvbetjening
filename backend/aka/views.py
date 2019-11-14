@@ -225,7 +225,7 @@ class LoenTraekView(FormSetView, FormView):
                 amount=form.cleaned_data['total_amount'],
                 lines=[
                     PrismePayrollRequestLine(
-                        subform.cleaned_data.get('cpr_cvr'),
+                        subform.cleaned_data.get('cpr'),
                         subform.cleaned_data.get('agreement_number'),
                         subform.cleaned_data.get('amount'),
                         subform.cleaned_data.get('net_salary')
