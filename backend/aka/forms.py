@@ -206,6 +206,10 @@ class LoentraekUploadForm(LoentraekForm):
         file.seek(0)
         data = file.read()
         charset = chardet.detect(data)
+        if charset is None or charset['encoding'] is None:
+            raise ValidationError(_("common.upload.no_encoding"), "common.upload.no_encoding")
+
+        print(charset)
         rows = []
         subforms = []
         try:
@@ -213,6 +217,11 @@ class LoentraekUploadForm(LoentraekForm):
             rows = [row for row in csv_reader]  # Catch csv reading errors early
         except csv.Error as e:
             self.add_error(None, "failed_reading_csv")
+        if len(rows) == 0:
+            self.add_error('file', ValidationError(
+                _("common.upload.empty"),
+                "common.upload.empty")
+            )
         for row_index, row in enumerate(rows, start=1):
             subform = LoentraekFormItem(data=row)
             if not subform.is_valid():  # Catch row errors early
@@ -300,6 +309,7 @@ class NedskrivningUploadForm(forms.Form):
     )
 
     def clean_file(self):
+        print("clean_file")
         file = self.cleaned_data['file']
         if file.size > settings.MAX_UPLOAD_FILESIZE:
             raise ValidationError('file_too_large')
@@ -313,7 +323,12 @@ class NedskrivningUploadForm(forms.Form):
             csv_reader = csv.DictReader(StringIO(data.decode(charset['encoding'])))
             rows = [row for row in csv_reader]  # Catch csv reading errors early
         except csv.Error as e:
-            self.add_error(None, "failed_reading_csv")
+            self.add_error('file', "failed_reading_csv")
+        if len(rows) == 0:
+            self.add_error('file', ValidationError(
+                _("common.upload.empty"),
+                "common.upload.empty")
+            )
         for row_index, row in enumerate(rows, start=1):
             subform = NedskrivningForm(data=row)
             if not subform.is_valid():  # Catch row errors early

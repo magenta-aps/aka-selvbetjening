@@ -265,10 +265,14 @@ class LoentraekUploadView(LoentraekView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
-            formset = form.subforms
             if self.forms_valid(form.subforms) and form.check_sum(form.subforms, True):
                 return self.form_valid(form, form.subforms)
-        return self.form_invalid(form, form.subforms)
+        return self.form_invalid(form)
+
+    def form_invalid(self, form):
+        return self.render_to_response(
+            self.get_context_data(form=form)
+        )
 
 
 class LoenTraekDistributionView(View):
