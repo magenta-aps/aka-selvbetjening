@@ -19,9 +19,12 @@ class BasicTestCase(TestMixin, TestCase):
         ]
         self.cvrcheck_mock = self.mock_soap('aka.clients.prisme.Prisme.check_cvr')
         self.cvrcheck_mock.return_value = '12345678'  # claimant_id
+        session = self.client.session
+        session['user_info'] = {'CVR': '12479182'}  # 12479182
+        session.save()
 
 
-    ### PRISME INTERFACE TESTS ###
+### PRISME INTERFACE TESTS ###
 
     def test_impairment_request_parse(self):
         request = PrismeImpairmentRequest('32SE', '12345678', 'ref123', -100.5, 'AKI-000047')

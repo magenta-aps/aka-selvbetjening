@@ -209,10 +209,6 @@ class LoentraekView(FormSetView, FormView):
     def form_valid(self, form, formset):
         prisme = Prisme()
 
-        ####
-        self.request.session['user_info'] = {'CVR': '12479182'}  # 12479182
-        ####
-
         if 'user_info' not in self.request.session:
             raise AccessDeniedException('no_cvr')
 
@@ -303,9 +299,6 @@ class NedskrivningView(ErrorHandlerMixin, FormView):
         return claimant_id
 
     def get(self, request, *args, **kwargs):
-        ####
-        self.request.session['user_info'] = {'CVR': '12479182'}  # 12479182
-        ####
         self.get_claimant_id(request)
         return super(NedskrivningView, self).get(request, *args, **kwargs)
 
@@ -321,10 +314,6 @@ class NedskrivningView(ErrorHandlerMixin, FormView):
 
     def form_valid(self, form):
         prisme = Prisme()
-
-        ####
-        self.request.session['user_info'] = {'CVR': '12479182'}  # 12479182
-        ####
 
         if 'user_info' not in self.request.session:
             raise AccessDeniedException('no_cvr')
