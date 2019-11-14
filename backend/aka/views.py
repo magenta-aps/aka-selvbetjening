@@ -195,7 +195,7 @@ class InkassoSagUploadView(InkassoSagView):
 class LoenTraekView(FormSetView, FormView):
 
     form_class = LoentraekForm
-    template_name = 'aka/payrollForm.html'
+    template_name = 'aka/payroll/payrollForm.html'
 
     def get_formset(self):
         return formset_factory(LoentraekFormItem, **self.get_factory_kwargs())
@@ -267,7 +267,7 @@ class LoenTraekDistributionView(View):
 class NedskrivningView(ErrorHandlerMixin, FormView):
 
     form_class = NedskrivningForm
-    template_name = 'aka/impairmentForm.html'
+    template_name = 'aka/impairment/impairmentForm.html'
 
     def get_claimant_id(self, request):
         claimant_id = request.session['user_info'].get('claimant_id')
@@ -311,7 +311,7 @@ class NedskrivningView(ErrorHandlerMixin, FormView):
             rec_id = self.send_impairment(form, prisme)
             return TemplateResponse(
                 request=self.request,
-                template="aka/impairmentSuccess.html",
+                template="aka/impairment/impairmentSuccess.html",
                 context={
                     'rec_ids': [rec_id]
                 },
@@ -327,7 +327,7 @@ class NedskrivningView(ErrorHandlerMixin, FormView):
 
 class NedskrivningUploadView(NedskrivningView):
     form_class = NedskrivningUploadForm
-    template_name = 'aka/uploadImpairmentForm.html'
+    template_name = 'aka/impairment/uploadImpairmentForm.html'
 
     def form_valid(self, form):
         rec_ids = []
@@ -344,7 +344,7 @@ class NedskrivningUploadView(NedskrivningView):
 
         return TemplateResponse(
             request=self.request,
-            template="aka/impairmentSuccess.html",
+            template="aka/impairment/impairmentSuccess.html",
             context={
                 'rec_ids': rec_ids,
                 'errors': errors
