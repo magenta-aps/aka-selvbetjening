@@ -59,7 +59,8 @@ class CsvUploadMixin(object):
                         col_index = get_ordereddict_key_index(row, field)
                     except ValueError:
                         col_index = None
-                    for error in errorlist:
+                    print(errorlist.as_data)
+                    for error in errorlist.as_data:
                         self.add_error('file', ValidationError(
                             _("common.upload.validation_item"),
                             "common.upload.validation_item",
