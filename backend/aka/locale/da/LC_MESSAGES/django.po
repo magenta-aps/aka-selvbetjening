@@ -32,6 +32,9 @@ msgstr "Forside"
 msgid "common.gem"
 msgstr "Gem"
 
+msgid "common.send"
+msgstr "Send"
+
 msgid "common.repeat"
 msgstr "Gentag"
 
@@ -129,6 +132,67 @@ msgstr "Beløb"
 msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnummer"
 
+# NY16
+msgid "rentenota.dato"
+msgstr "Dato"
+
+msgid "rentenota.postdato"
+msgstr "Postdato"
+
+msgid "rentenota.debitorkonto"
+msgstr "Debitor&#173;konto"
+
+msgid "rentenota.faktureringsklassifikation"
+msgstr "Fakturerings&#173;klassifikation"
+
+msgid "rentenota.rentenotanummer"
+msgstr "Rentenota&#173;nummer"
+
+msgid "rentenota.bilag"
+msgstr "Bilag"
+
+msgid "rentenota.faktura"
+msgstr "Faktura"
+
+msgid "rentenota.tekst"
+msgstr "Tekst"
+
+msgid "rentenota.fradato"
+msgstr "Fradato"
+
+msgid "rentenota.tildato"
+msgstr "Tildato"
+
+msgid "rentenota.dage"
+msgstr "Dage"
+
+msgid "rentenota.grundlag"
+msgstr "Grundlag"
+
+msgid "rentenota.forfald"
+msgstr "Forfalds&#173;dato"
+
+msgid "rentenota.beloeb"
+msgstr "Beløb"
+
+msgid "rentenota.konto"
+msgstr "Konto"
+
+msgid "rentenota.telefon"
+msgstr "Oq/Telefon"
+
+msgid "rentenota.fax"
+msgstr "Fax"
+
+msgid "rentenota.email"
+msgstr "Email"
+
+msgid "rentenota.webadresse"
+msgstr "Web-adresse"
+
+msgid "rentenota.ingenposter"
+msgstr "Ingen poster"
+
 msgid "required"
 msgstr "Dette felt er påkrævet."
 
@@ -138,3 +202,9 @@ msgstr "Dette felt er påkrævet."
 
 msgid "invalid_extension"
 msgstr "Filendelse '{extension}' er ikke tilladt. Tilladte filendelser er: '{allowed_extensions}'."
+
+msgid "DK"
+msgstr "Danmark"
+
+msgid "GL"
+msgstr "Grønland"

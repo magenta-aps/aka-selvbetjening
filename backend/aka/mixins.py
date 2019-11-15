@@ -1,7 +1,7 @@
 from django.template.response import TemplateResponse
 import json
 
-from aka.exceptions import AkaException
+from aka.exceptions import AkaException, AccessDeniedException
 
 
 class ErrorHandlerMixin(object):
@@ -26,3 +26,13 @@ class ErrorHandlerMixin(object):
                 },
                 using=self.template_engine
             )
+
+
+class RequireCvrMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            self.cvr = request.session['user_info']['cvr']
+        except KeyError:
+            self.cvr = '12479182'
+            # raise AccessDeniedException('no_cvr')
+        return super(RequireCvrMixin, self).dispatch(request, *args, **kwargs)

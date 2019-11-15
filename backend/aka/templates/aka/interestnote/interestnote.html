@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block extra_headers %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/interestnote.css' %}"/>
+{% endblock %}
+
+{% block content %}
+<article>
+
+    <h1 class="rentenota-title">{% trans 'rentenota.title' %} </h1>
+
+    <div class="rentenota-main">
+
+        <form method="post" id="mainform">
+            {% csrf_token %}
+            <div class="rentenota-actions row">
+                <div class="col-4">
+                    {% include 'aka/field.html' with field=form.year key='rentenota.year' %}
+                    {% include 'aka/field.html' with field=form.month key='rentenota.month' %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <button type="submit" @click="requestRentenota">{% trans 'common.send' %}</button>
+                </div>
+            </div>
+        </form>
+
+
+        <div class="rentenota-data">
+
+            <div class="rentenota-data-title">
+                <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
+                <div>
+                    <button class="rentenota-btn-print" @click="print()">{% trans 'common.print' %}</button>
+                </div>
+            </div>
+
+            <p>
+                <strong>Akileraartarnermut Aqutsisoqarfik</strong><br>
+                <strong>Skattestyrelsen</strong>
+            </p>
+
+            <div class="notaheader">
+
+                <p>
+                    <em>{{ company.navn }}</em><br>
+                    {{ company.adresse }}<br>
+                    {{ company.postnummer }} {{ rentenota_data.bynavn }}<br>
+                    <span data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
+                </p>
+
+                <div>
+                    <h3 data-trans="rentenota.rentenota">{% trans '' %}</h3>
+                    <table class="rentenota-address-table">
+                        <tr>
+                            <th data-trans="rentenota.konto">{% trans '' %}</th>
+                            <td>10276179</td>
+                        </tr>
+                        <tr>
+                            <th data-trans="rentenota.dato">{% trans '' %}</th>
+                            <td v-html='today.toLocaleDateString()'></td>
+                        </tr>
+                    </table>
+
+                    <address>
+                        <p>
+                            Postboks 1605<br>
+                            3900 Nuuk
+                        </p>
+                        <table class="rentenota-address-table">
+                            <tr>
+                                <th data-trans="rentenota.telefon">{% trans 'rentenota.telefon' %}</th>
+                                <td>346500</td>
+                            </tr>
+                            <tr>
+                                <th data-trans="rentenota.fax">{% trans 'rentenota.fax' %}</th>
+                                <td>346577</td>
+                            </tr>
+                            <tr>
+                                <th data-trans="rentenota.email">{% trans 'rentenota.email' %}</th>
+                                <td>sulinal@nanoq.gl</td>
+                            </tr>
+                            <tr>
+                                <th data-trans="rentenota.webadresse">{% trans 'rentenota.webadresse' %}</th>
+                                <td>www.aka.gl</td>
+                            </tr>
+                        </table>
+                    </address>
+
+                </div>
+            </div>
+
+            {% if posts is not None %}
+                <table>
+                    <thead>
+                    <tr>
+                        <th data-trans="rentenota.dato">{% trans 'rentenota.dato' %}</th>
+                        <th data-trans="rentenota.debitorkonto">{% trans 'rentenota.debitorkonto' %}</th>
+                        <th data-trans="rentenota.faktureringsklassifikation">{% trans 'rentenota.faktureringsklassifikation' %}</th>
+                        <th data-trans="rentenota.bilag">{% trans 'rentenota.bilag' %}</th>
+                        <th data-trans="rentenota.rentenotanummer">{% trans 'rentenota.rentenotanummer' %}</th>
+                        <th data-trans="rentenota.tekst">{% trans 'rentenota.tekst' %}</th>
+                        <th data-trans="rentenota.forfald">{% trans 'rentenota.forfald' %}</th>
+                        <th data-trans="rentenota.grundlag">{% trans 'rentenota.grundlag' %}</th>
+                        <th data-trans="rentenota.beloeb">{% trans 'rentenota.beloeb' %}</th>
+                        <th data-trans="rentenota.postdato">{% trans 'rentenota.postdato' %}</th>
+                        <th data-trans="rentenota.faktura">{% trans 'rentenota.faktura' %}</th>
+                        <th data-trans="rentenota.fradato">{% trans 'rentenota.fradato' %}</th>
+                        <th data-trans="rentenota.tildato">{% trans 'rentenota.tildato' %}</th>
+                        <th data-trans="rentenota.dage">{% trans 'rentenota.dage' %}</th>
+                        <th style="border: none;"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% if posts|length == 0 %}
+                            <tr v-if="!rentenota_data.poster.length">
+                                <td colspan="14" style="text-align: center">
+                                    {% trans 'rentenota.ingenposter' %}
+                                </td>
+                            </tr>
+                        {% else %}
+                            {% for post in posts %}
+                                <tr>
+                                    <td>{{ post.Updated }}</td>
+                                    <td>{{ post.AccountNum }}</td>
+                                    <td>{{ post.BillingClassification }}</td>
+                                    <td>{{ post.Voucher }}</td>
+                                    <td>{{ post.InterestNote }}</td>
+                                    <td>{{ post.Txt }}</td>
+                                    <td class="numbercell">{{ post.DueDate }}</td>
+                                    <td class="numbercell">{{ post.InvoiceAmount }}</td>
+                                    <td class="numbercell">{{ post.InterestAmount }}</td>
+                                    <td>{{ post.TransDate }}</td>
+                                    <td>{{ post.Invoice }}</td>
+                                    <td>{{ post.CalcFrom }}</td>
+                                    <td>{{ post.CalcTo }}</td>
+                                    <td class="numbercell">{{ post.InterestDays }}</td>
+                                    <td></td>
+                                </tr>
+                            {% endfor %}
+                        <tr>
+                            <td colspan="8"></td>
+                            <td class="numbercell rentenota-total">{{ total }}</td>
+                            <td colspan="6">kr</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+</article>
+{% endblock %}

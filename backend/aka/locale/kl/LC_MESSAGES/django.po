@@ -23,12 +23,15 @@ msgstr "Fejl [kl]"
 msgid "common.error.access_denied"
 msgstr "Adgang nægtet [kl]"
 
+msgid "common.forside"
+msgstr "Forside [kl]"
+
 #: aka/templates/aka/impairmentForm.html:56
 msgid "common.gem"
 msgstr "Gem [kl]"
 
-msgid "common.forside"
-msgstr "Forside [kl]"
+msgid "common.send"
+msgstr "Send"
 
 msgid "common.repeat"
 msgstr "Gentag [kl]"
@@ -130,6 +133,70 @@ msgstr "Beløb [kl]"
 msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnummer [kl]"
 
+
+# NY16
+msgid "rentenota.dato"
+msgstr "Dato [kl]"
+
+msgid "rentenota.postdato"
+msgstr "Postdato [kl]"
+
+msgid "rentenota.debitorkonto"
+msgstr "Debitor&#173;konto [kl]"
+
+msgid "rentenota.faktureringsklassifikation"
+msgstr "Fakturerings&#173;klassifikation [kl]"
+
+msgid "rentenota.rentenotanummer"
+msgstr "Rentenota&#173;nummer [kl]"
+
+msgid "rentenota.bilag"
+msgstr "Bilag [kl]"
+
+msgid "rentenota.faktura"
+msgstr "Faktura [kl]"
+
+msgid "rentenota.tekst"
+msgstr "Tekst [kl]"
+
+msgid "rentenota.fradato"
+msgstr "Fradato [kl]"
+
+msgid "rentenota.tildato"
+msgstr "Tildato [kl]"
+
+msgid "rentenota.dage"
+msgstr "Dage [kl]"
+
+msgid "rentenota.grundlag"
+msgstr "Grundlag [kl]"
+
+msgid "rentenota.forfald"
+msgstr "Forfalds&#173;dato [kl]"
+
+msgid "rentenota.beloeb"
+msgstr "Beløb [kl]"
+
+msgid "rentenota.konto"
+msgstr "Konto [kl]"
+
+msgid "rentenota.telefon"
+msgstr "Oq/Telefon [kl]"
+
+msgid "rentenota.fax"
+msgstr "Fax [kl]"
+
+msgid "rentenota.email"
+msgstr "Email [kl]"
+
+msgid "rentenota.webadresse"
+msgstr "Web-adresse [kl]"
+
+msgid "rentenota.ingenposter"
+msgstr "Ingen poster [kl]"
+
+
+
 msgid "required"
 msgstr "Dette felt er påkrævet. [kl]"
 
@@ -138,3 +205,9 @@ msgstr "Dette felt er påkrævet. [kl]"
 
 msgid "invalid_extension"
 msgstr "Filendelse '{extension}' er ikke tilladt. Tilladte filendelser er: '{allowed_extensions}' [kl]."
+
+msgid "DK"
+msgstr "Danmarki"
+
+msgid "GL"
+msgstr "Kalaallit Nunaat"

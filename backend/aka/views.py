@@ -12,6 +12,7 @@ from aka.clients.prisme import PrismeImpairmentRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
 from aka.exceptions import AccessDeniedException
 from aka.forms import InkassoForm, InkassoUploadForm
+from aka.forms import InterestNoteForm
 from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
@@ -32,6 +33,8 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView, BaseFormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
+
+from aka.mixins import RequireCvrMixin
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -282,7 +285,7 @@ class LoenTraekDistributionView(View):
         return JsonResponse(data, safe=False)
 
 
-class NedskrivningView(ErrorHandlerMixin, FormView):
+class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
 
     form_class = NedskrivningForm
     template_name = 'aka/impairment/impairmentForm.html'
@@ -373,7 +376,72 @@ class PrivatdebitorkontoView(View):
         return JsonResponse("OK", safe=False)
 
 
-class RenteNotaView(View):
+class RenteNotaView(RequireCvrMixin, FormView):
+    form_class = InterestNoteForm
+    template_name = 'aka/interestnote/interestnote.html'
+
+    def __init__(self, *args, **kwargs):
+        super(RenteNotaView, self).__init__(*args, **kwargs)
+        self.posts = None
+
+    def get_posts(self, form):
+        prisme = Prisme()
+        posts = []
+        # Response is of type PrismeInterestNoteResponse
+        interest_note_data = prisme.process_service(
+            PrismeInterestNoteRequest(self.cvr, form.cleaned_data['year'], form.cleaned_data['month'])
+        )
+        for interest_note_response in interest_note_data:
+            for journal in interest_note_response.interest_journal:
+                journaldata = {
+                    k: v
+                    for k, v in journal.data.items()
+                    if k in [
+                        'Updated', 'AccountNum', 'InterestNote',
+                        'ToDate', 'BillingClassification'
+                    ]
+                }
+                for transaction in journal.interest_transactions:
+                    data = {}
+                    data.update(transaction.data)
+                    data.update(journaldata)
+                    posts.append(data)
+        return posts
+
+    def form_valid(self, form):
+        self.posts = self.get_posts(form)
+        return TemplateResponse(
+            request=self.request,
+            template=self.template_name,
+            context=self.get_context_data(),
+            using=self.template_engine
+        )
+
+    def get_context_data(self, **kwargs):
+        context = {
+            # 'customer_data': Dafo().lookup_cvr(self.cvr),
+            'company': {
+                'navn': 'Testfirma',
+                'adresse': 'Testvej 42',
+                'postnummer': '1234',
+                'bynavn': 'Testby',
+                'landekode': 'DK'
+            },
+            'posts': self.posts,
+            'total': sum([float(post['InterestAmount']) for post in self.posts])
+        }
+        context.update(kwargs)
+        return super(RenteNotaView, self).get_context_data(**context)
+
+
+
+
+
+
+
+
+
+class OldRenteNotaView(View):
 
     def get(self, request, year, month, *args, **kwargs):
         '''Get rentenota data for the given interval.

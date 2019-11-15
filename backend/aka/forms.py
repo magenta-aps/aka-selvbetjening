@@ -208,6 +208,24 @@ class InkassoUploadForm(forms.Form):
         return file
 
 
+class InterestNoteForm(forms.Form):
+
+    year = forms.ChoiceField(
+        choices=[(x, x) for x in range(date.today().year - 10, date.today().year + 1)],
+        required=True,
+        error_messages={'required': 'common.required'},
+        widget=forms.Select(attrs={'class': 'dropdown'}),
+        initial=date.today().year
+    )
+    month = forms.ChoiceField(
+        choices=[(x, x) for x in range(1, 13)],
+        required=True,
+        error_messages={'required': 'common.required'},
+        widget=forms.Select(attrs={'class': 'dropdown'}),
+        initial=date.today().month
+    )
+
+
 class LoentraekForm(forms.Form):
 
     year = forms.ChoiceField(
@@ -279,7 +297,6 @@ class LoentraekUploadForm(CsvUploadMixin, LoentraekForm):
     )
 
     subform_class = LoentraekFormItem
-
 
 
 class NedskrivningForm(forms.Form):

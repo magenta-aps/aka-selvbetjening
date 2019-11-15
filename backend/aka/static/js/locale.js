@@ -65,7 +65,7 @@ $(function() {
                     }
                 }
             }
-            return text;
+            return text.replace("&amp;", "&");
         };
 
         $("*[data-locale-changer]").each(function(){
@@ -79,7 +79,7 @@ $(function() {
                     let text = $this.attr('data-trans');
                     let params = $this.attr('data-trans-params');
                     text = format(text, params && JSON.parse(params), language);
-                    this.innerText = text;
+                    this.innerHTML = text;
                 });
                 $.ajax({
                     url: "/language/",
