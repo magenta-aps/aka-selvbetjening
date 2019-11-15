@@ -80,6 +80,7 @@ class BasicTestCase(TestMixin, TestCase):
             root = etree.fromstring(response.content, etree.HTMLParser())
             print(response.content)
             erroritems = root.xpath("//div[@data-field='id_file']//ul[@class='errorlist']/li")
-            self.assertEqual(2, len(erroritems))
+            self.assertEqual(3, len(erroritems))
             self.assertEqual('common.upload.validation_item', erroritems[0].attrib.get('data-trans'))
             self.assertEqual('common.upload.validation_item', erroritems[1].attrib.get('data-trans'))
+            self.assertEqual('common.upload.validation_item', erroritems[2].attrib.get('data-trans'))

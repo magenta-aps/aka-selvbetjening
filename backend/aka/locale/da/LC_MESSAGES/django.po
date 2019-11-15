@@ -132,6 +132,9 @@ msgstr "Sekvensnummer"
 msgid "required"
 msgstr "Dette felt er påkrævet."
 
+msgid "common.required"
+msgstr "Dette felt er påkrævet {foo}."
+
 
 msgid "invalid_extension"
 msgstr "Filendelse '{extension}' er ikke tilladt. Tilladte filendelser er: '{allowed_extensions}'."
