@@ -86,7 +86,7 @@ class BasicTestCase(TestMixin, TestCase):
 
     ### NEGATIVE TESTS
 
-    def test_payroll_failure_1(self):
+    def test_payroll_failure_missing_year(self):
         formData = {
             'month': 11,
             'total_amount': 200,
@@ -106,7 +106,7 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(1, len(erroritems))
         self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
 
-    def test_payroll_failure_2(self):
+    def test_payroll_failure_mmissing_month(self):
         formData = {
             'year': 2019,
             'total_amount': 200,
@@ -125,7 +125,7 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(1, len(erroritems))
         self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
 
-    def test_payroll_failure_3(self):
+    def test_payroll_failure_missing_total_amount(self):
         formData = {
             'year': 2019,
             'month': 11,
@@ -145,7 +145,7 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(1, len(erroritems))
         self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
 
-    def test_payroll_failure_4(self):
+    def test_payroll_failure_missing_cpr(self):
         formData = {
             'year': 2019,
             'month': 11,
@@ -165,7 +165,7 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(1, len(erroritems))
         self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
 
-    def test_payroll_failure_5(self):
+    def test_payroll_failure_missing_agreement_number(self):
         formData = {
             'year': 2019,
             'month': 11,
@@ -185,7 +185,7 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(1, len(erroritems))
         self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
 
-    def test_payroll_failure_6(self):
+    def test_payroll_failure_missing_amount(self):
         formData = {
             'year': 2019,
             'month': 11,
@@ -205,7 +205,7 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(1, len(erroritems))
         self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
 
-    def test_payroll_failure_7(self):
+    def test_payroll_failure_sum_mismatch(self):
         formData = {
             'year': 2019,
             'month': 11,

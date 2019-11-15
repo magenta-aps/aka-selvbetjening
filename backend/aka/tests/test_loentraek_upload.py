@@ -71,7 +71,7 @@ class BasicTestCase(TestMixin, TestCase):
 
     ### NEGATIVE TESTS
 
-    def test_payroll_failure_1(self):
+    def test_payroll_failure_missing_year(self):
         formData = {
             'month': 11,
             'total_amount': 200,
@@ -91,7 +91,7 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(1, len(erroritems))
         self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
 
-    def test_payroll_failure_2(self):
+    def test_payroll_failure_missing_month(self):
         formData = {
             'year': 2019,
             'total_amount': 200,
@@ -110,7 +110,7 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(1, len(erroritems))
         self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
 
-    def test_payroll_failure_3(self):
+    def test_payroll_failure_missing_total_amount(self):
         formData = {
             'year': 2019,
             'month': 11,
@@ -130,7 +130,7 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(1, len(erroritems))
         self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
 
-    def test_payroll_failure_4(self):
+    def test_payroll_failure_sum_mismatch(self):
         file = File(open('aka/tests/resources/payroll.csv', 'rb'))
         formData = {
             'year': 2019,
@@ -146,7 +146,7 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(1, len(erroritems))
         self.assertEqual('loentraek.sum_mismatch', erroritems[0].attrib.get('data-trans'))
 
-    def test_payroll_failure_5(self):
+    def test_payroll_failure_incorrect_csv(self):
         file = File(open('aka/tests/resources/incorrect.csv', 'rb'))
         formData = {
             'year': 2019,
@@ -161,3 +161,19 @@ class BasicTestCase(TestMixin, TestCase):
         erroritems = root.xpath("//div[@data-field='id_file']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
         self.assertEqual('common.upload.no_encoding', erroritems[0].attrib.get('data-trans'))
+
+    def test_payroll_failure_empty_csv(self):
+        file = File(open('aka/tests/resources/payroll_empty.csv', 'rb'))
+        formData = {
+            'year': 2019,
+            'month': 11,
+            'total_amount': '1000',
+            'file': file
+        }
+        response = self.client.post(self.url, formData)
+        file.close()
+        self.assertEqual(response.status_code, 200)
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        erroritems = root.xpath("//div[@data-field='id_file']//ul[@class='errorlist']/li")
+        self.assertEqual(1, len(erroritems))
+        self.assertEqual('common.upload.empty', erroritems[0].attrib.get('data-trans'))
