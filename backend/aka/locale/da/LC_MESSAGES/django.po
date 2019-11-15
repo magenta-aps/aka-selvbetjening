@@ -38,8 +38,23 @@ msgstr "Gentag"
 msgid "common.upload.validation"
 msgstr "Der er fejl i det uploadede regneark: "
 
+msgid "common.upload.empty"
+msgstr "Der er ingen rækker i det uploadede regneark"
+
+msgid "common.upload.no_encoding"
+msgstr "Kunne ikke finde tegnkodningen i det uploadede regneark. Er det en korrekt CSV-fil?"
+
+msgid "common.upload.read_error"
+msgstr "Kunne ikke læse CSV-filen. Er det en korrekt formatteret CSV-fil?"
+
 msgid "common.upload.validation_item"
 msgstr "Celle {col_letter}{row} ({field}): {message}"
+
+msgid "common.upload.validation_header"
+msgstr "Der mangler en kolonne med navnet '{field}'"
+
+msgid "common.upload.template"
+msgstr "Download skabelon"
 
 msgid "prisme.error"
 msgstr ""
@@ -51,6 +66,37 @@ msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet"
 
 
+# 6.2
+
+msgid "loentraek.title"
+msgstr "Indberet løntræk"
+
+msgid "loentraek.year"
+msgstr "År"
+
+msgid "loentraek.month"
+msgstr "Måned"
+
+msgid "loentraek.total_amount"
+msgstr "Totalt beløb"
+
+msgid "loentraek.cpr"
+msgstr "CPR"
+
+msgid "loentraek.agreement_number"
+msgstr "Aftalenummer"
+
+msgid "loentraek.amount"
+msgstr "Løntræk"
+
+msgid "loentraek.net_salary"
+msgstr "Nettoløn"
+
+msgid "loentraek.sum_mismatch"
+msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækker"
+
+
+# 6.4
 msgid "nedskrivning.success"
 msgstr "Nedskrivninger uploadet"
 
@@ -66,9 +112,6 @@ msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber}"
 #: aka/templates/aka/impairmentForm.html:12
 msgid "nedskrivning.title"
 msgstr "Nedskrivning - Opret"
-
-msgid "nedskrivning.template"
-msgstr "Download skabelon"
 
 #: aka/templates/aka/impairmentForm.html:18
 msgid "nedskrivning.debitor"
@@ -87,6 +130,9 @@ msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnummer"
 
 msgid "required"
+msgstr "Dette felt er påkrævet."
+
+msgid "common.required"
 msgstr "Dette felt er påkrævet."
 
 

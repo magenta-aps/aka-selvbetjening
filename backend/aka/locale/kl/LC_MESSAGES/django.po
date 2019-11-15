@@ -36,8 +36,20 @@ msgstr "Gentag [kl]"
 msgid "common.upload.validation"
 msgstr "Der er fejl i det uploadede regneark [kl]:"
 
+msgid "common.upload.empty"
+msgstr "Der er ingen rækker i det uploadede regneark [kl]"
+
+msgid "common.upload.no_encoding"
+msgstr "Kunne ikke finde tegnkodningen i det uploadede regneark. Er det en korrekt CSV-fil? [kl]"
+
+msgid "common.upload.read_error"
+msgstr "Kunne ikke læse CSV-filen. Er det en korrekt formatteret CSV-fil? [kl]"
+
 msgid "common.upload.validation_item"
 msgstr "Celle {col_letter}{row} ({field}): {message} [kl]"
+
+msgid "common.upload.validation_header"
+msgstr "Der mangler en kolonne med navnet '{field}' [kl]"
 
 msgid "prisme.error"
 msgstr ""
@@ -51,6 +63,37 @@ msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
 #: aka/templates/aka/error.html:17 aka/templates/aka/success.html:21
 #, fuzzy
 #| msgid "common.gem"
+
+
+msgid "loentraek.title"
+msgstr "Indberet løntræk [kl]"
+
+msgid "loentraek.year"
+msgstr "År [kl]"
+
+msgid "loentraek.month"
+msgstr "Måned [kl]"
+
+msgid "loentraek.total_amount"
+msgstr "Totalt beløb [kl]"
+
+msgid "loentraek.cpr"
+msgstr "CPR [kl]"
+
+msgid "loentraek.agreement_number"
+msgstr "Aftalenummer [kl]"
+
+msgid "loentraek.amount"
+msgstr "Løntræk [kl]"
+
+msgid "loentraek.net_salary"
+msgstr "Nettoløn [kl]"
+
+msgid "loentraek.sum_mismatch"
+msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækker [kl]"
+
+
+
 
 msgid "nedskrivning.success"
 msgstr "Nedskrivninger uploadet [kl]"
@@ -68,7 +111,7 @@ msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber} [kl]"
 msgid "nedskrivning.title"
 msgstr "Nedskrivning - Opret [kl]"
 
-msgid "nedskrivning.template"
+msgid "common.upload.template"
 msgstr "Download skabelon [kl]"
 
 #: aka/templates/aka/impairmentForm.html:18
@@ -88,6 +131,9 @@ msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnummer [kl]"
 
 msgid "required"
+msgstr "Dette felt er påkrævet. [kl]"
+
+msgid "common.required"
 msgstr "Dette felt er påkrævet. [kl]"
 
 msgid "invalid_extension"

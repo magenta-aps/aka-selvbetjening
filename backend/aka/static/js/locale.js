@@ -48,6 +48,26 @@ $(function() {
             }
         };
 
+        const format = function(text, params, language) {
+            text = django.gettext(language, text);
+            //text = text.replace(trans_re, function(match) { console.log("match found: ",match,"translating to: ",django.gettext(language, match)); return django.gettext(language, match) });
+            if (params) {
+                for (let key in params) {
+                    if (params.hasOwnProperty(key)) {
+                        let value = params[key];
+                        if (Array.isArray(value)) {
+                            // If a value is an array, it must be [message:string, params:dict]
+                            value = format(value[0], value[1], language);
+                        } else {
+                            value = format(value, null, language);
+                        }
+                        text = text.replace("{" + key + "}", value);
+                    }
+                }
+            }
+            return text;
+        };
+
         $("*[data-locale-changer]").each(function(){
             const langChooser = $(this);
             const flagElements = $(langChooser.attr("data-locale-flag"));
@@ -56,16 +76,9 @@ $(function() {
                 flagElements.removeClass().addClass("option-" + language);
                 $("*[data-trans]").each(function() {
                     let $this = $(this);
-                    let text = django.gettext(language, $this.attr('data-trans'));
+                    let text = $this.attr('data-trans');
                     let params = $this.attr('data-trans-params');
-                    if (params) {
-                        params = JSON.parse(params);
-                        for (key in params) {
-                            if (params.hasOwnProperty(key)) {
-                                text = text.replace("{" + key + "}", params[key]);
-                            }
-                        }
-                    }
+                    text = format(text, params && JSON.parse(params), language);
                     this.innerText = text;
                 });
                 $.ajax({
@@ -76,9 +89,11 @@ $(function() {
                         csrftoken: $("input[name='csrfmiddlewaretoken']").val()
                     }
                 });
+                django.language = language;
             };
             $(this).change(update);
         });
         django.jsi18n_initialized = true;
+        django.language = $("*[data-locale-changer]").val();
     }
 });

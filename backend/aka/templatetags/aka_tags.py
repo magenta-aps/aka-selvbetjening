@@ -1,7 +1,12 @@
 import json as jsonlib
+import re
 from html import unescape
 
+from django.utils.translation import gettext
 from django.template.defaultfilters import register
+
+trans_re = re.compile("_\\((.*)\\)")
+format_re = re.compile("{(.*)}")
 
 @register.filter
 def split(text, filter):
@@ -14,9 +19,16 @@ def json(data):
 
 @register.filter
 def format(text, params):
+    text = gettext(text)
     if params:
         for key in params:
-            text = text.replace("{" + key + "}", str(params[key]))
+            value = params[key]
+            if type(value) == tuple:
+                # If a value is a tuple, it must be (message:string, params:dict,)
+                value = format(value[0], value[1])
+            else:
+                value = format(str(value), None)
+            text = text.replace("{" + key + "}", value)
     return unescape(text)
 
 

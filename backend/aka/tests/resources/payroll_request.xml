@@ -1,0 +1,20 @@
+<custPayRollFromEmployerHeader>
+    <GERCVR>10147573</GERCVR>
+    <Date>2019-11-01T00:00:00</Date>
+    <ReceivedDate>2019-11-01T00:00:00</ReceivedDate>
+    <TotalAmount>100.50</TotalAmount>
+    <custPayRollFromEmployerLines>
+        <custPayRollFromEmployerLine>
+            <CprCvrEntity>1509551673</CprCvrEntity>
+            <AgreementNumber>00000001</AgreementNumber>
+            <Amount>100.00</Amount>
+            <NetSalary>25000.00</NetSalary>
+        </custPayRollFromEmployerLine>
+        <custPayRollFromEmployerLine>
+            <CprCvrEntity>2411803697</CprCvrEntity>
+            <AgreementNumber>00000001</AgreementNumber>
+            <Amount>0.50</Amount>
+            <NetSalary>25000.00</NetSalary>
+        </custPayRollFromEmployerLine>
+    </custPayRollFromEmployerLines>
+</custPayRollFromEmployerHeader>

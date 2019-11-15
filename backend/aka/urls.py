@@ -21,7 +21,7 @@ from .views import FordringshaverkontoView
 from .views import IndexTemplateView, VueTemplateView
 from .views import InkassoSagView, InkassoSagUploadView
 from .views import LoenTraekDistributionView
-from .views import LoenTraekView
+from .views import LoentraekView, LoentraekUploadView
 from .views import NedskrivningView, NedskrivningUploadView
 from .views import NetsopkraevningView
 from .views import PrivatdebitorkontoView
@@ -40,7 +40,8 @@ urlpatterns = [
     url(r'^oid/', include('openid.urls', namespace='openid')),
     url(r'^inkassosag$', InkassoSagView.as_view(), name='inkassosag'),
     url(r'^inkassosag/upload', InkassoSagUploadView.as_view(), name='inkassosag-upload'),
-    url(r'^loentraek$', LoenTraekView.as_view(), name='loentraek'),
+    url(r'^loentraek$', LoentraekView.as_view(), name='loentraek'),
+    url(r'^loentraek/upload', LoentraekUploadView.as_view(), name='loentraek-upload'),
     url(r'^loentraekdistribution/([0-9]{8})$', LoenTraekDistributionView.as_view(), name='loentraekdistribution'),
     url(r'^rentenota/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})$', RenteNotaView.as_view(), name='rentenota'),
     url(r'^nedskrivning$', NedskrivningView.as_view(), name='nedskrivning'),
