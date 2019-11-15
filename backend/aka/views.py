@@ -314,10 +314,8 @@ class NedskrivningView(ErrorHandlerMixin, FormView):
 
     def form_valid(self, form):
         prisme = Prisme()
-
         if 'user_info' not in self.request.session:
             raise AccessDeniedException('no_cvr')
-
         try:
             rec_id = self.send_impairment(form, prisme)
             return TemplateResponse(
@@ -333,7 +331,6 @@ class NedskrivningView(ErrorHandlerMixin, FormView):
                 form.add_error('ekstern_sagsnummer', e.as_validationerror)
                 return self.form_invalid(form)
             raise e
-
 
 
 class NedskrivningUploadView(NedskrivningView):

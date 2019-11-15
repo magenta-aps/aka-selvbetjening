@@ -41,7 +41,7 @@ class BasicTestCase(TestMixin, TestCase):
 
     ### POSITIVE TESTS ###
 
-    def test_validRequest1(self):
+    def test_impairment_success(self):
         # Contains just the required fields
         formData = {
             'debitor': 'test-debitor',
@@ -59,7 +59,7 @@ class BasicTestCase(TestMixin, TestCase):
 
     ### NEGATIVE TESTS ###
 
-    def test_invalidRequest1(self):
+    def test_impairment_invalid_amount(self):
         # Contains just the required fields
         formData = {
             'debitor': 'test-debitor',
@@ -70,5 +70,62 @@ class BasicTestCase(TestMixin, TestCase):
         response = self.client.post(self.url, formData)
         self.assertEqual(response.status_code, 200)
         root = etree.fromstring(response.content, etree.HTMLParser())
-        el = root.xpath("//div[@class='has-error']/input[@name='beloeb'][@value='aaa']")
-        self.assertEqual(1, len(el))
+        erroritems = root.xpath("//div[@data-field='id_beloeb']//ul[@class='errorlist']/li")
+        self.assertEqual(1, len(erroritems))
+        self.assertEqual('invalid', erroritems[0].attrib.get('data-trans'))
+
+    def test_impairment_missing_amount(self):
+        # Contains just the required fields
+        formData = {
+            'debitor': 'test-debitor',
+            'ekstern_sagsnummer': '1234',
+            'sekvensnummer': '1'
+        }
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        erroritems = root.xpath("//div[@data-field='id_beloeb']//ul[@class='errorlist']/li")
+        self.assertEqual(1, len(erroritems))
+        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+
+    def test_impairment_missing_debitor(self):
+        # Contains just the required fields
+        formData = {
+            'beloeb': 123,
+            'ekstern_sagsnummer': '1234',
+            'sekvensnummer': '1'
+        }
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        erroritems = root.xpath("//div[@data-field='id_debitor']//ul[@class='errorlist']/li")
+        self.assertEqual(1, len(erroritems))
+        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+
+    def test_impairment_missing_casenumber(self):
+        # Contains just the required fields
+        formData = {
+            'debitor': 'test-debitor',
+            'beloeb': 123,
+            'sekvensnummer': '1'
+        }
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        erroritems = root.xpath("//div[@data-field='id_ekstern_sagsnummer']//ul[@class='errorlist']/li")
+        self.assertEqual(1, len(erroritems))
+        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+
+    def test_impairment_missing_sequencenumber(self):
+        # Contains just the required fields
+        formData = {
+            'debitor': 'test-debitor',
+            'beloeb': 123,
+            'ekstern_sagsnummer': '1234',
+        }
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        erroritems = root.xpath("//div[@data-field='id_sekvensnummer']//ul[@class='errorlist']/li")
+        self.assertEqual(1, len(erroritems))
+        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))

@@ -30,6 +30,8 @@ class CsvUploadMixin(object):
         data = file.read()
         charset = chardet.detect(data)
         if charset is None or charset['encoding'] is None:
+            # Raise errors that affect the whole file,
+            # preventing the contents from being validated
             raise ValidationError(_("common.upload.no_encoding"), "common.upload.no_encoding")
         subforms = []
         try:
@@ -41,22 +43,24 @@ class CsvUploadMixin(object):
         if len(rows) == 0:
             raise ValidationError(_("common.upload.empty"), "common.upload.empty")
 
+        # Use self.add_error to add validation errors on the file contents,
+        # as there may be several in the same file
         for row_index, row in enumerate(rows, start=1):
             subform = self.subform_class(data=row)
             if not subform.is_valid():  # Catch row errors early
                 for field, errorlist in subform.errors.items():
                     if 'required_field' in errorlist:
-                        raise ValidationError(
+                        self.add_error('file', ValidationError(
                             _("common.upload.validation_header"),
                             "common.upload.validation_header",
                             {'field': field}
-                        )
+                        ))
                     try:
                         col_index = get_ordereddict_key_index(row, field)
                     except ValueError:
                         col_index = None
                     for error in errorlist:
-                        raise ValidationError(
+                        self.add_error('file', ValidationError(
                             _("common.upload.validation_item"),
                             "common.upload.validation_item",
                             {
@@ -66,7 +70,7 @@ class CsvUploadMixin(object):
                                 'col': col_index,
                                 'col_letter': spreadsheet_col_letter(col_index)
                             }
-                        )
+                        ))
             subforms.append(subform)
         self.subforms = subforms
         return file
@@ -240,7 +244,6 @@ class LoentraekForm(forms.Form):
                 self.add_error('total_amount', ValidationError(_('loentraek.sum_mismatch'), 'loentraek.sum_mismatch'))
             return False
         return True
-
 
 
 class LoentraekFormItem(forms.Form):
