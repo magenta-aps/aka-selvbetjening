@@ -133,7 +133,7 @@ msgid "required"
 msgstr "Dette felt er påkrævet."
 
 msgid "common.required"
-msgstr "Dette felt er påkrævet {foo}."
+msgstr "Dette felt er påkrævet."
 
 
 msgid "invalid_extension"

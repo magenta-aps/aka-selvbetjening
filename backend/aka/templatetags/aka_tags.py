@@ -19,19 +19,15 @@ def json(data):
 
 @register.filter
 def format(text, params):
-    text = trans_re.sub(lambda match: gettext(match[1]), text)  # TODO: maybe always translate text
+    text = gettext(text)
     if params:
         for key in params:
             value = params[key]
-
             if type(value) == tuple:
                 # If a value is a tuple, it must be (message:string, params:dict,)
                 value = format(value[0], value[1])
-
-            value = str(value)
-            if trans_re.match(value):
-                value = format(value, None)
-
+            else:
+                value = format(str(value), None)
             text = text.replace("{" + key + "}", value)
     return unescape(text)
 

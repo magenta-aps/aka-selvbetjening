@@ -65,7 +65,7 @@ class CsvUploadMixin(object):
                             "common.upload.validation_item",
                             {
                                 'field': field,
-                                'message': ("_(" + str(error.message) + ")", {'foo':42}, ),
+                                'message': (str(error.message), error.params),
                                 'row': row_index,
                                 'col': col_index,
                                 'col_letter': spreadsheet_col_letter(col_index)
