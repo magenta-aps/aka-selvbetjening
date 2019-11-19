@@ -302,7 +302,7 @@ class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
         return claimant_id
 
     def get(self, request, *args, **kwargs):
-        # self.get_claimant_id(request)
+        self.get_claimant_id(request)  # Raise exception if claimant id not found
         return super(NedskrivningView, self).get(request, *args, **kwargs)
 
     def send_impairment(self, form, prisme):

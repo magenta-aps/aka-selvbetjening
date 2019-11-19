@@ -7,12 +7,64 @@ from django.test import TestCase
 from lxml import etree
 from xmltodict import parse as xml_to_dict
 
+from requests.exceptions import ConnectionError
+
 
 class BasicTestCase(TestMixin, TestCase):
 
     def setUp(self):
         logging.disable(logging.CRITICAL)
         self.url = '/nedskrivning'
+
+
+class RemoteTestCase(BasicTestCase):
+    pass
+    # def test_impairment_success(self):
+    #     session = self.client.session
+    #     session['user_info'] = {'CVR': '19785289'}
+    #     session.save()
+    #     try:
+    #         formData = {
+    #             'debitor': 'test-debitor',
+    #             'ekstern_sagsnummer': '1234',
+    #             'beloeb': '100',
+    #             'sekvensnummer': '1'
+    #         }
+    #         response = self.client.post(self.url, formData)
+    #         self.assertEqual(response.status_code, 200)
+    #         root = etree.fromstring(response.content, etree.HTMLParser())
+    #         el = root.xpath("//ul[@class='success-list']/li")
+    #         self.assertEqual(1, len(el))
+    #         self.assertEqual('1234', el[0].text)
+    #     except ConnectionError:
+    #         print("\nRemote test: Cannot connect to remote service")
+
+    #
+    # def test_invalid_cvr(self):
+    #     session = self.client.session
+    #     session['user_info'] = {'CVR': '12345678'}
+    #     session.save()
+    #     try:
+    #         formData = {
+    #             'debitor': 'test-debitor',
+    #             'ekstern_sagsnummer': '1234',
+    #             'beloeb': '100',
+    #             'sekvensnummer': '1'
+    #         }
+    #         response = self.client.post(self.url, formData)
+    #         self.assertEqual(response.status_code, 200)
+    #         root = etree.fromstring(response.content, etree.HTMLParser())
+    #         el = root.xpath("//h1[@class='page-header']")
+    #         self.assertEqual(1, len(el))
+    #         self.assertEqual('common.error.access_denied', el[0].attrib.get('data-trans'))
+    #     except ConnectionError:
+    #         print("\nRemote test: Cannot connect to remote service")
+
+
+class LocalTestCase(BasicTestCase):
+
+    def setUp(self):
+        super().setUp()
         self.service_mock = self.mock('aka.clients.prisme.Prisme.process_service')
         self.service_mock.return_value = [
             PrismeImpairmentResponse(None, f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
@@ -23,8 +75,7 @@ class BasicTestCase(TestMixin, TestCase):
         session['user_info'] = {'CVR': '12479182'}
         session.save()
 
-
-### PRISME INTERFACE TESTS ###
+    ### PRISME INTERFACE TESTS ###
 
     def test_impairment_request_parse(self):
         request = PrismeImpairmentRequest('32SE', '12345678', 'ref123', -100.5, 'AKI-000047')
@@ -42,7 +93,6 @@ class BasicTestCase(TestMixin, TestCase):
     ### POSITIVE TESTS ###
 
     def test_impairment_success(self):
-        # Contains just the required fields
         formData = {
             'debitor': 'test-debitor',
             'ekstern_sagsnummer': '1234',

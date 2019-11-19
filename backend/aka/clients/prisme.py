@@ -455,6 +455,7 @@ class Prisme(object):
         # reply_item is of type GWSReplyInstanceDCFUJ
         for reply_item in reply.instanceCollection.GWSReplyInstanceDCFUJ:
             if reply_item.replyCode == 0:
+                print("Receiving:\n%s" % reply_item.xml)
                 outputs.append(request_object.reply_class(request_object, reply_item.xml))
             else:
                 raise PrismeException(reply_item.replyCode, reply_item.replyText)
