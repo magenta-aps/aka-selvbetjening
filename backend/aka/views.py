@@ -391,6 +391,7 @@ class RenteNotaView(RequireCvrMixin, FormView):
         interest_note_data = prisme.process_service(
             PrismeInterestNoteRequest(self.cvr, form.cleaned_data['year'], form.cleaned_data['month'])
         )
+
         for interest_note_response in interest_note_data:
             for journal in interest_note_response.interest_journal:
                 journaldata = {
@@ -419,16 +420,10 @@ class RenteNotaView(RequireCvrMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = {
-            # 'customer_data': Dafo().lookup_cvr(self.cvr),
-            'company': {
-                'navn': 'Testfirma',
-                'adresse': 'Testvej 42',
-                'postnummer': '1234',
-                'bynavn': 'Testby',
-                'landekode': 'DK'
-            },
+            'company': Dafo().lookup_cvr(self.cvr),
             'posts': self.posts,
             'total': sum([float(post['InterestAmount']) for post in self.posts])
+            if self.posts is not None else None
         }
         context.update(kwargs)
         return super(RenteNotaView, self).get_context_data(**context)

@@ -16,7 +16,7 @@ class BasicTestCase(TestMixin, TestCase):
     def setUp(self):
         logging.disable(logging.CRITICAL)
         self.url = '/loentraek/upload'
-        self.service_mock = self.mock_soap('aka.clients.prisme.Prisme.process_service')
+        self.service_mock = self.mock('aka.clients.prisme.Prisme.process_service')
         self.service_mock.return_value = [
             PrismePayrollResponse(None, f"<CustPayrollFromEmployerHeaderFUJ><RecId>1234</RecId></CustPayrollFromEmployerHeaderFUJ>")
         ]

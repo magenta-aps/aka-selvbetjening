@@ -3,11 +3,11 @@ from unittest.mock import patch
 
 class TestMixin(object):
 
-    def mock_soap(self, method):
-        soap_patch_1 = patch(method)
-        mock = soap_patch_1.start()
-        self.addCleanup(soap_patch_1.stop)
-        return mock
+    def mock(self, method):
+        patch_object = patch(method)
+        mock_object = patch_object.start()
+        self.addCleanup(patch_object.stop)
+        return mock_object
 
     @staticmethod
     def get_file_contents(filename):

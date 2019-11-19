@@ -50,7 +50,6 @@ $(function() {
 
         const format = function(text, params, language) {
             text = django.gettext(language, text);
-            //text = text.replace(trans_re, function(match) { console.log("match found: ",match,"translating to: ",django.gettext(language, match)); return django.gettext(language, match) });
             if (params) {
                 for (let key in params) {
                     if (params.hasOwnProperty(key)) {

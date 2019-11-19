@@ -1,12 +1,13 @@
 import json
 import logging
-from unittest.mock import patch
 
 from aka.clients.prisme import PrismeInterestNoteRequest, PrismeInterestNoteResponse
 from aka.tests.mixins import TestMixin
 from django.test import TestCase
 from django.test import override_settings
 from xmltodict import parse as xml_to_dict
+from lxml import etree
+
 
 
 @override_settings(OPENID_CONNECT={'enabled': False})
@@ -14,15 +15,28 @@ class BasicTestCase(TestMixin, TestCase):
 
     def setUp(self):
         logging.disable(logging.CRITICAL)
-        self.url = '/rentenota'
-        soap_patch = patch('aka.clients.prisme.Prisme.process_service')
-        self.soapmock = soap_patch.start()
-        self.addCleanup(soap_patch.stop)
+        self.url = '/rentenota/'
+        self.soapmock = self.mock('aka.clients.prisme.Prisme.process_service')
+        self.soapmock.return_value = [PrismeInterestNoteResponse(
+            None,
+            self.get_file_contents('aka/tests/resources/interestnote_response.xml')
+        )]
 
-        dafo_patch = patch('aka.clients.dafo.Dafo.lookup_cvr')
-        self.dafomock = dafo_patch.start()
-        self.addCleanup(dafo_patch.stop)
+        dafologinmock = self.mock('aka.clients.dafo.Dafo.login')
+        dafologinmock.return_value = ""
 
+        self.dafomock = self.mock('aka.clients.dafo.Dafo.lookup_cvr')
+        self.dafomock.return_value = {
+            'navn': 'Testfirma',
+            'adresse': 'Testvej 42',
+            'postnummer': '1234',
+            'bynavn': 'Testby',
+            'landekode': 'DK'
+        }
+
+        session = self.client.session
+        session['user_info'] = {'CVR': '12479182'}
+        session.save()
 
     ### PRISME INTERFACE TESTS ###
 
@@ -80,39 +94,70 @@ class BasicTestCase(TestMixin, TestCase):
 
     ### POSITIVE TESTS ###
 
-    def checkReturnValIsJSON(self, response):
-        try:
-            charset = response.charset
-            json.dumps(json.loads(response.content.decode(charset)), indent=4)
-        except json.decoder.JSONDecodeError:
-            self.fail('Did not get JSON back.')
+    def test_interestnote_success(self):
+        response = self.client.post(self.url, {
+            'year': 2019,
+            'month': 10
+        })
+        self.assertEqual(response.status_code, 200)
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        header_row = root.xpath("//table[@class='rentenota-post-table']/thead/tr")[0]
+        headers = [cell.text for cell in header_row.iterchildren()]
+        rows = root.xpath("//table[@class='rentenota-post-table']/tbody/tr[@class='rentenota-post-table-datarow']")
+        data = [{headers[i]: cell.text for i, cell in enumerate(row.iterchildren())} for row in rows]
+        self.assertEqual(2, len(data))
+        self.assertEqual([
+            {
+                'Dato': '03-04-2019',
+                'Debitor\xadkonto': '00000725',
+                'Fakturerings\xadklassifikation': '200',
+                'Bilag': 'FAK-00000040',
+                'Rentenota\xadnummer': '00000001',
+                'Tekst': 'Renter af fakturanummer 00000044',
+                'Forfalds\xaddato': '02-01-2018',
+                'Grundlag': '4000.00',
+                'Beløb': '160.00',
+                'Postdato': '02-01-2018',
+                'Faktura': '00000044',
+                'Fradato': '01-01-2019',
+                'Tildato': 'None',
+                'Dage': '0',
+            },
+            {
+                'Dato': '03-04-2019',
+                'Debitor\xadkonto': '00000726',
+                'Fakturerings\xadklassifikation': '200',
+                'Bilag': 'FAK-00000039',
+                'Rentenota\xadnummer': '00000002',
+                'Tekst': 'Renter af fakturanummer 00000043',
+                'Forfalds\xaddato': '02-01-2018',
+                'Grundlag': '7000.00',
+                'Beløb': '280.00',
+                'Postdato': '02-01-2018',
+                'Faktura': '00000043',
+                'Fradato': '01-01-2019',
+                'Tildato': 'None',
+                'Dage': '0',
+            },
+        ], data)
+        rows = root.xpath("//table[@class='rentenota-post-table']/tbody/tr[@class='rentenota-post-table-sumrow']")
+        data = [cell.text for cell in rows[0].iterchildren()]
+        self.assertEqual(3, len(data))
+        self.assertEqual([None, '440,0', 'kr'], data)
 
 
     ### NEGATIVE TESTS ###
 
     def test_invalid_cvr(self):
+
+        session = self.client.session
+        session['user_info'] = None
+        session.save()
         expected = {'errors': ['Access denied'], 'fieldErrors': []}
         for y in range(2000, 2019):
-            for m in ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']:
-                response = self.client.get(self.url + f'/{y}/{m}')
+            for m in range(1, 13):
+                response = self.client.post(self.url, {
+                    'year': y,
+                    'month': m
+                })
                 self.assertEqual(response.status_code, 403)
-                self.assertEqual(json.loads(response.content), expected)
-
-    # def test_valid_cvr(self):
-    #     request_factory = RequestFactory()
-    #     session_handler = SessionMiddleware()
-    #     self.soapmock.return_value = [PrismeInterestNoteResponse(self.get_file_contents('aka/tests/resources/interestnote_response.xml'))]
-    #     self.dafomock.return_value = {'navn': 'Test company', 'adresse': 'Test Street 42', 'postnummer': 1234, 'bynavn': 'Test town', 'landekode': 'GL'}
-    #     for y in range(2000, 2019):
-    #         for m in ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']:
-    #             request = request_factory.get(self.url + f'/{y}/{m}')
-    #             session_handler.process_request(request)
-    #             request.session['user_info'] = {'CVR': '12345678'}
-    #             response = RenteNotaView.as_view()(request, y, m)
-    #             self.assertEqual(response.status_code, 200)
-    #             self.checkReturnValIsJSON(response)
-
-    @staticmethod
-    def get_file_contents(filename):
-        with open(filename, "r") as f:
-            return f.read()

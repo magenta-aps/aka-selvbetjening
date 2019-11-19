@@ -94,7 +94,7 @@
             </div>
 
             {% if posts is not None %}
-                <table>
+                <table class="rentenota-post-table">
                     <thead>
                     <tr>
                         <th data-trans="rentenota.dato">{% trans 'rentenota.dato' %}</th>
@@ -123,7 +123,7 @@
                             </tr>
                         {% else %}
                             {% for post in posts %}
-                                <tr>
+                                <tr class="rentenota-post-table-datarow">
                                     <td>{{ post.Updated }}</td>
                                     <td>{{ post.AccountNum }}</td>
                                     <td>{{ post.BillingClassification }}</td>
@@ -138,10 +138,9 @@
                                     <td>{{ post.CalcFrom }}</td>
                                     <td>{{ post.CalcTo }}</td>
                                     <td class="numbercell">{{ post.InterestDays }}</td>
-                                    <td></td>
                                 </tr>
                             {% endfor %}
-                        <tr>
+                        <tr class="rentenota-post-table-sumrow">
                             <td colspan="8"></td>
                             <td class="numbercell rentenota-total">{{ total }}</td>
                             <td colspan="6">kr</td>
