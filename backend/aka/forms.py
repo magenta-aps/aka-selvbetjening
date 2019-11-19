@@ -86,28 +86,32 @@ class InkassoForm(forms.Form):
     fordringshaver2 = forms.CharField(
         required=False
     )
-    fordringsgruppe_id = forms.ChoiceField(
+    fordringsgruppe = forms.ChoiceField(
         required=True,
         choices=[(item['id'], item['name']) for item in fordringJson],
         error_messages={'invalid_choice': 'fordringsgruppe_not_found', 'required': 'required_field'}
     )
-    fordringsgruppe = forms.ChoiceField(
-        required=True,
-        choices=[],
-        error_messages={'invalid_choice': 'fordringsgruppe_not_found', 'required': 'required_field'}
-    )
+    # fordringsgruppe = forms.ChoiceField(
+    #     required=True,
+    #     choices=[],
+    #     error_messages={'invalid_choice': 'fordringsgruppe_not_found', 'required': 'required_field'}
+    # )
     fordringstype = forms.ChoiceField(
         required=True,
         choices=[],
         error_messages={'invalid_choice': 'fordringstype_not_found', 'required': 'required_field'}
     )
     periodestart = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'required_field'},
+        input_formats=['%d/%m/%Y']
     )
     periodeslut = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'required_field'},
+        input_formats=['%d/%m/%Y']
     )
     barns_cpr = forms.CharField(
         required=False
@@ -128,18 +132,25 @@ class InkassoForm(forms.Form):
         # error_messages={'required': 'required_field'}
     )
     forfaldsdato = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'required_field'},
+        input_formats=['%d/%m/%Y']
     )
     betalingsdato = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'required_field'},
+        input_formats=['%d/%m/%Y']
     )
     foraeldelsesdato = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'required_field'},
+        input_formats=['%d/%m/%Y']
     )
     noter = forms.CharField(
+        widget=forms.Textarea(attrs={'cols': 50}),
         required=False
     )
 
@@ -150,10 +161,10 @@ class InkassoForm(forms.Form):
     def set_typefield_choices(self):
         try:
             # Get selected group id
-            group_id = self.fields['fordringsgruppe_id'].widget.value_from_datadict(
+            group_id = self.fields['fordringsgruppe'].widget.value_from_datadict(
                 self.data,
                 self.files,
-                self.add_prefix('fordringsgruppe_id')
+                self.add_prefix('fordringsgruppe')
             )
             if group_id is not None:
                 # Find out which subgroup exists for this id
@@ -163,12 +174,12 @@ class InkassoForm(forms.Form):
                     if int(x['id']) == int(group_id)
                 ][0]
                 # Set type choices based on this subgroup
-                self.fields['fordringsgruppe'].choices = [
-                    (item['group_id'], item['group_id'])
-                    for item in subgroup
-                ]
+                # self.fields['fordringsgruppe'].choices = [
+                #     (item['group_id'], item['group_id'])
+                #     for item in subgroup
+                # ]
                 self.fields['fordringstype'].choices = [
-                    (item['type_id'], item['type_id'])
+                    ("%d.%d" % (item['group_id'], item['type_id']), item['type_id'])
                     for item in subgroup
                 ]
         except IndexError:
@@ -190,6 +201,20 @@ class InkassoForm(forms.Form):
         end = cleaned_data.get('periodeslut')
         if start and end and start > end:
             self.add_error('periodeslut', ValidationError('start_date_before_end_date'))
+
+
+class InkassoCoDebitorFormItem(forms.Form):
+
+    cpr = forms.CharField(
+        required=False,
+        min_length=10,
+        max_length=10
+    )
+    cvr = forms.CharField(
+        required=False,
+        min_length=8,
+        max_length=8
+    )
 
 
 class InkassoUploadForm(forms.Form):

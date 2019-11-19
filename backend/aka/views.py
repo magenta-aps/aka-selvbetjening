@@ -5,17 +5,19 @@ from io import StringIO
 
 import chardet
 from aka.clients.dafo import Dafo
-from aka.clients.prisme import Prisme,PrismeException, PrismeNotFoundException
+from aka.clients.prisme import Prisme, PrismeException, PrismeNotFoundException
 from aka.clients.prisme import PrismeClaimRequest
-from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismeImpairmentRequest
+from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
 from aka.exceptions import AccessDeniedException
+from aka.forms import InkassoCoDebitorFormItem
 from aka.forms import InkassoForm, InkassoUploadForm
 from aka.forms import InterestNoteForm
 from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
+from aka.mixins import RequireCvrMixin
 from aka.utils import ErrorJsonResponse, AccessDeniedJsonResponse
 from django.conf import settings
 from django.forms import formset_factory
@@ -30,11 +32,9 @@ from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import TemplateView
-from django.views.generic.edit import FormView, BaseFormView
+from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
-
-from aka.mixins import RequireCvrMixin
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -114,26 +114,32 @@ class FordringshaverkontoView(View):
         return JsonResponse("OK", safe=False)
 
 
-class InkassoSagView(BaseFormView):
+class InkassoSagView(FormSetView, FormView):
 
     form_class = InkassoForm
+    template_name = 'aka/claim/claimForm.html'
 
-    def get(self, *args, **kwargs):
-        return self.http_method_not_allowed(*args, **kwargs)
+    def get_formset(self):
+        return formset_factory(InkassoCoDebitorFormItem, **self.get_factory_kwargs())
 
-    def form_valid(self, form):
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        formset = self.construct_formset()
+        if form.is_valid() and formset.is_valid():
+            return self.form_valid(form, formset)
+        return self.form_invalid(form, formset)
+
+    def form_valid(self, form, formset):
         prisme = Prisme()
 
-        def get_codebtors(data):
-            codebtors = []
-            for i in range(1, 1000):
-                if "meddebitor%d_cpr" % i in data:
-                    codebtors.append(data["meddebitor%d_cpr" % i])
-                elif "meddebitor%d_cvr" % i in data:
-                    codebtors.append(data["meddebitor%d_cvr" % i])
-                else:
-                    break
-            return codebtors
+        codebtors = []
+        for subform in formset:
+            cpr = subform.cleaned_data.get("cpr")
+            cvr = subform.cleaned_data.get("cvr")
+            if cpr is not None:
+                codebtors.append(cpr)
+            elif cvr is not None:
+                codebtors.append(cvr)
 
         claim = PrismeClaimRequest(
             claimant_id=form.cleaned_data.get('fordringshaver'),
@@ -152,19 +158,20 @@ class InkassoSagView(BaseFormView):
             founded_date=form.cleaned_data.get('betalingsdato'),
             obsolete_date=form.cleaned_data.get('foraeldelsesdato'),
             notes=form.cleaned_data.get('noter'),
-            codebtors=get_codebtors(form.cleaned_data),
+            codebtors=codebtors,
             files=[file for name, file in form.files.items()]
         )
-        try:
-            prisme_reply = prisme.process_service(claim)[0]
-            response = {
-                'rec_id': prisme_reply.rec_id
-            }
-            return JsonResponse(response)
-        except Exception as e:
-            return ErrorJsonResponse.from_exception(e)
+        print(claim.xml)
+        # try:
+        #     prisme_reply = prisme.process_service(claim)[0]
+        #     response = {
+        #         'rec_id': prisme_reply.rec_id
+        #     }
+        #     return JsonResponse(response)
+        # except Exception as e:
+        #     return ErrorJsonResponse.from_exception(e)
 
-    def form_invalid(self, form):
+    def form_invalid(self, form, formset):
         return ErrorJsonResponse.from_error_dict(form.errors)
 
 
