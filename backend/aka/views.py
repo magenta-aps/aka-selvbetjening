@@ -141,12 +141,14 @@ class InkassoSagView(FormSetView, FormView):
             elif cvr is not None:
                 codebtors.append(cvr)
 
+        claim_type = form.cleaned_data['fordringstype'].split(".")
+
         claim = PrismeClaimRequest(
             claimant_id=form.cleaned_data.get('fordringshaver'),
             cpr_cvr=form.cleaned_data.get('debitor'),
             external_claimant=form.cleaned_data.get('fordringshaver2'),
-            claim_group_number=form.cleaned_data.get('fordringsgruppe'),
-            claim_type=form.cleaned_data.get('fordringstype'),
+            claim_group_number=claim_type[0],
+            claim_type=claim_type[1],
             child_cpr=form.cleaned_data.get('barns_cpr'),
             claim_ref=form.cleaned_data.get('ekstern_sagsnummer'),
             amount_balance=form.cleaned_data.get('hovedstol'),
@@ -161,15 +163,15 @@ class InkassoSagView(FormSetView, FormView):
             codebtors=codebtors,
             files=[file for name, file in form.files.items()]
         )
-        print(claim.xml)
-        # try:
-        #     prisme_reply = prisme.process_service(claim)[0]
-        #     response = {
-        #         'rec_id': prisme_reply.rec_id
-        #     }
-        #     return JsonResponse(response)
-        # except Exception as e:
-        #     return ErrorJsonResponse.from_exception(e)
+        prisme_reply = prisme.process_service(claim)[0]
+        return TemplateResponse(
+            request=self.request,
+            template="aka/payroll/payrollSuccess.html",
+            context={
+                'rec_id': prisme_reply.rec_id
+            },
+            using=self.template_engine
+        )
 
     def form_invalid(self, form, formset):
         return ErrorJsonResponse.from_error_dict(form.errors)

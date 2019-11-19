@@ -1,4 +1,5 @@
 import csv
+import json
 import logging
 from io import StringIO
 
@@ -10,10 +11,12 @@ from django.forms import ValidationError
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 
-from .utils import getSharedJson, get_ordereddict_key_index, spreadsheet_col_letter
+from .utils import get_ordereddict_key_index, spreadsheet_col_letter
 
 logger = logging.getLogger(__name__)
-fordringJson = getSharedJson('fordringsgruppe.json')
+
+with open('aka/static/json/fordringsgruppe.json', 'r', encoding="utf8") as jsonfile:
+    fordring_options = json.loads(jsonfile.read())
 
 
 class CsvUploadMixin(object):
@@ -88,14 +91,9 @@ class InkassoForm(forms.Form):
     )
     fordringsgruppe = forms.ChoiceField(
         required=True,
-        choices=[(item['id'], item['name']) for item in fordringJson],
+        choices=[(item['id'], item['name']) for item in fordring_options],
         error_messages={'invalid_choice': 'fordringsgruppe_not_found', 'required': 'required_field'}
     )
-    # fordringsgruppe = forms.ChoiceField(
-    #     required=True,
-    #     choices=[],
-    #     error_messages={'invalid_choice': 'fordringsgruppe_not_found', 'required': 'required_field'}
-    # )
     fordringstype = forms.ChoiceField(
         required=True,
         choices=[],
@@ -170,7 +168,7 @@ class InkassoForm(forms.Form):
                 # Find out which subgroup exists for this id
                 subgroup = [
                     x['sub_groups']
-                    for x in fordringJson
+                    for x in fordring_options
                     if int(x['id']) == int(group_id)
                 ][0]
                 # Set type choices based on this subgroup
@@ -188,7 +186,7 @@ class InkassoForm(forms.Form):
     def clean_fordringsgruppe(self):
         value = self.cleaned_data['fordringsgruppe']
         items = [
-            item for item in fordringJson
+            item for item in fordring_options
             if int(item['id']) == int(value)
         ]
         if len(items) > 1:
