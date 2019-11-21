@@ -165,3 +165,18 @@ def format_filesize(bytes, digits=1, SI=True):
             return "%d B" % bytes
         now = next
         next *= stepsize
+
+def list_lstrip(l, strip=None):
+    l = l.copy()  # Work on a copy of the list
+    while l and l[0] == strip:
+        l = l[1:]
+    return l
+
+def list_rstrip(l, strip=None):
+    l = l.copy()  # Work on a copy of the list
+    while l and l[-1] == strip:
+        l = l[:-1]
+    return l
+
+def list_strip(l, strip=None):
+    return list_rstrip(list_lstrip(l, strip), strip)

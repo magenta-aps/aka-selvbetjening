@@ -20,13 +20,24 @@
             <tbody>
             {% for entry in entries %}
                 <tr>
-                    <td>{{ entry.name }}</td>
+                    <td>
+                        <a href="{% url 'fordringshaverkonto' path=entry.path %}">{{ entry.name }}</a>
+
+                    </td>
                     {% if entry.folder %}
-                        <td data-raw="d {{ entry.size }}" data-trans="filliste.mappeindhold" data-trans-params="{{ entry|json }}">{{ 'filliste.mappeindhold'|format:entry }}</td>
-                        <td data-trans="filliste.mappe">{% trans 'filliste.mappe' %}</td>
+                        <td data-raw="d {{ entry.size }}" data-trans="filliste.mappeindhold" data-trans-params="{{ entry|json }}">
+                            {{ 'filliste.mappeindhold'|format:entry }}
+                        </td>
+                        <td data-trans="filliste.mappe">
+                            {% trans 'filliste.mappe' %}
+                        </td>
                     {% else %}
-                        <td data-raw="f {{ entry.size }}">{{ entry.formatted_size }}</td>
-                        <td>{{ entry.type }}</td>
+                        <td data-raw="f {{ entry.size }}">
+                            {{ entry.formatted_size }}
+                        </td>
+                        <td>
+                            {{ entry.type }}
+                        </td>
                     {% endif %}
                 </tr>
             {% endfor %}

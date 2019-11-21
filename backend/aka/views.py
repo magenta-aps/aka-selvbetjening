@@ -7,10 +7,10 @@ from io import StringIO
 
 import chardet
 from aka.clients.dafo import Dafo
-from aka.clients.prisme import Prisme,PrismeException, PrismeNotFoundException
+from aka.clients.prisme import Prisme, PrismeException, PrismeNotFoundException
 from aka.clients.prisme import PrismeClaimRequest
-from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismeImpairmentRequest
+from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
 from aka.exceptions import AccessDeniedException
 from aka.forms import InkassoForm, InkassoUploadForm
@@ -18,10 +18,14 @@ from aka.forms import InterestNoteForm
 from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
+from aka.mixins import RequireCvrMixin
 from aka.utils import ErrorJsonResponse, AccessDeniedJsonResponse
+from aka.utils import format_filesize
+from aka.utils import list_lstrip
+from aka.utils import list_rstrip
 from django.conf import settings
 from django.forms import formset_factory
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, FileResponse
 from django.template import Engine, Context
 from django.template.response import TemplateResponse
 from django.utils import timezone
@@ -35,10 +39,6 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView, BaseFormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
-
-from aka.mixins import RequireCvrMixin
-
-from aka.utils import format_filesize
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -116,57 +116,77 @@ class FordringshaverkontoView(RequireCvrMixin, TemplateView):
 
     template_name = 'aka/claimant_account/list.html'
     mounts = settings.MOUNTS['claimant_account_statements']
-    print(settings.MOUNTS['claimant_account_statements'])
 
-    def get_entries(self):
+    def get(self, request, path=None, *args, **kwargs):
+
+        # Clean path - it should become an array of path entries, empty if input is '/'
+        if '..' in path.split('/'):
+            raise FileNotFoundError(path)
+        if path is None:
+            path = []
+        self.path = list_rstrip(path.split('/'), '')
+
+        # Find root folder and all folders that match our configuration for the current cvr
         self.mounts = settings.MOUNTS['claimant_account_statements']
-        path = self.request.GET.get('path')
-
-        folder = self.mounts['maindir']
+        rootfolder = os.path.abspath(self.mounts['maindir'])
         subfolder_re = re.compile(self.mounts['subdir'].replace('{cvr}', self.cvr))
-        subfolders = [
-            os.path.join(folder, subfolder)
-            for subfolder in os.listdir(folder)
-            if os.path.isdir(os.path.join(folder, subfolder))
+        companyfolders = [
+            subfolder
+            for subfolder in os.listdir(rootfolder)
+            if os.path.isdir(os.path.join(rootfolder, subfolder))
             and subfolder_re.match(subfolder)
         ]
 
+        # Find folders that match our path in each companyfolder
+        self.folders = []
+        found = False
+        self.relpath = os.path.join(*self.path) if self.path else None
+        for companyfolder in companyfolders:
+            abs_path = os.path.join(*list_rstrip([rootfolder, companyfolder, self.relpath]))
+            if os.path.isfile(abs_path):
+                # If we have a file, return it
+                return FileResponse(open(abs_path, 'rb'), as_attachment=True)
+            try:
+                if os.path.isdir(abs_path):
+                    found = True
+                    self.folders.append(abs_path)
+            except FileNotFoundError:
+                continue
+        if not found:
+            raise FileNotFoundError(path)
+
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
         entries = []
-        for subfolder in subfolders:
-            if path:
-                for p in path.split('/'):
-                    subfolder = os.path.join(subfolder, p)
-            for filename in os.listdir(subfolder):
-                fullpath = os.path.join(subfolder, filename)
+        for abs_path in self.folders:
+            folder_listing = os.listdir(abs_path)
+
+            for filename in folder_listing:
+                fullpath = os.path.join(abs_path, filename)
+                entry = {
+                    'name': filename,
+                    'path': '/' + os.path.join(*list_lstrip([self.relpath, filename])).replace(os.path.pathsep, '/')
+                }
                 if os.path.isfile(fullpath):
-                    entry = {
-                        'folder': False,
-                        'name': filename,
-                        'type': os.path.splitext(filename)[1].lstrip('.'),
-                    }
+                    entry['folder'] = False
+                    entry['type'] = os.path.splitext(filename)[1].lstrip('.')
                     try:
                         bytesize = entry['size'] = os.path.getsize(fullpath)
                         entry['formatted_size'] = format_filesize(bytesize)
                     except:
                         pass
-                    entries.append(entry)
                 elif os.path.isdir(fullpath):
-                    entry = {
-                        'folder': True,
-                        'name': filename,
-                        'size': len(os.listdir(fullpath))
-                    }
-                    entries.append(entry)
+                    entry['folder'] = True
+                    entry['size'] = len(os.listdir(fullpath))
+                else:
+                    continue
+                entries.append(entry)
         entries.sort(key=lambda entry: entry['name'])
-        return entries
-
-    def get_context_data(self, **kwargs):
-        context = {'entries': self.get_entries()}
+        context = {'entries': entries}
         context.update(**kwargs)
         return super().get_context_data(**context)
-
-
-
 
 
 class InkassoSagView(BaseFormView):
