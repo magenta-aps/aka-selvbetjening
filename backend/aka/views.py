@@ -36,6 +36,8 @@ from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
 
+from aka.utils import dummy_management_form
+
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
 
@@ -129,7 +131,8 @@ class InkassoSagView(FormSetView, FormView):
             return self.form_valid(form, formset)
         return self.form_invalid(form, formset)
 
-    def form_valid(self, form, formset):
+    @staticmethod
+    def send_claim(form, formset):
         prisme = Prisme()
 
         codebtors = []
@@ -164,20 +167,24 @@ class InkassoSagView(FormSetView, FormView):
             files=[file for name, file in form.files.items()]
         )
         prisme_reply = prisme.process_service(claim)[0]
+        return prisme_reply
+
+    def form_valid(self, form, formset):
+        prisme_reply = self.send_claim(form, formset)
         return TemplateResponse(
             request=self.request,
             template="aka/payroll/payrollSuccess.html",
             context={
-                'rec_id': prisme_reply.rec_id
+                'rec_ids': [prisme_reply.rec_id]
             },
             using=self.template_engine
         )
 
     def form_invalid(self, form, formset):
-        return ErrorJsonResponse.from_error_dict(form.errors)
+        return super().form_invalid(form)
 
 
-class InkassoSagUploadView(InkassoSagView):
+class InkassoSagUploadView(FormView):
     form_class = InkassoUploadForm
 
     def form_valid(self, form):
@@ -189,15 +196,25 @@ class InkassoSagUploadView(InkassoSagView):
         try:
             csv_reader = csv.DictReader(StringIO(data.decode(charset['encoding'])))
             for row in csv_reader:
-                subform = InkassoForm(data=row)
+                row['fordringsgruppe'], row['fordringstype'] = InkassoForm.convert_group_type_text(row.get('fordringsgruppe'), row.get('fordringstype'))
+                data = dummy_management_form("form")
+                data.update(row)
+                subform = InkassoForm(data=data)
                 if subform.is_valid():
-                    response = super(InkassoSagUploadView, self).form_valid(subform)
-                    responses.append(json.loads(response.content))
+                    prisme_reply = InkassoSagView.send_claim(subform, [])
+                    responses.append(prisme_reply.rec_id)
                 else:
                     return ErrorJsonResponse.from_error_dict(subform.errors)
         except csv.Error as e:
             return ErrorJsonResponse.from_error_id('failed_reading_csv')
-        return JsonResponse(responses, safe=False)
+        return TemplateResponse(
+            request=self.request,
+            template="aka/payroll/payrollSuccess.html",
+            context={
+                'rec_ids': responses
+            },
+            using=self.template_engine
+        )
 
     def form_invalid(self, form):
         return ErrorJsonResponse.from_error_dict(form.errors)

@@ -78,6 +78,8 @@ class CsvUploadMixin(object):
 
 class InkassoForm(forms.Form):
 
+    valid_date_formats = ['%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%Y-%m-%d']
+
     fordringshaver = forms.CharField(
         required=True,
         error_messages={'required': 'required_field'}
@@ -103,13 +105,13 @@ class InkassoForm(forms.Form):
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
         error_messages={'required': 'required_field'},
-        input_formats=['%d/%m/%Y']
+        input_formats=valid_date_formats
     )
     periodeslut = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
         error_messages={'required': 'required_field'},
-        input_formats=['%d/%m/%Y']
+        input_formats=valid_date_formats
     )
     barns_cpr = forms.CharField(
         required=False
@@ -133,19 +135,19 @@ class InkassoForm(forms.Form):
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
         error_messages={'required': 'required_field'},
-        input_formats=['%d/%m/%Y']
+        input_formats=valid_date_formats
     )
     betalingsdato = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
         error_messages={'required': 'required_field'},
-        input_formats=['%d/%m/%Y']
+        input_formats=valid_date_formats
     )
     foraeldelsesdato = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
         error_messages={'required': 'required_field'},
-        input_formats=['%d/%m/%Y']
+        input_formats=valid_date_formats
     )
     noter = forms.CharField(
         widget=forms.Textarea(attrs={'cols': 50}),
@@ -199,6 +201,18 @@ class InkassoForm(forms.Form):
         end = cleaned_data.get('periodeslut')
         if start and end and start > end:
             self.add_error('periodeslut', ValidationError('start_date_before_end_date'))
+
+    @staticmethod
+    def convert_group_type_text(groupname, typename):
+        group_match = [group for group in fordring_options if group['name'] == groupname]
+        if not group_match:
+            raise ValidationError('fordringsgruppe_not_found')
+        group = group_match[0]
+        type_match = [type for type in group['sub_groups'] if type['name'] == typename]
+        if not type_match:
+            raise ValidationError('fordringstype_not_found')
+        type = type_match[0]
+        return (group['id'], "%d.%d" % (type['group_id'], type['type_id']))
 
 
 class InkassoCoDebitorFormItem(forms.Form):
