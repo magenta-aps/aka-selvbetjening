@@ -157,6 +157,7 @@ class FordringshaverkontoView(RequireCvrMixin, TemplateView):
                         'size': len(os.listdir(fullpath))
                     }
                     entries.append(entry)
+        entries.sort(key=lambda entry: entry['name'])
         return entries
 
     def get_context_data(self, **kwargs):

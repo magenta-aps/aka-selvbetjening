@@ -65,6 +65,9 @@ msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
 
 msgid "filliste.mappeindhold"
 msgstr "{size} elementer [kl]"
+
+msgid "filliste.mappe"
+msgstr "Mappe [kl]"
 #: aka/templates/aka/error.html:17 aka/templates/aka/success.html:21
 #, fuzzy
 #| msgid "common.gem"

@@ -71,6 +71,9 @@ msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet"
 msgid "filliste.mappeindhold"
 msgstr "{size} elementer"
 
+msgid "filliste.mappe"
+msgstr "Mappe"
+
 
 # 6.2
 

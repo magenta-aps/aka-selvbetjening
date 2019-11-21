@@ -9,7 +9,7 @@
 
 {% block content %}
     <article class="fordringshaverkonto_liste">
-        <table>
+        <table class="folder-table">
             <thead>
             <tr>
                 <th class="sortable" data-trans="fordringshaverkonto.filnavn">{% trans 'fordringshaverkonto.filnavn' %}</th>
@@ -22,10 +22,10 @@
                 <tr>
                     <td>{{ entry.name }}</td>
                     {% if entry.folder %}
-                        <td data-raw="{{ entry.size }}" data-trans="filliste.mappeindhold" data-trans-params="{{ entry|json }}">{{ 'filliste.mappeindhold'|format:entry }}</td>
+                        <td data-raw="d {{ entry.size }}" data-trans="filliste.mappeindhold" data-trans-params="{{ entry|json }}">{{ 'filliste.mappeindhold'|format:entry }}</td>
                         <td data-trans="filliste.mappe">{% trans 'filliste.mappe' %}</td>
                     {% else %}
-                        <td data-raw="{{ entry.size }}">{{ entry.formatted_size }}</td>
+                        <td data-raw="f {{ entry.size }}">{{ entry.formatted_size }}</td>
                         <td>{{ entry.type }}</td>
                     {% endif %}
                 </tr>
