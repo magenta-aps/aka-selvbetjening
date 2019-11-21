@@ -1,18 +1,27 @@
-import json
 import logging
+import os
 
-from django.test import SimpleTestCase
+from django.test import TransactionTestCase
+from aka.tests.mixins import TestMixin
 
 
-# Create your tests here.
-class BasicTestCase(SimpleTestCase):
+class BasicTestCase(TestMixin, TransactionTestCase):
+
     def setUp(self):
         logging.disable(logging.CRITICAL)
         self.url = '/fordringshaverkonto'
 
-    def checkReturnValIsJSON(self, response):
-        try:
-            charset = response.charset
-            return json.loads(response.content.decode(charset))
-        except json.decoder.JSONDecodeError:
-            self.fail('Did not get JSON back.')
+    # POSITIVE TESTS
+
+    def test_listing_success(self):
+        session = self.client.session
+        session['user_info'] = {'CVR': '12345678'}
+        session.save()
+        with self.settings(MOUNTS = {
+            'claimant_account_statements': {
+                'dir': os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resources', 'fordringshaverkonto'),
+                'files': '{cvr}_*'
+            }
+        }):
+            response = self.client.get(self.url)
+            print(response.content)

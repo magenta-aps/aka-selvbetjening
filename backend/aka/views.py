@@ -1,6 +1,8 @@
 import csv
 import json
 import logging
+import os
+import re
 from io import StringIO
 
 import chardet
@@ -35,6 +37,8 @@ from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
 
 from aka.mixins import RequireCvrMixin
+
+from aka.utils import format_filesize
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -108,10 +112,60 @@ class ArbejdsgiverkontoView(View):
         return JsonResponse("OK", safe=False)
 
 
-class FordringshaverkontoView(View):
+class FordringshaverkontoView(RequireCvrMixin, TemplateView):
 
-    def get(self, request, *args, **kwargs):
-        return JsonResponse("OK", safe=False)
+    template_name = 'aka/claimant_account/list.html'
+    mounts = settings.MOUNTS['claimant_account_statements']
+    print(settings.MOUNTS['claimant_account_statements'])
+
+    def get_entries(self):
+        self.mounts = settings.MOUNTS['claimant_account_statements']
+        path = self.request.GET.get('path')
+
+        folder = self.mounts['maindir']
+        subfolder_re = re.compile(self.mounts['subdir'].replace('{cvr}', self.cvr))
+        subfolders = [
+            os.path.join(folder, subfolder)
+            for subfolder in os.listdir(folder)
+            if os.path.isdir(os.path.join(folder, subfolder))
+            and subfolder_re.match(subfolder)
+        ]
+
+        entries = []
+        for subfolder in subfolders:
+            if path:
+                for p in path.split('/'):
+                    subfolder = os.path.join(subfolder, p)
+            for filename in os.listdir(subfolder):
+                fullpath = os.path.join(subfolder, filename)
+                if os.path.isfile(fullpath):
+                    entry = {
+                        'folder': False,
+                        'name': filename,
+                        'type': os.path.splitext(filename)[1].lstrip('.'),
+                    }
+                    try:
+                        bytesize = entry['size'] = os.path.getsize(fullpath)
+                        entry['formatted_size'] = format_filesize(bytesize)
+                    except:
+                        pass
+                    entries.append(entry)
+                elif os.path.isdir(fullpath):
+                    entry = {
+                        'folder': True,
+                        'name': filename,
+                        'size': len(os.listdir(fullpath))
+                    }
+                    entries.append(entry)
+        return entries
+
+    def get_context_data(self, **kwargs):
+        context = {'entries': self.get_entries()}
+        context.update(**kwargs)
+        return super().get_context_data(**context)
+
+
+
 
 
 class InkassoSagView(BaseFormView):
@@ -427,8 +481,6 @@ class RenteNotaView(RequireCvrMixin, FormView):
         }
         context.update(kwargs)
         return super(RenteNotaView, self).get_context_data(**context)
-
-
 
 
 

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block extra_headers %}
+    <script type="text/javascript" src="{% static 'js/thirdparty/sort.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/claimantaccount.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <article class="fordringshaverkonto_liste">
+        <table>
+            <thead>
+            <tr>
+                <th class="sortable" data-trans="fordringshaverkonto.filnavn">{% trans 'fordringshaverkonto.filnavn' %}</th>
+                <th class="sortable" data-trans="fordringshaverkonto.filstoerrelse">{% trans 'fordringshaverkonto.filstoerrelse' %}</th>
+                <th class="sortable" data-trans="fordringshaverkonto.filtype">{% trans 'fordringshaverkonto.filtype' %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for entry in entries %}
+                <tr>
+                    <td>{{ entry.name }}</td>
+                    {% if entry.folder %}
+                        <td data-raw="{{ entry.size }}" data-trans="filliste.mappeindhold" data-trans-params="{{ entry|json }}">{{ 'filliste.mappeindhold'|format:entry }}</td>
+                        <td data-trans="filliste.mappe">{% trans 'filliste.mappe' %}</td>
+                    {% else %}
+                        <td data-raw="{{ entry.size }}">{{ entry.formatted_size }}</td>
+                        <td>{{ entry.type }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </article>
+{% endblock %}

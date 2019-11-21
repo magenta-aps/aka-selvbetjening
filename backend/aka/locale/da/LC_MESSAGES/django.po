@@ -68,6 +68,9 @@ msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber}"
 msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet"
 
+msgid "filliste.mappeindhold"
+msgstr "{size} elementer"
+
 
 # 6.2
 
@@ -131,6 +134,17 @@ msgstr "Beløb"
 #: aka/templates/aka/impairmentForm.html:48
 msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnummer"
+
+
+# 6.5
+msgid "fordringshaverkonto.filnavn"
+msgstr "Filnavn"
+
+msgid "fordringshaverkonto.filstoerrelse"
+msgstr "Størrelse"
+
+msgid "fordringshaverkonto.filtype"
+msgstr "Type"
 
 # NY16
 msgid "rentenota.dato"

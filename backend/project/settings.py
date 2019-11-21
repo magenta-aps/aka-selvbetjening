@@ -190,6 +190,14 @@ DAFO_CONNECT = {
 }
 OPENID_CONNECT = {}
 
+MOUNTS = {
+    'claimant_account_statements': {  # 6.5
+        'maindir': '/tmp',
+        'subdir': '{cvr}.*',
+        'files': '.*'
+    }
+}
+
 # Max 2 MB - can be lower if we want
 MAX_UPLOAD_FILESIZE = 22097152
 

@@ -1,12 +1,11 @@
 import base64
 import datetime
 import json
-import os
 import logging
+import os
 from math import floor
 
 from django.conf import settings
-
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.http import JsonResponse
 
@@ -153,3 +152,16 @@ class AccessDeniedJsonResponse(ErrorJsonResponse):
 
     def __init__(self, **kwargs):
         super(AccessDeniedJsonResponse, self).__init__(['Access denied'], [], **kwargs)
+
+
+def format_filesize(bytes, digits=1, SI=True):
+    stepsize = 1000 if SI else 1024
+    now = 1
+    next = stepsize
+    for step in ['', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']:
+        if bytes < next:
+            if step:
+                return ("{0:.%df} %s%sB" % (digits, step, '' if SI else 'i')).format(bytes / now)
+            return "%d B" % bytes
+        now = next
+        next *= stepsize
