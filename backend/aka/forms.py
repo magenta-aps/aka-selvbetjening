@@ -1,4 +1,5 @@
 import csv
+import json
 import logging
 from io import StringIO
 
@@ -10,11 +11,13 @@ from django.forms import ValidationError
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 
-from .utils import getSharedJson, get_ordereddict_key_index, \
-    spreadsheet_col_letter
+from .utils import get_ordereddict_key_index, spreadsheet_col_letter
+
 
 logger = logging.getLogger(__name__)
-fordringJson = getSharedJson('fordringsgruppe.json')
+
+with open('aka/static/json/fordringsgruppe.json', 'r', encoding="utf8") as jsonfile:
+    fordring_options = json.loads(jsonfile.read())
 
 
 class CsvUploadMixin(object):
@@ -76,6 +79,8 @@ class CsvUploadMixin(object):
 
 class InkassoForm(forms.Form):
 
+    valid_date_formats = ['%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%Y-%m-%d']
+
     fordringshaver = forms.CharField(
         required=True,
         error_messages={'required': 'required_field'}
@@ -87,14 +92,9 @@ class InkassoForm(forms.Form):
     fordringshaver2 = forms.CharField(
         required=False
     )
-    fordringsgruppe_id = forms.ChoiceField(
-        required=True,
-        choices=[(item['id'], item['name']) for item in fordringJson],
-        error_messages={'invalid_choice': 'fordringsgruppe_not_found', 'required': 'required_field'}
-    )
     fordringsgruppe = forms.ChoiceField(
         required=True,
-        choices=[],
+        choices=[(item['id'], item['name']) for item in fordring_options],
         error_messages={'invalid_choice': 'fordringsgruppe_not_found', 'required': 'required_field'}
     )
     fordringstype = forms.ChoiceField(
@@ -103,12 +103,16 @@ class InkassoForm(forms.Form):
         error_messages={'invalid_choice': 'fordringstype_not_found', 'required': 'required_field'}
     )
     periodestart = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'required_field'},
+        input_formats=valid_date_formats
     )
     periodeslut = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'required_field'},
+        input_formats=valid_date_formats
     )
     barns_cpr = forms.CharField(
         required=False
@@ -129,18 +133,25 @@ class InkassoForm(forms.Form):
         # error_messages={'required': 'required_field'}
     )
     forfaldsdato = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'required_field'},
+        input_formats=valid_date_formats
     )
     betalingsdato = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'required_field'},
+        input_formats=valid_date_formats
     )
     foraeldelsesdato = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'required_field'},
+        input_formats=valid_date_formats
     )
     noter = forms.CharField(
+        widget=forms.Textarea(attrs={'cols': 50}),
         required=False
     )
 
@@ -151,25 +162,25 @@ class InkassoForm(forms.Form):
     def set_typefield_choices(self):
         try:
             # Get selected group id
-            group_id = self.fields['fordringsgruppe_id'].widget.value_from_datadict(
+            group_id = self.fields['fordringsgruppe'].widget.value_from_datadict(
                 self.data,
                 self.files,
-                self.add_prefix('fordringsgruppe_id')
+                self.add_prefix('fordringsgruppe')
             )
             if group_id is not None:
                 # Find out which subgroup exists for this id
                 subgroup = [
                     x['sub_groups']
-                    for x in fordringJson
+                    for x in fordring_options
                     if int(x['id']) == int(group_id)
                 ][0]
                 # Set type choices based on this subgroup
-                self.fields['fordringsgruppe'].choices = [
-                    (item['group_id'], item['group_id'])
-                    for item in subgroup
-                ]
+                # self.fields['fordringsgruppe'].choices = [
+                #     (item['group_id'], item['group_id'])
+                #     for item in subgroup
+                # ]
                 self.fields['fordringstype'].choices = [
-                    (item['type_id'], item['type_id'])
+                    ("%d.%d" % (item['group_id'], item['type_id']), item['type_id'])
                     for item in subgroup
                 ]
         except IndexError:
@@ -178,7 +189,7 @@ class InkassoForm(forms.Form):
     def clean_fordringsgruppe(self):
         value = self.cleaned_data['fordringsgruppe']
         items = [
-            item for item in fordringJson
+            item for item in fordring_options
             if int(item['id']) == int(value)
         ]
         if len(items) > 1:
@@ -191,6 +202,32 @@ class InkassoForm(forms.Form):
         end = cleaned_data.get('periodeslut')
         if start and end and start > end:
             self.add_error('periodeslut', ValidationError('start_date_before_end_date'))
+
+    @staticmethod
+    def convert_group_type_text(groupname, typename):
+        group_match = [group for group in fordring_options if group['name'] == groupname]
+        if not group_match:
+            raise ValidationError('fordringsgruppe_not_found')
+        group = group_match[0]
+        type_match = [type for type in group['sub_groups'] if type['name'] == typename]
+        if not type_match:
+            raise ValidationError('fordringstype_not_found')
+        type = type_match[0]
+        return (group['id'], "%d.%d" % (type['group_id'], type['type_id']))
+
+
+class InkassoCoDebitorFormItem(forms.Form):
+
+    cpr = forms.CharField(
+        required=False,
+        min_length=10,
+        max_length=10
+    )
+    cvr = forms.CharField(
+        required=False,
+        min_length=8,
+        max_length=8
+    )
 
 
 class InkassoUploadForm(forms.Form):

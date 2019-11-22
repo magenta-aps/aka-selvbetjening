@@ -84,6 +84,71 @@ msgid "filliste.filtype"
 msgstr "Type"
 
 
+# 6.1
+msgid "fordring.title"
+msgstr "Indberet fordring"
+
+msgid "fordring.debitor"
+msgstr "Debitor"
+
+msgid "fordring.fordringshaver"
+msgstr "Fordringshaver"
+
+msgid "fordring.anden_fordringshaver"
+msgstr "Anden fordringshaver"
+
+msgid "fordring.dokumentation"
+msgstr "Dokumentation"
+
+msgid "fordring.fordringsgruppe"
+msgstr "Ekstern fordringsgruppe"
+
+msgid "fordring.fordringstype"
+msgstr "Ekstern fordringstype"
+
+msgid "fordring.barns_cpr"
+msgstr "Barns CPR-nr"
+
+msgid "fordring.ekstern_sagsnummer"
+msgstr "Ekstern sagsnummer"
+
+msgid "fordring.fakturanr"
+msgstr "Fakturanr"
+
+msgid "fordring.bnr"
+msgstr "B-nr"
+
+msgid "fordring.hovedstol"
+msgstr "Hovedstol"
+
+msgid "fordring.posteringstekst"
+msgstr "Posteringstekst"
+
+msgid "fordring.periodestart"
+msgstr "Periodestart"
+
+msgid "fordring.periodeslut"
+msgstr "Periodeslut"
+
+msgid "fordring.forfaldsdato"
+msgstr "Forfaldsdato"
+
+msgid "fordring.betalingsdato"
+msgstr "Betalingsdato"
+
+msgid "fordring.foraeldelsesdato"
+msgstr "Forældelsesdato"
+
+msgid "fordring.kontaktperson"
+msgstr "Kontaktperson"
+
+msgid "fordring.noter"
+msgstr "Noter"
+
+msgid "fordring.meddebitor"
+msgstr "Meddebitor"
+
+
 # 6.2
 
 msgid "loentraek.title"
@@ -128,23 +193,18 @@ msgstr "Der opstod følgende fejl:"
 msgid "nedskrivning.error_250"
 msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber}"
 
-#: aka/templates/aka/impairmentForm.html:12
 msgid "nedskrivning.title"
 msgstr "Nedskrivning - Opret"
 
-#: aka/templates/aka/impairmentForm.html:18
 msgid "nedskrivning.debitor"
 msgstr "Debitor"
 
-#: aka/templates/aka/impairmentForm.html:29
 msgid "nedskrivning.ekstern_sagsnummer"
 msgstr "Ekstern sagsnummer"
 
-#: aka/templates/aka/impairmentForm.html:39
 msgid "nedskrivning.beloeb"
 msgstr "Beløb"
 
-#: aka/templates/aka/impairmentForm.html:48
 msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnummer"
 

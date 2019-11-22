@@ -180,3 +180,11 @@ def list_rstrip(l, strip=None):
 
 def list_strip(l, strip=None):
     return list_rstrip(list_lstrip(l, strip), strip)
+
+def dummy_management_form(name, total_forms=1, initial_forms=1, min_forms=1, max_forms=1000):
+    return {
+        "%s-TOTAL_FORMS" % name: total_forms,
+        "%s-INITIAL_FORMS" % name: initial_forms,
+        "%s-MIN_NUM_FORMS" % name: min_forms,
+        "%s-MAX_NUM_FORMS" % name: max_forms,
+    }

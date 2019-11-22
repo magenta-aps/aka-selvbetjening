@@ -387,10 +387,10 @@ footer {
     background-color:#83929d;
     opacity:1
 }
-.dropdown {
+select {
     padding:.75rem 1.5rem;
     padding-right:3em;
-    background-color:#fff;
+    /*background-color:#fff;*/
     border:none;
     color:#31495b;
     font-size:1em;
@@ -405,8 +405,7 @@ footer {
     -ms-flex-align:center;
     align-items:center;
     width:100%
-}
-select {
+
     -webkit-appearance:none;
     -moz-appearance:none;
     appearance:none;
