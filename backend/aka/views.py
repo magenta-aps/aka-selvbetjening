@@ -18,13 +18,13 @@ from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
 from aka.mixins import RequireCvrMixin
-from aka.utils import ErrorJsonResponse, AccessDeniedJsonResponse
+from aka.utils import ErrorJsonResponse
+from aka.utils import dummy_management_form
 from django.conf import settings
 from django.forms import formset_factory
 from django.http import JsonResponse, HttpResponse
 from django.template import Engine, Context
 from django.template.response import TemplateResponse
-from django.utils import timezone
 from django.utils import translation
 from django.utils.datetime_safe import date
 from django.utils.decorators import method_decorator
@@ -35,8 +35,6 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
-
-from aka.utils import dummy_management_form
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -220,7 +218,7 @@ class InkassoSagUploadView(FormView):
         return ErrorJsonResponse.from_error_dict(form.errors)
 
 
-class LoentraekView(FormSetView, FormView):
+class LoentraekView(RequireCvrMixin, FormSetView, FormView):
 
     form_class = LoentraekForm
     template_name = 'aka/payroll/payrollForm.html'
@@ -238,12 +236,9 @@ class LoentraekView(FormSetView, FormView):
     def form_valid(self, form, formset):
         prisme = Prisme()
 
-        if 'user_info' not in self.request.session:
-            raise AccessDeniedException('no_cvr')
-
         try:
             payroll = PrismePayrollRequest(
-                cvr=self.request.session['user_info']['CVR'],
+                cvr=self.cvr,
                 date=date(int(form.cleaned_data['year']), int(form.cleaned_data['month']), 1),
                 received_date=date.today(),
                 amount=form.cleaned_data['total_amount'],
@@ -262,9 +257,7 @@ class LoentraekView(FormSetView, FormView):
             return TemplateResponse(
                 request=self.request,
                 template="aka/payroll/payrollSuccess.html",
-                context={
-                    'rec_ids': [rec_id]
-                },
+                context={'rec_ids': [rec_id]},
                 using=self.template_engine
             )
         except PrismeException as e:
@@ -277,7 +270,7 @@ class LoentraekView(FormSetView, FormView):
         )
 
 
-class LoentraekUploadView(LoentraekView):
+class LoentraekUploadView(RequireCvrMixin, LoentraekView):
     form_class = LoentraekUploadForm
     template_name = 'aka/payroll/uploadPayrollForm.html'
 
@@ -321,15 +314,11 @@ class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
         if claimant_id is None:
             prisme = Prisme()
             try:
-                claimant_id = prisme.check_cvr(request.session['user_info'].get('CVR'))
+                claimant_id = prisme.check_cvr(self.cvr)
             except PrismeNotFoundException as e:
                 raise AccessDeniedException(e.error_code, **e.params)
             request.session['user_info']['claimant_id'] = claimant_id
         return claimant_id
-
-    def get(self, request, *args, **kwargs):
-        self.get_claimant_id(request)  # Raise exception if claimant id not found
-        return super(NedskrivningView, self).get(request, *args, **kwargs)
 
     def send_impairment(self, form, prisme):
         impairment = PrismeImpairmentRequest(
@@ -343,8 +332,6 @@ class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
 
     def form_valid(self, form):
         prisme = Prisme()
-        if 'user_info' not in self.request.session:
-            raise AccessDeniedException('no_cvr')
         try:
             rec_id = self.send_impairment(form, prisme)
             return TemplateResponse(
@@ -453,94 +440,3 @@ class RenteNotaView(RequireCvrMixin, FormView):
         }
         context.update(kwargs)
         return super(RenteNotaView, self).get_context_data(**context)
-
-
-
-
-
-
-
-
-
-class OldRenteNotaView(View):
-
-    def get(self, request, year, month, *args, **kwargs):
-        '''Get rentenota data for the given interval.
-
-        :param request: Djangos request object.
-        :type request: Request object
-        :param cvr: The CVR number of the subject
-        :type cvr: eight digits
-        :param year: The year for this rentenota.
-        :type year: four digits
-        :param month: The month for this rentenota.
-        :type month: two digits
-        :returns: HttpResponse of some variety.
-        :raises: ValueError.
-        '''
-
-        try:
-            if 'user_info' not in request.session:
-                return AccessDeniedJsonResponse()
-            else:
-                user_info = request.session['user_info']
-                cvr = user_info.get('CVR')
-                cpr = user_info.get('CPR')
-
-            year = int(year)
-            month = int(month)
-            logger.info(f'Get rentenota {year}-{month}')
-
-            if month > 12 or month < 1:
-                return ErrorJsonResponse.invalid_month()
-            today = timezone.now()
-            if year > today.year or (year == today.year and month > today.month):
-                return ErrorJsonResponse.future_month()
-
-            if cvr is not None:
-                customer_data = Dafo().lookup_cvr(cvr)
-            # elif cpr is not None:
-            #     customer_data = Dafo().lookup_cpr(cpr)
-
-            prisme = Prisme()
-
-            posts = []
-            # Response is of type PrismeInterestNoteResponse
-            interest_note_data = prisme.process_service(
-                PrismeInterestNoteRequest(cvr, year, month)
-            )
-            for interest_note_response in interest_note_data:
-                for journal in interest_note_response.interest_journal:
-                    journaldata = {
-                        k: v
-                        for k, v in journal.data.items()
-                        if k in [
-                            'Updated', 'AccountNum', 'InterestNote',
-                            'ToDate', 'BillingClassification'
-                        ]
-                    }
-                    for transaction in journal.interest_transactions:
-                        data = {}
-                        data.update(transaction.data)
-                        data.update(journaldata)
-                        posts.append(data)
-
-            land_map = {
-                'GL': 'Grønland',
-                'DK': 'Danmark'
-            }
-
-            return JsonResponse({
-                'firmanavn': customer_data['navn'],
-                'adresse': {
-                    'gade': customer_data['adresse'],
-                    'postnr': customer_data['postnummer'],
-                    'by': customer_data['bynavn'],
-                    'land': land_map[customer_data['landekode']],
-                },
-                'poster': posts
-            })
-
-        except Exception as e:
-            logger.error(str(e))
-            return ErrorJsonResponse.from_exception(e)
