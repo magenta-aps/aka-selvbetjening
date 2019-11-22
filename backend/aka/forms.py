@@ -10,7 +10,8 @@ from django.forms import ValidationError
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 
-from .utils import getSharedJson, get_ordereddict_key_index, spreadsheet_col_letter
+from .utils import getSharedJson, get_ordereddict_key_index, \
+    spreadsheet_col_letter
 
 logger = logging.getLogger(__name__)
 fordringJson = getSharedJson('fordringsgruppe.json')

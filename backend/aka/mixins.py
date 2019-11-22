@@ -1,8 +1,8 @@
-from django.core.exceptions import PermissionDenied
-from django.template.response import TemplateResponse
 import json
 
-from aka.exceptions import AkaException, AccessDeniedException
+from aka.exceptions import AkaException
+from django.core.exceptions import PermissionDenied
+from django.template.response import TemplateResponse
 
 
 class ErrorHandlerMixin(object):
@@ -32,8 +32,7 @@ class ErrorHandlerMixin(object):
 class RequireCvrMixin(object):
     def dispatch(self, request, *args, **kwargs):
         try:
-            # self.cvr = request.session['user_info']['CVR']
-            self.cvr = '12345678'
+            self.cvr = request.session['user_info']['CVR']
         except (KeyError, TypeError):
             raise PermissionDenied('no_cvr')
         return super(RequireCvrMixin, self).dispatch(request, *args, **kwargs)
