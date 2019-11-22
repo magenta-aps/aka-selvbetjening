@@ -14,9 +14,9 @@ Includinganother URLconf
    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
-from django.views.i18n import JavaScriptCatalog
 
 from .views import ArbejdsgiverkontoView
+from .views import CustomJavaScriptCatalog, SetLanguageView
 from .views import FordringshaverkontoView
 from .views import IndexTemplateView, VueTemplateView
 from .views import InkassoSagView, InkassoSagUploadView
@@ -26,7 +26,6 @@ from .views import NedskrivningView, NedskrivningUploadView
 from .views import NetsopkraevningView
 from .views import PrivatdebitorkontoView
 from .views import RenteNotaView
-from .views import CustomJavaScriptCatalog, SetLanguageView
 
 urlpatterns = [
     # Use 'django' domain instead of 'djangojs', so we get serverside translations
@@ -47,7 +46,7 @@ urlpatterns = [
     url(r'^nedskrivning$', NedskrivningView.as_view(), name='nedskrivning'),
     url(r'^nedskrivning/upload$', NedskrivningUploadView.as_view(), name='nedskrivning-upload'),
     url(r'^netsopkraevning$', NetsopkraevningView.as_view(), name='netsopkraevning'),
-    url(r'^fordringshaverkonto$', FordringshaverkontoView.as_view(), name='fordringshaverkonto'),
+    url(r'^fordringshaverkonto(?P<path>/.*)$', FordringshaverkontoView.as_view(), name='fordringshaverkonto'),
     url(r'^arbejdsgiverkonto$', ArbejdsgiverkontoView.as_view(), name='arbejdsgiverkonto'),
     url(r'^privatdebitorkonto$', PrivatdebitorkontoView.as_view(), name='privatdebitorkonto'),
 ]

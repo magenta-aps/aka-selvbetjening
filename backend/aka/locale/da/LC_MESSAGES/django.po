@@ -68,6 +68,21 @@ msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber}"
 msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet"
 
+msgid "filliste.mappeindhold"
+msgstr "{size} elementer"
+
+msgid "filliste.mappe"
+msgstr "Mappe"
+
+msgid "filliste.filnavn"
+msgstr "Filnavn"
+
+msgid "filliste.filstoerrelse"
+msgstr "Størrelse"
+
+msgid "filliste.filtype"
+msgstr "Type"
+
 
 # 6.1
 msgid "fordring.title"
@@ -134,9 +149,6 @@ msgid "fordring.meddebitor"
 msgstr "Meddebitor"
 
 
-
-
-
 # 6.2
 
 msgid "loentraek.title"
@@ -168,6 +180,7 @@ msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækk
 
 
 # 6.4
+
 msgid "nedskrivning.success"
 msgstr "Nedskrivninger uploadet"
 
@@ -194,6 +207,10 @@ msgstr "Beløb"
 
 msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnummer"
+
+
+# 6.5
+
 
 # NY16
 msgid "rentenota.dato"

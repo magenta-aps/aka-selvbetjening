@@ -7,6 +7,8 @@ from django.core.exceptions import ValidationError
 from django.forms.utils import ErrorDict, ErrorList
 from django.test import SimpleTestCase
 
+from aka.utils import format_filesize
+
 
 class BasicTestCase(SimpleTestCase):
     def setUp(self):
@@ -82,3 +84,14 @@ class BasicTestCase(SimpleTestCase):
                 }
             }
         )
+
+    def test_format_filesize(self):
+        self.assertEqual("100 B", format_filesize(100))
+        self.assertEqual("1.0 kB", format_filesize(1000))
+        self.assertEqual("1.5 kB", format_filesize(1500))
+        self.assertEqual("12.3 MB", format_filesize(12345678))
+        self.assertEqual("12.35 MB", format_filesize(12345678, 2))
+        self.assertEqual("1.0 MiB", format_filesize(1024**2, 1, False))
+        self.assertEqual("1.5 MiB", format_filesize(1.5*1024**2, 1, False))
+        self.assertEqual("1.0 GiB", format_filesize(1024**3, SI=False))
+        self.assertEqual("1.0 GB", format_filesize(1000**3, SI=True))

@@ -49,6 +49,9 @@ $(function() {
         };
 
         const format = function(text, params, language) {
+            if (typeof text !== 'string') {
+                text = String(text);
+            }
             text = django.gettext(language, text);
             if (params) {
                 for (let key in params) {

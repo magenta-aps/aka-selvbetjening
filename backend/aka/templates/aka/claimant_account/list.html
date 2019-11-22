@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block extra_headers %}
+    <script type="text/javascript" src="{% static 'js/thirdparty/sort.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/claimantaccount.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/claimantaccount.css' %}"/>
+{% endblock %}
+
+{% block content %}
+    <article class="fordringshaverkonto_liste">
+        <table class="folder-table">
+            <thead>
+            <tr>
+                <th class="sortable" data-trans="filliste.filnavn">{% trans 'filliste.filnavn' %}</th>
+                <th class="sortable" data-trans="filliste.filtype">{% trans 'filliste.filtype' %}</th>
+                <th class="sortable" data-trans="filliste.filstoerrelse">{% trans 'filliste.filstoerrelse' %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for entry in entries %}
+                <tr>
+                    <td>
+                        <a href="{% url 'fordringshaverkonto' path=entry.path %}">{{ entry.name }}</a>
+                    </td>
+                    {% if entry.folder %}
+                        <td data-trans="filliste.mappe">
+                            {% trans 'filliste.mappe' %}
+                        </td>
+                        <td data-raw="d {{ entry.size }}" data-trans="filliste.mappeindhold" data-trans-params="{{ entry|json }}">
+                            {{ 'filliste.mappeindhold'|format:entry }}
+                        </td>
+                    {% else %}
+                        <td>
+                            {{ entry.type }}
+                        </td>
+                        <td data-raw="f {{ entry.size }}">
+                            {{ entry.formatted_size }}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </article>
+{% endblock %}

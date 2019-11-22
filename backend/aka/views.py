@@ -1,6 +1,8 @@
 import csv
 import json
 import logging
+import os
+import re
 from io import StringIO
 
 import chardet
@@ -18,11 +20,14 @@ from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
 from aka.mixins import RequireCvrMixin
+from aka.utils import format_filesize
+from aka.utils import list_lstrip
+from aka.utils import list_rstrip
 from aka.utils import ErrorJsonResponse
 from aka.utils import dummy_management_form
 from django.conf import settings
 from django.forms import formset_factory
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, FileResponse
 from django.template import Engine, Context
 from django.template.response import TemplateResponse
 from django.utils import translation
@@ -108,10 +113,81 @@ class ArbejdsgiverkontoView(View):
         return JsonResponse("OK", safe=False)
 
 
-class FordringshaverkontoView(View):
+class FordringshaverkontoView(RequireCvrMixin, TemplateView):
 
-    def get(self, request, *args, **kwargs):
-        return JsonResponse("OK", safe=False)
+    template_name = 'aka/claimant_account/list.html'
+    mounts = settings.MOUNTS['claimant_account_statements']
+
+    def get(self, request, path=None, *args, **kwargs):
+
+        # Clean path - it should become an array of path entries, empty if input is '/'
+        if '..' in path.split('/'):
+            raise FileNotFoundError(path)
+        if path is None:
+            path = []
+        self.path = list_rstrip(path.split('/'), '')
+
+        # Find root folder and all folders that match our configuration for the current cvr
+        self.mounts = settings.MOUNTS['claimant_account_statements']
+        rootfolder = os.path.abspath(self.mounts['maindir'])
+        subfolder_re = re.compile(self.mounts['subdir'].replace('{cvr}', self.cvr))
+        companyfolders = [
+            subfolder
+            for subfolder in os.listdir(rootfolder)
+            if os.path.isdir(os.path.join(rootfolder, subfolder))
+            and subfolder_re.match(subfolder)
+        ]
+
+        # Find folders that match our path in each companyfolder
+        self.folders = []
+        found = False
+        self.relpath = os.path.join(*self.path) if self.path else None
+        for companyfolder in companyfolders:
+            abs_path = os.path.join(*list_rstrip([rootfolder, companyfolder, self.relpath]))
+            if os.path.isfile(abs_path):
+                # If we have a file, return it
+                return FileResponse(open(abs_path, 'rb'), as_attachment=True)
+            try:
+                if os.path.isdir(abs_path):
+                    found = True
+                    self.folders.append(abs_path)
+            except FileNotFoundError:
+                continue
+        if not found:
+            raise FileNotFoundError(path)
+
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        entries = []
+        for abs_path in self.folders:
+            folder_listing = os.listdir(abs_path)
+
+            for filename in folder_listing:
+                fullpath = os.path.join(abs_path, filename)
+                entry = {
+                    'name': filename,
+                    'path': '/' + os.path.join(*list_lstrip([self.relpath, filename])).replace(os.path.pathsep, '/')
+                }
+                if os.path.isfile(fullpath):
+                    entry['folder'] = False
+                    entry['type'] = os.path.splitext(filename)[1].lstrip('.')
+                    try:
+                        bytesize = entry['size'] = os.path.getsize(fullpath)
+                        entry['formatted_size'] = format_filesize(bytesize)
+                    except:
+                        pass
+                elif os.path.isdir(fullpath):
+                    entry['folder'] = True
+                    entry['size'] = len(os.listdir(fullpath))
+                else:
+                    continue
+                entries.append(entry)
+        entries.sort(key=lambda entry: entry['name'])
+        context = {'entries': entries}
+        context.update(**kwargs)
+        return super().get_context_data(**context)
 
 
 class InkassoSagView(FormSetView, FormView):

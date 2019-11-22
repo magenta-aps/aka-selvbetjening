@@ -13,6 +13,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .utils import get_ordereddict_key_index, spreadsheet_col_letter
 
+
 logger = logging.getLogger(__name__)
 
 with open('aka/static/json/fordringsgruppe.json', 'r', encoding="utf8") as jsonfile:

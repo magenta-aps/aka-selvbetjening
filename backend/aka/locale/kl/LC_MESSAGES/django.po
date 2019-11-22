@@ -63,11 +63,23 @@ msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber} [kl]"
 msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
 
-#: aka/templates/aka/error.html:17 aka/templates/aka/success.html:21
-#, fuzzy
-#| msgid "common.gem"
+msgid "filliste.mappeindhold"
+msgstr "{size} elementer [kl]"
+
+msgid "filliste.mappe"
+msgstr "Mappe [kl]"
+
+msgid "filliste.filnavn"
+msgstr "Filnavn [kl]"
+
+msgid "filliste.filstoerrelse"
+msgstr "Størrelse [kl]"
+
+msgid "filliste.filtype"
+msgstr "Type [kl]"
 
 
+# 6.1
 
 msgid "fordring.debitor"
 msgstr "Debitor [kl]"
@@ -127,9 +139,7 @@ msgid "fordring.meddebitor"
 msgstr "Meddebitor [kl]"
 
 
-
-
-
+# 6.2
 
 msgid "loentraek.title"
 msgstr "Indberet løntræk [kl]"
@@ -159,7 +169,7 @@ msgid "loentraek.sum_mismatch"
 msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækker [kl]"
 
 
-
+# 6.4
 
 msgid "nedskrivning.success"
 msgstr "Nedskrivninger uploadet [kl]"
@@ -197,7 +207,11 @@ msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnummer [kl]"
 
 
+# 6.5
+
+
 # NY16
+
 msgid "rentenota.dato"
 msgstr "Dato [kl]"
 

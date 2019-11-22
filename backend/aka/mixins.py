@@ -1,8 +1,8 @@
-from django.core.exceptions import PermissionDenied
-from django.template.response import TemplateResponse
 import json
 
-from aka.exceptions import AkaException, AccessDeniedException
+from aka.exceptions import AkaException
+from django.core.exceptions import PermissionDenied
+from django.template.response import TemplateResponse
 
 
 class ErrorHandlerMixin(object):
