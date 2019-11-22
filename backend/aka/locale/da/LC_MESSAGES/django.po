@@ -74,6 +74,15 @@ msgstr "{size} elementer"
 msgid "filliste.mappe"
 msgstr "Mappe"
 
+msgid "filliste.filnavn"
+msgstr "Filnavn"
+
+msgid "filliste.filstoerrelse"
+msgstr "Størrelse"
+
+msgid "filliste.filtype"
+msgstr "Type"
+
 
 # 6.2
 
@@ -106,6 +115,7 @@ msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækk
 
 
 # 6.4
+
 msgid "nedskrivning.success"
 msgstr "Nedskrivninger uploadet"
 
@@ -140,14 +150,7 @@ msgstr "Sekvensnummer"
 
 
 # 6.5
-msgid "fordringshaverkonto.filnavn"
-msgstr "Filnavn"
 
-msgid "fordringshaverkonto.filstoerrelse"
-msgstr "Størrelse"
-
-msgid "fordringshaverkonto.filtype"
-msgstr "Type"
 
 # NY16
 msgid "rentenota.dato"
