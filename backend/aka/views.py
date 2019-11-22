@@ -346,7 +346,7 @@ class LoentraekView(RequireCvrMixin, FormSetView, FormView):
         )
 
 
-class LoentraekUploadView(RequireCvrMixin, LoentraekView):
+class LoentraekUploadView(LoentraekView):
     form_class = LoentraekUploadForm
     template_name = 'aka/payroll/uploadPayrollForm.html'
 
