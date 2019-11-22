@@ -68,6 +68,69 @@ msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
 #| msgid "common.gem"
 
 
+
+msgid "fordring.debitor"
+msgstr "Debitor [kl]"
+
+msgid "fordring.fordringshaver"
+msgstr "Fordringshaver [kl]"
+
+msgid "fordring.anden_fordringshaver"
+msgstr "Anden fordringshaver [kl]"
+
+msgid "fordring.fordringsgruppe"
+msgstr "Ekstern fordringsgruppe [kl]"
+
+msgid "fordring.fordringstype"
+msgstr "Ekstern fordringstype [kl]"
+
+msgid "fordring.barns_cpr"
+msgstr "Barns CPR-nr [kl]"
+
+msgid "fordring.ekstern_sagsnummer"
+msgstr "Ekstern sagsnummer [kl]"
+
+msgid "fordring.fakturanr"
+msgstr "Fakturanr [kl]"
+
+msgid "fordring.bnr"
+msgstr "B-nr [kl]"
+
+msgid "fordring.hovedstol"
+msgstr "Hovedstol [kl]"
+
+msgid "fordring.posteringstekst"
+msgstr "Posteringstekst [kl]"
+
+msgid "fordring.periodestart"
+msgstr "Periodestart [kl]"
+
+msgid "fordring.periodeslut"
+msgstr "Periodeslut [kl]"
+
+msgid "fordring.forfaldsdato"
+msgstr "Forfaldsdato [kl]"
+
+msgid "fordring.betalingsdato"
+msgstr "Betalingsdato [kl]"
+
+msgid "fordring.foraeldelsesdato"
+msgstr "Forældelsesdato [kl]"
+
+msgid "fordring.kontaktperson"
+msgstr "Kontaktperson [kl]"
+
+msgid "fordring.noter"
+msgstr "Noter [kl]"
+
+msgid "fordring.meddebitor"
+msgstr "Meddebitor [kl]"
+
+
+
+
+
+
 msgid "loentraek.title"
 msgstr "Indberet løntræk [kl]"
 

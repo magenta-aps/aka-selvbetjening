@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block extra_headers %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static 'js/formset.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/claim.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<article class="indberet_fordring">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <h1 class="page-header" data-trans="fordring.title">{% trans 'fordring.title' %}</h1>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-4">
+                    {% include 'aka/field.html' with field=form.fordringshaver key='fordring.fordringshaver' %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    {% include 'aka/field.html' with field=form.fordringshaver2 key='fordring.anden_fordringshaver' %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    {% include 'aka/field.html' with field=form.debitor key='fordring.debitor' %}
+                </div>
+            </div>
+
+            <div class="row">
+                <label data-trans="fordring.codebitorer">{% trans 'fordring.codebitorer' %}</label>
+                <div class="col-3"><label data-trans="fordring.cpr">{% trans 'fordring.cpr' %}</label></div>
+                <div class="col-3"><label data-trans="fordring.cvr">{% trans 'fordring.cvr' %}</label></div>
+            </div>
+            <div id="codebitorContainer">
+                {% for subform in formset %}
+                    {% include 'aka/claim/claimSubForm.html' with subform=subform %}
+                {% endfor %}
+            </div>
+
+
+
+            <div class="row">
+                <label data-trans="fordring.dokumentation">{% trans 'fordring.dokumentation' %}</label>
+                <div class="col-4" id="documentationContainer">
+                    <input type="file" name="documentation0"/>
+                </div>
+            </div>
+            <button type="button" id="addDocumentationRow" class="button">+</button>
+
+            <div class="row">
+                <div class="col-4">
+                    {% include 'aka/field.html' with field=form.fordringsgruppe key='fordring.fordringsgruppe' %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    {% include 'aka/field.html' with field=form.fordringstype key='fordring.fordringstype' %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    {% include 'aka/field.html' with field=form.barns_cpr key='fordring.barns_cpr' %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    {% include 'aka/field.html' with field=form.ekstern_sagsnummer key='fordring.ekstern_sagsnummer' %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    {% include 'aka/field.html' with field=form.hovedstol key='fordring.hovedstol' %}
+                </div>
+                <div class="col-6">
+                    {% include 'aka/field.html' with field=form.hovedstol_posteringstekst key='fordring.posteringstekst' %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-3">
+                    {% include 'aka/field.html' with field=form.periodestart key='fordring.periodestart' %}
+                </div>
+                <div class="col-3">
+                    {% include 'aka/field.html' with field=form.periodeslut key='fordring.periodeslut' %}
+                </div>
+                <div class="col-3">
+                    {% include 'aka/field.html' with field=form.forfaldsdato key='fordring.forfaldsdato' %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-3">
+                    {% include 'aka/field.html' with field=form.betalingsdato key='fordring.betalingsdato' %}
+                </div>
+                <div class="col-3">
+                    {% include 'aka/field.html' with field=form.foraeldelsesdato key='fordring.foraeldelsesdato' %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-4">
+                    {% include 'aka/field.html' with field=form.kontaktperson key='fordring.kontaktperson' %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-4">
+                    {% include 'aka/field.html' with field=form.noter key='fordring.noter' %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-2">
+                    <input type="submit" value="{% trans 'common.gem' %}" @click="isSubmitted = true">
+                </div>
+            </div>
+
+        </div>
+    </form>
+    <div id="codebitorFormsetPrototype" style="display: none">
+        {% include 'aka/claim/claimSubForm.html' with subform=formset.empty_form %}
+    </div>
+</article>
+{% endblock %}
+
+{##}
+{#<div class="row" v-for="(meddebitor, index) in meddebitorer" :key="index">#}
+{#    <div @input.once="addNewMeddebitor">#}
+{#        <div class="col-4">#}
+{#            <label :for="meddebitor.index">{{ $t('attributes.meddebitor_nr', {nr: index + 1}) }}</label>#}
+{#            <input :id="meddebitor.index" type="text" :disabled="meddebitor.cvr !== null && meddebitor.cvr !== ''" v-model="meddebitor.cpr" placeholder="CPR" v-validate="'digits:10'">#}
+{#        </div>#}
+{#        <div class="col-4">#}
+{#            <label style="height: 24px;" class="hidden-sm" :for="meddebitor.index"></label>#}
+{#            <input type="text" :disabled="meddebitor.cpr !== null && meddebitor.cpr !== ''" v-model="meddebitor.cvr" placeholder="GER" v-validate="'digits:8'">#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}

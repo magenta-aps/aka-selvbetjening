@@ -153,3 +153,12 @@ class AccessDeniedJsonResponse(ErrorJsonResponse):
 
     def __init__(self, **kwargs):
         super(AccessDeniedJsonResponse, self).__init__(['Access denied'], [], **kwargs)
+
+
+def dummy_management_form(name, total_forms=1, initial_forms=1, min_forms=1, max_forms=1000):
+    return {
+        "%s-TOTAL_FORMS" % name: total_forms,
+        "%s-INITIAL_FORMS" % name: initial_forms,
+        "%s-MIN_NUM_FORMS" % name: min_forms,
+        "%s-MAX_NUM_FORMS" % name: max_forms,
+    }
