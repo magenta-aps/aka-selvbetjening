@@ -1,18 +1,15 @@
-import json
 import logging
 from datetime import date
-from unittest.mock import patch
 
 from aka.clients.prisme import PrismeClaimRequest
 from aka.clients.prisme import PrismeClaimResponse
 from aka.tests.mixins import TestMixin
+from aka.utils import dummy_management_form
 from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings, TestCase
 from lxml import etree
 from xmltodict import parse as xml_to_dict
-
-from aka.utils import dummy_management_form
 
 
 @override_settings(OPENID_CONNECT={'enabled': False})
@@ -22,7 +19,9 @@ class BasicTestCase(TestMixin, TestCase):
         logging.disable(logging.CRITICAL)
         self.url = '/inkassosag'
         self.service_mock = self.mock('aka.clients.prisme.Prisme.process_service')
-
+        session = self.client.session
+        session['user_info'] = {'CVR': '12479182'}
+        session.save()
 
 
     ### PRISME INTERFACE TESTS ###

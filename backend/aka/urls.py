@@ -15,17 +15,17 @@ Includinganother URLconf
 """
 from django.conf.urls import url, include
 
-from .views import ArbejdsgiverkontoView
-from .views import CustomJavaScriptCatalog, SetLanguageView
-from .views import FordringshaverkontoView
-from .views import IndexTemplateView, VueTemplateView
-from .views import InkassoSagView, InkassoSagUploadView
-from .views import LoenTraekDistributionView
-from .views import LoentraekView, LoentraekUploadView
-from .views import NedskrivningView, NedskrivningUploadView
-from .views import NetsopkraevningView
-from .views import PrivatdebitorkontoView
-from .views import RenteNotaView
+from aka.views import ArbejdsgiverkontoView
+from aka.views import CustomJavaScriptCatalog, SetLanguageView
+from aka.views import FordringshaverkontoView
+from aka.views import IndexTemplateView, VueTemplateView
+from aka.views import InkassoSagView, InkassoSagUploadView
+from aka.views import LoenTraekDistributionView
+from aka.views import LoentraekView, LoentraekUploadView
+from aka.views import NedskrivningView, NedskrivningUploadView
+from aka.views import NetsopkraevningView
+from aka.views import PrivatdebitorkontoView
+from aka.views import RenteNotaView
 
 urlpatterns = [
     # Use 'django' domain instead of 'djangojs', so we get serverside translations

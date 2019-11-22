@@ -11,7 +11,7 @@ from django.forms import ValidationError
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 
-from .utils import get_ordereddict_key_index, spreadsheet_col_letter
+from aka.utils import get_ordereddict_key_index, spreadsheet_col_letter
 
 
 logger = logging.getLogger(__name__)
@@ -175,10 +175,6 @@ class InkassoForm(forms.Form):
                     if int(x['id']) == int(group_id)
                 ][0]
                 # Set type choices based on this subgroup
-                # self.fields['fordringsgruppe'].choices = [
-                #     (item['group_id'], item['group_id'])
-                #     for item in subgroup
-                # ]
                 self.fields['fordringstype'].choices = [
                     ("%d.%d" % (item['group_id'], item['type_id']), item['type_id'])
                     for item in subgroup

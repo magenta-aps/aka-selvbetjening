@@ -190,7 +190,7 @@ class FordringshaverkontoView(RequireCvrMixin, TemplateView):
         return super().get_context_data(**context)
 
 
-class InkassoSagView(FormSetView, FormView):
+class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
 
     form_class = InkassoForm
     template_name = 'aka/claim/claimForm.html'
@@ -258,7 +258,7 @@ class InkassoSagView(FormSetView, FormView):
         return super().form_invalid(form)
 
 
-class InkassoSagUploadView(FormView):
+class InkassoSagUploadView(RequireCvrMixin, FormView):
     form_class = InkassoUploadForm
 
     def form_valid(self, form):
