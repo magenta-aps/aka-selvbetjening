@@ -488,7 +488,7 @@ select {
 @media screen and (min-width:60rem) {
     article {
         max-width:75rem;
-        margin:0 auto 2.25rem
+        margin:2rem auto 2.25rem
     }
 }
 

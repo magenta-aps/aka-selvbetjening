@@ -5,6 +5,7 @@
 {% block extra_headers %}
     <script type="text/javascript" src="{% static 'js/thirdparty/sort.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/claimantaccount.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/claimantaccount.css' %}"/>
 {% endblock %}
 
 {% block content %}
@@ -13,8 +14,8 @@
             <thead>
             <tr>
                 <th class="sortable" data-trans="fordringshaverkonto.filnavn">{% trans 'fordringshaverkonto.filnavn' %}</th>
-                <th class="sortable" data-trans="fordringshaverkonto.filstoerrelse">{% trans 'fordringshaverkonto.filstoerrelse' %}</th>
                 <th class="sortable" data-trans="fordringshaverkonto.filtype">{% trans 'fordringshaverkonto.filtype' %}</th>
+                <th class="sortable" data-trans="fordringshaverkonto.filstoerrelse">{% trans 'fordringshaverkonto.filstoerrelse' %}</th>
             </tr>
             </thead>
             <tbody>
@@ -22,21 +23,20 @@
                 <tr>
                     <td>
                         <a href="{% url 'fordringshaverkonto' path=entry.path %}">{{ entry.name }}</a>
-
                     </td>
                     {% if entry.folder %}
-                        <td data-raw="d {{ entry.size }}" data-trans="filliste.mappeindhold" data-trans-params="{{ entry|json }}">
-                            {{ 'filliste.mappeindhold'|format:entry }}
-                        </td>
                         <td data-trans="filliste.mappe">
                             {% trans 'filliste.mappe' %}
                         </td>
-                    {% else %}
-                        <td data-raw="f {{ entry.size }}">
-                            {{ entry.formatted_size }}
+                        <td data-raw="d {{ entry.size }}" data-trans="filliste.mappeindhold" data-trans-params="{{ entry|json }}">
+                            {{ 'filliste.mappeindhold'|format:entry }}
                         </td>
+                    {% else %}
                         <td>
                             {{ entry.type }}
+                        </td>
+                        <td data-raw="f {{ entry.size }}">
+                            {{ entry.formatted_size }}
                         </td>
                     {% endif %}
                 </tr>
