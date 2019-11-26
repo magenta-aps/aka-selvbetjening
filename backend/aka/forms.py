@@ -79,19 +79,20 @@ class ArbejdsgiverkontoForm(forms.Form):
     from_date = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'},
+        error_messages={'required': 'error.required'},
         input_formats=valid_date_formats
     )
     to_date = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'},
+        error_messages={'required': 'error.required'},
         input_formats=valid_date_formats
     )
 
     def clean(self):
-        if self.cleaned_data['from_date'] > self.cleaned_data['to_date']:
-            raise ValidationError(_('error.from_date_before_to_date'), code='error.from_date_before_to_date')
+        if 'from_date' in self.cleaned_data and 'to_date' in self.cleaned_data:
+            if self.cleaned_data['from_date'] > self.cleaned_data['to_date']:
+                raise ValidationError(_('error.from_date_before_to_date'), code='error.from_date_before_to_date')
 
 
 class InkassoForm(forms.Form):

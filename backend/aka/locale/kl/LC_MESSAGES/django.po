@@ -67,7 +67,7 @@ msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
 # Errors
 
 msgid "error.from_date_before_to_date"
-msgstr "Fra-dato skal være før til-dato"
+msgstr "Fra-dato skal være før til-dato [kl]"
 
 
 # File lists

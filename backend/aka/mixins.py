@@ -45,8 +45,10 @@ class SimpleGetFormMixin(FormMixin):
     def get(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
+            print("form is valid")
             return self.form_valid(form)
         else:
+            print("form is not valid")
             return self.form_invalid(form)
 
     def form_valid(self, form):

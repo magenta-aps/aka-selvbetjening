@@ -22,7 +22,7 @@
             </div>
             <div class="row">
                 <div class="col-4">
-                    <button type="submit" @click="requestRentenota">{% trans 'common.send' %}</button>
+                    <button type="submit">{% trans 'common.send' %}</button>
                 </div>
             </div>
         </form>
@@ -52,14 +52,14 @@
                 </p>
 
                 <div>
-                    <h3 data-trans="rentenota.rentenota">{% trans '' %}</h3>
+                    <h3 data-trans="rentenota.rentenota">{% trans 'rentenota.rentenota' %}</h3>
                     <table class="rentenota-address-table">
                         <tr>
-                            <th data-trans="rentenota.konto">{% trans '' %}</th>
+                            <th data-trans="rentenota.konto">{% trans 'rentenota.konto' %}</th>
                             <td>10276179</td>
                         </tr>
                         <tr>
-                            <th data-trans="rentenota.dato">{% trans '' %}</th>
+                            <th data-trans="rentenota.dato">{% trans 'rentenota.dato' %}</th>
                             <td v-html='today.toLocaleDateString()'></td>
                         </tr>
                     </table>
@@ -115,7 +115,7 @@
                     </thead>
                     <tbody>
                         {% if posts|length == 0 %}
-                            <tr v-if="!rentenota_data.poster.length">
+                            <tr>
                                 <td colspan="14" style="text-align: center">
                                     {% trans 'rentenota.ingenposter' %}
                                 </td>
