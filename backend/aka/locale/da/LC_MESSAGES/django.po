@@ -83,6 +83,9 @@ msgstr "Størrelse"
 msgid "filliste.filtype"
 msgstr "Type"
 
+msgid "filliste.op"
+msgstr "Op"
+
 
 # 6.1
 msgid "fordring.title"

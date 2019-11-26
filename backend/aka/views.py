@@ -4,6 +4,7 @@ import logging
 import os
 import re
 from io import StringIO
+from pathlib import Path
 
 import chardet
 from aka.clients.dafo import Dafo
@@ -185,7 +186,12 @@ class FordringshaverkontoView(RequireCvrMixin, TemplateView):
                     continue
                 entries.append(entry)
         entries.sort(key=lambda entry: entry['name'])
-        context = {'entries': entries}
+        parent_path = ('/' + os.path.join(*self.path[:-1])) if self.path else None
+        context = {
+            'path': self.relpath,
+            'parent': parent_path,
+            'entries': entries
+        }
         context.update(**kwargs)
         return super().get_context_data(**context)
 

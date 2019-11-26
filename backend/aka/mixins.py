@@ -31,6 +31,7 @@ class ErrorHandlerMixin(object):
 
 class RequireCvrMixin(object):
     def dispatch(self, request, *args, **kwargs):
+        self.cvr = '12345678'
         # try:
         #     self.cvr = request.session['user_info']['CVR']
         # except (KeyError, TypeError):

@@ -78,6 +78,8 @@ msgstr "Størrelse [kl]"
 msgid "filliste.filtype"
 msgstr "Type [kl]"
 
+msgid "filliste.op"
+msgstr "Op [kl]"
 
 # 6.1
 
