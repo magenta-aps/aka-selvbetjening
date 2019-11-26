@@ -15,6 +15,20 @@
     <div class="employeraccount-main">
 
         <form method="get" id="mainform">
+            {% if form.non_field_errors %}
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors.as_data %}
+                        <li {% if error.code %}data-trans="{{ error.code }}"{% endif %} {% if error.params %}data-trans-params="{{ error.params|json }}"{% endif %}>
+                            {% if error.code %}
+                                {% trans error.code as error_message %}
+                                {{ error_message|format:error.params }}
+                            {% else %}
+                                {{ error }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
             <div class="employeraccount-actions row">
                 <div class="col-4">
                     {% include 'aka/field.html' with field=form.from_date key='employeraccount.from_date' %}

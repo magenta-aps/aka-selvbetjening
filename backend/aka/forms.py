@@ -89,6 +89,10 @@ class ArbejdsgiverkontoForm(forms.Form):
         input_formats=valid_date_formats
     )
 
+    def clean(self):
+        if self.cleaned_data['from_date'] > self.cleaned_data['to_date']:
+            raise ValidationError(_('error.from_date_before_to_date'), code='error.from_date_before_to_date')
+
 
 class InkassoForm(forms.Form):
 

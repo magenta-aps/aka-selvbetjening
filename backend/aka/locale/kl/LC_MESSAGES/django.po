@@ -63,6 +63,15 @@ msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber} [kl]"
 msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
 
+
+# Errors
+
+msgid "error.from_date_before_to_date"
+msgstr "Fra-dato skal være før til-dato"
+
+
+# File lists
+
 msgid "filliste.mappeindhold"
 msgstr "{size} elementer [kl]"
 
@@ -80,6 +89,7 @@ msgstr "Type [kl]"
 
 msgid "filliste.op"
 msgstr "Op [kl]"
+
 
 # 6.1
 msgid "fordring.title"
