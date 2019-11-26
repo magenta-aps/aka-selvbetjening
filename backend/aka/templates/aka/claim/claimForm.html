@@ -3,8 +3,8 @@
 {% load i18n %}
 
 {% block extra_headers %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/thirdparty/jquery.datetimepicker.min.css' %}"/>
+    <script type="text/javascript" src="{% static 'js/thirdparty/jquery.datetimepicker.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/formset.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/claim.js' %}"></script>
 {% endblock %}

@@ -31,8 +31,8 @@ class ErrorHandlerMixin(object):
 
 class RequireCvrMixin(object):
     def dispatch(self, request, *args, **kwargs):
-        try:
-            self.cvr = request.session['user_info']['CVR']
-        except (KeyError, TypeError):
-            raise PermissionDenied('no_cvr')
+        # try:
+        #     self.cvr = request.session['user_info']['CVR']
+        # except (KeyError, TypeError):
+        #     raise PermissionDenied('no_cvr')
         return super(RequireCvrMixin, self).dispatch(request, *args, **kwargs)

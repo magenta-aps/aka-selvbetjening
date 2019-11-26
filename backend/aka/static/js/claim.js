@@ -1,6 +1,21 @@
 $(function(){
+
+    kl = {
+        months: ['a01','a02','a03','a04','a05','a06','a07','a08','a09','a10','a11','a12'],
+        dayOfWeekShort: ['d1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7'],
+        dayOfWeek: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7'],
+    };
+
+    $.datetimepicker.addLocale(
+        'kl',
+        ['Januaari','Februaari','Marsi','Apriili','Maaji','Juuni','Juuli','Aggusti','Septembari','Oktobari','Novembari','Decembari'],
+        ['Ata', 'Mar', 'Pin', 'Tal', 'Sis', 'Arf', 'Sap'],
+        ['Ataasinngorneq', 'Marlunngorneq', 'Pingasunngorneq', 'Tallimanngorneq', 'Sisamanngorneq', 'Arfininngorneq', 'Sapaat'],
+    );
+
     $(".datepicker").datetimepicker({timepicker:false, format:'d/m/Y'});
-    $.datetimepicker.setLocale('da');
+
+    $.datetimepicker.setLocale('kl');
 });
 
 $(function(){
