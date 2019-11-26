@@ -43,6 +43,7 @@
         </form>
 
         {% if items %}
+            <a href="{% url 'arbejdsgiverkonto' %}?from_date={{ form.from_date.value }}&to_date={{ form.to_date.value }}&pdf">Hent som PDF</a>
             <div class="employeraccount-data">
             <table>
                 <thead>

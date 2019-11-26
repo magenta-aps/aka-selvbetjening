@@ -1,0 +1,37 @@
+{% extends 'pdfbase.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block extra_headers %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/employeraccount.css' %}"/>
+{% endblock %}
+
+{% block content %}
+<article>
+
+    <div class="employeraccount-main">
+        {% if items %}
+            <a href="{% url 'arbejdsgiverkonto' %}?from_date={{ form.from_date.value }}&to_date={{ form.to_date.value }}&pdf">Hent som PDF</a>
+            <div class="employeraccount-data">
+            <table>
+                <thead>
+                    <tr>
+                        <th>a</th>
+                        <th>b</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in items %}
+                    <tr>
+                        <td>{{ item.a }}</td>
+                        <td>{{ item.b }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        {% endif %}
+
+    </div>
+</article>
+{% endblock %}

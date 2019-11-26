@@ -32,10 +32,12 @@ from django.conf import settings
 from django.forms import formset_factory
 from django.http import JsonResponse, HttpResponse, FileResponse
 from django.template import Engine, Context
+from django.template.loader import get_template
 from django.template.response import TemplateResponse
 from django.utils import translation
 from django.utils.datetime_safe import date
 from django.utils.decorators import method_decorator
+from django.utils.translation import gettext_lazy as _
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
@@ -43,6 +45,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
+import pdfkit
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -107,10 +110,18 @@ class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, TemplateView):
 
     form_class = ArbejdsgiverkontoForm
     template_name = 'aka/employer_account/employer_account.html'
+    pdf_template_name = 'aka/employer_account/pdfbase.html'
     items = []
 
     def form_valid(self, form):
         self.items = self.get_items(form)
+        if 'pdf' in self.request.GET:
+            html = get_template(self.pdf_template_name).render(self.get_context_data())
+            pdf = pdfkit.from_string(html, False)
+            filename = _("employeraccount.filename").format(**{k: v.strftime('%Y-%m-%d') for k, v in form.cleaned_data.items()})
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
+            return response
         return super().form_valid(form)
 
     def get_items(self, form):

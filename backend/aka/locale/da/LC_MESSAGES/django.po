@@ -305,6 +305,9 @@ msgstr "Fra dato"
 msgid "employeraccount.to_date"
 msgstr "Til dato"
 
+msgid "employeraccount.filename"
+msgstr "Kontoudtog {from_date} - {to_date}.pdf"
+
 
 
 msgid "required"
