@@ -493,13 +493,11 @@ class PrivatdebitorkontoView(View):
         return JsonResponse("OK", safe=False)
 
 
-class RenteNotaView(RequireCvrMixin, FormView):
+@method_decorator(csrf_exempt, name='dispatch')
+class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, TemplateView):
     form_class = InterestNoteForm
     template_name = 'aka/interestnote/interestnote.html'
-
-    def __init__(self, *args, **kwargs):
-        super(RenteNotaView, self).__init__(*args, **kwargs)
-        self.posts = None
+    posts = None
 
     def get_posts(self, form):
         prisme = Prisme()
@@ -528,12 +526,7 @@ class RenteNotaView(RequireCvrMixin, FormView):
 
     def form_valid(self, form):
         self.posts = self.get_posts(form)
-        return TemplateResponse(
-            request=self.request,
-            template=self.template_name,
-            context=self.get_context_data(),
-            using=self.template_engine
-        )
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = {

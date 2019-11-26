@@ -13,8 +13,7 @@
 
     <div class="rentenota-main">
 
-        <form method="post" id="mainform">
-            {% csrf_token %}
+        <form method="get" id="mainform">
             <div class="rentenota-actions row">
                 <div class="col-4">
                     {% include 'aka/field.html' with field=form.year key='rentenota.year' %}
