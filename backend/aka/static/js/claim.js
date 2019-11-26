@@ -4,24 +4,41 @@ $(function(){
         success: function(groups){
             const groupSelect = $("#id_fordringsgruppe");
             const typeSelect = $("#id_fordringstype");
+            const childCpr = $("#id_barns_cpr");
             group_dict = {};
             for (let i=0; i<groups.length; i++) {
                 let group = groups[i];
-                group_dict[group['id']] = group;
+                let subgroups = group_dict[group['id']] = {};
+                for (let j=0, c=group['sub_groups'].length; j<c; j++) {
+                    let subgroup = group['sub_groups'][j];
+                    subgroups[subgroup['group_id']+"."+subgroup['type_id']] = subgroup;
+                }
             }
+            console.log(group_dict);
             const updateType = function(){
-                let group = group_dict[this.value];
+                const group = group_dict[this.value];
                 typeSelect.empty();
-                for (let i=0; i<group['sub_groups'].length; i++) {
-                    let subGroup = group['sub_groups'][i];
+                for (let subgroup_id in group) {
+                    let subGroup = group[subgroup_id];
                     let option = $("<option>");
-                    option.attr("value", subGroup['group_id'] + "." + subGroup['type_id']);
+                    option.attr("value", subgroup_id);
                     option.text(subGroup['name']);
                     typeSelect.append(option);
                 }
             };
             groupSelect.change(updateType);
             groupSelect.each(updateType);
+
+            const updateChildRequired = function() {
+                let subgroup = group_dict[groupSelect.val()][typeSelect.val()];
+                if (subgroup['has_child_cpr']) {
+                    childCpr.attr("required", "required");
+                } else {
+                    childCpr.removeAttr("required");
+                }
+            };
+            typeSelect.change(updateChildRequired);
+            typeSelect.each(updateChildRequired);
         }
     });
 

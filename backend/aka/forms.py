@@ -174,6 +174,8 @@ class InkassoForm(forms.Form):
                     ("%d.%d" % (item['group_id'], item['type_id']), item['type_id'])
                     for item in subgroup
                 ]
+                # type = [x for x in subgroup if x['type_id']]
+
         except IndexError:
             pass
 
@@ -193,6 +195,15 @@ class InkassoForm(forms.Form):
         end = cleaned_data.get('periodeslut')
         if start and end and start > end:
             self.add_error('periodeslut', ValidationError('start_date_before_end_date'))
+
+        # Whether barns_cpr is required depends on the group and type selected
+        group_id = cleaned_data.get('fordringsgruppe')
+        type_id = cleaned_data.get('fordringstype')
+        subgroups = [x['sub_groups'] for x in groups if int(x['id']) == int(group_id)][0]
+        type = [x for x in subgroups if "%d.%d" % (x['group_id'], x['type_id']) == type_id][0]
+        if type.get('has_child_cpr') and not cleaned_data.get('barns_cpr'):
+            self.add_error('barns_cpr', ValidationError(self.fields['barns_cpr'].error_messages['required'], code='required'))
+
 
     @staticmethod
     def convert_group_type_text(groupname, typename):

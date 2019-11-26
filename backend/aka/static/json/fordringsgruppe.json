@@ -1,4 +1,4 @@
-groups = [
+[
   {
     "name": "01UBIDRAG",
     "id": 1,
@@ -7,49 +7,49 @@ groups = [
         "name": "ABIDRAG",
         "group_id": 17,
         "type_id": 1,
-        "has_child_cpr": True
+        "has_child_cpr": true
       },
       {
         "name": "NORDISKE",
         "group_id": 17,
         "type_id": 6,
-        "has_child_cpr": True
+        "has_child_cpr": true
       },
       {
         "name": "NORDISKE1",
         "group_id": 17,
         "type_id": 7,
-        "has_child_cpr": True
+        "has_child_cpr": true
       },
       {
         "name": "NORDISKE2",
         "group_id": 17,
         "type_id": 8,
-        "has_child_cpr": True
+        "has_child_cpr": true
       },
       {
         "name": "NORDISKE3",
         "group_id": 17,
         "type_id": 9,
-        "has_child_cpr": True
+        "has_child_cpr": true
       },
       {
         "name": "NORDISKE4",
         "group_id": 17,
         "type_id": 10,
-        "has_child_cpr": True
+        "has_child_cpr": true
       },
       {
         "name": "NORDISKE6",
         "group_id": 17,
         "type_id": 12,
-        "has_child_cpr": True
+        "has_child_cpr": true
       },
       {
         "name": "PRIVATKRAV",
         "group_id": 17,
         "type_id": 2,
-        "has_child_cpr": True
+        "has_child_cpr": true
       },
       {
         "name": "TØNDER",
@@ -60,7 +60,7 @@ groups = [
         "name": "ULØNTRÆK",
         "group_id": 17,
         "type_id": 4,
-        "has_child_cpr": True
+        "has_child_cpr": true
       }
     ]
   },
@@ -626,7 +626,7 @@ groups = [
         "name": "DAGINST",
         "group_id": 26,
         "type_id": 1,
-        "has_child_cpr": True
+        "has_child_cpr": true
       }
     ]
   },
@@ -1034,7 +1034,7 @@ groups = [
         "name": "FORÆLDREBE",
         "group_id": 38,
         "type_id": 1,
-        "has_child_cpr": True
+        "has_child_cpr": true
       }
     ]
   },
@@ -1061,13 +1061,13 @@ groups = [
         "name": "UHB_DK",
         "group_id": 19,
         "type_id": 1,
-        "has_child_cpr": True
+        "has_child_cpr": true
       },
       {
         "name": "UHB_NORDI",
         "group_id": 19,
         "type_id": 2,
-        "has_child_cpr": True
+        "has_child_cpr": true
       }
     ]
   },

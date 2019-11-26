@@ -71,7 +71,6 @@
                     <input type="file" name="documentation0"/>
                 </div>
             </div>
-            <!--button type="button" id="addDocumentationRow" class="button">+</button>-->
 
             <div class="row">
                 <div class="col-4">
@@ -148,17 +147,3 @@
     </div>
 </article>
 {% endblock %}
-
-{##}
-{#<div class="row" v-for="(meddebitor, index) in meddebitorer" :key="index">#}
-{#    <div @input.once="addNewMeddebitor">#}
-{#        <div class="col-4">#}
-{#            <label :for="meddebitor.index">{{ $t('attributes.meddebitor_nr', {nr: index + 1}) }}</label>#}
-{#            <input :id="meddebitor.index" type="text" :disabled="meddebitor.cvr !== null && meddebitor.cvr !== ''" v-model="meddebitor.cpr" placeholder="CPR" v-validate="'digits:10'">#}
-{#        </div>#}
-{#        <div class="col-4">#}
-{#            <label style="height: 24px;" class="hidden-sm" :for="meddebitor.index"></label>#}
-{#            <input type="text" :disabled="meddebitor.cpr !== null && meddebitor.cpr !== ''" v-model="meddebitor.cvr" placeholder="GER" v-validate="'digits:8'">#}
-{#        </div>#}
-{#    </div>#}
-{#</div>#}
