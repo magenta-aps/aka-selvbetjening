@@ -1,7 +1,7 @@
 ---
 - name: Build release tarball with both backend and frontend
   become: no
-  local_action: command tar cfz /tmp/backend.tar.gz --exclude='*.pyc' --exclude='local_settings.py' --exclude='.gitignore' ../../backend ../../frontend/dist ../../shared
+  local_action: command tar cfz /tmp/backend.tar.gz --exclude='*.pyc' --exclude='local_settings.py' --exclude='.gitignore' ../../backend ../../shared
 
 - name: ensure project dir exists
   file:

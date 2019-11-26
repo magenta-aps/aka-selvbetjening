@@ -20,7 +20,7 @@ FRONTEND_PREREQUISITES = frontend/.make-updated-npm frontend/public/index.html f
 
 
 # .PHONY tells make, that it is not an actual file being built
-.PHONY : runserver documentation makemigrations frontend migrate test
+.PHONY : runserver documentation makemigrations migrate test
 
 # Run the server and make it assecible to the host machine
 # .PHONY
@@ -52,22 +52,3 @@ makemigrations : backend/project/local_settings.py
 # .PHONY
 documentation : 
 	make -C doc -f Makefile html
-
-# .PHONY
-frontend : frontend/dist/index.html 
-
-# FRONTEND_SOURCES checks if any files used as source files has changed, and compiles
-# the frontend if it has
-frontend/dist/index.html : $(FRONTEND_PREREQUISITES)
-	$(NPM) run build
-
-frontend/.make-updated-npm : frontend/package.json
-	$(NPM) update
-	$(NPM) install
-	touch frontend/.make-updated-npm
-
-# $@ is the target file (shared/fordringsgruppe.js)
-# $< is the prerequisitte (frontend/assets/fordringsgruppe.json) 
-# The second argument is the json variable name
-frontend/assets/fordringsgruppe.js : shared/fordringsgruppe.json
-	makefile-utils/gen_json-variable_for_frontend.sh $< groups > $@

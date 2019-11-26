@@ -116,7 +116,11 @@ class ArbejdsgiverkontoView(View):
 class FordringshaverkontoView(RequireCvrMixin, TemplateView):
 
     template_name = 'aka/claimant_account/list.html'
-    mounts = settings.MOUNTS['claimant_account_statements']
+
+    @staticmethod
+    def rootfolder():
+        mounts = settings.MOUNTS['claimant_account_statements']
+        return os.path.abspath(mounts['maindir'])
 
     def get(self, request, path=None, *args, **kwargs):
 
@@ -126,10 +130,11 @@ class FordringshaverkontoView(RequireCvrMixin, TemplateView):
         if path is None:
             path = []
         self.path = list_rstrip(path.split('/'), '')
+        rootfolder = self.rootfolder()
+        print(rootfolder)
 
         # Find root folder and all folders that match our configuration for the current cvr
         self.mounts = settings.MOUNTS['claimant_account_statements']
-        rootfolder = os.path.abspath(self.mounts['maindir'])
         subfolder_re = re.compile(self.mounts['subdir'].replace('{cvr}', self.cvr))
         companyfolders = [
             subfolder
@@ -142,19 +147,20 @@ class FordringshaverkontoView(RequireCvrMixin, TemplateView):
         self.folders = []
         found = False
         self.relpath = os.path.join(*self.path) if self.path else None
-        for companyfolder in companyfolders:
-            abs_path = os.path.join(*list_rstrip([rootfolder, companyfolder, self.relpath]))
-            if os.path.isfile(abs_path):
-                # If we have a file, return it
-                return FileResponse(open(abs_path, 'rb'), as_attachment=True)
-            try:
-                if os.path.isdir(abs_path):
-                    found = True
-                    self.folders.append(abs_path)
-            except FileNotFoundError:
-                continue
-        if not found:
-            raise FileNotFoundError(path)
+        if companyfolders:
+            for companyfolder in companyfolders:
+                abs_path = os.path.join(*list_rstrip([rootfolder, companyfolder, self.relpath]))
+                if os.path.isfile(abs_path):
+                    # If we have a file, return it
+                    return FileResponse(open(abs_path, 'rb'), as_attachment=True)
+                try:
+                    if os.path.isdir(abs_path):
+                        found = True
+                        self.folders.append(abs_path)
+                except FileNotFoundError:
+                    continue
+            if not found:
+                raise FileNotFoundError(path)
 
         context = self.get_context_data(**kwargs)
         return self.render_to_response(context)

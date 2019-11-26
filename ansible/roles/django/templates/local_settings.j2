@@ -1,3 +1,5 @@
+import os
+
 ALLOWED_HOSTS = ['*']
 
 DATABASES = {
@@ -39,4 +41,12 @@ OPENID_CONNECT = {
     'client_certificate': '{{django_openid.client_certificate}}',  # path to client certificate used to secure the communication between the system and OP
     'private_key': '{{django_openid.private_key}}',  # used for signing messages passed to the OP
     'redirect_uri': '{{django_openid.redirect_uri}}'  # url registered at headnet to redirect the user to after a successfull login at OP
+}
+
+MOUNTS = {
+    'claimant_account_statements': {
+        'maindir': os.path.join('media', '6.5'),
+        'subdir': '{cvr}*',
+        'files': '*'
+    }
 }

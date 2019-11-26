@@ -31,10 +31,7 @@ urlpatterns = [
     url(r'^language/(?P<locale>[a-z]{2})', CustomJavaScriptCatalog.as_view(domain='django', packages=['aka']), name='javascript-language-catalog'),
     url(r'^language', SetLanguageView.as_view()),
 
-
-
     url(r'^$', IndexTemplateView.as_view(), name='index'),
-    url(r'^vue/$', VueTemplateView.as_view(), name='vue'),
     url(r'^oid/', include('openid.urls', namespace='openid')),
     url(r'^inkassosag$', InkassoSagView.as_view(), name='inkassosag'),
     url(r'^inkassosag/upload', InkassoSagUploadView.as_view(), name='inkassosag-upload'),
