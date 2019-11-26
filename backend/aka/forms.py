@@ -1,10 +1,10 @@
 import csv
-import json
 import logging
 from io import StringIO
 
 import chardet
 from aka.utils import get_ordereddict_key_index, spreadsheet_col_letter
+from aka.data.fordringsgruppe import groups
 from django import forms
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
@@ -13,9 +13,6 @@ from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger(__name__)
-
-with open('aka/static/json/fordringsgruppe.json', 'r', encoding="utf8") as jsonfile:
-    fordring_options = json.loads(jsonfile.read())
 
 
 class CsvUploadMixin(object):
@@ -92,7 +89,7 @@ class InkassoForm(forms.Form):
     )
     fordringsgruppe = forms.ChoiceField(
         required=True,
-        choices=[(item['id'], item['name']) for item in fordring_options],
+        choices=[(item['id'], item['name']) for item in groups],
         error_messages={'invalid_choice': 'fordringsgruppe_not_found', 'required': 'required_field'}
     )
     fordringstype = forms.ChoiceField(
@@ -169,7 +166,7 @@ class InkassoForm(forms.Form):
                 # Find out which subgroup exists for this id
                 subgroup = [
                     x['sub_groups']
-                    for x in fordring_options
+                    for x in groups
                     if int(x['id']) == int(group_id)
                 ][0]
                 # Set type choices based on this subgroup
@@ -183,7 +180,7 @@ class InkassoForm(forms.Form):
     def clean_fordringsgruppe(self):
         value = self.cleaned_data['fordringsgruppe']
         items = [
-            item for item in fordring_options
+            item for item in groups
             if int(item['id']) == int(value)
         ]
         if len(items) > 1:
@@ -199,7 +196,7 @@ class InkassoForm(forms.Form):
 
     @staticmethod
     def convert_group_type_text(groupname, typename):
-        group_match = [group for group in fordring_options if group['name'] == groupname]
+        group_match = [group for group in groups if group['name'] == groupname]
         if not group_match:
             raise ValidationError('fordringsgruppe_not_found')
         group = group_match[0]

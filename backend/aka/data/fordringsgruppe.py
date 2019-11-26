@@ -1,4 +1,4 @@
-[
+groups = [
   {
     "name": "01UBIDRAG",
     "id": 1,
