@@ -14,6 +14,8 @@ from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger(__name__)
 
+valid_date_formats = ['%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%Y-%m-%d']
+
 
 class CsvUploadMixin(object):
 
@@ -72,9 +74,23 @@ class CsvUploadMixin(object):
         return file
 
 
-class InkassoForm(forms.Form):
+class ArbejdsgiverkontoForm(forms.Form):
 
-    valid_date_formats = ['%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%Y-%m-%d']
+    from_date = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
+        required=True,
+        error_messages={'required': 'required_field'},
+        input_formats=valid_date_formats
+    )
+    to_date = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
+        required=True,
+        error_messages={'required': 'required_field'},
+        input_formats=valid_date_formats
+    )
+
+
+class InkassoForm(forms.Form):
 
     fordringshaver = forms.CharField(
         required=True,

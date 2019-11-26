@@ -14,6 +14,7 @@ from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
 from aka.data.fordringsgruppe import groups
 from aka.exceptions import AccessDeniedException
+from aka.forms import ArbejdsgiverkontoForm
 from aka.forms import InkassoCoDebitorFormItem
 from aka.forms import InkassoForm, InkassoUploadForm
 from aka.forms import InterestNoteForm
@@ -100,18 +101,10 @@ class IndexTemplateView(TemplateView):
         return super(IndexTemplateView, self).get(*args, **kwargs)
 
 
-class VueTemplateView(TemplateView):
-    template_name = 'vue.html'
+class ArbejdsgiverkontoView(FormView):
 
-    @method_decorator(ensure_csrf_cookie)
-    def get(self, *args, **kwargs):
-        return super(VueTemplateView, self).get(*args, **kwargs)
-
-
-class ArbejdsgiverkontoView(View):
-
-    def get(self, request, *args, **kwargs):
-        return JsonResponse("OK", safe=False)
+    form_class = ArbejdsgiverkontoForm
+    template_name = 'aka/employer_account/employer_account.html'
 
 
 class FordringshaverkontoView(RequireCvrMixin, TemplateView):

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block extra_headers %}
+    {% include 'aka/calendar_headers.html' %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/employeraccount.css' %}"/>
+{% endblock %}
+
+{% block content %}
+<article>
+
+    <h1 class="employeraccount-title">{% trans 'employeraccount.title' %} </h1>
+
+    <div class="employeraccount-main">
+
+        <form method="post" id="mainform">
+            {% csrf_token %}
+            <div class="employeraccount-actions row">
+                <div class="col-4">
+                    {% include 'aka/field.html' with field=form.from_date key='employeraccount.from_date' %}
+                    {% include 'aka/field.html' with field=form.to_date key='employeraccount.to_date' %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <button type="submit">{% trans 'common.send' %}</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</article>
+{% endblock %}

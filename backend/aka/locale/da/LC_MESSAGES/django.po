@@ -285,6 +285,16 @@ msgstr "Web-adresse"
 msgid "rentenota.ingenposter"
 msgstr "Ingen poster"
 
+
+# NY18
+msgid "employeraccount.from_date"
+msgstr "Fra dato"
+
+msgid "employeraccount.to_date"
+msgstr "Til dato"
+
+
+
 msgid "required"
 msgstr "Dette felt er påkrævet."
 

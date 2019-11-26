@@ -1,0 +1,24 @@
+{% load static %}
+{% load i18n %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/thirdparty/jquery.datetimepicker.min.css' %}"/>
+<script type="text/javascript" src="{% static 'js/thirdparty/jquery.datetimepicker.js' %}"></script>
+<script type="text/javascript">
+    {# Greenlandic text for date chooser #}
+    {% autoescape off %}
+        {% language 'kl' %}
+            $(function(){
+                $.datetimepicker.addLocale(
+                    'kl',
+                    ['{% trans 'January'|capfirst %}','{% trans 'February'|capfirst %}','{% trans 'March'|capfirst %}','{% trans 'April'|capfirst %}','{% trans 'May'|capfirst %}','{% trans 'June'|capfirst %}','{% trans 'July'|capfirst %}','{% trans 'August'|capfirst %}','{% trans 'September'|capfirst %}','{% trans 'October'|capfirst %}','{% trans 'November'|capfirst %}','{% trans 'December'|capfirst %}'],
+                    ['{% trans 'Mon'|capfirst %}','{% trans 'Tue'|capfirst %}','{% trans 'Wed'|capfirst %}','{% trans 'Thu'|capfirst %}','{% trans 'Fri'|capfirst %}','{% trans 'Sat'|capfirst %}','{% trans 'Sun'|capfirst %}'],
+                    ['{% trans 'Monday'|capfirst %}','{% trans 'Tuesday'|capfirst %}','{% trans 'Wednesday'|capfirst %}','{% trans 'Thursday'|capfirst %}','{% trans 'Friday'|capfirst %}','{% trans 'Saturday'|capfirst %}','{% trans 'Sunday'|capfirst %}'],
+                );
+                $(".datepicker").datetimepicker({timepicker:false, format:'d/m/Y', dayOfWeekStart: 1});
+                $(document).on('language-change', function(event, language) {
+                    $.datetimepicker.setLocale(language);
+                });
+                $.datetimepicker.setLocale(django.language);
+            });
+        {% endlanguage %}
+    {% endautoescape %}
+</script>
