@@ -1,47 +1,46 @@
 $(function(){
-    $.ajax({
-        url: "static/json/fordringsgruppe.json",
-        success: function(groups){
-            const groupSelect = $("#id_fordringsgruppe");
-            const typeSelect = $("#id_fordringstype");
-            const childCpr = $("#id_barns_cpr");
-            group_dict = {};
-            for (let i=0; i<groups.length; i++) {
-                let group = groups[i];
-                let subgroups = group_dict[group['id']] = {};
-                for (let j=0, c=group['sub_groups'].length; j<c; j++) {
-                    let subgroup = group['sub_groups'][j];
-                    subgroups[subgroup['group_id']+"."+subgroup['type_id']] = subgroup;
-                }
+    groups = window.groups;
+    if (groups) {
+        const groupSelect = $("#id_fordringsgruppe");
+        const typeSelect = $("#id_fordringstype");
+        const childCpr = $("#id_barns_cpr");
+        const childCprParents = childCpr.parentsUntil(".container-fluid");
+        group_dict = {};
+        for (let i = 0; i < groups.length; i++) {
+            let group = groups[i];
+            let subgroups = group_dict[group['id']] = {};
+            for (let j = 0, c = group['sub_groups'].length; j < c; j++) {
+                let subgroup = group['sub_groups'][j];
+                subgroups[subgroup['group_id'] + "." + subgroup['type_id']] = subgroup;
             }
-            console.log(group_dict);
-            const updateType = function(){
-                const group = group_dict[this.value];
-                typeSelect.empty();
-                for (let subgroup_id in group) {
-                    let subGroup = group[subgroup_id];
-                    let option = $("<option>");
-                    option.attr("value", subgroup_id);
-                    option.text(subGroup['name']);
-                    typeSelect.append(option);
-                }
-            };
-            groupSelect.change(updateType);
-            groupSelect.each(updateType);
-
-            const updateChildRequired = function() {
-                let subgroup = group_dict[groupSelect.val()][typeSelect.val()];
-                if (subgroup['has_child_cpr']) {
-                    childCpr.attr("required", "required");
-                } else {
-                    childCpr.removeAttr("required");
-                }
-            };
-            typeSelect.change(updateChildRequired);
-            typeSelect.each(updateChildRequired);
         }
-    });
+        const updateType = function () {
+            const group = group_dict[this.value];
+            typeSelect.empty();
+            for (let subgroup_id in group) {
+                let subGroup = group[subgroup_id];
+                let option = $("<option>");
+                option.attr("value", subgroup_id);
+                option.text(subGroup['name']);
+                typeSelect.append(option);
+            }
+        };
+        groupSelect.change(updateType);
+        groupSelect.each(updateType);
 
+        const updateChildRequired = function () {
+            let subgroup = group_dict[groupSelect.val()][typeSelect.val()];
+            if (subgroup['has_child_cpr']) {
+                childCpr.attr("required", "required");
+                childCprParents.show();
+            } else {
+                childCpr.removeAttr("required");
+                childCprParents.hide();
+            }
+        };
+        typeSelect.change(updateChildRequired);
+        typeSelect.each(updateChildRequired);
+    }
 });
 
 $(function(){

@@ -16,7 +16,8 @@ Includinganother URLconf
 from aka.views import ArbejdsgiverkontoView
 from aka.views import CustomJavaScriptCatalog, SetLanguageView
 from aka.views import FordringshaverkontoView
-from aka.views import IndexTemplateView, VueTemplateView
+from aka.views import IndexTemplateView
+from aka.views import InkassoGroupDataView
 from aka.views import InkassoSagView, InkassoSagUploadView
 from aka.views import LoenTraekDistributionView
 from aka.views import LoentraekView, LoentraekUploadView
@@ -35,6 +36,7 @@ urlpatterns = [
     url(r'^oid/', include('openid.urls', namespace='openid')),
     url(r'^inkassosag$', InkassoSagView.as_view(), name='inkassosag'),
     url(r'^inkassosag/upload', InkassoSagUploadView.as_view(), name='inkassosag-upload'),
+    url(r'^fordringsgrupper/(?P<var>[a-z_]+)?', InkassoGroupDataView.as_view(), name='fordringsgrupper'),
     url(r'^loentraek$', LoentraekView.as_view(), name='loentraek'),
     url(r'^loentraek/upload', LoentraekUploadView.as_view(), name='loentraek-upload'),
     url(r'^loentraekdistribution/([0-9]{8})$', LoenTraekDistributionView.as_view(), name='loentraekdistribution'),

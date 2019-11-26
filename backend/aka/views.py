@@ -12,6 +12,7 @@ from aka.clients.prisme import PrismeClaimRequest
 from aka.clients.prisme import PrismeImpairmentRequest
 from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
+from aka.data.fordringsgruppe import groups
 from aka.exceptions import AccessDeniedException
 from aka.forms import InkassoCoDebitorFormItem
 from aka.forms import InkassoForm, InkassoUploadForm
@@ -303,6 +304,14 @@ class InkassoSagUploadView(RequireCvrMixin, FormView):
 
     def form_invalid(self, form):
         return ErrorJsonResponse.from_error_dict(form.errors)
+
+
+class InkassoGroupDataView(View):
+    def get(self, request, var='', *args, **kwargs):
+        data = json.dumps(groups)
+        if var:
+            return HttpResponse("%s = %s" % (var, data), content_type='text/javascript')
+        return HttpResponse(data, content_type='application/json')
 
 
 class LoentraekView(RequireCvrMixin, FormSetView, FormView):
