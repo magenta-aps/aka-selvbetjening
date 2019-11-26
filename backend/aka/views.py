@@ -22,6 +22,7 @@ from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
 from aka.mixins import RequireCvrMixin
+from aka.mixins import SimpleGetFormMixin
 from aka.utils import ErrorJsonResponse
 from aka.utils import dummy_management_form
 from aka.utils import format_filesize
@@ -37,7 +38,7 @@ from django.utils.datetime_safe import date
 from django.utils.decorators import method_decorator
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
@@ -101,10 +102,26 @@ class IndexTemplateView(TemplateView):
         return super(IndexTemplateView, self).get(*args, **kwargs)
 
 
-class ArbejdsgiverkontoView(FormView):
+@method_decorator(csrf_exempt, name='dispatch')
+class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, TemplateView):
 
     form_class = ArbejdsgiverkontoForm
     template_name = 'aka/employer_account/employer_account.html'
+    items = []
+
+    def form_valid(self, form):
+        print("form_valid")
+        self.items = self.get_items(form)
+        return super().form_valid(form)
+
+    def get_items(self, form):
+        return [{'a': 'foo', 'b': 'bar'}]
+
+    def get_context_data(self, **kwargs):
+        context = {'items': self.items}
+        context.update(kwargs)
+        print(context)
+        return super().get_context_data(**context)
 
 
 class FordringshaverkontoView(RequireCvrMixin, TemplateView):

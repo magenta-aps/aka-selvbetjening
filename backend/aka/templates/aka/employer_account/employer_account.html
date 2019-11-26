@@ -14,8 +14,7 @@
 
     <div class="employeraccount-main">
 
-        <form method="post" id="mainform">
-            {% csrf_token %}
+        <form method="get" id="mainform">
             <div class="employeraccount-actions row">
                 <div class="col-4">
                     {% include 'aka/field.html' with field=form.from_date key='employeraccount.from_date' %}
@@ -28,6 +27,25 @@
                 </div>
             </div>
         </form>
+
+        {% if items %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>a</th>
+                        <th>b</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in items %}
+                    <tr>
+                        <td>{{ item.a }}</td>
+                        <td>{{ item.b }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
 
     </div>
 </article>
