@@ -1713,7 +1713,6 @@ var datetimepickerFactory = function ($) {
                             table += '<th></th>';
                         }
 
-                        console.log("options.i18n", options.i18n);
                         for (j = 0; j < 7; j += 1) {
                             table += '<th>' + options.i18n[globalLocale].dayOfWeekShort[(j + options.dayOfWeekStart) % 7] + '</th>';
                         }

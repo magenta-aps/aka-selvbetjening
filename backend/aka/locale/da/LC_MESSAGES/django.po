@@ -94,6 +94,15 @@ msgstr "Indberet fordring"
 msgid "fordring.debitor"
 msgstr "Debitor"
 
+msgid "fordring.codebitorer"
+msgstr "Meddebitorer"
+
+msgid "fordring.cpr"
+msgstr "cpr"
+
+msgid "fordring.cvr"
+msgstr "cvr"
+
 msgid "fordring.fordringshaver"
 msgstr "Fordringshaver"
 

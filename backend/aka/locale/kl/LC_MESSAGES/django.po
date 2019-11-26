@@ -82,9 +82,20 @@ msgid "filliste.op"
 msgstr "Op [kl]"
 
 # 6.1
+msgid "fordring.title"
+msgstr "Indberet fordring [kl]"
 
 msgid "fordring.debitor"
 msgstr "Debitor [kl]"
+
+msgid "fordring.codebitorer"
+msgstr "Meddebitorer [kl]"
+
+msgid "fordring.cpr"
+msgstr "cpr [kl]"
+
+msgid "fordring.cvr"
+msgstr "cvr [kl]"
 
 msgid "fordring.fordringshaver"
 msgstr "Fordringshaver [kl]"
@@ -136,9 +147,6 @@ msgstr "Kontaktperson [kl]"
 
 msgid "fordring.noter"
 msgstr "Noter [kl]"
-
-msgid "fordring.meddebitor"
-msgstr "Meddebitor [kl]"
 
 
 # 6.2

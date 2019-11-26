@@ -35,6 +35,22 @@ $(function(){
         field.attr({"type": "file", "name": "documentation"+(++documentationCounter)});
         documentationContainer.append(field);
     });
+
+    const updateDocumentationFileFields = function(){
+        const emptyFields = documentationContainer.find('input[type=file]').filter(function() {
+            return !this.value;
+        });
+        if (emptyFields.length === 0) {
+            const field = $("<input>");
+            field.attr({"type": "file", "name": "documentation"+(++documentationCounter)});
+            documentationContainer.append(field);
+        } else if (emptyFields.length > 1) {
+            emptyFields.last().delete();
+        }
+    };
+
+    documentationContainer.on('change', 'input[type=file]', null, updateDocumentationFileFields);
+
 });
 
 $(function(){
@@ -43,24 +59,16 @@ $(function(){
 
     const updateRows = function() {
         // Checks the existing rows. If no rows are empty, add another row. If more than one row is empty, remove the last empty row
-        let emptyCount = 0;
-        let lastEmpty = null;
-        container.find('.subform-row').each(function () {
-            let thisEmpty = true;
-            $(this).find("input").each(function(){
-                if (this.value) {
-                    thisEmpty = false;
-                }
-            });
-            if (thisEmpty) {
-                emptyCount++;
-                lastEmpty = $(this);
-            }
+        const emptyRows = container.find('.subform-row').filter(function() {
+            // Check the number of fields with values in them. The row is empty if that number is 0
+            return ($(this).find('input[type="text"]').filter(function() {
+                return !!this.value;
+            }).length === 0);
         });
-        if (emptyCount === 0) {
+        if (emptyRows.length === 0) {
             codebtorFormset.addForm();
-        } else if (emptyCount > 1) {
-            codebtorFormset.removeForm(lastEmpty);
+        } else if (emptyRows.length > 1) {
+            codebtorFormset.removeForm(emptyRows.last());
         }
     };
     const updateRow = function() {
