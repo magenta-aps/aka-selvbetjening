@@ -284,11 +284,14 @@ msgstr "Ingen poster [kl]"
 
 
 # NY18
+msgid "employeraccount.title"
+msgstr "Kontoudtog for arbejdsgivere [kl]"
+
 msgid "employeraccount.from_date"
-msgstr "Fra dato"
+msgstr "Fra dato [kl]"
 
 msgid "employeraccount.to_date"
-msgstr "Til dato"
+msgstr "Til dato [kl]"
 
 
 

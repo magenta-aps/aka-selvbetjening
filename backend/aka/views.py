@@ -110,7 +110,6 @@ class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, TemplateView):
     items = []
 
     def form_valid(self, form):
-        print("form_valid")
         self.items = self.get_items(form)
         return super().form_valid(form)
 
@@ -120,7 +119,6 @@ class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = {'items': self.items}
         context.update(kwargs)
-        print(context)
         return super().get_context_data(**context)
 
 

@@ -287,6 +287,9 @@ msgstr "Ingen poster"
 
 
 # NY18
+msgid "employeraccount.title"
+msgstr "Kontoudtog for arbejdsgivere"
+
 msgid "employeraccount.from_date"
 msgstr "Fra dato"
 

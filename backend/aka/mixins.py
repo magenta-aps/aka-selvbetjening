@@ -36,7 +36,7 @@ class RequireCvrMixin(object):
         #     self.cvr = request.session['user_info']['CVR']
         # except (KeyError, TypeError):
         #     raise PermissionDenied('no_cvr')
-        self.cvr = 12345678
+        self.cvr = '12345678'
         return super(RequireCvrMixin, self).dispatch(request, *args, **kwargs)
 
 
