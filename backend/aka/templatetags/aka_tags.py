@@ -2,8 +2,8 @@ import json as jsonlib
 import re
 from html import unescape
 
-from django.utils.translation import gettext
 from django.template.defaultfilters import register
+from django.utils.translation import gettext
 
 trans_re = re.compile("_\\((.*)\\)")
 format_re = re.compile("{(.*)}")

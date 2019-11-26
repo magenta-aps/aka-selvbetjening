@@ -4,15 +4,13 @@ import logging
 from io import StringIO
 
 import chardet
+from aka.utils import get_ordereddict_key_index, spreadsheet_col_letter
 from django import forms
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from django.forms import ValidationError
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
-
-from aka.utils import get_ordereddict_key_index, spreadsheet_col_letter
-
 
 logger = logging.getLogger(__name__)
 

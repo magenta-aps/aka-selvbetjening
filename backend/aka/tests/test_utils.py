@@ -3,11 +3,10 @@ import json
 
 from aka.utils import ErrorJsonResponse
 from aka.utils import datefromstring, datetostring
+from aka.utils import format_filesize
 from django.core.exceptions import ValidationError
 from django.forms.utils import ErrorDict, ErrorList
 from django.test import SimpleTestCase
-
-from aka.utils import format_filesize
 
 
 class BasicTestCase(SimpleTestCase):

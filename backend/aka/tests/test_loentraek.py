@@ -5,7 +5,6 @@ from aka.clients.prisme import PrismePayrollRequest
 from aka.clients.prisme import PrismePayrollRequestLine
 from aka.clients.prisme import PrismePayrollResponse
 from aka.tests.mixins import TestMixin
-from django.core.files import File
 from django.test import TestCase
 from lxml import etree
 from xmltodict import parse as xml_to_dict

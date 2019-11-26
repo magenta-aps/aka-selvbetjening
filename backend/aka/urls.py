@@ -13,8 +13,6 @@ Includinganother URLconf
    1. Import the include() function: from django.conf.urls import url, include
    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
-
 from aka.views import ArbejdsgiverkontoView
 from aka.views import CustomJavaScriptCatalog, SetLanguageView
 from aka.views import FordringshaverkontoView
@@ -26,6 +24,7 @@ from aka.views import NedskrivningView, NedskrivningUploadView
 from aka.views import NetsopkraevningView
 from aka.views import PrivatdebitorkontoView
 from aka.views import RenteNotaView
+from django.conf.urls import url, include
 
 urlpatterns = [
     # Use 'django' domain instead of 'djangojs', so we get serverside translations

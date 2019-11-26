@@ -4,7 +4,6 @@ import logging
 import os
 import re
 from io import StringIO
-from pathlib import Path
 
 import chardet
 from aka.clients.dafo import Dafo
@@ -21,11 +20,11 @@ from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
 from aka.mixins import RequireCvrMixin
+from aka.utils import ErrorJsonResponse
+from aka.utils import dummy_management_form
 from aka.utils import format_filesize
 from aka.utils import list_lstrip
 from aka.utils import list_rstrip
-from aka.utils import ErrorJsonResponse
-from aka.utils import dummy_management_form
 from django.conf import settings
 from django.forms import formset_factory
 from django.http import JsonResponse, HttpResponse, FileResponse

@@ -1,13 +1,12 @@
-import json
 import logging
 
-from aka.clients.prisme import PrismeInterestNoteRequest, PrismeInterestNoteResponse
+from aka.clients.prisme import PrismeInterestNoteRequest, \
+    PrismeInterestNoteResponse
 from aka.tests.mixins import TestMixin
 from django.test import TestCase
 from django.test import override_settings
-from xmltodict import parse as xml_to_dict
 from lxml import etree
-
+from xmltodict import parse as xml_to_dict
 
 
 @override_settings(OPENID_CONNECT={'enabled': False})

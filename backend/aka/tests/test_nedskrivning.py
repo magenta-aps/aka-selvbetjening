@@ -1,4 +1,3 @@
-import json
 import logging
 
 from aka.clients.prisme import PrismeImpairmentRequest, PrismeImpairmentResponse
@@ -6,8 +5,6 @@ from aka.tests.mixins import TestMixin
 from django.test import TestCase
 from lxml import etree
 from xmltodict import parse as xml_to_dict
-
-from requests.exceptions import ConnectionError
 
 
 class BasicTestCase(TestMixin, TestCase):

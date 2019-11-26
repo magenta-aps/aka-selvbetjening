@@ -1,8 +1,8 @@
 import logging
 import os
 
-from django.test import TransactionTestCase
 from aka.tests.mixins import TestMixin
+from django.test import TransactionTestCase
 from lxml import etree
 
 
