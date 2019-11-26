@@ -70,32 +70,42 @@ $(function() {
             return text.replace("&amp;", "&");
         };
 
-        $("*[data-locale-changer]").each(function(){
+        const localeChanger = $("*[data-locale-changer]");
+        localeChanger.each(function(){
             const langChooser = $(this);
             const flagElements = $(langChooser.attr("data-locale-flag"));
             const update = function(){
                 const language = $(this).val();
                 flagElements.removeClass().addClass("option-" + language);
-                $("*[data-trans]").each(function() {
-                    let $this = $(this);
-                    let text = $this.attr('data-trans');
-                    let params = $this.attr('data-trans-params');
-                    text = format(text, params && JSON.parse(params), language);
-                    this.innerHTML = text;
-                });
-                $.ajax({
-                    url: "/language/",
-                    method: "POST",
-                    data: {
-                        language: language,
-                        csrftoken: $("input[name='csrfmiddlewaretoken']").val()
-                    }
-                });
                 django.language = language;
+                $(document).trigger('language-change', language);
             };
             $(this).change(update);
         });
         django.jsi18n_initialized = true;
-        django.language = $("*[data-locale-changer]").val();
+        django.language = localeChanger.val();
+
+        const $document = $(document);
+        $document.on('language-change', function(event, language) {
+            $.ajax({
+                url: "/language/",
+                method: "POST",
+                data: {
+                    language: language,
+                    csrftoken: $("input[name='csrfmiddlewaretoken']").val()
+                }
+            });
+        });
+        $document.on('language-change', function(event, language) {
+            $("*[data-trans]").each(function() {
+                let $this = $(this);
+                let text = $this.attr('data-trans');
+                let params = $this.attr('data-trans-params');
+                text = format(text, params && JSON.parse(params), language);
+                this.innerHTML = text;
+            });
+        });
+
+
     }
 });

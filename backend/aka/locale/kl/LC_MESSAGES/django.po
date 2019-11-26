@@ -288,3 +288,82 @@ msgstr "Danmarki"
 
 msgid "GL"
 msgstr "Kalaallit Nunaat"
+
+
+msgid "January"
+msgstr "Januaari"
+
+msgid "February"
+msgstr "Februaari"
+
+msgid "March"
+msgstr "Marsi"
+
+msgid "April"
+msgstr "Apriili"
+
+msgid "May"
+msgstr "Maaji"
+
+msgid "June"
+msgstr "Juuni"
+
+msgid "July"
+msgstr "Juuli"
+
+msgid "August"
+msgstr "Aggusti"
+
+msgid "September"
+msgstr "Septembari"
+
+msgid "October"
+msgstr "Oktobari"
+
+msgid "November"
+msgstr "Novembari"
+
+msgid "December"
+msgstr "Decembari"
+
+msgid "Mon"
+msgstr "Ata"
+
+msgid "Tue"
+msgstr "Mar"
+
+msgid "Wed"
+msgstr "Pin"
+
+msgid "Thu"
+msgstr "Tal"
+
+msgid "Fri"
+msgstr "Sis"
+
+msgid "Sat"
+msgstr "Arf"
+
+msgid "Sun"
+msgstr "Sap"
+
+msgid "Monday"
+msgstr "Ataasinngorneq"
+
+msgid "Tuesday"
+msgstr "Marlunngorneq"
+
+msgid "Wednesday"
+msgstr "Pingasunngorneq"
+
+msgid "Thursday"
+msgstr "Tallimanngorneq"
+
+msgid "Friday"
+msgstr "Sisamanngorneq"
+
+msgid "Saturday"
+msgstr "Arfininngorneq"
+
+msgid "Sunday"
+msgstr "Sapaat"
