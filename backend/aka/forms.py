@@ -220,6 +220,8 @@ class InkassoForm(forms.Form):
         # Whether barns_cpr is required depends on the group and type selected
         group_id = cleaned_data.get('fordringsgruppe')
         type_id = cleaned_data.get('fordringstype')
+        print("group_id: "+str(group_id))
+        print("type_id: "+str(type_id))
         subgroups = [x['sub_groups'] for x in groups if int(x['id']) == int(group_id)][0]
         type = [x for x in subgroups if "%d.%d" % (x['group_id'], x['type_id']) == type_id][0]
         if type.get('has_child_cpr') and not cleaned_data.get('barns_cpr'):
