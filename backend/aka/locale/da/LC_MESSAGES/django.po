@@ -24,11 +24,9 @@ msgstr "Fejl"
 msgid "common.error.access_denied"
 msgstr "Adgang nægtet"
 
-#: aka/templates/aka/error.html:17 aka/templates/aka/success.html:21
 msgid "common.forside"
 msgstr "Forside"
 
-#: aka/templates/aka/impairmentForm.html:56
 msgid "common.gem"
 msgstr "Gem"
 
@@ -337,6 +335,29 @@ msgstr "Kontoudtog {from_date} - {to_date}.pdf"
 
 msgid "employeraccount.account"
 msgstr "Kontoudtog"
+
+msgid "employeraccount.ingenposter"
+msgstr "Ingen poster for perioden"
+
+
+# S23
+msgid "citizenaccount.title"
+msgstr "Kontoudtog for borgere"
+
+msgid "citizenaccount.from_date"
+msgstr "Fra dato"
+
+msgid "citizenaccount.to_date"
+msgstr "Til dato"
+
+msgid "citizenaccount.filename"
+msgstr "Kontoudtog {from_date} - {to_date}.pdf"
+
+msgid "citizenaccount.account"
+msgstr "Kontoudtog"
+
+msgid "citizenaccount.ingenposter"
+msgstr "Ingen poster for perioden"
 
 
 

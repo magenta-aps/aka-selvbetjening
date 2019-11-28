@@ -51,6 +51,12 @@ body.pdf .output {
 .output table.output-table td.sum {
     border-bottom: solid 0.25rem #465c6c;
 }
+.output table.output-table td.empty {
+    text-align: center;
+    padding: 0.75em;
+}
+
+
 .output .output-actions {
     text-align: right;
 }

@@ -13,27 +13,27 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.debitor key='nedskrivning.debitor' %}
+                    {% include 'aka/util/field.html' with field=form.debitor key='nedskrivning.debitor' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.ekstern_sagsnummer key='nedskrivning.ekstern_sagsnummer' %}
+                    {% include 'aka/util/field.html' with field=form.ekstern_sagsnummer key='nedskrivning.ekstern_sagsnummer' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.beloeb key='nedskrivning.beloeb' %}
+                    {% include 'aka/util/field.html' with field=form.beloeb key='nedskrivning.beloeb' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.sekvensnummer key='nedskrivning.sekvensnummer' %}
+                    {% include 'aka/util/field.html' with field=form.sekvensnummer key='nedskrivning.sekvensnummer' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-2">
-                    <input type="submit" value="{% trans 'common.gem' %}" @click="isSubmitted = true">
+                    <button type="submit" data-trans="common.gem">{% trans 'common.gem' %}</button>
                 </div>
             </div>
         </div>

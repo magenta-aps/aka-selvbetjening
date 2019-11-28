@@ -14,14 +14,15 @@ from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
 from aka.data.fordringsgruppe import groups
 from aka.exceptions import AccessDeniedException
-from aka.forms import ArbejdsgiverkontoForm
 from aka.forms import InkassoCoDebitorFormItem
 from aka.forms import InkassoForm, InkassoUploadForm
 from aka.forms import InterestNoteForm
+from aka.forms import KontoForm
 from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
 from aka.mixins import PdfRendererMixin
+from aka.mixins import RequireCprMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
 from aka.utils import ErrorJsonResponse
@@ -105,16 +106,10 @@ class IndexTemplateView(TemplateView):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, TemplateView):
+class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
 
-    form_class = ArbejdsgiverkontoForm
-    template_name = 'aka/employer_account/employer_account.html'
-    items = []
-
-    def get_pdf_filename(self):
-        return _("employeraccount.filename").format(
-            **{k: v.strftime('%Y-%m-%d') for k, v in self.form.cleaned_data.items()}
-        )
+    form_class = KontoForm
+    items = None
 
     def form_valid(self, form):
         self.form = form
@@ -122,6 +117,24 @@ class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixi
         if 'pdf' in self.request.GET:
             return self.render_pdf()
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'items': self.items,
+            'date': date.today().strftime('%d/%m/%Y'),
+        }
+        context.update(kwargs)
+        return super().get_context_data(**context)
+
+
+class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
+
+    template_name = 'aka/employer_account/employer_account.html'
+
+    def get_pdf_filename(self):
+        return _("employeraccount.filename").format(
+            **{k: v.strftime('%Y-%m-%d') for k, v in self.form.cleaned_data.items()}
+        )
 
     def get_items(self, form):
         return [
@@ -132,11 +145,43 @@ class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixi
 
     def get_context_data(self, **kwargs):
         context = {
-            'items': self.items,
-            'date': date.today().strftime('%d/%m/%Y'),
+            'company': Dafo().lookup_cvr(self.cvr),
         }
         context.update(kwargs)
         return super().get_context_data(**context)
+
+
+
+class BorgerKontoView(RequireCprMixin, KontoView):
+
+    template_name = 'aka/citizen_account/citizen_account.html'
+
+    def get_pdf_filename(self):
+        return _("citizenaccount.filename").format(
+            **{k: v.strftime('%Y-%m-%d') for k, v in self.form.cleaned_data.items()}
+        )
+
+    def get_items(self, form):
+        return [
+            {'text': 'Hotdog', 'amount': 15.0, 'total': 100000.0},
+            {'text': 'Bøfsandwich', 'amount': 30.0, 'total': 100000.0},
+            {'text': 'Burger', 'amount': 30.0, 'total': 100000.0}
+        ]
+
+    def get_context_data(self, **kwargs):
+        context = {
+            # 'citizen': Dafo().lookup_cpr(self.cpr),
+            'citizen': {
+               'navn': "Tester Testersen",
+               'adresse': "Testvej 42",
+               'postnummer': 1337,
+               'bynavn': "Aweseome city",
+               'landekode': "DK"
+            }
+        }
+        context.update(kwargs)
+        return super().get_context_data(**context)
+
 
 
 class FordringshaverkontoView(RequireCvrMixin, TemplateView):
@@ -562,4 +607,4 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
             if self.posts is not None else None,
         }
         context.update(kwargs)
-        return super(RenteNotaView, self).get_context_data(**context)
+        return super().get_context_data(**context)

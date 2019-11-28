@@ -17,9 +17,9 @@
 {% block content %}
 <article>
 
-    <h1 class="employeraccount-title printhide">{% trans 'employeraccount.title' %} </h1>
+    <h1 class="citizenaccount-title printhide">{% trans 'citizenaccount.title' %} </h1>
 
-    <div class="employeraccount-main">
+    <div class="citizenaccount-main">
 
         <form method="get" id="mainform" class="printhide">
             {% if form.non_field_errors %}
@@ -36,12 +36,12 @@
                     {% endfor %}
                 </ul>
             {% endif %}
-            <div class="employeraccount-actions row">
+            <div class="citizenaccount-actions row">
                 <div class="col-4-sm">
-                    {% include 'aka/util/field.html' with field=form.from_date key='employeraccount.from_date' %}
+                    {% include 'aka/util/field.html' with field=form.from_date key='citizenaccount.from_date' %}
                 </div>
                 <div class="col-4-sm">
-                    {% include 'aka/util/field.html' with field=form.to_date key='employeraccount.to_date' %}
+                    {% include 'aka/util/field.html' with field=form.to_date key='citizenaccount.to_date' %}
                 </div>
             </div>
             <div class="row">
@@ -50,8 +50,6 @@
                 </div>
             </div>
         </form>
-
-
 
         {% if items is not None %}
 
@@ -73,18 +71,14 @@
 
                 <div class="output-details row">
                     <div class="col-8-sm">
-                        <span class="line">{{ company.navn }}</span>
-                        <span class="line">{{ company.adresse }}</span>
-                        <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
-                        <span class="line" data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
+                        <span class="line">{{ citizen.navn }}</span>
+                        <span class="line">{{ citizen.adresse }}</span>
+                        <span class="line">{{ citizen.postnummer }} {{ citizen.bynavn }}</span>
+                        <span class="line" data-trans="{{ citizen.landekode }}">{% trans citizen.landekode %}</span>
                     </div>
                     <div class="col-4-sm">
-                        <h3 data-trans="rentenota.rentenota">{% trans 'employeraccount.account' %}</h3>
+                        <h3 data-trans="rentenota.rentenota">{% trans 'citizenaccount.account' %}</h3>
                         <table class="dl-table">
-                            <tr>
-                                <th data-trans="common.konto">{% trans 'common.konto' %}</th>
-                                <td>{{ company.cvr }}</td>
-                            </tr>
                             <tr>
                                 <th data-trans="common.dato">{% trans 'common.dato' %}</th>
                                 <td>{{ date }}</td>
@@ -118,7 +112,7 @@
                     </div>
                 </div>
 
-                <div class="employeraccount-data">
+                <div class="citizenaccount-data">
                     <table class="output-table">
                         <thead>
                             <tr>
@@ -136,7 +130,7 @@
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="3" class="empty" data-trans="employeraccount.ingenposter">{% trans 'employeraccount.ingenposter' %}</td>
+                                <td colspan="3" class="empty" data-trans="citizenaccount.ingenposter">{% trans 'citizenaccount.ingenposter' %}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -144,6 +138,7 @@
                 </div>
             </div>
         {% endif %}
+
     </div>
 </article>
 {% endblock %}
