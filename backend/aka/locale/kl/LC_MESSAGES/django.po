@@ -69,6 +69,24 @@ msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber} [kl]"
 msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
 
+msgid "common.dato"
+msgstr "Dato [kl]"
+
+msgid "common.konto"
+msgstr "Konto [kl]"
+
+msgid "common.telefon"
+msgstr "Oq/Telefon [kl]"
+
+msgid "common.fax"
+msgstr "Fax [kl]"
+
+msgid "common.email"
+msgstr "Email [kl]"
+
+msgid "common.webadresse"
+msgstr "Web-adresse [kl]"
+
 
 # Errors
 
@@ -240,9 +258,6 @@ msgstr "Sekvensnummer [kl]"
 msgid "rentenota.rentenota"
 msgstr "Rentenota [kl]"
 
-msgid "rentenota.dato"
-msgstr "Dato [kl]"
-
 msgid "rentenota.postdato"
 msgstr "Postdato [kl]"
 
@@ -282,21 +297,6 @@ msgstr "Forfalds&#173;dato [kl]"
 msgid "rentenota.beloeb"
 msgstr "Beløb [kl]"
 
-msgid "rentenota.konto"
-msgstr "Konto [kl]"
-
-msgid "rentenota.telefon"
-msgstr "Oq/Telefon [kl]"
-
-msgid "rentenota.fax"
-msgstr "Fax [kl]"
-
-msgid "rentenota.email"
-msgstr "Email [kl]"
-
-msgid "rentenota.webadresse"
-msgstr "Web-adresse [kl]"
-
 msgid "rentenota.ingenposter"
 msgstr "Ingen poster [kl]"
 
@@ -317,6 +317,8 @@ msgstr "Til dato [kl]"
 msgid "employeraccount.filename"
 msgstr "Kontoudtog {from_date} - {to_date} [kl].pdf"
 
+msgid "employeraccount.account"
+msgstr "Kontoudtog [kl]"
 
 
 

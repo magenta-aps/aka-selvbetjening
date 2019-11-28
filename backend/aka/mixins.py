@@ -85,12 +85,15 @@ class PdfRendererMixin(object):
         filename = self.get_pdf_filename()
         context = self.get_context_data()
 
-        css_static_path = 'css/output.css'.split('/')
-        css_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', *css_static_path)
-        if not os.path.exists(css_path):
-            css_path = os.path.join(settings.STATIC_ROOT, *css_static_path)
-        with open(css_path) as file:
-            context['css'] = file.read()
+        css_data = []
+        for css_file in ['css/output.css', 'css/main.css', 'css/print.css']:
+            css_static_path = css_file.split('/')
+            css_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', *css_static_path)
+            if not os.path.exists(css_path):
+                css_path = os.path.join(settings.STATIC_ROOT, *css_static_path)
+            with open(css_path) as file:
+                css_data.append(file.read())
+        context['css'] = ''.join(css_data)
 
         html = get_template(self.pdf_template_name).render(context)
         response = HttpResponse(html)
@@ -98,3 +101,11 @@ class PdfRendererMixin(object):
         # response = HttpResponse(pdf, content_type='application/pdf')
         # response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
         return response
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'pdf': 'pdf' in self.request.GET
+        }
+        context.update(kwargs)
+        return super().get_context_data(**context)
+

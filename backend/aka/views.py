@@ -109,16 +109,19 @@ class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixi
 
     form_class = ArbejdsgiverkontoForm
     template_name = 'aka/employer_account/employer_account.html'
-    pdf_template_name = 'aka/employer_account/pdfbase.html'
+    pdf_template_name = 'aka/employer_account/employer_account.html'
     items = []
 
+    def get_pdf_filename(self):
+        return _("employeraccount.filename").format(
+            **{k: v.strftime('%Y-%m-%d') for k, v in self.form.cleaned_data.items()}
+        )
+
     def form_valid(self, form):
+        self.form = form
         self.items = self.get_items(form)
         if 'pdf' in self.request.GET:
-            filename = _("employeraccount.filename").format(
-                **{k: v.strftime('%Y-%m-%d') for k, v in form.cleaned_data.items()}
-            )
-            return self.render_pdf(form, filename)
+            return self.render_pdf()
         return super().form_valid(form)
 
     def get_items(self, form):
@@ -129,7 +132,10 @@ class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixi
         ]
 
     def get_context_data(self, **kwargs):
-        context = {'items': self.items}
+        context = {
+            'items': self.items,
+            'date': date.today().strftime('%d/%m/%Y'),
+        }
         context.update(kwargs)
         return super().get_context_data(**context)
 
@@ -593,7 +599,6 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
             'posts': self.posts,
             'total': sum([float(post['InterestAmount']) for post in self.posts])
             if self.posts is not None else None,
-            'pdf': 'pdf' in self.request.GET
         }
         context.update(kwargs)
         return super(RenteNotaView, self).get_context_data(**context)

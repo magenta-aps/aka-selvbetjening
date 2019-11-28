@@ -3,18 +3,24 @@
 {% load i18n %}
 
 {% block extra_headers %}
-    {% include 'aka/calendar_headers.html' %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}"/>
+    {% if pdf %}
+        <style>
+            {{ css|safe }}
+        </style>
+    {% else %}
+        {% include 'aka/calendar_headers.html' %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}"/>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
 <article>
 
-    <h1 class="employeraccount-title">{% trans 'employeraccount.title' %} </h1>
+    <h1 class="employeraccount-title printhide">{% trans 'employeraccount.title' %} </h1>
 
     <div class="employeraccount-main">
 
-        <form method="get" id="mainform">
+        <form method="get" id="mainform" class="printhide">
             {% if form.non_field_errors %}
                 <ul class="errorlist">
                     {% for error in form.non_field_errors.as_data %}
@@ -44,31 +50,99 @@
             </div>
         </form>
 
-        {% if items %}
-            <div class="output employeraccount-data">
-                <div class="output-actions">
-                    <a href="{% url 'arbejdsgiverkonto' %}?from_date={{ form.from_date.value }}&to_date={{ form.to_date.value }}&pdf">Hent som PDF</a>
+
+
+        <div class="output account-data">
+
+            <div class="output-header">
+                <div class="row">
+                    <div class="col-8">
+                        <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
+                        <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
+                        <strong>Skattestyrelsen</strong>
+                    </div>
+                    <div class="col-4 output-actions printhide">
+                        <a class="button" href="{% url 'arbejdsgiverkonto' %}?from_date={{ form.from_date.value }}&to_date={{ form.to_date.value }}&pdf" data-trans="common.pdf">Hent som PDF</a>
+                        <button class="btn-print" data-trans="common.print">{% trans 'common.print' %}</button>
+                    </div>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Posteringstekst</th>
-                            <th>Beløb</th>
-                            <th>Saldo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for item in items %}
-                        <tr>
-                            <td>{{ item.text }}</td>
-                            <td>{{ item.amount }}</td>
-                            <td>{{ item.total }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
             </div>
-        {% endif %}
+
+            <div class="output-details notaheader row">
+
+                <div class="col-8">
+                    <span class="line">{{ company.navn }}</span>
+                    <span class="line">{{ company.adresse }}</span>
+                    <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
+                    <span class="line" data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
+                </div>
+
+                <div class="col-4">
+                    <h3 data-trans="rentenota.rentenota">{% trans 'employeraccount.account' %}</h3>
+                    <table class="dl-table">
+                        <tr>
+                            <th data-trans="common.konto">{% trans 'common.konto' %}</th>
+                            <td>{{ company.cvr }}</td>
+                        </tr>
+                        <tr>
+                            <th data-trans="common.dato">{% trans 'common.dato' %}</th>
+                            <td>{{ date }}</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">Postboks 1605</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2">3900 Nuuk</th>
+                        </tr>
+                        <tr>
+                            <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
+                            <td>346500</td>
+                        </tr>
+                        <tr>
+                            <th data-trans="common.fax">{% trans 'common.fax' %}</th>
+                            <td>346577</td>
+                        </tr>
+                        <tr>
+                            <th data-trans="common.email">{% trans 'common.email' %}</th>
+                            <td>sulinal@nanoq.gl</td>
+                        </tr>
+                        <tr>
+                            <th data-trans="common.webadresse">{% trans 'common.webadresse' %}</th>
+                            <td>www.aka.gl</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+
+            {% if items %}
+                <div class="employeraccount-data">
+                    <table class="output-table">
+                        <thead>
+                            <tr>
+                                <th>Posteringstekst</th>
+                                <th>Beløb</th>
+                                <th>Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>{{ item.text }}</td>
+                                <td>{{ item.amount }}</td>
+                                <td>{{ item.total }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        </div>
 
     </div>
 </article>

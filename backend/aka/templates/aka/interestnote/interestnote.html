@@ -4,11 +4,11 @@
 
 {% block extra_headers %}
     {% if pdf %}
-    <style>
-        {{ css|safe }}
-    </style>
+        <style>
+            {{ css|safe }}
+        </style>
     {% else %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}"/>
     {% endif %}
 {% endblock %}
 
@@ -63,11 +63,11 @@
                     <h3 data-trans="rentenota.rentenota">{% trans 'rentenota.rentenota' %}</h3>
                     <table class="dl-table">
                         <tr>
-                            <th data-trans="rentenota.konto">{% trans 'rentenota.konto' %}</th>
+                            <th data-trans="common.konto">{% trans 'common.konto' %}</th>
                             <td>{{ company.cvr }}</td>
                         </tr>
                         <tr>
-                            <th data-trans="rentenota.dato">{% trans 'rentenota.dato' %}</th>
+                            <th data-trans="common.dato">{% trans 'common.dato' %}</th>
                             <td>{{ date }}</td>
                         </tr>
                         <tr>
@@ -80,19 +80,19 @@
                             <th colspan="2">3900 Nuuk</th>
                         </tr>
                         <tr>
-                            <th data-trans="rentenota.telefon">{% trans 'rentenota.telefon' %}</th>
+                            <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
                             <td>346500</td>
                         </tr>
                         <tr>
-                            <th data-trans="rentenota.fax">{% trans 'rentenota.fax' %}</th>
+                            <th data-trans="common.fax">{% trans 'common.fax' %}</th>
                             <td>346577</td>
                         </tr>
                         <tr>
-                            <th data-trans="rentenota.email">{% trans 'rentenota.email' %}</th>
+                            <th data-trans="common.email">{% trans 'common.email' %}</th>
                             <td>sulinal@nanoq.gl</td>
                         </tr>
                         <tr>
-                            <th data-trans="rentenota.webadresse">{% trans 'rentenota.webadresse' %}</th>
+                            <th data-trans="common.webadresse">{% trans 'common.webadresse' %}</th>
                             <td>www.aka.gl</td>
                         </tr>
                     </table>
