@@ -129,7 +129,7 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
 
 class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
-    template_name = 'aka/employer_account/employer_account.html'
+    template_name = 'aka/employer_account/account.html'
 
     def get_pdf_filename(self):
         return _("employeraccount.filename").format(
@@ -154,7 +154,7 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
 class BorgerKontoView(RequireCprMixin, KontoView):
 
-    template_name = 'aka/citizen_account/citizen_account.html'
+    template_name = 'aka/citizen_account/account.html'
 
     def get_pdf_filename(self):
         return _("citizenaccount.filename").format(
@@ -170,14 +170,7 @@ class BorgerKontoView(RequireCprMixin, KontoView):
 
     def get_context_data(self, **kwargs):
         context = {
-            # 'citizen': Dafo().lookup_cpr(self.cpr),
-            'citizen': {
-               'navn': "Tester Testersen",
-               'adresse': "Testvej 42",
-               'postnummer': 1337,
-               'bynavn': "Aweseome city",
-               'landekode': "DK"
-            }
+            'citizen': Dafo().lookup_cpr(self.cpr),
         }
         context.update(kwargs)
         return super().get_context_data(**context)
@@ -275,7 +268,7 @@ class FordringshaverkontoView(RequireCvrMixin, TemplateView):
 class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
 
     form_class = InkassoForm
-    template_name = 'aka/claim/claimForm.html'
+    template_name = 'aka/claim/form.html'
 
     def get_formset(self):
         return formset_factory(InkassoCoDebitorFormItem, **self.get_factory_kwargs())
@@ -329,7 +322,7 @@ class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
         prisme_reply = self.send_claim(form, formset)
         return TemplateResponse(
             request=self.request,
-            template="aka/payroll/payrollSuccess.html",
+            template="aka/claim/success.html",
             context={
                 'rec_ids': [prisme_reply.rec_id]
             },
@@ -342,6 +335,7 @@ class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
 
 class InkassoSagUploadView(RequireCvrMixin, FormView):
     form_class = InkassoUploadForm
+    template_name = 'aka/claim/upload.html'
 
     def form_valid(self, form):
         csv_file = form.cleaned_data['file']
@@ -365,7 +359,7 @@ class InkassoSagUploadView(RequireCvrMixin, FormView):
             return ErrorJsonResponse.from_error_id('failed_reading_csv')
         return TemplateResponse(
             request=self.request,
-            template="aka/payroll/payrollSuccess.html",
+            template="aka/claim/success.html",
             context={
                 'rec_ids': responses
             },
@@ -387,7 +381,7 @@ class InkassoGroupDataView(View):
 class LoentraekView(RequireCvrMixin, FormSetView, FormView):
 
     form_class = LoentraekForm
-    template_name = 'aka/payroll/payrollForm.html'
+    template_name = 'aka/payroll/form.html'
 
     def get_formset(self):
         return formset_factory(LoentraekFormItem, **self.get_factory_kwargs())
@@ -422,7 +416,7 @@ class LoentraekView(RequireCvrMixin, FormSetView, FormView):
             rec_id = prisme.process_service(payroll)[0].rec_id
             return TemplateResponse(
                 request=self.request,
-                template="aka/payroll/payrollSuccess.html",
+                template="aka/payroll/success.html",
                 context={'rec_ids': [rec_id]},
                 using=self.template_engine
             )
@@ -438,7 +432,7 @@ class LoentraekView(RequireCvrMixin, FormSetView, FormView):
 
 class LoentraekUploadView(LoentraekView):
     form_class = LoentraekUploadForm
-    template_name = 'aka/payroll/uploadPayrollForm.html'
+    template_name = 'aka/payroll/upload.html'
 
     def forms_valid(self, forms):
         for subform in forms:
@@ -473,7 +467,7 @@ class LoenTraekDistributionView(View):
 class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
 
     form_class = NedskrivningForm
-    template_name = 'aka/impairment/impairmentForm.html'
+    template_name = 'aka/impairment/form.html'
 
     def get_claimant_id(self, request):
         claimant_id = request.session['user_info'].get('claimant_id')
@@ -502,7 +496,7 @@ class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
             rec_id = self.send_impairment(form, prisme)
             return TemplateResponse(
                 request=self.request,
-                template="aka/impairment/impairmentSuccess.html",
+                template="aka/impairment/success.html",
                 context={
                     'rec_ids': [rec_id]
                 },
@@ -517,7 +511,7 @@ class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
 
 class NedskrivningUploadView(NedskrivningView):
     form_class = NedskrivningUploadForm
-    template_name = 'aka/impairment/uploadImpairmentForm.html'
+    template_name = 'aka/impairment/upload.html'
 
     def form_valid(self, form):
         rec_ids = []
@@ -534,7 +528,7 @@ class NedskrivningUploadView(NedskrivningView):
 
         return TemplateResponse(
             request=self.request,
-            template="aka/impairment/impairmentSuccess.html",
+            template="aka/impairment/success.html",
             context={
                 'rec_ids': rec_ids,
                 'errors': errors

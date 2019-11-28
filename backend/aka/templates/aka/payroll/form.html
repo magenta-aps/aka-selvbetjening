@@ -33,7 +33,7 @@
                 </div>
                 <div id="formsetContainer">
                     {% for subform in formset %}
-                        {% include 'aka/payroll/payrollSubForm.html' with subform=subform %}
+                        {% include 'aka/payroll/subform.html' with subform=subform %}
                     {% endfor %}
                 </div>
                 <button type="button" id="add-row" class="button">+</button>
@@ -46,7 +46,7 @@
             </div>
         </form>
         <div id="formsetPrototype" style="display: none">
-            {% include 'aka/payroll/payrollSubForm.html' with subform=formset.empty_form %}
+            {% include 'aka/payroll/subform.html' with subform=formset.empty_form %}
         </div>
     </article>
 {% endblock %}

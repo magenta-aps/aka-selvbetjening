@@ -39,7 +39,7 @@
             </div>
             <div id="codebitorContainer">
                 {% for subform in formset %}
-                    {% include 'aka/claim/claimSubForm.html' with subform=subform %}
+                    {% include 'aka/claim/subform.html' with subform=subform %}
                 {% endfor %}
             </div>
 
@@ -123,7 +123,7 @@
         </div>
     </form>
     <div id="codebitorFormsetPrototype" style="display: none">
-        {% include 'aka/claim/claimSubForm.html' with subform=formset.empty_form %}
+        {% include 'aka/claim/subform.html' with subform=formset.empty_form %}
     </div>
 </article>
 {% endblock %}
