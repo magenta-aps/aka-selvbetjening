@@ -53,74 +53,71 @@
 
 
 
-        <div class="output account-data">
+        {% if items is not None %}
 
-            <div class="output-header">
-                <div class="row">
-                    <div class="col-7-sm">
-                        <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
-                        <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
-                        <strong>Skattestyrelsen</strong>
+            <div class="output account-data">
+
+                <div class="output-header">
+                    <div class="row">
+                        <div class="col-7-sm">
+                            <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
+                            <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
+                            <strong>Skattestyrelsen</strong>
+                        </div>
+                        <div class="col-5-sm output-actions printhide">
+                            <a class="button" href="{{ pdflink }}" data-trans="common.pdf">{% trans 'common.pdf' %}</a>
+                            <button class="btn-print" data-trans="common.print">{% trans 'common.print' %}</button>
+                        </div>
                     </div>
-                    <div class="col-5-sm output-actions printhide">
-                        <a class="button" href="{{ pdflink }}" data-trans="common.pdf">{% trans 'common.pdf' %}</a>
-                        <button class="btn-print" data-trans="common.print">{% trans 'common.print' %}</button>
+                </div>
+
+                <div class="output-details row">
+                    <div class="col-8-sm">
+                        <span class="line">{{ company.navn }}</span>
+                        <span class="line">{{ company.adresse }}</span>
+                        <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
+                        <span class="line" data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
+                    </div>
+                    <div class="col-4-sm">
+                        <h3 data-trans="rentenota.rentenota">{% trans 'employeraccount.account' %}</h3>
+                        <table class="dl-table">
+                            <tr>
+                                <th data-trans="common.konto">{% trans 'common.konto' %}</th>
+                                <td>{{ company.cvr }}</td>
+                            </tr>
+                            <tr>
+                                <th data-trans="common.dato">{% trans 'common.dato' %}</th>
+                                <td>{{ date }}</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" data-trans="common.postboks" data-trans-params="{&quot;box&quot;:1605}">{{ 'common.postboks'|format:'{"box":1605}' }}</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2">3900 Nuuk</th>
+                            </tr>
+                            <tr>
+                                <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
+                                <td>346500</td>
+                            </tr>
+                            <tr>
+                                <th data-trans="common.fax">{% trans 'common.fax' %}</th>
+                                <td>346577</td>
+                            </tr>
+                            <tr>
+                                <th data-trans="common.email">{% trans 'common.email' %}</th>
+                                <td>sulinal@nanoq.gl</td>
+                            </tr>
+                            <tr>
+                                <th data-trans="common.webadresse">{% trans 'common.webadresse' %}</th>
+                                <td>www.aka.gl</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
-            </div>
 
-            <div class="output-details row">
-
-                <div class="col-8-sm">
-                    <span class="line">{{ company.navn }}</span>
-                    <span class="line">{{ company.adresse }}</span>
-                    <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
-                    <span class="line" data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
-                </div>
-
-                <div class="col-4-sm">
-                    <h3 data-trans="rentenota.rentenota">{% trans 'employeraccount.account' %}</h3>
-                    <table class="dl-table">
-                        <tr>
-                            <th data-trans="common.konto">{% trans 'common.konto' %}</th>
-                            <td>{{ company.cvr }}</td>
-                        </tr>
-                        <tr>
-                            <th data-trans="common.dato">{% trans 'common.dato' %}</th>
-                            <td>{{ date }}</td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <th colspan="2" data-trans="common.postboks" data-trans-params="{&quot;box&quot;:1605}">{{ 'common.postboks'|format:'{"box":1605}' }}</th>
-                        </tr>
-                        <tr>
-                            <th colspan="2">3900 Nuuk</th>
-                        </tr>
-                        <tr>
-                            <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
-                            <td>346500</td>
-                        </tr>
-                        <tr>
-                            <th data-trans="common.fax">{% trans 'common.fax' %}</th>
-                            <td>346577</td>
-                        </tr>
-                        <tr>
-                            <th data-trans="common.email">{% trans 'common.email' %}</th>
-                            <td>sulinal@nanoq.gl</td>
-                        </tr>
-                        <tr>
-                            <th data-trans="common.webadresse">{% trans 'common.webadresse' %}</th>
-                            <td>www.aka.gl</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
-
-
-            {% if items %}
                 <div class="employeraccount-data">
                     <table class="output-table">
                         <thead>
@@ -137,14 +134,16 @@
                                 <td>{{ item.amount }}</td>
                                 <td>{{ item.total }}</td>
                             </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="empty" data-trans="employeraccount.ingenposter">{% trans 'employeraccount.ingenposter' %}</td>
+                            </tr>
                         {% endfor %}
                         </tbody>
                     </table>
                 </div>
-            {% endif %}
-
-        </div>
-
+            </div>
+        {% endif %}
     </div>
 </article>
 {% endblock %}

@@ -22,6 +22,7 @@ from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
 from aka.mixins import PdfRendererMixin
+from aka.mixins import RequireCprMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
 from aka.utils import ErrorJsonResponse
@@ -142,8 +143,16 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
             {'text': 'Burger', 'amount': 30.0, 'total': 100000.0}
         ]
 
+    def get_context_data(self, **kwargs):
+        context = {
+            'company': Dafo().lookup_cvr(self.cvr),
+        }
+        context.update(kwargs)
+        return super().get_context_data(**context)
 
-class BorgerKontoView(KontoView):
+
+
+class BorgerKontoView(RequireCprMixin, KontoView):
 
     template_name = 'aka/citizen_account/citizen_account.html'
 
@@ -158,6 +167,21 @@ class BorgerKontoView(KontoView):
             {'text': 'Bøfsandwich', 'amount': 30.0, 'total': 100000.0},
             {'text': 'Burger', 'amount': 30.0, 'total': 100000.0}
         ]
+
+    def get_context_data(self, **kwargs):
+        context = {
+            # 'citizen': Dafo().lookup_cpr(self.cpr),
+            'citizen': {
+               'navn': "Tester Testersen",
+               'adresse': "Testvej 42",
+               'postnummer': 1337,
+               'bynavn': "Aweseome city",
+               'landekode': "DK"
+            }
+        }
+        context.update(kwargs)
+        return super().get_context_data(**context)
+
 
 
 class FordringshaverkontoView(RequireCvrMixin, TemplateView):
@@ -583,4 +607,4 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
             if self.posts is not None else None,
         }
         context.update(kwargs)
-        return super(RenteNotaView, self).get_context_data(**context)
+        return super().get_context_data(**context)

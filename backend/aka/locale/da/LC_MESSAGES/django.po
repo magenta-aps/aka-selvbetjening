@@ -338,6 +338,9 @@ msgstr "Kontoudtog {from_date} - {to_date}.pdf"
 msgid "employeraccount.account"
 msgstr "Kontoudtog"
 
+msgid "employeraccount.ingenposter"
+msgstr "Ingen poster for perioden"
+
 
 # S23
 msgid "citizenaccount.title"
@@ -354,6 +357,9 @@ msgstr "Kontoudtog {from_date} - {to_date}.pdf"
 
 msgid "citizenaccount.account"
 msgstr "Kontoudtog"
+
+msgid "citizenaccount.ingenposter"
+msgstr "Ingen poster for perioden"
 
 
 

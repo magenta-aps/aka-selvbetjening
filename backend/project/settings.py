@@ -181,6 +181,7 @@ PRISME_CONNECT = {
 DAFO_CONNECT = {
     'address': {
         'token': 'https://sts.data.gl/get_token_passive?username={username}&password={password}',
+        'cpr': 'https://data.gl/prisme/cpr/1/{cpr}',
         'cvr': 'https://data.gl/prisme/cvr/1/{cvr}'
     },
     'auth': {
