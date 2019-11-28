@@ -1,7 +1,29 @@
+body.pdf {
+     background-color: #fff;
+ }
+body.pdf .printhide {
+    display: none;
+}
+@media print {
+    .printhide {
+        display: none;
+    }
+    .output {
+        margin: 0;
+    }
+}
+
+
+
+
 .output {
     padding: 1.875rem;
     margin: 1.5rem 0;
     background-color: #fff;
+}
+
+body.pdf .output {
+    margin: 0;
 }
 
 .output span.line {

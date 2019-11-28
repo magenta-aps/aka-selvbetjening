@@ -1,7 +1,12 @@
 import json
+import os
 
+import pdfkit
 from aka.exceptions import AkaException
+from django.conf import settings
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse
+from django.template.loader import get_template
 from django.template.response import TemplateResponse
 from django.views.generic.edit import FormMixin
 
@@ -67,3 +72,29 @@ class SimpleGetFormMixin(FormMixin):
                 'data': self.request.GET,
             })
         return kwargs
+
+
+class PdfRendererMixin(object):
+
+    pdf_template_name = ''
+
+    def get_pdf_filename(self):
+        raise NotImplementedError
+
+    def render_pdf(self):
+        filename = self.get_pdf_filename()
+        context = self.get_context_data()
+
+        css_static_path = 'css/output.css'.split('/')
+        css_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', *css_static_path)
+        if not os.path.exists(css_path):
+            css_path = os.path.join(settings.STATIC_ROOT, *css_static_path)
+        with open(css_path) as file:
+            context['css'] = file.read()
+
+        html = get_template(self.pdf_template_name).render(context)
+        response = HttpResponse(html)
+        # pdf = pdfkit.from_string(html, False)
+        # response = HttpResponse(pdf, content_type='application/pdf')
+        # response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
+        return response

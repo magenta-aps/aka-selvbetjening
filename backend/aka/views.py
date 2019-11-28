@@ -6,11 +6,10 @@ import re
 from io import StringIO
 
 import chardet
-from aka.clients.dafo import Dafo
+import pdfkit
 from aka.clients.prisme import Prisme, PrismeException, PrismeNotFoundException
 from aka.clients.prisme import PrismeClaimRequest
 from aka.clients.prisme import PrismeImpairmentRequest
-from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
 from aka.data.fordringsgruppe import groups
 from aka.exceptions import AccessDeniedException
@@ -21,6 +20,7 @@ from aka.forms import InterestNoteForm
 from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
+from aka.mixins import PdfRendererMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
 from aka.utils import ErrorJsonResponse
@@ -45,7 +45,6 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
-import pdfkit
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -106,7 +105,7 @@ class IndexTemplateView(TemplateView):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, TemplateView):
+class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, TemplateView):
 
     form_class = ArbejdsgiverkontoForm
     template_name = 'aka/employer_account/employer_account.html'
@@ -121,22 +120,6 @@ class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, TemplateView):
             )
             return self.render_pdf(form, filename)
         return super().form_valid(form)
-
-    def render_pdf(self, filename):
-        context = self.get_context_data()
-
-        css_static_path = 'css/pdf.css'.split('/')
-        css_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', *css_static_path)
-        if not os.path.exists(css_path):
-            css_path = os.path.join(settings.STATIC_ROOT, *css_static_path)
-        with open(css_path) as file:
-            context['css'] = file.read()
-
-        html = get_template(self.pdf_template_name).render(context)
-        pdf = pdfkit.from_string(html, False)
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
-        return response
 
     def get_items(self, form):
         return [
@@ -523,38 +506,84 @@ class PrivatdebitorkontoView(View):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, TemplateView):
+class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, TemplateView):
     form_class = InterestNoteForm
     template_name = 'aka/interestnote/interestnote.html'
+    pdf_template_name = 'aka/interestnote/interestnote.html'
+    # pdf_template_name = 'aka/interestnote/pdfbase.html'
     posts = None
 
     def get_posts(self, form):
-        prisme = Prisme()
-        posts = []
-        # Response is of type PrismeInterestNoteResponse
-        interest_note_data = prisme.process_service(
-            PrismeInterestNoteRequest(self.cvr, form.cleaned_data['year'], form.cleaned_data['month'])
-        )
-
-        for interest_note_response in interest_note_data:
-            for journal in interest_note_response.interest_journal:
-                journaldata = {
-                    k: v
-                    for k, v in journal.data.items()
-                    if k in [
-                        'Updated', 'AccountNum', 'InterestNote',
-                        'ToDate', 'BillingClassification'
-                    ]
-                }
-                for transaction in journal.interest_transactions:
-                    data = {}
-                    data.update(transaction.data)
-                    data.update(journaldata)
-                    posts.append(data)
+        posts = [
+            {
+                'Updated': '07-10-2019',
+                'AccountNum': '00018972',
+                'BillingClassification': '200',
+                'Voucher': 'FAK-00007295',
+                'InterestNote': '00000005',
+                'Txt': 'Renter af fakturanummer 00007437 A-SKAT OPKRÆVNING 2017',
+                'DueDate': '07-02-2017',
+                'InvoiceAmount': 120000.00,
+                'InterestAmount': 12000.00,
+                'TransDate': '01-02-2017',
+                'Invoice': '00007437',
+                'CalcFrom': '01-01-2019',
+                'CalcTo': '31-10-2019',
+                'InterestDays': 304
+            },
+            {
+                'Updated': '07-10-2019',
+                'AccountNum': '00018972',
+                'BillingClassification': '200',
+                'Voucher': 'FAK-00007295',
+                'InterestNote': '00000005',
+                'Txt': 'Renter af fakturanummer 00007437 A-SKAT OPKRÆVNING 2018',
+                'DueDate': '07-02-2017',
+                'InvoiceAmount': 120000.00,
+                'InterestAmount': 12000.00,
+                'TransDate': '01-02-2017',
+                'Invoice': '00007437',
+                'CalcFrom': '01-01-2019',
+                'CalcTo': '31-10-2019',
+                'InterestDays': 304
+            }
+        ]
         return posts
 
+        # prisme = Prisme()
+        # posts = []
+        # # Response is of type PrismeInterestNoteResponse
+        # interest_note_data = prisme.process_service(
+        #     PrismeInterestNoteRequest(self.cvr, form.cleaned_data['year'], form.cleaned_data['month'])
+        # )
+        # 
+        # for interest_note_response in interest_note_data:
+        #     for journal in interest_note_response.interest_journal:
+        #         journaldata = {
+        #             k: v
+        #             for k, v in journal.data.items()
+        #             if k in [
+        #                 'Updated', 'AccountNum', 'InterestNote',
+        #                 'ToDate', 'BillingClassification'
+        #             ]
+        #         }
+        #         for transaction in journal.interest_transactions:
+        #             data = {}
+        #             data.update(transaction.data)
+        #             data.update(journaldata)
+        #             posts.append(data)
+        # return posts
+
+    def get_pdf_filename(self):
+        return _("rentenota.filename").format(
+            **dict(self.form.cleaned_data.items())
+        )
+
     def form_valid(self, form):
+        self.form = form
         self.posts = self.get_posts(form)
+        if 'pdf' in self.request.GET:
+            return self.render_pdf()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -563,7 +592,8 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, TemplateView):
             'date': date.today().strftime('%d/%m/%Y'),
             'posts': self.posts,
             'total': sum([float(post['InterestAmount']) for post in self.posts])
-            if self.posts is not None else None
+            if self.posts is not None else None,
+            'pdf': 'pdf' in self.request.GET
         }
         context.update(kwargs)
         return super(RenteNotaView, self).get_context_data(**context)

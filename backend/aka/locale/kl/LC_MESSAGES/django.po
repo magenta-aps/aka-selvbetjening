@@ -39,6 +39,9 @@ msgstr "Gentag [kl]"
 msgid "common.print"
 msgstr "Print [kl]"
 
+msgid "common.pdf"
+msgstr "Download PDF [kl]"
+
 msgid "common.upload.validation"
 msgstr "Der er fejl i det uploadede regneark [kl]:"
 
@@ -297,6 +300,9 @@ msgstr "Web-adresse [kl]"
 msgid "rentenota.ingenposter"
 msgstr "Ingen poster [kl]"
 
+msgid "rentenota.filename"
+msgstr "Rentenota {month}/{year} [kl].pdf"
+
 
 # NY18
 msgid "employeraccount.title"
@@ -309,7 +315,7 @@ msgid "employeraccount.to_date"
 msgstr "Til dato [kl]"
 
 msgid "employeraccount.filename"
-msgstr "Kontoudtog {from_date} - {to_date}.pdf [kl]"
+msgstr "Kontoudtog {from_date} - {to_date} [kl].pdf"
 
 
 

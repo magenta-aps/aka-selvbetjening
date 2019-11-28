@@ -9,26 +9,30 @@
         <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
         <title>Sullissivik</title>
         <meta name="description" content="">
+        {% if not pdf %}
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
         <script type="text/javascript" src="{% url 'javascript-language-catalog' locale='da' %}"></script>
         <script type="text/javascript" src="{% url 'javascript-language-catalog' locale='kl' %}"></script>
         <script type="text/javascript" src="{% static 'js/cookies.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/locale.js' %}"></script>
-        {% block extra_headers %}{% endblock %}
         <script type="text/javascript">
             $(function() {
                 $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
                     if (!options.headers) options.headers = {};
                     options.headers["X-CSRFToken"] = django.getCookie('csrftoken');
                 });
+                $(".btn-print").click(window.print.bind(window));
             });
         </script>
+        {% endif %}
+        {% block extra_headers %}{% endblock %}
     </head>
-    <body>
+    <body class="{% if pdf %}pdf{% endif %}">
 
     {% csrf_token %}
         <div class="wrapper">
+            {% if not pdf %}
             <header class="globalheader">
                 <div class="globalheader-wrapper">
                     <h1 class="globalheader-heading">
@@ -45,15 +49,18 @@
                     </div>
                 </div>
             </header>
+            {% endif %}
             <main>
                 {% block content %}
                 {% endblock %}
             </main>
+            {% if not pdf %}
             <footer>
                 <div class="footer-wrapper">
                     Footer
                 </div>
             </footer>
+            {% endif %}
         </div>
     </body>
 </html>

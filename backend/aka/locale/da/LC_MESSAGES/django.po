@@ -41,6 +41,9 @@ msgstr "Gentag"
 msgid "common.print"
 msgstr "Print"
 
+msgid "common.pdf"
+msgstr "Download PDF"
+
 msgid "common.upload.validation"
 msgstr "Der er fejl i det uploadede regneark: "
 
@@ -299,6 +302,9 @@ msgstr "Web-adresse"
 
 msgid "rentenota.ingenposter"
 msgstr "Ingen poster"
+
+msgid "rentenota.filename"
+msgstr "Rentenota {month}/{year}.pdf"
 
 
 # NY18
