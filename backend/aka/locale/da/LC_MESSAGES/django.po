@@ -339,6 +339,23 @@ msgid "employeraccount.account"
 msgstr "Kontoudtog"
 
 
+# S23
+msgid "citizenaccount.title"
+msgstr "Kontoudtog for borgere"
+
+msgid "citizenaccount.from_date"
+msgstr "Fra dato"
+
+msgid "citizenaccount.to_date"
+msgstr "Til dato"
+
+msgid "citizenaccount.filename"
+msgstr "Kontoudtog {from_date} - {to_date}.pdf"
+
+msgid "citizenaccount.account"
+msgstr "Kontoudtog"
+
+
 
 msgid "required"
 msgstr "Dette felt er påkrævet."

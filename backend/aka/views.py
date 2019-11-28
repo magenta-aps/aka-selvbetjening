@@ -14,10 +14,10 @@ from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
 from aka.data.fordringsgruppe import groups
 from aka.exceptions import AccessDeniedException
-from aka.forms import ArbejdsgiverkontoForm
 from aka.forms import InkassoCoDebitorFormItem
 from aka.forms import InkassoForm, InkassoUploadForm
 from aka.forms import InterestNoteForm
+from aka.forms import KontoForm
 from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
@@ -105,16 +105,10 @@ class IndexTemplateView(TemplateView):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, TemplateView):
+class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
 
-    form_class = ArbejdsgiverkontoForm
-    template_name = 'aka/employer_account/employer_account.html'
-    items = []
-
-    def get_pdf_filename(self):
-        return _("employeraccount.filename").format(
-            **{k: v.strftime('%Y-%m-%d') for k, v in self.form.cleaned_data.items()}
-        )
+    form_class = KontoForm
+    items = None
 
     def form_valid(self, form):
         self.form = form
@@ -123,13 +117,6 @@ class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixi
             return self.render_pdf()
         return super().form_valid(form)
 
-    def get_items(self, form):
-        return [
-            {'text': 'Hotdog', 'amount': 15.0, 'total': 100000.0},
-            {'text': 'Bøfsandwich', 'amount': 30.0, 'total': 100000.0},
-            {'text': 'Burger', 'amount': 30.0, 'total': 100000.0}
-        ]
-
     def get_context_data(self, **kwargs):
         context = {
             'items': self.items,
@@ -137,6 +124,40 @@ class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixi
         }
         context.update(kwargs)
         return super().get_context_data(**context)
+
+
+class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
+
+    template_name = 'aka/employer_account/employer_account.html'
+
+    def get_pdf_filename(self):
+        return _("employeraccount.filename").format(
+            **{k: v.strftime('%Y-%m-%d') for k, v in self.form.cleaned_data.items()}
+        )
+
+    def get_items(self, form):
+        return [
+            {'text': 'Hotdog', 'amount': 15.0, 'total': 100000.0},
+            {'text': 'Bøfsandwich', 'amount': 30.0, 'total': 100000.0},
+            {'text': 'Burger', 'amount': 30.0, 'total': 100000.0}
+        ]
+
+
+class BorgerKontoView(KontoView):
+
+    template_name = 'aka/citizen_account/citizen_account.html'
+
+    def get_pdf_filename(self):
+        return _("citizenaccount.filename").format(
+            **{k: v.strftime('%Y-%m-%d') for k, v in self.form.cleaned_data.items()}
+        )
+
+    def get_items(self, form):
+        return [
+            {'text': 'Hotdog', 'amount': 15.0, 'total': 100000.0},
+            {'text': 'Bøfsandwich', 'amount': 30.0, 'total': 100000.0},
+            {'text': 'Burger', 'amount': 30.0, 'total': 100000.0}
+        ]
 
 
 class FordringshaverkontoView(RequireCvrMixin, TemplateView):

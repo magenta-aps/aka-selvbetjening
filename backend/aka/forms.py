@@ -74,7 +74,7 @@ class CsvUploadMixin(object):
         return file
 
 
-class ArbejdsgiverkontoForm(forms.Form):
+class KontoForm(forms.Form):
 
     from_date = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
