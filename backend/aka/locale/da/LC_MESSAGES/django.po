@@ -86,6 +86,9 @@ msgstr "Oq/Telefon"
 msgid "common.fax"
 msgstr "Fax"
 
+msgid "common.postboks"
+msgstr "Postboks {box}"
+
 msgid "common.email"
 msgstr "Email"
 
@@ -258,11 +261,17 @@ msgstr "Sekvensnummer"
 
 
 # NY16
+msgid "rentenota.title"
+msgstr "Rentenota"
+
 msgid "rentenota.rentenota"
 msgstr "Rentenota"
 
 msgid "rentenota.postdato"
 msgstr "Postdato"
+
+msgid "rentenota.dato"
+msgstr "Dato"
 
 msgid "rentenota.debitorkonto"
 msgstr "Debitor&#173;konto"
@@ -305,6 +314,12 @@ msgstr "Ingen poster"
 
 msgid "rentenota.filename"
 msgstr "Rentenota {month}/{year}.pdf"
+
+msgid "rentenota.year"
+msgstr "År"
+
+msgid "rentenota.month"
+msgstr "Måned"
 
 
 # NY18

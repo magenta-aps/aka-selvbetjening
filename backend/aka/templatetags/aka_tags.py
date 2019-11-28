@@ -16,11 +16,12 @@ def split(text, filter):
 def json(data):
     return jsonlib.dumps(data)
 
-
 @register.filter
 def format(text, params):
     text = gettext(text)
     if params:
+        if isinstance(params, str):
+            params = jsonlib.loads(params)
         for key in params:
             value = params[key]
             if type(value) == tuple:

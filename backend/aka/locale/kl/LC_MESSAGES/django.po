@@ -31,7 +31,7 @@ msgid "common.gem"
 msgstr "Gem [kl]"
 
 msgid "common.send"
-msgstr "Send"
+msgstr "Send [kl]"
 
 msgid "common.repeat"
 msgstr "Gentag [kl]"
@@ -80,6 +80,9 @@ msgstr "Oq/Telefon [kl]"
 
 msgid "common.fax"
 msgstr "Fax [kl]"
+
+msgid "common.postboks"
+msgstr "Postboks {box} [kl]"
 
 msgid "common.email"
 msgstr "Email [kl]"
@@ -255,8 +258,14 @@ msgstr "Sekvensnummer [kl]"
 
 
 # NY16
+msgid "rentenota.title"
+msgstr "Rentenota [kl]"
+
 msgid "rentenota.rentenota"
 msgstr "Rentenota [kl]"
+
+msgid "rentenota.dato"
+msgstr "Dato [kl]"
 
 msgid "rentenota.postdato"
 msgstr "Postdato [kl]"
@@ -302,6 +311,12 @@ msgstr "Ingen poster [kl]"
 
 msgid "rentenota.filename"
 msgstr "Rentenota {month}/{year} [kl].pdf"
+
+msgid "rentenota.year"
+msgstr "År [kl]"
+
+msgid "rentenota.month"
+msgstr "Måned [kl]"
 
 
 # NY18

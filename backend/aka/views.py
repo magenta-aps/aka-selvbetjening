@@ -6,10 +6,10 @@ import re
 from io import StringIO
 
 import chardet
-import pdfkit
 from aka.clients.prisme import Prisme, PrismeException, PrismeNotFoundException
 from aka.clients.prisme import PrismeClaimRequest
 from aka.clients.prisme import PrismeImpairmentRequest
+from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
 from aka.data.fordringsgruppe import groups
 from aka.exceptions import AccessDeniedException
@@ -32,7 +32,6 @@ from django.conf import settings
 from django.forms import formset_factory
 from django.http import JsonResponse, HttpResponse, FileResponse
 from django.template import Engine, Context
-from django.template.loader import get_template
 from django.template.response import TemplateResponse
 from django.utils import translation
 from django.utils.datetime_safe import date
@@ -109,7 +108,6 @@ class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixi
 
     form_class = ArbejdsgiverkontoForm
     template_name = 'aka/employer_account/employer_account.html'
-    pdf_template_name = 'aka/employer_account/employer_account.html'
     items = []
 
     def get_pdf_filename(self):
@@ -515,70 +513,32 @@ class PrivatdebitorkontoView(View):
 class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, TemplateView):
     form_class = InterestNoteForm
     template_name = 'aka/interestnote/interestnote.html'
-    pdf_template_name = 'aka/interestnote/interestnote.html'
-    # pdf_template_name = 'aka/interestnote/pdfbase.html'
     posts = None
 
     def get_posts(self, form):
-        posts = [
-            {
-                'Updated': '07-10-2019',
-                'AccountNum': '00018972',
-                'BillingClassification': '200',
-                'Voucher': 'FAK-00007295',
-                'InterestNote': '00000005',
-                'Txt': 'Renter af fakturanummer 00007437 A-SKAT OPKRÆVNING 2017',
-                'DueDate': '07-02-2017',
-                'InvoiceAmount': 120000.00,
-                'InterestAmount': 12000.00,
-                'TransDate': '01-02-2017',
-                'Invoice': '00007437',
-                'CalcFrom': '01-01-2019',
-                'CalcTo': '31-10-2019',
-                'InterestDays': 304
-            },
-            {
-                'Updated': '07-10-2019',
-                'AccountNum': '00018972',
-                'BillingClassification': '200',
-                'Voucher': 'FAK-00007295',
-                'InterestNote': '00000005',
-                'Txt': 'Renter af fakturanummer 00007437 A-SKAT OPKRÆVNING 2018',
-                'DueDate': '07-02-2017',
-                'InvoiceAmount': 120000.00,
-                'InterestAmount': 12000.00,
-                'TransDate': '01-02-2017',
-                'Invoice': '00007437',
-                'CalcFrom': '01-01-2019',
-                'CalcTo': '31-10-2019',
-                'InterestDays': 304
-            }
-        ]
-        return posts
+        prisme = Prisme()
+        posts = []
+        # Response is of type PrismeInterestNoteResponse
+        interest_note_data = prisme.process_service(
+            PrismeInterestNoteRequest(self.cvr, form.cleaned_data['year'], form.cleaned_data['month'])
+        )
 
-        # prisme = Prisme()
-        # posts = []
-        # # Response is of type PrismeInterestNoteResponse
-        # interest_note_data = prisme.process_service(
-        #     PrismeInterestNoteRequest(self.cvr, form.cleaned_data['year'], form.cleaned_data['month'])
-        # )
-        # 
-        # for interest_note_response in interest_note_data:
-        #     for journal in interest_note_response.interest_journal:
-        #         journaldata = {
-        #             k: v
-        #             for k, v in journal.data.items()
-        #             if k in [
-        #                 'Updated', 'AccountNum', 'InterestNote',
-        #                 'ToDate', 'BillingClassification'
-        #             ]
-        #         }
-        #         for transaction in journal.interest_transactions:
-        #             data = {}
-        #             data.update(transaction.data)
-        #             data.update(journaldata)
-        #             posts.append(data)
-        # return posts
+        for interest_note_response in interest_note_data:
+            for journal in interest_note_response.interest_journal:
+                journaldata = {
+                    k: v
+                    for k, v in journal.data.items()
+                    if k in [
+                        'Updated', 'AccountNum', 'InterestNote',
+                        'ToDate', 'BillingClassification'
+                    ]
+                }
+                for transaction in journal.interest_transactions:
+                    data = {}
+                    data.update(transaction.data)
+                    data.update(journaldata)
+                    posts.append(data)
+        return posts
 
     def get_pdf_filename(self):
         return _("rentenota.filename").format(

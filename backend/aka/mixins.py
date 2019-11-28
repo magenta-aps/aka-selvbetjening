@@ -4,9 +4,8 @@ import os
 import pdfkit
 from aka.exceptions import AkaException
 from django.conf import settings
-from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
-from django.template.loader import get_template
+from django.template.loader import get_template, select_template
 from django.template.response import TemplateResponse
 from django.views.generic.edit import FormMixin
 
@@ -95,16 +94,19 @@ class PdfRendererMixin(object):
                 css_data.append(file.read())
         context['css'] = ''.join(css_data)
 
-        html = get_template(self.pdf_template_name).render(context)
-        response = HttpResponse(html)
-        # pdf = pdfkit.from_string(html, False)
-        # response = HttpResponse(pdf, content_type='application/pdf')
-        # response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
+        html = select_template(self.get_template_names()).render(context)
+        # response = HttpResponse(html)
+        pdf = pdfkit.from_string(html, False)
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
         return response
 
     def get_context_data(self, **kwargs):
+        full_path = self.request.get_full_path_info()
+        full_path += ('&' if '?' in full_path else '?') + 'pdf'
         context = {
-            'pdf': 'pdf' in self.request.GET
+            'pdf': 'pdf' in self.request.GET,
+            'pdflink': full_path
         }
         context.update(kwargs)
         return super().get_context_data(**context)

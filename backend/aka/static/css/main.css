@@ -60,11 +60,6 @@
         margin-bottom:0
     }
 }
-@media print {
-    .globalheader {
-        display:none
-    }
-}
 .err-msg {
     color:red
 }

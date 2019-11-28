@@ -33,7 +33,7 @@
     {% csrf_token %}
         <div class="wrapper">
             {% if not pdf %}
-            <header class="globalheader">
+            <header class="globalheader printhide">
                 <div class="globalheader-wrapper">
                     <h1 class="globalheader-heading">
                         <a href="{% url 'index' %}" class="router-link-exact-active router-link-active">
