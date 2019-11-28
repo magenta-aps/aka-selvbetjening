@@ -36,6 +36,9 @@ msgstr "Send"
 msgid "common.repeat"
 msgstr "Gentag [kl]"
 
+msgid "common.print"
+msgstr "Print [kl]"
+
 msgid "common.upload.validation"
 msgstr "Der er fejl i det uploadede regneark [kl]:"
 
@@ -231,6 +234,8 @@ msgstr "Sekvensnummer [kl]"
 
 
 # NY16
+msgid "rentenota.rentenota"
+msgstr "Rentenota [kl]"
 
 msgid "rentenota.dato"
 msgstr "Dato [kl]"

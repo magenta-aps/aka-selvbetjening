@@ -559,7 +559,8 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = {
-            'company': Dafo().lookup_cvr(self.cvr),
+            # 'company': Dafo().lookup_cvr(self.cvr),
+            'date': date.today().strftime('%d/%m/%Y'),
             'posts': self.posts,
             'total': sum([float(post['InterestAmount']) for post in self.posts])
             if self.posts is not None else None

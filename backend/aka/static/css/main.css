@@ -130,6 +130,7 @@ ol,
 ul {
     padding-left:1.25rem
 }
+
 form {
     background-color:#fff;
     padding:1.875rem
@@ -619,14 +620,7 @@ select {
         max-width:60rem
     }
 }
-th {
-    text-align:left;
-    border-bottom:1px solid #465c6c
-}
-td,
-th {
-    padding:.25rem .5rem
-}
+
 address {
     font-style:normal
 }

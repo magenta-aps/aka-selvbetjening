@@ -3,17 +3,44 @@
     margin: 1.5rem 0;
     background-color: #fff;
 }
-.output table {
+
+.output span.line {
+    display:block;
+    width: 100%;
+}
+
+.output .dl-table {
+    width: 100%;
+}
+.output .dl-table th {
+    border: none;
+    font-weight: normal;
+    padding: 0;
+    text-align:left;
+}
+.output .dl-table td {
+    text-align: right;
+    padding: 0;
+}
+
+
+
+.output table.output-table {
     width: 100%;
     border-collapse: collapse;
 }
-.output table th {
+.output table.output-table th {
     text-align: left;
     border-bottom: 1px solid #465c6c;
+    padding: .25rem .5rem
 }
-.output table td {
+.output table.output-table td {
     border-top: 1px solid #dddddd;
+    padding: .25rem .5rem
+}
+.output table.output-table td.sum {
+    border-bottom: solid 0.25rem #465c6c;
 }
 .output .output-actions {
-    float: right;
+    text-align: right;
 }
