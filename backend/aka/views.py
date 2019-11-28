@@ -6,6 +6,7 @@ import re
 from io import StringIO
 
 import chardet
+from aka.clients.dafo import Dafo
 from aka.clients.prisme import Prisme, PrismeException, PrismeNotFoundException
 from aka.clients.prisme import PrismeClaimRequest
 from aka.clients.prisme import PrismeImpairmentRequest
@@ -554,7 +555,7 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
 
     def get_context_data(self, **kwargs):
         context = {
-            # 'company': Dafo().lookup_cvr(self.cvr),
+            'company': Dafo().lookup_cvr(self.cvr),
             'date': date.today().strftime('%d/%m/%Y'),
             'posts': self.posts,
             'total': sum([float(post['InterestAmount']) for post in self.posts])

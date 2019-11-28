@@ -4,6 +4,7 @@ import os
 import pdfkit
 from aka.exceptions import AkaException
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.template.loader import get_template, select_template
 from django.template.response import TemplateResponse
@@ -36,11 +37,10 @@ class ErrorHandlerMixin(object):
 
 class RequireCvrMixin(object):
     def dispatch(self, request, *args, **kwargs):
-        # try:
-        #     self.cvr = request.session['user_info']['CVR']
-        # except (KeyError, TypeError):
-        #     raise PermissionDenied('no_cvr')
-        self.cvr = '12345678'
+        try:
+            self.cvr = request.session['user_info']['CVR']
+        except (KeyError, TypeError):
+            raise PermissionDenied('no_cvr')
         return super(RequireCvrMixin, self).dispatch(request, *args, **kwargs)
 
 
