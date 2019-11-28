@@ -24,7 +24,7 @@ msgstr "Fejl"
 msgid "common.error.access_denied"
 msgstr "Adgang nægtet"
 
-#: aka/templates/aka/error.html:17 aka/templates/aka/success.html:21
+#: aka/templates/aka/util/error.html:17 aka/templates/aka/util/success.html:21
 msgid "common.forside"
 msgstr "Forside"
 

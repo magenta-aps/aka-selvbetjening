@@ -8,7 +8,7 @@
             {{ css|safe }}
         </style>
     {% else %}
-        {% include 'aka/calendar_headers.html' %}
+        {% include 'aka/util/calendar_headers.html' %}
         <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}"/>
     {% endif %}
@@ -38,10 +38,10 @@
             {% endif %}
             <div class="employeraccount-actions row">
                 <div class="col-4-sm">
-                    {% include 'aka/field.html' with field=form.from_date key='employeraccount.from_date' %}
+                    {% include 'aka/util/field.html' with field=form.from_date key='employeraccount.from_date' %}
                 </div>
                 <div class="col-4-sm">
-                    {% include 'aka/field.html' with field=form.to_date key='employeraccount.to_date' %}
+                    {% include 'aka/util/field.html' with field=form.to_date key='employeraccount.to_date' %}
                 </div>
             </div>
             <div class="row">

@@ -24,7 +24,7 @@ class ErrorHandlerMixin(object):
             })
             return TemplateResponse(
                 request=request,
-                template="aka/error.html",
+                template="aka/util/error.html",
                 context={
                     'header': e.title,
                     'message': e.message,

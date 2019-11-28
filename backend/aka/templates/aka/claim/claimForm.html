@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block extra_headers %}
-    {% include 'aka/calendar_headers.html' %}
+    {% include 'aka/util/calendar_headers.html' %}
     <script type="text/javascript" src="{% static 'js/formset.js' %}"></script>
     <script type="text/javascript" src="{% url 'fordringsgrupper' var='groups' %}"></script>
     <script type="text/javascript" src="{% static 'js/claim.js' %}"></script>
@@ -18,17 +18,17 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.fordringshaver key='fordring.fordringshaver' %}
+                    {% include 'aka/util/field.html' with field=form.fordringshaver key='fordring.fordringshaver' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.fordringshaver2 key='fordring.anden_fordringshaver' %}
+                    {% include 'aka/util/field.html' with field=form.fordringshaver2 key='fordring.anden_fordringshaver' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.debitor key='fordring.debitor' %}
+                    {% include 'aka/util/field.html' with field=form.debitor key='fordring.debitor' %}
                 </div>
             </div>
 
@@ -54,63 +54,63 @@
 
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.fordringsgruppe key='fordring.fordringsgruppe' %}
+                    {% include 'aka/util/field.html' with field=form.fordringsgruppe key='fordring.fordringsgruppe' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.fordringstype key='fordring.fordringstype' %}
+                    {% include 'aka/util/field.html' with field=form.fordringstype key='fordring.fordringstype' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.barns_cpr key='fordring.barns_cpr' %}
+                    {% include 'aka/util/field.html' with field=form.barns_cpr key='fordring.barns_cpr' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.ekstern_sagsnummer key='fordring.ekstern_sagsnummer' %}
+                    {% include 'aka/util/field.html' with field=form.ekstern_sagsnummer key='fordring.ekstern_sagsnummer' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-3">
-                    {% include 'aka/field.html' with field=form.hovedstol key='fordring.hovedstol' %}
+                    {% include 'aka/util/field.html' with field=form.hovedstol key='fordring.hovedstol' %}
                 </div>
                 <div class="col-6">
-                    {% include 'aka/field.html' with field=form.hovedstol_posteringstekst key='fordring.posteringstekst' %}
+                    {% include 'aka/util/field.html' with field=form.hovedstol_posteringstekst key='fordring.posteringstekst' %}
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-3">
-                    {% include 'aka/field.html' with field=form.periodestart key='fordring.periodestart' %}
+                    {% include 'aka/util/field.html' with field=form.periodestart key='fordring.periodestart' %}
                 </div>
                 <div class="col-3">
-                    {% include 'aka/field.html' with field=form.periodeslut key='fordring.periodeslut' %}
+                    {% include 'aka/util/field.html' with field=form.periodeslut key='fordring.periodeslut' %}
                 </div>
                 <div class="col-3">
-                    {% include 'aka/field.html' with field=form.forfaldsdato key='fordring.forfaldsdato' %}
+                    {% include 'aka/util/field.html' with field=form.forfaldsdato key='fordring.forfaldsdato' %}
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-3">
-                    {% include 'aka/field.html' with field=form.betalingsdato key='fordring.betalingsdato' %}
+                    {% include 'aka/util/field.html' with field=form.betalingsdato key='fordring.betalingsdato' %}
                 </div>
                 <div class="col-3">
-                    {% include 'aka/field.html' with field=form.foraeldelsesdato key='fordring.foraeldelsesdato' %}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-4">
-                    {% include 'aka/field.html' with field=form.kontaktperson key='fordring.kontaktperson' %}
+                    {% include 'aka/util/field.html' with field=form.foraeldelsesdato key='fordring.foraeldelsesdato' %}
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-4">
-                    {% include 'aka/field.html' with field=form.noter key='fordring.noter' %}
+                    {% include 'aka/util/field.html' with field=form.kontaktperson key='fordring.kontaktperson' %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-4">
+                    {% include 'aka/util/field.html' with field=form.noter key='fordring.noter' %}
                 </div>
             </div>
 
