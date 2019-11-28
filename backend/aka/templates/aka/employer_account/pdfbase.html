@@ -3,7 +3,9 @@
 {% load i18n %}
 
 {% block extra_headers %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/employeraccount.css' %}"/>
+    <style>
+        {{ css|safe }}
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -11,24 +13,25 @@
 
     <div class="employeraccount-main">
         {% if items %}
-            <a href="{% url 'arbejdsgiverkonto' %}?from_date={{ form.from_date.value }}&to_date={{ form.to_date.value }}&pdf">Hent som PDF</a>
-            <div class="employeraccount-data">
-            <table>
-                <thead>
+            <div class="output employeraccount-data">
+                <table>
+                    <thead>
                     <tr>
-                        <th>a</th>
-                        <th>b</th>
+                        <th>Posteringstekst</th>
+                        <th>Beløb</th>
+                        <th>Saldo</th>
                     </tr>
-                </thead>
-                <tbody>
-                {% for item in items %}
-                    <tr>
-                        <td>{{ item.a }}</td>
-                        <td>{{ item.b }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.text }}</td>
+                            <td>{{ item.amount }}</td>
+                            <td>{{ item.total }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         {% endif %}
 

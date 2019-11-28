@@ -4,7 +4,7 @@
 
 {% block extra_headers %}
     {% include 'aka/calendar_headers.html' %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/employeraccount.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}"/>
 {% endblock %}
 
 {% block content %}
@@ -32,6 +32,8 @@
             <div class="employeraccount-actions row">
                 <div class="col-4">
                     {% include 'aka/field.html' with field=form.from_date key='employeraccount.from_date' %}
+                </div>
+                <div class="col-4">
                     {% include 'aka/field.html' with field=form.to_date key='employeraccount.to_date' %}
                 </div>
             </div>
@@ -43,24 +45,28 @@
         </form>
 
         {% if items %}
-            <a href="{% url 'arbejdsgiverkonto' %}?from_date={{ form.from_date.value }}&to_date={{ form.to_date.value }}&pdf">Hent som PDF</a>
-            <div class="employeraccount-data">
-            <table>
-                <thead>
-                    <tr>
-                        <th>a</th>
-                        <th>b</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for item in items %}
-                    <tr>
-                        <td>{{ item.a }}</td>
-                        <td>{{ item.b }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            <div class="output employeraccount-data">
+                <div class="output-actions">
+                    <a href="{% url 'arbejdsgiverkonto' %}?from_date={{ form.from_date.value }}&to_date={{ form.to_date.value }}&pdf">Hent som PDF</a>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Posteringstekst</th>
+                            <th>Beløb</th>
+                            <th>Saldo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.text }}</td>
+                            <td>{{ item.amount }}</td>
+                            <td>{{ item.total }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         {% endif %}
 

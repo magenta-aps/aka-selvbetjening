@@ -1,0 +1,19 @@
+.output {
+    padding: 1.875rem;
+    margin: 1.5rem 0;
+    background-color: #fff;
+}
+.output table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.output table th {
+    text-align: left;
+    border-bottom: 1px solid #465c6c;
+}
+.output table td {
+    border-top: 1px solid #dddddd;
+}
+.output .output-actions {
+    float: right;
+}

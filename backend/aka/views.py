@@ -116,16 +116,34 @@ class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, TemplateView):
     def form_valid(self, form):
         self.items = self.get_items(form)
         if 'pdf' in self.request.GET:
-            html = get_template(self.pdf_template_name).render(self.get_context_data())
-            pdf = pdfkit.from_string(html, False)
-            filename = _("employeraccount.filename").format(**{k: v.strftime('%Y-%m-%d') for k, v in form.cleaned_data.items()})
-            response = HttpResponse(pdf, content_type='application/pdf')
-            response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
-            return response
+            filename = _("employeraccount.filename").format(
+                **{k: v.strftime('%Y-%m-%d') for k, v in form.cleaned_data.items()}
+            )
+            return self.render_pdf(form, filename)
         return super().form_valid(form)
 
+    def render_pdf(self, filename):
+        context = self.get_context_data()
+
+        css_static_path = 'css/pdf.css'.split('/')
+        css_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', *css_static_path)
+        if not os.path.exists(css_path):
+            css_path = os.path.join(settings.STATIC_ROOT, *css_static_path)
+        with open(css_path) as file:
+            context['css'] = file.read()
+
+        html = get_template(self.pdf_template_name).render(context)
+        pdf = pdfkit.from_string(html, False)
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
+        return response
+
     def get_items(self, form):
-        return [{'a': 'foo', 'b': 'bar'}]
+        return [
+            {'text': 'Hotdog', 'amount': 15.0, 'total': 100000.0},
+            {'text': 'Bøfsandwich', 'amount': 30.0, 'total': 100000.0},
+            {'text': 'Burger', 'amount': 30.0, 'total': 100000.0}
+        ]
 
     def get_context_data(self, **kwargs):
         context = {'items': self.items}
