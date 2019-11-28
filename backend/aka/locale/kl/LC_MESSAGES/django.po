@@ -31,10 +31,16 @@ msgid "common.gem"
 msgstr "Gem [kl]"
 
 msgid "common.send"
-msgstr "Send"
+msgstr "Send [kl]"
 
 msgid "common.repeat"
 msgstr "Gentag [kl]"
+
+msgid "common.print"
+msgstr "Print [kl]"
+
+msgid "common.pdf"
+msgstr "Download PDF [kl]"
 
 msgid "common.upload.validation"
 msgstr "Der er fejl i det uploadede regneark [kl]:"
@@ -63,6 +69,36 @@ msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber} [kl]"
 msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
 
+msgid "common.dato"
+msgstr "Dato [kl]"
+
+msgid "common.konto"
+msgstr "Konto [kl]"
+
+msgid "common.telefon"
+msgstr "Oq/Telefon [kl]"
+
+msgid "common.fax"
+msgstr "Fax [kl]"
+
+msgid "common.postboks"
+msgstr "Postboks {box} [kl]"
+
+msgid "common.email"
+msgstr "Email [kl]"
+
+msgid "common.webadresse"
+msgstr "Web-adresse [kl]"
+
+
+# Errors
+
+msgid "error.from_date_before_to_date"
+msgstr "Fra-dato skal være før til-dato [kl]"
+
+
+# File lists
+
 msgid "filliste.mappeindhold"
 msgstr "{size} elementer [kl]"
 
@@ -80,6 +116,7 @@ msgstr "Type [kl]"
 
 msgid "filliste.op"
 msgstr "Op [kl]"
+
 
 # 6.1
 msgid "fordring.title"
@@ -221,6 +258,11 @@ msgstr "Sekvensnummer [kl]"
 
 
 # NY16
+msgid "rentenota.title"
+msgstr "Rentenota [kl]"
+
+msgid "rentenota.rentenota"
+msgstr "Rentenota [kl]"
 
 msgid "rentenota.dato"
 msgstr "Dato [kl]"
@@ -264,23 +306,34 @@ msgstr "Forfalds&#173;dato [kl]"
 msgid "rentenota.beloeb"
 msgstr "Beløb [kl]"
 
-msgid "rentenota.konto"
-msgstr "Konto [kl]"
-
-msgid "rentenota.telefon"
-msgstr "Oq/Telefon [kl]"
-
-msgid "rentenota.fax"
-msgstr "Fax [kl]"
-
-msgid "rentenota.email"
-msgstr "Email [kl]"
-
-msgid "rentenota.webadresse"
-msgstr "Web-adresse [kl]"
-
 msgid "rentenota.ingenposter"
 msgstr "Ingen poster [kl]"
+
+msgid "rentenota.filename"
+msgstr "Rentenota {month}/{year} [kl].pdf"
+
+msgid "rentenota.year"
+msgstr "År [kl]"
+
+msgid "rentenota.month"
+msgstr "Måned [kl]"
+
+
+# NY18
+msgid "employeraccount.title"
+msgstr "Kontoudtog for arbejdsgivere [kl]"
+
+msgid "employeraccount.from_date"
+msgstr "Fra dato [kl]"
+
+msgid "employeraccount.to_date"
+msgstr "Til dato [kl]"
+
+msgid "employeraccount.filename"
+msgstr "Kontoudtog {from_date} - {to_date} [kl].pdf"
+
+msgid "employeraccount.account"
+msgstr "Kontoudtog [kl]"
 
 
 

@@ -21,6 +21,10 @@
   apt:
     name: gettext
 
+- name: Install wkhtmltopdf
+  apt:
+    name: wkhtmltopdf
+
 - name: Install requirements
   pip:
     requirements: "{{django_requirements_file}}"

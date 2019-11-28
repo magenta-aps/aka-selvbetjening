@@ -38,6 +38,12 @@ msgstr "Send"
 msgid "common.repeat"
 msgstr "Gentag"
 
+msgid "common.print"
+msgstr "Print"
+
+msgid "common.pdf"
+msgstr "Download PDF"
+
 msgid "common.upload.validation"
 msgstr "Der er fejl i det uploadede regneark: "
 
@@ -67,6 +73,36 @@ msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber}"
 
 msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet"
+
+msgid "common.dato"
+msgstr "Dato"
+
+msgid "common.konto"
+msgstr "Konto"
+
+msgid "common.telefon"
+msgstr "Oq/Telefon"
+
+msgid "common.fax"
+msgstr "Fax"
+
+msgid "common.postboks"
+msgstr "Postboks {box}"
+
+msgid "common.email"
+msgstr "Email"
+
+msgid "common.webadresse"
+msgstr "Web-adresse"
+
+
+# Errors
+
+msgid "error.from_date_before_to_date"
+msgstr "Fra-dato skal være før til-dato"
+
+
+# File lists
 
 msgid "filliste.mappeindhold"
 msgstr "{size} elementer"
@@ -225,11 +261,17 @@ msgstr "Sekvensnummer"
 
 
 # NY16
-msgid "rentenota.dato"
-msgstr "Dato"
+msgid "rentenota.title"
+msgstr "Rentenota"
+
+msgid "rentenota.rentenota"
+msgstr "Rentenota"
 
 msgid "rentenota.postdato"
 msgstr "Postdato"
+
+msgid "rentenota.dato"
+msgstr "Dato"
 
 msgid "rentenota.debitorkonto"
 msgstr "Debitor&#173;konto"
@@ -267,23 +309,36 @@ msgstr "Forfalds&#173;dato"
 msgid "rentenota.beloeb"
 msgstr "Beløb"
 
-msgid "rentenota.konto"
-msgstr "Konto"
-
-msgid "rentenota.telefon"
-msgstr "Oq/Telefon"
-
-msgid "rentenota.fax"
-msgstr "Fax"
-
-msgid "rentenota.email"
-msgstr "Email"
-
-msgid "rentenota.webadresse"
-msgstr "Web-adresse"
-
 msgid "rentenota.ingenposter"
 msgstr "Ingen poster"
+
+msgid "rentenota.filename"
+msgstr "Rentenota {month}/{year}.pdf"
+
+msgid "rentenota.year"
+msgstr "År"
+
+msgid "rentenota.month"
+msgstr "Måned"
+
+
+# NY18
+msgid "employeraccount.title"
+msgstr "Kontoudtog for arbejdsgivere"
+
+msgid "employeraccount.from_date"
+msgstr "Fra dato"
+
+msgid "employeraccount.to_date"
+msgstr "Til dato"
+
+msgid "employeraccount.filename"
+msgstr "Kontoudtog {from_date} - {to_date}.pdf"
+
+msgid "employeraccount.account"
+msgstr "Kontoudtog"
+
+
 
 msgid "required"
 msgstr "Dette felt er påkrævet."

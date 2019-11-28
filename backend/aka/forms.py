@@ -14,6 +14,8 @@ from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger(__name__)
 
+valid_date_formats = ['%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%Y-%m-%d']
+
 
 class CsvUploadMixin(object):
 
@@ -72,9 +74,28 @@ class CsvUploadMixin(object):
         return file
 
 
-class InkassoForm(forms.Form):
+class ArbejdsgiverkontoForm(forms.Form):
 
-    valid_date_formats = ['%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%Y-%m-%d']
+    from_date = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
+        required=True,
+        error_messages={'required': 'error.required'},
+        input_formats=valid_date_formats
+    )
+    to_date = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
+        required=True,
+        error_messages={'required': 'error.required'},
+        input_formats=valid_date_formats
+    )
+
+    def clean(self):
+        if 'from_date' in self.cleaned_data and 'to_date' in self.cleaned_data:
+            if self.cleaned_data['from_date'] > self.cleaned_data['to_date']:
+                raise ValidationError(_('error.from_date_before_to_date'), code='error.from_date_before_to_date')
+
+
+class InkassoForm(forms.Form):
 
     fordringshaver = forms.CharField(
         required=True,
@@ -199,11 +220,11 @@ class InkassoForm(forms.Form):
         # Whether barns_cpr is required depends on the group and type selected
         group_id = cleaned_data.get('fordringsgruppe')
         type_id = cleaned_data.get('fordringstype')
-        subgroups = [x['sub_groups'] for x in groups if int(x['id']) == int(group_id)][0]
-        type = [x for x in subgroups if "%d.%d" % (x['group_id'], x['type_id']) == type_id][0]
-        if type.get('has_child_cpr') and not cleaned_data.get('barns_cpr'):
-            self.add_error('barns_cpr', ValidationError(self.fields['barns_cpr'].error_messages['required'], code='required'))
-
+        if group_id is not None and type_id is not None:
+            subgroups = [x['sub_groups'] for x in groups if int(x['id']) == int(group_id)][0]
+            type = [x for x in subgroups if "%d.%d" % (x['group_id'], x['type_id']) == type_id][0]
+            if type.get('has_child_cpr') and not cleaned_data.get('barns_cpr'):
+                self.add_error('barns_cpr', ValidationError(self.fields['barns_cpr'].error_messages['required'], code='required'))
 
     @staticmethod
     def convert_group_type_text(groupname, typename):

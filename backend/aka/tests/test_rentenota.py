@@ -94,15 +94,15 @@ class BasicTestCase(TestMixin, TestCase):
     ### POSITIVE TESTS ###
 
     def test_interestnote_success(self):
-        response = self.client.post(self.url, {
+        response = self.client.get(self.url, {
             'year': 2019,
             'month': 10
         })
         self.assertEqual(response.status_code, 200)
         root = etree.fromstring(response.content, etree.HTMLParser())
-        header_row = root.xpath("//table[@class='rentenota-post-table']/thead/tr")[0]
+        header_row = root.xpath("//table[@class='output-table']/thead/tr")[0]
         headers = [cell.text for cell in header_row.iterchildren()]
-        rows = root.xpath("//table[@class='rentenota-post-table']/tbody/tr[@class='rentenota-post-table-datarow']")
+        rows = root.xpath("//table[@class='output-table']/tbody/tr[@class='rentenota-post-table-datarow']")
         data = [{headers[i]: cell.text for i, cell in enumerate(row.iterchildren())} for row in rows]
         self.assertEqual(2, len(data))
         self.assertEqual([
@@ -139,7 +139,7 @@ class BasicTestCase(TestMixin, TestCase):
                 'Dage': '0',
             },
         ], data)
-        rows = root.xpath("//table[@class='rentenota-post-table']/tbody/tr[@class='rentenota-post-table-sumrow']")
+        rows = root.xpath("//table[@class='output-table']/tbody/tr[@class='rentenota-post-table-sumrow']")
         data = [cell.text for cell in rows[0].iterchildren()]
         self.assertEqual(3, len(data))
         self.assertEqual([None, '440,0', 'kr'], data)
@@ -155,7 +155,7 @@ class BasicTestCase(TestMixin, TestCase):
         expected = {'errors': ['Access denied'], 'fieldErrors': []}
         for y in range(2000, 2019):
             for m in range(1, 13):
-                response = self.client.post(self.url, {
+                response = self.client.get(self.url, {
                     'year': y,
                     'month': m
                 })

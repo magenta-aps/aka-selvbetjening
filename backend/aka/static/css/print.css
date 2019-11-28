@@ -1,0 +1,24 @@
+body.pdf {
+    background-color: #fff;
+}
+body.pdf .printhide {
+    display: none;
+}
+body.pdf main,
+body.pdf article {
+    margin-top: 0;
+}
+
+
+@media print {
+    .printhide {
+        display: none;
+    }
+    .output {
+        margin: 0;
+    }
+    main,
+    article {
+        margin-top: 0;
+    }
+}

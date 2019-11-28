@@ -3,98 +3,106 @@
 {% load i18n %}
 
 {% block extra_headers %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/interestnote.css' %}"/>
+    {% if pdf %}
+        <style>
+            {{ css|safe }}
+        </style>
+    {% else %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}"/>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
 <article>
 
-    <h1 class="rentenota-title">{% trans 'rentenota.title' %} </h1>
+    <h1 class="rentenota-title printhide">{% trans 'rentenota.title' %}</h1>
 
     <div class="rentenota-main">
 
-        <form method="post" id="mainform">
-            {% csrf_token %}
+        <form method="get" id="mainform" class="printhide">
             <div class="rentenota-actions row">
-                <div class="col-4">
+                <div class="col-4-sm">
                     {% include 'aka/field.html' with field=form.year key='rentenota.year' %}
                     {% include 'aka/field.html' with field=form.month key='rentenota.month' %}
                 </div>
             </div>
             <div class="row">
-                <div class="col-4">
-                    <button type="submit" @click="requestRentenota">{% trans 'common.send' %}</button>
+                <div class="col-4-sm">
+                    <button type="submit">{% trans 'common.send' %}</button>
                 </div>
             </div>
         </form>
 
 
-        <div class="rentenota-data">
+        <div class="output rentenota-data">
 
-            <div class="rentenota-data-title">
-                <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
-                <div>
-                    <button class="rentenota-btn-print" @click="print()">{% trans 'common.print' %}</button>
+            <div class="output-header">
+                <div class="row">
+                    <div class="col-7-sm">
+                        <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
+                        <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
+                        <strong>Skattestyrelsen</strong>
+                    </div>
+                    <div class="col-5-sm output-actions printhide">
+                        <a class="button" href="{{ pdflink }}" data-trans="common.pdf">{% trans 'common.pdf' %}</a>
+                        <button class="btn-print" data-trans="common.print">{% trans 'common.print' %}</button>
+                    </div>
                 </div>
             </div>
 
-            <p>
-                <strong>Akileraartarnermut Aqutsisoqarfik</strong><br>
-                <strong>Skattestyrelsen</strong>
-            </p>
+            <div class="output-details row">
 
-            <div class="notaheader">
+                <div class="col-8-sm">
+                    <span class="line">{{ company.navn }}</span>
+                    <span class="line">{{ company.adresse }}</span>
+                    <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
+                    <span class="line" data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
+                </div>
 
-                <p>
-                    <em>{{ company.navn }}</em><br>
-                    {{ company.adresse }}<br>
-                    {{ company.postnummer }} {{ rentenota_data.bynavn }}<br>
-                    <span data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
-                </p>
-
-                <div>
-                    <h3 data-trans="rentenota.rentenota">{% trans '' %}</h3>
-                    <table class="rentenota-address-table">
+                <div class="col-4-sm">
+                    <h3 data-trans="rentenota.rentenota">{% trans 'rentenota.rentenota' %}</h3>
+                    <table class="dl-table">
                         <tr>
-                            <th data-trans="rentenota.konto">{% trans '' %}</th>
-                            <td>10276179</td>
+                            <th data-trans="common.konto">{% trans 'common.konto' %}</th>
+                            <td>{{ company.cvr }}</td>
                         </tr>
                         <tr>
-                            <th data-trans="rentenota.dato">{% trans '' %}</th>
-                            <td v-html='today.toLocaleDateString()'></td>
+                            <th data-trans="common.dato">{% trans 'common.dato' %}</th>
+                            <td>{{ date }}</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" data-trans="common.postboks" data-trans-params="{&quot;box&quot;:1605}">{{ 'common.postboks'|format:'{"box":1605}' }}</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2">3900 Nuuk</th>
+                        </tr>
+                        <tr>
+                            <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
+                            <td>346500</td>
+                        </tr>
+                        <tr>
+                            <th data-trans="common.fax">{% trans 'common.fax' %}</th>
+                            <td>346577</td>
+                        </tr>
+                        <tr>
+                            <th data-trans="common.email">{% trans 'common.email' %}</th>
+                            <td>sulinal@nanoq.gl</td>
+                        </tr>
+                        <tr>
+                            <th data-trans="common.webadresse">{% trans 'common.webadresse' %}</th>
+                            <td>www.aka.gl</td>
                         </tr>
                     </table>
-
-                    <address>
-                        <p>
-                            Postboks 1605<br>
-                            3900 Nuuk
-                        </p>
-                        <table class="rentenota-address-table">
-                            <tr>
-                                <th data-trans="rentenota.telefon">{% trans 'rentenota.telefon' %}</th>
-                                <td>346500</td>
-                            </tr>
-                            <tr>
-                                <th data-trans="rentenota.fax">{% trans 'rentenota.fax' %}</th>
-                                <td>346577</td>
-                            </tr>
-                            <tr>
-                                <th data-trans="rentenota.email">{% trans 'rentenota.email' %}</th>
-                                <td>sulinal@nanoq.gl</td>
-                            </tr>
-                            <tr>
-                                <th data-trans="rentenota.webadresse">{% trans 'rentenota.webadresse' %}</th>
-                                <td>www.aka.gl</td>
-                            </tr>
-                        </table>
-                    </address>
-
                 </div>
             </div>
 
             {% if posts is not None %}
-                <table class="rentenota-post-table">
+                <div class="output-data">
+                <table class="output-table" style="font-size: 0.8em">
                     <thead>
                     <tr>
                         <th data-trans="rentenota.dato">{% trans 'rentenota.dato' %}</th>
@@ -111,12 +119,11 @@
                         <th data-trans="rentenota.fradato">{% trans 'rentenota.fradato' %}</th>
                         <th data-trans="rentenota.tildato">{% trans 'rentenota.tildato' %}</th>
                         <th data-trans="rentenota.dage">{% trans 'rentenota.dage' %}</th>
-                        <th style="border: none;"></th>
                     </tr>
                     </thead>
                     <tbody>
                         {% if posts|length == 0 %}
-                            <tr v-if="!rentenota_data.poster.length">
+                            <tr>
                                 <td colspan="14" style="text-align: center">
                                     {% trans 'rentenota.ingenposter' %}
                                 </td>
@@ -142,13 +149,14 @@
                             {% endfor %}
                         <tr class="rentenota-post-table-sumrow">
                             <td colspan="8"></td>
-                            <td class="numbercell rentenota-total">{{ total }}</td>
+                            <td class="numbercell rentenota-total sum">{{ total }}</td>
                             <td colspan="6">kr</td>
                         </tr>
                         {% endif %}
                     </tbody>
                 </table>
             {% endif %}
+            </div>
         </div>
     </div>
 </article>

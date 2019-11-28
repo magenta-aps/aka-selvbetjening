@@ -14,13 +14,16 @@ from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
 from aka.data.fordringsgruppe import groups
 from aka.exceptions import AccessDeniedException
+from aka.forms import ArbejdsgiverkontoForm
 from aka.forms import InkassoCoDebitorFormItem
 from aka.forms import InkassoForm, InkassoUploadForm
 from aka.forms import InterestNoteForm
 from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
+from aka.mixins import PdfRendererMixin
 from aka.mixins import RequireCvrMixin
+from aka.mixins import SimpleGetFormMixin
 from aka.utils import ErrorJsonResponse
 from aka.utils import dummy_management_form
 from aka.utils import format_filesize
@@ -34,9 +37,10 @@ from django.template.response import TemplateResponse
 from django.utils import translation
 from django.utils.datetime_safe import date
 from django.utils.decorators import method_decorator
+from django.utils.translation import gettext_lazy as _
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
@@ -100,18 +104,39 @@ class IndexTemplateView(TemplateView):
         return super(IndexTemplateView, self).get(*args, **kwargs)
 
 
-class VueTemplateView(TemplateView):
-    template_name = 'vue.html'
+@method_decorator(csrf_exempt, name='dispatch')
+class ArbejdsgiverkontoView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, TemplateView):
 
-    @method_decorator(ensure_csrf_cookie)
-    def get(self, *args, **kwargs):
-        return super(VueTemplateView, self).get(*args, **kwargs)
+    form_class = ArbejdsgiverkontoForm
+    template_name = 'aka/employer_account/employer_account.html'
+    items = []
 
+    def get_pdf_filename(self):
+        return _("employeraccount.filename").format(
+            **{k: v.strftime('%Y-%m-%d') for k, v in self.form.cleaned_data.items()}
+        )
 
-class ArbejdsgiverkontoView(View):
+    def form_valid(self, form):
+        self.form = form
+        self.items = self.get_items(form)
+        if 'pdf' in self.request.GET:
+            return self.render_pdf()
+        return super().form_valid(form)
 
-    def get(self, request, *args, **kwargs):
-        return JsonResponse("OK", safe=False)
+    def get_items(self, form):
+        return [
+            {'text': 'Hotdog', 'amount': 15.0, 'total': 100000.0},
+            {'text': 'Bøfsandwich', 'amount': 30.0, 'total': 100000.0},
+            {'text': 'Burger', 'amount': 30.0, 'total': 100000.0}
+        ]
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'items': self.items,
+            'date': date.today().strftime('%d/%m/%Y'),
+        }
+        context.update(kwargs)
+        return super().get_context_data(**context)
 
 
 class FordringshaverkontoView(RequireCvrMixin, TemplateView):
@@ -485,13 +510,11 @@ class PrivatdebitorkontoView(View):
         return JsonResponse("OK", safe=False)
 
 
-class RenteNotaView(RequireCvrMixin, FormView):
+@method_decorator(csrf_exempt, name='dispatch')
+class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, TemplateView):
     form_class = InterestNoteForm
     template_name = 'aka/interestnote/interestnote.html'
-
-    def __init__(self, *args, **kwargs):
-        super(RenteNotaView, self).__init__(*args, **kwargs)
-        self.posts = None
+    posts = None
 
     def get_posts(self, form):
         prisme = Prisme()
@@ -518,21 +541,25 @@ class RenteNotaView(RequireCvrMixin, FormView):
                     posts.append(data)
         return posts
 
-    def form_valid(self, form):
-        self.posts = self.get_posts(form)
-        return TemplateResponse(
-            request=self.request,
-            template=self.template_name,
-            context=self.get_context_data(),
-            using=self.template_engine
+    def get_pdf_filename(self):
+        return _("rentenota.filename").format(
+            **dict(self.form.cleaned_data.items())
         )
+
+    def form_valid(self, form):
+        self.form = form
+        self.posts = self.get_posts(form)
+        if 'pdf' in self.request.GET:
+            return self.render_pdf()
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = {
             'company': Dafo().lookup_cvr(self.cvr),
+            'date': date.today().strftime('%d/%m/%Y'),
             'posts': self.posts,
             'total': sum([float(post['InterestAmount']) for post in self.posts])
-            if self.posts is not None else None
+            if self.posts is not None else None,
         }
         context.update(kwargs)
         return super(RenteNotaView, self).get_context_data(**context)
