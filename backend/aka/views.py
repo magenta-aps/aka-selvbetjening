@@ -1,11 +1,8 @@
-import csv
 import json
 import logging
 import os
 import re
-from io import StringIO
 
-import chardet
 from aka.clients.dafo import Dafo
 from aka.clients.prisme import Prisme, PrismeException, PrismeNotFoundException
 from aka.clients.prisme import PrismeClaimRequest

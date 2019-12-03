@@ -120,6 +120,7 @@ msgstr "Fordringstype findes ikke i fordringsgruppe"
 msgid "error.multiple_fordringsgruppe_found"
 msgstr "Konfigurationsfejl på serveren"
 
+
 # File lists
 
 msgid "filliste.mappeindhold"

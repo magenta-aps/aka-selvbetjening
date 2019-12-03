@@ -26,7 +26,6 @@ msgstr "Adgang nægtet [kl]"
 msgid "common.forside"
 msgstr "Forside [kl]"
 
-#: aka/templates/aka/impairmentForm.html:56
 msgid "common.gem"
 msgstr "Gem [kl]"
 
@@ -141,6 +140,7 @@ msgstr "Op [kl]"
 
 
 # 6.1
+
 msgid "fordring.title"
 msgstr "Indberet fordring [kl]"
 
