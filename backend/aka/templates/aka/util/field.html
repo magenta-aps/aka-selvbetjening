@@ -19,16 +19,11 @@
                                 data-trans-params="{{ error.params|json }}"
                             {% endif %}
                     >
-                        {% if error.code %}
-                            {% trans error.code as error_message %}
-                            {% if error_message != error.code %}
-                                {{ error_message|format:error.params }}
-                            {% elif error.message %}
-                                {% trans error.message as error_message %}
-                                {{ error_message|format:error.params }}
-                            {% endif %}
+                        {% if error.message|startswith:'error.' %}
+                            {{ error.message|format:error.params }}
+                        {% elif error.code %}
+                            {{ error.code|format:error.params }}
                         {% else %}
-                            NOT CODE
                             {{ error }}
                         {% endif %}
                     </li>
