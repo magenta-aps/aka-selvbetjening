@@ -12,8 +12,15 @@
                     <li {% if error.code %}data-trans="{{ error.code }}"{% endif %} {% if error.params %}data-trans-params="{{ error.params|json }}"{% endif %}>
                         {% if error.code %}
                             {% trans error.code as error_message %}
-                            {{ error_message|format:error.params }}
+                            {% if error_message != error.code %}
+                                {{ error_message|format:error.params }}
+                            {% elif error.message %}
+                                {% trans error.message as error_message %}
+                                {{ error_message }} ||
+                                {{ error_message|format:error.params }}
+                            {% endif %}
                         {% else %}
+                            NOT CODE
                             {{ error }}
                         {% endif %}
                     </li>

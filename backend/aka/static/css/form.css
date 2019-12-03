@@ -21,7 +21,9 @@ div.input {
 /* Buttons and button-like links */
 
 button,
-a.button {
+a.button,
+a.button:link,
+a.button:visited {
     color: #fff;
     border: none;
     padding: .75rem 2.25rem;

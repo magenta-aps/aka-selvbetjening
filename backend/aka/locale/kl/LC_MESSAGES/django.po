@@ -42,24 +42,6 @@ msgstr "Print [kl]"
 msgid "common.pdf"
 msgstr "Download PDF [kl]"
 
-msgid "common.upload.validation"
-msgstr "Der er fejl i det uploadede regneark [kl]:"
-
-msgid "common.upload.empty"
-msgstr "Der er ingen rækker i det uploadede regneark [kl]"
-
-msgid "common.upload.no_encoding"
-msgstr "Kunne ikke finde tegnkodningen i det uploadede regneark. Er det en korrekt CSV-fil? [kl]"
-
-msgid "common.upload.read_error"
-msgstr "Kunne ikke læse CSV-filen. Er det en korrekt formatteret CSV-fil? [kl]"
-
-msgid "common.upload.validation_item"
-msgstr "Celle {col_letter}{row} ({field}): {message} [kl]"
-
-msgid "common.upload.validation_header"
-msgstr "Der mangler en kolonne med navnet '{field}' [kl]"
-
 msgid "prisme.error"
 msgstr ""
 
@@ -91,10 +73,42 @@ msgid "common.webadresse"
 msgstr "Web-adresse [kl]"
 
 
+
 # Errors
 
 msgid "error.from_date_before_to_date"
 msgstr "Fra-dato skal være før til-dato [kl]"
+
+msgid "error.invalid_date"
+msgstr "Ugyldig dato [kl]"
+
+msgid "error.required"
+msgstr "Dette felt er påkrævet [kl]"
+
+msgid "error.invalid_extension"
+msgstr "Filendelse '{extension}' er ikke tilladt. Tilladte filendelser er: '{allowed_extensions}' [kl]."
+
+msgid "error.upload_too_large"
+msgstr "Den uploadede fil er for stor [kl]"
+
+msgid "error.upload_validation"
+msgstr "Der er fejl i det uploadede regneark: [kl]"
+
+msgid "error.upload_empty"
+msgstr "Der er ingen rækker i det uploadede regneark [kl]"
+
+msgid "error.upload_no_encoding"
+msgstr "Kunne ikke finde tegnkodningen i det uploadede regneark. Er det en korrekt CSV-fil? [kl]"
+
+msgid "error.upload_read_error"
+msgstr "Kunne ikke læse CSV-filen. Er det en korrekt formatteret CSV-fil? [kl]"
+
+msgid "error.upload_validation_item"
+msgstr "Celle {col_letter}{row} ({field}): {message} [kl]"
+
+msgid "error.upload_validation_header"
+msgstr "Der mangler en kolonne med navnet '{field}' [kl]"
+
 
 
 # File lists
@@ -337,14 +351,6 @@ msgstr "Kontoudtog [kl]"
 
 
 
-msgid "required"
-msgstr "Dette felt er påkrævet. [kl]"
-
-msgid "common.required"
-msgstr "Dette felt er påkrævet. [kl]"
-
-msgid "invalid_extension"
-msgstr "Filendelse '{extension}' er ikke tilladt. Tilladte filendelser er: '{allowed_extensions}' [kl]."
 
 msgid "DK"
 msgstr "Danmarki"

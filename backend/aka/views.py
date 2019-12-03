@@ -170,7 +170,7 @@ class BorgerKontoView(RequireCprMixin, KontoView):
 
     def get_context_data(self, **kwargs):
         context = {
-            'citizen': Dafo().lookup_cpr(self.cpr),
+            # 'citizen': Dafo().lookup_cpr(self.cpr),
         }
         context.update(kwargs)
         return super().get_context_data(**context)

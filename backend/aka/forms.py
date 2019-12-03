@@ -3,8 +3,8 @@ import logging
 from io import StringIO
 
 import chardet
-from aka.utils import get_ordereddict_key_index, spreadsheet_col_letter
 from aka.data.fordringsgruppe import groups
+from aka.utils import get_ordereddict_key_index, spreadsheet_col_letter
 from django import forms
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
@@ -22,7 +22,7 @@ class CsvUploadMixin(object):
     def clean_file(self):
         file = self.cleaned_data['file']
         if file.size > settings.MAX_UPLOAD_FILESIZE:
-            raise ValidationError('file_too_large')
+            raise ValidationError('file_too_large', code='error.upload_too_large', params={'maxsize': settings.MAX_UPLOAD_FILESIZE})
 
         file.seek(0)
         data = file.read()
@@ -30,16 +30,15 @@ class CsvUploadMixin(object):
         if charset is None or charset['encoding'] is None:
             # Raise errors that affect the whole file,
             # preventing the contents from being validated
-            raise ValidationError(_("common.upload.no_encoding"), "common.upload.no_encoding")
+            raise ValidationError('error.upload.no_encoding', code='error.upload_no_encoding')
         subforms = []
         try:
             csv_reader = csv.DictReader(StringIO(data.decode(charset['encoding'])))
             rows = [row for row in csv_reader]  # Catch csv reading errors early
         except csv.Error as e:
-            print(e)
-            raise ValidationError(_("common.upload.read_error", "common.upload.read_error"))
+            raise ValidationError('error.upload_read_error', code='error.upload_read_error')
         if len(rows) == 0:
-            raise ValidationError(_("common.upload.empty"), "common.upload.empty")
+            raise ValidationError('error.upload_empty', code='error.upload_empty')
 
         # Use self.add_error to add validation errors on the file contents,
         # as there may be several in the same file
@@ -47,11 +46,11 @@ class CsvUploadMixin(object):
             subform = self.subform_class(data=row)
             if not subform.is_valid():  # Catch row errors early
                 for field, errorlist in subform.errors.items():
-                    if 'required_field' in errorlist:
+                    if 'error.required' in errorlist:
                         self.add_error('file', ValidationError(
-                            _("common.upload.validation_header"),
-                            "common.upload.validation_header",
-                            {'field': field}
+                            'error.upload_validation_header',
+                            code='error.upload_validation_header',
+                            params={'field': field}
                         ))
                     try:
                         col_index = get_ordereddict_key_index(row, field)
@@ -59,9 +58,9 @@ class CsvUploadMixin(object):
                         col_index = None
                     for error in errorlist.as_data():
                         self.add_error('file', ValidationError(
-                            _("common.upload.validation_item"),
-                            "common.upload.validation_item",
-                            {
+                            'error.upload_validation_item',
+                            code='error.upload_validation_item',
+                            params={
                                 'field': field,
                                 'message': (str(error.message), error.params),
                                 'row': row_index,
@@ -74,18 +73,34 @@ class CsvUploadMixin(object):
         return file
 
 
+# class TemporalFieldMixin(BaseTemporalField):
+#
+#     def to_python(self, value):
+#         try:
+#             return super().to_python(value)
+#         except ValidationError as e:
+#             code = e.code
+#             if code == 'invalid':
+#                 code = 'errors.invalid'
+#                 raise ValidationError(self.error_messages[code], code=code)
+#
+# class DateInput(TemporalFieldMixin, forms.DateField):
+#     pass
+
+
+
 class KontoForm(forms.Form):
 
     from_date = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'error.required'},
+        error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
     )
     to_date = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'error.required'},
+        error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
     )
 
@@ -99,11 +114,11 @@ class InkassoForm(forms.Form):
 
     fordringshaver = forms.CharField(
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
     )
     debitor = forms.CharField(
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
     )
     fordringshaver2 = forms.CharField(
         required=False
@@ -111,23 +126,23 @@ class InkassoForm(forms.Form):
     fordringsgruppe = forms.ChoiceField(
         required=True,
         choices=[(item['id'], item['name']) for item in groups],
-        error_messages={'invalid_choice': 'fordringsgruppe_not_found', 'required': 'required_field'}
+        error_messages={'invalid_choice': 'fordringsgruppe_not_found', 'required': 'error.required'}
     )
     fordringstype = forms.ChoiceField(
         required=True,
         choices=[],
-        error_messages={'invalid_choice': 'fordringstype_not_found', 'required': 'required_field'}
+        error_messages={'invalid_choice': 'fordringstype_not_found', 'required': 'error.required'}
     )
     periodestart = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'},
+        error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
     )
     periodeslut = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'},
+        error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
     )
     barns_cpr = forms.CharField(
@@ -139,31 +154,31 @@ class InkassoForm(forms.Form):
     hovedstol = forms.DecimalField(
         decimal_places=2,
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'error.required'}
     )
     hovedstol_posteringstekst = forms.CharField(
         required=False
     )
     kontaktperson = forms.CharField(
         required=False,
-        # error_messages={'required': 'required_field'}
+        # error_messages={'required': 'error.required'}
     )
     forfaldsdato = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'},
+        error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
     )
     betalingsdato = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'},
+        error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
     )
     foraeldelsesdato = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
-        error_messages={'required': 'required_field'},
+        error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
     )
     noter = forms.CharField(
@@ -258,14 +273,14 @@ class InkassoUploadForm(forms.Form):
     file = forms.FileField(
         required=True,
         validators=[
-            FileExtensionValidator(['csv'])
+            FileExtensionValidator(['csv'], code='error.invalid_extension')
         ]
     )
 
     def clean_file(self):
         file = self.cleaned_data['file']
         if file.size > settings.MAX_UPLOAD_FILESIZE:
-            raise ValidationError('file_too_large')
+            raise ValidationError('file_too_large', code='error.file_too_large', params={'maxsize': settings.MAX_UPLOAD_FILESIZE})
         return file
 
 
@@ -274,14 +289,14 @@ class InterestNoteForm(forms.Form):
     year = forms.ChoiceField(
         choices=[(x, x) for x in range(date.today().year - 10, date.today().year + 1)],
         required=True,
-        error_messages={'required': 'common.required'},
+        error_messages={'required': 'error.required'},
         widget=forms.Select(attrs={'class': 'dropdown'}),
         initial=date.today().year
     )
     month = forms.ChoiceField(
         choices=[(x, x) for x in range(1, 13)],
         required=True,
-        error_messages={'required': 'common.required'},
+        error_messages={'required': 'error.required'},
         widget=forms.Select(attrs={'class': 'dropdown'}),
         initial=date.today().month
     )
@@ -292,21 +307,21 @@ class LoentraekForm(forms.Form):
     year = forms.ChoiceField(
         choices=[(x, x) for x in range(date.today().year - 10, date.today().year + 1)],
         required=True,
-        error_messages={'required': 'common.required'},
+        error_messages={'required': 'error.required'},
         widget=forms.Select(attrs={'class': 'dropdown'}),
         initial=date.today().year
     )
     month = forms.ChoiceField(
         choices=[(x, x) for x in range(1, 13)],
         required=True,
-        error_messages={'required': 'common.required'},
+        error_messages={'required': 'error.required'},
         widget=forms.Select(attrs={'class': 'dropdown'}),
         initial=date.today().month
     )
     total_amount = forms.DecimalField(
         decimal_places=2,
         required=True,
-        error_messages={'required': 'common.required'},
+        error_messages={'required': 'error.required'},
         min_value=0.01,
     )
 
@@ -326,24 +341,24 @@ class LoentraekFormItem(forms.Form):
 
     cpr = forms.CharField(
         required=True,
-        error_messages={'required': 'required_field'},
+        error_messages={'required': 'error.required'},
         min_length=10,
         max_length=10
     )
     agreement_number = forms.CharField(
         required=True,
-        error_messages={'required': 'required_field'}
+        error_messages={'required': 'error.required'}
     )
     amount = forms.DecimalField(
         decimal_places=2,
         required=True,
-        error_messages={'required': 'common.required'},
+        error_messages={'required': 'error.required'},
         min_value=0.01
     )
     net_salary = forms.DecimalField(
         decimal_places=2,
         required=False,
-        error_messages={'required': 'common.required'},
+        error_messages={'required': 'error.required'},
         min_value=0.01
     )
 
@@ -353,7 +368,7 @@ class LoentraekUploadForm(CsvUploadMixin, LoentraekForm):
     file = forms.FileField(
         required=True,
         validators=[
-            FileExtensionValidator(['csv'])
+            FileExtensionValidator(['csv'], code='error.invalid_extension')
         ]
     )
 
@@ -364,21 +379,21 @@ class NedskrivningForm(forms.Form):
 
     debitor = forms.CharField(
         required=True,
-        error_messages={'required': 'common.required'}
+        error_messages={'required': 'error.required'}
     )
     ekstern_sagsnummer = forms.CharField(
         required=True,
         max_length=10,
-        error_messages={'required': 'common.required'}
+        error_messages={'required': 'error.required'}
     )
     beloeb = forms.DecimalField(
         decimal_places=2,
         required=True,
-        error_messages={'required': 'common.required'}
+        error_messages={'required': 'error.required'}
     )
     sekvensnummer = forms.CharField(
         max_length=30,
-        error_messages={'required': 'common.required'}
+        error_messages={'required': 'error.required'}
     )
 
 
