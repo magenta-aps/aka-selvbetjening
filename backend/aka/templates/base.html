@@ -25,6 +25,9 @@
                         options.headers["X-CSRFToken"] = django.getCookie('csrftoken');
                     });
                     $(".btn-print").click(window.print.bind(window));
+                    $('input[type="submit"]').click(function(){
+                        $(this).parents("form").addClass('submitted');
+                    });
                 });
             </script>
         {% endif %}
