@@ -89,7 +89,7 @@ class BasicTestCase(TestMixin, TestCase):
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_year']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+        self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
 
     def test_payroll_failure_missing_month(self):
         formData = {
@@ -108,7 +108,7 @@ class BasicTestCase(TestMixin, TestCase):
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_month']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+        self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
 
     def test_payroll_failure_missing_total_amount(self):
         formData = {
@@ -128,7 +128,7 @@ class BasicTestCase(TestMixin, TestCase):
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_total_amount']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+        self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
 
     def test_payroll_failure_sum_mismatch(self):
         file = File(open('aka/tests/resources/payroll.csv', 'rb'))
@@ -160,7 +160,7 @@ class BasicTestCase(TestMixin, TestCase):
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_file']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
-        self.assertEqual('common.upload.no_encoding', erroritems[0].attrib.get('data-trans'))
+        self.assertEqual('error.upload_no_encoding', erroritems[0].attrib.get('data-trans'))
 
     def test_payroll_failure_empty_csv(self):
         file = File(open('aka/tests/resources/payroll_empty.csv', 'rb'))
@@ -176,4 +176,4 @@ class BasicTestCase(TestMixin, TestCase):
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_file']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
-        self.assertEqual('common.upload.empty', erroritems[0].attrib.get('data-trans'))
+        self.assertEqual('error.upload_empty', erroritems[0].attrib.get('data-trans'))

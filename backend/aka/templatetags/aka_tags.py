@@ -42,3 +42,8 @@ def analyze(data):
     print(data)
     print("---------")
     return ""
+
+
+@register.filter
+def startswith(text, prefix):
+    return type(text) == str and text.startswith(prefix)

@@ -103,7 +103,7 @@ class BasicTestCase(TestMixin, TestCase):
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_year']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+        self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
 
     def test_payroll_failure_mmissing_month(self):
         formData = {
@@ -122,7 +122,7 @@ class BasicTestCase(TestMixin, TestCase):
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_month']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+        self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
 
     def test_payroll_failure_missing_total_amount(self):
         formData = {
@@ -142,7 +142,7 @@ class BasicTestCase(TestMixin, TestCase):
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_total_amount']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+        self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
 
     def test_payroll_failure_missing_cpr(self):
         formData = {
@@ -162,7 +162,7 @@ class BasicTestCase(TestMixin, TestCase):
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_form-0-cpr']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+        self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
 
     def test_payroll_failure_missing_agreement_number(self):
         formData = {
@@ -182,7 +182,7 @@ class BasicTestCase(TestMixin, TestCase):
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_form-0-agreement_number']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+        self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
 
     def test_payroll_failure_missing_amount(self):
         formData = {
@@ -202,7 +202,7 @@ class BasicTestCase(TestMixin, TestCase):
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_form-0-amount']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+        self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
 
     def test_payroll_failure_sum_mismatch(self):
         formData = {

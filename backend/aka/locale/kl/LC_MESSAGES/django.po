@@ -101,7 +101,7 @@ msgid "error.upload_no_encoding"
 msgstr "Kunne ikke finde tegnkodningen i det uploadede regneark. Er det en korrekt CSV-fil? [kl]"
 
 msgid "error.upload_read_error"
-msgstr "Kunne ikke læse CSV-filen. Er det en korrekt formatteret CSV-fil? [kl]"
+msgstr "Kunne ikke læse CSV-filen. Er det en korrekt formatteret CSV-fil i UTF-8 eller UTF-16LE? [kl]"
 
 msgid "error.upload_validation_item"
 msgstr "Celle {col_letter}{row} ({field}): {message} [kl]"
@@ -109,6 +109,14 @@ msgstr "Celle {col_letter}{row} ({field}): {message} [kl]"
 msgid "error.upload_validation_header"
 msgstr "Der mangler en kolonne med navnet '{field}' [kl]"
 
+msgid "error.fordringsgruppe_not_found"
+msgstr "Fordringsgruppe findes ikke [kl]"
+
+msgid "error.fordringstype_not_found"
+msgstr "Fordringstype findes ikke i fordringsgruppe [kl]"
+
+msgid "error.multiple_fordringsgruppe_found"
+msgstr "Konfigurationsfejl på serveren [kl]"
 
 
 # File lists

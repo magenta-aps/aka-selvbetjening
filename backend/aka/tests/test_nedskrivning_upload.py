@@ -67,7 +67,7 @@ class BasicTestCase(TestMixin, TestCase):
             root = etree.fromstring(response.content, etree.HTMLParser())
             erroritems = root.xpath("//div[@data-field='id_file']//ul[@class='errorlist']/li")
             self.assertEqual(1, len(erroritems))
-            self.assertEqual('common.upload.empty', erroritems[0].attrib.get('data-trans'))
+            self.assertEqual('error.upload_empty', erroritems[0].attrib.get('data-trans'))
 
 
     def test_impairment_invalid(self):
@@ -80,18 +80,18 @@ class BasicTestCase(TestMixin, TestCase):
             root = etree.fromstring(response.content, etree.HTMLParser())
             erroritems = root.xpath("//div[@data-field='id_file']//ul[@class='errorlist']/li")
             self.assertEqual(3, len(erroritems))
-            self.assertEqual('common.upload.validation_item', erroritems[0].attrib.get('data-trans'))
+            self.assertEqual('error.upload_validation_item', erroritems[0].attrib.get('data-trans'))
             self.assertEqual(
-                {'field': 'ekstern_sagsnummer', 'message': ['common.required', None], 'row': 1, 'col': 1, 'col_letter': 'B'},
+                {'field': 'ekstern_sagsnummer', 'message': ['error.required', None], 'row': 1, 'col': 1, 'col_letter': 'B'},
                 json.loads(erroritems[0].attrib.get('data-trans-params'))
             )
-            self.assertEqual('common.upload.validation_item', erroritems[1].attrib.get('data-trans'))
+            self.assertEqual('error.upload_validation_item', erroritems[1].attrib.get('data-trans'))
             self.assertEqual(
                 {'field': 'beloeb', 'message': ['Indtast et tal.', None], 'row': 1, 'col': 2, 'col_letter': 'C'},
                 json.loads(erroritems[1].attrib.get('data-trans-params'))
             )
-            self.assertEqual('common.upload.validation_item', erroritems[2].attrib.get('data-trans'))
+            self.assertEqual('error.upload_validation_item', erroritems[2].attrib.get('data-trans'))
             self.assertEqual(
-                {'field': 'sekvensnummer', 'message': ['common.required', None], 'row': 1, 'col': 3, 'col_letter': 'D'},
+                {'field': 'sekvensnummer', 'message': ['error.required', None], 'row': 1, 'col': 3, 'col_letter': 'D'},
                 json.loads(erroritems[2].attrib.get('data-trans-params'))
             )

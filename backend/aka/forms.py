@@ -30,7 +30,7 @@ class CsvUploadMixin(object):
         if charset is None or charset['encoding'] is None:
             # Raise errors that affect the whole file,
             # preventing the contents from being validated
-            raise ValidationError('error.upload.no_encoding', code='error.upload_no_encoding')
+            raise ValidationError('error.upload_no_encoding', code='error.upload_no_encoding')
         subforms = []
         try:
             csv_reader = csv.DictReader(StringIO(data.decode(charset['encoding'])))
@@ -43,10 +43,10 @@ class CsvUploadMixin(object):
         # Use self.add_error to add validation errors on the file contents,
         # as there may be several in the same file
         for row_index, row in enumerate(rows, start=1):
-            subform = self.subform_class(data=row)
+            subform = self.subform_class(data=self.transform_row(row))
             if not subform.is_valid():  # Catch row errors early
                 for field, errorlist in subform.errors.items():
-                    if 'error.required' in errorlist:
+                    if 'error.required' in errorlist and field not in row:
                         self.add_error('file', ValidationError(
                             'error.upload_validation_header',
                             code='error.upload_validation_header',
@@ -72,21 +72,9 @@ class CsvUploadMixin(object):
         self.subforms = subforms
         return file
 
-
-# class TemporalFieldMixin(BaseTemporalField):
-#
-#     def to_python(self, value):
-#         try:
-#             return super().to_python(value)
-#         except ValidationError as e:
-#             code = e.code
-#             if code == 'invalid':
-#                 code = 'errors.invalid'
-#                 raise ValidationError(self.error_messages[code], code=code)
-#
-# class DateInput(TemporalFieldMixin, forms.DateField):
-#     pass
-
+    # To be overridden in subclasses
+    def transform_row(self, row):
+        return row
 
 
 class KontoForm(forms.Form):
@@ -126,12 +114,12 @@ class InkassoForm(forms.Form):
     fordringsgruppe = forms.ChoiceField(
         required=True,
         choices=[(item['id'], item['name']) for item in groups],
-        error_messages={'invalid_choice': 'fordringsgruppe_not_found', 'required': 'error.required'}
+        error_messages={'invalid_choice': 'error.fordringsgruppe_not_found', 'required': 'error.required'}
     )
     fordringstype = forms.ChoiceField(
         required=True,
         choices=[],
-        error_messages={'invalid_choice': 'fordringstype_not_found', 'required': 'error.required'}
+        error_messages={'invalid_choice': 'error.fordringstype_not_found', 'required': 'error.required'}
     )
     periodestart = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
@@ -161,7 +149,6 @@ class InkassoForm(forms.Form):
     )
     kontaktperson = forms.CharField(
         required=False,
-        # error_messages={'required': 'error.required'}
     )
     forfaldsdato = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
@@ -222,7 +209,7 @@ class InkassoForm(forms.Form):
             if int(item['id']) == int(value)
         ]
         if len(items) > 1:
-            raise ValidationError('multiple_fordringsgruppe_found')
+            raise ValidationError('error.multiple_fordringsgruppe_found')
         return value
 
     def clean(self):
@@ -268,7 +255,9 @@ class InkassoCoDebitorFormItem(forms.Form):
     )
 
 
-class InkassoUploadForm(forms.Form):
+class InkassoUploadForm(CsvUploadMixin, forms.Form):
+
+    subform_class = InkassoForm
 
     file = forms.FileField(
         required=True,
@@ -277,11 +266,9 @@ class InkassoUploadForm(forms.Form):
         ]
     )
 
-    def clean_file(self):
-        file = self.cleaned_data['file']
-        if file.size > settings.MAX_UPLOAD_FILESIZE:
-            raise ValidationError('file_too_large', code='error.file_too_large', params={'maxsize': settings.MAX_UPLOAD_FILESIZE})
-        return file
+    def transform_row(self, row):
+        (row['fordringsgruppe'], row['fordringstype']) = InkassoForm.convert_group_type_text(row['fordringsgruppe'], row['fordringstype'])
+        return row
 
 
 class InterestNoteForm(forms.Form):
@@ -332,7 +319,7 @@ class LoentraekForm(forms.Form):
         total = self.cleaned_data['total_amount']
         if formset_sum != total:
             if add_error:
-                self.add_error('total_amount', ValidationError(_('loentraek.sum_mismatch'), 'loentraek.sum_mismatch'))
+                self.add_error('total_amount', ValidationError('loentraek.sum_mismatch', code='loentraek.sum_mismatch'))
             return False
         return True
 

@@ -155,7 +155,7 @@ class BasicTestCase(TestMixin, TestCase):
         for field in ['fordringshaver', 'hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']:
             erroritems = root.xpath("//div[@data-field='id_%s']//ul[@class='errorlist']/li" % field)
             self.assertEqual(1, len(erroritems))
-            self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+            self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
 
     def test_claim_missing_fields_2(self):
         # Test that multiple errors are recieved
@@ -173,7 +173,7 @@ class BasicTestCase(TestMixin, TestCase):
         for field in ['fordringshaver', 'debitor', 'hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']:
             erroritems = root.xpath("//div[@data-field='id_%s']//ul[@class='errorlist']/li" % field)
             self.assertEqual(1, len(erroritems))
-            self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+            self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
 
     def test_claim_incorrect_group_and_type(self):
         # Test fordringsgruppe and -type errors
@@ -190,8 +190,30 @@ class BasicTestCase(TestMixin, TestCase):
         formData.update(dummy_management_form("form"))
         response = self.client.post(self.url, formData)
         root = etree.fromstring(response.content, etree.HTMLParser())
-        expected = {'fordringsgruppe': 'invalid_choice', 'fordringstype': 'invalid_choice'}
-        expected.update({field: 'required' for field in ['hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']})
+        expected = {'fordringsgruppe': 'error.fordringsgruppe_not_found', 'fordringstype': 'error.fordringstype_not_found'}
+        expected.update({field: 'error.required' for field in ['hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']})
+        for field, message in expected.items():
+            erroritems = root.xpath("//div[@data-field='id_%s']//ul[@class='errorlist']/li" % field)
+            self.assertEqual(1, len(erroritems))
+            self.assertEqual(message, erroritems[0].attrib.get('data-trans'))
+
+    def test_claim_incorrect_group(self):
+        # Test fordringsgruppe and -type errors
+        formData = {
+            'fordringshaver2': 'test-fordringshaver2',
+            'fordringshaver': 'test-fordringshaver',
+            'debitor': 'test-debitor',
+            'fordringsgruppe': '100',
+            'fordringstype': '100',
+            'fordringsgruppe_id': '13',
+            'periodestart': date(2019, 3, 27),
+            'periodeslut': date(2019, 3, 28)
+        }
+        formData.update(dummy_management_form("form"))
+        response = self.client.post(self.url, formData)
+        root = etree.fromstring(response.content, etree.HTMLParser())
+        expected = {'fordringsgruppe': 'error.fordringsgruppe_not_found', 'fordringstype': 'error.fordringstype_not_found'}
+        expected.update({field: 'error.required' for field in ['hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']})
         for field, message in expected.items():
             erroritems = root.xpath("//div[@data-field='id_%s']//ul[@class='errorlist']/li" % field)
             self.assertEqual(1, len(erroritems))

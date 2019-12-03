@@ -25,8 +25,6 @@ from aka.mixins import PdfRendererMixin
 from aka.mixins import RequireCprMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
-from aka.utils import ErrorJsonResponse
-from aka.utils import dummy_management_form
 from aka.utils import format_filesize
 from aka.utils import list_lstrip
 from aka.utils import list_rstrip
@@ -195,7 +193,6 @@ class FordringshaverkontoView(RequireCvrMixin, TemplateView):
             path = []
         self.path = list_rstrip(path.split('/'), '')
         rootfolder = self.rootfolder()
-        print(rootfolder)
 
         # Find root folder and all folders that match our configuration for the current cvr
         self.mounts = settings.MOUNTS['claimant_account_statements']
@@ -338,36 +335,19 @@ class InkassoSagUploadView(RequireCvrMixin, FormView):
     template_name = 'aka/claim/upload.html'
 
     def form_valid(self, form):
-        csv_file = form.cleaned_data['file']
-        csv_file.seek(0)
-        data = csv_file.read()
-        charset = chardet.detect(data)
         responses = []
-        try:
-            csv_reader = csv.DictReader(StringIO(data.decode(charset['encoding'])))
-            for row in csv_reader:
-                row['fordringsgruppe'], row['fordringstype'] = InkassoForm.convert_group_type_text(row.get('fordringsgruppe'), row.get('fordringstype'))
-                data = dummy_management_form("form")
-                data.update(row)
-                subform = InkassoForm(data=data)
-                if subform.is_valid():
-                    prisme_reply = InkassoSagView.send_claim(subform, [])
-                    responses.append(prisme_reply.rec_id)
-                else:
-                    return ErrorJsonResponse.from_error_dict(subform.errors)
-        except csv.Error as e:
-            return ErrorJsonResponse.from_error_id('failed_reading_csv')
+        for subform in form.subforms:
+            prisme_reply = InkassoSagView.send_claim(subform, [])
+            responses.append(prisme_reply.rec_id)
+
         return TemplateResponse(
             request=self.request,
             template="aka/claim/success.html",
             context={
-                'rec_ids': responses
+                'rec_ids': responses,
             },
             using=self.template_engine
         )
-
-    def form_invalid(self, form):
-        return ErrorJsonResponse.from_error_dict(form.errors)
 
 
 class InkassoGroupDataView(View):

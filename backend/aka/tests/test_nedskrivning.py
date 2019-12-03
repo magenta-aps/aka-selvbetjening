@@ -133,7 +133,7 @@ class LocalTestCase(BasicTestCase):
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_beloeb']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+        self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
 
     def test_impairment_missing_debitor(self):
         # Contains just the required fields
@@ -147,7 +147,7 @@ class LocalTestCase(BasicTestCase):
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_debitor']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+        self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
 
     def test_impairment_missing_casenumber(self):
         # Contains just the required fields
@@ -161,7 +161,7 @@ class LocalTestCase(BasicTestCase):
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_ekstern_sagsnummer']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+        self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
 
     def test_impairment_missing_sequencenumber(self):
         # Contains just the required fields
@@ -175,4 +175,4 @@ class LocalTestCase(BasicTestCase):
         root = etree.fromstring(response.content, etree.HTMLParser())
         erroritems = root.xpath("//div[@data-field='id_sekvensnummer']//ul[@class='errorlist']/li")
         self.assertEqual(1, len(erroritems))
-        self.assertEqual('required', erroritems[0].attrib.get('data-trans'))
+        self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
