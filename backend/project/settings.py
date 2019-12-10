@@ -107,10 +107,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # See local_settings_example.py
-SULLISSIVIK_FEDERATION_SERVICE = (
-    'http://ip.demo.sullissivik.local'
-    '/services/IdentityServiceV2.svc?wsdl'
-)
+SULLISSIVIK_FEDERATION_SERVICE = None
 
 # Application definition
 
@@ -118,6 +115,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
+    'django.contrib.auth',
     'sullissivik.login.nemid',
     'aka',
     'openid'
@@ -219,7 +217,7 @@ MAX_UPLOAD_FILESIZE = 22097152
 
 LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
 if os.path.exists(LOCAL_SETTINGS_FILE):
-    from aka.local_settings import *  # noqa
+    from .local_settings import *  # noqa
 
 SECRET_KEY_FILE = os.path.join(SITE_DIR, "secret_key.py")
 if os.path.exists(SECRET_KEY_FILE):

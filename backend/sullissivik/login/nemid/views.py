@@ -18,8 +18,7 @@ class AuthenticateMixin(LoginRequiredMixin):
                 request.session['user'] = request.user.dict()
             else:
                 return self.handle_no_permission()
-        return super(AuthenticateMixin, self) \
-            .dispatch(request, *args, **kwargs)
+        return super(AuthenticateMixin, self).dispatch(request, *args, **kwargs)
 
     def handle_no_permission(self):
         if self.raise_exception:

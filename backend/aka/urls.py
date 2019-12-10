@@ -47,7 +47,4 @@ urlpatterns = [
     url(r'^fordringshaverkonto(?P<path>/.*)$', FordringshaverkontoView.as_view(), name='fordringshaverkonto'),
     url(r'^arbejdsgiverkonto$', ArbejdsgiverKontoView.as_view(), name='arbejdsgiverkonto'),
     url(r'^borgerkonto$', BorgerKontoView.as_view(), name='borgerkonto'),
-
-
-    url(r'sullissivik-nemid/', include('sullissivik.login.nemid.urls')),
 ]

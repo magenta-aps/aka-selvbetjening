@@ -22,10 +22,8 @@ class CookieAuthBackend(object):
             name = user_data.get('Name')
             is_authenticated = user_data.get('IsAuthenticated')
             if is_authenticated is not True:
-                print('Not authenticated')
                 return None
             if cpr is None:
-                print('Did not obtain CPR number')
                 return None
             return SessionOnlyUser.get_user(request.session, cpr, name)
         return None

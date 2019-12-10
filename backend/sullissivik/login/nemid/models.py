@@ -1,8 +1,5 @@
 from django.contrib.auth.models import AnonymousUser
 
-# Create your models here.
-from django.utils.deprecation import CallableTrue
-
 
 class SessionOnlyUserPkField(object):
     def value_to_string(self):
@@ -24,7 +21,7 @@ class SessionOnlyUser(AnonymousUser):
 
     @property
     def is_authenticated(self):
-        return CallableTrue
+        return True
 
     def dict(self):
         return {'cpr': self.cpr, 'name': self.name}
@@ -37,6 +34,4 @@ class SessionOnlyUser(AnonymousUser):
             session['user'] = user_dict
         elif user_dict is None:
             return AnonymousUser()
-        return SessionOnlyUser(
-            user_dict.get('cpr'), user_dict.get('name', name)
-        )
+        return SessionOnlyUser(user_dict.get('cpr'), user_dict.get('name', name))

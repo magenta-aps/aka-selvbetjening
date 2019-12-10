@@ -11,7 +11,8 @@ class LoggedIn:
         # urls we do not want to redirect from
         self.white_listed_urls = [reverse_lazy('openid:login'),
                                   reverse_lazy('openid:logout'),
-                                  reverse_lazy('openid:callback')]
+                                  reverse_lazy('openid:callback'),
+                                  reverse_lazy('nemid:test')]
 
     def __call__(self, request):
         # Code to be executed for each request before
