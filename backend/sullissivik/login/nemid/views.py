@@ -15,7 +15,7 @@ class AuthenticateMixin(LoginRequiredMixin):
         if not request.user.is_authenticated:
             request.user = authenticate(request)
             if request.user is not None and request.user.is_authenticated:
-                request.session['user'] = request.user.dict()
+                request.session['user_info'] = request.user.dict()
             else:
                 return self.handle_no_permission()
         return super(AuthenticateMixin, self).dispatch(request, *args, **kwargs)
