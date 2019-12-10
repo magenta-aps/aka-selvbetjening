@@ -1,0 +1,34 @@
+{% load i18n %}
+{% load aka_tags %}
+<div class="input{% if field.errors %} has-error{% endif %}" data-field="{{ field.id_for_label }}">
+    {% if key %}
+        <label for="{{ field.id_for_label }}" data-trans="{{ key }}">{% trans key %}</label>
+    {% endif %}
+    {{ field }}
+    <span class="err-msg" for="{{ field.id_for_label }}">
+        {% if field.errors %}
+            <ul class="errorlist">
+                {% for error in field.errors.as_data %}
+                    <li
+                            {% if error.message|startswith:'error.' %}
+                                data-trans="{{ error.message }}"
+                            {% elif error.code %}
+                                data-trans="{{ error.code }}"
+                            {% endif %}
+                            {% if error.params %}
+                                data-trans-params="{{ error.params|json }}"
+                            {% endif %}
+                    >
+                        {% if error.message|startswith:'error.' %}
+                            {{ error.message|format:error.params }}
+                        {% elif error.code %}
+                            {{ error.code|format:error.params }}
+                        {% else %}
+                            {{ error }}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </span>
+</div>

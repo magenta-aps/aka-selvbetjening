@@ -1,0 +1,26 @@
+# Default playbook.
+#
+# The default playbook contains everything which should be used on all 
+# playbooks.
+#
+# This is created since some of the things used for development is not 
+# necessary for a production system, and should therefore not be installed.
+
+---
+
+- hosts: all
+
+  remote_user: vagrant
+  become: true
+  become_method: sudo
+  become_user: root
+
+  pre_tasks:
+    - name: Update apt cache (if old)
+      apt: update_cache=yes cache_valid_time=84600
+  
+  roles:
+    - postgres
+    - django
+    - sphinx
+...

@@ -1,0 +1,15 @@
+django==2.2.6
+django-extra-views>=0.12.0
+psycopg2-binary
+requests
+requests[socks]
+requests_ntlm
+oic
+httpretty
+lxml>=4.2.5
+zeep>=3.4.0
+xmltodict>=0.12.0
+dict2xml>=1.6.1
+pdfkit
+pysmb>=1.1.28
+pysmbc>=1.0.18

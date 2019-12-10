@@ -1,0 +1,52 @@
+table.folder-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.folder-table th {
+    border-top: 1px solid #31495b;
+    border-bottom: 1px solid #31495b;
+    border-left: 1px solid #93b5c5;
+    border-right: 1px solid #93b5c5;
+}
+
+table.folder-table td {
+    border-top: 1px solid #31495b;
+    border-bottom: 1px solid #93b5c5;
+    border-left: 1px solid #93b5c5;
+    border-right: 1px solid #93b5c5;
+}
+
+table.folder-table th:first-child,
+table.folder-table td:first-child {
+    border-left: 1px solid #31495b;
+}
+
+table.folder-table th:last-child,
+table.folder-table td:last-child {
+    border-right: 1px solid #31495b;
+}
+
+table.folder-table tr:last-child td {
+    border-bottom: 1px solid #31495b;
+}
+
+
+th.sortable {
+    cursor: pointer;
+}
+
+th.sortable.sorted {
+    background-position-x: right;
+    background-position-y: 50%;
+    background-size: 1.5em;
+    background-repeat: no-repeat;
+}
+
+th.sortable.sorted.asc {
+    background-image: url("../img/sullisivk_arrow_up.svg");
+}
+
+th.sortable.sorted.desc {
+    background-image: url("../img/sullisivk_arrow.svg");
+}

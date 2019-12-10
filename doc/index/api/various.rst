@@ -26,18 +26,18 @@ general as well as field specific errors::
             
         ],
         "fieldErrors": {
-            "field_a": {
+            "field_a": [{
                 "da": "Navnet må ikke indeholde disse tegn: @$%&*",
                 "kl": "Illuquarnuulit annuueriset: @$%&*"
-            },
-            "field_b": {
+            }],
+            "field_b": [{
                 "da": "Dette felt er obligatorisk",
                 "kl": "Illuquarnuulit annuueriset"
-            },
-            "field_c": {
+            }],
+            "field_c": [{
                 "da": "36 er for lavt et tal",
                 "kl": "Illuquarnuulit 36 annuueriset"
-            }
+            }]
         }
     }
 

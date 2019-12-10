@@ -1,0 +1,446 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-07 12:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "common.error.generic"
+msgstr "Fejl [kl]"
+
+msgid "common.error.access_denied"
+msgstr "Adgang nægtet [kl]"
+
+msgid "common.forside"
+msgstr "Forside [kl]"
+
+msgid "common.gem"
+msgstr "Gem [kl]"
+
+msgid "common.send"
+msgstr "Send [kl]"
+
+msgid "common.repeat"
+msgstr "Gentag [kl]"
+
+msgid "common.print"
+msgstr "Print [kl]"
+
+msgid "common.pdf"
+msgstr "Download PDF [kl]"
+
+msgid "prisme.error"
+msgstr ""
+
+msgid "prisme.error_250"
+msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber} [kl]"
+
+msgid "prisme.cvrcheck_no_result"
+msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
+
+msgid "common.dato"
+msgstr "Dato [kl]"
+
+msgid "common.konto"
+msgstr "Konto [kl]"
+
+msgid "common.telefon"
+msgstr "Oq/Telefon [kl]"
+
+msgid "common.fax"
+msgstr "Fax [kl]"
+
+msgid "common.postboks"
+msgstr "Postboks {box} [kl]"
+
+msgid "common.email"
+msgstr "Email [kl]"
+
+msgid "common.webadresse"
+msgstr "Web-adresse [kl]"
+
+
+
+# Errors
+
+msgid "error.from_date_before_to_date"
+msgstr "Fra-dato skal være før til-dato [kl]"
+
+msgid "error.invalid_date"
+msgstr "Ugyldig dato [kl]"
+
+msgid "error.required"
+msgstr "Dette felt er påkrævet [kl]"
+
+msgid "error.invalid_extension"
+msgstr "Filendelse '{extension}' er ikke tilladt. Tilladte filendelser er: '{allowed_extensions}' [kl]."
+
+msgid "error.upload_too_large"
+msgstr "Den uploadede fil er for stor [kl]"
+
+msgid "error.upload_validation"
+msgstr "Der er fejl i det uploadede regneark: [kl]"
+
+msgid "error.upload_empty"
+msgstr "Der er ingen rækker i det uploadede regneark [kl]"
+
+msgid "error.upload_no_encoding"
+msgstr "Kunne ikke finde tegnkodningen i det uploadede regneark. Er det en korrekt CSV-fil? [kl]"
+
+msgid "error.upload_read_error"
+msgstr "Kunne ikke læse CSV-filen. Er det en korrekt formatteret CSV-fil i UTF-8 eller UTF-16LE? [kl]"
+
+msgid "error.upload_validation_item"
+msgstr "Celle {col_letter}{row} ({field}): {message} [kl]"
+
+msgid "error.upload_validation_header"
+msgstr "Der mangler en kolonne med navnet '{field}' [kl]"
+
+msgid "error.fordringsgruppe_not_found"
+msgstr "Fordringsgruppe findes ikke [kl]"
+
+msgid "error.fordringstype_not_found"
+msgstr "Fordringstype findes ikke i fordringsgruppe [kl]"
+
+msgid "error.multiple_fordringsgruppe_found"
+msgstr "Konfigurationsfejl på serveren [kl]"
+
+
+# File lists
+
+msgid "filliste.mappeindhold"
+msgstr "{size} elementer [kl]"
+
+msgid "filliste.mappe"
+msgstr "Mappe [kl]"
+
+msgid "filliste.filnavn"
+msgstr "Filnavn [kl]"
+
+msgid "filliste.filstoerrelse"
+msgstr "Størrelse [kl]"
+
+msgid "filliste.filtype"
+msgstr "Type [kl]"
+
+msgid "filliste.op"
+msgstr "Op [kl]"
+
+
+# 6.1
+
+msgid "fordring.title"
+msgstr "Indberet fordring [kl]"
+
+msgid "fordring.debitor"
+msgstr "Debitor [kl]"
+
+msgid "fordring.codebitorer"
+msgstr "Meddebitorer [kl]"
+
+msgid "fordring.cpr"
+msgstr "cpr [kl]"
+
+msgid "fordring.cvr"
+msgstr "cvr [kl]"
+
+msgid "fordring.fordringshaver"
+msgstr "Fordringshaver [kl]"
+
+msgid "fordring.anden_fordringshaver"
+msgstr "Anden fordringshaver [kl]"
+
+msgid "fordring.fordringsgruppe"
+msgstr "Ekstern fordringsgruppe [kl]"
+
+msgid "fordring.fordringstype"
+msgstr "Ekstern fordringstype [kl]"
+
+msgid "fordring.barns_cpr"
+msgstr "Barns CPR-nr [kl]"
+
+msgid "fordring.ekstern_sagsnummer"
+msgstr "Ekstern sagsnummer [kl]"
+
+msgid "fordring.fakturanr"
+msgstr "Fakturanr [kl]"
+
+msgid "fordring.bnr"
+msgstr "B-nr [kl]"
+
+msgid "fordring.hovedstol"
+msgstr "Hovedstol [kl]"
+
+msgid "fordring.posteringstekst"
+msgstr "Posteringstekst [kl]"
+
+msgid "fordring.periodestart"
+msgstr "Periodestart [kl]"
+
+msgid "fordring.periodeslut"
+msgstr "Periodeslut [kl]"
+
+msgid "fordring.forfaldsdato"
+msgstr "Forfaldsdato [kl]"
+
+msgid "fordring.betalingsdato"
+msgstr "Betalingsdato [kl]"
+
+msgid "fordring.foraeldelsesdato"
+msgstr "Forældelsesdato [kl]"
+
+msgid "fordring.kontaktperson"
+msgstr "Kontaktperson [kl]"
+
+msgid "fordring.noter"
+msgstr "Noter [kl]"
+
+
+# 6.2
+
+msgid "loentraek.title"
+msgstr "Indberet løntræk [kl]"
+
+msgid "loentraek.year"
+msgstr "År [kl]"
+
+msgid "loentraek.month"
+msgstr "Måned [kl]"
+
+msgid "loentraek.total_amount"
+msgstr "Totalt beløb [kl]"
+
+msgid "loentraek.cpr"
+msgstr "CPR [kl]"
+
+msgid "loentraek.agreement_number"
+msgstr "Aftalenummer [kl]"
+
+msgid "loentraek.amount"
+msgstr "Løntræk [kl]"
+
+msgid "loentraek.net_salary"
+msgstr "Nettoløn [kl]"
+
+msgid "loentraek.sum_mismatch"
+msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækker [kl]"
+
+
+# 6.4
+
+msgid "nedskrivning.success"
+msgstr "Nedskrivninger uploadet [kl]"
+
+msgid "nedskrivning.result"
+msgstr "Oprettede nedskrivninger [kl]"
+
+msgid "nedskrivning.errors"
+msgstr "Der opstod følgende fejl: [kl]"
+
+msgid "nedskrivning.error_250"
+msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber} [kl]"
+
+#: aka/templates/aka/impairmentForm.html:12
+msgid "nedskrivning.title"
+msgstr "Nedskrivning - Opret [kl]"
+
+msgid "common.upload.template"
+msgstr "Download skabelon [kl]"
+
+#: aka/templates/aka/impairmentForm.html:18
+msgid "nedskrivning.debitor"
+msgstr "Debitor [kl]"
+
+#: aka/templates/aka/impairmentForm.html:29
+msgid "nedskrivning.ekstern_sagsnummer"
+msgstr "Ekstern sagsnummer [kl]"
+
+#: aka/templates/aka/impairmentForm.html:39
+msgid "nedskrivning.beloeb"
+msgstr "Beløb [kl]"
+
+#: aka/templates/aka/impairmentForm.html:48
+msgid "nedskrivning.sekvensnummer"
+msgstr "Sekvensnummer [kl]"
+
+
+# 6.5
+
+
+# NY16
+msgid "rentenota.title"
+msgstr "Rentenota [kl]"
+
+msgid "rentenota.rentenota"
+msgstr "Rentenota [kl]"
+
+msgid "rentenota.dato"
+msgstr "Dato [kl]"
+
+msgid "rentenota.postdato"
+msgstr "Postdato [kl]"
+
+msgid "rentenota.debitorkonto"
+msgstr "Debitor&#173;konto [kl]"
+
+msgid "rentenota.faktureringsklassifikation"
+msgstr "Fakturerings&#173;klassifikation [kl]"
+
+msgid "rentenota.rentenotanummer"
+msgstr "Rentenota&#173;nummer [kl]"
+
+msgid "rentenota.bilag"
+msgstr "Bilag [kl]"
+
+msgid "rentenota.faktura"
+msgstr "Faktura [kl]"
+
+msgid "rentenota.tekst"
+msgstr "Tekst [kl]"
+
+msgid "rentenota.fradato"
+msgstr "Fradato [kl]"
+
+msgid "rentenota.tildato"
+msgstr "Tildato [kl]"
+
+msgid "rentenota.dage"
+msgstr "Dage [kl]"
+
+msgid "rentenota.grundlag"
+msgstr "Grundlag [kl]"
+
+msgid "rentenota.forfald"
+msgstr "Forfalds&#173;dato [kl]"
+
+msgid "rentenota.beloeb"
+msgstr "Beløb [kl]"
+
+msgid "rentenota.ingenposter"
+msgstr "Ingen poster [kl]"
+
+msgid "rentenota.filename"
+msgstr "Rentenota {month}/{year} [kl].pdf"
+
+msgid "rentenota.year"
+msgstr "År [kl]"
+
+msgid "rentenota.month"
+msgstr "Måned [kl]"
+
+
+# NY18
+msgid "employeraccount.title"
+msgstr "Kontoudtog for arbejdsgivere [kl]"
+
+msgid "employeraccount.from_date"
+msgstr "Fra dato [kl]"
+
+msgid "employeraccount.to_date"
+msgstr "Til dato [kl]"
+
+msgid "employeraccount.filename"
+msgstr "Kontoudtog {from_date} - {to_date} [kl].pdf"
+
+msgid "employeraccount.account"
+msgstr "Kontoudtog [kl]"
+
+
+
+
+msgid "DK"
+msgstr "Danmarki"
+
+msgid "GL"
+msgstr "Kalaallit Nunaat"
+
+
+msgid "January"
+msgstr "Januaari"
+
+msgid "February"
+msgstr "Februaari"
+
+msgid "March"
+msgstr "Marsi"
+
+msgid "April"
+msgstr "Apriili"
+
+msgid "May"
+msgstr "Maaji"
+
+msgid "June"
+msgstr "Juuni"
+
+msgid "July"
+msgstr "Juuli"
+
+msgid "August"
+msgstr "Aggusti"
+
+msgid "September"
+msgstr "Septembari"
+
+msgid "October"
+msgstr "Oktobari"
+
+msgid "November"
+msgstr "Novembari"
+
+msgid "December"
+msgstr "Decembari"
+
+msgid "Mon"
+msgstr "Ata"
+
+msgid "Tue"
+msgstr "Mar"
+
+msgid "Wed"
+msgstr "Pin"
+
+msgid "Thu"
+msgstr "Tal"
+
+msgid "Fri"
+msgstr "Sis"
+
+msgid "Sat"
+msgstr "Arf"
+
+msgid "Sun"
+msgstr "Sap"
+
+msgid "Monday"
+msgstr "Ataasinngorneq"
+
+msgid "Tuesday"
+msgstr "Marlunngorneq"
+
+msgid "Wednesday"
+msgstr "Pingasunngorneq"
+
+msgid "Thursday"
+msgstr "Tallimanngorneq"
+
+msgid "Friday"
+msgstr "Sisamanngorneq"
+
+msgid "Saturday"
+msgstr "Arfininngorneq"
+
+msgid "Sunday"
+msgstr "Sapaat"

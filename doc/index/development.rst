@@ -14,4 +14,5 @@ The frontend and backend is decoupled, and communicates via a REST-interface.
 
    development/* 
    
+It is suggested to start by looking at the :ref:`structure`.
 
