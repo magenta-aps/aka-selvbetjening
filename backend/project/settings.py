@@ -117,8 +117,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.auth',
     'sullissivik.login.nemid',
+    'sullissivik.login.openid',
     'aka',
-    'openid'
 ]
 
 MIDDLEWARE = [
@@ -127,7 +127,7 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'openid.middleware.openid.LoggedIn',
+    'sullissivik.login.openid.middleware.openid.LoggedIn',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 

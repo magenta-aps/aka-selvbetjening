@@ -3,6 +3,7 @@ from django.test import Client
 import requests
 from lxml import html
 
+
 class LoginTestCase(TestCase):
     sfc = 'Sullissivik.Federation.Cookie'
 
@@ -22,31 +23,24 @@ class LoginTestCase(TestCase):
         self.assertNotIn(self.sfc, self.sul_page.cookies)
 
     def testHasSFCAfterValidCPRPOST(self):
-        self.assertEquals(self.fields['txtCPR'], '0606606063',
-                          'Invalid input CPR')
-
-        sul_post = requests.post(self.sul_address,
-                                 data=self.fields,
-                                 allow_redirects=False)
-
+        self.assertEquals(self.fields['txtCPR'], '0606606063', 'Invalid input CPR')
+        sul_post = requests.post(self.sul_address, data=self.fields, allow_redirects=False)
         self.assertIn(self.sfc, sul_post.cookies)
 
     def testHasNoSFCAfterInvalidCPRPOST(self):
         fields = self.fields
         fields['txtCPR'] = '1243142323'   # Invalid CPR
-        sul_post = requests.post(self.sul_address,
-                                 data=fields,
-                                 allow_redirects=False)
+        sul_post = requests.post(self.sul_address, data=fields, allow_redirects=False)
         self.assertNotIn(self.sfc, sul_post.cookies)
 
     def testMissingCookieGivesRedirect(self):
         client = Client()
-        response = client.get('/test/')
+        response = client.get('/nemid/test/')
         self.assertEqual(302, response.status_code)
 
         location = response._headers.get('location')
         self.assertIn('http://ip.demo.sullissivik.local/login.aspx'
-                      '?returnurl=http%3A//testserver/test/', location)
+                      '?returnurl=http%3A//testserver/nemid/test/', location)
 
     def testLogin(self):
         sul_post = requests.post(self.sul_address,
@@ -56,5 +50,5 @@ class LoginTestCase(TestCase):
 
         client = Client()
         client.cookies[self.sfc] = cookie
-        response = client.get('/test/')
+        response = client.get('/nemid/test/')
         self.assertEqual(200, response.status_code)

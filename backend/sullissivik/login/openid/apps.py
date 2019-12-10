@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class SullissivikopenidloginConfig(AppConfig):
-    name = 'sullissivikopenidlogin'
+class SullissivikOpenIdLoginConfig(AppConfig):
+    name = 'sullissivik.login.openid'

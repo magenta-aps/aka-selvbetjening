@@ -33,7 +33,6 @@ urlpatterns = [
     url(r'^language', SetLanguageView.as_view()),
 
     url(r'^$', IndexTemplateView.as_view(), name='index'),
-    url(r'^oid/', include('openid.urls', namespace='openid')),
     url(r'^inkassosag$', InkassoSagView.as_view(), name='inkassosag'),
     url(r'^inkassosag/upload', InkassoSagUploadView.as_view(), name='inkassosag-upload'),
     url(r'^fordringsgrupper/(?P<var>[a-z_]+)?', InkassoGroupDataView.as_view(), name='fordringsgrupper'),

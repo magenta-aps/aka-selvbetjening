@@ -51,7 +51,7 @@ django_openid:
   client_id: "sullissivik_company_tax"
   client_certificate: "/etc/ssl/openid/sullissivik_company_tax_test.cert"
   private_key: "/etc/ssl/openid/sullissivik_company_tax_test.key"
-  redirect_uri: "https://akaptest.sullissivik.gl/oid/callback/"
+  redirect_uri: "https://akaptest.sullissivik.gl/openid/callback/"
 
 restart_apache: True
 

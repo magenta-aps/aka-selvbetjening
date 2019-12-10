@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from openid.views import Callback, Login, Logout
+from sullissivik.login.openid.views import Callback, Login, Logout
 
 app_name = 'openid'
 
