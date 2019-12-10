@@ -139,6 +139,39 @@ msgid "filliste.op"
 msgstr "Op [kl]"
 
 
+# Index
+
+msgid "index.rentenota"
+msgstr "Hent rentenota [kl]"
+
+msgid "index.fordring"
+msgstr "Indberet fordring [kl]"
+
+msgid "index.fordring-upload"
+msgstr "Upload fordring [kl]"
+
+msgid "index.nedskrivning"
+msgstr "Indberet nedskrivning [kl]"
+
+msgid "index.nedskrivning-upload"
+msgstr "Upload nedskrivning [kl]"
+
+msgid "index.løntræk"
+msgstr "Indberet løntræk [kl]"
+
+msgid "index.løntræk-upload"
+msgstr "Upload løntræk [kl]"
+
+msgid "index.fordringshaverkonto"
+msgstr "Vis fordringshaverkonto [kl]"
+
+msgid "index.arbejdsgiverkonto"
+msgstr "Vis arbejdsgiverkonto [kl]"
+
+msgid "index.borgerkonto"
+msgstr "Vis Borgerkonto [kl]"
+
+
 # 6.1
 
 msgid "fordring.title"

@@ -100,6 +100,15 @@ class IndexTemplateView(TemplateView):
     def get(self, *args, **kwargs):
         return super(IndexTemplateView, self).get(*args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        user_info = self.request.session.get('user_info', {})
+        context = {
+            'cpr': 1, # user_info.get('CPR'),
+            'cvr': 2, # user_info.get('CVR')
+        }
+        context.update(kwargs)
+        return super().get_context_data(**context)
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
