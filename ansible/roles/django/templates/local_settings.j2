@@ -26,7 +26,7 @@ PRISME_CONNECT = {
 DAFO_CONNECT = {
     'address': {
         'token': 'https://sts.data.gl/get_token_passive?username={username}&password={password}',
-        'cpr': 'https://data.gl/prisme/cpr/2/{cpr}'
+        'cpr': 'https://data.gl/prisme/cpr/2/{cpr}',
         'cvr': 'https://data.gl/prisme/cvr/2/{cvr}'
     },
     'auth': {
@@ -46,8 +46,11 @@ OPENID_CONNECT = {
 
 MOUNTS = {
     'claimant_account_statements': {
-        'maindir': os.path.join('media', '6.5'),
+        'username': '',
+        'password': '',
+        'host': '',
+        'share': '',
+        'maindir': '/companies/',
         'subdir': '{cvr}*',
-        'files': '*'
     }
 }

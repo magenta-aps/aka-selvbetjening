@@ -1,14 +1,14 @@
 ---
 - name: Build release tarball with both backend and frontend
   become: no
-  local_action: command tar cfz /tmp/backend.tar.gz --exclude='*.pyc' --exclude='local_settings.py' --exclude='.gitignore' ../../backend ../../shared
+  local_action: command tar cfz /tmp/backend.tar.gz --exclude='*.pyc' --exclude='local_settings.py' --exclude='.gitignore' ../../backend
 
-- name: ensure project dir exists
+- name: Ensure project dir exists
   file:
     path: "{{project_dir}}"
     state: directory
 
-- name: unpack release
+- name: Unpack release
   unarchive:
     src: /tmp/backend.tar.gz
     dest: "{{project_dir}}"

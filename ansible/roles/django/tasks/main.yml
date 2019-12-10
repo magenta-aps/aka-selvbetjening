@@ -25,7 +25,18 @@
   apt:
     name: wkhtmltopdf
 
-- name: Install requirements
+- name: Install pkg-config
+  apt:
+    name: pkg-config
+
+- name: Install smbclient
+  apt:
+    name:
+      - smbclient
+      - libsmbclient
+      - libsmbclient-dev
+
+- name: Install python requirements
   pip:
     requirements: "{{django_requirements_file}}"
     virtualenv: "{{django_virtual_env_path}}"
