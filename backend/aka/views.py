@@ -9,6 +9,7 @@ from aka.clients.prisme import PrismeClaimRequest
 from aka.clients.prisme import PrismeImpairmentRequest
 from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
+from aka.clients.samba import SmbcClient
 from aka.data.fordringsgruppe import groups
 from aka.exceptions import AccessDeniedException
 from aka.forms import InkassoCoDebitorFormItem
@@ -176,82 +177,84 @@ class FordringshaverkontoView(RequireCvrMixin, TemplateView):
 
     template_name = 'aka/claimant_account/list.html'
 
+    def __init__(self):
+        self.samba = SmbcClient('claimant_account_statements')
+
     @staticmethod
     def rootfolder():
         mounts = settings.MOUNTS['claimant_account_statements']
-        return os.path.abspath(mounts['maindir'])
+        return mounts['maindir']
 
     def get(self, request, path=None, *args, **kwargs):
-
-        # Clean path - it should become an array of path entries, empty if input is '/'
         if '..' in path.split('/'):
             raise FileNotFoundError(path)
         if path is None:
-            path = []
+            path = '/'
         self.path = list_rstrip(path.split('/'), '')
+
+        mounts = settings.MOUNTS['claimant_account_statements']
+        rootfolder = mounts['maindir']
+
+        # Find root folder and all folders that match our configuration for the current cvr
+        self.mounts = settings.MOUNTS['claimant_account_statements']
+        subfolder_re = re.compile(self.mounts['subdir'].replace('{cvr}', self.cvr))
+
+        companyfolder = None
+        for folder in self.samba.list_dir(rootfolder):
+            if folder.is_directory and subfolder_re.match(folder.name):
+                companyfolder = folder
+                break
+        if not companyfolder:
+            raise AccessDeniedException('errors.no_cvr_folder')
+
+        full_entry_path = '/'.join([rootfolder, companyfolder.name, path])
+        entry = self.samba.get_entry(full_entry_path)
+        if entry.is_directory:
+            return self.render_to_response(self.get_context_data(**kwargs))
+        else:
+            file = self.samba.get_contents(full_entry_path)
+            file.seek(0)
+            response = FileResponse(file, filename=self.path[-1], as_attachment=True)
+            response['Content-Length'] = entry.filesize
+            response.set_headers(file)
+            return response
+
+    def get_entries(self, path):
+        # Clean path - it should become an array of path entries, empty if input is '/'
         rootfolder = self.rootfolder()
 
         # Find root folder and all folders that match our configuration for the current cvr
         self.mounts = settings.MOUNTS['claimant_account_statements']
         subfolder_re = re.compile(self.mounts['subdir'].replace('{cvr}', self.cvr))
-        companyfolders = [
-            subfolder
-            for subfolder in os.listdir(rootfolder)
-            if os.path.isdir(os.path.join(rootfolder, subfolder))
-            and subfolder_re.match(subfolder)
-        ]
 
-        # Find folders that match our path in each companyfolder
-        self.folders = []
-        found = False
-        self.relpath = os.path.join(*self.path) if self.path else None
-        if companyfolders:
-            for companyfolder in companyfolders:
-                abs_path = os.path.join(*list_rstrip([rootfolder, companyfolder, self.relpath]))
-                if os.path.isfile(abs_path):
-                    # If we have a file, return it
-                    return FileResponse(open(abs_path, 'rb'), as_attachment=True)
-                try:
-                    if os.path.isdir(abs_path):
-                        found = True
-                        self.folders.append(abs_path)
-                except FileNotFoundError:
-                    continue
-            if not found:
-                raise FileNotFoundError(path)
-
-        context = self.get_context_data(**kwargs)
-        return self.render_to_response(context)
+        outputs = []
+        for companyfolder in self.samba.list_dir(rootfolder):
+            if companyfolder.is_directory and subfolder_re.match(companyfolder.name):
+                full_entry_path = '/'.join([rootfolder, companyfolder.name, path])
+                entry = self.samba.get_entry(full_entry_path)
+                if entry.is_directory:
+                    for entry in self.samba.list_dir(full_entry_path):
+                        output = {
+                            'name': entry.name,
+                            'path': '/'.join([path, entry.name]),
+                            'folder': entry.is_directory
+                        }
+                        if entry.is_directory:
+                            output['size'] = len(self.samba.list_dir('/'.join([rootfolder, companyfolder.name, path, entry.name])))
+                        else:
+                            output['type'] = os.path.splitext(entry.name)[1].lstrip('.')
+                            output['size'] = entry.filesize
+                            output['formatted_size'] = format_filesize(entry.filesize)
+                        outputs.append(output)
+        return outputs
 
     def get_context_data(self, **kwargs):
-        entries = []
-        for abs_path in self.folders:
-            folder_listing = os.listdir(abs_path)
-
-            for filename in folder_listing:
-                fullpath = os.path.join(abs_path, filename)
-                entry = {
-                    'name': filename,
-                    'path': '/' + os.path.join(*list_lstrip([self.relpath, filename])).replace(os.path.pathsep, '/')
-                }
-                if os.path.isfile(fullpath):
-                    entry['folder'] = False
-                    entry['type'] = os.path.splitext(filename)[1].lstrip('.')
-                    try:
-                        bytesize = entry['size'] = os.path.getsize(fullpath)
-                        entry['formatted_size'] = format_filesize(bytesize)
-                    except:
-                        pass
-                elif os.path.isdir(fullpath):
-                    entry['folder'] = True
-                    entry['size'] = len(os.listdir(fullpath))
-                else:
-                    continue
-                entries.append(entry)
+        path = '/'.join(self.path)
+        parent_path = ('/' + '/'.join(list_lstrip(self.path[:-1], ''))) if self.path else None
+        entries = self.get_entries(path)
         entries.sort(key=lambda entry: entry['name'])
-        parent_path = ('/' + os.path.join(*self.path[:-1])) if self.path else None
         context = {
-            'path': self.relpath,
+            'path': path,
             'parent': parent_path,
             'entries': entries
         }

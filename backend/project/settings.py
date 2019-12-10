@@ -193,9 +193,12 @@ OPENID_CONNECT = {}
 
 MOUNTS = {
     'claimant_account_statements': {  # 6.5
-        'maindir': '/tmp',
-        'subdir': '{cvr}.*',
-        'files': '.*'
+        'username': '',
+        'password': '',
+        'host': '',
+        'share': '',
+        'maindir': '/',
+        'subdir': '{cvr}.*'
     }
 }
 

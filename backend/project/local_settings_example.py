@@ -35,3 +35,14 @@ OPENID_CONNECT = {
     'private_key': '',  # used for signing messages passed to the OP
     'redirect_uri': 'https://akaptest.sullissivik.gl/oid/callback/'  # url registered at headnet to redirect the user to after a successfull login at OP
 }
+
+MOUNTS = {
+    'claimant_account_statements': {  # 6.5
+        'username': 'testuser',
+        'password': 'testpassword',
+        'host': 'fqdn or IP address',  # Samba server to access
+        'share': 'share name',  # Samba share on the host
+        'maindir': '/path',  # Path to the root dir where we operate from, ie. where company folders are located
+        'subdir': '{cvr}.*',  # Pattern to find folders for a given CVR number, relative to maindir
+    }
+}

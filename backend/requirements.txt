@@ -11,3 +11,5 @@ zeep>=3.4.0
 xmltodict>=0.12.0
 dict2xml>=1.6.1
 pdfkit
+pysmb>=1.1.28
+pysmbc>=1.0.18
