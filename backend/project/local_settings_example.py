@@ -37,3 +37,10 @@ OPENID_CONNECT = {
     'private_key': '',  # used for signing messages passed to the OP
     'redirect_uri': 'https://akaptest.sullissivik.gl/oid/callback/'  # url registered at headnet to redirect the user to after a successfull login at OP
 }
+
+NEMID_CONNECT = {
+    'federation_service': 'http://ip.demo.sullissivik.local/services/IdentityServiceV2.svc?wsdl',
+    'cookie_name': 'Sullissivik.Federation.Cookie',
+    'login_url': 'http://ip.demo.sullissivik.local/login.aspx',
+    'redirect_field': 'returnurl'
+}

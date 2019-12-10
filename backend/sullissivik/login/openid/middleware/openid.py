@@ -12,7 +12,8 @@ class LoggedIn:
         self.white_listed_urls = [reverse_lazy('openid:login'),
                                   reverse_lazy('openid:logout'),
                                   reverse_lazy('openid:callback'),
-                                  reverse_lazy('nemid:test')]
+                                  reverse_lazy('nemid:test'),
+                                  reverse_lazy('aka:login')]
 
     def __call__(self, request):
         # Code to be executed for each request before

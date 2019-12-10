@@ -99,7 +99,6 @@ LOGGING = {
 
 ALLOWED_HOSTS = ['*']
 
-LOGIN_URL = "http://ip.demo.sullissivik.local/login.aspx"
 SITE_URL = "https://aka.sullissivik.gl"
 
 AUTHENTICATION_BACKENDS = [
@@ -127,6 +126,7 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'sullissivik.login.nemid.middleware.nemid.LoggedIn',
     'sullissivik.login.openid.middleware.openid.LoggedIn',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -203,6 +203,8 @@ DAFO_CONNECT = {
     }
 }
 OPENID_CONNECT = {}
+
+NEMID_CONNECT = {}
 
 MOUNTS = {
     'claimant_account_statements': {  # 6.5

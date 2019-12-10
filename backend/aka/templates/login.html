@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block extra_headers %}
+{% endblock %}
+
+{% block content %}
+    <a href="{% url 'nemid:login' %}">NemID</a>
+    <a href="{% url 'openid:login' %}">OpenID</a>
+{% endblock %}

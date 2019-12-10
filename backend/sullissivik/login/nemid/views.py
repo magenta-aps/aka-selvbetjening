@@ -1,35 +1,10 @@
-from sullissivik.login.nemid.models import SessionOnlyUser
-from django.contrib.auth import authenticate
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
-from django.core.exceptions import PermissionDenied
-from django.views.generic import TemplateView
+from django.views import View
+from django.views.generic import TemplateView, RedirectView
 
 
-class AuthenticateMixin(LoginRequiredMixin):
-
-    redirect_field_name = 'returnurl'
-
-    def dispatch(self, request, *args, **kwargs):
-        request.user = SessionOnlyUser.get_user(request.session)
-        if not request.user.is_authenticated:
-            request.user = authenticate(request)
-            if request.user is not None and request.user.is_authenticated:
-                request.session['user_info'] = request.user.dict()
-            else:
-                return self.handle_no_permission()
-        return super(AuthenticateMixin, self).dispatch(request, *args, **kwargs)
-
-    def handle_no_permission(self):
-        if self.raise_exception:
-            raise PermissionDenied(self.get_permission_denied_message())
-        return_url = self.request.build_absolute_uri()
-        return redirect_to_login(
-            return_url, self.get_login_url(), self.get_redirect_field_name()
-        )
-
-
-class TestView(AuthenticateMixin, TemplateView):
+class TestView(TemplateView):
     template_name = 'sullissiviknemidlogin/test.html'
 
     def get_context_data(self, **kwargs):
@@ -37,3 +12,16 @@ class TestView(AuthenticateMixin, TemplateView):
         context.update(**kwargs)
         return context
 
+
+class Login(View):
+
+    def __init__(self):
+        super().__init__()
+        self.config = settings.NEMID_CONNECT
+
+    def get(self, request, *args, **kwargs):
+        return redirect_to_login(
+            request.build_absolute_uri(),
+            self.config.get('login_url'),
+            self.config.get('redirect_field')
+        )

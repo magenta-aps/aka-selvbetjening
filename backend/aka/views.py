@@ -109,6 +109,10 @@ class IndexTemplateView(TemplateView):
         return super().get_context_data(**context)
 
 
+class LoginView(TemplateView):
+    template_name = 'login.html'
+
+
 @method_decorator(csrf_exempt, name='dispatch')
 class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
 

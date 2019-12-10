@@ -44,6 +44,13 @@ OPENID_CONNECT = {
     'redirect_uri': '{{django_openid.redirect_uri}}'  # url registered at headnet to redirect the user to after a successfull login at OP
 }
 
+NEMID_CONNECT = {
+    'federation_service': 'http://ip.demo.sullissivik.local/services/IdentityServiceV2.svc?wsdl',
+    'cookie_name': 'Sullissivik.Federation.Cookie',
+    'login_url': 'http://ip.demo.sullissivik.local/login.aspx',
+    'redirect_field': 'returnurl'
+}
+
 MOUNTS = {
     'claimant_account_statements': {
         'maindir': os.path.join('media', '6.5'),
