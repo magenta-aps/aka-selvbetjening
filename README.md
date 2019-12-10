@@ -1,9 +1,6 @@
-Django Vangrant-Ansible Project template
+AKA Selvbetjenningsløsninger
 ========================================
 
-Basic template cloned from github.com:magenta-aps/vagrant-ansible-example.git
-
-For the Windows equivalent, see [here](https://github.com/magenta-aps/vagrant-ansible-example-windows)
 
 
 ## Requirements:
@@ -35,6 +32,10 @@ From `/vagrant` in the virtual machine:
 - `make test`: Will run the test-suite.
 - `make frontend`: Will build the frontend components.
 
+For further documentation for developers, run `make documentation`
+(possibly from the Virtual Machine).
+Then open `doc/_build/html/index.html` in a browser, and navigate to: *Docs/Development*
+
 ### Production:
 
 ### Running specific playbooks:
@@ -44,3 +45,13 @@ changing the `PLAYBOOK` environmental variable before running `vagrant provision
 as done by:
 
     PLAYBOOK=demo.yml vagrant provision
+
+#### For further refference on Ansible/Vagrant setup:
+Basic template cloned from github.com:magenta-aps/vagrant-ansible-example.git
+
+For the Windows equivalent, see [here](https://github.com/magenta-aps/vagrant-ansible-example-windows)
+
+### ansible
+
+deply to testing (vault pass is in bitwarden) 
+ansible-playbook -i akaptest01, -K playbooks/deploy.yml --ask-vault-pass

@@ -9,7 +9,7 @@ Methods:
 
     **Request URL:**
     
-    * /rentenota/fromYYYY-MM-DDtoYYYY-MM-DD
+    * /rentenota/[year]/[month]
     
     **Request headers:**
     

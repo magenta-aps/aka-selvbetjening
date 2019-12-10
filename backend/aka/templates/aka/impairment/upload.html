@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block extra_headers %}
+{% endblock %}
+
+{% block content %}
+    <article class="indberet_nedskrivning">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h1 class="page-header" data-trans="nedskrivning.title">{% trans 'nedskrivning.title' %}</h1>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-4">
+                        <a href="{% static '/csv/Nedskrivning.csv' %}" data-trans="common.download_template">{% trans 'common.download_template' %}</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        {% include 'aka/util/field.html' with field=form.file %}
+                    </div>
+                </div>
+
+                {% if form.non_field_errors %}
+                    <div class="err-msg">
+                        <span data-trans="common.upload.validation">{% trans 'common.upload.validation' %}</span>
+                        <ul class="errorlist">
+                            {% for error in form.non_field_errors.as_data %}
+                                <li {% if error.code %}data-trans="{{ error.code }}"{% endif %} {% if error.params %}data-trans-params="{{ error.params|json }}"{% endif %}>
+                                    {% if error.code %}
+                                        {% trans error.code as error_message %}
+                                        {{ error_message|format:error.params }}
+                                    {% else %}
+                                        {{ error }}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-2">
+                        <button type="submit" data-trans="common.gem">{% trans 'common.gem' %}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </article>
+{% endblock %}
