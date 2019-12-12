@@ -1,7 +1,10 @@
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
+from django.shortcuts import redirect
 from django.views import View
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import TemplateView
+from sullissivik.login.middleware import LoginManager
+from sullissivik.login.nemid.nemid import NemId
 
 
 class TestView(TemplateView):
@@ -20,8 +23,23 @@ class Login(View):
         self.config = settings.NEMID_CONNECT
 
     def get(self, request, *args, **kwargs):
+        user = NemId.authenticate(request)
+        if user.is_authenticated:
+            return redirect(LoginManager.get_backpage(request))
+
+        # Sullissivik redirects back here, so if login somehow fails (and we don't trust sullisivik to keep the user in that case), we re-check and direct back
         return redirect_to_login(
             request.build_absolute_uri(),
             self.config.get('login_url'),
             self.config.get('redirect_field')
         )
+
+
+class Logout(View):
+
+    def get(self, request):
+        if 'user_info' in request.session:
+            del request.session['user_info']
+        if 'login_method' in request.session:
+            del request.session['login_method']
+        return redirect('aka:index')

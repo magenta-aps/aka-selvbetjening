@@ -112,6 +112,11 @@ class IndexTemplateView(TemplateView):
 class LoginView(TemplateView):
     template_name = 'login.html'
 
+    def get_context_data(self, **kwargs):
+        context = {'back': self.request.GET.get('back')}
+        context.update(kwargs)
+        return super().get_context_data(**context)
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):

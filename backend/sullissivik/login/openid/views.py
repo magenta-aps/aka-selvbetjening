@@ -52,6 +52,7 @@ class Login(View):
 
         request.session['oid_state'] = state
         request.session['oid_nonce'] = nonce
+        request.session['login_method'] = 'openid'
         auth_req = client.construct_AuthorizationRequest(request_args=request_args)
         login_url = auth_req.request(client.authorization_endpoint)
         return HttpResponseRedirect(login_url)
@@ -128,8 +129,9 @@ class Callback(TemplateView):
                 request.session['user_info'] = user_info_dict
                 # always delete the state so it is not reused
                 del request.session['oid_state']
-                # after the oauth flow is done and we have the user_info redirect to the frontpage
-                return HttpResponseRedirect(reverse('index'))
+
+                # after the oauth flow is done and we have the user_info redirect to the original page or the frontpage
+                return HttpResponseRedirect(request.session.get('backpage', reverse('aka:index')))
 
 
 class Logout(View):
@@ -144,4 +146,4 @@ class Logout(View):
             del request.session['oid_nonce']
         if 'user_info' in request.session:
             del request.session['user_info']
-        return HttpResponseRedirect('index')
+        return HttpResponseRedirect('aka:index')

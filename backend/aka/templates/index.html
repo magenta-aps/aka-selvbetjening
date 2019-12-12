@@ -9,36 +9,36 @@
 {% block content %}
 <nav class="toc">
     {% if cvr %}
-    <a href="{% url 'rentenota' %}" class="toc-link">
+    <a href="{% url 'aka:rentenota' %}" class="toc-link">
         <span data-trans="index.rentenota">{% trans 'index.rentenota' %}</span>
     </a>
-    <a href="{% url 'inkassosag' %}" class="toc-link">
+    <a href="{% url 'aka:inkassosag' %}" class="toc-link">
         <span data-trans="index.fordring">{% trans 'index.fordring' %}</span>
     </a>
-    <a href="{% url 'inkassosag-upload' %}" class="toc-link">
+    <a href="{% url 'aka:inkassosag-upload' %}" class="toc-link">
         <span data-trans="index.fordring-upload">{% trans 'index.fordring-upload' %}</span>
     </a>
-    <a href="{% url 'nedskrivning' %}" class="toc-link">
+    <a href="{% url 'aka:nedskrivning' %}" class="toc-link">
         <span data-trans="index.nedskrivning">{% trans 'index.nedskrivning' %}</span>
     </a>
-    <a href="{% url 'nedskrivning-upload' %}" class="toc-link">
+    <a href="{% url 'aka:nedskrivning-upload' %}" class="toc-link">
         <span data-trans="index.nedskrivning-upload">{% trans 'index.nedskrivning-upload' %}</span>
     </a>
-    <a href="{% url 'loentraek' %}" class="toc-link">
+    <a href="{% url 'aka:loentraek' %}" class="toc-link">
         <span data-trans="index.løntræk">{% trans 'index.løntræk' %}</span>
     </a>
-    <a href="{% url 'loentraek-upload' %}" class="toc-link">
+    <a href="{% url 'aka:loentraek-upload' %}" class="toc-link">
         <span data-trans="index.løntræk-upload">{% trans 'index.løntræk-upload' %}</span>
     </a>
-    <a href="{% url 'fordringshaverkonto' path='/' %}" class="toc-link">
+    <a href="{% url 'aka:fordringshaverkonto' path='/' %}" class="toc-link">
         <span data-trans="index.fordringshaverkonto">{% trans 'index.fordringshaverkonto' %}</span>
     </a>
-    <a href="{% url 'arbejdsgiverkonto' %}" class="toc-link">
+    <a href="{% url 'aka:arbejdsgiverkonto' %}" class="toc-link">
         <span data-trans="index.arbejdsgiverkonto">{% trans 'index.arbejdsgiverkonto' %}</span>
     </a>
     {% endif %}
     {% if cpr %}
-    <a href="{% url 'borgerkonto' %}" class="toc-link">
+    <a href="{% url 'aka:borgerkonto' %}" class="toc-link">
         <span data-trans="index.borgerkonto">{% trans 'index.borgerkonto' %}</span>
     </a>
     {% endif %}

@@ -12,7 +12,7 @@ from lxml import etree
 from xmltodict import parse as xml_to_dict
 
 
-@override_settings(OPENID_CONNECT={'enabled': False})
+@override_settings(OPENID_CONNECT={'enabled': False}, NEMID_CONNECT={'enabled': False})
 class BasicTestCase(TestMixin, TestCase):
 
     def setUp(self):

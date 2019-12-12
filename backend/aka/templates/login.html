@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
-{% load static %}
 {% load i18n %}
 
 {% block extra_headers %}
 {% endblock %}
 
 {% block content %}
-    <a href="{% url 'nemid:login' %}">NemID</a>
-    <a href="{% url 'openid:login' %}">OpenID</a>
+    <a href="{% url 'nemid:login' %}{% if back %}?back={{ back }}{% endif %}">NemID</a>
+    <a href="{% url 'openid:login' %}{% if back %}?back={{ back }}{% endif %}">OpenID</a>
 {% endblock %}
