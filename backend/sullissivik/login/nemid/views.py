@@ -37,9 +37,15 @@ class Login(View):
 
 class Logout(View):
 
+    def __init__(self):
+        super().__init__()
+        self.config = settings.NEMID_CONNECT
+
     def get(self, request):
         if 'user_info' in request.session:
             del request.session['user_info']
         if 'login_method' in request.session:
             del request.session['login_method']
-        return redirect('aka:index')
+        response = redirect('aka:index')
+        response.delete_cookie(self.config['cookie_name'])
+        return response
