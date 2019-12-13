@@ -19,12 +19,11 @@ class LoginManager:
 
         # Urls that should not redirect an anonymous user to login page
         self.white_listed_urls = NemId.whitelist + OpenId.whitelist + [
-            reverse_lazy('aka:login'),
+            reverse('aka:login'),
             '/favicon.ico',
-            reverse_lazy('aka:javascript-language-catalog', kwargs={'locale': 'da'}),
+            reverse('aka:javascript-language-catalog', kwargs={'locale': 'da'}),
             reverse('aka:javascript-language-catalog', kwargs={'locale': 'kl'}),
         ]
-        print(self.white_listed_urls)
 
     def __call__(self, request):
         if self.enabled:
