@@ -158,6 +158,8 @@ TIME_ZONE = 'America/Godthab'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+LANGUAGE_COOKIE_NAME = 'Sullissivik.Portal.Lang'
+LANGUAGE_COOKIE_DOMAIN = 'sullissivik.gl'
 LOCALE_PATHS = [ os.path.join(BASE_DIR, 'i18n') ]
 LANGUAGES = [
     ('da', _('Danish')),
