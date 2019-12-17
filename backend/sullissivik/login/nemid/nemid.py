@@ -1,8 +1,14 @@
+import sys
+import traceback
+
 from django.conf import settings
 from django.urls import reverse_lazy
+from requests import Session
 from sullissivik.login.nemid.models import SessionOnlyUser
-from zeep import Client
+from zeep import Client, Transport
 from zeep.helpers import serialize_object
+from zeep.plugins import HistoryPlugin
+from zeep.wsse import Signature
 
 
 class NemId:
@@ -19,7 +25,24 @@ class NemId:
                 config = settings.NEMID_CONNECT
                 cookie = request.COOKIES.get(config.get('cookie_name'))
                 if cookie is not None:
-                    client = Client(config.get('federation_service'))
+
+                    session = Session()
+                    session.cert = (
+                        config['client_certificate'],
+                        config['private_key']
+                    )
+
+                    client = Client(
+                        config.get('federation_service'),
+                        transport=Transport(
+                            session=session
+                        ),
+                        # plugins=[HistoryPlugin()],
+                        # wsse=Signature(
+                        #     config['private_key'],
+                        #     config['client_certificate']
+                        # ),
+                    )
                     # Convert zeep object to OrderedDict
                     user_data = serialize_object(client.service.GetUser(cookie))
                     # federationPid = user_data.get('FederationPid')
@@ -33,8 +56,11 @@ class NemId:
                     user = request.user = SessionOnlyUser.get_user(request.session, cpr, name)
                     if request.user.is_authenticated:
                         request.session['user_info'] = user.dict()
-            except:
-                pass
+            except Exception as e:
+                print(e)
+                exc_info = sys.exc_info()
+                traceback.print_exception(*exc_info)
+                raise e
         return user
 
     whitelist = [reverse_lazy('nemid:login')]

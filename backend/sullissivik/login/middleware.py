@@ -29,15 +29,14 @@ class LoginManager:
         if self.enabled:
             # When any non-whitelisted page is loaded, check if we are authenticated
             if request.path not in self.white_listed_urls:
-                print(request.path+" is not in "+str(self.white_listed_urls))
+                print("LoginManager.__call__")
                 if 'user_info' not in request.session or not request.session['user_info']:
                     if not self.authenticate(request):  # The user might not have anything in his session, but he may have a cookie that can log him in anyway
                         backpage = urlquote(request.path)
                         if request.GET:
                             backpage += "?" + urlencode(request.GET, True)
+                        print("Redirecting to aka login")
                         return redirect(reverse_lazy('aka:login') + "?back=" + backpage)
-            else:
-                print(request.path+" is in "+str(self.white_listed_urls))
         return self.get_response(request)
 
     @staticmethod

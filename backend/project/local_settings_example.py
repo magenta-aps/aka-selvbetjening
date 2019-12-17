@@ -42,5 +42,7 @@ NEMID_CONNECT = {
     'federation_service': 'http://ip.demo.sullissivik.local/services/IdentityServiceV2.svc?wsdl',
     'cookie_name': 'Sullissivik.Federation.Cookie',
     'login_url': 'http://ip.demo.sullissivik.local/login.aspx',
-    'redirect_field': 'returnurl'
+    'redirect_field': 'returnurl',
+    'client_certificate': '/etc/ssl/nemid/aka.crt',
+    'private_key': '/etc/ssl/nemid/aka.key',
 }

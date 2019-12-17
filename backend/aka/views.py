@@ -113,6 +113,7 @@ class LoginView(TemplateView):
     template_name = 'login.html'
 
     def get_context_data(self, **kwargs):
+        print("Aka login")
         context = {'back': self.request.GET.get('back')}
         context.update(kwargs)
         return super().get_context_data(**context)

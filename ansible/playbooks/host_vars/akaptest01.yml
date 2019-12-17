@@ -54,10 +54,12 @@ django_openid:
   redirect_uri: "https://akaptest.sullissivik.gl/oid/callback/"
 
 django_nemid:
-  federation_service: "https://ip.sullissivik.gl/services/IdentityServiceV2.svc?wsdl"
+  federation_service: "https://qaip.sullissivik.gl/services/IdentityServiceV2.svc?wsdl"
   cookie_name: "Sullissivik.Federation.Cookie"
-  login_url: "https://ip.sullissivik.gl/login.aspx"
+  login_url: "https://qaip.sullissivik.gl/login.aspx"
   redirect_field: "returnurl"
+  client_certificate: "/etc/ssl/openid/sullissivik_company_tax_test.cert"
+  private_key: "/etc/ssl/openid/sullissivik_company_tax_test.key"
 
 restart_apache: True
 
