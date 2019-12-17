@@ -82,11 +82,24 @@ class CustomJavaScriptCatalog(JavaScriptCatalog):
 
 
 class SetLanguageView(View):
+
+    locale_map = {
+        'da': 'da-DK',
+        'kl': 'kl-GL'
+    }
+
     def post(self, request, *args, **kwargs):
         language = request.POST.get('language', settings.LANGUAGE_CODE)
         translation.activate(language)
-        request.session[translation.LANGUAGE_SESSION_KEY] = language
-        return JsonResponse("OK", safe=False)
+        # request.session[translation.LANGUAGE_SESSION_KEY] = language
+        response = JsonResponse("OK", safe=False)
+        response.set_cookie(
+            settings.LANGUAGE_COOKIE_NAME,
+            self.locale_map.get(language, language),
+            domain=settings.LANGUAGE_COOKIE_DOMAIN,
+            path=settings.LANGUAGE_COOKIE_PATH,
+        )
+        return response
 
 
 logger = logging.getLogger(__name__)
@@ -113,7 +126,6 @@ class LoginView(TemplateView):
     template_name = 'login.html'
 
     def get_context_data(self, **kwargs):
-        print("Aka login")
         context = {'back': self.request.GET.get('back')}
         context.update(kwargs)
         return super().get_context_data(**context)
