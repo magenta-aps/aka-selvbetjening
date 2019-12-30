@@ -47,7 +47,8 @@ urlpatterns = [
     url(r'^nedskrivning$', NedskrivningView.as_view(), name='nedskrivning'),
     url(r'^nedskrivning/upload$', NedskrivningUploadView.as_view(), name='nedskrivning-upload'),
     url(r'^netsopkraevning$', NetsopkraevningView.as_view(), name='netsopkraevning'),
-    url(r'^fordringshaverkonto(?P<path>/.*)$', FordringshaverkontoView.as_view(), name='fordringshaverkonto'),
+    url(r'^fordringshaverkonto(?P<path>/.*)$', FordringshaverkontoView.as_view(), name='fordringshaverkonto-path'),
+    url(r'^fordringshaverkonto/$', FordringshaverkontoView.as_view(), name='fordringshaverkonto', kwargs={'path': '/'}),
     url(r'^arbejdsgiverkonto$', ArbejdsgiverKontoView.as_view(), name='arbejdsgiverkonto'),
     url(r'^borgerkonto$', BorgerKontoView.as_view(), name='borgerkonto'),
 ]
