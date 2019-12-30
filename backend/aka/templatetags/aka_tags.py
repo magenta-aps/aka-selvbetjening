@@ -3,6 +3,7 @@ import re
 from html import unescape
 
 from django.template.defaultfilters import register
+from django.utils.http import urlencode, urlquote
 from django.utils.translation import gettext
 
 trans_re = re.compile("_\\((.*)\\)")
@@ -47,3 +48,20 @@ def analyze(data):
 @register.filter
 def startswith(text, prefix):
     return type(text) == str and text.startswith(prefix)
+
+
+@register.filter
+def addstr(arg1, arg2):
+    return ''.join([str(a) if a is not None else '' for a in [arg1, arg2]])
+
+
+@register.filter
+def back(url, backurl):
+    if backurl:
+        return ''.join([
+            url,
+            '&' if '?' in url else '?',
+            'back=',
+            urlquote(backurl)
+        ])
+    return url

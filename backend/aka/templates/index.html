@@ -30,15 +30,24 @@
 
 <nav class="toc row">
     {% if cvr %}
-        {% include 'toc-item.html' with url='rentenota' text='index.rentenota' icon='tax' %}
-        {% include 'toc-item.html' with url='inkassosag' text='index.fordring' icon='business' %}
-        {% include 'toc-item.html' with url='inkassosag-upload' text='index.fordring-upload' icon='business' %}
-        {% include 'toc-item.html' with url='nedskrivning' text='index.rentenota' icon='tax' %}
-        {% include 'toc-item.html' with url='nedskrivning-upload' text='index.nedskrivning-upload' icon='tax' %}
-        {% include 'toc-item.html' with url='loentraek' text='index.løntræk' icon='briefcase' %}
-        {% include 'toc-item.html' with url='loentraek-upload' text='index.løntræk-upload' icon='briefcase' %}
-        {% include 'toc-item.html' with url='fordringshaverkonto' text='index.fordringshaverkonto' icon='tax' %}
-        {% include 'toc-item.html' with url='arbejdsgiverkonto' text='index.arbejdsgiverkonto' icon='tax' %}
+        {% url 'aka:rentenota' as rentenota_url %}
+        {% include 'toc-item.html' with url=rentenota_url text='index.rentenota' icon='tax' %}
+        {% url 'aka:inkassosag' as inkassosag_url %}
+        {% include 'toc-item.html' with url=inkassosag_url text='index.fordring' icon='business' %}
+        {% url 'aka:inkassosag-upload' as inkassosag_upload_url %}
+        {% include 'toc-item.html' with url=inkassosag_upload_url text='index.fordring-upload' icon='business' %}
+        {% url 'aka:nedskrivning' as nedskrivning_url %}
+        {% include 'toc-item.html' with url=nedskrivning_url text='index.rentenota' icon='tax' %}
+        {% url 'aka:nedskrivning-upload' as nedskrivning_upload_url %}
+        {% include 'toc-item.html' with url=nedskrivning_upload_url text='index.nedskrivning-upload' icon='tax' %}
+        {% url 'aka:loentraek' as loentraek_url %}
+        {% include 'toc-item.html' with url=loentraek_url text='index.løntræk' icon='briefcase' %}
+        {% url 'aka:loentraek-upload' as loentraek_upload_url %}
+        {% include 'toc-item.html' with url=loentraek_upload_url text='index.løntræk-upload' icon='briefcase' %}
+        {% url 'aka:fordringshaverkonto' as fordringshaverkonto_url %}
+        {% include 'toc-item.html' with url=fordringshaverkonto_url text='index.fordringshaverkonto' icon='tax' %}
+        {% url 'aka:arbejdsgiverkonto' as arbejdsgiverkonto_url %}
+        {% include 'toc-item.html' with url=arbejdsgiverkonto_url text='index.arbejdsgiverkonto' icon='tax' %}
     {% endif %}
     {% if cpr %}
         {% include 'toc-item.html' with url='borgerkonto' text='index.borgerkonto' icon='tax' %}

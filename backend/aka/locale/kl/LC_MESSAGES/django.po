@@ -41,6 +41,12 @@ msgstr "Print [kl]"
 msgid "common.pdf"
 msgstr "Download PDF [kl]"
 
+msgid "login.openid"
+msgstr "Log ind som virksomhed [kl]"
+
+msgid "login.nemid"
+msgstr "Log ind som borger [kl]"
+
 msgid "prisme.error"
 msgstr ""
 

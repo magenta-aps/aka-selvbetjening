@@ -45,6 +45,12 @@ msgstr "Download PDF"
 msgid "common.download_template"
 msgstr "Download skabelon"
 
+msgid "login.openid"
+msgstr "Log ind som virksomhed"
+
+msgid "login.nemid"
+msgstr "Log ind som borger"
+
 msgid "prisme.error"
 msgstr ""
 
