@@ -54,6 +54,9 @@
             </header>
             {% endif %}
             <main>
+                {% if company %}
+                    <span id="company">{{ company.name }}</span>
+                {% endif %}
                 {% block content %}
                 {% endblock %}
             </main>
