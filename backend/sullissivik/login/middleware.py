@@ -29,7 +29,7 @@ class LoginManager:
     def __call__(self, request):
         if self.enabled:
             # When any non-whitelisted page is loaded, check if we are authenticated
-            if request.path.rstrip('/') not in self.white_listed_urls:
+            if request.path not in self.white_listed_urls and request.path.rstrip('/') not in self.white_listed_urls:
                 if 'user_info' not in request.session or not request.session['user_info']:
                     if not self.authenticate(request):  # The user might not have anything in his session, but he may have a cookie that can log him in anyway
                         backpage = urlquote(request.path)
