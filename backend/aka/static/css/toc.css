@@ -2,6 +2,60 @@
     padding: 1rem 2rem;
 }
 
-.toc-link {
+.columns {
+    position: relative;
+    padding-left: .46875rem;
+    padding-right: .46875rem;
+    float: left;
+}
+
+.medium-4 {
+    width: 33.3333333333%;
+}
+
+.row {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    max-width: 78.75rem;
+}
+
+p {
+    font-family: inherit;
+    font-weight: normal;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: .9375rem;
+    text-rendering: optimizeLegibility;
+}
+
+.box__content {
+    padding-top: 2.5rem;
+    font-size: .9375rem;
+    font-weight: bold;
+    position: relative;
+}
+
+.box__icon {
+    width: 42px;
+    height: 42px;
+    fill: #FBB03B;
+    margin-bottom: .9375rem;
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+a.box--selfservice {
     display: block;
+    margin-bottom: .9375rem;
+    color: #fff;
+    text-align: center;
+    background-color: #31495B;
+    min-height: 180px;
+    text-decoration: none;
+    font-weight: normal;
 }

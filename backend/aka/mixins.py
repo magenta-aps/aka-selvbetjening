@@ -10,6 +10,8 @@ from django.template.loader import select_template
 from django.template.response import TemplateResponse
 from django.views.generic.edit import FormMixin
 
+from aka.clients.dafo import Dafo
+
 
 class ErrorHandlerMixin(object):
     def dispatch(self, request, *args, **kwargs):
@@ -51,6 +53,15 @@ class RequireCvrMixin(object):
         except (KeyError, TypeError):
             raise PermissionDenied('no_cvr')
         return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        try:
+            context['company'] = Dafo().lookup_cvr(self.cvr)
+        except:
+            pass
+        context.update(kwargs)
+        return super().get_context_data(**context)
 
 
 class SimpleGetFormMixin(FormMixin):
