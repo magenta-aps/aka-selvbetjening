@@ -102,7 +102,7 @@ select {
     -moz-appearance: none;
     appearance: none;
     background: url(../img/sullisivk_arrow.svg) no-repeat #ddd;
-    background-position-x: right;
+    background-position-x: right 10px;
     background-position-y: 50%;
     background-size: 1.5em
 }
