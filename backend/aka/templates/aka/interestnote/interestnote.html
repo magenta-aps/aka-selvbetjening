@@ -103,7 +103,7 @@
             {% if errors %}
                 <div class="errors">
                 {% for error in errors %}
-                    <div class="error">
+                    <div class="error" data-trans="{{ error.key }}" data-trans-params="{{ error.params|json }}">
                         {{ error.key|format:error.params }}
                     </div>
                 {% endfor %}
