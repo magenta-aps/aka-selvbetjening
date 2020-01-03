@@ -48,9 +48,6 @@ msgstr "Download skabelon"
 msgid "prisme.error"
 msgstr ""
 
-msgid "prisme.error_250"
-msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber}"
-
 msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet"
 
@@ -372,6 +369,9 @@ msgstr "År"
 
 msgid "rentenota.month"
 msgstr "Måned"
+
+msgid "rentenota.error_250"
+msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne periode {start} {end}"
 
 
 # NY18

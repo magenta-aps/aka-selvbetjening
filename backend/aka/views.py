@@ -318,7 +318,7 @@ class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
             codebtors=codebtors,
             files=[file for name, file in form.files.items()]
         )
-        prisme_reply = prisme.process_service(claim)[0]
+        prisme_reply = prisme.process_service(claim, 'fordring')[0]
         return prisme_reply
 
     def form_valid(self, form, formset):
@@ -399,7 +399,7 @@ class LoentraekView(RequireCvrMixin, FormSetView, FormView):
                     if subform.cleaned_data
                 ]
             )
-            rec_id = prisme.process_service(payroll)[0].rec_id
+            rec_id = prisme.process_service(payroll, 'loentraek')[0].rec_id
             return TemplateResponse(
                 request=self.request,
                 template="aka/payroll/success.html",
@@ -474,7 +474,7 @@ class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
             amount_balance=-abs(form.cleaned_data.get('beloeb', 0)),
             claim_number_seq=form.cleaned_data.get('sekvensnummer')
         )
-        return prisme.process_service(impairment)[0].rec_id
+        return prisme.process_service(impairment, 'nedskrivning')[0].rec_id
 
     def form_valid(self, form):
         prisme = Prisme()
@@ -508,7 +508,7 @@ class NedskrivningUploadView(NedskrivningView):
                 rec_ids.append(self.send_impairment(subform, prisme))
             except PrismeException as e:
                 if e.code == 250:
-                    errors.append({'key': 'nedskrivning.error_250', 'params': e.params})
+                    errors.append(e.as_error_dict)
                 else:
                     raise e
 
@@ -540,13 +540,15 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
     form_class = InterestNoteForm
     template_name = 'aka/interestnote/interestnote.html'
     posts = None
+    errors = []
 
     def get_posts(self, form):
         prisme = Prisme()
         posts = []
         # Response is of type PrismeInterestNoteResponse
         interest_note_data = prisme.process_service(
-            PrismeInterestNoteRequest(self.cvr, form.cleaned_data['year'], form.cleaned_data['month'])
+            PrismeInterestNoteRequest(self.cvr, form.cleaned_data['year'], form.cleaned_data['month']),
+            'rentenota'
         )
 
         for interest_note_response in interest_note_data:
@@ -573,7 +575,11 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
 
     def form_valid(self, form):
         self.form = form
-        self.posts = self.get_posts(form)
+        try:
+            self.posts = self.get_posts(form)
+        except PrismeException as e:
+            self.errors.append(e.as_error_dict)
+
         if 'pdf' in self.request.GET:
             return self.render_pdf()
         return super().form_valid(form)
@@ -585,6 +591,7 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
             'posts': self.posts,
             'total': sum([float(post['InterestAmount']) for post in self.posts])
             if self.posts is not None else None,
+            'errors': self.errors
         }
         context.update(kwargs)
         return super().get_context_data(**context)
