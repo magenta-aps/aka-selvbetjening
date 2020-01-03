@@ -51,6 +51,13 @@ address {
     }
 }
 
+.userinfo {
+    padding: 0.5rem 2rem 0 2rem;
+    margin: 0 auto;
+    width: 78.75rem;
+    text-align: right;
+}
+
 /* Links */
 
 a,

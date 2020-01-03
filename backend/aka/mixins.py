@@ -37,7 +37,20 @@ class ErrorHandlerMixin(object):
             )
 
 
-class RequireCprMixin(object):
+class HasUserMixin(object):
+    def get_context_data(self, **kwargs):
+        context = {}
+        try:
+            context['company'] = Dafo().lookup_cvr(
+                self.request.session['user_info']['CVR']
+            )
+        except:
+            pass
+        context.update(kwargs)
+        return super().get_context_data(**context)
+
+
+class RequireCprMixin(HasUserMixin):
     def dispatch(self, request, *args, **kwargs):
         try:
             self.cpr = request.session['user_info']['CPR']
@@ -46,22 +59,13 @@ class RequireCprMixin(object):
         return super().dispatch(request, *args, **kwargs)
 
 
-class RequireCvrMixin(object):
+class RequireCvrMixin(HasUserMixin):
     def dispatch(self, request, *args, **kwargs):
         try:
             self.cvr = request.session['user_info']['CVR']
         except (KeyError, TypeError):
             raise PermissionDenied('no_cvr')
         return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = {}
-        try:
-            context['company'] = Dafo().lookup_cvr(self.cvr)
-        except:
-            pass
-        context.update(kwargs)
-        return super().get_context_data(**context)
 
 
 class SimpleGetFormMixin(FormMixin):

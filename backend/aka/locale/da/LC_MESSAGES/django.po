@@ -45,6 +45,9 @@ msgstr "Download PDF"
 msgid "common.download_template"
 msgstr "Download skabelon"
 
+msgid "common.logged_in_as"
+msgstr "Logget ind som: {navn}"
+
 msgid "login.openid"
 msgstr "Log ind som virksomhed"
 

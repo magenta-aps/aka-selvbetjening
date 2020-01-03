@@ -18,6 +18,7 @@ from aka.forms import KontoForm
 from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
+from aka.mixins import HasUserMixin
 from aka.mixins import PdfRendererMixin
 from aka.mixins import RequireCprMixin
 from aka.mixins import RequireCvrMixin
@@ -105,7 +106,7 @@ class SetLanguageView(View):
 logger = logging.getLogger(__name__)
 
 
-class IndexTemplateView(TemplateView):
+class IndexTemplateView(HasUserMixin, TemplateView):
     template_name = 'index.html'
 
     @method_decorator(ensure_csrf_cookie)
@@ -115,8 +116,8 @@ class IndexTemplateView(TemplateView):
     def get_context_data(self, **kwargs):
         user_info = self.request.session.get('user_info', {})
         context = {
-            'cpr': 1, # user_info.get('CPR'),
-            'cvr': 2, # user_info.get('CVR')
+            'cpr': user_info.get('CPR'),
+            'cvr': user_info.get('CVR')
         }
         context.update(kwargs)
         return super().get_context_data(**context)
