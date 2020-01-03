@@ -383,7 +383,7 @@ msgid "rentenota.month"
 msgstr "Måned [kl]"
 
 msgid "rentenota.error_250"
-msgstr "Der findes ingen renter for dette CPR/CVR ({cvr}) eller for den angivne periode ({start}) ({end}) [kl]"
+msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne periode {start} {end} [kl]"
 
 
 # NY18
