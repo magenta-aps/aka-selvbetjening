@@ -14,7 +14,7 @@ from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger(__name__)
 
-valid_date_formats = ['%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%Y-%m-%d']
+valid_date_formats = ['%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%Y-%m-%d', '%d-%m-%y']
 
 
 class CsvUploadMixin(object):
@@ -235,11 +235,11 @@ class InkassoForm(forms.Form):
     def convert_group_type_text(groupname, typename):
         group_match = [group for group in groups if group['name'] == groupname]
         if not group_match:
-            raise ValidationError('fordringsgruppe_not_found')
+            raise ValidationError('error.fordringsgruppe_not_found')
         group = group_match[0]
         type_match = [type for type in group['sub_groups'] if type['name'] == typename]
         if not type_match:
-            raise ValidationError('fordringstype_not_found')
+            raise ValidationError('error.fordringstype_not_found')
         type = type_match[0]
         return (group['id'], "%d.%d" % (type['group_id'], type['type_id']))
 

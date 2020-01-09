@@ -240,6 +240,12 @@ msgstr "Kontaktperson [kl]"
 msgid "fordring.noter"
 msgstr "Noter [kl]"
 
+msgid "fordring.success"
+msgstr "Fordring oprettet [kl]"
+
+msgid "fordring.result"
+msgstr "Oprettede fordingsnumre: [kl]"
+
 
 # 6.2
 
