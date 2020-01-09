@@ -42,11 +42,20 @@ class CsvUploadMixin(object):
 
         # Use self.add_error to add validation errors on the file contents,
         # as there may be several in the same file
-        for row_index, row in enumerate(rows, start=1):
-            subform = self.subform_class(data=self.transform_row(row))
+        for row_index, row in enumerate(rows, start=2):
+            data=self.transform_row(row)
+            subform = self.subform_class(data=data)
+            missing = subform.fields.keys() - data
+            if missing:
+                for field in missing:
+                    self.add_error('file', ValidationError(
+                        'error.upload_validation_header',
+                        code='error.upload_validation_header',
+                        params={'field': field}
+                    ))
             if not subform.is_valid():  # Catch row errors early
                 for field, errorlist in subform.errors.items():
-                    if 'error.required' in errorlist and field not in row:
+                    if 'error.required' in errorlist and field not in row and field not in missing:
                         self.add_error('file', ValidationError(
                             'error.upload_validation_header',
                             code='error.upload_validation_header',
