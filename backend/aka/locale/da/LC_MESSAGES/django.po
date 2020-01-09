@@ -120,6 +120,9 @@ msgstr "Fordringstype findes ikke i fordringsgruppe"
 msgid "error.multiple_fordringsgruppe_found"
 msgstr "Konfigurationsfejl på serveren"
 
+msgid "error.invalid_cpr"
+msgstr "Ugyldigt CPR-nummer"
+
 
 # File lists
 

@@ -7,7 +7,8 @@ from aka.data.fordringsgruppe import groups
 from aka.utils import get_ordereddict_key_index, spreadsheet_col_letter
 from django import forms
 from django.conf import settings
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, MinLengthValidator, \
+    MaxLengthValidator
 from django.forms import ValidationError
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
@@ -40,12 +41,14 @@ class CsvUploadMixin(object):
         if len(rows) == 0:
             raise ValidationError('error.upload_empty', code='error.upload_empty')
 
+        found_missing = set()
         # Use self.add_error to add validation errors on the file contents,
         # as there may be several in the same file
         for row_index, row in enumerate(rows, start=2):
             data=self.transform_row(row)
             subform = self.subform_class(data=data)
-            missing = subform.fields.keys() - data
+            missing = subform.fields.keys() - data - found_missing
+            found_missing.update(missing)
             if missing:
                 for field in missing:
                     self.add_error('file', ValidationError(
@@ -66,6 +69,7 @@ class CsvUploadMixin(object):
                     except ValueError:
                         col_index = None
                     for error in errorlist.as_data():
+                        print(error)
                         self.add_error('file', ValidationError(
                             'error.upload_validation_item',
                             code='error.upload_validation_item',
@@ -341,7 +345,7 @@ class LoentraekFormItem(forms.Form):
     cpr = forms.CharField(
         required=True,
         error_messages={'required': 'error.required'},
-        min_length=10,
+        min_length=9,
         max_length=10
     )
     agreement_number = forms.CharField(
@@ -360,6 +364,18 @@ class LoentraekFormItem(forms.Form):
         error_messages={'required': 'error.required'},
         min_value=0.01
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for validator in self.fields['cpr'].validators:
+            if isinstance(validator, (MinLengthValidator, MaxLengthValidator)):
+                validator.message = "error.invalid_cpr"
+
+    def clean_cpr(self):
+        cpr = self.cleaned_data['cpr']
+        if len(cpr) == 9:
+            cpr = '0' + cpr
+        return cpr
 
 
 class LoentraekUploadForm(CsvUploadMixin, LoentraekForm):
