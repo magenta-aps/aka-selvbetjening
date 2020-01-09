@@ -78,6 +78,9 @@ msgstr "Web-adresse"
 msgid "error.from_date_before_to_date"
 msgstr "Fra-dato skal være før til-dato"
 
+msgid "error.start_date_before_end_date"
+msgstr "Start-dato skal være før slut-dato"
+
 msgid "error.invalid_date"
 msgstr "Ugyldig dato"
 

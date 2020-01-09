@@ -273,6 +273,10 @@ class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
     form_class = InkassoForm
     template_name = 'aka/claim/form.html'
 
+    factory_kwargs = {
+        'extra': 1
+    }
+
     def get_formset(self):
         return formset_factory(InkassoCoDebitorFormItem, **self.get_factory_kwargs())
 
