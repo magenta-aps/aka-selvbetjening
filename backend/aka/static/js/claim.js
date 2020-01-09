@@ -18,15 +18,16 @@ $(function(){
             const group = group_dict[this.value];
             typeSelect.empty();
             for (let subgroup_id in group) {
-                let subGroup = group[subgroup_id];
-                let option = $("<option>");
-                option.attr("value", subgroup_id);
-                option.text(subGroup['name']);
-                typeSelect.append(option);
+                if (group.hasOwnProperty(subgroup_id)) {
+                    let subGroup = group[subgroup_id];
+                    let option = $("<option>");
+                    option.attr("value", subgroup_id);
+                    option.text(subGroup['name']);
+                    typeSelect.append(option);
+                }
             }
+            updateChildRequired();
         };
-        groupSelect.change(updateType);
-        groupSelect.each(updateType);
 
         const updateChildRequired = function () {
             let subgroup = group_dict[groupSelect.val()][typeSelect.val()];
@@ -38,6 +39,8 @@ $(function(){
                 childCprParents.hide();
             }
         };
+        groupSelect.change(updateType);
+        groupSelect.each(updateType);
         typeSelect.change(updateChildRequired);
         typeSelect.each(updateChildRequired);
     }
