@@ -18,16 +18,31 @@ prisme_settings = settings.PRISME_CONNECT
 class PrismeException(AkaException):
 
     title = "prisme.error"
-    error_250_re = re.compile(r'Der findes ikke en inkassosag med det eksterne ref.nr. (.*)')
+    error_parse = {
+        '250': {
+            'inkasso': {
+                're': re.compile(r'Der findes ikke en inkassosag med det eksterne ref.nr. (.*)'),
+                'args': ['refnumber']
+            },
+            'rentenota': {
+                're': re.compile(r'Der findes ingen renter for dette CPR/CVR (\d{8}) eller for den angivne periode (\d{2}-\d{2}-\d{4}) (\d{2}-\d{2}-\d{4})'),
+                'args': ['cvr', 'start', 'end']
+            }
+        }
+    }
 
-    def __init__(self, code, text):
+    def __init__(self, code, text, context):
         super(PrismeException, self).__init__(f"prisme.error_{code}", text=text)
         self.code = int(code)
         self.text = text
+        self.context = context
         try:
-            if self.code == 250:
-                match = self.error_250_re.search(text)
-                self.params['refnumber'] = match.group(1)
+            parsedata = self.error_parse.get(str(code)).get(context)
+            if parsedata:
+                match = parsedata['re'].search(text)
+                if match:
+                    for i, argname in enumerate(parsedata['args'], start=1):
+                        self.params[argname] = match.group(i)
         except Exception as e:
             print(e)
             pass
@@ -41,6 +56,10 @@ class PrismeException(AkaException):
 
     def __str__(self):
         return f"Error in response from Prisme. Code: {self.code}, Text: {self.text}"
+
+    @property
+    def as_error_dict(self):
+        return {'key': "%s.error_250" % self.context, 'params': self.params}
 
 
 class PrismeNotFoundException(AkaException):
@@ -437,7 +456,7 @@ class Prisme(object):
             'description': response.serverVersionDescription
         }
 
-    def process_service(self, request_object):
+    def process_service(self, request_object, context):
         request_class = self.client.get_type("tns:GWSRequestDCFUJ")
         request = request_class(
             requestHeader=self.create_request_header(request_object.method),
@@ -458,9 +477,9 @@ class Prisme(object):
                 print("Receiving:\n%s" % reply_item.xml)
                 outputs.append(request_object.reply_class(request_object, reply_item.xml))
             else:
-                raise PrismeException(reply_item.replyCode, reply_item.replyText)
+                raise PrismeException(reply_item.replyCode, reply_item.replyText, context)
         return outputs
 
     def check_cvr(self, cvr):
-        response = self.process_service(PrismeCvrCheckRequest(cvr))
+        response = self.process_service(PrismeCvrCheckRequest(cvr), 'cvrcheck')
         return response[0].claimant_id

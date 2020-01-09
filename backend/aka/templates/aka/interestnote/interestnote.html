@@ -100,6 +100,16 @@
                 </div>
             </div>
 
+            {% if errors %}
+                <div class="errors">
+                {% for error in errors %}
+                    <div class="error" data-trans="{{ error.key }}" data-trans-params="{{ error.params|json }}">
+                        {{ error.key|format:error.params }}
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+
             {% if posts is not None %}
                 <div class="output-data">
                 <table class="output-table" style="font-size: 0.8em">
