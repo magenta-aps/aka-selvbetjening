@@ -137,7 +137,8 @@ class InkassoForm(forms.Form):
         required=False
     )
     ekstern_sagsnummer = forms.CharField(
-        required=False
+        required=True,
+        error_messages={'required': 'error.required'},
     )
     hovedstol = forms.DecimalField(
         decimal_places=2,
@@ -145,7 +146,8 @@ class InkassoForm(forms.Form):
         error_messages={'required': 'error.required'}
     )
     hovedstol_posteringstekst = forms.CharField(
-        required=False
+        required=True,
+        error_messages={'required': 'error.required'},
     )
     kontaktperson = forms.CharField(
         required=False,
@@ -217,7 +219,7 @@ class InkassoForm(forms.Form):
         start = cleaned_data.get('periodestart')
         end = cleaned_data.get('periodeslut')
         if start and end and start > end:
-            self.add_error('periodeslut', ValidationError('start_date_before_end_date'))
+            self.add_error('periodeslut', ValidationError('error.start_date_before_end_date'))
 
         # Whether barns_cpr is required depends on the group and type selected
         group_id = cleaned_data.get('fordringsgruppe')
@@ -227,6 +229,7 @@ class InkassoForm(forms.Form):
             type = [x for x in subgroups if "%d.%d" % (x['group_id'], x['type_id']) == type_id][0]
             if type.get('has_child_cpr') and not cleaned_data.get('barns_cpr'):
                 self.add_error('barns_cpr', ValidationError(self.fields['barns_cpr'].error_messages['required'], code='required'))
+        print(self.errors)
 
     @staticmethod
     def convert_group_type_text(groupname, typename):
