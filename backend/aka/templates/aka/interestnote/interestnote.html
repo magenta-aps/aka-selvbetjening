@@ -8,6 +8,7 @@
             {{ css|safe }}
         </style>
     {% else %}
+        <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
         <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}"/>
     {% endif %}

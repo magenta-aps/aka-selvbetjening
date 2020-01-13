@@ -41,14 +41,12 @@ class CsvUploadMixin(object):
         if len(rows) == 0:
             raise ValidationError('error.upload_empty', code='error.upload_empty')
 
-        found_missing = set()
         # Use self.add_error to add validation errors on the file contents,
         # as there may be several in the same file
         for row_index, row in enumerate(rows, start=2):
             data=self.transform_row(row)
             subform = self.subform_class(data=data)
-            missing = subform.fields.keys() - data - found_missing
-            found_missing.update(missing)
+            missing = subform.fields.keys() - data
             if missing:
                 for field in missing:
                     self.add_error('file', ValidationError(
@@ -56,6 +54,7 @@ class CsvUploadMixin(object):
                         code='error.upload_validation_header',
                         params={'field': field}
                     ))
+                break
             if not subform.is_valid():  # Catch row errors early
                 for field, errorlist in subform.errors.items():
                     if 'error.required' in errorlist and field not in row and field not in missing:
@@ -115,11 +114,11 @@ class InkassoForm(forms.Form):
 
     fordringshaver = forms.CharField(
         required=True,
-        error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
+        error_messages={'required': 'error.required'},
     )
     debitor = forms.CharField(
         required=True,
-        error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
+        error_messages={'required': 'error.required'},
     )
     fordringshaver2 = forms.CharField(
         required=False
@@ -147,7 +146,9 @@ class InkassoForm(forms.Form):
         input_formats=valid_date_formats
     )
     barns_cpr = forms.CharField(
-        required=False
+        required=False,
+        min_length=9,
+        max_length=10
     )
     ekstern_sagsnummer = forms.CharField(
         required=True,
@@ -191,6 +192,16 @@ class InkassoForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(InkassoForm, self).__init__(*args, **kwargs)
         self.set_typefield_choices()
+
+        for validator in self.fields['barns_cpr'].validators:
+            if isinstance(validator, (MinLengthValidator, MaxLengthValidator)):
+                validator.message = "error.invalid_cpr"
+
+    def clean_cpr(self):
+        cpr = self.cleaned_data['barns_cpr']
+        if len(cpr) == 9:
+            cpr = '0' + cpr
+        return cpr
 
     def set_typefield_choices(self):
         try:
