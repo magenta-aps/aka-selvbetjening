@@ -7,14 +7,15 @@ from aka.data.fordringsgruppe import groups
 from aka.utils import get_ordereddict_key_index, spreadsheet_col_letter
 from django import forms
 from django.conf import settings
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, MinLengthValidator, \
+    MaxLengthValidator
 from django.forms import ValidationError
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger(__name__)
 
-valid_date_formats = ['%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%Y-%m-%d']
+valid_date_formats = ['%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%Y-%m-%d', '%d-%m-%y']
 
 
 class CsvUploadMixin(object):
@@ -42,11 +43,21 @@ class CsvUploadMixin(object):
 
         # Use self.add_error to add validation errors on the file contents,
         # as there may be several in the same file
-        for row_index, row in enumerate(rows, start=1):
-            subform = self.subform_class(data=self.transform_row(row))
+        for row_index, row in enumerate(rows, start=2):
+            data=self.transform_row(row)
+            subform = self.subform_class(data=data)
+            missing = subform.fields.keys() - data
+            if missing:
+                for field in missing:
+                    self.add_error('file', ValidationError(
+                        'error.upload_validation_header',
+                        code='error.upload_validation_header',
+                        params={'field': field}
+                    ))
+                break
             if not subform.is_valid():  # Catch row errors early
                 for field, errorlist in subform.errors.items():
-                    if 'error.required' in errorlist and field not in row:
+                    if 'error.required' in errorlist and field not in row and field not in missing:
                         self.add_error('file', ValidationError(
                             'error.upload_validation_header',
                             code='error.upload_validation_header',
@@ -57,6 +68,7 @@ class CsvUploadMixin(object):
                     except ValueError:
                         col_index = None
                     for error in errorlist.as_data():
+                        print(error)
                         self.add_error('file', ValidationError(
                             'error.upload_validation_item',
                             code='error.upload_validation_item',
@@ -102,11 +114,11 @@ class InkassoForm(forms.Form):
 
     fordringshaver = forms.CharField(
         required=True,
-        error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
+        error_messages={'required': 'error.required'},
     )
     debitor = forms.CharField(
         required=True,
-        error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
+        error_messages={'required': 'error.required'},
     )
     fordringshaver2 = forms.CharField(
         required=False
@@ -134,7 +146,9 @@ class InkassoForm(forms.Form):
         input_formats=valid_date_formats
     )
     barns_cpr = forms.CharField(
-        required=False
+        required=False,
+        min_length=9,
+        max_length=10
     )
     ekstern_sagsnummer = forms.CharField(
         required=True,
@@ -178,6 +192,16 @@ class InkassoForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(InkassoForm, self).__init__(*args, **kwargs)
         self.set_typefield_choices()
+
+        for validator in self.fields['barns_cpr'].validators:
+            if isinstance(validator, (MinLengthValidator, MaxLengthValidator)):
+                validator.message = "error.invalid_cpr"
+
+    def clean_cpr(self):
+        cpr = self.cleaned_data['barns_cpr']
+        if len(cpr) == 9:
+            cpr = '0' + cpr
+        return cpr
 
     def set_typefield_choices(self):
         try:
@@ -235,11 +259,11 @@ class InkassoForm(forms.Form):
     def convert_group_type_text(groupname, typename):
         group_match = [group for group in groups if group['name'] == groupname]
         if not group_match:
-            raise ValidationError('fordringsgruppe_not_found')
+            raise ValidationError('error.fordringsgruppe_not_found')
         group = group_match[0]
         type_match = [type for type in group['sub_groups'] if type['name'] == typename]
         if not type_match:
-            raise ValidationError('fordringstype_not_found')
+            raise ValidationError('error.fordringstype_not_found')
         type = type_match[0]
         return (group['id'], "%d.%d" % (type['group_id'], type['type_id']))
 
@@ -332,7 +356,7 @@ class LoentraekFormItem(forms.Form):
     cpr = forms.CharField(
         required=True,
         error_messages={'required': 'error.required'},
-        min_length=10,
+        min_length=9,
         max_length=10
     )
     agreement_number = forms.CharField(
@@ -351,6 +375,18 @@ class LoentraekFormItem(forms.Form):
         error_messages={'required': 'error.required'},
         min_value=0.01
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for validator in self.fields['cpr'].validators:
+            if isinstance(validator, (MinLengthValidator, MaxLengthValidator)):
+                validator.message = "error.invalid_cpr"
+
+    def clean_cpr(self):
+        cpr = self.cleaned_data['cpr']
+        if len(cpr) == 9:
+            cpr = '0' + cpr
+        return cpr
 
 
 class LoentraekUploadForm(CsvUploadMixin, LoentraekForm):

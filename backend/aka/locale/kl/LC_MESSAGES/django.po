@@ -129,6 +129,8 @@ msgstr "Fordringstype findes ikke i fordringsgruppe [kl]"
 msgid "error.multiple_fordringsgruppe_found"
 msgstr "Konfigurationsfejl på serveren [kl]"
 
+msgid "error.invalid_cpr"
+msgstr "Ugyldigt CPR-nummer [kl]"
 
 # File lists
 
@@ -251,6 +253,12 @@ msgstr "Kontaktperson [kl]"
 
 msgid "fordring.noter"
 msgstr "Noter [kl]"
+
+msgid "fordring.success"
+msgstr "Fordring oprettet [kl]"
+
+msgid "fordring.result"
+msgstr "Oprettede fordingsnumre: [kl]"
 
 
 # 6.2
