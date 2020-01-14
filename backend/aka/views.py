@@ -102,8 +102,8 @@ class IndexTemplateView(TemplateView):
     def get_context_data(self, **kwargs):
         user_info = self.request.session.get('user_info', {})
         context = {
-            'cpr': 1, # user_info.get('CPR'),
-            'cvr': 2, # user_info.get('CVR')
+            'cpr': user_info.get('CPR'),
+            'cvr': user_info.get('CVR')
         }
         context.update(kwargs)
         return super().get_context_data(**context)
