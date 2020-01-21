@@ -90,4 +90,12 @@
     state: restarted
     enabled: yes
   when: restart_apache == true
+
+- name: Setup session clearance as a CRON job
+  cron:
+    job: "{{django_virtual_env_path}}/bin/activate && {{django_manage_file}} clearsessions && deactivate"
+    name: "AKA session cache clear"
+    hour: 2
+    minute: 0
+
 ...
