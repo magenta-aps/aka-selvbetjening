@@ -1,4 +1,4 @@
-project_dir: /srv/aka-selvbetjening/
+project_dir: /srv/aka-selvbetjening
 django_virtual_env_path: "{{project_dir}}/venv"
 django_manage_file: "{{project_dir}}/backend/manage.py"
 django_requirements_file: "{{project_dir}}/backend/requirements.txt"
