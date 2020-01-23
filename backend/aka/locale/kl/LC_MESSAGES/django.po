@@ -68,7 +68,17 @@ msgstr "Email [kl]"
 msgid "common.webadresse"
 msgstr "Web-adresse [kl]"
 
+msgid "common.swift"
+msgstr "SWIFT"
 
+msgid "common.iban"
+msgstr "IBAN"
+
+msgid "common.cvrse"
+msgstr "CVR/SE"
+
+msgid "common.skattestyrelsen"
+msgstr "Skattestyrelsen [kl]"
 
 # Errors
 
@@ -398,8 +408,59 @@ msgstr "Til dato [kl]"
 msgid "employeraccount.filename"
 msgstr "Kontoudtog {from_date} - {to_date} [kl].pdf"
 
+msgid "employeraccount.bankaccount"
+msgstr "Bankkonto [kl]"
+
 msgid "employeraccount.account"
 msgstr "Kontoudtog [kl]"
+
+msgid "employeraccount.period"
+msgstr "Gældende for perioden: {start} - {end} [kl]"
+
+msgid "employeraccount.number"
+msgstr "Nummer [kl]"
+
+msgid "employeraccount.date"
+msgstr "Dato [kl]"
+
+msgid "employeraccount.cprcvr"
+msgstr "CPR/CVR [kl]"
+
+msgid "employeraccount.yourref"
+msgstr "Deres reference [kl]"
+
+msgid "employeraccount.contact"
+msgstr "Sagsbehandler [kl]"
+
+msgid "employeraccount.localnumber"
+msgstr "Lokalnummer [kl]"
+
+msgid "employeraccount.payment1"
+msgstr "Betaling [kl]"
+
+msgid "employeraccount.invoiceaccount"
+msgstr "Fakturakonto [kl]"
+
+msgid "employeraccount.paymentdate"
+msgstr "Forfaldsdato [kl]"
+
+msgid "employeraccount.debitorgroup"
+msgstr "Debitorgruppe [kl]"
+
+msgid "employeraccount.claimant"
+msgstr "Fordringshaver [kl]"
+
+msgid "employeraccount.reference"
+msgstr "Eksternt referencenummer [kl]"
+
+msgid "employeraccount.childcpr"
+msgstr "Barns cpr.nr. [kl]"
+
+msgid "employeraccount.payment2"
+msgstr "Indbetaling [kl]"
+
+msgid "employeraccount.amount"
+msgstr "Beløb [kl]"
 
 
 

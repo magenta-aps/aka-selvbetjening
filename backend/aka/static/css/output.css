@@ -39,12 +39,12 @@ body.pdf .output {
     width: 100%;
     border-collapse: collapse;
 }
-.output table.output-table th {
+.output table.output-table thead th {
     text-align: left;
     border-bottom: 1px solid #465c6c;
     padding: .25rem .5rem
 }
-.output table.output-table td {
+.output table.output-table tbody td {
     border-top: 1px solid #dddddd;
     padding: .25rem .5rem
 }
@@ -54,6 +54,11 @@ body.pdf .output {
 .output table.output-table td.empty {
     text-align: center;
     padding: 0.75em;
+}
+
+.output table.output-table tfoot td {
+    font-weight: bold;
+    padding: .25rem .5rem
 }
 
 

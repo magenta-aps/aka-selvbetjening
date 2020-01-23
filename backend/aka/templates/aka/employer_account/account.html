@@ -71,48 +71,86 @@
                     </div>
                 </div>
 
+                <hr/>
+
                 <div class="output-details row">
-                    <div class="col-8-sm">
+                    <div class="col-6-sm">
                         <span class="line">{{ company.navn }}</span>
                         <span class="line">{{ company.adresse }}</span>
                         <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
                         <span class="line" data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
                     </div>
-                    <div class="col-4-sm">
-                        <h3 data-trans="rentenota.rentenota">{% trans 'employeraccount.account' %}</h3>
+                    <div class="col-3-sm">
                         <table class="dl-table">
                             <tr>
-                                <th data-trans="common.konto">{% trans 'common.konto' %}</th>
-                                <td>{{ company.cvr }}</td>
+                                <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th data-trans="common.fax">{% trans 'common.fax' %}</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th data-trans="employeraccount.swift">{% trans 'common.swift' %}</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th data-trans="employeraccount.iban">{% trans 'common.iban' %}</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th data-trans="employeraccount.cvrse">{% trans 'common.cvrse' %}</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th data-trans="employeraccount.bankaccount">{% trans 'employeraccount.bankaccount' %}</th>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-3-sm">
+                        <img src="{% static 'img/naalakkersuisut.png' %}" style="width:100%"/>
+                    </div>
+                </div>
+
+                <div class="output-details row">
+                    <div class="col-4-sm offset-6-sm">
+
+                        <h3 data-trans="rentenota.rentenota">{% trans 'employeraccount.account' %}</h3>
+                        <h4 data-trans="employeraccount.period">{{ 'employeraccount.period'|format:period }}</h4>
+
+                        <table class="dl-table">
+                            <tr>
+                                <th data-trans="employeraccount.number">{% trans 'employeraccount.number' %}</th>
+                                <td>{{ number }}</td>
                             </tr>
                             <tr>
                                 <th data-trans="common.dato">{% trans 'common.dato' %}</th>
                                 <td>{{ date }}</td>
                             </tr>
                             <tr>
-                                <td>&nbsp;</td>
+                                <th data-trans="employeraccount.cprcvr">{% trans 'employeraccount.cprcvr' %}</th>
+                                <td>{{ company.cvr }}</td>
                             </tr>
                             <tr>
-                                <th colspan="2" data-trans="common.postboks" data-trans-params="{&quot;box&quot;:1605}">{{ 'common.postboks'|format:'{"box":1605}' }}</th>
+                                <th data-trans="employeraccount.yourref">{% trans 'employeraccount.yourref' %}</th>
+                                <td>{{ yourref }}</td>
                             </tr>
                             <tr>
-                                <th colspan="2">3900 Nuuk</th>
+                                <th data-trans="employeraccount.contact">{% trans 'employeraccount.contact' %}</th>
+                                <td>{{ contact }}</td>
                             </tr>
                             <tr>
-                                <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
-                                <td>346500</td>
+                                <th data-trans="employeraccount.localnumber">{% trans 'employeraccount.localnumber' %}</th>
+                                <td>{{ localnumber }}</td>
                             </tr>
                             <tr>
-                                <th data-trans="common.fax">{% trans 'common.fax' %}</th>
-                                <td>346577</td>
+                                <th data-trans="employeraccount.payment1">{% trans 'employeraccount.payment1' %}</th>
+                                <td>{{ payment1 }}</td>
                             </tr>
                             <tr>
-                                <th data-trans="common.email">{% trans 'common.email' %}</th>
-                                <td>sulinal@nanoq.gl</td>
-                            </tr>
-                            <tr>
-                                <th data-trans="common.webadresse">{% trans 'common.webadresse' %}</th>
-                                <td>www.aka.gl</td>
+                                <th data-trans="employeraccount.invoiceaccount">{% trans 'employeraccount.invoiceaccount' %}</th>
+                                <td>{{ account }}</td>
                             </tr>
                         </table>
                     </div>
@@ -122,17 +160,25 @@
                     <table class="output-table">
                         <thead>
                             <tr>
-                                <th>Posteringstekst</th>
-                                <th>Beløb</th>
-                                <th>Saldo</th>
+                                <th data-trans="employeraccount.paymentdate">{% trans 'employeraccount.paymentdate' %}</th>
+                                <th data-trans="employeraccount.debitorgroup">{% trans 'employeraccount.debitorgroup' %}</th>
+                                <th data-trans="employeraccount.claimant">{% trans 'employeraccount.claimant' %}</th>
+                                <th data-trans="employeraccount.reference">{% trans 'employeraccount.reference' %}</th>
+                                <th data-trans="employeraccount.childcpr">{% trans 'employeraccount.childcpr' %}</th>
+                                <th data-trans="employeraccount.payment2">{% trans 'employeraccount.payment2' %}</th>
+                                <th data-trans="employeraccount.amount">{% trans 'employeraccount.amount' %}</th>
                             </tr>
                         </thead>
                         <tbody>
                         {% for item in items %}
                             <tr>
-                                <td>{{ item.text }}</td>
+                                <td>{{ item.paymentdate }}</td>
+                                <td>{{ item.debitorgroup }}</td>
+                                <td>{{ item.claimant }}</td>
+                                <td>{{ item.reference }}</td>
+                                <td>{{ item.childcpr }}</td>
+                                <td>{{ item.payment }}</td>
                                 <td>{{ item.amount }}</td>
-                                <td>{{ item.total }}</td>
                             </tr>
                         {% empty %}
                             <tr>
@@ -140,7 +186,23 @@
                             </tr>
                         {% endfor %}
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td style="border-bottom:2px solid #000"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td colspan="4">NO AKI 240140</td>
+                                <td>{{ sum }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td data-trans="common.skattestyrelsen">{% trans 'common.skattestyrelsen' %}</td>
+                            </tr>
+                        </tfoot>
                     </table>
+                    <p>Såfremt ovenstående er betalt indenfor de sidste 8 hverdage, bedes De se bort fra denne henvendelse.<p>
+                    <p>Akiligassaq qulaani pineqartoq ullut arfineq pingasut iluanni akilersimagukku, una allagaq igiinnassaq.</p>
                 </div>
             </div>
         {% endif %}
