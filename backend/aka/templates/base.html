@@ -55,11 +55,14 @@
             </header>
             {% endif %}
             <main>
-                {% if company.navn %}
-                    <div class="userinfo">
-                        <span id="company" data-trans="common.logged_in_as" data-trans-params="{{ company|json }}">{{ 'common.logged_in_as'|format:company }}</span>
-                    </div>
-                {% endif %}
+                <div class="userinfo">
+                    {% if company.navn %}
+                    <span id="company" data-trans="common.logged_in_as" data-trans-params="{{ company|json }}">{{ 'common.logged_in_as'|format:company }}</span>
+                    {% endif %}
+                    {% if cpr or cvr %}
+                        <a href="{% url 'aka:logout' %}" data-trans="common.logout">{% trans 'common.logout' %}</a>
+                    {% endif %}
+                </div>
                 {% block content %}
                 {% endblock %}
             </main>

@@ -24,6 +24,7 @@ class Login(View):
 
     def get(self, request, *args, **kwargs):
         user = NemId.authenticate(request)
+        request.session['login_method'] = 'nemid'
         if user.is_authenticated:
             return redirect(LoginManager.get_backpage(request))
 
@@ -42,10 +43,7 @@ class Logout(View):
         self.config = settings.NEMID_CONNECT
 
     def get(self, request):
-        if 'user_info' in request.session:
-            del request.session['user_info']
-        if 'login_method' in request.session:
-            del request.session['login_method']
+        NemId.clear_session(request.session)
         response = redirect('aka:index')
         response.delete_cookie(self.config['cookie_name'])
         return response

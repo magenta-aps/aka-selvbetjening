@@ -22,7 +22,7 @@ from aka.views import InkassoGroupDataView
 from aka.views import InkassoSagView, InkassoSagUploadView
 from aka.views import LoenTraekDistributionView
 from aka.views import LoentraekView, LoentraekUploadView
-from aka.views import LoginView
+from aka.views import LoginView, LogoutView
 from aka.views import NedskrivningView, NedskrivningUploadView
 from aka.views import NetsopkraevningView
 from aka.views import RenteNotaView
@@ -37,6 +37,7 @@ urlpatterns = [
 
     url(r'^$', IndexTemplateView.as_view(), name='index'),
     url(r'^login$', LoginView.as_view(), name='login'),
+    url(r'^logout$', LogoutView.as_view(), name='logout'),
     url(r'^inkassosag$', InkassoSagView.as_view(), name='inkassosag'),
     url(r'^inkassosag/upload', InkassoSagUploadView.as_view(), name='inkassosag-upload'),
     url(r'^fordringsgrupper/(?P<var>[a-z_]+)?', InkassoGroupDataView.as_view(), name='fordringsgrupper'),

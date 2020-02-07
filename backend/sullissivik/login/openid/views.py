@@ -13,19 +13,10 @@ from oic.oic.message import AuthorizationResponse, RegistrationResponse
 from django.views.decorators.clickjacking import xframe_options_exempt
 from oic.utils.keyio import KeyBundle
 
+from sullissivik.login.openid.openid import OpenId
+
 logger = logging.getLogger(__name__)
 
-open_id_settings = {}
-kc_rsa = None
-client_cert = None
-if getattr(settings, 'OPENID_CONNECT', None) and settings.OPENID_CONNECT.get('enabled', True):
-    # if openID is enabled setup the key bundle and client_cert
-    open_id_settings = settings.OPENID_CONNECT
-    key = rsa_load(open_id_settings['private_key'])
-    kc_rsa = KeyBundle([{'key': key, 'kty': 'RSA', 'use': 'ver'},
-                        {'key': key, 'kty': 'RSA', 'use': 'sig'}])
-
-    client_cert = (open_id_settings['client_certificate'], open_id_settings['private_key'])
 
 
 class Login(View):
@@ -36,9 +27,9 @@ class Login(View):
     http_method_names = ['get']
 
     def get(self, request, *args, **kwargs):
-        client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=client_cert)
-        provider_info = client.provider_config(open_id_settings['issuer'])
-        client_reg = RegistrationResponse(**{'client_id': open_id_settings['client_id'], 'redirect_uris': [open_id_settings['redirect_uri']]})
+        client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=OpenId.client_cert)
+        provider_info = client.provider_config(OpenId.open_id_settings['issuer'])
+        client_reg = RegistrationResponse(**{'client_id': OpenId.open_id_settings['client_id'], 'redirect_uris': [OpenId.open_id_settings['redirect_uri']]})
         client.store_registration_info(client_reg)
 
         state = rndstr(32)
@@ -54,6 +45,7 @@ class Login(View):
         request.session['oid_nonce'] = nonce
         request.session['login_method'] = 'openid'
         auth_req = client.construct_AuthorizationRequest(request_args=request_args)
+        print("client.authorization_endpoint: "+client.authorization_endpoint)
         login_url = auth_req.request(client.authorization_endpoint)
         return HttpResponseRedirect(login_url)
 
@@ -77,19 +69,24 @@ class Callback(TemplateView):
             logger.exception(SuspiciousOperation('Session `oid_state` does not exist!'))
             return HttpResponseRedirect(reverse('openid:login'))
 
-        client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=client_cert)
-        client.keyjar[""] = kc_rsa
+        client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=OpenId.client_cert)
+        client.keyjar[""] = OpenId.kc_rsa
 
         client_configuration = {'client_id': settings.OPENID_CONNECT['client_id'],
                                 'token_endpoint_auth_method': 'private_key_jwt'}
 
         client.store_registration_info(client_configuration)
 
+        print("request.GET: "+str(request.GET))
+        print("request.META['QUERY_STRING']: "+request.META['QUERY_STRING'])
         aresp = client.parse_response(AuthorizationResponse, info=request.META['QUERY_STRING'], sformat="urlencoded")
+        print("aresp: "+str(aresp.to_dict()))
+        print("client.grant: "+str(client.grant))
 
         if isinstance(aresp, ErrorResponse):
             # we got an error from the OP
             del request.session['oid_state']
+            logger.error("Got ErrorResponse %s" % str(aresp.to_dict()))
             context = self.get_context_data(errors=aresp.to_dict())
             return self.render_to_response(context)
 
@@ -118,12 +115,14 @@ class Callback(TemplateView):
                                                   authn_method="private_key_jwt",
                                                   authn_endpoint='token')
 
+
             if isinstance(resp, ErrorResponse):
                 del request.session['oid_state']
                 logger.error('Error received from headnet: {}'.format(str(ErrorResponse)))
                 context = self.get_context_data(errors=resp.to_dict())
                 return self.render_to_response(context)
             else:
+                request.session['access_token_data'] = resp.to_dict()
                 userinfo = client.do_user_info_request(state=request.session['oid_state'])
                 user_info_dict = userinfo.to_dict()
                 request.session['user_info'] = user_info_dict
@@ -133,17 +132,35 @@ class Callback(TemplateView):
                 # after the oauth flow is done and we have the user_info redirect to the original page or the frontpage
                 return HttpResponseRedirect(request.session.get('backpage', reverse('aka:index')))
 
+#
+# class Logout(View):
+#
+#     @xframe_options_exempt
+#     def get(self, request):
+#         client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=client_cert)
+#         client_reg = RegistrationResponse(**{'client_id': open_id_settings['client_id'], 'redirect_uris': [open_id_settings['redirect_uri']]})
+#         client.store_registration_info(client_reg)
+#
+#         state = rndstr(32)
+#         nonce = rndstr(32)
+#         request_args = {'response_type': 'code',
+#                         'scope': settings.OPENID_CONNECT['scope'],
+#                         'client_id': settings.OPENID_CONNECT['client_id'],
+#                         'redirect_uri': settings.OPENID_CONNECT['redirect_uri'],
+#                         'state': state,
+#                         'nonce': nonce}
+#         auth_req = client.construct_EndSessionRequest(request_args=request_args)
+#         login_url = auth_req.request(client.authorization_endpoint)
+#         return HttpResponseRedirect(login_url)
 
-class Logout(View):
+
+class LogoutCallback(View):
 
     @xframe_options_exempt
     def get(self, request):
+        print("logout callback")
+        print(request.GET)
         # according to the specs this is rendered in a iframe when the user triggers a logout from OP`s side
         # do a total cleanup and delete everything related to openID
-        if 'oid_state' in request.session:
-            del request.session['oid_state']
-        if 'oid_nonce' in request.session:
-            del request.session['oid_nonce']
-        if 'user_info' in request.session:
-            del request.session['user_info']
-        return HttpResponseRedirect('aka:index')
+        OpenId.clear_session(request.session)
+        return HttpResponseRedirect(reverse('aka:index'))

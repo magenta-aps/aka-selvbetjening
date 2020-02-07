@@ -41,7 +41,9 @@ OPENID_CONNECT = {
     'client_id': '{{django_openid.client_id}}',  # id of the system (ouath), registered at headnet
     'client_certificate': '{{django_openid.client_certificate}}',  # path to client certificate used to secure the communication between the system and OP
     'private_key': '{{django_openid.private_key}}',  # used for signing messages passed to the OP
-    'redirect_uri': '{{django_openid.redirect_uri}}'  # url registered at headnet to redirect the user to after a successfull login at OP
+    'redirect_uri': '{{django_openid.redirect_uri}}',  # url registered at headnet to redirect the user to after a successfull login at OP
+    'logout_uri': '{{django_openid.logout_uri}}',  # url registered at headnet to call when logging out, removing session data there
+    'front_channel_logout_uri': '{{django_openid.front_channel_logout_uri}}'  # url registered at headnet to call when logging out, should clear our cookies etc.
 }
 
 NEMID_CONNECT = {

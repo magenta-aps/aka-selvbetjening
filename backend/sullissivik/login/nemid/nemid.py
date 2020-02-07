@@ -64,3 +64,15 @@ class NemId:
         return user
 
     whitelist = [reverse_lazy('nemid:login')]
+
+    @staticmethod
+    def clear_session(session):
+        for key in ['user_info', 'login_method']:
+            if key in session:
+                del session[key]
+
+    @staticmethod
+    def logout():
+        response = redirect('aka:index')
+        response.delete_cookie(settings.NEMID_CONNECT['cookie_name'])
+        return response

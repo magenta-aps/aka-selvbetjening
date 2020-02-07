@@ -52,6 +52,8 @@ django_openid:
   client_certificate: "/etc/ssl/openid/sullissivik_company_tax_test.cert"
   private_key: "/etc/ssl/openid/sullissivik_company_tax_test.key"
   redirect_uri: "https://akaptest.sullissivik.gl/oid/callback/"
+  logout_uri: "https://loginqa.sullissivik.gl/connect/endsession"
+  front_channel_logout_uri: "https://akaptest.sullissivik.gl/oid/logout/"
 
 django_nemid:
   federation_service: "https://qaip.sullissivik.gl/services/IdentityServiceV2.svc?wsdl"

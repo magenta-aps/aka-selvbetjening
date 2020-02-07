@@ -29,6 +29,7 @@ from aka.utils import list_rstrip
 from django.conf import settings
 from django.forms import formset_factory
 from django.http import JsonResponse, HttpResponse, FileResponse
+from django.shortcuts import redirect
 from django.template import Engine, Context
 from django.template.response import TemplateResponse
 from django.utils import translation
@@ -42,6 +43,9 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
+
+from sullissivik.login.nemid.nemid import NemId
+from sullissivik.login.openid.openid import OpenId
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -120,6 +124,7 @@ class IndexTemplateView(HasUserMixin, TemplateView):
             'cvr': user_info.get('CVR')
         }
         context.update(kwargs)
+        print(context)
         return super().get_context_data(**context)
 
 
@@ -130,6 +135,18 @@ class LoginView(TemplateView):
         context = {'back': self.request.GET.get('back')}
         context.update(kwargs)
         return super().get_context_data(**context)
+
+
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        method = self.request.session['login_method']
+        # NemId.clear_session(self.request.session)
+        # OpenId.clear_session(self.request.session)
+
+        if method == 'openid':
+            return OpenId.logout(self.request.session)
+        else:
+            return NemId.logout()
 
 
 @method_decorator(csrf_exempt, name='dispatch')
