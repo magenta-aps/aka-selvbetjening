@@ -1,6 +1,5 @@
-from django.urls import reverse_lazy
 from django.conf import settings
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from jwkest.jwk import rsa_load
 from oic.oic import Client, rndstr
@@ -23,8 +22,6 @@ class OpenId:
 
         client_cert = (open_id_settings['client_certificate'], open_id_settings['private_key'])
 
-
-
     @staticmethod
     def enabled():
         return settings.OPENID_CONNECT.get('enabled', True)
@@ -42,30 +39,31 @@ class OpenId:
                 del session[key]
 
 
-    @staticmethod
-    def logout(session):
-        client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=OpenId.client_cert)
+    @classmethod
+    def logout(cls, session):
+        # See also doc here: https://github.com/IdentityServer/IdentityServer4/blob/master/docs/endpoints/endsession.rst
+        client = Client(
+            client_authn_method=CLIENT_AUTHN_METHOD,
+            client_cert=OpenId.client_cert
+        )
         client.store_registration_info(
             RegistrationResponse(**{
-                'client_id': OpenId.open_id_settings['client_id'],
-                'redirect_uris': [OpenId.open_id_settings['front_channel_logout_uri']]
+                'client_id': cls.open_id_settings['client_id'],
+                'redirect_uris': [cls.open_id_settings['front_channel_logout_uri']],
+                'post_logout_redirect_uris': [cls.open_id_settings['post_logout_redirect_uri']]
             })
         )
-
         request_args = {
-            # 'response_type': 'code',
-            'scope': settings.OPENID_CONNECT['scope'],
-            'client_id': settings.OPENID_CONNECT['client_id'],
-            'redirect_uri': settings.OPENID_CONNECT['front_channel_logout_uri'],
+            'scope': cls.open_id_settings['scope'],
+            'client_id': cls.open_id_settings['client_id'],
+            'redirect_uri': cls.open_id_settings['front_channel_logout_uri'],
+            'id_token_hint': session.get('raw_id_token'),
+            'post_logout_redirect_uri': cls.open_id_settings['post_logout_redirect_uri'],
             'state': rndstr(32),
-            # 'nonce': rndstr(32)
         }
-        auth_req = client.construct_EndSessionRequest(request_args=request_args, id_token=session['access_token_data']['id_token'])
-        # logout_url = auth_req.request(client.end_session_endpoint)
-        logout_url = auth_req.request(OpenId.open_id_settings['logout_uri']) # TODO: Gør dette pænere
+        auth_req = client.construct_EndSessionRequest(
+            request_args=request_args,
+            id_token=session['access_token_data']['id_token']
+        )
+        logout_url = auth_req.request(cls.open_id_settings['logout_uri'])
         return HttpResponseRedirect(logout_url)
-
-        # TODO: tjek at logoutcallback får rigtige data (tjek state og nonce osv), og redirect tilbage i det callback
-
-        # This one will send a request from the server. It should be the client doing that
-        # client.do_end_session_request(scope=settings.OPENID_CONNECT['scope'], state=rndstr(32))

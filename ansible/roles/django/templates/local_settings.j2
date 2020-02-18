@@ -43,7 +43,8 @@ OPENID_CONNECT = {
     'private_key': '{{django_openid.private_key}}',  # used for signing messages passed to the OP
     'redirect_uri': '{{django_openid.redirect_uri}}',  # url registered at headnet to redirect the user to after a successfull login at OP
     'logout_uri': '{{django_openid.logout_uri}}',  # url registered at headnet to call when logging out, removing session data there
-    'front_channel_logout_uri': '{{django_openid.front_channel_logout_uri}}'  # url registered at headnet to call when logging out, should clear our cookies etc.
+    'front_channel_logout_uri': '{{django_openid.front_channel_logout_uri}}',  # url registered at headnet to call when logging out, should clear our cookies etc.
+    'post_logout_redirect_uri': '{{django_openid.post_logout_redirect_uri}}'  # url registered at headnet to redirect to when logout is complete
 }
 
 NEMID_CONNECT = {
