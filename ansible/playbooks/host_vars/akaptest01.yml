@@ -58,11 +58,11 @@ django_openid:
 
 django_nemid:
   federation_service: "https://qaip.sullissivik.gl/services/IdentityServiceV2.svc?wsdl"
-  cookie_name: "Sullissivik.Federation.Cookie"
+  cookie_name: "Sullissivik.Federation.Cookie.QA"
   login_url: "https://qaip.sullissivik.gl/login.aspx"
   redirect_field: "returnurl"
-  client_certificate: "/etc/ssl/openid/sullissivik_company_tax_test.cert"
-  private_key: "/etc/ssl/openid/sullissivik_company_tax_test.key"
+  client_certificate: "/etc/ssl/nemid/test.akap.sullissivik.gl.cer"
+  private_key: "/etc/ssl/nemid/test.akap.sullissivik.gl.key"
 
 restart_apache: True
 
