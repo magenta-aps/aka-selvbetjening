@@ -123,14 +123,13 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = {
-            'items': self.items,
-            'date': date.today().strftime('%d/%m/%Y'),
-            'sum': sum([item['amount'] for item in self.items])
-        }
+        context = {}
         if self.form.is_bound:
             formdata = self.form.cleaned_data
             context.update({
+                'items': self.items,
+                'date': date.today().strftime('%d/%m/%Y'),
+                'sum': sum([item['amount'] for item in self.items]) if self.items else 0,
                 'period': {
                     'from_date': formdata['from_date'].strftime('%d-%m-%Y'),
                     'to_date': formdata['to_date'].strftime('%d-%m-%Y')
@@ -140,7 +139,8 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
         return super().get_context_data(**context)
 
 
-class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
+class ArbejdsgiverKontoView(KontoView):
+# class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
     template_name = 'aka/employer_account/account.html'
 
@@ -150,6 +150,11 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
         )
 
     def get_items(self, form):
+        # Call prisme
+        account_statement_req = Prisme
+
+
+
         return [
             {'text': 'Hotdog', 'amount': 15.0, 'total': 100000.0},
             {'text': 'Bøfsandwich', 'amount': 30.0, 'total': 100000.0},
@@ -158,7 +163,7 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
     def get_context_data(self, **kwargs):
         context = {
-            'company': Dafo().lookup_cvr(self.cvr),
+            # 'company': Dafo().lookup_cvr(self.cvr),
         }
         context.update(kwargs)
         return super().get_context_data(**context)

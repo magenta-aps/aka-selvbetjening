@@ -332,8 +332,19 @@ msgstr "Sekvensnummer"
 
 # 6.5
 
-
 # NY16
+
+msgid "account.entries_open"
+msgstr "Åbne poster"
+
+msgid "account.entries_closed"
+msgstr "Lukkede poster"
+
+msgid "account.entries_all"
+msgstr "Alle poster"
+
+
+# NY18
 msgid "rentenota.title"
 msgstr "Rentenota"
 

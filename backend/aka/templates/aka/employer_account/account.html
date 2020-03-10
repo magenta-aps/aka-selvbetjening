@@ -44,6 +44,13 @@
                     {% include 'aka/util/field.html' with field=form.to_date key='employeraccount.to_date' %}
                 </div>
             </div>
+
+            <div class="employeraccount-actions row">
+                <div class="col-4-sm">
+                    {% include 'aka/util/field.html' with field=form.open_closed %}
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-4-sm">
                     <button type="submit" data-trans="common.send">{% trans 'common.send' %}</button>

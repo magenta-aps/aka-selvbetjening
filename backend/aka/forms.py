@@ -89,6 +89,10 @@ class CsvUploadMixin(object):
         return row
 
 
+class RadioSelect(forms.RadioSelect):
+    option_template_name='aka/util/optionfield.html'
+
+
 class KontoForm(forms.Form):
 
     from_date = forms.DateField(
@@ -102,6 +106,12 @@ class KontoForm(forms.Form):
         required=True,
         error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
+    )
+    open_closed = forms.IntegerField(
+        widget=RadioSelect(
+            choices=[(0, 'account.entries_open'), (1, 'account.entries_closed'), (2, 'account.entries_all')],
+
+        )
     )
 
     def clean(self):

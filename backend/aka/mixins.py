@@ -67,7 +67,7 @@ class RequireCvrMixin(object):
 class SimpleGetFormMixin(FormMixin):
 
     def get(self, request, *args, **kwargs):
-        form = self.get_form()
+        form = self.form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
         else:

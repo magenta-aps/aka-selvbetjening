@@ -91,6 +91,35 @@ class PrismeRequestObject(object):
         return value
 
 
+class PrismeAccountRequest(PrismeRequestObject):
+
+    wrap = 'custInterestJour'  # Ret dette ift. FDD
+
+    def __init__(self, customer_id_number, from_date, to_date, closed=False):
+        self.customer_id_number = customer_id_number
+        self.from_date = from_date
+        self.to_date = to_date
+        self.closed = closed
+
+    @property
+    def method(self):
+        return 'getAccount'  # Ret dette ift. FDD
+
+    @property
+    def xml(self):
+        return dict_to_xml({
+            'CustIdentificationNumber': self.customer_id_number,
+            'from_date': self.from_date,
+            'to_date': self.to_date,
+            'closed': self.closed
+        }, wrap=self.wrap)
+
+    @property
+    def reply_class(self):
+        return PrismeInterestNoteResponse
+
+
+
 class PrismeClaimRequest(PrismeRequestObject):
 
     wrap = 'CustCollClaimTableFuj'
@@ -303,6 +332,20 @@ class PrismeResponseObject(object):
     def __init__(self, request, xml):
         self.request = request
         self.xml = xml
+
+
+class PrismeAccountResponse(PrismeResponseObject):
+
+    def __init__(self, request, xml):
+        super(PrismeAccountResponse, self).__init__(request, xml)
+        data = xml_to_dict(xml)
+        journals = data['CustTable']['CustInterestJour']
+        if type(journals) != list:
+            journals = [journals]
+        self.interest_journal = [
+            PrismeInterestResponseJournal(x)
+            for x in journals
+        ]
 
 
 class PrismeRecIdResponse(PrismeResponseObject):

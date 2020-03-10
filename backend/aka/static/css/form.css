@@ -119,6 +119,11 @@ select {
     background-color: #d6dbde
 }
 
+.input ul {
+    padding-left: 0;
+    list-style-type: none;
+}
+
 .err-msg {
     color:red;
 }
