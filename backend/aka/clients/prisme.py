@@ -1,6 +1,6 @@
 import os
 import re
-from datetime import date
+from datetime import date, datetime, time
 
 import zeep
 from aka.exceptions import AkaException
@@ -86,38 +86,50 @@ class PrismeRequestObject(object):
             return ''
         if is_amount:
             value = f"{value:.2f}"
+        if isinstance(value, datetime):
+            value = f'{value:%Y-%m-%dT%H:%M:%S}'
         if isinstance(value, date):
-            value = f'{value:%Y-%m-%d}T00:00:00'
+            value = f'{value:%Y-%m-%d}'
         return value
+
+    @staticmethod
+    def to_datetime(date):
+        return datetime.combine(date, time.min)
 
 
 class PrismeAccountRequest(PrismeRequestObject):
 
-    wrap = 'custInterestJour'  # Ret dette ift. FDD
+    wrap = 'CustTable'
 
-    def __init__(self, customer_id_number, from_date, to_date, closed=False):
+    # See also choices in KontoForm
+    open_closed_map = {
+        0: 'Åbne',
+        1: 'Lukkede',
+        2: 'Åbne og Lukkede'
+    }
+
+    def __init__(self, customer_id_number, from_date, to_date, open_closed=2):
         self.customer_id_number = customer_id_number
         self.from_date = from_date
         self.to_date = to_date
-        self.closed = closed
+        self.open_closed = open_closed
 
     @property
     def method(self):
-        return 'getAccount'  # Ret dette ift. FDD
+        return 'getAccountStatementAKI'
 
     @property
     def xml(self):
         return dict_to_xml({
-            'CustIdentificationNumber': self.customer_id_number,
-            'from_date': self.from_date,
-            'to_date': self.to_date,
-            'closed': self.closed
+            'CustIdentificationNumber': self.prepare(self.customer_id_number),
+            'FromDate': self.prepare(self.from_date),
+            'ToDate': self.prepare(self.to_date),
+            'CustInterestCalc': self.open_closed_map[self.open_closed]
         }, wrap=self.wrap)
 
     @property
     def reply_class(self):
-        return PrismeInterestNoteResponse
-
+        return PrismeAccountResponse
 
 
 class PrismeClaimRequest(PrismeRequestObject):
@@ -166,11 +178,11 @@ class PrismeClaimRequest(PrismeRequestObject):
             'CustCollAmountBalance': self.prepare(self.amount_balance, is_amount=True),
             'CustCollText': self.prepare(self.text),
             'CustCollCreatedBy': self.prepare(self.created_by),
-            'CustCollPeriodStart': self.prepare(self.period_start),
-            'CustCollPeriodEnd': self.prepare(self.period_end),
-            'CustCollDueDate': self.prepare(self.due_date),
-            'CustCollFoundedDate': self.prepare(self.founded_date),
-            'CustCollObsolescenceDate': self.prepare(self.obsolete_date),
+            'CustCollPeriodStart': self.prepare(self.to_datetime(self.period_start)),
+            'CustCollPeriodEnd': self.prepare(self.to_datetime(self.period_end)),
+            'CustCollDueDate': self.prepare(self.to_datetime(self.due_date)),
+            'CustCollFoundedDate': self.prepare(self.to_datetime(self.founded_date)),
+            'CustCollObsolescenceDate': self.prepare(self.to_datetime(self.obsolete_date)),
             'Notes': self.prepare(self.notes),
             'coDebtors': [
                 {'coDebtor': {'CustCollCprCvr': self.prepare(codebtor)}}
@@ -284,14 +296,14 @@ class PrismePayrollRequest(PrismeRequestObject):
 
     @property
     def method(self):
-        return 'getInterestNote'
+        return 'createPayrollFromEmployer'
 
     @property
     def xml(self):
         return dict_to_xml({
             'GERCVR': self.cvr,
-            'Date': self.prepare(self.date),
-            'ReceivedDate': self.prepare(self.received_date),
+            'Date': self.prepare(self.to_datetime(self.date)),
+            'ReceivedDate': self.prepare(self.to_datetime(self.received_date)),
             'TotalAmount': self.prepare(self.amount, is_amount=True),
             'custPayRollFromEmployerLines': {
                 PrismePayrollRequestLine.wrap: [line.dict for line in self.lines]
@@ -339,13 +351,42 @@ class PrismeAccountResponse(PrismeResponseObject):
     def __init__(self, request, xml):
         super(PrismeAccountResponse, self).__init__(request, xml)
         data = xml_to_dict(xml)
-        journals = data['CustTable']['CustInterestJour']
-        if type(journals) != list:
-            journals = [journals]
-        self.interest_journal = [
-            PrismeInterestResponseJournal(x)
-            for x in journals
+        transactions = data['CustTable']['CustTrans']
+        if type(transactions) != list:
+            transactions = [transactions]
+        self.transactions = [
+            PrismeAccountResponseTransaction(x)
+            for x in transactions
         ]
+
+
+class PrismeAccountResponseTransaction(object):
+
+    def __init__(self, data):
+        self.account_number = data['AccountNum']
+        self.transaction_date = data['TransDate']
+        self.accounting_date = data['AccountingDate']
+        self.customer_group_id = data['CustGroup']
+        self.customer_group_name = data['CustGroupName']
+        self.voucher = data['Voucher']
+        self.text = data['Txt']
+        self.payment_code = data['CustPaymCode']
+        self.payment_description = data['CustPaymDescription']
+        self.amount = data['AmountCur']
+        self.remaining_amount = data['RemainAmountCur']
+        self.due_date = data['DueDate']
+        self.closed_date = data['Closed']
+        self.last_settlement_voucher = data['LastSettleVoucher']
+        self.collection_letter_date = data['CollectionLetterDate']
+        self.collection_letter_code = data['CollectionLetterCode']
+        self.claim_type_code = data['EfiClaimTypeCode']
+        self.invoice = data['Invoice']
+        self.transaction_type = data['TransType']
+        self.claimant_name = data['ClaimantName']
+        self.claimant_id = data['ClaimantId']
+        self.payment_code = data['ChildClaimant']
+        self.child_claimant = data['ChildClaimant']
+        self.rate_number = data.get('ClaimRateNmb')
 
 
 class PrismeRecIdResponse(PrismeResponseObject):
@@ -419,7 +460,6 @@ class PrismeInterestResponseJournal(object):
 class PrismeInterestNoteResponseTransaction(object):
 
     def __init__(self, data):
-        # TODO you are unpacking a dictionary...
         self.voucher = data['Voucher']
         self.invoice = data['Invoice']
         self.text = data['Txt']

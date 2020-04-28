@@ -95,6 +95,10 @@ class RadioSelect(forms.RadioSelect):
 
 class KontoForm(forms.Form):
 
+    def __init__(self, *args, **kwargs):
+        super(KontoForm, self).__init__(*args, **kwargs)
+        self.initial['open_closed'] = 2
+
     from_date = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
         required=True,
@@ -110,7 +114,6 @@ class KontoForm(forms.Form):
     open_closed = forms.IntegerField(
         widget=RadioSelect(
             choices=[(0, 'account.entries_open'), (1, 'account.entries_closed'), (2, 'account.entries_all')],
-
         )
     )
 

@@ -167,25 +167,54 @@
                     <table class="output-table">
                         <thead>
                             <tr>
-                                <th data-trans="employeraccount.paymentdate">{% trans 'employeraccount.paymentdate' %}</th>
-                                <th data-trans="employeraccount.debitorgroup">{% trans 'employeraccount.debitorgroup' %}</th>
-                                <th data-trans="employeraccount.claimant">{% trans 'employeraccount.claimant' %}</th>
-                                <th data-trans="employeraccount.reference">{% trans 'employeraccount.reference' %}</th>
-                                <th data-trans="employeraccount.childcpr">{% trans 'employeraccount.childcpr' %}</th>
-                                <th data-trans="employeraccount.payment2">{% trans 'employeraccount.payment2' %}</th>
+                                <th data-trans="employeraccount.account_number">{% trans 'employeraccount.account_number' %}</th>
+                                <th data-trans="employeraccount.transaction_date">{% trans 'employeraccount.transaction_date' %}</th>
+                                <th data-trans="employeraccount.debitorgroup_id">{% trans 'employeraccount.debitorgroup_id' %}</th>
+                                <th data-trans="employeraccount.debitorgroup_name">{% trans 'employeraccount.debitorgroup_name' %}</th>
+                                <th data-trans="employeraccount.voucher">{% trans 'employeraccount.voucher' %}</th>
+                                <th data-trans="employeraccount.text">{% trans 'employeraccount.text' %}</th>
+                                <th data-trans="employeraccount.payment_code">{% trans 'employeraccount.payment_code' %}</th>
+                                <th data-trans="employeraccount.payment_code_name">{% trans 'employeraccount.payment_code_name' %}</th>
                                 <th data-trans="employeraccount.amount">{% trans 'employeraccount.amount' %}</th>
+                                <th data-trans="employeraccount.balance">{% trans 'employeraccount.balance' %}</th>
+                                <th data-trans="employeraccount.due_date">{% trans 'employeraccount.due_date' %}</th>
+                                <th data-trans="employeraccount.close_date">{% trans 'employeraccount.close_date' %}</th>
+                                <th data-trans="employeraccount.last_settlement_voucher">{% trans 'employeraccount.last_settlement_voucher' %}</th>
+                                <th data-trans="employeraccount.collection_letter_date">{% trans 'employeraccount.collection_letter_date' %}</th>
+                                <th data-trans="employeraccount.collection_letter_code">{% trans 'employeraccount.collection_letter_code' %}</th>
+                                <th data-trans="employeraccount.claim_type_code">{% trans 'employeraccount.claim_type_code' %}</th>
+                                <th data-trans="employeraccount.invoice_number">{% trans 'employeraccount.invoice_number' %}</th>
+                                <th data-trans="employeraccount.transaction_type">{% trans 'employeraccount.transaction_type' %}</th>
+                                <th data-trans="employeraccount.rate_number">{% trans 'employeraccount.rate_number' %}</th>
                             </tr>
                         </thead>
                         <tbody>
                         {% for item in items %}
                             <tr>
-                                <td>{{ item.paymentdate }}</td>
-                                <td>{{ item.debitorgroup }}</td>
-                                <td>{{ item.claimant }}</td>
-                                <td>{{ item.reference }}</td>
-                                <td>{{ item.childcpr }}</td>
-                                <td>{{ item.payment }}</td>
+                                <td>{{ item.account_number }}</td>
+                                <td>{{ item.transaction_date }}</td>
+                                <td>{{ item.accounting_date }}</td>
+                                <td>{{ item.customer_group_id }}</td>
+                                <td>{{ item.customer_group_name }}</td>
+                                <td>{{ item.voucher }}</td>
+                                <td>{{ item.text }}</td>
+                                <td>{{ item.payment_code }}</td>
+                                <td>{{ item.payment_description }}</td>
                                 <td>{{ item.amount }}</td>
+                                <td>{{ item.remaining_amount }}</td>
+                                <td>{{ item.due_date }}</td>
+                                <td>{{ item.closed_date }}</td>
+                                <td>{{ item.last_settlement_voucher }}</td>
+                                <td>{{ item.collection_letter_date }}</td>
+                                <td>{{ item.collection_letter_code }}</td>
+                                <td>{{ item.claim_type_code }}</td>
+                                <td>{{ item.invoice }}</td>
+                                <td>{{ item.transaction_type }}</td>
+                                <td>{{ item.claimant_name }}</td>
+                                <td>{{ item.claimant_id }}</td>
+                                <td>{{ item.payment_code }}</td>
+                                <td>{{ item.child_claimant }}</td>
+                                <td>{{ item.rate_number }}</td>
                             </tr>
                         {% empty %}
                             <tr>

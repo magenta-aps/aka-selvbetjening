@@ -409,7 +409,7 @@ msgid "rentenota.error_250"
 msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne periode {start} {end}"
 
 
-# NY18
+# NY16
 msgid "employeraccount.title"
 msgstr "Kontoudtog for arbejdsgivere"
 
@@ -443,41 +443,68 @@ msgstr "CPR/CVR"
 msgid "employeraccount.yourref"
 msgstr "Deres reference"
 
-msgid "employeraccount.contact"
-msgstr "Sagsbehandler"
-
-msgid "employeraccount.localnumber"
-msgstr "Lokalnummer"
-
-msgid "employeraccount.payment1"
-msgstr "Betaling"
-
-msgid "employeraccount.invoiceaccount"
-msgstr "Fakturakonto"
-
 msgid "employeraccount.ingenposter"
 msgstr "Ingen poster for perioden"
 
 msgid "employeraccount.paymentdate"
 msgstr "Forfaldsdato"
 
-msgid "employeraccount.debitorgroup"
+msgid "employeraccount.account_number"
+msgstr "Debitorkonto"
+
+msgid "employeraccount.transaction_date"
+msgstr "Posteringsdato"
+
+msgid "employeraccount.debitorgroup_id"
 msgstr "Debitorgruppe"
 
-msgid "employeraccount.claimant"
-msgstr "Fordringshaver"
+msgid "employeraccount.debitorgroup_name"
+msgstr "Debitorgruppenavn"
 
-msgid "employeraccount.reference"
-msgstr "Eksternt referencenummer"
+msgid "employeraccount.voucher"
+msgstr "Bilag"
 
-msgid "employeraccount.childcpr"
-msgstr "Barns cpr.nr."
+msgid "employeraccount.text"
+msgstr "Posteringstekst"
 
-msgid "employeraccount.payment2"
-msgstr "Indbetaling"
+msgid "employeraccount.payment_code"
+msgstr "Indbetalingskode"
+
+msgid "employeraccount.payment_code_name"
+msgstr "Indbetalingskodenavn"
 
 msgid "employeraccount.amount"
 msgstr "Beløb"
+
+msgid "employeraccount.balance"
+msgstr "Restsaldo"
+
+msgid "employeraccount.due_date"
+msgstr "Forfaldsdato"
+
+msgid "employeraccount.close_date"
+msgstr "Lukkedato"
+
+msgid "employeraccount.last_settlement_voucher"
+msgstr "Sidste udligningsbilag"
+
+msgid "employeraccount.collection_letter_date"
+msgstr "Rykkerdato"
+
+msgid "employeraccount.collection_letter_code"
+msgstr "Rykkerkode"
+
+msgid "employeraccount.claim_type_code"
+msgstr "Fordringsartskode"
+
+msgid "employeraccount.invoice_number"
+msgstr "Fakturanummer"
+
+msgid "employeraccount.transaction_type"
+msgstr "Posteringstype"
+
+msgid "employeraccount.rate_number"
+msgstr "Ratenummer"
 
 
 # S23

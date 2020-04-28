@@ -5,6 +5,7 @@ import re
 
 from aka.clients.dafo import Dafo
 from aka.clients.prisme import Prisme, PrismeException, PrismeNotFoundException
+from aka.clients.prisme import PrismeAccountRequest
 from aka.clients.prisme import PrismeClaimRequest
 from aka.clients.prisme import PrismeImpairmentRequest
 from aka.clients.prisme import PrismeInterestNoteRequest
@@ -139,27 +140,26 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
         return super().get_context_data(**context)
 
 
-class ArbejdsgiverKontoView(KontoView):
-# class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
+class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
     template_name = 'aka/employer_account/account.html'
 
     def get_pdf_filename(self):
         return _("employeraccount.filename").format(
-            **{k: v.strftime('%Y-%m-%d') for k, v in self.form.cleaned_data.items()}
+            self.form.cleaned_data['from_date'].strftime('%Y-%m-%d'),
+            self.form.cleaned_data['to_date'].strftime('%Y-%m-%d'),
         )
 
     def get_items(self, form):
-        # Call prisme
-        account_statement_req = Prisme
-
-
-
-        return [
-            {'text': 'Hotdog', 'amount': 15.0, 'total': 100000.0},
-            {'text': 'Bøfsandwich', 'amount': 30.0, 'total': 100000.0},
-            {'text': 'Burger', 'amount': 30.0, 'total': 100000.0}
-        ]
+        prisme = Prisme()
+        account_request = PrismeAccountRequest(
+            self.cvr,
+            form.cleaned_data['from_date'],
+            form.cleaned_data['to_date'],
+            form.cleaned_data['open_closed']
+        )
+        prisme_reply = prisme.process_service(account_request, 'arbejdsgiverkonto')[0]
+        return prisme_reply
 
     def get_context_data(self, **kwargs):
         context = {
@@ -176,15 +176,20 @@ class BorgerKontoView(RequireCprMixin, KontoView):
 
     def get_pdf_filename(self):
         return _("citizenaccount.filename").format(
-            **{k: v.strftime('%Y-%m-%d') for k, v in self.form.cleaned_data.items()}
+            self.form.cleaned_data['from_date'].strftime('%Y-%m-%d'),
+            self.form.cleaned_data['to_date'].strftime('%Y-%m-%d'),
         )
 
     def get_items(self, form):
-        return [
-            {'text': 'Hotdog', 'amount': 15.0, 'total': 100000.0},
-            {'text': 'Bøfsandwich', 'amount': 30.0, 'total': 100000.0},
-            {'text': 'Burger', 'amount': 30.0, 'total': 100000.0}
-        ]
+        prisme = Prisme
+        account_request = PrismeAccountRequest(
+            self.cpr,
+            form.cleaned_data['from_date'],
+            form.cleaned_data['to_date'],
+            form.cleaned_data['open_closed']
+        )
+        prisme_reply = prisme.process_service(account_request, 'borgerkonto')[0]
+        return prisme_reply
 
     def get_context_data(self, **kwargs):
         context = {
