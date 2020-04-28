@@ -455,6 +455,9 @@ msgstr "Debitorkonto"
 msgid "employeraccount.transaction_date"
 msgstr "Posteringsdato"
 
+msgid "employeraccount.accounting_date"
+msgstr "Bogføringsdato"
+
 msgid "employeraccount.debitorgroup_id"
 msgstr "Debitorgruppe"
 
@@ -502,6 +505,15 @@ msgstr "Fakturanummer"
 
 msgid "employeraccount.transaction_type"
 msgstr "Posteringstype"
+
+msgid "employeraccount.claimant_name"
+msgstr "Fordringshaver navn"
+
+msgid "employeraccount.claimant_id"
+msgstr "Fordringshaver ID"
+
+msgid "employeraccount.child_claimant"
+msgstr "?? Barn Fordringshaver ??"
 
 msgid "employeraccount.rate_number"
 msgstr "Ratenummer"
@@ -556,12 +568,6 @@ msgstr "Fakturakonto"
 msgid "citizenaccount.ingenposter"
 msgstr "Ingen poster for perioden"
 
-msgid "citizenaccount.paymentdate"
-msgstr "Forfaldsdato"
-
-msgid "citizenaccount.debitorgroup"
-msgstr "Debitorgruppe"
-
 msgid "citizenaccount.claimant"
 msgstr "Fordringshaver"
 
@@ -574,9 +580,77 @@ msgstr "Barns cpr.nr."
 msgid "citizenaccount.payment2"
 msgstr "Indbetaling"
 
+msgid "citizenaccount.paymentdate"
+msgstr "Forfaldsdato"
+
+msgid "citizenaccount.account_number"
+msgstr "Debitorkonto"
+
+msgid "citizenaccount.transaction_date"
+msgstr "Posteringsdato"
+
+msgid "citizenaccount.accounting_date"
+msgstr "Bogføringsdato"
+
+msgid "citizenaccount.debitorgroup_id"
+msgstr "Debitorgruppe"
+
+msgid "citizenaccount.debitorgroup_name"
+msgstr "Debitorgruppenavn"
+
+msgid "citizenaccount.voucher"
+msgstr "Bilag"
+
+msgid "citizenaccount.text"
+msgstr "Posteringstekst"
+
+msgid "citizenaccount.payment_code"
+msgstr "Indbetalingskode"
+
+msgid "citizenaccount.payment_code_name"
+msgstr "Indbetalingskodenavn"
+
 msgid "citizenaccount.amount"
 msgstr "Beløb"
 
+msgid "citizenaccount.balance"
+msgstr "Restsaldo"
+
+msgid "citizenaccount.due_date"
+msgstr "Forfaldsdato"
+
+msgid "citizenaccount.close_date"
+msgstr "Lukkedato"
+
+msgid "citizenaccount.last_settlement_voucher"
+msgstr "Sidste udligningsbilag"
+
+msgid "citizenaccount.collection_letter_date"
+msgstr "Rykkerdato"
+
+msgid "citizenaccount.collection_letter_code"
+msgstr "Rykkerkode"
+
+msgid "citizenaccount.claim_type_code"
+msgstr "Fordringsartskode"
+
+msgid "citizenaccount.invoice_number"
+msgstr "Fakturanummer"
+
+msgid "citizenaccount.transaction_type"
+msgstr "Posteringstype"
+
+msgid "citizenaccount.claimant_name"
+msgstr "Fordringshaver navn"
+
+msgid "citizenaccount.claimant_id"
+msgstr "Fordringshaver ID"
+
+msgid "citizenaccount.child_claimant"
+msgstr "?? Barn Fordringshaver ??"
+
+msgid "citizenaccount.rate_number"
+msgstr "Ratenummer"
 
 
 

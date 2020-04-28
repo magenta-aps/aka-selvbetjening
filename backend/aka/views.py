@@ -43,6 +43,9 @@ from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
 
+from aka.clients.prisme import PrismeAccountResponse
+from aka.utils import get_file_contents
+
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
 
@@ -130,7 +133,7 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
             context.update({
                 'items': self.items,
                 'date': date.today().strftime('%d/%m/%Y'),
-                'sum': sum([item['amount'] for item in self.items]) if self.items else 0,
+                # 'sum': sum([item['amount'] for item in self.items]) if self.items else 0,
                 'period': {
                     'from_date': formdata['from_date'].strftime('%d-%m-%Y'),
                     'to_date': formdata['to_date'].strftime('%d-%m-%Y')
@@ -146,8 +149,8 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
     def get_pdf_filename(self):
         return _("employeraccount.filename").format(
-            self.form.cleaned_data['from_date'].strftime('%Y-%m-%d'),
-            self.form.cleaned_data['to_date'].strftime('%Y-%m-%d'),
+            from_date=self.form.cleaned_data['from_date'].strftime('%Y-%m-%d'),
+            to_date=self.form.cleaned_data['to_date'].strftime('%Y-%m-%d'),
         )
 
     def get_items(self, form):
@@ -163,7 +166,7 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
     def get_context_data(self, **kwargs):
         context = {
-            # 'company': Dafo().lookup_cvr(self.cvr),
+            'company': Dafo().lookup_cvr(self.cvr),
         }
         context.update(kwargs)
         return super().get_context_data(**context)
@@ -175,20 +178,22 @@ class BorgerKontoView(RequireCprMixin, KontoView):
     template_name = 'aka/citizen_account/account.html'
 
     def get_pdf_filename(self):
+        print(self.form.cleaned_data)
         return _("citizenaccount.filename").format(
-            self.form.cleaned_data['from_date'].strftime('%Y-%m-%d'),
-            self.form.cleaned_data['to_date'].strftime('%Y-%m-%d'),
+            from_date=self.form.cleaned_data['from_date'].strftime('%Y-%m-%d'),
+            to_date=self.form.cleaned_data['to_date'].strftime('%Y-%m-%d'),
         )
 
     def get_items(self, form):
-        prisme = Prisme
+        prisme = Prisme()
         account_request = PrismeAccountRequest(
             self.cpr,
             form.cleaned_data['from_date'],
             form.cleaned_data['to_date'],
             form.cleaned_data['open_closed']
         )
-        prisme_reply = prisme.process_service(account_request, 'borgerkonto')[0]
+        # prisme_reply = prisme.process_service(account_request, 'borgerkonto')[0]
+        prisme_reply = PrismeAccountResponse(None, get_file_contents('aka/tests/resources/employeraccount_response.xml'))
         return prisme_reply
 
     def get_context_data(self, **kwargs):

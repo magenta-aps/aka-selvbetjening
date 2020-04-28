@@ -359,6 +359,9 @@ class PrismeAccountResponse(PrismeResponseObject):
             for x in transactions
         ]
 
+    def __iter__(self):
+        yield from self.transactions
+
 
 class PrismeAccountResponseTransaction(object):
 

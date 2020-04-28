@@ -124,7 +124,8 @@ table {
     width: 100%
 }
 .row {
-    position: relative
+    position: relative;
+    padding: 0.5em 0;
 }
 .row [class^=col] {
     float: left;

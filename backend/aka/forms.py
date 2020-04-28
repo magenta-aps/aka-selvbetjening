@@ -114,7 +114,8 @@ class KontoForm(forms.Form):
     open_closed = forms.IntegerField(
         widget=RadioSelect(
             choices=[(0, 'account.entries_open'), (1, 'account.entries_closed'), (2, 'account.entries_all')],
-        )
+        ),
+        error_messages={'required': 'error.required'},
     )
 
     def clean(self):
