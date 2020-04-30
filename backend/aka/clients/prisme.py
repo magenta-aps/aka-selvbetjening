@@ -352,12 +352,12 @@ class PrismeAccountResponseTransaction(object):
         self.account_number = data['AccountNum']
         self.transaction_date = data['TransDate']
         self.accounting_date = data['AccountingDate']
-        self.customer_group_id = data['CustGroup']
-        self.customer_group_name = data['CustGroupName']
+        self.debitor_group_id = data['CustGroup']
+        self.debitor_group_name = data['CustGroupName']
         self.voucher = data['Voucher']
         self.text = data['Txt']
         self.payment_code = data['CustPaymCode']
-        self.payment_description = data['CustPaymDescription']
+        self.payment_code_name = data['CustPaymDescription']
         amount = data['AmountCur']
         try:
             self.amount = float(amount)
@@ -370,7 +370,7 @@ class PrismeAccountResponseTransaction(object):
         self.collection_letter_date = data['CollectionLetterDate']
         self.collection_letter_code = data['CollectionLetterCode']
         self.claim_type_code = data['EfiClaimTypeCode']
-        self.invoice = data['Invoice']
+        self.invoice_number = data['Invoice']
         self.transaction_type = data['TransType']
         self.rate_number = data['ClaimRateNmb']
 

@@ -169,12 +169,21 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
             form.cleaned_data['to_date'],
             form.cleaned_data['open_closed']
         )
-        prisme_reply = prisme.process_service(account_request, 'arbejdsgiverkonto')[0]
+        # prisme_reply = prisme.process_service(account_request, 'arbejdsgiverkonto')[0]
+        prisme_reply = PrismeAccountResponse(None, get_file_contents('aka/tests/resources/employeraccount_response.xml'))
         return prisme_reply
 
     def get_context_data(self, **kwargs):
         context = {
             'company': Dafo().lookup_cvr(self.cvr),
+            'fields': [
+                'account_number', 'transaction_date', 'accounting_date', 'debitor_group_id',
+                'debitor_group_name', 'voucher', 'text', 'payment_code',
+                'payment_code_name', 'amount', 'remaining_amount', 'due_date',
+                'closed_date', 'last_settlement_voucher', 'collection_letter_date', 'collection_letter_code',
+                'claim_type_code', 'invoice_number', 'transaction_type', 'claimant_name',
+                'claimant_id', 'payment_code', 'child_claimant', 'rate_number',
+            ]
         }
         context.update(kwargs)
         return super().get_context_data(**context)
@@ -208,6 +217,14 @@ class BorgerKontoView(RequireCprMixin, KontoView):
     def get_context_data(self, **kwargs):
         context = {
             'citizen': Dafo().lookup_cpr(self.cpr),
+            'fields': [
+                'account_number', 'transaction_date', 'accounting_date', 'debitor_group_id',
+                'debitor_group_name', 'voucher', 'text', 'payment_code',
+                'payment_code_name', 'amount', 'remaining_amount', 'due_date',
+                'closed_date', 'last_settlement_voucher', 'collection_letter_date', 'collection_letter_code',
+                'claim_type_code', 'invoice_number', 'transaction_type', 'claimant_name',
+                'claimant_id', 'child_claimant', 'rate_number'
+            ]
         }
         context.update(kwargs)
         return super().get_context_data(**context)

@@ -47,3 +47,11 @@ def analyze(data):
 @register.filter
 def startswith(text, prefix):
     return type(text) == str and text.startswith(prefix)
+
+
+@register.filter
+def get(item, attribute):
+    if hasattr(item, attribute):
+        return getattr(item, attribute)
+    if hasattr(item, 'get'):
+        return item.get(attribute)

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load aka_tags %}
 
 {% block extra_headers %}
     {% if pdf %}
@@ -209,117 +210,44 @@
 
                 <div class="citizenaccount-data">
 
-
-                <div>
-                    show/hide columns
-                    <a href="#" data-action="display-column" data-column="account_number">{% trans 'citizenaccount.account_number' %}</a>
-                    <a href="#" data-action="display-column" data-column="transaction_date">{% trans 'citizenaccount.transaction_date' %}</a>
-                    <a href="#" data-action="display-column" data-column="accounting_date">{% trans 'citizenaccount.accounting_date' %}</a>
-                    <a href="#" data-action="display-column" data-column="debitorgroup_id">{% trans 'citizenaccount.debitorgroup_id' %}</a>
-                    <a href="#" data-action="display-column" data-column="debitorgroup_name">{% trans 'citizenaccount.debitorgroup_name' %}</a>
-                    <a href="#" data-action="display-column" data-column="voucher">{% trans 'citizenaccount.voucher' %}</a>
-                    <a href="#" data-action="display-column" data-column="text">{% trans 'citizenaccount.text' %}</a>
-                    <a href="#" data-action="display-column" data-column="payment_code">{% trans 'citizenaccount.payment_code' %}</a>
-                    <a href="#" data-action="display-column" data-column="payment_code_name">{% trans 'citizenaccount.payment_code_name' %}</a>
-                    <a href="#" data-action="display-column" data-column="amount">{% trans 'citizenaccount.amount' %}</a>
-                    <a href="#" data-action="display-column" data-column="balance">{% trans 'citizenaccount.balance' %}</a>
-                    <a href="#" data-action="display-column" data-column="due_date">{% trans 'citizenaccount.due_date' %}</a>
-                    <a href="#" data-action="display-column" data-column="close_date">{% trans 'citizenaccount.close_date' %}</a>
-                    <a href="#" data-action="display-column" data-column="last_settlement_voucher">{% trans 'citizenaccount.last_settlement_voucher' %}</a>
-                    <a href="#" data-action="display-column" data-column="collection_letter_date">{% trans 'citizenaccount.collection_letter_date' %}</a>
-                    <a href="#" data-action="display-column" data-column="collection_letter_code">{% trans 'citizenaccount.collection_letter_code' %}</a>
-                    <a href="#" data-action="display-column" data-column="claim_type_code">{% trans 'citizenaccount.claim_type_code' %}</a>
-                    <a href="#" data-action="display-column" data-column="invoice_number">{% trans 'citizenaccount.invoice_number' %}</a>
-                    <a href="#" data-action="display-column" data-column="transaction_type">{% trans 'citizenaccount.transaction_type' %}</a>
-                    <a href="#" data-action="display-column" data-column="claimant_name">{% trans 'citizenaccount.claimant_name' %}</a>
-                    <a href="#" data-action="display-column" data-column="claimant_id">{% trans 'citizenaccount.claimant_id' %}</a>
-                    <a href="#" data-action="display-column" data-column="child_claimant">{% trans 'citizenaccount.child_claimant' %}</a>
-                    <a href="#" data-action="display-column" data-column="rate_number">{% trans 'citizenaccount.rate_number' %}</a>
-
-                </div>
+                    <div>
+                        show/hide columns
+                        {% for field in fields %}
+                            {% with "citizenaccount."|add:field as transkey %}
+                                <a href="#" data-action="display-column" data-column="{{ field }}">{% trans transkey %}</a>
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
 
                     <table id="data-table" class="output-table">
                         <thead>
                         <tr>
-                            <th data-field="account_number" data-trans="citizenaccount.account_number">{% trans 'citizenaccount.account_number' %}</th>
-                            <th data-field="transaction_date" data-trans="citizenaccount.transaction_date">{% trans 'citizenaccount.transaction_date' %}</th>
-                            <th data-field="accounting_date" data-trans="citizenaccount.accounting_date">{% trans 'citizenaccount.accounting_date' %}</th>
-                            <th data-field="debitorgroup_id" data-trans="citizenaccount.debitorgroup_id">{% trans 'citizenaccount.debitorgroup_id' %}</th>
-                            <th data-field="debitorgroup_name" data-trans="citizenaccount.debitorgroup_name">{% trans 'citizenaccount.debitorgroup_name' %}</th>
-                            <th data-field="voucher" data-trans="citizenaccount.voucher">{% trans 'citizenaccount.voucher' %}</th>
-                            <th data-field="text" data-trans="citizenaccount.text">{% trans 'citizenaccount.text' %}</th>
-                            <th data-field="payment_code" data-trans="citizenaccount.payment_code">{% trans 'citizenaccount.payment_code' %}</th>
-                            <th data-field="payment_code_name" data-trans="citizenaccount.payment_code_name">{% trans 'citizenaccount.payment_code_name' %}</th>
-                            <th data-field="amount" data-trans="citizenaccount.amount">{% trans 'citizenaccount.amount' %}</th>
-                            <th data-field="balance" data-trans="citizenaccount.balance">{% trans 'citizenaccount.balance' %}</th>
-                            <th data-field="due_date" data-trans="citizenaccount.due_date">{% trans 'citizenaccount.due_date' %}</th>
-                            <th data-field="close_date" data-trans="citizenaccount.close_date">{% trans 'citizenaccount.close_date' %}</th>
-                            <th data-field="last_settlement_voucher" data-trans="citizenaccount.last_settlement_voucher">{% trans 'citizenaccount.last_settlement_voucher' %}</th>
-                            <th data-field="collection_letter_date" data-trans="citizenaccount.collection_letter_date">{% trans 'citizenaccount.collection_letter_date' %}</th>
-                            <th data-field="collection_letter_code" data-trans="citizenaccount.collection_letter_code">{% trans 'citizenaccount.collection_letter_code' %}</th>
-                            <th data-field="claim_type_code" data-trans="citizenaccount.claim_type_code">{% trans 'citizenaccount.claim_type_code' %}</th>
-                            <th data-field="invoice_number" data-trans="citizenaccount.invoice_number">{% trans 'citizenaccount.invoice_number' %}</th>
-                            <th data-field="transaction_type" data-trans="citizenaccount.transaction_type">{% trans 'citizenaccount.transaction_type' %}</th>
-                            <th data-field="claimant_name" data-trans="citizenaccount.claimant_name">{% trans 'citizenaccount.claimant_name' %}</th>
-                            <th data-field="claimant_id" data-trans="citizenaccount.claimant_id">{% trans 'citizenaccount.claimant_id' %}</th>
-                            <th data-field="child_claimant" data-trans="citizenaccount.child_claimant">{% trans 'citizenaccount.child_claimant' %}</th>
-                            <th data-field="rate_number" data-trans="citizenaccount.rate_number">{% trans 'citizenaccount.rate_number' %}</th>
+                            {% for field in fields %}
+                                {% with "citizenaccount."|add:field as transkey %}
+                                    <th data-field="{{ field }}" data-trans="{{ transkey }}">{% trans transkey %}</th>
+                                {% endwith %}
+                            {% endfor %}
                         </tr>
                         </thead>
                         <tbody>
                         {% for item in items %}
                             <tr>
-                                <td>{{ item.account_number|default:'' }}</td>
-                                <td>{{ item.transaction_date|default:'' }}</td>
-                                <td>{{ item.accounting_date|default:'' }}</td>
-                                <td>{{ item.customer_group_id|default:'' }}</td>
-                                <td>{{ item.customer_group_name|default:'' }}</td>
-                                <td>{{ item.voucher|default:'' }}</td>
-                                <td>{{ item.text|default:'' }}</td>
-                                <td>{{ item.payment_code|default:'' }}</td>
-                                <td>{{ item.payment_description|default:'' }}</td>
-                                <td>{{ item.amount|default:'' }}</td>
-                                <td>{{ item.remaining_amount|default:'' }}</td>
-                                <td>{{ item.due_date|default:'' }}</td>
-                                <td>{{ item.closed_date|default:'' }}</td>
-                                <td>{{ item.last_settlement_voucher|default:'' }}</td>
-                                <td>{{ item.collection_letter_date|default:'' }}</td>
-                                <td>{{ item.collection_letter_code|default:'' }}</td>
-                                <td>{{ item.claim_type_code|default:'' }}</td>
-                                <td>{{ item.invoice|default:'' }}</td>
-                                <td>{{ item.transaction_type|default:'' }}</td>
-                                <td>{{ item.claimant_name|default:'' }}</td>
-                                <td>{{ item.claimant_id|default:'' }}</td>
-                                <td>{{ item.child_claimant|default:'' }}</td>
-                                <td>{{ item.rate_number|default:'' }}</td>
+                                {% for field in fields %}
+                                    <td>{{ item|get:field|default:'' }}</td>
+                                {% endfor %}
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="3" class="empty" data-trans="citizenaccount.ingenposter">{% trans 'citizenaccount.ingenposter' %}</td>
+                                <td colspan="{{ fields|length }}" class="empty" data-trans="citizenaccount.ingenposter">{% trans 'citizenaccount.ingenposter' %}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
-
-{#                        <tfoot>#}
-{#                            <tr>#}
-{#                                <td style="border-bottom:2px solid #000"></td>#}
-{#                            </tr>#}
-{#                            <tr>#}
-{#                                <td colspan="9"></td>#}
-{#                                <td>{{ sum }}</td>#}
-{#                            </tr>#}
-{#                            <tr>#}
-{#                                <td colspan="2"></td>#}
-{#                                <td data-trans="common.skattestyrelsen">{% trans 'common.skattestyrelsen' %}</td>#}
-{#                            </tr>#}
-{#                        </tfoot>#}
                     </table>
                     <hr/>
                     <p>Såfremt ovenstående er betalt indenfor de sidste 8 hverdage, bedes De se bort fra denne henvendelse.<p>
                     <p>Akiligassaq qulaani pineqartoq ullut arfineq pingasut iluanni akilersimagukku, una allagaq igiinnassaq.</p>
                 </div>
-            
-            
+
             </div>
         {% endif %}
 

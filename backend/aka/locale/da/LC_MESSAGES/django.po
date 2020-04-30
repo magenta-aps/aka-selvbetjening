@@ -459,10 +459,10 @@ msgstr "Posteringsdato"
 msgid "employeraccount.accounting_date"
 msgstr "Bogføringsdato"
 
-msgid "employeraccount.debitorgroup_id"
+msgid "employeraccount.customer_group_id"
 msgstr "Debitorgruppe"
 
-msgid "employeraccount.debitorgroup_name"
+msgid "employeraccount.customer_group_name"
 msgstr "Debitorgruppenavn"
 
 msgid "employeraccount.voucher"
@@ -593,10 +593,10 @@ msgstr "Posteringsdato"
 msgid "citizenaccount.accounting_date"
 msgstr "Bogføringsdato"
 
-msgid "citizenaccount.debitorgroup_id"
+msgid "citizenaccount.debitor_group_id"
 msgstr "Debitorgruppe"
 
-msgid "citizenaccount.debitorgroup_name"
+msgid "citizenaccount.debitor_group_name"
 msgstr "Debitorgruppenavn"
 
 msgid "citizenaccount.voucher"
@@ -614,13 +614,13 @@ msgstr "Indbetalingskodenavn"
 msgid "citizenaccount.amount"
 msgstr "Beløb"
 
-msgid "citizenaccount.balance"
+msgid "citizenaccount.remaining_amount"
 msgstr "Restsaldo"
 
 msgid "citizenaccount.due_date"
 msgstr "Forfaldsdato"
 
-msgid "citizenaccount.close_date"
+msgid "citizenaccount.closed_date"
 msgstr "Lukkedato"
 
 msgid "citizenaccount.last_settlement_voucher"
