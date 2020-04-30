@@ -346,23 +346,6 @@ class PrismeResponseObject(object):
         self.xml = xml
 
 
-class PrismeAccountResponse(PrismeResponseObject):
-
-    def __init__(self, request, xml):
-        super(PrismeAccountResponse, self).__init__(request, xml)
-        data = xml_to_dict(xml)
-        transactions = data['CustTable']['CustTrans']
-        if type(transactions) != list:
-            transactions = [transactions]
-        self.transactions = [
-            PrismeAccountResponseTransaction(x)
-            for x in transactions
-        ]
-
-    def __iter__(self):
-        yield from self.transactions
-
-
 class PrismeAccountResponseTransaction(object):
 
     def __init__(self, data):
@@ -375,7 +358,11 @@ class PrismeAccountResponseTransaction(object):
         self.text = data['Txt']
         self.payment_code = data['CustPaymCode']
         self.payment_description = data['CustPaymDescription']
-        self.amount = data['AmountCur']
+        amount = data['AmountCur']
+        try:
+            self.amount = float(amount)
+        except ValueError:
+            self.amount = 0
         self.remaining_amount = data['RemainAmountCur']
         self.due_date = data['DueDate']
         self.closed_date = data['Closed']
@@ -385,11 +372,38 @@ class PrismeAccountResponseTransaction(object):
         self.claim_type_code = data['EfiClaimTypeCode']
         self.invoice = data['Invoice']
         self.transaction_type = data['TransType']
+        self.rate_number = data['ClaimRateNmb']
+
+
+class PrismeCitizenAccountResponseTransaction(PrismeAccountResponseTransaction):
+
+    def __init__(self, data):
+        super(PrismeCitizenAccountResponseTransaction, self).__init__(data)
         self.claimant_name = data['ClaimantName']
         self.claimant_id = data['ClaimantId']
-        self.payment_code = data['ChildClaimant']
         self.child_claimant = data['ChildClaimant']
-        self.rate_number = data.get('ClaimRateNmb')
+
+
+class PrismeAccountResponse(PrismeResponseObject):
+
+    itemclass = PrismeAccountResponseTransaction
+
+    def __init__(self, request, xml):
+        super(PrismeAccountResponse, self).__init__(request, xml)
+        data = xml_to_dict(xml)
+        transactions = data['CustTable']['CustTrans']
+        if type(transactions) != list:
+            transactions = [transactions]
+        self.transactions = [self.itemclass(x) for x in transactions]
+
+    def __iter__(self):
+        yield from self.transactions
+
+
+class PrismeCitizenAccountResponse(PrismeAccountResponse):
+
+    itemclass = PrismeCitizenAccountResponseTransaction
+
 
 
 class PrismeRecIdResponse(PrismeResponseObject):

@@ -9,7 +9,7 @@ from django import forms
 from django.conf import settings
 from django.core.validators import FileExtensionValidator, MinLengthValidator, \
     MaxLengthValidator
-from django.forms import ValidationError
+from django.forms import ValidationError, MultipleHiddenInput
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 
@@ -93,6 +93,10 @@ class RadioSelect(forms.RadioSelect):
     option_template_name='aka/util/optionfield.html'
 
 
+class AcceptingMultipleChoiceField(forms.MultipleChoiceField):
+    def valid_value(self, value):
+        return True
+
 class KontoForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
@@ -116,6 +120,10 @@ class KontoForm(forms.Form):
             choices=[(0, 'account.entries_open'), (1, 'account.entries_closed'), (2, 'account.entries_all')],
         ),
         error_messages={'required': 'error.required'},
+    )
+    hidden = AcceptingMultipleChoiceField(
+        widget=MultipleHiddenInput,
+        required=False
     )
 
     def clean(self):

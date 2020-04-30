@@ -84,8 +84,8 @@ class SimpleGetFormMixin(FormMixin):
     def form_valid(self, form):
         return super().get(self.request)
 
-    def form_invalid(self, form):
-        return super().get(self.request)
+    # def form_invalid(self, form):
+    #     return super().get(self.request)
 
     def get_form_kwargs(self):
         kwargs = {

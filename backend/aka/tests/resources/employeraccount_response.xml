@@ -22,5 +22,6 @@
         <ClaimantName>Avannaata Kommunia</ClaimantName>
         <ClaimantId>37AK</ClaimantId>
         <ChildClaimant/>
+        <ClaimRateNmb>2</ClaimRateNmb>
     </CustTrans>
 </CustTable>

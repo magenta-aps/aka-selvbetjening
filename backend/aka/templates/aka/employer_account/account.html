@@ -22,6 +22,8 @@
     <div class="employeraccount-main">
 
         <form method="get" id="mainform" class="printhide">
+            form.non_field_errors: {{ form.non_field_errors }}
+            form.non_errors: {{ form.errors }}
             {% if form.non_field_errors %}
                 <ul class="errorlist">
                     {% for error in form.non_field_errors.as_data %}
@@ -231,8 +233,7 @@
                                 <td style="border-bottom:2px solid #000"></td>
                             </tr>
                             <tr>
-                                <td colspan="2"></td>
-                                <td colspan="4">NO AKI 240140</td>
+                                <td colspan="9"></td>
                                 <td>{{ sum }}</td>
                             </tr>
                             <tr>
