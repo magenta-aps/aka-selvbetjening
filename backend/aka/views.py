@@ -117,7 +117,10 @@ class IndexTemplateView(TemplateView):
 class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
 
     form_class = KontoForm
-    items = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.items = None
 
     def form_valid(self, form):
         self.form = form
@@ -146,6 +149,7 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
         context.update(kwargs)
         return super().get_context_data(**context)
 
+# NY16
 
 class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
@@ -175,6 +179,8 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
         context.update(kwargs)
         return super().get_context_data(**context)
 
+
+# S23
 
 class BorgerKontoView(RequireCprMixin, KontoView):
 
@@ -207,6 +213,7 @@ class BorgerKontoView(RequireCprMixin, KontoView):
         return super().get_context_data(**context)
 
 
+# 6.1
 
 class FordringshaverkontoView(RequireCvrMixin, TemplateView):
 
@@ -391,6 +398,8 @@ class InkassoGroupDataView(View):
         return HttpResponse(data, content_type='application/json')
 
 
+# 6.2
+
 class LoentraekView(RequireCvrMixin, FormSetView, FormView):
 
     form_class = LoentraekForm
@@ -477,6 +486,8 @@ class LoenTraekDistributionView(View):
         return JsonResponse(data, safe=False)
 
 
+#6.4
+
 class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
 
     form_class = NedskrivningForm
@@ -562,12 +573,17 @@ class PrivatdebitorkontoView(View):
         return JsonResponse("OK", safe=False)
 
 
+# NY18
+
 @method_decorator(csrf_exempt, name='dispatch')
 class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, TemplateView):
     form_class = InterestNoteForm
     template_name = 'aka/interestnote/interestnote.html'
-    posts = None
-    errors = []
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.errors = []
+        self.posts = None
 
     def get_posts(self, form):
         prisme = Prisme()
@@ -605,6 +621,7 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
         try:
             self.posts = self.get_posts(form)
         except PrismeException as e:
+            print(e.as_error_dict)
             self.errors.append(e.as_error_dict)
 
         if 'pdf' in self.request.GET:

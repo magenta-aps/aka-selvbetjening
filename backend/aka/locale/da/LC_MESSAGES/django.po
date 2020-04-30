@@ -191,6 +191,7 @@ msgstr "Vis Borgerkonto"
 
 
 # 6.1
+
 msgid "fordring.title"
 msgstr "Indberet fordring"
 
