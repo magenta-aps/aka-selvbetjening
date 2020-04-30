@@ -2,6 +2,7 @@ import json
 import os
 
 import pdfkit
+from aka.clients.dafo import Dafo
 from aka.exceptions import AkaException
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
@@ -9,8 +10,6 @@ from django.http import HttpResponse
 from django.template.loader import select_template
 from django.template.response import TemplateResponse
 from django.views.generic.edit import FormMixin
-
-from aka.clients.dafo import Dafo
 
 
 class ErrorHandlerMixin(object):

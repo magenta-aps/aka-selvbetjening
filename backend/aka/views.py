@@ -133,6 +133,7 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
         context.update(kwargs)
         return super().get_context_data(**context)
 
+# NY16
 
 class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
@@ -158,6 +159,7 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
         return super().get_context_data(**context)
 
 
+# S23
 
 class BorgerKontoView(RequireCprMixin, KontoView):
 
@@ -183,6 +185,7 @@ class BorgerKontoView(RequireCprMixin, KontoView):
         return super().get_context_data(**context)
 
 
+# 6.1
 
 class FordringshaverkontoView(RequireCvrMixin, TemplateView):
 
@@ -367,6 +370,8 @@ class InkassoGroupDataView(View):
         return HttpResponse(data, content_type='application/json')
 
 
+# 6.2
+
 class LoentraekView(RequireCvrMixin, FormSetView, FormView):
 
     form_class = LoentraekForm
@@ -453,6 +458,8 @@ class LoenTraekDistributionView(View):
         return JsonResponse(data, safe=False)
 
 
+#6.4
+
 class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
 
     form_class = NedskrivningForm
@@ -537,6 +544,8 @@ class PrivatdebitorkontoView(View):
     def get(self, request, *args, **kwargs):
         return JsonResponse("OK", safe=False)
 
+
+# NY18
 
 @method_decorator(csrf_exempt, name='dispatch')
 class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, TemplateView):

@@ -179,6 +179,7 @@ msgstr "Vis Borgerkonto"
 
 
 # 6.1
+
 msgid "fordring.title"
 msgstr "Indberet fordring"
 
@@ -321,7 +322,7 @@ msgstr "Sekvensnummer"
 # 6.5
 
 
-# NY16
+# NY18
 msgid "rentenota.title"
 msgstr "Rentenota"
 
@@ -386,7 +387,7 @@ msgid "rentenota.error_250"
 msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne periode {start} {end}"
 
 
-# NY18
+# NY16
 msgid "employeraccount.title"
 msgstr "Kontoudtog for arbejdsgivere"
 

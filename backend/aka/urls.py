@@ -14,6 +14,7 @@ Includinganother URLconf
    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from aka.views import ArbejdsgiverKontoView
+from aka.views import BorgerKontoView
 from aka.views import CustomJavaScriptCatalog, SetLanguageView
 from aka.views import FordringshaverkontoView
 from aka.views import IndexTemplateView
@@ -23,7 +24,6 @@ from aka.views import LoenTraekDistributionView
 from aka.views import LoentraekView, LoentraekUploadView
 from aka.views import NedskrivningView, NedskrivningUploadView
 from aka.views import NetsopkraevningView
-from aka.views import BorgerKontoView
 from aka.views import RenteNotaView
 from django.conf.urls import url, include
 
