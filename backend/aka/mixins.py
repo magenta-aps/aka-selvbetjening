@@ -120,7 +120,12 @@ class PdfRendererMixin(object):
         context['css'] = ''.join(css_data)
 
         html = select_template(self.get_template_names()).render(context)
-        # response = HttpResponse(html)
+
+        html = html.replace(
+            "\"%s" % settings.STATIC_URL,
+            "\"file://%s/" % os.path.abspath(settings.STATIC_ROOT)
+        )
+
         pdf = pdfkit.from_string(html, False)
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
