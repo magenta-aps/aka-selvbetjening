@@ -169,7 +169,7 @@
                     <div>
                         show/hide columns
                         {% for field in fields %}
-                            {% with "citizenaccount."|add:field as transkey %}
+                            {% with "employeraccount."|add:field as transkey %}
                                 <a href="#" data-action="display-column" data-column="{{ field }}">{% trans transkey %}</a>
                             {% endwith %}
                         {% endfor %}
@@ -179,7 +179,7 @@
                         <thead>
                         <tr>
                             {% for field in fields %}
-                                {% with "citizenaccount."|add:field as transkey %}
+                                {% with "employeraccount."|add:field as transkey %}
                                     <th data-field="{{ field }}" data-trans="{{ transkey }}">{% trans transkey %}</th>
                                 {% endwith %}
                             {% endfor %}
@@ -194,7 +194,7 @@
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="{{ fields|length }}" class="empty" data-trans="citizenaccount.ingenposter">{% trans 'citizenaccount.ingenposter' %}</td>
+                                <td colspan="{{ fields|length }}" class="empty" data-trans="employeraccount.ingenposter">{% trans 'employeraccount.ingenposter' %}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
