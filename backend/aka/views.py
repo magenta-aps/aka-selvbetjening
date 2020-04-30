@@ -113,7 +113,10 @@ class IndexTemplateView(TemplateView):
 class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
 
     form_class = KontoForm
-    items = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.items = None
 
     def form_valid(self, form):
         self.form = form
@@ -539,8 +542,11 @@ class PrivatdebitorkontoView(View):
 class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, TemplateView):
     form_class = InterestNoteForm
     template_name = 'aka/interestnote/interestnote.html'
-    posts = None
-    errors = []
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.errors = []
+        self.posts = None
 
     def get_posts(self, form):
         prisme = Prisme()
@@ -578,6 +584,7 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
         try:
             self.posts = self.get_posts(form)
         except PrismeException as e:
+            print(e.as_error_dict)
             self.errors.append(e.as_error_dict)
 
         if 'pdf' in self.request.GET:
