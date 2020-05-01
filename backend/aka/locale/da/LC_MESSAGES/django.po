@@ -444,6 +444,18 @@ msgstr "CPR/CVR"
 msgid "employeraccount.yourref"
 msgstr "Deres reference"
 
+msgid "employeraccount.contact"
+msgstr "Sagsbehandler"
+
+msgid "employeraccount.localnumber"
+msgstr "Lokalnummer"
+
+msgid "employeraccount.payment1"
+msgstr "Betaling"
+
+msgid "employeraccount.invoiceaccount"
+msgstr "Fakturakonto"
+
 msgid "employeraccount.ingenposter"
 msgstr "Ingen poster for perioden"
 

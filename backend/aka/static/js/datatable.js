@@ -1,6 +1,10 @@
 $(function(){
     var table = $('#data-table').DataTable({
-        scrollX: true
+        scrollX: true,
+        searching: false,
+        lengthChange: false,
+        paging: false,
+        info: false,
     });
 
     $("[data-action='display-column']").each(function(index, element){
