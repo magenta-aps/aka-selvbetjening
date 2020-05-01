@@ -137,6 +137,13 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
         context = {}
         if self.form.is_bound:
             formdata = self.form.cleaned_data
+            fields = self.get_fields()
+            if 'pdf' in self.request.GET:
+                fields = [
+                    field for field in fields
+                    if field not in formdata['hidden']
+                ]
+
             context.update({
                 'items': self.items,
                 'date': date.today().strftime('%d/%m/%Y'),
@@ -144,7 +151,8 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
                 'period': {
                     'from_date': formdata['from_date'].strftime('%d-%m-%Y'),
                     'to_date': formdata['to_date'].strftime('%d-%m-%Y')
-                }
+                },
+                'fields': fields
             })
         context.update(kwargs)
         return super().get_context_data(**context)
@@ -173,17 +181,19 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
         prisme_reply = PrismeAccountResponse(None, get_file_contents('aka/tests/resources/employeraccount_response.xml'))
         return prisme_reply
 
+    def get_fields(self):
+        return [
+            'account_number', 'transaction_date', 'accounting_date', 'debitor_group_id',
+            'debitor_group_name', 'voucher', 'text', 'payment_code',
+            'payment_code_name', 'amount', 'remaining_amount', 'due_date',
+            'closed_date', 'last_settlement_voucher', 'collection_letter_date', 'collection_letter_code',
+            'claim_type_code', 'invoice_number', 'transaction_type', 'claimant_name',
+            'claimant_id', 'payment_code', 'child_claimant', 'rate_number',
+        ]
+
     def get_context_data(self, **kwargs):
         context = {
-            'company': Dafo().lookup_cvr(self.cvr),
-            'fields': [
-                'account_number', 'transaction_date', 'accounting_date', 'debitor_group_id',
-                'debitor_group_name', 'voucher', 'text', 'payment_code',
-                'payment_code_name', 'amount', 'remaining_amount', 'due_date',
-                'closed_date', 'last_settlement_voucher', 'collection_letter_date', 'collection_letter_code',
-                'claim_type_code', 'invoice_number', 'transaction_type', 'claimant_name',
-                'claimant_id', 'payment_code', 'child_claimant', 'rate_number',
-            ]
+            'company': Dafo().lookup_cvr(self.cvr)
         }
         context.update(kwargs)
         return super().get_context_data(**context)
@@ -214,17 +224,19 @@ class BorgerKontoView(RequireCprMixin, KontoView):
         # raise PrismeException(123, "Der findes ingen debitorer for dette CPR/CVR", "borgerkonto")
         return prisme_reply
 
+    def get_fields(self):
+        return [
+            'account_number', 'transaction_date', 'accounting_date', 'debitor_group_id',
+            'debitor_group_name', 'voucher', 'text', 'payment_code',
+            'payment_code_name', 'amount', 'remaining_amount', 'due_date',
+            'closed_date', 'last_settlement_voucher', 'collection_letter_date', 'collection_letter_code',
+            'claim_type_code', 'invoice_number', 'transaction_type', 'claimant_name',
+            'claimant_id', 'child_claimant', 'rate_number'
+        ]
+
     def get_context_data(self, **kwargs):
         context = {
-            'citizen': Dafo().lookup_cpr(self.cpr),
-            'fields': [
-                'account_number', 'transaction_date', 'accounting_date', 'debitor_group_id',
-                'debitor_group_name', 'voucher', 'text', 'payment_code',
-                'payment_code_name', 'amount', 'remaining_amount', 'due_date',
-                'closed_date', 'last_settlement_voucher', 'collection_letter_date', 'collection_letter_code',
-                'claim_type_code', 'invoice_number', 'transaction_type', 'claimant_name',
-                'claimant_id', 'child_claimant', 'rate_number'
-            ]
+            'citizen': Dafo().lookup_cpr(self.cpr)
         }
         context.update(kwargs)
         return super().get_context_data(**context)

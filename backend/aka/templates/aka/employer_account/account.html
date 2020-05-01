@@ -175,6 +175,7 @@
 
                 <div class="employeraccount-data">
 
+                    {% if not pdf %}
                     <select name="columns" multiple="multiple">
                         {% for field in fields %}
                             {% with "employeraccount."|add:field as transkey %}
@@ -182,6 +183,7 @@
                             {% endwith %}
                         {% endfor %}
                     </select>
+                    {% endif %}
 
                     <table id="data-table" class="output-table">
                         <thead>
