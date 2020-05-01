@@ -16,46 +16,11 @@
         {% if items is not None %}
             <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>
             <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
-            <script>
-                $(function(){
-                    var table = $('#data-table').DataTable({
-                        scrollX: true
-                    });
-                    var hiddenColumns = {};
 
-                    $("[data-action='display-column']").each(function(index, element){
-                        $(element).attr("data-column-index", index);
-                    });
+            <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/sumoselect.min.css">
+            <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/jquery.sumoselect.min.js"></script>
 
-                    $("[data-action='display-column']").click(function(e){
-                        e.preventDefault();
-                        var index = $(this).attr('data-column-index');
-                        var column = table.column(index);
-                        var hide = column.visible();
-                        column.visible(!hide);
-                        var field = $(this).attr('data-column');
-                        hiddenColumns[field] = hide;
-
-                        if (hide) {
-                            if (!($("input[name=hidden][value="+field+"]").length)) {
-                                $("form").append('<input type="hidden" name="hidden" value="'+field+'"/>');
-                            }
-                        } else {
-                            $("input[name=hidden][value="+field+"]").remove();
-                        }
-                    });
-
-                    $("input[name=hidden]").each(function () {
-                        var field = $(this).val();
-                        var header = $('#data-table th[data-field='+field+']').first();
-                        var headers = $('#data-table th');
-                        var index = headers.index(header);
-                        console.log("hide column "+field+" at index "+index);
-                        var column = table.column(index);
-                        column.visible(false);
-                    })
-                });
-            </script>
+            <script src="{% static 'js/datatable.js' %}"></script>
         {% endif %}
     {% endif %}
 {% endblock %}
@@ -210,14 +175,13 @@
 
                 <div class="citizenaccount-data">
 
-                    <div>
-                        show/hide columns
+                    <select name="columns" multiple="multiple">
                         {% for field in fields %}
                             {% with "citizenaccount."|add:field as transkey %}
-                                <a href="#" data-action="display-column" data-column="{{ field }}">{% trans transkey %}</a>
+                                <option value="{{ field }}" {% if not field in form.hidden.value %}selected="selected"{% endif %}>{% trans transkey %}</option>
                             {% endwith %}
                         {% endfor %}
-                    </div>
+                    </select>
 
                     <table id="data-table" class="output-table">
                         <thead>

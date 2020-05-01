@@ -23,7 +23,9 @@ div.input {
 button,
 a.button,
 a.button:link,
-a.button:visited {
+a.button:visited,
+div.SumoSelect > .CaptionCont
+{
     color: #fff;
     border: none;
     padding: .75rem 2.25rem;
@@ -43,6 +45,18 @@ button[type=submit] {
 }
 button[type=submit]:active, button[type=submit]:hover {
     background-color: #fbb84f;
+}
+
+div.SumoSelect > .CaptionCont > label {
+    display: none;
+}
+
+div.SumoSelect > .CaptionCont > span {
+    padding-right: 0;
+}
+
+div.SumoSelect > .optWrapper label {
+    margin: 0;
 }
 
 /* Input fields */

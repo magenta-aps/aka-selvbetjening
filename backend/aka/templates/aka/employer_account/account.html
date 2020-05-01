@@ -11,6 +11,16 @@
         {% include 'aka/util/calendar_headers.html' %}
         <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}"/>
+
+        {% if items is not None %}
+            <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>
+            <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+
+            <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/sumoselect.min.css">
+            <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/jquery.sumoselect.min.js"></script>
+
+            <script src="{% static 'js/datatable.js' %}"></script>
+        {% endif %}
     {% endif %}
 {% endblock %}
 
@@ -22,8 +32,6 @@
     <div class="employeraccount-main">
 
         <form method="get" id="mainform" class="printhide">
-            form.non_field_errors: {{ form.non_field_errors }}
-            form.non_errors: {{ form.errors }}
             {% if form.non_field_errors %}
                 <ul class="errorlist">
                     {% for error in form.non_field_errors.as_data %}
@@ -166,14 +174,14 @@
                 </div>
 
                 <div class="employeraccount-data">
-                    <div>
-                        show/hide columns
+
+                    <select name="columns" multiple="multiple">
                         {% for field in fields %}
                             {% with "employeraccount."|add:field as transkey %}
-                                <a href="#" data-action="display-column" data-column="{{ field }}">{% trans transkey %}</a>
+                                <option value="{{ field }}" {% if not field in form.hidden.value %}selected="selected"{% endif %}>{% trans transkey %}</option>
                             {% endwith %}
                         {% endfor %}
-                    </div>
+                    </select>
 
                     <table id="data-table" class="output-table">
                         <thead>
