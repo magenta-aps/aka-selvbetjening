@@ -23,7 +23,9 @@ div.input {
 button,
 a.button,
 a.button:link,
-a.button:visited {
+a.button:visited,
+div.SumoSelect > .CaptionCont
+{
     color: #fff;
     border: none;
     padding: .75rem 2.25rem;
@@ -43,6 +45,18 @@ button[type=submit] {
 }
 button[type=submit]:active, button[type=submit]:hover {
     background-color: #fbb84f;
+}
+
+div.SumoSelect > .CaptionCont > label {
+    display: none;
+}
+
+div.SumoSelect > .CaptionCont > span {
+    padding-right: 0;
+}
+
+div.SumoSelect > .optWrapper label {
+    margin: 0;
 }
 
 /* Input fields */
@@ -71,10 +85,17 @@ input[type=text]:focus, textarea:focus, select:focus {
     border-color: #83929d
 }
 
+input[type=number] {
+    width: 221px;
+    height: 32px;
+}
+
 form.submitted input:invalid,
 form.submitted select:invalid,
 .has-error input, .has-error select {
-    border: 2px solid #d7404d
+    border: 2px solid #d7404d;
+    /*width: 221px;
+    height: 32px;*/
 }
 input[disabled] {
     background-color: #f5f5f5
@@ -102,7 +123,7 @@ select {
     -moz-appearance: none;
     appearance: none;
     background: url(../img/sullisivk_arrow.svg) no-repeat #ddd;
-    background-position-x: right;
+    background-position-x: right 10px;
     background-position-y: 50%;
     background-size: 1.5em
 }
@@ -110,6 +131,11 @@ select {
 .dropdown:focus,
 .dropdown:hover {
     background-color: #d6dbde
+}
+
+.input ul {
+    padding-left: 0;
+    list-style-type: none;
 }
 
 .err-msg {

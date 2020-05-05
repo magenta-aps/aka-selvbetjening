@@ -5,6 +5,7 @@ import re
 
 from aka.clients.dafo import Dafo
 from aka.clients.prisme import Prisme, PrismeException, PrismeNotFoundException
+from aka.clients.prisme import PrismeAccountRequest
 from aka.clients.prisme import PrismeClaimRequest
 from aka.clients.prisme import PrismeImpairmentRequest
 from aka.clients.prisme import PrismeInterestNoteRequest
@@ -42,6 +43,9 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
+
+from aka.clients.prisme import PrismeAccountResponse
+from aka.utils import get_file_contents
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -100,28 +104,61 @@ class IndexTemplateView(TemplateView):
     def get(self, *args, **kwargs):
         return super(IndexTemplateView, self).get(*args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        user_info = self.request.session.get('user_info', {})
+        context = {
+            'cpr': user_info.get('CPR'),
+            'cvr': user_info.get('CVR')
+        }
+        context.update(kwargs)
+        return super().get_context_data(**context)
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
 
     form_class = KontoForm
-    items = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.items = None
 
     def form_valid(self, form):
         self.form = form
-        self.items = self.get_items(form)
+        try:
+            self.items = self.get_items(form)
+        except PrismeException as e:
+            form.add_error(None, e.as_validationerror)
+            return self.form_invalid(form)
         if 'pdf' in self.request.GET:
             return self.render_pdf()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = {
-            'items': self.items,
-            'date': date.today().strftime('%d/%m/%Y'),
-        }
+        context = {}
+        if self.form.is_bound:
+            formdata = self.form.cleaned_data
+            fields = self.get_fields()
+            if 'pdf' in self.request.GET:
+                fields = [
+                    field for field in fields
+                    if field not in formdata['hidden']
+                ]
+
+            context.update({
+                'items': self.items,
+                'date': date.today().strftime('%d/%m/%Y'),
+                'sum': sum([item.amount for item in self.items]) if self.items else 0,
+                'period': {
+                    'from_date': formdata['from_date'].strftime('%d-%m-%Y'),
+                    'to_date': formdata['to_date'].strftime('%d-%m-%Y')
+                },
+                'fields': fields
+            })
         context.update(kwargs)
         return super().get_context_data(**context)
 
+# NY16
 
 class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
@@ -129,24 +166,59 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
     def get_pdf_filename(self):
         return _("employeraccount.filename").format(
-            **{k: v.strftime('%Y-%m-%d') for k, v in self.form.cleaned_data.items()}
+            from_date=self.form.cleaned_data['from_date'].strftime('%Y-%m-%d'),
+            to_date=self.form.cleaned_data['to_date'].strftime('%Y-%m-%d'),
         )
 
     def get_items(self, form):
+        prisme = Prisme()
+        account_request = PrismeAccountRequest(
+            self.cvr,
+            form.cleaned_data['from_date'],
+            form.cleaned_data['to_date'],
+            form.cleaned_data['open_closed']
+        )
+        # prisme_reply = prisme.process_service(account_request, 'arbejdsgiverkonto')[0]
+        prisme_reply = PrismeAccountResponse(None, get_file_contents('aka/tests/resources/employeraccount_response.xml'))
+        return prisme_reply
+
+    def get_fields(self):
         return [
-            {'text': 'Hotdog', 'amount': 15.0, 'total': 100000.0},
-            {'text': 'Bøfsandwich', 'amount': 30.0, 'total': 100000.0},
-            {'text': 'Burger', 'amount': 30.0, 'total': 100000.0}
+            {'name':'account_number', 'class': 'nb'},
+            {'name':'transaction_date', 'class': 'nb'},
+            {'name':'accounting_date', 'class': 'nb'},
+            {'name':'debitor_group_id', 'class': 'nb'},
+            {'name':'debitor_group_name', 'class': 'nb'},
+            {'name':'voucher',  'class': 'nb'},
+            {'name':'text', 'class': ''},
+            {'name':'payment_code', 'class': 'nb'},
+            {'name':'payment_code_name', 'class': 'nb'},
+            {'name':'amount', 'class': 'nb'},
+            {'name':'remaining_amount', 'class': 'nb'},
+            {'name':'due_date', 'class': 'nb'},
+            {'name':'closed_date', 'class': 'nb'},
+            {'name':'last_settlement_voucher', 'class': 'nb'},
+            {'name':'collection_letter_date', 'class': 'nb'},
+            {'name':'collection_letter_code', 'class': 'nb'},
+            {'name':'claim_type_code', 'class': 'nb'},
+            {'name':'invoice_number', 'class': 'nb'},
+            {'name':'transaction_type', 'class': 'nb'},
+            {'name':'claimant_name', 'class': 'nb'},
+            {'name':'claimant_id', 'class': 'nb'},
+            {'name':'payment_code', 'class': 'nb'},
+            {'name':'child_claimant', 'class': 'nb'},
+            {'name':'rate_number', 'class': 'nb'},
         ]
 
     def get_context_data(self, **kwargs):
         context = {
-            'company': Dafo().lookup_cvr(self.cvr),
+            'company': Dafo().lookup_cvr(self.cvr)
         }
         context.update(kwargs)
         return super().get_context_data(**context)
 
 
+# S23
 
 class BorgerKontoView(RequireCprMixin, KontoView):
 
@@ -154,24 +226,59 @@ class BorgerKontoView(RequireCprMixin, KontoView):
 
     def get_pdf_filename(self):
         return _("citizenaccount.filename").format(
-            **{k: v.strftime('%Y-%m-%d') for k, v in self.form.cleaned_data.items()}
+            from_date=self.form.cleaned_data['from_date'].strftime('%Y-%m-%d'),
+            to_date=self.form.cleaned_data['to_date'].strftime('%Y-%m-%d'),
         )
 
     def get_items(self, form):
+        prisme = Prisme()
+        account_request = PrismeAccountRequest(
+            self.cpr,
+            form.cleaned_data['from_date'],
+            form.cleaned_data['to_date'],
+            form.cleaned_data['open_closed']
+        )
+        # prisme_reply = prisme.process_service(account_request, 'borgerkonto')[0]
+        prisme_reply = PrismeAccountResponse(None, get_file_contents('aka/tests/resources/employeraccount_response.xml'))
+        # raise PrismeException(123, "Der findes ingen debitorer for dette CPR/CVR", "borgerkonto")
+        return prisme_reply
+
+    def get_fields(self):
         return [
-            {'text': 'Hotdog', 'amount': 15.0, 'total': 100000.0},
-            {'text': 'Bøfsandwich', 'amount': 30.0, 'total': 100000.0},
-            {'text': 'Burger', 'amount': 30.0, 'total': 100000.0}
+            {'name':'account_number', 'class': 'nb'},
+            {'name':'transaction_date', 'class': 'nb'},
+            {'name':'accounting_date', 'class': 'nb'},
+            {'name':'debitor_group_id', 'class': 'nb'},
+            {'name':'debitor_group_name', 'class': 'nb'},
+            {'name':'voucher', 'class': 'nb'},
+            {'name':'text', 'class': ''},
+            {'name':'payment_code', 'class': 'nb'},
+            {'name':'payment_code_name', 'class': 'nb'},
+            {'name':'amount', 'class': 'nb'},
+            {'name':'remaining_amount', 'class': 'nb'},
+            {'name':'due_date', 'class': 'nb'},
+            {'name':'closed_date', 'class': 'nb'},
+            {'name':'last_settlement_voucher', 'class': 'nb'},
+            {'name':'collection_letter_date', 'class': 'nb'},
+            {'name':'collection_letter_code', 'class': 'nb'},
+            {'name':'claim_type_code', 'class': 'nb'},
+            {'name':'invoice_number', 'class': 'nb'},
+            {'name':'transaction_type', 'class': 'nb'},
+            {'name':'claimant_name', 'class': 'nb'},
+            {'name':'claimant_id', 'class': 'nb'},
+            {'name':'child_claimant', 'class': 'nb'},
+            {'name':'rate_number', 'class': 'nb'},
         ]
 
     def get_context_data(self, **kwargs):
         context = {
-            # 'citizen': Dafo().lookup_cpr(self.cpr),
+            'citizen': Dafo().lookup_cpr(self.cpr)
         }
         context.update(kwargs)
         return super().get_context_data(**context)
 
 
+# 6.1
 
 class FordringshaverkontoView(RequireCvrMixin, TemplateView):
 
@@ -312,7 +419,7 @@ class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
             codebtors=codebtors,
             files=[file for name, file in form.files.items()]
         )
-        prisme_reply = prisme.process_service(claim)[0]
+        prisme_reply = prisme.process_service(claim, 'fordring')[0]
         return prisme_reply
 
     def form_valid(self, form, formset):
@@ -327,7 +434,7 @@ class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
         )
 
     def form_invalid(self, form, formset):
-        return super().form_invalid(form)
+        return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
 
 class InkassoSagUploadView(RequireCvrMixin, FormView):
@@ -357,6 +464,8 @@ class InkassoGroupDataView(View):
             return HttpResponse("%s = %s" % (var, data), content_type='text/javascript')
         return HttpResponse(data, content_type='application/json')
 
+
+# 6.2
 
 class LoentraekView(RequireCvrMixin, FormSetView, FormView):
 
@@ -393,7 +502,7 @@ class LoentraekView(RequireCvrMixin, FormSetView, FormView):
                     if subform.cleaned_data
                 ]
             )
-            rec_id = prisme.process_service(payroll)[0].rec_id
+            rec_id = prisme.process_service(payroll, 'loentraek')[0].rec_id
             return TemplateResponse(
                 request=self.request,
                 template="aka/payroll/success.html",
@@ -444,6 +553,8 @@ class LoenTraekDistributionView(View):
         return JsonResponse(data, safe=False)
 
 
+#6.4
+
 class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
 
     form_class = NedskrivningForm
@@ -468,7 +579,7 @@ class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
             amount_balance=-abs(form.cleaned_data.get('beloeb', 0)),
             claim_number_seq=form.cleaned_data.get('sekvensnummer')
         )
-        return prisme.process_service(impairment)[0].rec_id
+        return prisme.process_service(impairment, 'nedskrivning')[0].rec_id
 
     def form_valid(self, form):
         prisme = Prisme()
@@ -502,7 +613,7 @@ class NedskrivningUploadView(NedskrivningView):
                 rec_ids.append(self.send_impairment(subform, prisme))
             except PrismeException as e:
                 if e.code == 250:
-                    errors.append({'key': 'nedskrivning.error_250', 'params': e.params})
+                    errors.append(e.as_error_dict)
                 else:
                     raise e
 
@@ -529,18 +640,25 @@ class PrivatdebitorkontoView(View):
         return JsonResponse("OK", safe=False)
 
 
+# NY18
+
 @method_decorator(csrf_exempt, name='dispatch')
 class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, TemplateView):
     form_class = InterestNoteForm
     template_name = 'aka/interestnote/interestnote.html'
-    posts = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.errors = []
+        self.posts = None
 
     def get_posts(self, form):
         prisme = Prisme()
         posts = []
         # Response is of type PrismeInterestNoteResponse
         interest_note_data = prisme.process_service(
-            PrismeInterestNoteRequest(self.cvr, form.cleaned_data['year'], form.cleaned_data['month'])
+            PrismeInterestNoteRequest(self.cvr, form.cleaned_data['year'], form.cleaned_data['month']),
+            'rentenota'
         )
 
         for interest_note_response in interest_note_data:
@@ -567,7 +685,12 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
 
     def form_valid(self, form):
         self.form = form
-        self.posts = self.get_posts(form)
+        try:
+            self.posts = self.get_posts(form)
+        except PrismeException as e:
+            print(e.as_error_dict)
+            self.errors.append(e.as_error_dict)
+
         if 'pdf' in self.request.GET:
             return self.render_pdf()
         return super().form_valid(form)
@@ -579,6 +702,7 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
             'posts': self.posts,
             'total': sum([float(post['InterestAmount']) for post in self.posts])
             if self.posts is not None else None,
+            'errors': self.errors
         }
         context.update(kwargs)
         return super().get_context_data(**context)

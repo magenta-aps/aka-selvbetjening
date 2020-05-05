@@ -48,7 +48,7 @@ $(function() {
             }
         };
 
-        const format = function(text, params, language) {
+        const format = django.format = function(text, params, language) {
             if (typeof text !== 'string') {
                 text = String(text);
             }

@@ -1,6 +1,6 @@
 import os
 import re
-from datetime import date
+from datetime import date, datetime, time
 
 import zeep
 from aka.exceptions import AkaException
@@ -18,16 +18,31 @@ prisme_settings = settings.PRISME_CONNECT
 class PrismeException(AkaException):
 
     title = "prisme.error"
-    error_250_re = re.compile(r'Der findes ikke en inkassosag med det eksterne ref.nr. (.*)')
+    error_parse = {
+        '250': {
+            'inkasso': {
+                're': re.compile(r'Der findes ikke en inkassosag med det eksterne ref.nr. (.*)'),
+                'args': ['refnumber']
+            },
+            'rentenota': {
+                're': re.compile(r'Der findes ingen renter for dette CPR/CVR (\d{8}) eller for den angivne periode (\d{2}-\d{2}-\d{4}) (\d{2}-\d{2}-\d{4})'),
+                'args': ['cvr', 'start', 'end']
+            }
+        }
+    }
 
-    def __init__(self, code, text):
+    def __init__(self, code, text, context):
         super(PrismeException, self).__init__(f"prisme.error_{code}", text=text)
         self.code = int(code)
         self.text = text
+        self.context = context
         try:
-            if self.code == 250:
-                match = self.error_250_re.search(text)
-                self.params['refnumber'] = match.group(1)
+            parsedata = self.error_parse.get(str(code)).get(context)
+            if parsedata:
+                match = parsedata['re'].search(text)
+                if match:
+                    for i, argname in enumerate(parsedata['args'], start=1):
+                        self.params[argname] = match.group(i)
         except Exception as e:
             print(e)
             pass
@@ -41,6 +56,10 @@ class PrismeException(AkaException):
 
     def __str__(self):
         return f"Error in response from Prisme. Code: {self.code}, Text: {self.text}"
+
+    @property
+    def as_error_dict(self):
+        return {'key': "%s.error_250" % self.context, 'params': self.params}
 
 
 class PrismeNotFoundException(AkaException):
@@ -67,9 +86,50 @@ class PrismeRequestObject(object):
             return ''
         if is_amount:
             value = f"{value:.2f}"
+        if isinstance(value, datetime):
+            value = f'{value:%Y-%m-%dT%H:%M:%S}'
         if isinstance(value, date):
-            value = f'{value:%Y-%m-%d}T00:00:00'
+            value = f'{value:%Y-%m-%d}'
         return value
+
+    @staticmethod
+    def to_datetime(date):
+        return datetime.combine(date, time.min)
+
+
+class PrismeAccountRequest(PrismeRequestObject):
+
+    wrap = 'CustTable'
+
+    # See also choices in KontoForm
+    open_closed_map = {
+        0: 'Åbne',
+        1: 'Lukkede',
+        2: 'Åbne og Lukkede'
+    }
+
+    def __init__(self, customer_id_number, from_date, to_date, open_closed=2):
+        self.customer_id_number = customer_id_number
+        self.from_date = from_date
+        self.to_date = to_date
+        self.open_closed = open_closed
+
+    @property
+    def method(self):
+        return 'getAccountStatementAKI'
+
+    @property
+    def xml(self):
+        return dict_to_xml({
+            'CustIdentificationNumber': self.prepare(self.customer_id_number),
+            'FromDate': self.prepare(self.from_date),
+            'ToDate': self.prepare(self.to_date),
+            'CustInterestCalc': self.open_closed_map[self.open_closed]
+        }, wrap=self.wrap)
+
+    @property
+    def reply_class(self):
+        return PrismeAccountResponse
 
 
 class PrismeClaimRequest(PrismeRequestObject):
@@ -118,11 +178,11 @@ class PrismeClaimRequest(PrismeRequestObject):
             'CustCollAmountBalance': self.prepare(self.amount_balance, is_amount=True),
             'CustCollText': self.prepare(self.text),
             'CustCollCreatedBy': self.prepare(self.created_by),
-            'CustCollPeriodStart': self.prepare(self.period_start),
-            'CustCollPeriodEnd': self.prepare(self.period_end),
-            'CustCollDueDate': self.prepare(self.due_date),
-            'CustCollFoundedDate': self.prepare(self.founded_date),
-            'CustCollObsolescenceDate': self.prepare(self.obsolete_date),
+            'CustCollPeriodStart': self.prepare(self.to_datetime(self.period_start)),
+            'CustCollPeriodEnd': self.prepare(self.to_datetime(self.period_end)),
+            'CustCollDueDate': self.prepare(self.to_datetime(self.due_date)),
+            'CustCollFoundedDate': self.prepare(self.to_datetime(self.founded_date)),
+            'CustCollObsolescenceDate': self.prepare(self.to_datetime(self.obsolete_date)),
             'Notes': self.prepare(self.notes),
             'coDebtors': [
                 {'coDebtor': {'CustCollCprCvr': self.prepare(codebtor)}}
@@ -236,14 +296,14 @@ class PrismePayrollRequest(PrismeRequestObject):
 
     @property
     def method(self):
-        return 'getInterestNote'
+        return 'createPayrollFromEmployer'
 
     @property
     def xml(self):
         return dict_to_xml({
             'GERCVR': self.cvr,
-            'Date': self.prepare(self.date),
-            'ReceivedDate': self.prepare(self.received_date),
+            'Date': self.prepare(self.to_datetime(self.date)),
+            'ReceivedDate': self.prepare(self.to_datetime(self.received_date)),
             'TotalAmount': self.prepare(self.amount, is_amount=True),
             'custPayRollFromEmployerLines': {
                 PrismePayrollRequestLine.wrap: [line.dict for line in self.lines]
@@ -284,6 +344,66 @@ class PrismeResponseObject(object):
     def __init__(self, request, xml):
         self.request = request
         self.xml = xml
+
+
+class PrismeAccountResponseTransaction(object):
+
+    def __init__(self, data):
+        self.account_number = data['AccountNum']
+        self.transaction_date = data['TransDate']
+        self.accounting_date = data['AccountingDate']
+        self.debitor_group_id = data['CustGroup']
+        self.debitor_group_name = data['CustGroupName']
+        self.voucher = data['Voucher']
+        self.text = data['Txt']
+        self.payment_code = data['CustPaymCode']
+        self.payment_code_name = data['CustPaymDescription']
+        amount = data['AmountCur']
+        try:
+            self.amount = float(amount)
+        except ValueError:
+            self.amount = 0
+        self.remaining_amount = data['RemainAmountCur']
+        self.due_date = data['DueDate']
+        self.closed_date = data['Closed']
+        self.last_settlement_voucher = data['LastSettleVoucher']
+        self.collection_letter_date = data['CollectionLetterDate']
+        self.collection_letter_code = data['CollectionLetterCode']
+        self.claim_type_code = data['EfiClaimTypeCode']
+        self.invoice_number = data['Invoice']
+        self.transaction_type = data['TransType']
+        self.rate_number = data['ClaimRateNmb']
+
+
+class PrismeCitizenAccountResponseTransaction(PrismeAccountResponseTransaction):
+
+    def __init__(self, data):
+        super(PrismeCitizenAccountResponseTransaction, self).__init__(data)
+        self.claimant_name = data['ClaimantName']
+        self.claimant_id = data['ClaimantId']
+        self.child_claimant = data['ChildClaimant']
+
+
+class PrismeAccountResponse(PrismeResponseObject):
+
+    itemclass = PrismeAccountResponseTransaction
+
+    def __init__(self, request, xml):
+        super(PrismeAccountResponse, self).__init__(request, xml)
+        data = xml_to_dict(xml)
+        transactions = data['CustTable']['CustTrans']
+        if type(transactions) != list:
+            transactions = [transactions]
+        self.transactions = [self.itemclass(x) for x in transactions]
+
+    def __iter__(self):
+        yield from self.transactions
+
+
+class PrismeCitizenAccountResponse(PrismeAccountResponse):
+
+    itemclass = PrismeCitizenAccountResponseTransaction
+
 
 
 class PrismeRecIdResponse(PrismeResponseObject):
@@ -357,7 +477,6 @@ class PrismeInterestResponseJournal(object):
 class PrismeInterestNoteResponseTransaction(object):
 
     def __init__(self, data):
-        # TODO you are unpacking a dictionary...
         self.voucher = data['Voucher']
         self.invoice = data['Invoice']
         self.text = data['Txt']
@@ -437,7 +556,7 @@ class Prisme(object):
             'description': response.serverVersionDescription
         }
 
-    def process_service(self, request_object):
+    def process_service(self, request_object, context):
         request_class = self.client.get_type("tns:GWSRequestDCFUJ")
         request = request_class(
             requestHeader=self.create_request_header(request_object.method),
@@ -458,9 +577,9 @@ class Prisme(object):
                 print("Receiving:\n%s" % reply_item.xml)
                 outputs.append(request_object.reply_class(request_object, reply_item.xml))
             else:
-                raise PrismeException(reply_item.replyCode, reply_item.replyText)
+                raise PrismeException(reply_item.replyCode, reply_item.replyText, context)
         return outputs
 
     def check_cvr(self, cvr):
-        response = self.process_service(PrismeCvrCheckRequest(cvr))
+        response = self.process_service(PrismeCvrCheckRequest(cvr), 'cvrcheck')
         return response[0].claimant_id

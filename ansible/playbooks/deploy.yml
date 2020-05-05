@@ -6,4 +6,5 @@
   roles:
     - postgres
     - deploy
+    - xvfb
     - django

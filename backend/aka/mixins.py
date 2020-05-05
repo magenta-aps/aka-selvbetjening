@@ -2,6 +2,7 @@ import json
 import os
 
 import pdfkit
+from aka.clients.dafo import Dafo
 from aka.exceptions import AkaException
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
@@ -10,6 +11,8 @@ from django.template.loader import select_template
 from django.template.response import TemplateResponse
 from django.views.generic.edit import FormMixin
 
+
+DEBUG = True
 
 class ErrorHandlerMixin(object):
     def dispatch(self, request, *args, **kwargs):
@@ -40,7 +43,10 @@ class RequireCprMixin(object):
         try:
             self.cpr = request.session['user_info']['CPR']
         except (KeyError, TypeError):
-            raise PermissionDenied('no_cpr')
+            if DEBUG:
+                self.cpr = '1234567890'
+            else:
+                raise PermissionDenied('no_cpr')
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -49,14 +55,26 @@ class RequireCvrMixin(object):
         try:
             self.cvr = request.session['user_info']['CVR']
         except (KeyError, TypeError):
-            raise PermissionDenied('no_cvr')
+            if DEBUG:
+                self.cvr = '12345678'
+            else:
+                raise PermissionDenied('no_cvr')
         return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        try:
+            context['company'] = Dafo().lookup_cvr(self.cvr)
+        except:
+            pass
+        context.update(kwargs)
+        return super().get_context_data(**context)
 
 
 class SimpleGetFormMixin(FormMixin):
 
     def get(self, request, *args, **kwargs):
-        form = self.get_form()
+        form = self.form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
         else:
@@ -65,8 +83,8 @@ class SimpleGetFormMixin(FormMixin):
     def form_valid(self, form):
         return super().get(self.request)
 
-    def form_invalid(self, form):
-        return super().get(self.request)
+    # def form_invalid(self, form):
+    #     return super().get(self.request)
 
     def get_form_kwargs(self):
         kwargs = {
@@ -102,8 +120,20 @@ class PdfRendererMixin(object):
         context['css'] = ''.join(css_data)
 
         html = select_template(self.get_template_names()).render(context)
-        # response = HttpResponse(html)
-        pdf = pdfkit.from_string(html, False)
+
+        html = html.replace(
+            "\"%s" % settings.STATIC_URL,
+            "\"file://%s/" % os.path.abspath(settings.STATIC_ROOT)
+        )
+
+        pdf = pdfkit.from_string(html, False, options={
+            'javascript-delay': 1000,
+            'debug-javascript': '',
+            'margin-top': '20mm',
+            'margin-bottom': '20mm',
+            'margin-left': '20mm',
+            'margin-right': '20mm',
+        })
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
         return response
