@@ -5,6 +5,10 @@ $(function(){
         lengthChange: false,
         paging: false,
         info: false,
+        fixedHeader: true,
+        buttons: [
+            'pdf'
+        ]
     });
 
     $("[data-action='display-column']").each(function(index, element){
@@ -49,5 +53,9 @@ $(function(){
         var index = headers.index(header);
         var column = table.column(index);
         column.visible(false);
+    });
+
+    $(document).on('language-change', function(event, language) {
+        table.draw();
     });
 });

@@ -6,19 +6,32 @@ body.pdf .printhide {
 }
 body.pdf main,
 body.pdf article {
-    margin-top: 0;
+    width: 100%;
+    margin: 0;
 }
 
-
-@media print {
-    .printhide {
-        display: none;
-    }
-    .output {
-        margin: 0;
-    }
-    main,
-    article {
-        margin-top: 0;
-    }
+body.pdf .output {
+    margin: 0;
+    padding: 0;
 }
+
+body.pdf .printhide {
+    display: none;
+}
+body.pdf .page {
+    page-break-after: always;
+}
+body.pdf .page:last-child {
+    page-break-after: auto;
+}
+body.pdf .output-table {
+    font-size: 9.5pt;
+}
+body.pdf .output-table tr,
+body.pdf .output-table tr td {
+    page-break-inside: avoid;
+}
+body.pdf .output-table td {
+    border: 1px solid #000;
+}
+

@@ -183,12 +183,30 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
     def get_fields(self):
         return [
-            'account_number', 'transaction_date', 'accounting_date', 'debitor_group_id',
-            'debitor_group_name', 'voucher', 'text', 'payment_code',
-            'payment_code_name', 'amount', 'remaining_amount', 'due_date',
-            'closed_date', 'last_settlement_voucher', 'collection_letter_date', 'collection_letter_code',
-            'claim_type_code', 'invoice_number', 'transaction_type', 'claimant_name',
-            'claimant_id', 'payment_code', 'child_claimant', 'rate_number',
+            {'name':'account_number', 'class': 'nb'},
+            {'name':'transaction_date', 'class': 'nb'},
+            {'name':'accounting_date', 'class': 'nb'},
+            {'name':'debitor_group_id', 'class': 'nb'},
+            {'name':'debitor_group_name', 'class': 'nb'},
+            {'name':'voucher',  'class': 'nb'},
+            {'name':'text', 'class': ''},
+            {'name':'payment_code', 'class': 'nb'},
+            {'name':'payment_code_name', 'class': 'nb'},
+            {'name':'amount', 'class': 'nb'},
+            {'name':'remaining_amount', 'class': 'nb'},
+            {'name':'due_date', 'class': 'nb'},
+            {'name':'closed_date', 'class': 'nb'},
+            {'name':'last_settlement_voucher', 'class': 'nb'},
+            {'name':'collection_letter_date', 'class': 'nb'},
+            {'name':'collection_letter_code', 'class': 'nb'},
+            {'name':'claim_type_code', 'class': 'nb'},
+            {'name':'invoice_number', 'class': 'nb'},
+            {'name':'transaction_type', 'class': 'nb'},
+            {'name':'claimant_name', 'class': 'nb'},
+            {'name':'claimant_id', 'class': 'nb'},
+            {'name':'payment_code', 'class': 'nb'},
+            {'name':'child_claimant', 'class': 'nb'},
+            {'name':'rate_number', 'class': 'nb'},
         ]
 
     def get_context_data(self, **kwargs):
@@ -226,12 +244,29 @@ class BorgerKontoView(RequireCprMixin, KontoView):
 
     def get_fields(self):
         return [
-            'account_number', 'transaction_date', 'accounting_date', 'debitor_group_id',
-            'debitor_group_name', 'voucher', 'text', 'payment_code',
-            'payment_code_name', 'amount', 'remaining_amount', 'due_date',
-            'closed_date', 'last_settlement_voucher', 'collection_letter_date', 'collection_letter_code',
-            'claim_type_code', 'invoice_number', 'transaction_type', 'claimant_name',
-            'claimant_id', 'child_claimant', 'rate_number'
+            {'name':'account_number', 'class': 'nb'},
+            {'name':'transaction_date', 'class': 'nb'},
+            {'name':'accounting_date', 'class': 'nb'},
+            {'name':'debitor_group_id', 'class': 'nb'},
+            {'name':'debitor_group_name', 'class': 'nb'},
+            {'name':'voucher', 'class': 'nb'},
+            {'name':'text', 'class': ''},
+            {'name':'payment_code', 'class': 'nb'},
+            {'name':'payment_code_name', 'class': 'nb'},
+            {'name':'amount', 'class': 'nb'},
+            {'name':'remaining_amount', 'class': 'nb'},
+            {'name':'due_date', 'class': 'nb'},
+            {'name':'closed_date', 'class': 'nb'},
+            {'name':'last_settlement_voucher', 'class': 'nb'},
+            {'name':'collection_letter_date', 'class': 'nb'},
+            {'name':'collection_letter_code', 'class': 'nb'},
+            {'name':'claim_type_code', 'class': 'nb'},
+            {'name':'invoice_number', 'class': 'nb'},
+            {'name':'transaction_type', 'class': 'nb'},
+            {'name':'claimant_name', 'class': 'nb'},
+            {'name':'claimant_id', 'class': 'nb'},
+            {'name':'child_claimant', 'class': 'nb'},
+            {'name':'rate_number', 'class': 'nb'},
         ]
 
     def get_context_data(self, **kwargs):

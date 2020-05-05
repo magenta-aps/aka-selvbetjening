@@ -126,7 +126,14 @@ class PdfRendererMixin(object):
             "\"file://%s/" % os.path.abspath(settings.STATIC_ROOT)
         )
 
-        pdf = pdfkit.from_string(html, False)
+        pdf = pdfkit.from_string(html, False, options={
+            'javascript-delay': 1000,
+            'debug-javascript': '',
+            'margin-top': '20mm',
+            'margin-bottom': '20mm',
+            'margin-left': '20mm',
+            'margin-right': '20mm',
+        })
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
         return response

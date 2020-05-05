@@ -442,6 +442,18 @@ msgstr "CPR/CVR [kl]"
 msgid "employeraccount.yourref"
 msgstr "Deres reference [kl]"
 
+msgid "employeraccount.contact"
+msgstr "Sagsbehandler [kl]"
+
+msgid "employeraccount.localnumber"
+msgstr "Lokalnummer [kl]"
+
+msgid "employeraccount.payment1"
+msgstr "Betaling [kl]"
+
+msgid "employeraccount.invoiceaccount"
+msgstr "Fakturakonto [kl]"
+
 msgid "employeraccount.ingenposter"
 msgstr "Ingen poster for perioden [kl]"
 
@@ -452,13 +464,16 @@ msgid "employeraccount.account_number"
 msgstr "Debitorkonto [kl]"
 
 msgid "employeraccount.transaction_date"
-msgstr "Posteringsdato [kl]"
+msgstr "Posterings&shy;dato [kl]"
 
-msgid "employeraccount.debitorgroup_id"
-msgstr "Debitorgruppe [kl]"
+msgid "employeraccount.accounting_date"
+msgstr "Bogførings&shy;dato [kl]"
 
-msgid "employeraccount.debitorgroup_name"
-msgstr "Debitorgruppenavn [kl]"
+msgid "employeraccount.debitor_group_id"
+msgstr "Debitor&shy;gruppe [kl]"
+
+msgid "employeraccount.debitor_group_name"
+msgstr "Debitor&shy;gruppenavn [kl]"
 
 msgid "employeraccount.voucher"
 msgstr "Bilag [kl]"
@@ -475,13 +490,13 @@ msgstr "Indbetalingskodenavn [kl]"
 msgid "employeraccount.amount"
 msgstr "Beløb [kl]"
 
-msgid "employeraccount.balance"
+msgid "employeraccount.remaining_amount"
 msgstr "Restsaldo [kl]"
 
 msgid "employeraccount.due_date"
 msgstr "Forfaldsdato [kl]"
 
-msgid "employeraccount.close_date"
+msgid "employeraccount.closed_date"
 msgstr "Lukkedato [kl]"
 
 msgid "employeraccount.last_settlement_voucher"
@@ -500,11 +515,153 @@ msgid "employeraccount.invoice_number"
 msgstr "Fakturanummer [kl]"
 
 msgid "employeraccount.transaction_type"
-msgstr "Posteringstype [kl]"
+msgstr "Posterings&shy;type [kl]"
+
+msgid "employeraccount.claimant_name"
+msgstr "Fordringshaver navn [kl]"
+
+msgid "employeraccount.claimant_id"
+msgstr "Fordringshaver ID [kl]"
+
+msgid "employeraccount.child_claimant"
+msgstr "?? Barn Fordringshaver ?? [kl]"
 
 msgid "employeraccount.rate_number"
 msgstr "Ratenummer [kl]"
 
+
+# S23
+msgid "citizenaccount.title"
+msgstr "Kontoudtog for borgere [kl]"
+
+msgid "citizenaccount.from_date"
+msgstr "Fra dato [kl]"
+
+msgid "citizenaccount.to_date"
+msgstr "Til dato [kl]"
+
+msgid "citizenaccount.filename"
+msgstr "Kontoudtog {from_date} - {to_date} [kl].pdf"
+
+msgid "citizenaccount.bankaccount"
+msgstr "Bankkonto [kl]"
+
+msgid "citizenaccount.account"
+msgstr "Kontoudtog [kl]"
+
+msgid "citizenaccount.period"
+msgstr "Gældende for perioden: {from_date} - {to_date} [kl]"
+
+msgid "citizenaccount.number"
+msgstr "Nummer [kl]"
+
+msgid "citizenaccount.date"
+msgstr "Dato [kl]"
+
+msgid "citizenaccount.cprcvr"
+msgstr "CPR/CVR [kl]"
+
+msgid "citizenaccount.yourref"
+msgstr "Deres reference [kl]"
+
+msgid "citizenaccount.contact"
+msgstr "Sagsbehandler [kl]"
+
+msgid "citizenaccount.localnumber"
+msgstr "Lokalnummer [kl]"
+
+msgid "citizenaccount.payment1"
+msgstr "Betaling [kl]"
+
+msgid "citizenaccount.invoiceaccount"
+msgstr "Fakturakonto [kl]"
+
+msgid "citizenaccount.ingenposter"
+msgstr "Ingen poster for perioden [kl]"
+
+msgid "citizenaccount.claimant"
+msgstr "Fordringshaver [kl]"
+
+msgid "citizenaccount.reference"
+msgstr "Eksternt referencenummer [kl]"
+
+msgid "citizenaccount.childcpr"
+msgstr "Barns cpr.nr. [kl]"
+
+msgid "citizenaccount.payment2"
+msgstr "Indbetaling [kl]"
+
+msgid "citizenaccount.paymentdate"
+msgstr "Forfaldsdato [kl]"
+
+msgid "citizenaccount.account_number"
+msgstr "Debitorkonto [kl]"
+
+msgid "citizenaccount.transaction_date"
+msgstr "Posteringsdato [kl]"
+
+msgid "citizenaccount.accounting_date"
+msgstr "Bogføringsdato [kl]"
+
+msgid "citizenaccount.debitor_group_id"
+msgstr "Debitorgruppe [kl]"
+
+msgid "citizenaccount.debitor_group_name"
+msgstr "Debitorgruppenavn [kl]"
+
+msgid "citizenaccount.voucher"
+msgstr "Bilag [kl]"
+
+msgid "citizenaccount.text"
+msgstr "Posteringstekst [kl]"
+
+msgid "citizenaccount.payment_code"
+msgstr "Indbetalingskode [kl]"
+
+msgid "citizenaccount.payment_code_name"
+msgstr "Indbetalingskodenavn [kl]"
+
+msgid "citizenaccount.amount"
+msgstr "Beløb [kl]"
+
+msgid "citizenaccount.remaining_amount"
+msgstr "Restsaldo [kl]"
+
+msgid "citizenaccount.due_date"
+msgstr "Forfaldsdato [kl]"
+
+msgid "citizenaccount.closed_date"
+msgstr "Lukkedato [kl]"
+
+msgid "citizenaccount.last_settlement_voucher"
+msgstr "Sidste udligningsbilag [kl]"
+
+msgid "citizenaccount.collection_letter_date"
+msgstr "Rykkerdato [kl]"
+
+msgid "citizenaccount.collection_letter_code"
+msgstr "Rykkerkode [kl]"
+
+msgid "citizenaccount.claim_type_code"
+msgstr "Fordringsartskode [kl]"
+
+msgid "citizenaccount.invoice_number"
+msgstr "Fakturanummer [kl]"
+
+msgid "citizenaccount.transaction_type"
+msgstr "Posteringstype [kl]"
+
+msgid "citizenaccount.claimant_name"
+msgstr "Fordringshaver navn [kl]"
+
+msgid "citizenaccount.claimant_id"
+msgstr "Fordringshaver ID [kl]"
+
+msgid "citizenaccount.child_claimant"
+msgstr "?? Barn Fordringshaver ?? [kl]"
+
+msgid "citizenaccount.rate_number"
+msgstr "Ratenummer [kl]"
 
 
 

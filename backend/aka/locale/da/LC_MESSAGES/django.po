@@ -460,34 +460,34 @@ msgid "employeraccount.ingenposter"
 msgstr "Ingen poster for perioden"
 
 msgid "employeraccount.paymentdate"
-msgstr "Forfaldsdato"
+msgstr "Forfalds&shy;dato"
 
 msgid "employeraccount.account_number"
-msgstr "Debitorkonto"
+msgstr "Debitor&shy;konto"
 
 msgid "employeraccount.transaction_date"
-msgstr "Posteringsdato"
+msgstr "Posterings&shy;dato"
 
 msgid "employeraccount.accounting_date"
-msgstr "Bogføringsdato"
+msgstr "Bogførings&shy;dato"
 
 msgid "employeraccount.debitor_group_id"
-msgstr "Debitorgruppe"
+msgstr "Debitor&shy;gruppe"
 
 msgid "employeraccount.debitor_group_name"
-msgstr "Debitorgruppenavn"
+msgstr "Debitor&shy;gruppenavn"
 
 msgid "employeraccount.voucher"
 msgstr "Bilag"
 
 msgid "employeraccount.text"
-msgstr "Posteringstekst"
+msgstr "Posterings&shy;tekst"
 
 msgid "employeraccount.payment_code"
-msgstr "Indbetalingskode"
+msgstr "Indbetalings&shy;kode"
 
 msgid "employeraccount.payment_code_name"
-msgstr "Indbetalingskodenavn"
+msgstr "Indbetalings&shy;kodenavn"
 
 msgid "employeraccount.amount"
 msgstr "Beløb"
@@ -496,7 +496,7 @@ msgid "employeraccount.remaining_amount"
 msgstr "Restsaldo"
 
 msgid "employeraccount.due_date"
-msgstr "Forfaldsdato"
+msgstr "Forfalds&shy;dato"
 
 msgid "employeraccount.closed_date"
 msgstr "Lukkedato"
@@ -505,19 +505,19 @@ msgid "employeraccount.last_settlement_voucher"
 msgstr "Sidste udligningsbilag"
 
 msgid "employeraccount.collection_letter_date"
-msgstr "Rykkerdato"
+msgstr "Rykker&shy;dato"
 
 msgid "employeraccount.collection_letter_code"
-msgstr "Rykkerkode"
+msgstr "Rykker&shy;kode"
 
 msgid "employeraccount.claim_type_code"
-msgstr "Fordringsartskode"
+msgstr "Fordringsarts&shy;kode"
 
 msgid "employeraccount.invoice_number"
-msgstr "Fakturanummer"
+msgstr "Faktura&shy;nummer"
 
 msgid "employeraccount.transaction_type"
-msgstr "Posteringstype"
+msgstr "Posterings&shy;type"
 
 msgid "employeraccount.claimant_name"
 msgstr "Fordringshaver navn"
@@ -529,7 +529,7 @@ msgid "employeraccount.child_claimant"
 msgstr "?? Barn Fordringshaver ??"
 
 msgid "employeraccount.rate_number"
-msgstr "Ratenummer"
+msgstr "Rate&shy;nummer"
 
 
 # S23

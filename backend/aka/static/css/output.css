@@ -61,7 +61,14 @@ body.pdf .output {
     padding: .25rem .5rem
 }
 
-
 .output .output-actions {
     text-align: right;
+}
+
+.output-table {
+    font-size: 1em;
+}
+
+.nb {
+    white-space: nowrap;
 }
