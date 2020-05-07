@@ -121,14 +121,18 @@ class PdfRendererMixin(object):
 
         html = select_template(self.get_template_names()).render(context)
 
+        # return HttpResponse(html)
+
         html = html.replace(
             "\"%s" % settings.STATIC_URL,
             "\"file://%s/" % os.path.abspath(settings.STATIC_ROOT)
         )
 
+
         pdf = pdfkit.from_string(html, False, options={
             'javascript-delay': 1000,
             'debug-javascript': '',
+            'default-header': '',
             'margin-top': '20mm',
             'margin-bottom': '20mm',
             'margin-left': '20mm',

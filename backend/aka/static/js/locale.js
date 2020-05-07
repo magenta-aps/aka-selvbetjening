@@ -4,6 +4,7 @@ $(function() {
     if (!django.catalog) django.catalog = {};
 
     if (!django.jsi18n_initialized) {
+
         django.gettext = function(language, msgid) {
             var value = django.catalog[language][msgid];
             if (typeof(value) == 'undefined') {
