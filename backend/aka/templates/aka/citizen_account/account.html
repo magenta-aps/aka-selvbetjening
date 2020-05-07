@@ -30,6 +30,7 @@
                         var newPage = $("<div class=\"page\"/>");
                         newPage.append($("#data-table").parent().prevAll().clone().get().reverse());
                         newPage.append(newTable);
+                        newPage.append($(".pagefooter").first().clone());
                         $(".account-data").append(newPage);
                         newTable.addClass(table.get(0).className);
                         // Move table headers (this + all to the right), and their cells to the new table
@@ -54,9 +55,13 @@
                 return tables;
             };
 
-            const maxHeight = 1800;
             const splitPage = function(page) {
-                if (page.outerHeight() > maxHeight) {
+                var maxHeight = page.outerHeight() + 100;
+                var height = 0;
+                page.children().each(function () {
+                    height += $(this).outerHeight();
+                });
+                if (height > maxHeight) {
                     // Create new page to hold punted rows
                     var pageOffset = page.offset().top;
                     var newPage = $("<div><table><thead/><tbody/></table></div>");
@@ -71,6 +76,7 @@
                             return false;
                         }
                     });
+                    newPage.append($(".pagefooter").first().clone());
                     page.parent().append(newPage);
                     splitPage(newPage);
                 }
@@ -93,7 +99,21 @@
                 // Split the pages to get a nice border (and copy headers to pages)
                 $(".page").each(function(index, el) {
                     splitPage($(this));
-                })
+                });
+
+                var footerTemplate = "{% trans 'citizenaccount.footer' %}";
+
+                var footers = $(".page .pagefooter");
+                footers.each(function(index, el){
+                    var params = {'index':index+1, 'count':footers.length};
+                    var text = footerTemplate;
+                    for (let key in params) {
+                        if (params.hasOwnProperty(key)) {
+                            text = text.replace("{" + key + "}", params[key]);
+                        }
+                    }
+                    $(this).text(text);
+                 });
             });
         </script>
 
@@ -304,6 +324,9 @@
                             </tbody>
                         </table>
                     </div>
+                    {% if pdf %}
+                        <div class="pagefooter"></div>
+                    {% endif %}
                 </div>
             </div>
         {% endif %}

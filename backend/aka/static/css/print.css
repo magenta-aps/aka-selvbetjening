@@ -20,6 +20,9 @@ body.pdf .printhide {
 }
 body.pdf .page {
     page-break-after: always;
+    /*border: 1px dashed #000;*/
+    height: 1700px;
+    position: relative;
 }
 body.pdf .page:last-child {
     page-break-after: auto;
@@ -32,6 +35,14 @@ body.pdf .output-table tr td {
     page-break-inside: avoid;
 }
 body.pdf .output-table td {
-    border: 1px solid #000;
+    /*border: 1px solid #000;*/
+}
+body.pdf .pagefooter {
+    text-align: center;
+    font-size: 10pt;
+    margin-top: 2em;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
 }
 

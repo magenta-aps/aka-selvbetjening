@@ -423,6 +423,9 @@ msgstr "Til dato"
 msgid "employeraccount.filename"
 msgstr "Kontoudtog {from_date} - {to_date}.pdf"
 
+msgid "employeraccount.footer"
+msgstr "Side {index} af {count}"
+
 msgid "employeraccount.bankaccount"
 msgstr "Bankkonto"
 
@@ -545,6 +548,9 @@ msgstr "Til dato"
 msgid "citizenaccount.filename"
 msgstr "Kontoudtog {from_date} - {to_date}.pdf"
 
+msgid "citizenaccount.footer"
+msgstr "Side {index} af {count}"
+
 msgid "citizenaccount.bankaccount"
 msgstr "Bankkonto"
 
@@ -594,34 +600,34 @@ msgid "citizenaccount.payment2"
 msgstr "Indbetaling"
 
 msgid "citizenaccount.paymentdate"
-msgstr "Forfaldsdato"
+msgstr "Forfalds&shy;dato"
 
 msgid "citizenaccount.account_number"
-msgstr "Debitorkonto"
+msgstr "Debitor&shy;konto"
 
 msgid "citizenaccount.transaction_date"
-msgstr "Posteringsdato"
+msgstr "Posterings&shy;dato"
 
 msgid "citizenaccount.accounting_date"
-msgstr "Bogføringsdato"
+msgstr "Bogførings&shy;dato"
 
 msgid "citizenaccount.debitor_group_id"
-msgstr "Debitorgruppe"
+msgstr "Debitor&shy;gruppe"
 
 msgid "citizenaccount.debitor_group_name"
-msgstr "Debitorgruppenavn"
+msgstr "Debitor&shy;gruppenavn"
 
 msgid "citizenaccount.voucher"
 msgstr "Bilag"
 
 msgid "citizenaccount.text"
-msgstr "Posteringstekst"
+msgstr "Posterings&shy;tekst"
 
 msgid "citizenaccount.payment_code"
-msgstr "Indbetalingskode"
+msgstr "Indbetalings&shy;kode"
 
 msgid "citizenaccount.payment_code_name"
-msgstr "Indbetalingskodenavn"
+msgstr "Indbetalings&shy;kodenavn"
 
 msgid "citizenaccount.amount"
 msgstr "Beløb"
@@ -630,7 +636,7 @@ msgid "citizenaccount.remaining_amount"
 msgstr "Restsaldo"
 
 msgid "citizenaccount.due_date"
-msgstr "Forfaldsdato"
+msgstr "Forfalds&shy;dato"
 
 msgid "citizenaccount.closed_date"
 msgstr "Lukkedato"
@@ -645,13 +651,13 @@ msgid "citizenaccount.collection_letter_code"
 msgstr "Rykkerkode"
 
 msgid "citizenaccount.claim_type_code"
-msgstr "Fordringsartskode"
+msgstr "Fordringsarts&shy;kode"
 
 msgid "citizenaccount.invoice_number"
-msgstr "Fakturanummer"
+msgstr "Faktura&shy;nummer"
 
 msgid "citizenaccount.transaction_type"
-msgstr "Posteringstype"
+msgstr "Posterings&shy;type"
 
 msgid "citizenaccount.claimant_name"
 msgstr "Fordringshaver navn"
