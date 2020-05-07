@@ -18,7 +18,7 @@ class BasicTestCase(TestMixin, TransactionTestCase):
         session = self.client.session
         session['user_info'] = {'CVR': '12345678'}
         session.save()
-        with self.settings(MOUNTS = {
+        with self.settings(MOUNTS={
             'claimant_account_statements': {
                 'maindir': os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resources', 'fordringshaverkonto'),
                 'subdir': '{cvr}.*',
@@ -45,4 +45,3 @@ class BasicTestCase(TestMixin, TransactionTestCase):
                 ['test3.txt', 'txt', '18 B'],
                 ['test5.txt', 'txt', '18 B']
             ], data)
-

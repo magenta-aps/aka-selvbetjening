@@ -1,16 +1,17 @@
 import logging
+
+from django.conf import settings
 from django.core.exceptions import SuspiciousOperation
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import View
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView
 from jwkest.jwk import rsa_load
 from oic.oauth2 import ErrorResponse
 from oic.oic import Client, rndstr
-from oic.utils.authn.client import CLIENT_AUTHN_METHOD
-from django.conf import settings
 from oic.oic.message import AuthorizationResponse, RegistrationResponse
-from django.views.decorators.clickjacking import xframe_options_exempt
+from oic.utils.authn.client import CLIENT_AUTHN_METHOD
 from oic.utils.keyio import KeyBundle
 
 logger = logging.getLogger(__name__)
@@ -38,17 +39,22 @@ class Login(View):
     def get(self, request, *args, **kwargs):
         client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=client_cert)
         provider_info = client.provider_config(open_id_settings['issuer'])
-        client_reg = RegistrationResponse(**{'client_id': open_id_settings['client_id'], 'redirect_uris': [open_id_settings['redirect_uri']]})
+        client_reg = RegistrationResponse(**{
+            'client_id': open_id_settings['client_id'],
+            'redirect_uris': [open_id_settings['redirect_uri']]
+        })
         client.store_registration_info(client_reg)
 
         state = rndstr(32)
         nonce = rndstr(32)
-        request_args = {'response_type': 'code',
-                'scope': settings.OPENID_CONNECT['scope'],
-                'client_id': settings.OPENID_CONNECT['client_id'],
-                'redirect_uri': settings.OPENID_CONNECT['redirect_uri'],
-                'state': state,
-                'nonce': nonce}
+        request_args = {
+            'response_type': 'code',
+            'scope': settings.OPENID_CONNECT['scope'],
+            'client_id': settings.OPENID_CONNECT['client_id'],
+            'redirect_uri': settings.OPENID_CONNECT['redirect_uri'],
+            'state': state,
+            'nonce': nonce
+        }
 
         request.session['oid_state'] = state
         request.session['oid_nonce'] = nonce

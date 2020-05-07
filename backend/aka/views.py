@@ -72,7 +72,9 @@ class CustomJavaScriptCatalog(JavaScriptCatalog):
     def get_context_data(self, **kwargs):
         context = {'locale': self.locale}
         context.update(super(CustomJavaScriptCatalog, self).get_context_data(**kwargs))
-        context['catalog_str'] = json.dumps(context['catalog'], sort_keys=True, indent=2) if context['catalog'] else None
+        context['catalog_str'] = \
+            json.dumps(context['catalog'], sort_keys=True, indent=2) \
+            if context['catalog'] else None
         context['formats_str'] = json.dumps(context['formats'], sort_keys=True, indent=2)
         return context
 
@@ -133,8 +135,8 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
         context.update(kwargs)
         return super().get_context_data(**context)
 
-# NY16
 
+# NY16
 class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
     template_name = 'aka/employer_account/account.html'
@@ -212,8 +214,7 @@ class FordringshaverkontoView(RequireCvrMixin, TemplateView):
         companyfolders = [
             subfolder
             for subfolder in os.listdir(rootfolder)
-            if os.path.isdir(os.path.join(rootfolder, subfolder))
-            and subfolder_re.match(subfolder)
+            if os.path.isdir(os.path.join(rootfolder, subfolder)) and subfolder_re.match(subfolder)
         ]
 
         # Find folders that match our path in each companyfolder
@@ -255,7 +256,7 @@ class FordringshaverkontoView(RequireCvrMixin, TemplateView):
                     try:
                         bytesize = entry['size'] = os.path.getsize(fullpath)
                         entry['formatted_size'] = format_filesize(bytesize)
-                    except:
+                    except Exception as e:
                         pass
                 elif os.path.isdir(fullpath):
                     entry['folder'] = True
@@ -458,7 +459,7 @@ class LoenTraekDistributionView(View):
         return JsonResponse(data, safe=False)
 
 
-#6.4
+# 6.4
 
 class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
 

@@ -53,6 +53,6 @@ class BasicTestCase(SimpleTestCase):
         self.assertEqual("12.3 MB", format_filesize(12345678))
         self.assertEqual("12.35 MB", format_filesize(12345678, 2))
         self.assertEqual("1.0 MiB", format_filesize(1024**2, 1, False))
-        self.assertEqual("1.5 MiB", format_filesize(1.5*1024**2, 1, False))
+        self.assertEqual("1.5 MiB", format_filesize(1.5 * 1024**2, 1, False))
         self.assertEqual("1.0 GiB", format_filesize(1024**3, SI=False))
         self.assertEqual("1.0 GB", format_filesize(1000**3, SI=True))

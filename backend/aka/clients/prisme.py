@@ -25,7 +25,10 @@ class PrismeException(AkaException):
                 'args': ['refnumber']
             },
             'rentenota': {
-                're': re.compile(r'Der findes ingen renter for dette CPR/CVR (\d{8}) eller for den angivne periode (\d{2}-\d{2}-\d{4}) (\d{2}-\d{2}-\d{4})'),
+                're': re.compile(
+                    r'Der findes ingen renter for dette CPR/CVR (\d{8}) eller for '
+                    r'den angivne periode (\d{2}-\d{2}-\d{4}) (\d{2}-\d{2}-\d{4})'
+                ),
                 'args': ['cvr', 'start', 'end']
             }
         }
@@ -332,7 +335,6 @@ class PrismePayrollResponse(PrismeRecIdResponse):
 
 
 class PrismeCvrCheckResponse(PrismeResponseObject):
-    #instead of this could we just have one class and use self._id and figure out the type of xml from the xml content?
     def __init__(self, request, xml):
         super(PrismeCvrCheckResponse, self).__init__(request, xml)
         d = xml_to_dict(xml)

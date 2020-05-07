@@ -148,7 +148,7 @@ TIME_ZONE = 'America/Godthab'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-LOCALE_PATHS = [ os.path.join(BASE_DIR, 'i18n') ]
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'i18n')]
 LANGUAGES = [
     ('da', _('Danish')),
     ('kl', _('Greenlandic')),

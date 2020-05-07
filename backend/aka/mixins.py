@@ -57,7 +57,7 @@ class RequireCvrMixin(object):
         context = {}
         try:
             context['company'] = Dafo().lookup_cvr(self.cvr)
-        except:
+        except Exception as e:
             pass
         context.update(kwargs)
         return super().get_context_data(**context)
@@ -132,4 +132,3 @@ class PdfRendererMixin(object):
         }
         context.update(kwargs)
         return super().get_context_data(**context)
-
