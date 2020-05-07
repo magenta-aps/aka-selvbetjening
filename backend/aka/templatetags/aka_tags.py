@@ -8,13 +8,16 @@ from django.utils.translation import gettext
 trans_re = re.compile("_\\((.*)\\)")
 format_re = re.compile("{(.*)}")
 
+
 @register.filter
 def split(text, filter):
     return text.split(filter)
 
+
 @register.filter
 def json(data):
     return jsonlib.dumps(data)
+
 
 @register.filter
 def format(text, params):

@@ -17,14 +17,16 @@ class BasicTestCase(TestMixin, TestCase):
         self.url = '/loentraek'
         self.service_mock = self.mock('aka.clients.prisme.Prisme.process_service')
         self.service_mock.return_value = [
-            PrismePayrollResponse(None, f"<CustPayrollFromEmployerHeaderFUJ><RecId>1234</RecId></CustPayrollFromEmployerHeaderFUJ>")
+            PrismePayrollResponse(
+                None,
+                f"<CustPayrollFromEmployerHeaderFUJ><RecId>1234</RecId></CustPayrollFromEmployerHeaderFUJ>"
+            )
         ]
         session = self.client.session
         session['user_info'] = {'CVR': '12479182'}
         session.save()
 
-
-    ### PRISME INTERFACE TESTS ###
+    # PRISME INTERFACE TESTS
 
     def test_create_payroll_request_parse(self):
         request = PrismePayrollRequest(
@@ -47,7 +49,7 @@ class BasicTestCase(TestMixin, TestCase):
         response = PrismePayrollResponse(None, self.get_file_contents('aka/tests/resources/payroll_response.xml'))
         self.assertEqual("5637238342", response.rec_id)
 
-    ### POSITIVE TESTS
+    # POSITIVE TESTS
 
     def test_payroll_success(self):
         # Contains just the required fields
@@ -83,7 +85,7 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(1, len(el))
         self.assertEqual('1234', el[0].text)
 
-    ### NEGATIVE TESTS
+    # NEGATIVE TESTS
 
     def test_payroll_failure_missing_year(self):
         formData = {

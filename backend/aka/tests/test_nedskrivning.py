@@ -72,7 +72,7 @@ class LocalTestCase(BasicTestCase):
         session['user_info'] = {'CVR': '12479182'}
         session.save()
 
-    ### PRISME INTERFACE TESTS ###
+    # PRISME INTERFACE TESTS
 
     def test_impairment_request_parse(self):
         request = PrismeImpairmentRequest('32SE', '12345678', 'ref123', -100.5, 'AKI-000047')
@@ -86,8 +86,7 @@ class LocalTestCase(BasicTestCase):
         response = PrismeImpairmentResponse(None, self.get_file_contents('aka/tests/resources/impairment_response.xml'))
         self.assertEqual("5637238342", response.rec_id)
 
-
-    ### POSITIVE TESTS ###
+    # POSITIVE TESTS
 
     def test_impairment_success(self):
         formData = {
@@ -103,8 +102,7 @@ class LocalTestCase(BasicTestCase):
         self.assertEqual(1, len(el))
         self.assertEqual('1234', el[0].text)
 
-
-    ### NEGATIVE TESTS ###
+    # NEGATIVE TESTS
 
     def test_impairment_invalid_amount(self):
         # Contains just the required fields
