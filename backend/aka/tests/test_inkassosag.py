@@ -76,8 +76,10 @@ class BasicTestCase(TestMixin, TestCase):
             'betalingsdato': date(2019, 3, 28).strftime("%d/%m/%Y"),
             'foraeldelsesdato': date(2019, 5, 28).strftime("%d/%m/%Y"),
             'hovedstol': 100,
+            'hovedstol_posteringstekst': 'Testing',
             'kontaktperson': 'Test Testersen',
-            'form-0-cpr': '1234567890'
+            'form-0-cpr': '1234567890',
+            'ekstern_sagsnummer': '1234'
         }
         for management_field, value in {
             'TOTAL_FORMS': 1, 'INITIAL_FORMS': 0, 'MIN_NUM_FORMS': 0, 'MAX_NUM_FORMS': 1000
@@ -107,8 +109,10 @@ class BasicTestCase(TestMixin, TestCase):
             'betalingsdato': date(2019, 3, 28).strftime("%d/%m/%Y"),
             'foraeldelsesdato': date(2019, 5, 28).strftime("%d/%m/%Y"),
             'hovedstol': 100,
+            'hovedstol_posteringstekst': 'Testing',
             'kontaktperson': 'Test Testersen',
-            'form-0-cpr': '1234567890'
+            'form-0-cpr': '1234567890',
+            'ekstern_sagsnummer': '1234'
         }
         for management_field, value in {
             'TOTAL_FORMS': 1, 'INITIAL_FORMS': 0, 'MIN_NUM_FORMS': 0, 'MAX_NUM_FORMS': 1000
