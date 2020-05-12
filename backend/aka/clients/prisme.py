@@ -139,7 +139,7 @@ class PrismeEmployerAccountRequest(PrismeAccountRequest):
 
     @property
     def method(self):
-        return 'getAccountStatementAKI'
+        return 'getAccountStatementSEL'
 
     @property
     def reply_class(self):
@@ -150,7 +150,7 @@ class PrismeCitizenAccountRequest(PrismeAccountRequest):
 
     @property
     def method(self):
-        return 'getAccountStatementSEL'
+        return 'getAccountStatementAKI'
 
     @property
     def reply_class(self):
@@ -419,12 +419,7 @@ class PrismeAccountResponse(PrismeResponseObject):
 
 
 class PrismeEmployerAccountResponseTransaction(PrismeAccountResponseTransaction):
-
-    def __init__(self, data):
-        super().__init__(data)
-        self.claimant_name = data['ClaimantName']
-        self.claimant_id = data['ClaimantId']
-        self.child_claimant = data['ChildClaimant']
+    pass
 
 
 class PrismeEmployerAccountResponse(PrismeAccountResponse):
@@ -432,7 +427,12 @@ class PrismeEmployerAccountResponse(PrismeAccountResponse):
 
 
 class PrismeCitizenAccountResponseTransaction(PrismeAccountResponseTransaction):
-    pass
+
+    def __init__(self, data):
+        super().__init__(data)
+        self.claimant_name = data['ClaimantName']
+        self.claimant_id = data['ClaimantId']
+        self.child_claimant = data['ChildClaimant']
 
 
 class PrismeCitizenAccountResponse(PrismeAccountResponse):
