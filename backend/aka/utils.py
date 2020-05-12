@@ -90,20 +90,24 @@ def format_filesize(bytes, digits=1, SI=True):
         now = next
         next *= stepsize
 
-def list_lstrip(l, strip=None):
-    l = l.copy()  # Work on a copy of the list
-    while l and l[0] == strip:
-        l = l[1:]
-    return l
 
-def list_rstrip(l, strip=None):
-    l = l.copy()  # Work on a copy of the list
-    while l and l[-1] == strip:
-        l = l[:-1]
-    return l
+def list_lstrip(lst, strip=None):
+    lst = lst.copy()  # Work on a copy of the list
+    while lst and lst[0] == strip:
+        lst = lst[1:]
+    return lst
 
-def list_strip(l, strip=None):
-    return list_rstrip(list_lstrip(l, strip), strip)
+
+def list_rstrip(lst, strip=None):
+    lst = lst.copy()  # Work on a copy of the list
+    while lst and lst[-1] == strip:
+        lst = lst[:-1]
+    return lst
+
+
+def list_strip(lst, strip=None):
+    return list_rstrip(list_lstrip(lst, strip), strip)
+
 
 def dummy_management_form(name, total_forms=1, initial_forms=1, min_forms=1, max_forms=1000):
     return {

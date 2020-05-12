@@ -6,6 +6,7 @@ import re
 from aka.clients.dafo import Dafo
 from aka.clients.prisme import Prisme, PrismeException, PrismeNotFoundException
 from aka.clients.prisme import PrismeAccountRequest
+from aka.clients.prisme import PrismeAccountResponse
 from aka.clients.prisme import PrismeClaimRequest
 from aka.clients.prisme import PrismeImpairmentRequest
 from aka.clients.prisme import PrismeInterestNoteRequest
@@ -25,6 +26,7 @@ from aka.mixins import RequireCprMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
 from aka.utils import format_filesize
+from aka.utils import get_file_contents
 from aka.utils import list_lstrip
 from aka.utils import list_rstrip
 from django.conf import settings
@@ -43,9 +45,6 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
-
-from aka.clients.prisme import PrismeAccountResponse
-from aka.utils import get_file_contents
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -77,7 +76,9 @@ class CustomJavaScriptCatalog(JavaScriptCatalog):
     def get_context_data(self, **kwargs):
         context = {'locale': self.locale}
         context.update(super(CustomJavaScriptCatalog, self).get_context_data(**kwargs))
-        context['catalog_str'] = json.dumps(context['catalog'], sort_keys=True, indent=2) if context['catalog'] else None
+        context['catalog_str'] = \
+            json.dumps(context['catalog'], sort_keys=True, indent=2) \
+            if context['catalog'] else None
         context['formats_str'] = json.dumps(context['formats'], sort_keys=True, indent=2)
         return context
 
@@ -158,8 +159,8 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
         context.update(kwargs)
         return super().get_context_data(**context)
 
-# NY16
 
+# NY16
 class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
     template_name = 'aka/employer_account/account.html'
@@ -553,7 +554,7 @@ class LoenTraekDistributionView(View):
         return JsonResponse(data, safe=False)
 
 
-#6.4
+# 6.4
 
 class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
 

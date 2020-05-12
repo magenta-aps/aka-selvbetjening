@@ -23,7 +23,11 @@ class CsvUploadMixin(object):
     def clean_file(self):
         file = self.cleaned_data['file']
         if file.size > settings.MAX_UPLOAD_FILESIZE:
-            raise ValidationError('file_too_large', code='error.upload_too_large', params={'maxsize': settings.MAX_UPLOAD_FILESIZE})
+            raise ValidationError(
+                'file_too_large',
+                code='error.upload_too_large',
+                params={'maxsize': settings.MAX_UPLOAD_FILESIZE}
+            )
 
         file.seek(0)
         data = file.read()
@@ -44,7 +48,7 @@ class CsvUploadMixin(object):
         # Use self.add_error to add validation errors on the file contents,
         # as there may be several in the same file
         for row_index, row in enumerate(rows, start=2):
-            data=self.transform_row(row)
+            data = self.transform_row(row)
             subform = self.subform_class(data=data)
             missing = subform.fields.keys() - data
             if missing:
@@ -274,7 +278,10 @@ class InkassoForm(forms.Form):
             subgroups = [x['sub_groups'] for x in groups if int(x['id']) == int(group_id)][0]
             type = [x for x in subgroups if "%d.%d" % (x['group_id'], x['type_id']) == type_id][0]
             if type.get('has_child_cpr') and not cleaned_data.get('barns_cpr'):
-                self.add_error('barns_cpr', ValidationError(self.fields['barns_cpr'].error_messages['required'], code='required'))
+                self.add_error(
+                    'barns_cpr',
+                    ValidationError(self.fields['barns_cpr'].error_messages['required'], code='required')
+                )
         print(self.errors)
 
     @staticmethod
@@ -316,7 +323,8 @@ class InkassoUploadForm(CsvUploadMixin, forms.Form):
     )
 
     def transform_row(self, row):
-        (row['fordringsgruppe'], row['fordringstype']) = InkassoForm.convert_group_type_text(row['fordringsgruppe'], row['fordringstype'])
+        (row['fordringsgruppe'], row['fordringstype']) = \
+            InkassoForm.convert_group_type_text(row['fordringsgruppe'], row['fordringstype'])
         return row
 
 
