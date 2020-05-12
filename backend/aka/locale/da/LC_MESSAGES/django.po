@@ -48,6 +48,9 @@ msgstr "Download skabelon"
 msgid "prisme.error"
 msgstr ""
 
+msgid "prisme.error_250"
+msgstr "{text}"
+
 msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet"
 

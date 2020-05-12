@@ -179,8 +179,7 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
             form.cleaned_data['to_date'],
             form.cleaned_data['open_closed']
         )
-        # prisme_reply = prisme.process_service(account_request, 'arbejdsgiverkonto')[0]
-        prisme_reply = PrismeAccountResponse(None, get_file_contents('aka/tests/resources/employeraccount_response.xml'))
+        prisme_reply = prisme.process_service(account_request, 'arbejdsgiverkonto')[0]
         return prisme_reply
 
     def get_fields(self):
@@ -239,9 +238,7 @@ class BorgerKontoView(RequireCprMixin, KontoView):
             form.cleaned_data['to_date'],
             form.cleaned_data['open_closed']
         )
-        # prisme_reply = prisme.process_service(account_request, 'borgerkonto')[0]
-        prisme_reply = PrismeAccountResponse(None, get_file_contents('aka/tests/resources/employeraccount_response.xml'))
-        # raise PrismeException(123, "Der findes ingen debitorer for dette CPR/CVR", "borgerkonto")
+        prisme_reply = prisme.process_service(account_request, 'borgerkonto')[0]
         return prisme_reply
 
     def get_fields(self):
