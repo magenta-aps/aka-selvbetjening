@@ -12,7 +12,7 @@ from django.template.response import TemplateResponse
 from django.views.generic.edit import FormMixin
 
 
-DEBUG = True
+DEBUG = False
 
 class ErrorHandlerMixin(object):
     def dispatch(self, request, *args, **kwargs):

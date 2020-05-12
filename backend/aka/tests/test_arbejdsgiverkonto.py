@@ -38,7 +38,7 @@ class BasicTestCase(TestMixin, TestCase):
     ### PRISME INTERFACE TESTS ###
 
     def test_account_request_parse(self):
-        request = PrismeAccountRequest('12345678', date(2019, 1, 22), date(2019, 1, 22))
+        request = PrismeAccountRequest('12345678', date(2019, 1, 22), date(2019, 1, 22), 0)
         self.compare(
             xml_to_dict(self.get_file_contents('aka/tests/resources/employeraccount_request.xml')),
             xml_to_dict(request.xml),
