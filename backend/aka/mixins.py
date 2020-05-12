@@ -44,7 +44,7 @@ class RequireCprMixin(object):
             self.cpr = request.session['user_info']['CPR']
         except (KeyError, TypeError):
             if DEBUG:
-                self.cpr = '1234567890'
+                self.cpr = '0101601919'
             else:
                 raise PermissionDenied('no_cpr')
         return super().dispatch(request, *args, **kwargs)

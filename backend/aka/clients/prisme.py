@@ -398,7 +398,6 @@ class PrismeAccountResponseTransaction(object):
         self.claim_type_code = data['ClaimTypeCode']
         self.invoice_number = data['Invoice']
         self.transaction_type = data['TransType']
-        self.rate_number = data['RateNmb']
 
 
 class PrismeAccountResponse(PrismeResponseObject):
@@ -419,7 +418,10 @@ class PrismeAccountResponse(PrismeResponseObject):
 
 
 class PrismeEmployerAccountResponseTransaction(PrismeAccountResponseTransaction):
-    pass
+
+    def __init__(self, data):
+        super().__init__(data)
+        self.rate_number = data['RateNmb']
 
 
 class PrismeEmployerAccountResponse(PrismeAccountResponse):
