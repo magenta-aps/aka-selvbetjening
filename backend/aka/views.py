@@ -169,12 +169,14 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
     template_name = 'aka/employer_account/account.html'
 
     def get_pdf_filename(self):
-        from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d') \
-            if 'from_date' in self.form.cleaned_data \
-            else "alle"
-        to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d') \
-            if 'to_date' in self.form.cleaned_data \
-            else "alle"
+        try:
+            from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d')
+        except:
+            from_date = "alle"
+        try:
+            to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d')
+        except:
+            to_date = "alle"
         return _("employeraccount.filename").format(
             from_date=from_date,
             to_date=to_date
@@ -234,12 +236,14 @@ class BorgerKontoView(RequireCprMixin, KontoView):
     template_name = 'aka/citizen_account/account.html'
 
     def get_pdf_filename(self):
-        from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d') \
-            if 'from_date' in self.form.cleaned_data \
-            else "alle"
-        to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d') \
-            if 'to_date' in self.form.cleaned_data \
-            else "alle"
+        try:
+            from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d')
+        except:
+            from_date = "alle"
+        try:
+            to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d')
+        except:
+            to_date = "alle"
         return _("citizenaccount.filename").format(
             from_date=from_date,
             to_date=to_date
