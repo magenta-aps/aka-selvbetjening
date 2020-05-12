@@ -44,6 +44,9 @@ msgstr "Download PDF [kl]"
 msgid "prisme.error"
 msgstr ""
 
+msgid "prisme.error_250"
+msgstr "{text}"
+
 msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
 
@@ -53,12 +56,6 @@ msgstr "Dato [kl]"
 msgid "common.konto"
 msgstr "Konto [kl]"
 
-msgid "common.telefon"
-msgstr "Oq/Telefon [kl]"
-
-msgid "common.fax"
-msgstr "Fax [kl]"
-
 msgid "common.postboks"
 msgstr "Postboks {box} [kl]"
 
@@ -67,15 +64,6 @@ msgstr "Email [kl]"
 
 msgid "common.webadresse"
 msgstr "Web-adresse [kl]"
-
-msgid "common.swift"
-msgstr "SWIFT"
-
-msgid "common.iban"
-msgstr "IBAN"
-
-msgid "common.cvrse"
-msgstr "CVR/SE"
 
 msgid "common.skattestyrelsen"
 msgstr "Skattestyrelsen [kl]"
@@ -409,6 +397,21 @@ msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne pe
 
 
 # NY16
+msgid "employeraccount.telefon"
+msgstr "Telefon [kl]"
+
+msgid "employeraccount.fax"
+msgstr "Fax [kl]"
+
+msgid "employeraccount.swift"
+msgstr "SWIFT"
+
+msgid "employeraccount.iban"
+msgstr "IBAN"
+
+msgid "employeraccount.cvrse"
+msgstr "CVR/SE"
+
 msgid "employeraccount.title"
 msgstr "Kontoudtog for arbejdsgivere [kl]"
 
@@ -531,6 +534,21 @@ msgstr "Ratenummer [kl]"
 
 
 # S23
+msgid "citizenaccount.telefon"
+msgstr "Telefon [kl]"
+
+msgid "citizenaccount.fax"
+msgstr "Fax [kl]"
+
+msgid "citizenaccount.swift"
+msgstr "SWIFT"
+
+msgid "citizenaccount.iban"
+msgstr "IBAN"
+
+msgid "citizenaccount.cvrse"
+msgstr "CVR/SE"
+
 msgid "citizenaccount.title"
 msgstr "Kontoudtog for borgere [kl]"
 

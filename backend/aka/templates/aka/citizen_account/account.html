@@ -138,7 +138,7 @@
 {% block content %}
 <article>
 
-    <h1 class="citizenaccount-title printhide">{% trans 'citizenaccount.title' %} </h1>
+    <h1 class="citizenaccount-title printhide" data-trans="citizenaccount.title">{% trans 'citizenaccount.title' %} </h1>
 
     <div class="citizenaccount-main">
 
@@ -211,23 +211,23 @@
                         <div class="col-3-sm">
                             <table class="dl-table">
                                 <tr>
-                                    <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
+                                    <th data-trans="citizenaccount.telefon">{% trans 'citizenaccount.telefon' %}</th>
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <th data-trans="common.fax">{% trans 'common.fax' %}</th>
+                                    <th data-trans="citizenaccount.fax">{% trans 'citizenaccount.fax' %}</th>
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <th data-trans="citizenaccount.swift">{% trans 'common.swift' %}</th>
+                                    <th data-trans="citizenaccount.swift">{% trans 'citizenaccount.swift' %}</th>
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <th data-trans="citizenaccount.iban">{% trans 'common.iban' %}</th>
+                                    <th data-trans="citizenaccount.iban">{% trans 'citizenaccount.iban' %}</th>
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <th data-trans="citizenaccount.cvrse">{% trans 'common.cvrse' %}</th>
+                                    <th data-trans="citizenaccount.cvrse">{% trans 'citizenaccount.cvrse' %}</th>
                                     <td></td>
                                 </tr>
                                 <tr>
@@ -244,7 +244,7 @@
                     <div class="output-details row">
                         <div class="col-6-sm offset-6-sm">
 
-                            <h3 data-trans="rentenota.rentenota">{% trans 'citizenaccount.account' %}</h3>
+                            <h3 data-trans="citizenaccount.account">{% trans 'citizenaccount.account' %}</h3>
                             <h4 data-trans="citizenaccount.period" data-trans-params="{{ period|json }}">{{ 'citizenaccount.period'|format:period }}</h4>
                         </div>
 
@@ -294,7 +294,7 @@
                         <select name="columns" multiple="multiple">
                             {% for field in fields %}
                                 {% with "citizenaccount."|add:field.name as transkey %}
-                                    <option value="{{ field }}" {% if not field in form.hidden.value %}selected="selected"{% endif %}>{% trans transkey %}</option>
+                                    <option value="{{ field }}" {% if not field in form.hidden.value %}selected="selected"{% endif %} data-trans="{{ transkey }}">{% trans transkey %}</option>
                                 {% endwith %}
                             {% endfor %}
                         </select>

@@ -570,7 +570,7 @@ class Prisme(object):
 
         # reply.status is of type GWSReplyStatusDCFUJ
         if reply.status.replyCode != 0:
-            raise PrismeException(reply.status.replyCode, reply.status.replyText)
+            raise PrismeException(reply.status.replyCode, reply.status.replyText, context)
 
         outputs = []
         # reply_item is of type GWSReplyInstanceDCFUJ
