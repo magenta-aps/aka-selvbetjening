@@ -109,13 +109,13 @@ class KontoForm(forms.Form):
 
     from_date = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
-        required=True,
+        required=False,
         error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
     )
     to_date = forms.DateField(
-        widget=forms.DateInput(attrs={'class': 'datepicker'}),
-        required=True,
+        widget=forms.DateInput(attrs={'class': 'datepicker', 'data-validate-after': '#id_from_date'}),
+        required=False,
         error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
     )
@@ -131,7 +131,7 @@ class KontoForm(forms.Form):
     )
 
     def clean(self):
-        if 'from_date' in self.cleaned_data and 'to_date' in self.cleaned_data:
+        if self.cleaned_data.get('from_date') is not None and self.cleaned_data.get('to_date') is not None:
             if self.cleaned_data['from_date'] > self.cleaned_data['to_date']:
                 raise ValidationError(_('error.from_date_before_to_date'), code='error.from_date_before_to_date')
 

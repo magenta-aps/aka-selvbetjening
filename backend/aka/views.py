@@ -151,8 +151,8 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
                 'date': date.today().strftime('%d/%m/%Y'),
                 'sum': sum([item.amount for item in self.items]) if self.items else 0,
                 'period': {
-                    'from_date': formdata['from_date'].strftime('%d-%m-%Y'),
-                    'to_date': formdata['to_date'].strftime('%d-%m-%Y')
+                    'from_date': formdata['from_date'].strftime('%d-%m-%Y') if formdata.get('from_date') is not None else None,
+                    'to_date': formdata['to_date'].strftime('%d-%m-%Y') if formdata.get('to_date') is not None else None
                 },
                 'fields': fields
             })
