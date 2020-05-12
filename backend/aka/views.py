@@ -5,9 +5,9 @@ import re
 
 from aka.clients.dafo import Dafo
 from aka.clients.prisme import Prisme, PrismeException, PrismeNotFoundException
-from aka.clients.prisme import PrismeAccountRequest
-from aka.clients.prisme import PrismeAccountResponse
+from aka.clients.prisme import PrismeCitizenAccountRequest
 from aka.clients.prisme import PrismeClaimRequest
+from aka.clients.prisme import PrismeEmployerAccountRequest
 from aka.clients.prisme import PrismeImpairmentRequest
 from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
@@ -135,6 +135,11 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
             return self.render_pdf()
         return super().form_valid(form)
 
+    def form_invalid(self, form):
+        if 'pdf' in self.request.GET:
+            return self.render_pdf()
+        return super().form_invalid(form)
+
     def get_context_data(self, **kwargs):
         context = {}
         if self.form.is_bound:
@@ -166,14 +171,22 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
     template_name = 'aka/employer_account/account.html'
 
     def get_pdf_filename(self):
+        try:
+            from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d')
+        except:
+            from_date = "alle"
+        try:
+            to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d')
+        except:
+            to_date = "alle"
         return _("employeraccount.filename").format(
-            from_date=self.form.cleaned_data['from_date'].strftime('%Y-%m-%d'),
-            to_date=self.form.cleaned_data['to_date'].strftime('%Y-%m-%d'),
+            from_date=from_date,
+            to_date=to_date
         )
 
     def get_items(self, form):
         prisme = Prisme()
-        account_request = PrismeAccountRequest(
+        account_request = PrismeEmployerAccountRequest(
             self.cvr,
             form.cleaned_data['from_date'],
             form.cleaned_data['to_date'],
@@ -184,30 +197,30 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
     def get_fields(self):
         return [
-            {'name':'account_number', 'class': 'nb'},
-            {'name':'transaction_date', 'class': 'nb'},
-            {'name':'accounting_date', 'class': 'nb'},
-            {'name':'debitor_group_id', 'class': 'nb'},
-            {'name':'debitor_group_name', 'class': 'nb'},
-            {'name':'voucher',  'class': 'nb'},
-            {'name':'text', 'class': ''},
-            {'name':'payment_code', 'class': 'nb'},
-            {'name':'payment_code_name', 'class': 'nb'},
-            {'name':'amount', 'class': 'nb'},
-            {'name':'remaining_amount', 'class': 'nb'},
-            {'name':'due_date', 'class': 'nb'},
-            {'name':'closed_date', 'class': 'nb'},
-            {'name':'last_settlement_voucher', 'class': 'nb'},
-            {'name':'collection_letter_date', 'class': 'nb'},
-            {'name':'collection_letter_code', 'class': 'nb'},
-            {'name':'claim_type_code', 'class': 'nb'},
-            {'name':'invoice_number', 'class': 'nb'},
-            {'name':'transaction_type', 'class': 'nb'},
-            {'name':'claimant_name', 'class': 'nb'},
-            {'name':'claimant_id', 'class': 'nb'},
-            {'name':'payment_code', 'class': 'nb'},
-            {'name':'child_claimant', 'class': 'nb'},
-            {'name':'rate_number', 'class': 'nb'},
+            {'name': 'account_number', 'class': 'nb'},
+            {'name': 'transaction_date', 'class': 'nb'},
+            {'name': 'accounting_date', 'class': 'nb'},
+            {'name': 'debitor_group_id', 'class': 'nb'},
+            {'name': 'debitor_group_name', 'class': 'nb'},
+            {'name': 'voucher',  'class': 'nb'},
+            {'name': 'text', 'class': ''},
+            {'name': 'payment_code', 'class': 'nb'},
+            {'name': 'payment_code_name', 'class': 'nb'},
+            {'name': 'amount', 'class': 'nb'},
+            {'name': 'remaining_amount', 'class': 'nb'},
+            {'name': 'due_date', 'class': 'nb'},
+            {'name': 'closed_date', 'class': 'nb'},
+            {'name': 'last_settlement_voucher', 'class': 'nb'},
+            {'name': 'collection_letter_date', 'class': 'nb'},
+            {'name': 'collection_letter_code', 'class': 'nb'},
+            {'name': 'claim_type_code', 'class': 'nb'},
+            {'name': 'invoice_number', 'class': 'nb'},
+            {'name': 'transaction_type', 'class': 'nb'},
+            {'name': 'claimant_name', 'class': 'nb'},
+            {'name': 'claimant_id', 'class': 'nb'},
+            {'name': 'payment_code', 'class': 'nb'},
+            {'name': 'child_claimant', 'class': 'nb'},
+            {'name': 'rate_number', 'class': 'nb'},
         ]
 
     def get_context_data(self, **kwargs):
@@ -225,14 +238,22 @@ class BorgerKontoView(RequireCprMixin, KontoView):
     template_name = 'aka/citizen_account/account.html'
 
     def get_pdf_filename(self):
+        try:
+            from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d')
+        except:
+            from_date = "alle"
+        try:
+            to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d')
+        except:
+            to_date = "alle"
         return _("citizenaccount.filename").format(
-            from_date=self.form.cleaned_data['from_date'].strftime('%Y-%m-%d'),
-            to_date=self.form.cleaned_data['to_date'].strftime('%Y-%m-%d'),
+            from_date=from_date,
+            to_date=to_date
         )
 
     def get_items(self, form):
         prisme = Prisme()
-        account_request = PrismeAccountRequest(
+        account_request = PrismeCitizenAccountRequest(
             self.cpr,
             form.cleaned_data['from_date'],
             form.cleaned_data['to_date'],

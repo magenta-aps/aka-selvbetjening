@@ -16,12 +16,12 @@
         <LastSettleVoucher>KMO-000000001</LastSettleVoucher>
         <CollectionLetterDate/>
         <CollectionLetterCode>Ingen</CollectionLetterCode>
-        <EfiClaimTypeCode/>
+        <ClaimTypeCode/>
         <Invoice>AKI-000001</Invoice>
         <TransType>Debitor</TransType>
         <ClaimantName>Avannaata Kommunia</ClaimantName>
         <ClaimantId>37AK</ClaimantId>
         <ChildClaimant/>
-        <ClaimRateNmb>2</ClaimRateNmb>
+        <RateNmb>2</RateNmb>
     </CustTrans>
 </CustTable>

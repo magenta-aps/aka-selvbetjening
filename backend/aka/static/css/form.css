@@ -138,6 +138,11 @@ select {
     list-style-type: none;
 }
 
+.input ul li {
+    display: inline-block;
+    margin: 0 3em;
+}
+
 .err-msg {
     color:red;
 }

@@ -135,6 +135,29 @@ class PrismeAccountRequest(PrismeRequestObject):
         return PrismeAccountResponse
 
 
+class PrismeEmployerAccountRequest(PrismeAccountRequest):
+
+    @property
+    def method(self):
+        return 'getAccountStatementAKI'
+
+    @property
+    def reply_class(self):
+        return PrismeEmployerAccountResponse
+
+
+class PrismeCitizenAccountRequest(PrismeAccountRequest):
+
+    @property
+    def method(self):
+        return 'getAccountStatementSEL'
+
+    @property
+    def reply_class(self):
+        return PrismeCitizenAccountResponse
+
+
+
 class PrismeClaimRequest(PrismeRequestObject):
 
     wrap = 'CustCollClaimTableFuj'
@@ -372,19 +395,10 @@ class PrismeAccountResponseTransaction(object):
         self.last_settlement_voucher = data['LastSettleVoucher']
         self.collection_letter_date = data['CollectionLetterDate']
         self.collection_letter_code = data['CollectionLetterCode']
-        self.claim_type_code = data['EfiClaimTypeCode']
+        self.claim_type_code = data['ClaimTypeCode']
         self.invoice_number = data['Invoice']
         self.transaction_type = data['TransType']
-        self.rate_number = data['ClaimRateNmb']
-
-
-class PrismeCitizenAccountResponseTransaction(PrismeAccountResponseTransaction):
-
-    def __init__(self, data):
-        super(PrismeCitizenAccountResponseTransaction, self).__init__(data)
-        self.claimant_name = data['ClaimantName']
-        self.claimant_id = data['ClaimantId']
-        self.child_claimant = data['ChildClaimant']
+        self.rate_number = data['RateNmb']
 
 
 class PrismeAccountResponse(PrismeResponseObject):
@@ -394,6 +408,7 @@ class PrismeAccountResponse(PrismeResponseObject):
     def __init__(self, request, xml):
         super(PrismeAccountResponse, self).__init__(request, xml)
         data = xml_to_dict(xml)
+        print(data)
         transactions = data['CustTable']['CustTrans']
         if type(transactions) != list:
             transactions = [transactions]
@@ -403,8 +418,24 @@ class PrismeAccountResponse(PrismeResponseObject):
         yield from self.transactions
 
 
-class PrismeCitizenAccountResponse(PrismeAccountResponse):
+class PrismeEmployerAccountResponseTransaction(PrismeAccountResponseTransaction):
 
+    def __init__(self, data):
+        super().__init__(data)
+        self.claimant_name = data['ClaimantName']
+        self.claimant_id = data['ClaimantId']
+        self.child_claimant = data['ChildClaimant']
+
+
+class PrismeEmployerAccountResponse(PrismeAccountResponse):
+    itemclass = PrismeEmployerAccountResponseTransaction
+
+
+class PrismeCitizenAccountResponseTransaction(PrismeAccountResponseTransaction):
+    pass
+
+
+class PrismeCitizenAccountResponse(PrismeAccountResponse):
     itemclass = PrismeCitizenAccountResponseTransaction
 
 

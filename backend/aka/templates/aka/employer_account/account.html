@@ -14,42 +14,46 @@
         <script>
 
             const splitTable = function(table) {
-                var newTable;
-                var tableLeft = table.offset().left;
-                var maxWidth = 1200; // table.parent().innerWidth();
-                var tables = [table];
+                var tables = [];
+                if (table.length) {
+                    var newTable;
+                    var tableLeft = table.offset().left;
+                    var maxWidth = 1200; // table.parent().innerWidth();
+                    tables.push(table);
 
-                table.find("th").each(function (index) {
+                    table.find("th").each(function (index) {
 
-                    var $this = $(this);
-                    var right = $this.offset().left + $this.outerWidth() - tableLeft;
+                        var $this = $(this);
+                        var right = $this.offset().left + $this.outerWidth() - tableLeft;
 
-                    if (right > maxWidth) {
-                        // Create a new table to hold punted columns
-                        newTable = $("<table><thead><tr></tr></thead><tbody></tbody></table>");
-                        var newPage = $("<div class=\"page\"/>");
-                        newPage.append($(".employeraccount-data").prevAll().clone().get().reverse());
-                        newPage.append(newTable);
-                        $(".account-data").append(newPage);
-                        newTable.addClass(table.get(0).className);
-                        // Move table headers (this + all to the right), and their cells to the new table
-                        var puntHeaders = $this.add($this.nextAll());
-                        newTable.find("thead tr").append(puntHeaders);
-                        table.find("tbody tr").each(function() {
-                            var puntCells = $(this).find("td:nth-child("+(index)+")").nextAll();
-                            var newRow = $("<tr/>");
-                            newRow.append(puntCells);
-                            newTable.find("tbody").append(newRow);
-                            newRow.height($(this).height());
-                        });
-                        return false;
+                        if (right > maxWidth) {
+                            // Create a new table to hold punted columns
+                            newTable = $("<table><thead><tr></tr></thead><tbody></tbody></table>");
+                            var newPage = $("<div class=\"page\"/>");
+                            newPage.append($("#data-table").parent().prevAll().clone().get().reverse());
+                            newPage.append(newTable);
+                            newPage.append($(".pagefooter").first().clone());
+                            $(".account-data").append(newPage);
+                            newTable.addClass(table.get(0).className);
+                            // Move table headers (this + all to the right), and their cells to the new table
+                            var puntHeaders = $this.add($this.nextAll());
+                            newTable.find("thead tr").append(puntHeaders);
+                            table.find("tbody tr").each(function () {
+                                var puntCells = $(this).find("td:nth-child(" + (index) + ")").nextAll();
+                                var newRow = $("<tr/>");
+                                newRow.append(puntCells);
+                                newTable.find("tbody").append(newRow);
+                                newRow.height($(this).height());
+                            });
+                            return false;
+                        }
+                    });
+                    if (newTable) {
+                        // Run split on the new (smaller) table. This continues in a chain until the last table does not need to be split
+                        tables = tables.concat(
+                            splitTable(newTable)
+                        );
                     }
-                });
-                if (newTable) {
-                    // Run split on the new (smaller) table. This continues in a chain until the last table does not need to be split
-                    tables = tables.concat(
-                        splitTable(newTable)
-                    );
                 }
                 return tables;
             };
@@ -75,6 +79,7 @@
                             return false;
                         }
                     });
+                    newPage.append($(".pagefooter").first().clone());
                     page.parent().append(newPage);
                     splitPage(newPage);
                 }
@@ -97,7 +102,21 @@
                 // Split the pages to get a nice border (and copy headers to pages)
                 $(".page").each(function(index, el) {
                     splitPage($(this));
-                })
+                });
+
+                var footerTemplate = "{% trans 'employeraccount.footer' %}";
+
+                var footers = $(".page .pagefooter");
+                footers.each(function(index, el){
+                    var params = {'index':index+1, 'count':footers.length};
+                    var text = footerTemplate;
+                    for (let key in params) {
+                        if (params.hasOwnProperty(key)) {
+                            text = text.replace("{" + key + "}", params[key]);
+                        }
+                    }
+                    $(this).text(text);
+                 });
             });
         </script>
 
@@ -151,20 +170,20 @@
             </div>
 
             <div class="employeraccount-actions row">
-                <div class="col-4-sm">
+                <div class="col-12-sm">
                     {% include 'aka/util/field.html' with field=form.open_closed %}
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-4-sm">
+                <div class="col-12-sm">
                     <button type="submit" data-trans="common.send">{% trans 'common.send' %}</button>
                 </div>
             </div>
             {{ form.hidden }}
         </form>
 
-        {% if items is not None %}
+        {% if items is not None or pdf %}
 
             <div class="output account-data">
                 <div class="page">
@@ -285,6 +304,7 @@
                         {% endif %}
 
                         <table id="data-table" class="output-table">
+                            {% if items is not None %}
                             <thead>
                             <tr>
                                 {% for field in fields %}
@@ -294,6 +314,7 @@
                                 {% endfor %}
                             </tr>
                             </thead>
+                            {% endif %}
                             <tbody>
                             {% for item in items %}
                                 <tr>
@@ -309,6 +330,9 @@
                             </tbody>
                         </table>
                     </div>
+                    {% if pdf %}
+                        <div class="pagefooter"></div>
+                    {% endif %}
                 </div>
             </div>
         {% endif %}
