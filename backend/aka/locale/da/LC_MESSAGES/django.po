@@ -60,12 +60,6 @@ msgstr "Dato"
 msgid "common.konto"
 msgstr "Konto"
 
-msgid "common.telefon"
-msgstr "Telefon"
-
-msgid "common.fax"
-msgstr "Fax"
-
 msgid "common.postboks"
 msgstr "Postboks {box}"
 
@@ -74,15 +68,6 @@ msgstr "Email"
 
 msgid "common.webadresse"
 msgstr "Web-adresse"
-
-msgid "common.swift"
-msgstr "SWIFT"
-
-msgid "common.iban"
-msgstr "IBAN"
-
-msgid "common.cvrse"
-msgstr "CVR/SE"
 
 msgid "common.skattestyrelsen"
 msgstr "Skattestyrelsen"
@@ -414,6 +399,21 @@ msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne pe
 
 
 # NY16
+msgid "employeraccount.telefon"
+msgstr "Telefon"
+
+msgid "employeraccount.fax"
+msgstr "Fax"
+
+msgid "employeraccount.swift"
+msgstr "SWIFT"
+
+msgid "employeraccount.iban"
+msgstr "IBAN"
+
+msgid "employeraccount.cvrse"
+msgstr "CVR/SE"
+
 msgid "employeraccount.title"
 msgstr "Kontoudtog for arbejdsgivere"
 
@@ -539,6 +539,21 @@ msgstr "Rate&shy;nummer"
 
 
 # S23
+msgid "citizenaccount.telefon"
+msgstr "Telefon"
+
+msgid "citizenaccount.fax"
+msgstr "Fax"
+
+msgid "citizenaccount.swift"
+msgstr "SWIFT"
+
+msgid "citizenaccount.iban"
+msgstr "IBAN"
+
+msgid "citizenaccount.cvrse"
+msgstr "CVR/SE"
+
 msgid "citizenaccount.title"
 msgstr "Kontoudtog for borgere"
 
