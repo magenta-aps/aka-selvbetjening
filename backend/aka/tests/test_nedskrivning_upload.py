@@ -78,11 +78,12 @@ class BasicTestCase(TestMixin, TestCase):
             erroritems = root.xpath("//div[@data-field='id_file']//ul[@class='errorlist']/li")
             self.assertEqual(3, len(erroritems))
             self.assertEqual('error.upload_validation_item', erroritems[0].attrib.get('data-trans'))
+            print(erroritems[0].attrib.get('data-trans-params'))
             self.assertEqual(
                 {
                     'field': 'ekstern_sagsnummer',
                     'message': ['error.required', None],
-                    'row': 1,
+                    'row': 2,
                     'col': 1,
                     'col_letter': 'B'
                 },
@@ -90,11 +91,11 @@ class BasicTestCase(TestMixin, TestCase):
             )
             self.assertEqual('error.upload_validation_item', erroritems[1].attrib.get('data-trans'))
             self.assertEqual(
-                {'field': 'beloeb', 'message': ['Indtast et tal.', None], 'row': 1, 'col': 2, 'col_letter': 'C'},
+                {'field': 'beloeb', 'message': ['Indtast et tal.', None], 'row': 2, 'col': 2, 'col_letter': 'C'},
                 json.loads(erroritems[1].attrib.get('data-trans-params'))
             )
             self.assertEqual('error.upload_validation_item', erroritems[2].attrib.get('data-trans'))
             self.assertEqual(
-                {'field': 'sekvensnummer', 'message': ['error.required', None], 'row': 1, 'col': 3, 'col_letter': 'D'},
+                {'field': 'sekvensnummer', 'message': ['error.required', None], 'row': 2, 'col': 3, 'col_letter': 'D'},
                 json.loads(erroritems[2].attrib.get('data-trans-params'))
             )
