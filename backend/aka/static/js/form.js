@@ -21,7 +21,7 @@ $(function(){
         const invalidDateAfterMessage = django.format("error.from_date_before_to_date", null, django.language);
         $this.find("input[data-validate-after]").each(function() {
             var comparisonField = $($(this).attr("data-validate-after"));
-            if (strpdate(this.value) < strpdate(comparisonField.val())) {
+            if (this.value && comparisonField.val() && strpdate(this.value) < strpdate(comparisonField.val())) {
                 error = true;
                 const errorContainer = $(".err-msg[for='"+this.id+"']");
                 let ul = errorContainer.find("ul.errorlist");

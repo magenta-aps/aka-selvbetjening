@@ -143,6 +143,11 @@ select {
     margin: 0 3em;
 }
 
+.input ul.errorlist li {
+    display: block;
+    margin: 0;
+}
+
 .err-msg {
     color:red;
 }

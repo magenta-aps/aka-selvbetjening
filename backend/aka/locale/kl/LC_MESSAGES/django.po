@@ -676,7 +676,7 @@ msgid "citizenaccount.claimant_id"
 msgstr "Fordringshaver ID [kl]"
 
 msgid "citizenaccount.child_claimant"
-msgstr "?? Barn Fordringshaver ?? [kl]"
+msgstr "Fordringshavers barns CPR [kl]"
 
 msgid "citizenaccount.rate_number"
 msgstr "Ratenummer [kl]"
