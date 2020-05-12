@@ -133,6 +133,11 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
             return self.render_pdf()
         return super().form_valid(form)
 
+    def form_invalid(self, form):
+        if 'pdf' in self.request.GET:
+            return self.render_pdf()
+        return super().form_invalid(form)
+
     def get_context_data(self, **kwargs):
         context = {}
         if self.form.is_bound:
