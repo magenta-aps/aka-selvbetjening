@@ -47,7 +47,7 @@ class PrismeException(AkaException):
                     for i, argname in enumerate(parsedata['args'], start=1):
                         self.params[argname] = match.group(i)
         except Exception as e:
-            print(e)
+            print("Failed to parse prisme error response: %s" % str(e))
             pass
 
     @property

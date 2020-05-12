@@ -416,7 +416,6 @@ class LoentraekView(RequireCvrMixin, FormSetView, FormView):
                 using=self.template_engine
             )
         except PrismeException as e:
-            print(e.code)
             raise e
 
     def form_invalid(self, form, formset):
@@ -594,7 +593,6 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
         try:
             self.posts = self.get_posts(form)
         except PrismeException as e:
-            print(e.as_error_dict)
             self.errors.append(e.as_error_dict)
 
         if 'pdf' in self.request.GET:

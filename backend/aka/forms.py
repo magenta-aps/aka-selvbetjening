@@ -72,7 +72,6 @@ class CsvUploadMixin(object):
                     except ValueError:
                         col_index = None
                     for error in errorlist.as_data():
-                        print(error)
                         self.add_error('file', ValidationError(
                             'error.upload_validation_item',
                             code='error.upload_validation_item',
