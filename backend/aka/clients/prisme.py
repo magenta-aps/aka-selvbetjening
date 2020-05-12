@@ -406,12 +406,14 @@ class PrismeAccountResponse(PrismeResponseObject):
 
     def __init__(self, request, xml):
         super(PrismeAccountResponse, self).__init__(request, xml)
-        data = xml_to_dict(xml)
-        print(data)
-        transactions = data['CustTable']['CustTrans']
-        if type(transactions) != list:
-            transactions = [transactions]
-        self.transactions = [self.itemclass(x) for x in transactions]
+        if xml is None:
+            self.transactions = []
+        else:
+            data = xml_to_dict(xml)
+            transactions = data['CustTable']['CustTrans']
+            if type(transactions) != list:
+                transactions = [transactions]
+            self.transactions = [self.itemclass(x) for x in transactions]
 
     def __iter__(self):
         yield from self.transactions
