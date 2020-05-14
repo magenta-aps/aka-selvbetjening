@@ -126,13 +126,12 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}"/>
         <script src="{% static 'js/form.js' %}"></script>
 
-        {% if items is not None %}
-            <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>
-            <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>
+        <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
 
+        {% if items %}
             <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/sumoselect.min.css">
             <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/jquery.sumoselect.min.js"></script>
-
             <script src="{% static 'js/datatable.js' %}"></script>
         {% endif %}
     {% endif %}
@@ -183,7 +182,7 @@
             {{ form.hidden }}
         </form>
 
-        {% if items is not None or pdf %}
+        {% if form.is_bound %}
 
             <div class="output account-data">
                 <div class="page">
@@ -293,18 +292,19 @@
 
                     <div class="citizenaccount-data">
 
-                        {% if not pdf %}
-                        <select name="columns" multiple="multiple">
-                            {% for field in fields %}
-                                {% with "citizenaccount."|add:field.name as transkey %}
-                                    <option value="{{ field }}" {% if not field in form.hidden.value %}selected="selected"{% endif %} data-trans="{{ transkey }}">{% trans transkey %}</option>
-                                {% endwith %}
-                            {% endfor %}
-                        </select>
-                        {% endif %}
+                        {% if items and items|length > 0 %}
 
-                        <table id="data-table" class="output-table">
-                            {% if items is not None %}
+                            {% if not pdf %}
+                            <select name="columns" multiple="multiple">
+                                {% for field in fields %}
+                                    {% with "citizenaccount."|add:field.name as transkey %}
+                                        <option value="{{ field }}" {% if not field in form.hidden.value %}selected="selected"{% endif %} data-trans="{{ transkey }}">{% trans transkey %}</option>
+                                    {% endwith %}
+                                {% endfor %}
+                            </select>
+                            {% endif %}
+
+                            <table id="data-table" class="output-table">
                             <thead>
                             <tr>
                                 {% for field in fields %}
@@ -314,7 +314,6 @@
                                 {% endfor %}
                             </tr>
                             </thead>
-                            {% endif %}
                             <tbody>
                             {% for item in items %}
                                 <tr>
@@ -322,13 +321,12 @@
                                         <td class="{{ field.class }}">{{ item|get:field.name|default:'' }}</td>
                                     {% endfor %}
                                 </tr>
-                            {% empty %}
-                                <tr>
-                                    <td colspan="{{ fields|length }}" class="empty" data-trans="citizenaccount.ingenposter">{% trans 'citizenaccount.ingenposter' %}</td>
-                                </tr>
                             {% endfor %}
                             </tbody>
                         </table>
+                        {% else %}
+                            <p data-trans="citizenaccount.ingenposter">{% trans 'citizenaccount.ingenposter' %}</p>
+                        {% endif %}
                     </div>
                     {% if pdf %}
                         <div class="pagefooter"></div>
