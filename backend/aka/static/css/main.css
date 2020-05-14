@@ -45,14 +45,16 @@ address {
 }
 
 @media screen and (min-width:60rem) {
-    article,
-    #company {
+    article {
         max-width: 75rem;
         margin: 2rem auto 2.25rem
     }
 }
 
-#company {
+.userinfo {
+    padding: 0.5rem 2rem 0 2rem;
+    margin: 0 auto;
+    width: 78.75rem;
     text-align: right;
 }
 

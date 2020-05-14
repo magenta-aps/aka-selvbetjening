@@ -5,7 +5,7 @@
 {% block extra_headers %}
     {% include 'aka/util/calendar_headers.html' %}
     <script type="text/javascript" src="{% static 'js/formset.js' %}"></script>
-    <script type="text/javascript" src="{% url 'fordringsgrupper' var='groups' %}"></script>
+    <script type="text/javascript" src="{% url 'aka:fordringsgrupper' var='groups' %}"></script>
     <script type="text/javascript" src="{% static 'js/claim.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
 {% endblock %}
