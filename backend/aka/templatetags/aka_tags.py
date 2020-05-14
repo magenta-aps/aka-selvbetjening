@@ -3,19 +3,21 @@ import re
 from html import unescape
 
 from django.template.defaultfilters import register
-from django.utils.http import urlencode, urlquote
 from django.utils.translation import gettext
 
 trans_re = re.compile("_\\((.*)\\)")
 format_re = re.compile("{(.*)}")
 
+
 @register.filter
 def split(text, filter):
     return text.split(filter)
 
+
 @register.filter
 def json(data):
     return jsonlib.dumps(data)
+
 
 @register.filter
 def format(text, params):
@@ -65,3 +67,11 @@ def back(url, backurl):
             urlquote(backurl)
         ])
     return url
+
+
+@register.filter
+def get(item, attribute):
+    if hasattr(item, attribute):
+        return getattr(item, attribute)
+    if hasattr(item, 'get'):
+        return item.get(attribute)

@@ -25,7 +25,7 @@ class BasicTestCase(TestMixin, TestCase):
         session.save()
 
 
-### PRISME INTERFACE TESTS ###
+# PRISME INTERFACE TESTS ###
 
     def test_impairment_request_parse(self):
         request = PrismeImpairmentRequest('32SE', '12345678', 'ref123', -100.5, 'AKI-000047')
@@ -39,8 +39,7 @@ class BasicTestCase(TestMixin, TestCase):
         response = PrismeImpairmentResponse(None, self.get_file_contents('aka/tests/resources/impairment_response.xml'))
         self.assertEqual("5637238342", response.rec_id)
 
-
-    ### POSITIVE TESTS ###
+    # POSITIVE TESTS
 
     def test_impairment_success(self):
         with File(open('aka/tests/resources/impairment.csv', 'rb')) as file:
@@ -54,8 +53,7 @@ class BasicTestCase(TestMixin, TestCase):
             self.assertEqual(1, len(el))
             self.assertEqual('1234', el[0].text)
 
-
-    ### NEGATIVE TESTS ###
+    # NEGATIVE TESTS
 
     def test_impairment_empty_csv(self):
         with File(open('aka/tests/resources/impairment_empty.csv', 'rb')) as file:
@@ -69,7 +67,6 @@ class BasicTestCase(TestMixin, TestCase):
             self.assertEqual(1, len(erroritems))
             self.assertEqual('error.upload_empty', erroritems[0].attrib.get('data-trans'))
 
-
     def test_impairment_invalid(self):
         with File(open('aka/tests/resources/impairment_missing.csv', 'rb')) as file:
             formData = {
@@ -81,17 +78,24 @@ class BasicTestCase(TestMixin, TestCase):
             erroritems = root.xpath("//div[@data-field='id_file']//ul[@class='errorlist']/li")
             self.assertEqual(3, len(erroritems))
             self.assertEqual('error.upload_validation_item', erroritems[0].attrib.get('data-trans'))
+            print(erroritems[0].attrib.get('data-trans-params'))
             self.assertEqual(
-                {'field': 'ekstern_sagsnummer', 'message': ['error.required', None], 'row': 1, 'col': 1, 'col_letter': 'B'},
+                {
+                    'field': 'ekstern_sagsnummer',
+                    'message': ['error.required', None],
+                    'row': 2,
+                    'col': 1,
+                    'col_letter': 'B'
+                },
                 json.loads(erroritems[0].attrib.get('data-trans-params'))
             )
             self.assertEqual('error.upload_validation_item', erroritems[1].attrib.get('data-trans'))
             self.assertEqual(
-                {'field': 'beloeb', 'message': ['Indtast et tal.', None], 'row': 1, 'col': 2, 'col_letter': 'C'},
+                {'field': 'beloeb', 'message': ['Indtast et tal.', None], 'row': 2, 'col': 2, 'col_letter': 'C'},
                 json.loads(erroritems[1].attrib.get('data-trans-params'))
             )
             self.assertEqual('error.upload_validation_item', erroritems[2].attrib.get('data-trans'))
             self.assertEqual(
-                {'field': 'sekvensnummer', 'message': ['error.required', None], 'row': 1, 'col': 3, 'col_letter': 'D'},
+                {'field': 'sekvensnummer', 'message': ['error.required', None], 'row': 2, 'col': 3, 'col_letter': 'D'},
                 json.loads(erroritems[2].attrib.get('data-trans-params'))
             )

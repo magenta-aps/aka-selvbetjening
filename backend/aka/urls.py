@@ -32,9 +32,11 @@ app_name = 'aka'
 
 urlpatterns = [
     # Use 'django' domain instead of 'djangojs', so we get serverside translations
-    url(r'^language/(?P<locale>[a-z]{2})', CustomJavaScriptCatalog.as_view(domain='django', packages=['aka']), name='javascript-language-catalog'),
+    url(
+        r'^language/(?P<locale>[a-z]{2})',
+        CustomJavaScriptCatalog.as_view(domain='django', packages=['aka']), name='javascript-language-catalog'
+    ),
     url(r'^language', SetLanguageView.as_view(), name='set-language'),
-
     url(r'^$', IndexTemplateView.as_view(), name='index'),
     url(r'^login$', LoginView.as_view(), name='login'),
     url(r'^logout$', LogoutView.as_view(), name='logout'),

@@ -131,13 +131,16 @@ table {
     width: 100%
 }
 .row {
-    position: relative
+    position: relative;
+    padding: 0.5em 0;
 }
 .row [class^=col] {
     float: left;
-    margin: .5rem 2%;
     min-height: .125rem
 }
+.row [class^=col]:not[class^=offset] {
+     margin: .5rem 2%;
+ }
 .col-1,
 .col-2,
 .col-3,
@@ -150,44 +153,83 @@ table {
 .col-10,
 .col-11,
 .col-12 {
-    width: 96%
+    width: 100%
 }
 .col-1-sm {
-    width: 4.33%
+    width: 8.33%
 }
 .col-2-sm {
-    width: 12.66%
+    width: 16.66%
 }
 .col-3-sm {
-    width: 21%
+    width: 25%
 }
 .col-4-sm {
-    width: 29.33%
+    width: 33.33%
 }
 .col-5-sm {
-    width: 37.66%
+    width: 41.66%
 }
 .col-6-sm {
-    width: 46%
+    width: 50%
 }
 .col-7-sm {
-    width: 54.33%
+    width: 58.33%
 }
 .col-8-sm {
-    width: 62.66%
+    width: 66.66%
 }
 .col-9-sm {
-    width: 71%
+    width: 75%
 }
 .col-10-sm {
-    width: 79.33%
+    width: 83.33%
 }
 .col-11-sm {
-    width: 87.66%
+    width: 91.66%
 }
 .col-12-sm {
-    width: 96%
+    width: 100%
 }
+
+.offset-1-sm {
+    margin-left: 8.33%
+}
+.offset-2-sm {
+    margin-left: 16.66%
+}
+.offset-3-sm {
+    margin-left: 25%
+}
+.offset-4-sm {
+    margin-left: 33.33%
+}
+.offset-5-sm {
+    margin-left: 41.66%
+}
+.offset-6-sm {
+    margin-left: 50%
+}
+.offset-7-sm {
+    margin-left: 58.33%
+}
+.offset-8-sm {
+    margin-left: 66.66%
+}
+.offset-9-sm {
+    margin-left: 75%
+}
+.offset-10-sm {
+    margin-left: 83.33%
+}
+.offset-11-sm {
+    margin-left: 91.66%
+}
+.offset-12-sm {
+    margin-left: 100%
+}
+
+
 .row:after {
     content: "";
     display: table;

@@ -9,7 +9,7 @@ from django import forms
 from django.conf import settings
 from django.core.validators import FileExtensionValidator, MinLengthValidator, \
     MaxLengthValidator
-from django.forms import ValidationError
+from django.forms import ValidationError, MultipleHiddenInput
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 
@@ -23,7 +23,11 @@ class CsvUploadMixin(object):
     def clean_file(self):
         file = self.cleaned_data['file']
         if file.size > settings.MAX_UPLOAD_FILESIZE:
-            raise ValidationError('file_too_large', code='error.upload_too_large', params={'maxsize': settings.MAX_UPLOAD_FILESIZE})
+            raise ValidationError(
+                'file_too_large',
+                code='error.upload_too_large',
+                params={'maxsize': settings.MAX_UPLOAD_FILESIZE}
+            )
 
         file.seek(0)
         data = file.read()
@@ -44,7 +48,7 @@ class CsvUploadMixin(object):
         # Use self.add_error to add validation errors on the file contents,
         # as there may be several in the same file
         for row_index, row in enumerate(rows, start=2):
-            data=self.transform_row(row)
+            data = self.transform_row(row)
             subform = self.subform_class(data=data)
             missing = subform.fields.keys() - data
             if missing:
@@ -68,7 +72,6 @@ class CsvUploadMixin(object):
                     except ValueError:
                         col_index = None
                     for error in errorlist.as_data():
-                        print(error)
                         self.add_error('file', ValidationError(
                             'error.upload_validation_item',
                             code='error.upload_validation_item',
@@ -89,23 +92,45 @@ class CsvUploadMixin(object):
         return row
 
 
+class RadioSelect(forms.RadioSelect):
+    option_template_name='aka/util/optionfield.html'
+
+
+class AcceptingMultipleChoiceField(forms.MultipleChoiceField):
+    def valid_value(self, value):
+        return True
+
 class KontoForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        super(KontoForm, self).__init__(*args, **kwargs)
+        self.initial['open_closed'] = 2
 
     from_date = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
-        required=True,
+        required=False,
         error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
     )
     to_date = forms.DateField(
-        widget=forms.DateInput(attrs={'class': 'datepicker'}),
-        required=True,
+        widget=forms.DateInput(attrs={'class': 'datepicker', 'data-validate-after': '#id_from_date'}),
+        required=False,
         error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
     )
+    open_closed = forms.IntegerField(
+        widget=RadioSelect(
+            choices=[(0, 'account.entries_open'), (1, 'account.entries_closed'), (2, 'account.entries_all')],
+        ),
+        error_messages={'required': 'error.required'},
+    )
+    hidden = AcceptingMultipleChoiceField(
+        widget=MultipleHiddenInput,
+        required=False
+    )
 
     def clean(self):
-        if 'from_date' in self.cleaned_data and 'to_date' in self.cleaned_data:
+        if self.cleaned_data.get('from_date') is not None and self.cleaned_data.get('to_date') is not None:
             if self.cleaned_data['from_date'] > self.cleaned_data['to_date']:
                 raise ValidationError(_('error.from_date_before_to_date'), code='error.from_date_before_to_date')
 
@@ -252,7 +277,10 @@ class InkassoForm(forms.Form):
             subgroups = [x['sub_groups'] for x in groups if int(x['id']) == int(group_id)][0]
             type = [x for x in subgroups if "%d.%d" % (x['group_id'], x['type_id']) == type_id][0]
             if type.get('has_child_cpr') and not cleaned_data.get('barns_cpr'):
-                self.add_error('barns_cpr', ValidationError(self.fields['barns_cpr'].error_messages['required'], code='required'))
+                self.add_error(
+                    'barns_cpr',
+                    ValidationError(self.fields['barns_cpr'].error_messages['required'], code='required')
+                )
         print(self.errors)
 
     @staticmethod
@@ -294,7 +322,8 @@ class InkassoUploadForm(CsvUploadMixin, forms.Form):
     )
 
     def transform_row(self, row):
-        (row['fordringsgruppe'], row['fordringstype']) = InkassoForm.convert_group_type_text(row['fordringsgruppe'], row['fordringstype'])
+        (row['fordringsgruppe'], row['fordringstype']) = \
+            InkassoForm.convert_group_type_text(row['fordringsgruppe'], row['fordringstype'])
         return row
 
 

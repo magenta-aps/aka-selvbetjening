@@ -1,7 +1,7 @@
 import logging
 
-from aka.clients.prisme import PrismeInterestNoteRequest, \
-    PrismeInterestNoteResponse
+from aka.clients.prisme import PrismeInterestNoteRequest
+from aka.clients.prisme import PrismeInterestNoteResponse
 from aka.tests.mixins import TestMixin
 from django.test import TestCase
 from django.test import override_settings
@@ -37,7 +37,7 @@ class BasicTestCase(TestMixin, TestCase):
         session['user_info'] = {'CVR': '12479182'}
         session.save()
 
-    ### PRISME INTERFACE TESTS ###
+    # PRISME INTERFACE TESTS
 
     def test_interest_note_request_parse(self):
         request = PrismeInterestNoteRequest('10977231', 2019, 4)
@@ -48,7 +48,10 @@ class BasicTestCase(TestMixin, TestCase):
         )
 
     def test_interest_note_response_parse(self):
-        response = PrismeInterestNoteResponse(None, self.get_file_contents('aka/tests/resources/interestnote_response.xml'))
+        response = PrismeInterestNoteResponse(
+            None,
+            self.get_file_contents('aka/tests/resources/interestnote_response.xml')
+        )
         self.assertEqual(2, len(response.interest_journal))
         journal0 = response.interest_journal[0]
         self.assertEqual("03-04-2019", journal0.updated)
@@ -90,8 +93,7 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(None, transaction10.calculate_to_date)
         self.assertEqual("0", transaction10.interest_days)
 
-
-    ### POSITIVE TESTS ###
+    # POSITIVE TESTS
 
     def test_interestnote_success(self):
         response = self.client.get(self.url, {
@@ -144,8 +146,7 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(3, len(data))
         self.assertEqual([None, '440,0', 'kr'], data)
 
-
-    ### NEGATIVE TESTS ###
+    # NEGATIVE TESTS
 
     def test_invalid_cvr(self):
 

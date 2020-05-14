@@ -2,6 +2,9 @@ import requests
 from django.conf import settings
 
 
+DEBUG = False
+
+
 class Dafo(object):
 
     def __init__(self):
@@ -17,10 +20,14 @@ class Dafo(object):
         )
         if response.status_code == 200:
             self.token = response.text
+        elif DEBUG:
+            pass
         else:
             raise Exception("Login to DAFO failed")
 
     def lookup_cpr(self, cpr):
+        if DEBUG:
+            return {}
         config = settings.DAFO_CONNECT
         response = requests.get(
             config['address']['cpr'].format(cpr=cpr),
@@ -32,6 +39,8 @@ class Dafo(object):
             raise Exception(f"Lookup for cpr {cpr} failed")
 
     def lookup_cvr(self, cvr):
+        if DEBUG:
+            return {}
         config = settings.DAFO_CONNECT
         response = requests.get(
             config['address']['cvr'].format(cvr=cvr),

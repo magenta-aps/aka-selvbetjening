@@ -6,7 +6,7 @@ from xmltodict import parse as xml_to_dict
 
 class BasicTestCase(TestMixin, SimpleTestCase):
 
-    ### PRISME INTERFACE TESTS ###
+    # PRISME INTERFACE TESTS ###
 
     def test_check_cvr_request_parse(self):
         request = PrismeCvrCheckRequest('12345678')
@@ -21,4 +21,3 @@ class BasicTestCase(TestMixin, SimpleTestCase):
         self.assertEqual(2, len(response.claimant_id))
         self.assertEqual("35SKATDK", response.claimant_id[0])
         self.assertEqual("35BIDRAGDK", response.claimant_id[1])
-

@@ -1,9 +1,10 @@
 import os
 import re
-from datetime import date
+from datetime import date, datetime, time
 
 import zeep
 from aka.exceptions import AkaException
+from aka.utils import flatten
 from aka.utils import get_file_contents_base64
 from dict2xml import dict2xml as dict_to_xml
 from django.conf import settings
@@ -25,7 +26,10 @@ class PrismeException(AkaException):
                 'args': ['refnumber']
             },
             'rentenota': {
-                're': re.compile(r'Der findes ingen renter for dette CPR/CVR (\d{8}) eller for den angivne periode (\d{2}-\d{2}-\d{4}) (\d{2}-\d{2}-\d{4})'),
+                're': re.compile(
+                    r'Der findes ingen renter for dette CPR/CVR (\d{8}) eller for '
+                    r'den angivne periode (\d{2}-\d{2}-\d{4}) (\d{2}-\d{2}-\d{4})'
+                ),
                 'args': ['cvr', 'start', 'end']
             }
         }
@@ -44,7 +48,7 @@ class PrismeException(AkaException):
                     for i, argname in enumerate(parsedata['args'], start=1):
                         self.params[argname] = match.group(i)
         except Exception as e:
-            print(e)
+            print("Failed to parse prisme error response: %s" % str(e))
             pass
 
     @property
@@ -86,9 +90,73 @@ class PrismeRequestObject(object):
             return ''
         if is_amount:
             value = f"{value:.2f}"
+        if isinstance(value, datetime):
+            value = f'{value:%Y-%m-%dT%H:%M:%S}'
         if isinstance(value, date):
-            value = f'{value:%Y-%m-%d}T00:00:00'
+            value = f'{value:%Y-%m-%d}'
         return value
+
+    @staticmethod
+    def to_datetime(date):
+        return datetime.combine(date, time.min)
+
+
+class PrismeAccountRequest(PrismeRequestObject):
+
+    wrap = 'CustTable'
+
+    # See also choices in KontoForm
+    open_closed_map = {
+        0: 'Åbne',
+        1: 'Lukkede',
+        2: 'Åbne og Lukkede'
+    }
+
+    def __init__(self, customer_id_number, from_date, to_date, open_closed=2):
+        self.customer_id_number = customer_id_number
+        self.from_date = from_date
+        self.to_date = to_date
+        self.open_closed = open_closed
+
+    @property
+    def method(self):
+        return 'getAccountStatementAKI'
+
+    @property
+    def xml(self):
+        return dict_to_xml({
+            'CustIdentificationNumber': self.prepare(self.customer_id_number),
+            'FromDate': self.prepare(self.from_date),
+            'ToDate': self.prepare(self.to_date),
+            'CustInterestCalc': self.open_closed_map[self.open_closed]
+        }, wrap=self.wrap)
+
+    @property
+    def reply_class(self):
+        return PrismeAccountResponse
+
+
+class PrismeEmployerAccountRequest(PrismeAccountRequest):
+
+    @property
+    def method(self):
+        return 'getAccountStatementSEL'
+
+    @property
+    def reply_class(self):
+        return PrismeEmployerAccountResponse
+
+
+class PrismeCitizenAccountRequest(PrismeAccountRequest):
+
+    @property
+    def method(self):
+        return 'getAccountStatementAKI'
+
+    @property
+    def reply_class(self):
+        return PrismeCitizenAccountResponse
+
 
 
 class PrismeClaimRequest(PrismeRequestObject):
@@ -137,11 +205,11 @@ class PrismeClaimRequest(PrismeRequestObject):
             'CustCollAmountBalance': self.prepare(self.amount_balance, is_amount=True),
             'CustCollText': self.prepare(self.text),
             'CustCollCreatedBy': self.prepare(self.created_by),
-            'CustCollPeriodStart': self.prepare(self.period_start),
-            'CustCollPeriodEnd': self.prepare(self.period_end),
-            'CustCollDueDate': self.prepare(self.due_date),
-            'CustCollFoundedDate': self.prepare(self.founded_date),
-            'CustCollObsolescenceDate': self.prepare(self.obsolete_date),
+            'CustCollPeriodStart': self.prepare(self.to_datetime(self.period_start)),
+            'CustCollPeriodEnd': self.prepare(self.to_datetime(self.period_end)),
+            'CustCollDueDate': self.prepare(self.to_datetime(self.due_date)),
+            'CustCollFoundedDate': self.prepare(self.to_datetime(self.founded_date)),
+            'CustCollObsolescenceDate': self.prepare(self.to_datetime(self.obsolete_date)),
             'Notes': self.prepare(self.notes),
             'coDebtors': [
                 {'coDebtor': {'CustCollCprCvr': self.prepare(codebtor)}}
@@ -255,14 +323,14 @@ class PrismePayrollRequest(PrismeRequestObject):
 
     @property
     def method(self):
-        return 'getInterestNote'
+        return 'createPayrollFromEmployer'
 
     @property
     def xml(self):
         return dict_to_xml({
             'GERCVR': self.cvr,
-            'Date': self.prepare(self.date),
-            'ReceivedDate': self.prepare(self.received_date),
+            'Date': self.prepare(self.to_datetime(self.date)),
+            'ReceivedDate': self.prepare(self.to_datetime(self.received_date)),
             'TotalAmount': self.prepare(self.amount, is_amount=True),
             'custPayRollFromEmployerLines': {
                 PrismePayrollRequestLine.wrap: [line.dict for line in self.lines]
@@ -305,6 +373,81 @@ class PrismeResponseObject(object):
         self.xml = xml
 
 
+class PrismeAccountResponseTransaction(object):
+
+    def __init__(self, data):
+        self.account_number = data['AccountNum']
+        self.transaction_date = data['TransDate']
+        self.accounting_date = data['AccountingDate']
+        self.debitor_group_id = data['CustGroup']
+        self.debitor_group_name = data['CustGroupName']
+        self.voucher = data['Voucher']
+        self.text = data['Txt']
+        self.payment_code = data['CustPaymCode']
+        self.payment_code_name = data['CustPaymDescription']
+        amount = data['AmountCur']
+        try:
+            self.amount = float(amount)
+        except ValueError:
+            self.amount = 0
+        self.remaining_amount = data['RemainAmountCur']
+        self.due_date = data['DueDate']
+        self.closed_date = data['Closed']
+        self.last_settlement_voucher = data['LastSettleVoucher']
+        self.collection_letter_date = data['CollectionLetterDate']
+        self.collection_letter_code = data['CollectionLetterCode']
+        self.claim_type_code = data['ClaimTypeCode']
+        self.invoice_number = data['Invoice']
+        self.transaction_type = data['TransType']
+
+
+class PrismeAccountResponse(PrismeResponseObject):
+
+    itemclass = PrismeAccountResponseTransaction
+
+    def __init__(self, request, xml):
+        super(PrismeAccountResponse, self).__init__(request, xml)
+        if xml is None:
+            self.transactions = []
+        else:
+            data = xml_to_dict(xml)
+            transactions = data['CustTable']['CustTrans']
+            if type(transactions) != list:
+                transactions = [transactions]
+            self.transactions = [self.itemclass(x) for x in transactions]
+
+    def __iter__(self):
+        yield from self.transactions
+
+    def __len__(self):
+        return len(self.transactions)
+
+
+class PrismeEmployerAccountResponseTransaction(PrismeAccountResponseTransaction):
+
+    def __init__(self, data):
+        super().__init__(data)
+        self.rate_number = data['RateNmb']
+
+
+class PrismeEmployerAccountResponse(PrismeAccountResponse):
+    itemclass = PrismeEmployerAccountResponseTransaction
+
+
+class PrismeCitizenAccountResponseTransaction(PrismeAccountResponseTransaction):
+
+    def __init__(self, data):
+        super().__init__(data)
+        self.claimant_name = data['ClaimantName']
+        self.claimant_id = data['ClaimantId']
+        self.child_claimant = data['ChildClaimant']
+
+
+class PrismeCitizenAccountResponse(PrismeAccountResponse):
+    itemclass = PrismeCitizenAccountResponseTransaction
+
+
+
 class PrismeRecIdResponse(PrismeResponseObject):
 
     response_tag = ''
@@ -332,13 +475,12 @@ class PrismePayrollResponse(PrismeRecIdResponse):
 
 
 class PrismeCvrCheckResponse(PrismeResponseObject):
-    #instead of this could we just have one class and use self._id and figure out the type of xml from the xml content?
     def __init__(self, request, xml):
         super(PrismeCvrCheckResponse, self).__init__(request, xml)
         d = xml_to_dict(xml)
         if d.get('FujClaimant') is None or d['FujClaimant'].get('ClaimantId') is None:
             raise PrismeNotFoundException('prisme.cvrcheck_no_result', cvr=request.cvr)
-        self.claimant_id = list(d['FujClaimant']['ClaimantId'])
+        self.claimant_id = flatten(d['FujClaimant']['ClaimantId'])
 
 
 class PrismeInterestNoteResponse(PrismeResponseObject):
@@ -376,7 +518,6 @@ class PrismeInterestResponseJournal(object):
 class PrismeInterestNoteResponseTransaction(object):
 
     def __init__(self, data):
-        # TODO you are unpacking a dictionary...
         self.voucher = data['Voucher']
         self.invoice = data['Invoice']
         self.text = data['Txt']
@@ -468,7 +609,7 @@ class Prisme(object):
 
         # reply.status is of type GWSReplyStatusDCFUJ
         if reply.status.replyCode != 0:
-            raise PrismeException(reply.status.replyCode, reply.status.replyText)
+            raise PrismeException(reply.status.replyCode, reply.status.replyText, context)
 
         outputs = []
         # reply_item is of type GWSReplyInstanceDCFUJ

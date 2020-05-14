@@ -4,7 +4,11 @@
     {% if key %}
         <label for="{{ field.id_for_label }}" data-trans="{{ key }}">{% trans key %}</label>
     {% endif %}
-    {{ field }}
+    {% if field.type == 'radio' %}
+        {{ field }}
+    {% else %}
+        {{ field }}
+    {% endif %}
     <span class="err-msg" for="{{ field.id_for_label }}">
         {% if field.errors %}
             <ul class="errorlist">

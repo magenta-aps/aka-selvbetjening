@@ -7,14 +7,30 @@ from django.urls import reverse
 from django.views import View
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView
+from jwkest.jwk import rsa_load
 from oic.oauth2 import ErrorResponse
 from oic.oic import Client, rndstr
 from oic.oic.message import AuthorizationResponse, RegistrationResponse
 from oic.utils.authn.client import CLIENT_AUTHN_METHOD
 from sullissivik.login.openid.openid import OpenId
+from django.conf import settings
+from oic.oic.message import AuthorizationResponse, RegistrationResponse
+from django.views.decorators.clickjacking import xframe_options_exempt
+from oic.utils.keyio import KeyBundle
 
 logger = logging.getLogger(__name__)
 
+open_id_settings = {}
+kc_rsa = None
+client_cert = None
+if getattr(settings, 'OPENID_CONNECT', None) and settings.OPENID_CONNECT.get('enabled', True):
+    # if openID is enabled setup the key bundle and client_cert
+    open_id_settings = settings.OPENID_CONNECT
+    key = rsa_load(open_id_settings['private_key'])
+    kc_rsa = KeyBundle([{'key': key, 'kty': 'RSA', 'use': 'ver'},
+                        {'key': key, 'kty': 'RSA', 'use': 'sig'}])
+
+    client_cert = (open_id_settings['client_certificate'], open_id_settings['private_key'])
 
 
 class Login(View):
@@ -27,17 +43,22 @@ class Login(View):
     def get(self, request, *args, **kwargs):
         client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=OpenId.client_cert)
         provider_info = client.provider_config(OpenId.open_id_settings['issuer'])
-        client_reg = RegistrationResponse(**{'client_id': OpenId.open_id_settings['client_id'], 'redirect_uris': [OpenId.open_id_settings['redirect_uri']]})
+        client_reg = RegistrationResponse(**{
+            'client_id': OpenId.open_id_settings['client_id'],
+            'redirect_uris': [OpenId.open_id_settings['redirect_uri']]
+        })
         client.store_registration_info(client_reg)
 
         state = rndstr(32)
         nonce = rndstr(32)
-        request_args = {'response_type': 'code',
-                'scope': settings.OPENID_CONNECT['scope'],
-                'client_id': settings.OPENID_CONNECT['client_id'],
-                'redirect_uri': settings.OPENID_CONNECT['redirect_uri'],
-                'state': state,
-                'nonce': nonce}
+        request_args = {
+            'response_type': 'code',
+            'scope': settings.OPENID_CONNECT['scope'],
+            'client_id': settings.OPENID_CONNECT['client_id'],
+            'redirect_uri': settings.OPENID_CONNECT['redirect_uri'],
+            'state': state,
+            'nonce': nonce
+        }
 
         request.session['oid_state'] = state
         request.session['oid_nonce'] = nonce
@@ -121,15 +142,6 @@ class LoginCallback(TemplateView):
                 context = self.get_context_data(errors=resp.to_dict())
                 return self.render_to_response(context)
             else:
-                respdict = resp.to_dict()
-                their_nonce = respdict['id_token']['nonce']
-                if their_nonce != nonce:
-                    del request.session['oid_state']
-                    logger.error("Nonce mismatch: Token service responded with incorrect nonce (expected %s, got %s)" % (nonce, their_nonce))
-                    context = self.get_context_data(errors={'Nonce mismatch': 'Got incorrect nonce from token server'})
-                    return self.render_to_response(context)
-                request.session['access_token_data'] = respdict
-                request.session['raw_id_token'] = resp.raw_id_token
                 userinfo = client.do_user_info_request(state=request.session['oid_state'])
                 user_info_dict = userinfo.to_dict()
                 request.session['user_info'] = user_info_dict
@@ -139,16 +151,16 @@ class LoginCallback(TemplateView):
                 return HttpResponseRedirect(request.session.get('backpage', reverse('aka:index')))
 
 
-class LogoutCallback(View):
+class Logout(View):
 
     @xframe_options_exempt
     def get(self, request):
-        their_sid = request.GET.get('sid')
-        our_sid = request.session['access_token_data']['id_token']['sid']
-        if their_sid != our_sid:
-            print("Logout SID mismatch (ours: %s, theirs: %s)" % (our_sid, their_sid))
-
         # according to the specs this is rendered in a iframe when the user triggers a logout from OP`s side
         # do a total cleanup and delete everything related to openID
-        OpenId.clear_session(request.session)
-        return HttpResponse("")
+        if 'oid_state' in request.session:
+            del request.session['oid_state']
+        if 'oid_nonce' in request.session:
+            del request.session['oid_nonce']
+        if 'user_info' in request.session:
+            del request.session['user_info']
+        return HttpResponseRedirect('index')

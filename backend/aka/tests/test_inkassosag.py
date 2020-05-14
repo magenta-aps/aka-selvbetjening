@@ -23,8 +23,7 @@ class BasicTestCase(TestMixin, TestCase):
         session['user_info'] = {'CVR': '12479182'}
         session.save()
 
-
-    ### PRISME INTERFACE TESTS ###
+    # PRISME INTERFACE TESTS
 
     def test_create_claim_request_parse(self):
         attachment = File(open('aka/tests/resources/testfile.pdf'))
@@ -59,12 +58,13 @@ class BasicTestCase(TestMixin, TestCase):
         response = PrismeClaimResponse(None, self.get_file_contents('aka/tests/resources/claim_response.xml'))
         self.assertEqual("5637238342", response.rec_id)
 
-
-    ### POSITIVE TESTS ###
+    # POSITIVE TESTS
 
     def test_claim_success_1(self):
         # Contains just the required fields
-        self.service_mock.return_value = [PrismeClaimResponse(None, f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")]
+        self.service_mock.return_value = [
+            PrismeClaimResponse(None, f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
+        ]
         formData = {
             'fordringshaver': 'test-fordringshaver',
             'debitor': 'test-debitor',
@@ -76,10 +76,14 @@ class BasicTestCase(TestMixin, TestCase):
             'betalingsdato': date(2019, 3, 28).strftime("%d/%m/%Y"),
             'foraeldelsesdato': date(2019, 5, 28).strftime("%d/%m/%Y"),
             'hovedstol': 100,
+            'hovedstol_posteringstekst': 'Testing',
             'kontaktperson': 'Test Testersen',
-            'form-0-cpr': '1234567890'
+            'form-0-cpr': '1234567890',
+            'ekstern_sagsnummer': '1234'
         }
-        for management_field, value in {'TOTAL_FORMS': 1, 'INITIAL_FORMS': 0, 'MIN_NUM_FORMS': 0, 'MAX_NUM_FORMS': 1000}.items():
+        for management_field, value in {
+            'TOTAL_FORMS': 1, 'INITIAL_FORMS': 0, 'MIN_NUM_FORMS': 0, 'MAX_NUM_FORMS': 1000
+        }.items():
             formData["form-%s" % management_field] = str(value)
         response = self.client.post(self.url, formData)
         self.assertEqual(response.status_code, 200)
@@ -90,7 +94,9 @@ class BasicTestCase(TestMixin, TestCase):
 
     def test_claim_success_2(self):
         # Contains all required fields, and some more
-        self.service_mock.return_value = [PrismeClaimResponse(None, f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")]
+        self.service_mock.return_value = [
+            PrismeClaimResponse(None, f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
+        ]
         formData = {
             'fordringshaver': 'test-fordringshaver',
             'debitor': 'test-debitor',
@@ -103,10 +109,14 @@ class BasicTestCase(TestMixin, TestCase):
             'betalingsdato': date(2019, 3, 28).strftime("%d/%m/%Y"),
             'foraeldelsesdato': date(2019, 5, 28).strftime("%d/%m/%Y"),
             'hovedstol': 100,
+            'hovedstol_posteringstekst': 'Testing',
             'kontaktperson': 'Test Testersen',
-            'form-0-cpr': '1234567890'
+            'form-0-cpr': '1234567890',
+            'ekstern_sagsnummer': '1234'
         }
-        for management_field, value in {'TOTAL_FORMS': 1, 'INITIAL_FORMS': 0, 'MIN_NUM_FORMS': 0, 'MAX_NUM_FORMS': 1000}.items():
+        for management_field, value in {
+            'TOTAL_FORMS': 1, 'INITIAL_FORMS': 0, 'MIN_NUM_FORMS': 0, 'MAX_NUM_FORMS': 1000
+        }.items():
             formData["form-%s" % management_field] = str(value)
         response = self.client.post(self.url, formData)
         self.assertEqual(response.status_code, 200)
@@ -117,7 +127,9 @@ class BasicTestCase(TestMixin, TestCase):
 
     def test_claim_upload_success(self):
         # Contains all required fields, and some more
-        self.service_mock.return_value = [PrismeClaimResponse(None, f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")]
+        self.service_mock.return_value = [
+            PrismeClaimResponse(None, f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
+        ]
         fp = open('aka/tests/resources/inkasso.csv', "rb")
         uploadfile = SimpleUploadedFile(
             'test.csv',
@@ -135,8 +147,7 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual('1234', el[0].text)
         self.assertEqual('1234', el[1].text)
 
-
-    ### NEGATIVE TESTS ###
+    # NEGATIVE TESTS
 
     def test_claim_missing_fields_1(self):
         # Does not contain all required fields
@@ -190,8 +201,14 @@ class BasicTestCase(TestMixin, TestCase):
         formData.update(dummy_management_form("form"))
         response = self.client.post(self.url, formData)
         root = etree.fromstring(response.content, etree.HTMLParser())
-        expected = {'fordringsgruppe': 'error.fordringsgruppe_not_found', 'fordringstype': 'error.fordringstype_not_found'}
-        expected.update({field: 'error.required' for field in ['hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']})
+        expected = {
+            'fordringsgruppe': 'error.fordringsgruppe_not_found',
+            'fordringstype': 'error.fordringstype_not_found'
+        }
+        expected.update({
+            field: 'error.required'
+            for field in ['hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']
+        })
         for field, message in expected.items():
             erroritems = root.xpath("//div[@data-field='id_%s']//ul[@class='errorlist']/li" % field)
             self.assertEqual(1, len(erroritems))
@@ -212,8 +229,14 @@ class BasicTestCase(TestMixin, TestCase):
         formData.update(dummy_management_form("form"))
         response = self.client.post(self.url, formData)
         root = etree.fromstring(response.content, etree.HTMLParser())
-        expected = {'fordringsgruppe': 'error.fordringsgruppe_not_found', 'fordringstype': 'error.fordringstype_not_found'}
-        expected.update({field: 'error.required' for field in ['hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']})
+        expected = {
+            'fordringsgruppe': 'error.fordringsgruppe_not_found',
+            'fordringstype': 'error.fordringstype_not_found'
+        }
+        expected.update({
+            field: 'error.required'
+            for field in ['hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']
+        })
         for field, message in expected.items():
             erroritems = root.xpath("//div[@data-field='id_%s']//ul[@class='errorlist']/li" % field)
             self.assertEqual(1, len(erroritems))

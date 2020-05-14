@@ -1,0 +1,25 @@
+---
+
+- name: Install Xvfb
+  apt:
+    name: xvfb
+    update_cache: true
+
+- name: Setup service file
+  template:
+    src: "templates/Xvfb.service.j2"
+    dest: "/etc/systemd/system/Xvfb.service"
+    force: yes
+
+- name: Set permissions on service file
+  file:
+    path: "/etc/systemd/system/Xvfb.service"
+    owner: root
+    group: root
+    mode: '700'
+
+- name: Start Xvfb service
+  systemd:
+    name: Xvfb
+    state: started
+...

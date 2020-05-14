@@ -2,15 +2,17 @@ import json
 import os
 
 import pdfkit
+from aka.clients.dafo import Dafo
+from aka.clients.prisme import PrismeCvrCheckRequest, Prisme
+from aka.clients.prisme import PrismeNotFoundException
 from aka.exceptions import AkaException
+from aka.utils import flatten
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.template.loader import select_template
 from django.template.response import TemplateResponse
 from django.views.generic.edit import FormMixin
-
-from aka.clients.dafo import Dafo
 
 
 class ErrorHandlerMixin(object):
@@ -38,14 +40,56 @@ class ErrorHandlerMixin(object):
 
 
 class HasUserMixin(object):
-    def get_context_data(self, **kwargs):
-        context = {}
+
+    def __init__(self):
+        self.cvr = None
+
+    def get_claimants(self, request):
+        if 'claimantIds' in request.session['user_info']:
+            return request.session['user_info']['claimantIds']
+        elif self.cvr is not None:
+            try:
+                cvr = self.cvr
+                cvr = "31290937"
+                claimant_ids = flatten([
+                    response.claimant_id
+                    for response in Prisme().process_service(PrismeCvrCheckRequest(cvr), 'cvr_check')
+                ])
+                request.session['user_info']['claimantIds'] = claimant_ids
+                return claimant_ids
+            except PrismeNotFoundException as e:
+                return []
+
+    def get_company(self, request):
+        if 'company' in request.session['user_info']:
+            return request.session['user_info']['company']
+        else:
+            company = Dafo().lookup_cvr(self.cvr)
+            request.session['user_info']['company'] = company
+            return company
+
+    def dispatch(self, request, *args, **kwargs):
         try:
-            context['company'] = Dafo().lookup_cvr(
-                self.request.session['user_info']['CVR']
-            )
-        except:
+            self.cvr = request.session['user_info'].get('CVR')
+            self.claimant_ids = self.get_claimants(request)
+            self.company = self.get_company(request)
+        except (KeyError, TypeError):
             pass
+
+        try:
+            self.cpr = request.session['user_info']['CPR']
+        except (KeyError, TypeError):
+            self.cpr = '0101601919'
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'cpr': self.cpr,
+            'cvr': self.cvr,
+            'claimant_ids': self.claimant_ids,
+            'company': self.company
+        }
         context.update(kwargs)
         return super().get_context_data(**context)
 
@@ -55,7 +99,8 @@ class RequireCprMixin(HasUserMixin):
         try:
             self.cpr = request.session['user_info']['CPR']
         except (KeyError, TypeError):
-            raise PermissionDenied('no_cpr')
+            self.cpr = '0101601919'
+            # raise PermissionDenied('no_cpr')
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -65,13 +110,14 @@ class RequireCvrMixin(HasUserMixin):
             self.cvr = request.session['user_info']['CVR']
         except (KeyError, TypeError):
             raise PermissionDenied('no_cvr')
+
         return super().dispatch(request, *args, **kwargs)
 
 
 class SimpleGetFormMixin(FormMixin):
 
     def get(self, request, *args, **kwargs):
-        form = self.get_form()
+        form = self.form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
         else:
@@ -80,8 +126,8 @@ class SimpleGetFormMixin(FormMixin):
     def form_valid(self, form):
         return super().get(self.request)
 
-    def form_invalid(self, form):
-        return super().get(self.request)
+    # def form_invalid(self, form):
+    #     return super().get(self.request)
 
     def get_form_kwargs(self):
         kwargs = {
@@ -117,8 +163,24 @@ class PdfRendererMixin(object):
         context['css'] = ''.join(css_data)
 
         html = select_template(self.get_template_names()).render(context)
-        # response = HttpResponse(html)
-        pdf = pdfkit.from_string(html, False)
+
+        # return HttpResponse(html)
+
+        html = html.replace(
+            "\"%s" % settings.STATIC_URL,
+            "\"file://%s/" % os.path.abspath(settings.STATIC_ROOT)
+        )
+
+
+        pdf = pdfkit.from_string(html, False, options={
+            'javascript-delay': 1000,
+            'debug-javascript': '',
+            'default-header': '',
+            'margin-top': '20mm',
+            'margin-bottom': '20mm',
+            'margin-left': '20mm',
+            'margin-right': '20mm',
+        })
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
         return response
@@ -132,4 +194,3 @@ class PdfRendererMixin(object):
         }
         context.update(kwargs)
         return super().get_context_data(**context)
-
