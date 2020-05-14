@@ -418,6 +418,9 @@ class PrismeAccountResponse(PrismeResponseObject):
     def __iter__(self):
         yield from self.transactions
 
+    def __len__(self):
+        return len(self.transactions)
+
 
 class PrismeEmployerAccountResponseTransaction(PrismeAccountResponseTransaction):
 
