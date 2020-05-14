@@ -5,7 +5,9 @@ import re
 
 from aka.clients.dafo import Dafo
 from aka.clients.prisme import Prisme, PrismeException, PrismeNotFoundException
+from aka.clients.prisme import PrismeCitizenAccountRequest
 from aka.clients.prisme import PrismeClaimRequest
+from aka.clients.prisme import PrismeEmployerAccountRequest
 from aka.clients.prisme import PrismeImpairmentRequest
 from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
@@ -18,6 +20,7 @@ from aka.forms import KontoForm
 from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
+from aka.mixins import HasCvrMixin
 from aka.mixins import PdfRendererMixin
 from aka.mixins import RequireCprMixin
 from aka.mixins import RequireCvrMixin
@@ -94,7 +97,7 @@ class SetLanguageView(View):
 logger = logging.getLogger(__name__)
 
 
-class IndexTemplateView(TemplateView):
+class IndexTemplateView(HasCvrMixin, TemplateView):
     template_name = 'index.html'
 
     @method_decorator(ensure_csrf_cookie)
@@ -122,16 +125,41 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
 
     def form_valid(self, form):
         self.form = form
-        self.items = self.get_items(form)
+        try:
+            self.items = self.get_items(form)
+        except PrismeException as e:
+            form.add_error(None, e.as_validationerror)
+            return self.form_invalid(form)
         if 'pdf' in self.request.GET:
             return self.render_pdf()
         return super().form_valid(form)
 
+    def form_invalid(self, form):
+        if 'pdf' in self.request.GET:
+            return self.render_pdf()
+        return super().form_invalid(form)
+
     def get_context_data(self, **kwargs):
-        context = {
-            'items': self.items,
-            'date': date.today().strftime('%d/%m/%Y'),
-        }
+        context = {}
+        if self.form.is_bound:
+            formdata = self.form.cleaned_data
+            fields = self.get_fields()
+            if 'pdf' in self.request.GET:
+                fields = [
+                    field for field in fields
+                    if field not in formdata['hidden']
+                ]
+
+            context.update({
+                'items': self.items,
+                'date': date.today().strftime('%d/%m/%Y'),
+                'sum': sum([item.amount for item in self.items]) if self.items else 0,
+                'period': {
+                    'from_date': formdata['from_date'].strftime('%d-%m-%Y') if formdata.get('from_date') is not None else None,
+                    'to_date': formdata['to_date'].strftime('%d-%m-%Y') if formdata.get('to_date') is not None else None
+                },
+                'fields': fields
+            })
         context.update(kwargs)
         return super().get_context_data(**context)
 
@@ -142,20 +170,58 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
     template_name = 'aka/employer_account/account.html'
 
     def get_pdf_filename(self):
+        try:
+            from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d')
+        except:
+            from_date = "alle"
+        try:
+            to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d')
+        except:
+            to_date = "alle"
         return _("employeraccount.filename").format(
-            **{k: v.strftime('%Y-%m-%d') for k, v in self.form.cleaned_data.items()}
+            from_date=from_date,
+            to_date=to_date
         )
 
     def get_items(self, form):
+        prisme = Prisme()
+        account_request = PrismeEmployerAccountRequest(
+            self.cvr,
+            form.cleaned_data['from_date'],
+            form.cleaned_data['to_date'],
+            form.cleaned_data['open_closed']
+        )
+        prisme_reply = prisme.process_service(account_request, 'arbejdsgiverkonto')[0]
+        return prisme_reply
+
+    def get_fields(self):
         return [
-            {'text': 'Hotdog', 'amount': 15.0, 'total': 100000.0},
-            {'text': 'Bøfsandwich', 'amount': 30.0, 'total': 100000.0},
-            {'text': 'Burger', 'amount': 30.0, 'total': 100000.0}
+            {'name': 'account_number', 'class': 'nb'},
+            {'name': 'transaction_date', 'class': 'nb'},
+            {'name': 'accounting_date', 'class': 'nb'},
+            {'name': 'debitor_group_id', 'class': 'nb'},
+            {'name': 'debitor_group_name', 'class': 'nb'},
+            {'name': 'voucher',  'class': 'nb'},
+            {'name': 'text', 'class': ''},
+            {'name': 'payment_code', 'class': 'nb'},
+            {'name': 'payment_code_name', 'class': 'nb'},
+            {'name': 'amount', 'class': 'nb'},
+            {'name': 'remaining_amount', 'class': 'nb'},
+            {'name': 'due_date', 'class': 'nb'},
+            {'name': 'closed_date', 'class': 'nb'},
+            {'name': 'last_settlement_voucher', 'class': 'nb'},
+            {'name': 'collection_letter_date', 'class': 'nb'},
+            {'name': 'collection_letter_code', 'class': 'nb'},
+            {'name': 'claim_type_code', 'class': 'nb'},
+            {'name': 'invoice_number', 'class': 'nb'},
+            {'name': 'transaction_type', 'class': 'nb'},
+            {'name': 'payment_code', 'class': 'nb'},
+            {'name': 'rate_number', 'class': 'nb'},
         ]
 
     def get_context_data(self, **kwargs):
         context = {
-            'company': Dafo().lookup_cvr(self.cvr),
+            'company': Dafo().lookup_cvr(self.cvr)
         }
         context.update(kwargs)
         return super().get_context_data(**context)
@@ -168,20 +234,59 @@ class BorgerKontoView(RequireCprMixin, KontoView):
     template_name = 'aka/citizen_account/account.html'
 
     def get_pdf_filename(self):
+        try:
+            from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d')
+        except:
+            from_date = "alle"
+        try:
+            to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d')
+        except:
+            to_date = "alle"
         return _("citizenaccount.filename").format(
-            **{k: v.strftime('%Y-%m-%d') for k, v in self.form.cleaned_data.items()}
+            from_date=from_date,
+            to_date=to_date
         )
 
     def get_items(self, form):
+        prisme = Prisme()
+        account_request = PrismeCitizenAccountRequest(
+            self.cpr,
+            form.cleaned_data['from_date'],
+            form.cleaned_data['to_date'],
+            form.cleaned_data['open_closed']
+        )
+        prisme_reply = prisme.process_service(account_request, 'borgerkonto')[0]
+        return prisme_reply
+
+    def get_fields(self):
         return [
-            {'text': 'Hotdog', 'amount': 15.0, 'total': 100000.0},
-            {'text': 'Bøfsandwich', 'amount': 30.0, 'total': 100000.0},
-            {'text': 'Burger', 'amount': 30.0, 'total': 100000.0}
+            {'name':'account_number', 'class': 'nb'},
+            {'name':'transaction_date', 'class': 'nb'},
+            {'name':'accounting_date', 'class': 'nb'},
+            {'name':'debitor_group_id', 'class': 'nb'},
+            {'name':'debitor_group_name', 'class': 'nb'},
+            {'name':'voucher', 'class': 'nb'},
+            {'name':'text', 'class': ''},
+            {'name':'payment_code', 'class': 'nb'},
+            {'name':'payment_code_name', 'class': 'nb'},
+            {'name':'amount', 'class': 'nb'},
+            {'name':'remaining_amount', 'class': 'nb'},
+            {'name':'due_date', 'class': 'nb'},
+            {'name':'closed_date', 'class': 'nb'},
+            {'name':'last_settlement_voucher', 'class': 'nb'},
+            {'name':'collection_letter_date', 'class': 'nb'},
+            {'name':'collection_letter_code', 'class': 'nb'},
+            {'name':'claim_type_code', 'class': 'nb'},
+            {'name':'invoice_number', 'class': 'nb'},
+            {'name':'transaction_type', 'class': 'nb'},
+            {'name':'claimant_name', 'class': 'nb'},
+            {'name':'claimant_id', 'class': 'nb'},
+            {'name':'child_claimant', 'class': 'nb'},
         ]
 
     def get_context_data(self, **kwargs):
         context = {
-            # 'citizen': Dafo().lookup_cpr(self.cpr),
+            'citizen': Dafo().lookup_cpr(self.cpr)
         }
         context.update(kwargs)
         return super().get_context_data(**context)

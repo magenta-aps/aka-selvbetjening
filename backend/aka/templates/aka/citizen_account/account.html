@@ -1,23 +1,146 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load aka_tags %}
 
 {% block extra_headers %}
     {% if pdf %}
         <style>
             {{ css|safe }}
         </style>
+
+        <script src="{% static 'js/thirdparty/jquery-3.5.0.min.js' %}"></script>
+
+        <script>
+
+            const splitTable = function(table) {
+                var tables = [];
+                if (table.length) {
+                    var newTable;
+                    var tableLeft = table.offset().left;
+                    var maxWidth = 1200; // table.parent().innerWidth();
+                    tables.push(table);
+
+                    table.find("th").each(function (index) {
+
+                        var $this = $(this);
+                        var right = $this.offset().left + $this.outerWidth() - tableLeft;
+
+                        if (right > maxWidth) {
+                            // Create a new table to hold punted columns
+                            newTable = $("<table><thead><tr></tr></thead><tbody></tbody></table>");
+                            var newPage = $("<div class=\"page\"/>");
+                            newPage.append($("#data-table").parent().prevAll().clone().get().reverse());
+                            newPage.append(newTable);
+                            newPage.append($(".pagefooter").first().clone());
+                            $(".account-data").append(newPage);
+                            newTable.addClass(table.get(0).className);
+                            // Move table headers (this + all to the right), and their cells to the new table
+                            var puntHeaders = $this.add($this.nextAll());
+                            newTable.find("thead tr").append(puntHeaders);
+                            table.find("tbody tr").each(function () {
+                                var puntCells = $(this).find("td:nth-child(" + (index) + ")").nextAll();
+                                var newRow = $("<tr/>");
+                                newRow.append(puntCells);
+                                newTable.find("tbody").append(newRow);
+                                newRow.height($(this).height());
+                            });
+                            return false;
+                        }
+                    });
+                    if (newTable) {
+                        // Run split on the new (smaller) table. This continues in a chain until the last table does not need to be split
+                        tables = tables.concat(
+                            splitTable(newTable)
+                        );
+                    }
+                }
+                return tables;
+            };
+
+            const splitPage = function(page) {
+                var maxHeight = page.outerHeight() + 100;
+                var height = 0;
+                page.children().each(function () {
+                    height += $(this).outerHeight();
+                });
+                if (height > maxHeight) {
+                    // Create new page to hold punted rows
+                    var pageOffset = page.offset().top;
+                    var newPage = $("<div><table><thead/><tbody/></table></div>");
+                    newPage.addClass(page.get(0).className);
+                    newPage.find("table").addClass(page.find("table.output-table").get(0).className);
+                    newPage.find("thead").append(page.find("table.output-table thead tr").clone());
+                    var body = newPage.find("tbody");
+                    // Find rows that would spill over our maxHeight, and send them to the new page
+                    page.find("table.output-table tbody tr").each(function() {
+                        if ($(this).offset().top - pageOffset > maxHeight) {
+                            body.append($(this).add($(this).nextAll()));
+                            return false;
+                        }
+                    });
+                    newPage.append($(".pagefooter").first().clone());
+                    page.parent().append(newPage);
+                    splitPage(newPage);
+                }
+            };
+
+
+            $(function() {
+                var table = $("#data-table");
+
+                // Expressly set row height - this is to maintain row height across split tables
+                // (So if cell content makes one row higher, that row should maintain its height even as the table splits)
+                table.find("tr").each(function(index, el) {
+                    var $this = $(this);
+                    $this.height($this.height());
+                });
+
+                // Split the table vertically into parallel tables
+                splitTable(table);
+
+                // Split the pages to get a nice border (and copy headers to pages)
+                $(".page").each(function(index, el) {
+                    splitPage($(this));
+                });
+
+                var footerTemplate = "{% trans 'citizenaccount.footer' %}";
+
+                var footers = $(".page .pagefooter");
+                footers.each(function(index, el){
+                    var params = {'index':index+1, 'count':footers.length};
+                    var text = footerTemplate;
+                    for (let key in params) {
+                        if (params.hasOwnProperty(key)) {
+                            text = text.replace("{" + key + "}", params[key]);
+                        }
+                    }
+                    $(this).text(text);
+                 });
+            });
+        </script>
+
     {% else %}
         {% include 'aka/util/calendar_headers.html' %}
         <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}"/>
+        <script src="{% static 'js/form.js' %}"></script>
+
+        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>
+        <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+
+        {% if items %}
+            <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/sumoselect.min.css">
+            <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/jquery.sumoselect.min.js"></script>
+            <script src="{% static 'js/datatable.js' %}"></script>
+        {% endif %}
     {% endif %}
 {% endblock %}
 
 {% block content %}
 <article>
 
-    <h1 class="citizenaccount-title printhide">{% trans 'citizenaccount.title' %} </h1>
+    <h1 class="citizenaccount-title printhide" data-trans="citizenaccount.title">{% trans 'citizenaccount.title' %} </h1>
 
     <div class="citizenaccount-main">
 
@@ -44,101 +167,173 @@
                     {% include 'aka/util/field.html' with field=form.to_date key='citizenaccount.to_date' %}
                 </div>
             </div>
+
+            <div class="citizenaccount-actions row">
+                <div class="col-12-sm">
+                    {% include 'aka/util/field.html' with field=form.open_closed %}
+                </div>
+            </div>
+
             <div class="row">
-                <div class="col-4-sm">
+                <div class="col-12-sm">
                     <button type="submit" data-trans="common.send">{% trans 'common.send' %}</button>
                 </div>
             </div>
+            {{ form.hidden }}
         </form>
 
-        {% if items is not None %}
+        {% if form.is_bound %}
 
             <div class="output account-data">
+                <div class="page">
 
-                <div class="output-header">
-                    <div class="row">
-                        <div class="col-7-sm">
-                            <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
-                            <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
-                            <strong>Skattestyrelsen</strong>
-                        </div>
-                        <div class="col-5-sm output-actions printhide">
-                            <a class="button" href="{{ pdflink }}" data-trans="common.pdf">{% trans 'common.pdf' %}</a>
-                            <button class="btn-print" data-trans="common.print">{% trans 'common.print' %}</button>
+                    <div class="output-header">
+                        <div class="row">
+                            <div class="col-7-sm">
+                                <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
+                                <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
+                                <strong>Skattestyrelsen</strong>
+                            </div>
+                            <div class="col-5-sm output-actions printhide">
+                                <a class="button" href="{{ pdflink }}" data-trans="common.pdf">{% trans 'common.pdf' %}</a>
+                                <button class="btn-print" data-trans="common.print">{% trans 'common.print' %}</button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="output-details row">
-                    <div class="col-8-sm">
-                        <span class="line">{{ citizen.navn }}</span>
-                        <span class="line">{{ citizen.adresse }}</span>
-                        <span class="line">{{ citizen.postnummer }} {{ citizen.bynavn }}</span>
-                        <span class="line" data-trans="{{ citizen.landekode }}">{% trans citizen.landekode %}</span>
+                    <hr/>
+
+                    <div class="output-details row">
+                        <div class="col-6-sm">
+                            <span class="line">{{ company.navn }}</span>
+                            <span class="line">{{ company.adresse }}</span>
+                            <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
+                            <span class="line" data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
+                        </div>
+                        <div class="col-3-sm">
+                            <table class="dl-table">
+                                <tr>
+                                    <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="common.fax">{% trans 'common.fax' %}</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="citizenaccount.swift">{% trans 'citizenaccount.swift' %}</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="citizenaccount.iban">{% trans 'citizenaccount.iban' %}</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="citizenaccount.cvrse">{% trans 'citizenaccount.cvrse' %}</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="citizenaccount.bankaccount">{% trans 'citizenaccount.bankaccount' %}</th>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-3-sm">
+                            <img src="{% static 'img/naalakkersuisut.png' %}" style="width:100%"/>
+                        </div>
                     </div>
-                    <div class="col-4-sm">
-                        <h3 data-trans="rentenota.rentenota">{% trans 'citizenaccount.account' %}</h3>
-                        <table class="dl-table">
+
+                    <div class="output-details row">
+                        <div class="col-6-sm offset-6-sm">
+
+                            <h3 data-trans="citizenaccount.account">{% trans 'citizenaccount.account' %}</h3>
+                            <h4 data-trans="citizenaccount.period" data-trans-params="{{ period|json }}">{{ 'citizenaccount.period'|format:period }}</h4>
+                        </div>
+
+                        <div class="output-details row">
+                            <div class="col-4-sm offset-6-sm">
+                            <table class="dl-table">
+                                <tr>
+                                    <th data-trans="citizenaccount.number">{% trans 'citizenaccount.number' %}</th>
+                                    <td>{{ number }}</td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="common.dato">{% trans 'common.dato' %}</th>
+                                    <td>{{ date }}</td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="citizenaccount.cprcvr">{% trans 'citizenaccount.cprcvr' %}</th>
+                                    <td>{{ company.cvr }}</td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="citizenaccount.yourref">{% trans 'citizenaccount.yourref' %}</th>
+                                    <td>{{ yourref }}</td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="citizenaccount.contact">{% trans 'citizenaccount.contact' %}</th>
+                                    <td>{{ contact }}</td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="citizenaccount.localnumber">{% trans 'citizenaccount.localnumber' %}</th>
+                                    <td>{{ localnumber }}</td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="citizenaccount.payment1">{% trans 'citizenaccount.payment1' %}</th>
+                                    <td>{{ payment1 }}</td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="citizenaccount.invoiceaccount">{% trans 'citizenaccount.invoiceaccount' %}</th>
+                                    <td>{{ account }}</td>
+                                </tr>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="citizenaccount-data">
+
+                        {% if items and items|length > 0 %}
+
+                            {% if not pdf %}
+                            <select name="columns" multiple="multiple">
+                                {% for field in fields %}
+                                    {% with "citizenaccount."|add:field.name as transkey %}
+                                        <option value="{{ field.name }}" {% if not field in form.hidden.value %}selected="selected"{% endif %} data-trans="{{ transkey }}">{% trans transkey %}</option>
+                                    {% endwith %}
+                                {% endfor %}
+                            </select>
+                            {% endif %}
+
+                            <table id="data-table" class="output-table">
+                            <thead>
                             <tr>
-                                <th data-trans="common.dato">{% trans 'common.dato' %}</th>
-                                <td>{{ date }}</td>
+                                {% for field in fields %}
+                                    {% with "citizenaccount."|add:field.name as transkey %}
+                                        <th data-field="{{ field.name }}" data-trans="{{ transkey }}">{% trans transkey|safe %}</th>
+                                    {% endwith %}
+                                {% endfor %}
                             </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <th colspan="2" data-trans="common.postboks" data-trans-params="{&quot;box&quot;:1605}">{{ 'common.postboks'|format:'{"box":1605}' }}</th>
-                            </tr>
-                            <tr>
-                                <th colspan="2">3900 Nuuk</th>
-                            </tr>
-                            <tr>
-                                <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
-                                <td>346500</td>
-                            </tr>
-                            <tr>
-                                <th data-trans="common.fax">{% trans 'common.fax' %}</th>
-                                <td>346577</td>
-                            </tr>
-                            <tr>
-                                <th data-trans="common.email">{% trans 'common.email' %}</th>
-                                <td>sulinal@nanoq.gl</td>
-                            </tr>
-                            <tr>
-                                <th data-trans="common.webadresse">{% trans 'common.webadresse' %}</th>
-                                <td>www.aka.gl</td>
-                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in items %}
+                                <tr>
+                                    {% for field in fields %}
+                                        <td class="{{ field.class }}">{{ item|get:field.name|default:'' }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
                         </table>
+                        {% else %}
+                            <p data-trans="citizenaccount.ingenposter">{% trans 'citizenaccount.ingenposter' %}</p>
+                        {% endif %}
                     </div>
-                </div>
-
-                <div class="citizenaccount-data">
-                    <table class="output-table">
-                        <thead>
-                            <tr>
-                                <th>Posteringstekst</th>
-                                <th>Beløb</th>
-                                <th>Saldo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {% for item in items %}
-                            <tr>
-                                <td>{{ item.text }}</td>
-                                <td>{{ item.amount }}</td>
-                                <td>{{ item.total }}</td>
-                            </tr>
-                        {% empty %}
-                            <tr>
-                                <td colspan="3" class="empty" data-trans="citizenaccount.ingenposter">{% trans 'citizenaccount.ingenposter' %}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                    {% if pdf %}
+                        <div class="pagefooter"></div>
+                    {% endif %}
                 </div>
             </div>
         {% endif %}
-
     </div>
 </article>
 {% endblock %}
