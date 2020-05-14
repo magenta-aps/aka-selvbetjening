@@ -21,12 +21,12 @@ from aka.forms import KontoForm
 from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
+from aka.mixins import HasCvrMixin
 from aka.mixins import PdfRendererMixin
 from aka.mixins import RequireCprMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
 from aka.utils import format_filesize
-from aka.utils import get_file_contents
 from aka.utils import list_lstrip
 from aka.utils import list_rstrip
 from django.conf import settings
@@ -98,7 +98,7 @@ class SetLanguageView(View):
 logger = logging.getLogger(__name__)
 
 
-class IndexTemplateView(TemplateView):
+class IndexTemplateView(HasCvrMixin, TemplateView):
     template_name = 'index.html'
 
     @method_decorator(ensure_csrf_cookie)

@@ -45,10 +45,15 @@ address {
 }
 
 @media screen and (min-width:60rem) {
-    article {
+    article,
+    #company {
         max-width: 75rem;
         margin: 2rem auto 2.25rem
     }
+}
+
+#company {
+    text-align: right;
 }
 
 /* Links */

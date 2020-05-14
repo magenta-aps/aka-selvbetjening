@@ -116,3 +116,15 @@ def dummy_management_form(name, total_forms=1, initial_forms=1, min_forms=1, max
         "%s-MIN_NUM_FORMS" % name: min_forms,
         "%s-MAX_NUM_FORMS" % name: max_forms,
     }
+
+
+def flatten(lst):
+    if type(lst) == list:
+        l = []
+        for x in lst:
+            if type(x) == list:
+                l.extend(flatten(x))
+            else:
+                l.append(x)
+        return l
+    return [lst]

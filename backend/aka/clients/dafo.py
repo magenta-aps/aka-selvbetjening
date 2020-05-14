@@ -2,7 +2,7 @@ import requests
 from django.conf import settings
 
 
-DEBUG = True
+DEBUG = False
 
 
 class Dafo(object):

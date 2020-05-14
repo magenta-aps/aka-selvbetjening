@@ -55,7 +55,7 @@
             {% endif %}
             <main>
                 {% if company %}
-                    <span id="company">{{ company.name }}</span>
+                    <div id="company" data-trans="common.companydata" data-trans-params="{{ company|json }}">{{ 'common.companydata'|format:company }}</div>
                 {% endif %}
                 {% block content %}
                 {% endblock %}
