@@ -1,8 +1,11 @@
+import itertools
 import json
 import os
 
 import pdfkit
 from aka.clients.dafo import Dafo
+from aka.clients.prisme import PrismeCvrCheckRequest, Prisme
+from aka.clients.prisme import PrismeNotFoundException
 from aka.exceptions import AkaException
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
@@ -11,8 +14,8 @@ from django.template.loader import select_template
 from django.template.response import TemplateResponse
 from django.views.generic.edit import FormMixin
 
+from aka.utils import flatten
 
-DEBUG = False
 
 class ErrorHandlerMixin(object):
     def dispatch(self, request, *args, **kwargs):
@@ -38,37 +41,85 @@ class ErrorHandlerMixin(object):
             )
 
 
+class HasCprMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            self.cpr = request.session['user_info']['CPR']
+        except (KeyError, TypeError):
+            self.cpr = '0101601919'
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'cpr': self.cpr
+        }
+        context.update(kwargs)
+        return super().get_context_data(**context)
+
+
 class RequireCprMixin(object):
     def dispatch(self, request, *args, **kwargs):
         try:
             self.cpr = request.session['user_info']['CPR']
         except (KeyError, TypeError):
-            if DEBUG:
-                self.cpr = '0101601919'
-            else:
-                raise PermissionDenied('no_cpr')
+            self.cpr = '0101601919'
+            # raise PermissionDenied('no_cpr')
         return super().dispatch(request, *args, **kwargs)
 
 
-class RequireCvrMixin(object):
+class HasCvrMixin(object):
+
+    def get_claimants(self, request):
+        if 'claimantIds' in request.session['user_info']:
+            return request.session['user_info']['claimantIds']
+        else:
+            try:
+                cvr = self.cvr
+                cvr = "31290937"
+                claimant_ids = flatten([
+                    response.claimant_id
+                    for response in Prisme().process_service(PrismeCvrCheckRequest(cvr), 'cvr_check')
+                ])
+                request.session['user_info']['claimantIds'] = claimant_ids
+                return claimant_ids
+            except PrismeNotFoundException as e:
+                return []
+
+    def get_company(self, request):
+        if 'company' in request.session['user_info']:
+            return request.session['user_info']['company']
+        else:
+            company = Dafo().lookup_cvr(self.cvr)
+            request.session['user_info']['company'] = company
+            return company
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            self.cvr = request.session['user_info']['CVR']
+            self.claimant_ids = self.get_claimants(request)
+            self.company = self.get_company(request)
+        except (KeyError, TypeError):
+            pass
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'cvr': self.cvr,
+            'claimant_ids': self.claimant_ids,
+            'company': self.company
+        }
+        context.update(kwargs)
+        return super().get_context_data(**context)
+
+
+class RequireCvrMixin(HasCvrMixin):
     def dispatch(self, request, *args, **kwargs):
         try:
             self.cvr = request.session['user_info']['CVR']
         except (KeyError, TypeError):
-            if DEBUG:
-                self.cvr = '12345678'
-            else:
-                raise PermissionDenied('no_cvr')
-        return super().dispatch(request, *args, **kwargs)
+            raise PermissionDenied('no_cvr')
 
-    def get_context_data(self, **kwargs):
-        context = {}
-        try:
-            context['company'] = Dafo().lookup_cvr(self.cvr)
-        except Exception as e:
-            pass
-        context.update(kwargs)
-        return super().get_context_data(**context)
+        return super().dispatch(request, *args, **kwargs)
 
 
 class SimpleGetFormMixin(FormMixin):

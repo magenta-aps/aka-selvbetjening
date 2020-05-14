@@ -4,6 +4,7 @@ from datetime import date, datetime, time
 
 import zeep
 from aka.exceptions import AkaException
+from aka.utils import flatten
 from aka.utils import get_file_contents_base64
 from dict2xml import dict2xml as dict_to_xml
 from django.conf import settings
@@ -479,7 +480,7 @@ class PrismeCvrCheckResponse(PrismeResponseObject):
         d = xml_to_dict(xml)
         if d.get('FujClaimant') is None or d['FujClaimant'].get('ClaimantId') is None:
             raise PrismeNotFoundException('prisme.cvrcheck_no_result', cvr=request.cvr)
-        self.claimant_id = list(d['FujClaimant']['ClaimantId'])
+        self.claimant_id = flatten(d['FujClaimant']['ClaimantId'])
 
 
 class PrismeInterestNoteResponse(PrismeResponseObject):
