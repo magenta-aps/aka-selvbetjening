@@ -151,3 +151,11 @@ select {
 .err-msg {
     color:red;
 }
+
+.SumoSelect {
+    width: 300px !important;
+}
+
+.SumoSelect > .CaptionCont > span {
+    text-align: center !important;
+}

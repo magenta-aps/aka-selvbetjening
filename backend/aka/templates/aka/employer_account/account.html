@@ -298,7 +298,7 @@
                                 <select name="columns" multiple="multiple">
                                     {% for field in fields %}
                                         {% with "employeraccount."|add:field.name as transkey %}
-                                            <option value="{{ field }}" {% if not field in form.hidden.value %}selected="selected"{% endif %}>{% trans transkey %}</option>
+                                            <option value="{{ field.name }}" {% if not field in form.hidden.value %}selected="selected"{% endif %}>{% trans transkey %}</option>
                                         {% endwith %}
                                     {% endfor %}
                                 </select>

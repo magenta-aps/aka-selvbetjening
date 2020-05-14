@@ -16,10 +16,13 @@ $(function(){
     });
 
     var columnSelect = $("[name=columns]");
+    var columnSelectMessage = django.gettext(django.language, "common.showcolumns");
+    var sumo = [];
     columnSelect.SumoSelect();
     columnSelect.each(function() {
+        sumo.push(this.sumo);
         this.sumo.setText = function(){
-            this.caption.html("Vis/skjul kolonner");
+            this.caption.html(columnSelectMessage);
         };
         this.sumo.setText();
     });
@@ -57,5 +60,9 @@ $(function(){
 
     $(document).on('language-change', function(event, language) {
         table.draw();
+        columnSelectMessage = django.gettext(language, "common.showcolumns");
+        for (var i=0; i<sumo.length; i++) {
+            sumo[i].setText();
+        }
     });
 });
