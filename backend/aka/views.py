@@ -21,7 +21,6 @@ from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
 from aka.mixins import HasUserMixin
-from aka.mixins import HasCvrMixin
 from aka.mixins import PdfRendererMixin
 from aka.mixins import RequireCprMixin
 from aka.mixins import RequireCvrMixin
@@ -115,7 +114,7 @@ class SetLanguageView(View):
 logger = logging.getLogger(__name__)
 
 
-class IndexTemplateView(HasUserMixin, HasCvrMixin, TemplateView):
+class IndexTemplateView(HasUserMixin, TemplateView):
     template_name = 'index.html'
 
     @method_decorator(ensure_csrf_cookie)

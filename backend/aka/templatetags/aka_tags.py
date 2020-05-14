@@ -3,6 +3,7 @@ import re
 from html import unescape
 
 from django.template.defaultfilters import register
+from django.utils.http import urlquote
 from django.utils.translation import gettext
 
 trans_re = re.compile("_\\((.*)\\)")

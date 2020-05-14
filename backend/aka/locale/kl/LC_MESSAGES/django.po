@@ -86,9 +86,6 @@ msgstr "Skattestyrelsen [kl]"
 msgid "common.showcolumns"
 msgstr "Vis/skjul kolonner [kl]"
 
-msgid "common.companydata"
-msgstr "Logget ind som: {navn}, CVR {cvrNummer} [kl]"
-
 # Errors
 
 msgid "error.from_date_before_to_date"

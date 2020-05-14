@@ -151,7 +151,7 @@ class LoginCallback(TemplateView):
                 return HttpResponseRedirect(request.session.get('backpage', reverse('aka:index')))
 
 
-class Logout(View):
+class LogoutCallback(View):
 
     @xframe_options_exempt
     def get(self, request):

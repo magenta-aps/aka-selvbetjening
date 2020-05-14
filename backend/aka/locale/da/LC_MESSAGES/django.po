@@ -93,9 +93,6 @@ msgstr "Skattestyrelsen"
 msgid "common.showcolumns"
 msgstr "Vis/skjul kolonner"
 
-msgid "common.companydata"
-msgstr "Logget ind som: {navn}, CVR {cvrNummer}"
-
 
 # Errors
 
