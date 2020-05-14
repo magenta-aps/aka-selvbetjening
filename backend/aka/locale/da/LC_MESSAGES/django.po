@@ -78,6 +78,9 @@ msgstr "Web-adresse"
 msgid "common.skattestyrelsen"
 msgstr "Skattestyrelsen"
 
+msgid "common.showcolumns"
+msgstr "Vis/skjul kolonner"
+
 
 # Errors
 
