@@ -72,3 +72,8 @@ body.pdf .output {
 .nb {
     white-space: nowrap;
 }
+
+.output .dataTables_scrollHeadInner,
+.output table.output-table.dataTable {
+    min-width: 100%;
+}
