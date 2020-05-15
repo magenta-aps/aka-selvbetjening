@@ -85,7 +85,8 @@ input[type=text]:focus, textarea:focus, select:focus {
     border-color: #83929d
 }
 
-input[type=number] {
+input[type=number],
+input[type=text] {
     width: 221px;
     height: 32px;
 }

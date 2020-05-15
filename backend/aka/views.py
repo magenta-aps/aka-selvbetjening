@@ -122,12 +122,12 @@ class IndexTemplateView(HasUserMixin, TemplateView):
     def get(self, *args, **kwargs):
         return super(IndexTemplateView, self).get(*args, **kwargs)
 
+
+class LoginView(TemplateView):
+    template_name = 'login.html'
+
     def get_context_data(self, **kwargs):
-        user_info = self.request.session.get('user_info', {})
-        context = {
-            'cpr': user_info.get('CPR'),
-            'cvr': user_info.get('CVR')
-        }
+        context = {'back': self.request.GET.get('back')}
         context.update(kwargs)
         print(context)
         return super().get_context_data(**context)
@@ -622,20 +622,10 @@ class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
     form_class = NedskrivningForm
     template_name = 'aka/impairment/form.html'
 
-    def get_claimant_id(self, request):
-        claimant_id = request.session['user_info'].get('claimant_id')
-        if claimant_id is None:
-            prisme = Prisme()
-            try:
-                claimant_id = prisme.check_cvr(self.cvr)
-            except PrismeNotFoundException as e:
-                raise AccessDeniedException(e.error_code, **e.params)
-            request.session['user_info']['claimant_id'] = claimant_id
-        return claimant_id
-
     def send_impairment(self, form, prisme):
         impairment = PrismeImpairmentRequest(
-            claimant_id=self.get_claimant_id(self.request),
+            # claimant_id=self.get_claimant_id(self.request),
+            claimant_id=self.claimant_ids[0],
             cpr_cvr=form.cleaned_data.get('debitor'),
             claim_ref=form.cleaned_data.get('ekstern_sagsnummer'),
             amount_balance=-abs(form.cleaned_data.get('beloeb', 0)),
@@ -651,7 +641,8 @@ class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
                 request=self.request,
                 template="aka/impairment/success.html",
                 context={
-                    'rec_ids': [rec_id]
+                    'rec_ids': [rec_id],
+                    'upload': False
                 },
                 using=self.template_engine
             )
@@ -684,7 +675,8 @@ class NedskrivningUploadView(NedskrivningView):
             template="aka/impairment/success.html",
             context={
                 'rec_ids': rec_ids,
-                'errors': errors
+                'errors': errors,
+                'upload': True
             },
             using=self.template_engine
         )
@@ -758,7 +750,6 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
 
     def get_context_data(self, **kwargs):
         context = {
-            'company': Dafo().lookup_cvr(self.cvr),
             'date': date.today().strftime('%d/%m/%Y'),
             'posts': self.posts,
             'total': sum([float(post['InterestAmount']) for post in self.posts])
