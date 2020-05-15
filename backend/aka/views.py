@@ -435,8 +435,7 @@ class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
             return self.form_valid(form, formset)
         return self.form_invalid(form, formset)
 
-    @staticmethod
-    def send_claim(form, formset):
+    def send_claim(self, form, formset):
         prisme = Prisme()
 
         codebtors = []
@@ -451,7 +450,7 @@ class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
         claim_type = form.cleaned_data['fordringstype'].split(".")
 
         claim = PrismeClaimRequest(
-            claimant_id=form.cleaned_data.get('fordringshaver'),
+            claimant_id=self.claimant_ids[0],
             cpr_cvr=form.cleaned_data.get('debitor'),
             external_claimant=form.cleaned_data.get('fordringshaver2'),
             claim_group_number=claim_type[0],
