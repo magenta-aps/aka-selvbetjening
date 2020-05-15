@@ -1,35 +1,57 @@
 $(function(){
     $("form input[required]").attr("data-required", "true").removeAttr("required");
+    $("form input[type=number]").attr({"data-number": "true", "type": "text"});
+
+    const addError = function(id, errorkey) {
+        const errorContainer = $(".err-msg[for='"+id+"']");
+        let ul = errorContainer.find("ul.errorlist");
+        if (!ul.length) {
+            ul = $("<ul class=\"errorlist\"></ul>");
+            errorContainer.append(ul);
+        }
+        ul.append("<li data-trans=\""+errorkey+"\">"+django.format(errorkey, null, django.language)+"</li>");
+    };
+
+    const clearError = function() {
+        console.log("clearError",this,this.id);
+        $(".err-msg[for='"+this.id+"'] ul.errorlist").empty();
+        $("div.has-error[data-field='"+this.id+"']").removeClass("has-error");
+    };
+
+    $("form input, form select").on("keyup change", clearError);
+
     $("form").submit(function(){
         const $this = $(this);
+        $("form input, form select").each(clearError);
         var error = false;
-        $("ul.errorlist")
-        const requiredMessage = django.format("error.required", null, django.language);
         $this.find("input[data-required]").each(function() {
             if (this.value === '') {
                 error = true;
-                const errorContainer = $(".err-msg[for='"+this.id+"']");
-                let ul = errorContainer.find("ul.errorlist");
-                if (!ul.length) {
-                    ul = $("<ul class=\"errorlist\"></ul>");
-                    errorContainer.append(ul);
-                }
-                ul.append("<li data-trans=\"error.required\">"+requiredMessage+"</li>")
+                addError(this.id, "error.required");
             }
         });
 
-        const invalidDateAfterMessage = django.format("error.from_date_before_to_date", null, django.language);
+        const numberRegex = /^\d+([,\.]\d+)?$/;
+        $this.find("input[data-number]").each(function() {
+            if (this.value && !numberRegex.exec(this.value)) {
+                error = true;
+                addError(this.id, "error.number_required");
+            }
+        });
+
+        const cprRegex = /^\d{10}$/;
+        $this.find("input[data-cpr]").each(function() {
+            if (this.value && !cprRegex.exec(this.value)) {
+                error = true;
+                addError(this.id, "error.invalid_cpr");
+            }
+        });
+
         $this.find("input[data-validate-after]").each(function() {
             var comparisonField = $($(this).attr("data-validate-after"));
             if (this.value && comparisonField.val() && strpdate(this.value) < strpdate(comparisonField.val())) {
                 error = true;
-                const errorContainer = $(".err-msg[for='"+this.id+"']");
-                let ul = errorContainer.find("ul.errorlist");
-                if (!ul.length) {
-                    ul = $("<ul class=\"errorlist\"></ul>");
-                    errorContainer.append(ul);
-                }
-                ul.append("<li data-trans=\"error.from_date_before_to_date\">"+invalidDateAfterMessage+"</li>")
+                addError(this.id, "error.from_date_before_to_date");
             }
         });
 

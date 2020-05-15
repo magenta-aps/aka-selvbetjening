@@ -31,6 +31,10 @@ class PrismeException(AkaException):
                     r'den angivne periode (\d{2}-\d{2}-\d{4}) (\d{2}-\d{2}-\d{4})'
                 ),
                 'args': ['cvr', 'start', 'end']
+            },
+            'loentraek': {
+                're': re.compile(r'Aftalenummer (.+) findes ikke'),
+                'args': ['nr']
             }
         }
     }

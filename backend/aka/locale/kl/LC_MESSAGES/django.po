@@ -100,6 +100,9 @@ msgstr "Ugyldig dato [kl]"
 msgid "error.required"
 msgstr "Dette felt er påkrævet [kl]"
 
+msgid "error.number_required"
+msgstr "Dette felt skal indeholde et tal [kl]"
+
 msgid "error.invalid_extension"
 msgstr "Filendelse '{extension}' er ikke tilladt. Tilladte filendelser er: '{allowed_extensions}' [kl]."
 
@@ -298,7 +301,7 @@ msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækk
 # 6.4
 
 msgid "nedskrivning.success"
-msgstr "Nedskrivninger uploadet [kl]"
+msgstr "Nedskrivninger indberettet [kl]"
 
 msgid "nedskrivning.result"
 msgstr "Oprettede nedskrivninger [kl]"
@@ -709,40 +712,40 @@ msgstr "Kalaallit Nunaat"
 
 
 msgid "January"
-msgstr "Januaari"
+msgstr "januaari"
 
 msgid "February"
-msgstr "Februaari"
+msgstr "februaari"
 
 msgid "March"
-msgstr "Marsi"
+msgstr "marsi"
 
 msgid "April"
-msgstr "Apriili"
+msgstr "apriili"
 
 msgid "May"
-msgstr "Maaji"
+msgstr "maaji"
 
 msgid "June"
-msgstr "Juuni"
+msgstr "juuni"
 
 msgid "July"
-msgstr "Juuli"
+msgstr "juuli"
 
 msgid "August"
-msgstr "Aggusti"
+msgstr "aggusti"
 
 msgid "September"
-msgstr "Septembari"
+msgstr "septembari"
 
 msgid "October"
-msgstr "Oktobari"
+msgstr "oktobari"
 
 msgid "November"
-msgstr "Novembari"
+msgstr "novembari"
 
 msgid "December"
-msgstr "Decembari"
+msgstr "decembari"
 
 msgid "Mon"
 msgstr "Ata"

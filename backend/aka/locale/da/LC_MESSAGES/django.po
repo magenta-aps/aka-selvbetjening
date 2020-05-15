@@ -108,6 +108,9 @@ msgstr "Ugyldig dato"
 msgid "error.required"
 msgstr "Dette felt er påkrævet"
 
+msgid "error.number_required"
+msgstr "Dette felt skal indeholde et tal"
+
 msgid "error.invalid_extension"
 msgstr "Filendelse '{extension}' er ikke tilladt. Tilladte filendelser er: '{allowed_extensions}'"
 
@@ -313,7 +316,7 @@ msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækk
 # 6.4
 
 msgid "nedskrivning.success"
-msgstr "Nedskrivninger uploadet"
+msgstr "Nedskrivninger indberettet"
 
 msgid "nedskrivning.result"
 msgstr "Oprettede nedskrivninger"

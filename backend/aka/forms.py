@@ -5,11 +5,12 @@ from io import StringIO
 import chardet
 from aka.data.fordringsgruppe import groups
 from aka.utils import get_ordereddict_key_index, spreadsheet_col_letter
+from aka.widgets import TranslatedSelect
 from django import forms
 from django.conf import settings
 from django.core.validators import FileExtensionValidator, MinLengthValidator, \
     MaxLengthValidator
-from django.forms import ValidationError, MultipleHiddenInput
+from django.forms import ValidationError, MultipleHiddenInput, TextInput
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 
@@ -172,8 +173,7 @@ class InkassoForm(forms.Form):
     )
     barns_cpr = forms.CharField(
         required=False,
-        min_length=9,
-        max_length=10
+        widget=TextInput(attrs={'data-cpr': 'true'})
     )
     ekstern_sagsnummer = forms.CharField(
         required=True,
@@ -337,10 +337,14 @@ class InterestNoteForm(forms.Form):
         initial=date.today().year
     )
     month = forms.ChoiceField(
-        choices=[(x, x) for x in range(1, 13)],
+        choices=[
+            (1, "January"), (2, "February"), (3, "March"), (4, "April"),
+            (5, "May"), (6, "June"), (7, "July"), (8, "August"),
+            (9, "September"), (10, "October"), (11, "November"), (12, "December")
+        ],
         required=True,
         error_messages={'required': 'error.required'},
-        widget=forms.Select(attrs={'class': 'dropdown'}),
+        widget=TranslatedSelect(attrs={'class': 'dropdown'}),
         initial=date.today().month
     )
 
@@ -385,8 +389,7 @@ class LoentraekFormItem(forms.Form):
     cpr = forms.CharField(
         required=True,
         error_messages={'required': 'error.required'},
-        min_length=9,
-        max_length=10
+        widget=TextInput(attrs={'data-cpr': 'true'})
     )
     agreement_number = forms.CharField(
         required=True,
