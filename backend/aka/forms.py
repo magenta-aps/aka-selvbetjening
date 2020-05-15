@@ -138,10 +138,6 @@ class KontoForm(forms.Form):
 
 class InkassoForm(forms.Form):
 
-    fordringshaver = forms.CharField(
-        required=True,
-        error_messages={'required': 'error.required'},
-    )
     debitor = forms.CharField(
         required=True,
         error_messages={'required': 'error.required'},
