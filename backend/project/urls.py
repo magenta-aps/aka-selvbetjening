@@ -17,6 +17,7 @@ from django.conf.urls import url, include
 
 
 urlpatterns = [
-    url(r'^oid/', include('openid.urls', namespace='openid')),
-    url(r'', include('aka.urls')),
+    url(r'^oid/', include('sullissivik.login.openid.urls', namespace='openid')),
+    url(r'^nemid/', include('sullissivik.login.nemid.urls', namespace='nemid')),
+    url(r'', include('aka.urls', namespace='aka')),
 ]

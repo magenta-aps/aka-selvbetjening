@@ -12,12 +12,12 @@
             <h1 class="page-header" data-trans="nedskrivning.title">{% trans 'nedskrivning.title' %}</h1>
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-12">
                         <a href="{% static '/csv/Nedskrivning.csv' %}" data-trans="common.download_template">{% trans 'common.download_template' %}</a>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-12">
                         {% include 'aka/util/field.html' with field=form.file %}
                     </div>
                 </div>

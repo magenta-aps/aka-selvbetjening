@@ -99,6 +99,14 @@ LOGGING = {
 
 ALLOWED_HOSTS = ['*']
 
+SITE_URL = "https://aka.sullissivik.gl"
+
+AUTHENTICATION_BACKENDS = [
+    'sullissivik.login.nemid.authentication.CookieAuthBackend'
+]
+
+# See local_settings_example.py
+SULLISSIVIK_FEDERATION_SERVICE = None
 
 # Application definition
 
@@ -106,8 +114,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
+    'django.contrib.auth',
+    'sullissivik.login.nemid',
+    'sullissivik.login.openid',
     'aka',
-    'openid'
 ]
 
 MIDDLEWARE = [
@@ -116,7 +126,7 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'openid.middleware.openid.LoggedIn',
+    'sullissivik.login.middleware.LoginManager',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -148,11 +158,15 @@ TIME_ZONE = 'America/Godthab'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+LANGUAGE_COOKIE_NAME = 'Sullissivik.Portal.Lang'
+LANGUAGE_COOKIE_DOMAIN = 'sullissivik.gl'
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'i18n')]
 LANGUAGES = [
     ('da', _('Danish')),
     ('kl', _('Greenlandic')),
 ]
+
+DEFAULT_CHARSET = 'utf-8'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -190,6 +204,8 @@ DAFO_CONNECT = {
     }
 }
 OPENID_CONNECT = {}
+
+NEMID_CONNECT = {}
 
 MOUNTS = {
     'claimant_account_statements': {  # 6.5
