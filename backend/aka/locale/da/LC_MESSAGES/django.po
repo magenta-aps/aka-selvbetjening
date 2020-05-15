@@ -307,7 +307,7 @@ msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækk
 # 6.4
 
 msgid "nedskrivning.success"
-msgstr "Nedskrivninger uploadet"
+msgstr "Nedskrivninger indberettet"
 
 msgid "nedskrivning.result"
 msgstr "Oprettede nedskrivninger"

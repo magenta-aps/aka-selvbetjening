@@ -69,6 +69,11 @@ class RequireCprMixin(object):
 
 class HasCvrMixin(object):
 
+    def __init__(self):
+        self.cvr = None
+        self.claimant_ids = []
+        self.company = None
+
     def get_claimants(self, request):
         if 'claimantIds' in request.session['user_info']:
             return request.session['user_info']['claimantIds']
@@ -117,7 +122,8 @@ class RequireCvrMixin(HasCvrMixin):
         try:
             self.cvr = request.session['user_info']['CVR']
         except (KeyError, TypeError):
-            raise PermissionDenied('no_cvr')
+            # raise PermissionDenied('no_cvr')
+            pass
 
         return super().dispatch(request, *args, **kwargs)
 
