@@ -20,7 +20,7 @@ from aka.forms import KontoForm
 from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
 from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
-from aka.mixins import HasCvrMixin
+from aka.mixins import HasUserMixin
 from aka.mixins import PdfRendererMixin
 from aka.mixins import RequireCprMixin
 from aka.mixins import RequireCvrMixin
@@ -31,6 +31,7 @@ from aka.utils import list_rstrip
 from django.conf import settings
 from django.forms import formset_factory
 from django.http import JsonResponse, HttpResponse, FileResponse
+from django.shortcuts import redirect
 from django.template import Engine, Context
 from django.template.response import TemplateResponse
 from django.utils import translation
@@ -44,6 +45,9 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
+
+from sullissivik.login.nemid.nemid import NemId
+from sullissivik.login.openid.openid import OpenId
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -87,17 +91,30 @@ class CustomJavaScriptCatalog(JavaScriptCatalog):
 
 
 class SetLanguageView(View):
+
+    locale_map = {
+        'da': 'da-DK',
+        'kl': 'kl-GL'
+    }
+
     def post(self, request, *args, **kwargs):
         language = request.POST.get('language', settings.LANGUAGE_CODE)
         translation.activate(language)
-        request.session[translation.LANGUAGE_SESSION_KEY] = language
-        return JsonResponse("OK", safe=False)
+        # request.session[translation.LANGUAGE_SESSION_KEY] = language
+        response = JsonResponse("OK", safe=False)
+        response.set_cookie(
+            settings.LANGUAGE_COOKIE_NAME,
+            self.locale_map.get(language, language),
+            domain=settings.LANGUAGE_COOKIE_DOMAIN,
+            path=settings.LANGUAGE_COOKIE_PATH,
+        )
+        return response
 
 
 logger = logging.getLogger(__name__)
 
 
-class IndexTemplateView(HasCvrMixin, TemplateView):
+class IndexTemplateView(HasUserMixin, TemplateView):
     template_name = 'index.html'
 
     @method_decorator(ensure_csrf_cookie)
@@ -111,7 +128,26 @@ class LoginView(TemplateView):
     def get_context_data(self, **kwargs):
         context = {'back': self.request.GET.get('back')}
         context.update(kwargs)
+        print(context)
         return super().get_context_data(**context)
+
+
+class LoginView(TemplateView):
+    template_name = 'login.html'
+
+    def get_context_data(self, **kwargs):
+        context = {'back': self.request.GET.get('back')}
+        context.update(kwargs)
+        return super().get_context_data(**context)
+
+
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        method = self.request.session['login_method']
+        if method == 'openid':
+            return OpenId.logout(self.request.session)
+        else:
+            return NemId.logout()
 
 
 @method_decorator(csrf_exempt, name='dispatch')

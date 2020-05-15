@@ -45,6 +45,18 @@ msgstr "Download PDF"
 msgid "common.download_template"
 msgstr "Download skabelon"
 
+msgid "common.logout"
+msgstr "Log ud"
+
+msgid "common.logged_in_as"
+msgstr "Logget ind som: {navn}"
+
+msgid "login.openid"
+msgstr "Log ind som virksomhed"
+
+msgid "login.nemid"
+msgstr "Log ind som borger"
+
 msgid "common.telefon"
 msgstr "Telefon"
 
@@ -80,9 +92,6 @@ msgstr "Skattestyrelsen"
 
 msgid "common.showcolumns"
 msgstr "Vis/skjul kolonner"
-
-msgid "common.companydata"
-msgstr "Logget ind som: {navn}, CVR {cvrNummer}"
 
 
 # Errors

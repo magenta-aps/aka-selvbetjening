@@ -25,6 +25,10 @@
   apt:
     name: wkhtmltopdf
 
+- name: Install libxmlsec1-dev
+  apt:
+    name: libxmlsec1-dev
+
 - name: Install requirements
   pip:
     requirements: "{{django_requirements_file}}"

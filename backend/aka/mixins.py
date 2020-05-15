@@ -1,4 +1,3 @@
-import itertools
 import json
 import os
 
@@ -7,14 +6,13 @@ from aka.clients.dafo import Dafo
 from aka.clients.prisme import PrismeCvrCheckRequest, Prisme
 from aka.clients.prisme import PrismeNotFoundException
 from aka.exceptions import AkaException
+from aka.utils import flatten
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.template.loader import select_template
 from django.template.response import TemplateResponse
 from django.views.generic.edit import FormMixin
-
-from aka.utils import flatten
 
 
 class ErrorHandlerMixin(object):
@@ -41,33 +39,10 @@ class ErrorHandlerMixin(object):
             )
 
 
-class HasCprMixin(object):
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            self.cpr = request.session['user_info']['CPR']
-        except (KeyError, TypeError):
-            self.cpr = '0101601919'
-        return super().dispatch(request, *args, **kwargs)
+class HasUserMixin(object):
 
-    def get_context_data(self, **kwargs):
-        context = {
-            'cpr': self.cpr
-        }
-        context.update(kwargs)
-        return super().get_context_data(**context)
-
-
-class RequireCprMixin(object):
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            self.cpr = request.session['user_info']['CPR']
-        except (KeyError, TypeError):
-            self.cpr = '0101601919'
-            # raise PermissionDenied('no_cpr')
-        return super().dispatch(request, *args, **kwargs)
-
-
-class HasCvrMixin(object):
+    def __init__(self):
+        self.cvr = None
 
     def __init__(self):
         self.cvr = None
@@ -77,7 +52,7 @@ class HasCvrMixin(object):
     def get_claimants(self, request):
         if 'claimantIds' in request.session['user_info']:
             return request.session['user_info']['claimantIds']
-        else:
+        elif self.cvr is not None:
             try:
                 cvr = self.cvr
                 cvr = "31290937"
@@ -100,15 +75,22 @@ class HasCvrMixin(object):
 
     def dispatch(self, request, *args, **kwargs):
         try:
-            self.cvr = request.session['user_info']['CVR']
+            self.cvr = request.session['user_info'].get('CVR')
             self.claimant_ids = self.get_claimants(request)
             self.company = self.get_company(request)
         except (KeyError, TypeError):
             pass
+
+        try:
+            self.cpr = request.session['user_info']['CPR']
+        except (KeyError, TypeError):
+            self.cpr = '0101601919'
+
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = {
+            'cpr': self.cpr,
             'cvr': self.cvr,
             'claimant_ids': self.claimant_ids,
             'company': self.company
@@ -117,7 +99,17 @@ class HasCvrMixin(object):
         return super().get_context_data(**context)
 
 
-class RequireCvrMixin(HasCvrMixin):
+class RequireCprMixin(HasUserMixin):
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            self.cpr = request.session['user_info']['CPR']
+        except (KeyError, TypeError):
+            self.cpr = '0101601919'
+            # raise PermissionDenied('no_cpr')
+        return super().dispatch(request, *args, **kwargs)
+
+
+class RequireCvrMixin(HasUserMixin):
     def dispatch(self, request, *args, **kwargs):
         try:
             self.cvr = request.session['user_info']['CVR']

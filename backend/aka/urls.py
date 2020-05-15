@@ -22,10 +22,13 @@ from aka.views import InkassoGroupDataView
 from aka.views import InkassoSagView, InkassoSagUploadView
 from aka.views import LoenTraekDistributionView
 from aka.views import LoentraekView, LoentraekUploadView
+from aka.views import LoginView, LogoutView
 from aka.views import NedskrivningView, NedskrivningUploadView
 from aka.views import NetsopkraevningView
 from aka.views import RenteNotaView
-from django.conf.urls import url, include
+from django.conf.urls import url
+
+app_name = 'aka'
 
 urlpatterns = [
     # Use 'django' domain instead of 'djangojs', so we get serverside translations
@@ -33,10 +36,10 @@ urlpatterns = [
         r'^language/(?P<locale>[a-z]{2})',
         CustomJavaScriptCatalog.as_view(domain='django', packages=['aka']), name='javascript-language-catalog'
     ),
-    url(r'^language', SetLanguageView.as_view()),
-
+    url(r'^language', SetLanguageView.as_view(), name='set-language'),
     url(r'^$', IndexTemplateView.as_view(), name='index'),
-    url(r'^oid/', include('openid.urls', namespace='openid')),
+    url(r'^login$', LoginView.as_view(), name='login'),
+    url(r'^logout$', LogoutView.as_view(), name='logout'),
     url(r'^inkassosag$', InkassoSagView.as_view(), name='inkassosag'),
     url(r'^inkassosag/upload', InkassoSagUploadView.as_view(), name='inkassosag-upload'),
     url(r'^fordringsgrupper/(?P<var>[a-z_]+)?', InkassoGroupDataView.as_view(), name='fordringsgrupper'),

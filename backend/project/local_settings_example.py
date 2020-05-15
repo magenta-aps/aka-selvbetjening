@@ -27,6 +27,8 @@ DATABASES = {
     }
 }
 
+SULLISSIVIK_FEDERATION_SERVICE = 'http://example.com?wsdl'
+
 OPENID_CONNECT = {
     # top level url to the issuer, used for autodiscovery
     'issuer': 'https://loginqa.sullissivik.gl',
@@ -40,4 +42,13 @@ OPENID_CONNECT = {
     'private_key': '',
     # url registered at headnet to redirect the user to after a successfull login at OP
     'redirect_uri': 'https://akaptest.sullissivik.gl/oid/callback/'
+}
+
+NEMID_CONNECT = {
+    'federation_service': 'http://ip.demo.sullissivik.local/services/IdentityServiceV2.svc?wsdl',
+    'cookie_name': 'Sullissivik.Federation.Cookie',
+    'login_url': 'http://ip.demo.sullissivik.local/login.aspx',
+    'redirect_field': 'returnurl',
+    'client_certificate': '/etc/ssl/nemid/aka.crt',
+    'private_key': '/etc/ssl/nemid/aka.key',
 }

@@ -41,6 +41,21 @@ msgstr "Print [kl]"
 msgid "common.pdf"
 msgstr "Download PDF [kl]"
 
+msgid "common.download_template"
+msgstr "Download skabelon [kl]"
+
+msgid "common.logout"
+msgstr "Log ud [kl]"
+
+msgid "common.logged_in_as"
+msgstr "Logget ind som: {navn} [kl]"
+
+msgid "login.openid"
+msgstr "Log ind som virksomhed [kl]"
+
+msgid "login.nemid"
+msgstr "Log ind som borger [kl]"
+
 msgid "prisme.error"
 msgstr ""
 
@@ -70,9 +85,6 @@ msgstr "Skattestyrelsen [kl]"
 
 msgid "common.showcolumns"
 msgstr "Vis/skjul kolonner [kl]"
-
-msgid "common.companydata"
-msgstr "Logget ind som: {navn}, CVR {cvrNummer} [kl]"
 
 # Errors
 
