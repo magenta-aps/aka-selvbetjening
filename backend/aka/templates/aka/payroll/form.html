@@ -11,6 +11,20 @@
     <article class="indberet_loentraek">
         <form method="post" id="mainform">
             {% csrf_token %}
+            {% if form.non_field_errors %}
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors.as_data %}
+                        <li {% if error.code %}data-trans="{{ error.code }}"{% endif %} {% if error.params %}data-trans-params="{{ error.params|json }}"{% endif %}>
+                            {% if error.code %}
+                                {% trans error.code as error_message %}
+                                {{ error_message|format:error.params }}
+                            {% else %}
+                                {{ error }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
             {{ formset.management_form }}
             <h1 data-trans="loentraek.title">{% trans 'loentraek.title' %}</h1>
             <div class="container-fluid">

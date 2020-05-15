@@ -88,6 +88,9 @@ msgstr "Ugyldig dato [kl]"
 msgid "error.required"
 msgstr "Dette felt er påkrævet [kl]"
 
+msgid "error.number_required"
+msgstr "Dette felt skal indeholde et tal [kl]"
+
 msgid "error.invalid_extension"
 msgstr "Filendelse '{extension}' er ikke tilladt. Tilladte filendelser er: '{allowed_extensions}' [kl]."
 

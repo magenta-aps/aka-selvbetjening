@@ -9,7 +9,7 @@ from django import forms
 from django.conf import settings
 from django.core.validators import FileExtensionValidator, MinLengthValidator, \
     MaxLengthValidator
-from django.forms import ValidationError, MultipleHiddenInput
+from django.forms import ValidationError, MultipleHiddenInput, TextInput
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 
@@ -172,8 +172,7 @@ class InkassoForm(forms.Form):
     )
     barns_cpr = forms.CharField(
         required=False,
-        min_length=9,
-        max_length=10
+        widget=TextInput(attrs={'data-cpr': 'true'})
     )
     ekstern_sagsnummer = forms.CharField(
         required=True,
@@ -385,8 +384,7 @@ class LoentraekFormItem(forms.Form):
     cpr = forms.CharField(
         required=True,
         error_messages={'required': 'error.required'},
-        min_length=9,
-        max_length=10
+        widget=TextInput(attrs={'data-cpr': 'true'})
     )
     agreement_number = forms.CharField(
         required=True,

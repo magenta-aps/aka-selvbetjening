@@ -439,7 +439,8 @@ class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
             request=self.request,
             template="aka/claim/success.html",
             context={
-                'rec_ids': [prisme_reply.rec_id]
+                'rec_ids': [prisme_reply.rec_id],
+                'upload': False
             },
             using=self.template_engine
         )
@@ -463,6 +464,7 @@ class InkassoSagUploadView(RequireCvrMixin, FormView):
             template="aka/claim/success.html",
             context={
                 'rec_ids': responses,
+                'upload': True
             },
             using=self.template_engine
         )
@@ -521,7 +523,17 @@ class LoentraekView(RequireCvrMixin, FormSetView, FormView):
                 using=self.template_engine
             )
         except PrismeException as e:
-            raise e
+            found = False
+            if e.code == 250:
+                d = e.as_error_dict
+                if 'params' in d and 'nr' in d['params']:
+                    for subform in formset:
+                        if subform.cleaned_data.get('agreement_number') == d['params']['nr']:
+                            subform.add_error('agreement_number', e.as_validationerror)
+                            found = True
+            if not found:
+                form.add_error(None, e.as_validationerror)
+            return self.form_invalid(form, formset)
 
     def form_invalid(self, form, formset):
         return self.render_to_response(
