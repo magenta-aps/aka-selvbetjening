@@ -4,7 +4,7 @@ import os
 import re
 
 from aka.clients.dafo import Dafo
-from aka.clients.prisme import Prisme, PrismeException, PrismeNotFoundException
+from aka.clients.prisme import Prisme, PrismeException
 from aka.clients.prisme import PrismeCitizenAccountRequest
 from aka.clients.prisme import PrismeClaimRequest
 from aka.clients.prisme import PrismeEmployerAccountRequest
@@ -29,10 +29,11 @@ from aka.mixins import SimpleGetFormMixin
 from aka.utils import format_filesize
 from aka.utils import list_lstrip
 from aka.utils import list_rstrip
+from aka.utils import spreadsheet_col_letter
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.forms import formset_factory
 from django.http import JsonResponse, HttpResponse, FileResponse
-from django.shortcuts import redirect
 from django.template import Engine, Context
 from django.template.response import TemplateResponse
 from django.utils import translation
@@ -46,9 +47,10 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
-
 from sullissivik.login.nemid.nemid import NemId
 from sullissivik.login.openid.openid import OpenId
+
+from aka.utils import get_ordereddict_key_index
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -585,9 +587,28 @@ class LoentraekUploadView(LoentraekView):
         if form.is_valid():
             if self.forms_valid(form.subforms) and form.check_sum(form.subforms, True):
                 return self.form_valid(form, form.subforms)
-        return self.form_invalid(form)
+        return self.form_invalid(form, form.subforms)
 
-    def form_invalid(self, form):
+    def form_invalid(self, form, formset):
+        for row_index, subform in enumerate(formset, start=2):
+            if subform.errors:
+                for field, errorlist in subform.errors.items():
+                    try:
+                        col_index = get_ordereddict_key_index(subform.fields, field)
+                    except ValueError:
+                        col_index = None
+                    for error in errorlist.as_data():
+                        form.add_error('file', ValidationError(
+                            'error.upload_validation_item',
+                            code='error.upload_validation_item',
+                            params={
+                                'field': field,
+                                'message': (str(error.message), error.params),
+                                'row': row_index,
+                                'col': col_index,
+                                'col_letter': spreadsheet_col_letter(col_index)
+                            }
+                        ))
         return self.render_to_response(
             self.get_context_data(form=form)
         )
