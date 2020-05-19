@@ -13,14 +13,12 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    {% if rec_ids %}
-                        <span data-trans="loentraek.result">{% trans 'loentraek.result' %}</span>
-                        <ul class="success-list">
-                            {% for rec_id in rec_ids %}
-                                <li>{{ rec_id }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
+                    <span data-trans="loentraek.results">{% trans 'loentraek.results' %}</span>
+                    <ul class="success-list">
+                        {% for rec_id in rec_ids %}
+                            <li>{{ rec_id }}</li>
+                        {% endfor %}
+                    </ul>
                     {% if errors %}
                         <span data-trans="loentraek.errors">{% trans 'loentraek.errors' %}</span>
                         <ul class="error-list">

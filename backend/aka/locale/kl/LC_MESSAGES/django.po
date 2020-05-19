@@ -297,6 +297,12 @@ msgstr "Nettoløn [kl]"
 msgid "loentraek.sum_mismatch"
 msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækker [kl]"
 
+msgid "loentraek.success"
+msgstr "Løntræk indberettet [kl]"
+
+msgid "loentraek.results"
+msgstr "Oprettede notater [kl]"
+
 
 # 6.4
 
