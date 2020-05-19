@@ -26,6 +26,7 @@ $(function(){
     const cprRegex = /^\d{10}$/;
     const validate = function() {
         const $this = $(this);
+        let error = false;
         if ($this.attr("data-required")) {
             if (this.value === '') {
                 error = true;
