@@ -355,10 +355,14 @@ class LoentraekForm(forms.Form):
         initial=date.today().year
     )
     month = forms.ChoiceField(
-        choices=[(x, x) for x in range(1, 13)],
+        choices=[
+            (1, "January"), (2, "February"), (3, "March"), (4, "April"),
+            (5, "May"), (6, "June"), (7, "July"), (8, "August"),
+            (9, "September"), (10, "October"), (11, "November"), (12, "December")
+        ],
         required=True,
         error_messages={'required': 'error.required'},
-        widget=forms.Select(attrs={'class': 'dropdown'}),
+        widget=TranslatedSelect(attrs={'class': 'dropdown'}),
         initial=date.today().month
     )
     total_amount = forms.DecimalField(
