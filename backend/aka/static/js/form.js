@@ -13,48 +13,58 @@ $(function(){
     };
 
     const clearError = function() {
-        console.log("clearError",this,this.id);
         $(".err-msg[for='"+this.id+"'] ul.errorlist").empty();
         $("div.has-error[data-field='"+this.id+"']").removeClass("has-error");
     };
 
-    $("form input, form select").on("keyup change", clearError);
+    $("form input, form select").on("keyup change", function(){
+        clearError.call(this);
+        validate.call(this);
+    });
 
-    $("form").submit(function(){
+    const numberRegex = /^\d+([,\.]\d+)?$/;
+    const cprRegex = /^\d{10}$/;
+    const validate = function() {
         const $this = $(this);
-        $("form input, form select").each(clearError);
-        var error = false;
-        $this.find("input[data-required]").each(function() {
+        if ($this.attr("data-required")) {
             if (this.value === '') {
                 error = true;
                 addError(this.id, "error.required");
             }
-        });
+        }
 
-        const numberRegex = /^\d+([,\.]\d+)?$/;
-        $this.find("input[data-number]").each(function() {
+        if ($this.attr("data-number")) {
             if (this.value && !numberRegex.exec(this.value)) {
                 error = true;
                 addError(this.id, "error.number_required");
             }
-        });
+        }
 
-        const cprRegex = /^\d{10}$/;
-        $this.find("input[data-cpr]").each(function() {
+        if ($this.attr("data-cpr]")) {
             if (this.value && !cprRegex.exec(this.value)) {
                 error = true;
                 addError(this.id, "error.invalid_cpr");
             }
-        });
+        }
 
-        $this.find("input[data-validate-after]").each(function() {
+        if ($this.attr("data-validate-after")) {
             var comparisonField = $($(this).attr("data-validate-after"));
             if (this.value && comparisonField.val() && strpdate(this.value) < strpdate(comparisonField.val())) {
                 error = true;
                 addError(this.id, "error.from_date_before_to_date");
             }
-        });
+        }
+        return error;
+    };
 
+    $("form").submit(function(){
+        var error = false;
+        $("form input, form select").each(function(){
+            clearError.call(this);
+            if (validate.call(this)) {
+                error = true;
+            }
+        });
         if (error) {
             return false;
         }
