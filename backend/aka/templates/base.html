@@ -29,6 +29,7 @@
                         $(this).parents("form").addClass('submitted');
                     });
                 });
+                django.language = "{{ LANGUAGE_CODE|split:'-'|first }}";
             </script>
         {% endif %}
         {% block extra_headers %}{% endblock %}
@@ -45,11 +46,11 @@
                         </a>
                     </h1>
                     <div class="locale-changer">
-                        <span id="locale_flag" class="option-{{LANGUAGE_CODE|split:'-'|first}}"></span>
-                        <select class="dropdown" data-locale-changer="true" data-locale-flag="#locale_flag" autocomplete="off">
-                            <option value="kl" {% if LANGUAGE_CODE|split:'-'|first == 'kl' %}selected="selected"{% endif %}>Kalaallisut</option>
-                            <option value="da" {% if LANGUAGE_CODE|split:'-'|first == 'da' %}selected="selected"{% endif %}>Dansk</option>
-                        </select>
+                        {% if LANGUAGE_CODE|split:'-'|first == 'kl' %}
+                            <span id="locale_flag_change" class="option-da" data-language="da"></span>
+                        {% else %}
+                            <span id="locale_flag_change" class="option-kl" data-language="kl"></span>
+                        {% endif %}
                     </div>
                 </div>
             </header>
