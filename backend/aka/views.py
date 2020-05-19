@@ -128,16 +128,6 @@ class LoginView(TemplateView):
     def get_context_data(self, **kwargs):
         context = {'back': self.request.GET.get('back')}
         context.update(kwargs)
-        print(context)
-        return super().get_context_data(**context)
-
-
-class LoginView(TemplateView):
-    template_name = 'login.html'
-
-    def get_context_data(self, **kwargs):
-        context = {'back': self.request.GET.get('back')}
-        context.update(kwargs)
         return super().get_context_data(**context)
 
 

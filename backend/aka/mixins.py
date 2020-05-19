@@ -43,9 +43,6 @@ class HasUserMixin(object):
 
     def __init__(self):
         self.cvr = None
-
-    def __init__(self):
-        self.cvr = None
         self.claimant_ids = []
         self.company = None
 
