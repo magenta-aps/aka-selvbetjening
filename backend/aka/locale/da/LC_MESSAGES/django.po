@@ -282,6 +282,9 @@ msgstr "Fordring oprettet"
 msgid "fordring.result"
 msgstr "Oprettede fordingsnumre:"
 
+msgid "fordring.bill_date_before_due_date"
+msgstr "Betalingsdato skal være før forfaldsdato"
+
 
 # 6.2
 

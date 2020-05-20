@@ -8,7 +8,6 @@ from aka.clients.prisme import PrismeNotFoundException
 from aka.exceptions import AkaException
 from aka.utils import flatten
 from django.conf import settings
-from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.template.loader import select_template
 from django.template.response import TemplateResponse
@@ -47,8 +46,8 @@ class HasUserMixin(object):
         self.company = None
 
     def get_claimants(self, request):
-        if 'claimantIds' in request.session['user_info']:
-            return request.session['user_info']['claimantIds']
+        if 'claimantIds' in request.session:
+            return request.session['claimantIds']
         elif self.cvr is not None:
             try:
                 cvr = self.cvr
@@ -57,7 +56,8 @@ class HasUserMixin(object):
                     response.claimant_id
                     for response in Prisme().process_service(PrismeCvrCheckRequest(cvr), 'cvr_check')
                 ])
-                request.session['user_info']['claimantIds'] = claimant_ids
+                request.session['claimantIds'] = claimant_ids
+                request.session.save()
                 return claimant_ids
             except PrismeNotFoundException as e:
                 return []
