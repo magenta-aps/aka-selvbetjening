@@ -25,6 +25,10 @@ class PrismeException(AkaException):
                 're': re.compile(r'Der findes ikke en inkassosag med det eksterne ref.nr. (.*)'),
                 'args': ['refnumber']
             }],
+            'nedskrivning': [{
+                're': re.compile(r'Der findes ikke en inkassosag med det eksterne ref.nr. (.*)'),
+                'args': ['refnumber']
+            }],
             'rentenota': [{
                 're': re.compile(
                     r'Der findes ingen renter for dette CPR/CVR (\d{8}) eller for '

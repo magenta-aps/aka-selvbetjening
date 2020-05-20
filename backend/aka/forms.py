@@ -114,7 +114,7 @@ class KontoForm(forms.Form):
         input_formats=valid_date_formats
     )
     to_date = forms.DateField(
-        widget=forms.DateInput(attrs={'class': 'datepicker', 'data-validate-after': '#id_from_date'}),
+        widget=forms.DateInput(attrs={'class': 'datepicker', 'data-validate-after': '#id_from_date', 'data-validate-after-errormessage': 'error.from_date_before_to_date'}),
         required=False,
         error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
@@ -192,7 +192,7 @@ class InkassoForm(forms.Form):
         required=False,
     )
     forfaldsdato = forms.DateField(
-        widget=forms.DateInput(attrs={'class': 'datepicker'}),
+        widget=forms.DateInput(attrs={'class': 'datepicker', 'data-validate-after': '#id_betalingsdato', 'data-validate-after-errormessage': 'fordring.bill_date_before_due_date'}),
         required=True,
         error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
@@ -281,7 +281,6 @@ class InkassoForm(forms.Form):
                     'barns_cpr',
                     ValidationError(self.fields['barns_cpr'].error_messages['required'], code='required')
                 )
-        print(self.errors)
 
     @staticmethod
     def convert_group_type_text(groupname, typename):
@@ -445,7 +444,6 @@ class NedskrivningForm(forms.Form):
     )
     ekstern_sagsnummer = forms.CharField(
         required=True,
-        max_length=10,
         error_messages={'required': 'error.required'}
     )
     beloeb = forms.DecimalField(

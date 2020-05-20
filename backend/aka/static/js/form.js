@@ -12,19 +12,15 @@ $(function(){
         ul.append("<li data-trans=\""+errorkey+"\">"+django.format(errorkey, null, django.language)+"</li>");
     };
 
-    const clearError = function() {
-        $(".err-msg[for='"+this.id+"'] ul.errorlist").empty();
-        $("div.has-error[data-field='"+this.id+"']").removeClass("has-error");
-    };
-
     $("form input, form select").on("keyup change", function(){
-        clearError.call(this);
         validate.call(this);
     });
 
     const numberRegex = /^\d+([,\.]\d+)?$/;
     const cprRegex = /^\d{10}$/;
     const validate = function() {
+        $(".err-msg[for='"+this.id+"'] ul.errorlist").empty();
+        $("div.has-error[data-field='"+this.id+"']").removeClass("has-error");
         const $this = $(this);
         let error = false;
         if ($this.attr("data-required")) {
@@ -52,16 +48,20 @@ $(function(){
             var comparisonField = $($(this).attr("data-validate-after"));
             if (this.value && comparisonField.val() && strpdate(this.value) < strpdate(comparisonField.val())) {
                 error = true;
-                addError(this.id, "error.from_date_before_to_date");
+                addError(this.id, $(this).attr("data-validate-after-errormessage"));
             }
         }
+        const reverseDateComparator = $("[data-validate-after='#"+this.id+"']");
+        if (reverseDateComparator.length) {
+            validate.call(reverseDateComparator.get(0));
+        }
+
         return error;
     };
 
     $("form").submit(function(){
         var error = false;
         $("form input, form select").each(function(){
-            clearError.call(this);
             if (validate.call(this)) {
                 error = true;
             }
