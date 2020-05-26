@@ -92,11 +92,6 @@ class CustomJavaScriptCatalog(JavaScriptCatalog):
 
 class SetLanguageView(View):
 
-    locale_map = {
-        'da': 'da-DK',
-        'kl': 'kl-GL'
-    }
-
     def post(self, request, *args, **kwargs):
         language = request.POST.get('language', settings.LANGUAGE_CODE)
         translation.activate(language)
@@ -104,7 +99,7 @@ class SetLanguageView(View):
         response = JsonResponse("OK", safe=False)
         response.set_cookie(
             settings.LANGUAGE_COOKIE_NAME,
-            self.locale_map.get(language, language),
+            settings.LOCALE_MAP.get(language, language),
             domain=settings.LANGUAGE_COOKIE_DOMAIN,
             path=settings.LANGUAGE_COOKIE_PATH,
         )

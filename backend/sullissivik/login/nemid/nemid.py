@@ -40,8 +40,7 @@ class NemId:
                             response_object['CPR'],
                             response_object['Name']
                         )
-                        if request.user.is_authenticated:
-                            print("user.dict(): %s" % str(user.dict()))
+                        if user.is_authenticated:
                             request.session['user_info'] = user.dict()
             except Exception as e:
                 exc_info = sys.exc_info()
