@@ -34,16 +34,3 @@ class Login(View):
             self.config.get('login_url'),
             self.config.get('redirect_field')
         )
-
-
-class Logout(View):
-
-    def __init__(self):
-        super().__init__()
-        self.config = settings.NEMID_CONNECT
-
-    def get(self, request):
-        NemId.clear_session(request.session)
-        response = redirect('aka:index')
-        response.delete_cookie(self.config['cookie_name'])
-        return response
