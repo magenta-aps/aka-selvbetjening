@@ -1,14 +1,14 @@
 import sys
 import traceback
 
+import requests
 from django.conf import settings
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from requests import Session
 from sullissivik.login.nemid.models import SessionOnlyUser
 from zeep import Client, Transport
 from zeep.helpers import serialize_object
-from zeep.plugins import HistoryPlugin
-from zeep.wsse import Signature
 
 
 class NemId:
@@ -19,6 +19,38 @@ class NemId:
 
     @staticmethod
     def authenticate(request):
+        user = SessionOnlyUser.get_user(request.session)
+        if not user.is_authenticated:
+            try:
+                config = settings.NEMID_CONNECT
+                token = request.COOKIES.get(config.get('cookie_name'))
+                if token:
+                    response = requests.post(
+                        "https://qaip.sullissivik.gl/rest/identityservice/GetUser",
+                        data={'token': token},
+                        cert=(
+                            config['client_certificate'],
+                            config['private_key'],
+                        )
+                    )
+                    if response.status_code == 200:
+                        response_object = response.json()
+                        user = request.user = SessionOnlyUser.get_user(
+                            request.session,
+                            response_object['CPR'],
+                            response_object['Name']
+                        )
+                        if request.user.is_authenticated:
+                            print("user.dict(): %s" % str(user.dict()))
+                            request.session['user_info'] = user.dict()
+            except Exception as e:
+                exc_info = sys.exc_info()
+                traceback.print_exception(*exc_info)
+                raise e
+        return user
+
+    @staticmethod
+    def authenticate_soap(request):
         user = SessionOnlyUser.get_user(request.session)
         if not user.is_authenticated:
             try:
@@ -67,12 +99,18 @@ class NemId:
 
     @staticmethod
     def clear_session(session):
-        for key in ['user_info', 'login_method']:
+        for key in ['user_info', 'login_method', 'user']:
             if key in session:
                 del session[key]
+        session.save()
 
     @staticmethod
-    def logout():
+    def logout(session):
+        NemId.clear_session(session)
         response = redirect('aka:index')
-        response.delete_cookie(settings.NEMID_CONNECT['cookie_name'])
+        response.delete_cookie(
+            settings.NEMID_CONNECT['cookie_name'],
+            path=settings.NEMID_CONNECT['cookie_path'],
+            domain=settings.NEMID_CONNECT['cookie_domain']
+        )
         return response

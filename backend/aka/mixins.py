@@ -40,10 +40,13 @@ class ErrorHandlerMixin(object):
 
 class HasUserMixin(object):
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.cvr = None
+        self.cpr = None
         self.claimant_ids = []
         self.company = None
+        self.person = None
+        super().__init__(*args, **kwargs)
 
     def get_claimants(self, request):
         if 'claimantIds' in request.session:
@@ -65,7 +68,7 @@ class HasUserMixin(object):
     def get_company(self, request):
         if 'company' in request.session['user_info']:
             return request.session['user_info']['company']
-        else:
+        elif self.cvr is not None:
             company = Dafo().lookup_cvr(self.cvr)
             request.session['user_info']['company'] = company
             return company
@@ -80,8 +83,9 @@ class HasUserMixin(object):
 
         try:
             self.cpr = request.session['user_info']['CPR']
+            self.person = {'navn': request.session['user_info']['name']}
         except (KeyError, TypeError):
-            self.cpr = '0101601919'
+            pass
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -90,7 +94,8 @@ class HasUserMixin(object):
             'cpr': self.cpr,
             'cvr': self.cvr,
             'claimant_ids': self.claimant_ids,
-            'company': self.company
+            'company': self.company,
+            'person': self.person
         }
         context.update(kwargs)
         return super().get_context_data(**context)
