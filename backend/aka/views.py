@@ -591,28 +591,29 @@ class LoentraekUploadView(LoentraekView):
         if form.is_valid():
             if self.forms_valid(form.subforms) and form.check_sum(form.subforms, True):
                 return self.form_valid(form, form.subforms)
-        return self.form_invalid(form, form.subforms)
+        return self.form_invalid(form, form.subforms if hasattr(form, "subforms") else None)
 
-    def form_invalid(self, form, formset):
-        for row_index, subform in enumerate(formset, start=2):
-            if subform.errors:
-                for field, errorlist in subform.errors.items():
-                    try:
-                        col_index = get_ordereddict_key_index(subform.fields, field)
-                    except ValueError:
-                        col_index = None
-                    for error in errorlist.as_data():
-                        form.add_error('file', ValidationError(
-                            'error.upload_validation_item',
-                            code='error.upload_validation_item',
-                            params={
-                                'field': field,
-                                'message': (str(error.message), error.params),
-                                'row': row_index,
-                                'col': col_index,
-                                'col_letter': spreadsheet_col_letter(col_index)
-                            }
-                        ))
+    def form_invalid(self, form, formset=None):
+        if formset is not None:
+            for row_index, subform in enumerate(formset, start=2):
+                if subform.errors:
+                    for field, errorlist in subform.errors.items():
+                        try:
+                            col_index = get_ordereddict_key_index(subform.fields, field)
+                        except ValueError:
+                            col_index = None
+                        for error in errorlist.as_data():
+                            form.add_error('file', ValidationError(
+                                'error.upload_validation_item',
+                                code='error.upload_validation_item',
+                                params={
+                                    'field': field,
+                                    'message': (str(error.message), error.params),
+                                    'row': row_index,
+                                    'col': col_index,
+                                    'col_letter': spreadsheet_col_letter(col_index)
+                                }
+                            ))
         return self.render_to_response(
             self.get_context_data(form=form)
         )
