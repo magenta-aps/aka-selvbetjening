@@ -133,11 +133,11 @@ class LoginView(TemplateView):
 
 class LogoutView(View):
     def get(self, request, *args, **kwargs):
-        method = self.request.session['login_method']
+        method = self.request.session.get('login_method')
         if method == 'openid':
             return OpenId.logout(self.request.session)
         else:
-            return NemId.logout()
+            return NemId.logout(self.request.session)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -308,13 +308,6 @@ class BorgerKontoView(RequireCprMixin, KontoView):
             {'name':'claimant_id', 'class': 'nb'},
             {'name':'child_claimant', 'class': 'nb'},
         ]
-
-    def get_context_data(self, **kwargs):
-        context = {
-            'citizen': Dafo().lookup_cpr(self.cpr)
-        }
-        context.update(kwargs)
-        return super().get_context_data(**context)
 
 
 # 6.1
