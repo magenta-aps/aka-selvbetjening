@@ -1,5 +1,6 @@
 import csv
 import logging
+import re
 from io import StringIO
 
 import chardet
@@ -9,7 +10,7 @@ from aka.widgets import TranslatedSelect
 from django import forms
 from django.conf import settings
 from django.core.validators import FileExtensionValidator, MinLengthValidator, \
-    MaxLengthValidator
+    MaxLengthValidator, RegexValidator
 from django.forms import ValidationError, MultipleHiddenInput, TextInput
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
@@ -17,6 +18,11 @@ from django.utils.translation import gettext_lazy as _
 logger = logging.getLogger(__name__)
 
 valid_date_formats = ['%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%Y-%m-%d', '%d-%m-%y']
+
+
+cprvalidator = RegexValidator("^\d{10}$", "error.invalid_cpr")
+cvrvalidator = RegexValidator("^\d{8}$", "error.invalid_cvr")
+cprcvrvalidator = RegexValidator("^\d{8}(\d{2})?$", "error.invalid_cpr_cvr")
 
 
 class CsvUploadMixin(object):
@@ -53,13 +59,17 @@ class CsvUploadMixin(object):
             subform = self.subform_class(data=data)
             missing = subform.fields.keys() - data
             if missing:
+                missing_required = False
                 for field in missing:
-                    self.add_error('file', ValidationError(
-                        'error.upload_validation_header',
-                        code='error.upload_validation_header',
-                        params={'field': field}
-                    ))
-                break
+                    if subform.fields[field].required:
+                        self.add_error('file', ValidationError(
+                            'error.upload_validation_header',
+                            code='error.upload_validation_header',
+                            params={'field': field}
+                        ))
+                        missing_required = True
+                if missing_required:
+                    break
             if not subform.is_valid():  # Catch row errors early
                 for field, errorlist in subform.errors.items():
                     if 'error.required' in errorlist and field not in row and field not in missing:
@@ -309,9 +319,20 @@ class InkassoCoDebitorFormItem(forms.Form):
     )
 
 
+class InkassoUploadFormRow(InkassoForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for i in range(1, 100):
+            self.fields["codebtor_%d" % i] = forms.CharField(
+                required=False,
+                validators=[cprcvrvalidator]
+            )
+
+
 class InkassoUploadForm(CsvUploadMixin, forms.Form):
 
-    subform_class = InkassoForm
+    subform_class = InkassoUploadFormRow
 
     file = forms.FileField(
         required=True,
