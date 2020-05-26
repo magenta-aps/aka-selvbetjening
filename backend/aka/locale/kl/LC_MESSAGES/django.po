@@ -139,6 +139,12 @@ msgstr "Konfigurationsfejl på serveren [kl]"
 msgid "error.invalid_cpr"
 msgstr "Ugyldigt CPR-nummer [kl]"
 
+msgid "error.invalid_cvr"
+msgstr "Ugyldigt CVR-nummer [kl]"
+
+msgid "error.invalid_cpr_cvr"
+msgstr "Ugyldigt CPR- eller CVR-nummer [kl]"
+
 # File lists
 
 msgid "filliste.mappeindhold"

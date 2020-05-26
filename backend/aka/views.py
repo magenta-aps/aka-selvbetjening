@@ -27,6 +27,7 @@ from aka.mixins import RequireCprMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
 from aka.utils import format_filesize
+from aka.utils import get_ordereddict_key_index
 from aka.utils import list_lstrip
 from aka.utils import list_rstrip
 from aka.utils import spreadsheet_col_letter
@@ -49,8 +50,6 @@ from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
 from sullissivik.login.nemid.nemid import NemId
 from sullissivik.login.openid.openid import OpenId
-
-from aka.utils import get_ordereddict_key_index
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -427,22 +426,25 @@ class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
             return self.form_valid(form, formset)
         return self.form_invalid(form, formset)
 
-    def send_claim(self, form, formset):
+    @staticmethod
+    def send_claim(claimant_id, form, formset=None, codebtors=None):
         prisme = Prisme()
 
-        codebtors = []
-        for subform in formset:
-            cpr = subform.cleaned_data.get("cpr")
-            cvr = subform.cleaned_data.get("cvr")
-            if cpr is not None:
-                codebtors.append(cpr)
-            elif cvr is not None:
-                codebtors.append(cvr)
+        if codebtors is None:
+            codebtors = []
+        if formset:
+            for subform in formset:
+                cpr = subform.cleaned_data.get("cpr")
+                cvr = subform.cleaned_data.get("cvr")
+                if cpr is not None:
+                    codebtors.append(cpr)
+                elif cvr is not None:
+                    codebtors.append(cvr)
 
         claim_type = form.cleaned_data['fordringstype'].split(".")
 
         claim = PrismeClaimRequest(
-            claimant_id=self.claimant_ids[0],
+            claimant_id=claimant_id,
             cpr_cvr=form.cleaned_data.get('debitor'),
             external_claimant=form.cleaned_data.get('fordringshaver2'),
             claim_group_number=claim_type[0],
@@ -465,7 +467,7 @@ class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
         return prisme_reply
 
     def form_valid(self, form, formset):
-        prisme_reply = self.send_claim(form, formset)
+        prisme_reply = InkassoSagView.send_claim(self.claimant_ids[0], form, formset)
         return TemplateResponse(
             request=self.request,
             template="aka/claim/success.html",
@@ -486,8 +488,15 @@ class InkassoSagUploadView(RequireCvrMixin, FormView):
 
     def form_valid(self, form):
         responses = []
+        codebtor_re = re.compile("^codebtor_\d+$")
+        claimant_id = self.claimant_ids[0]
         for subform in form.subforms:
-            prisme_reply = InkassoSagView.send_claim(subform, [])
+            codebtors = []
+            for field, value in subform.cleaned_data.items():
+                match = codebtor_re.match(field)
+                if match and len(value):
+                    codebtors.append(value)
+            prisme_reply = InkassoSagView.send_claim(claimant_id, subform, codebtors=codebtors)
             responses.append(prisme_reply.rec_id)
 
         return TemplateResponse(
