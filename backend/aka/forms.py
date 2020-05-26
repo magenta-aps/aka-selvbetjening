@@ -413,7 +413,8 @@ class LoentraekFormItem(forms.Form):
     cpr = forms.CharField(
         required=True,
         error_messages={'required': 'error.required'},
-        widget=TextInput(attrs={'data-cpr': 'true'})
+        widget=TextInput(attrs={'data-cpr': 'true'}),
+        validators=[cprvalidator]
     )
     agreement_number = forms.CharField(
         required=True,
