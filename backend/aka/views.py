@@ -241,7 +241,6 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
             {'name': 'claim_type_code', 'class': 'nb'},
             {'name': 'invoice_number', 'class': 'nb'},
             {'name': 'transaction_type', 'class': 'nb'},
-            {'name': 'payment_code', 'class': 'nb'},
             {'name': 'rate_number', 'class': 'nb'},
         ]
 
