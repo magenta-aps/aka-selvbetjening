@@ -111,6 +111,22 @@ class AcceptingMultipleChoiceField(forms.MultipleChoiceField):
     def valid_value(self, value):
         return True
 
+
+class PrependCharField(forms.CharField):
+
+    def __init__(self, *args, prepend_char, total_length, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.prepend_char = prepend_char
+        self.total_length = total_length
+
+    def to_python(self, value):
+        value = super().to_python(value)
+        if len(self.prepend_char) > 0:
+            while (len(value) < self.total_length):
+                value = self.prepend_char + value
+        return value
+
+
 class KontoForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
@@ -181,9 +197,12 @@ class InkassoForm(forms.Form):
         error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
     )
-    barns_cpr = forms.CharField(
+    barns_cpr = PrependCharField(
         required=False,
-        widget=TextInput(attrs={'data-cpr': 'true'})
+        widget=TextInput(attrs={'data-cpr': 'true'}),
+        validators=[cprvalidator],
+        prepend_char='0',
+        total_length=10
     )
     ekstern_sagsnummer = forms.CharField(
         required=True,
@@ -231,12 +250,6 @@ class InkassoForm(forms.Form):
         for validator in self.fields['barns_cpr'].validators:
             if isinstance(validator, (MinLengthValidator, MaxLengthValidator)):
                 validator.message = "error.invalid_cpr"
-
-    def clean_cpr(self):
-        cpr = self.cleaned_data['barns_cpr']
-        if len(cpr) == 9:
-            cpr = '0' + cpr
-        return cpr
 
     def set_typefield_choices(self):
         try:
@@ -307,15 +320,19 @@ class InkassoForm(forms.Form):
 
 class InkassoCoDebitorFormItem(forms.Form):
 
-    cpr = forms.CharField(
+    cpr = PrependCharField(
         required=False,
         min_length=10,
-        max_length=10
+        max_length=10,
+        prepend_char='0',
+        total_length=10
     )
-    cvr = forms.CharField(
+    cvr = PrependCharField(
         required=False,
         min_length=8,
-        max_length=8
+        max_length=8,
+        prepend_char='0',
+        total_length=8
     )
 
 
@@ -410,15 +427,19 @@ class LoentraekForm(forms.Form):
 
 class LoentraekFormItem(forms.Form):
 
-    cpr = forms.CharField(
+    cpr = PrependCharField(
         required=True,
         error_messages={'required': 'error.required'},
         widget=TextInput(attrs={'data-cpr': 'true'}),
-        validators=[cprvalidator]
+        validators=[cprvalidator],
+        prepend_char='0',
+        total_length=10
     )
-    agreement_number = forms.CharField(
+    agreement_number = PrependCharField(
         required=True,
-        error_messages={'required': 'error.required'}
+        error_messages={'required': 'error.required'},
+        prepend_char='0',
+        total_length=8
     )
     amount = forms.DecimalField(
         decimal_places=2,
@@ -438,12 +459,6 @@ class LoentraekFormItem(forms.Form):
         for validator in self.fields['cpr'].validators:
             if isinstance(validator, (MinLengthValidator, MaxLengthValidator)):
                 validator.message = "error.invalid_cpr"
-
-    def clean_cpr(self):
-        cpr = self.cleaned_data['cpr']
-        if len(cpr) == 9:
-            cpr = '0' + cpr
-        return cpr
 
 
 class LoentraekUploadForm(CsvUploadMixin, LoentraekForm):
