@@ -37,7 +37,7 @@ $(function(){
             }
         }
 
-        if ($this.attr("data-cpr]")) {
+        if ($this.attr("data-cpr")) {
             if (this.value && !cprRegex.exec(this.value)) {
                 error = true;
                 addError(this.id, "error.invalid_cpr");
