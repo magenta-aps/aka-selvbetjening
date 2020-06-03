@@ -8,6 +8,7 @@ from aka.clients.prisme import PrismeNotFoundException
 from aka.exceptions import AkaException
 from aka.utils import flatten
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.template.loader import select_template
 from django.template.response import TemplateResponse
@@ -54,7 +55,7 @@ class HasUserMixin(object):
         elif self.cvr is not None:
             try:
                 cvr = self.cvr
-                cvr = "31290937"
+                # cvr = "31290937"
                 claimant_ids = flatten([
                     response.claimant_id
                     for response in Prisme().process_service(PrismeCvrCheckRequest(cvr), 'cvr_check')
@@ -83,6 +84,7 @@ class HasUserMixin(object):
 
         try:
             self.cpr = request.session['user_info']['CPR']
+            # self.cpr = '0101601919'
             self.person = {'navn': request.session['user_info']['name']}
         except (KeyError, TypeError):
             pass
@@ -103,11 +105,12 @@ class HasUserMixin(object):
 
 class RequireCprMixin(HasUserMixin):
     def dispatch(self, request, *args, **kwargs):
+
+        # self.cpr = '0101601919'
         try:
             self.cpr = request.session['user_info']['CPR']
         except (KeyError, TypeError):
-            self.cpr = '0101601919'
-            # raise PermissionDenied('no_cpr')
+            raise PermissionDenied('no_cpr')
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -116,8 +119,7 @@ class RequireCvrMixin(HasUserMixin):
         try:
             self.cvr = request.session['user_info']['CVR']
         except (KeyError, TypeError):
-            # raise PermissionDenied('no_cvr')
-            pass
+            raise PermissionDenied('no_cvr')
 
         return super().dispatch(request, *args, **kwargs)
 
