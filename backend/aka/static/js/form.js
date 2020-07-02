@@ -12,49 +12,60 @@ $(function(){
         ul.append("<li data-trans=\""+errorkey+"\">"+django.format(errorkey, null, django.language)+"</li>");
     };
 
-    const clearError = function() {
-        console.log("clearError",this,this.id);
+    $("form input, form select").on("keyup change", function(){
+        validate.call(this);
+    });
+
+    const numberRegex = /^\d+([,\.]\d+)?$/;
+    const cprRegex = /^\d{10}$/;
+    const validate = function() {
         $(".err-msg[for='"+this.id+"'] ul.errorlist").empty();
         $("div.has-error[data-field='"+this.id+"']").removeClass("has-error");
-    };
-
-    $("form input, form select").on("keyup change", clearError);
-
-    $("form").submit(function(){
         const $this = $(this);
-        $("form input, form select").each(clearError);
-        var error = false;
-        $this.find("input[data-required]").each(function() {
+        let error = false;
+        if ($this.attr("data-required")) {
             if (this.value === '') {
                 error = true;
                 addError(this.id, "error.required");
             }
-        });
+        }
 
-        const numberRegex = /^\d+([,\.]\d+)?$/;
-        $this.find("input[data-number]").each(function() {
+        if ($this.attr("data-number")) {
             if (this.value && !numberRegex.exec(this.value)) {
                 error = true;
                 addError(this.id, "error.number_required");
             }
-        });
+        }
 
-        const cprRegex = /^\d{10}$/;
-        $this.find("input[data-cpr]").each(function() {
+        if ($this.attr("data-cpr")) {
             if (this.value && !cprRegex.exec(this.value)) {
                 error = true;
                 addError(this.id, "error.invalid_cpr");
             }
-        });
+        }
 
-        $this.find("input[data-validate-after]").each(function() {
+        if ($this.attr("data-validate-after")) {
             var comparisonField = $($(this).attr("data-validate-after"));
             if (this.value && comparisonField.val() && strpdate(this.value) < strpdate(comparisonField.val())) {
                 error = true;
-                addError(this.id, "error.from_date_before_to_date");
+                addError(this.id, $(this).attr("data-validate-after-errormessage"));
+            }
+        }
+        const reverseDateComparator = $("[data-validate-after='#"+this.id+"']");
+        if (reverseDateComparator.length) {
+            validate.call(reverseDateComparator.get(0));
+        }
+
+        return error;
+    };
+
+    $("form").submit(function(){
+        var error = false;
+        $("form input, form select").each(function(){
+            if (validate.call(this)) {
+                error = true;
             }
         });
-
         if (error) {
             return false;
         }

@@ -166,6 +166,12 @@ LANGUAGES = [
     ('kl', _('Greenlandic')),
 ]
 
+
+LOCALE_MAP = {
+    'da': 'da-DK',
+    'kl': 'kl-GL'
+}
+
 DEFAULT_CHARSET = 'utf-8'
 
 

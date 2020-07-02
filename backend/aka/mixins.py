@@ -41,26 +41,27 @@ class ErrorHandlerMixin(object):
 
 class HasUserMixin(object):
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.cvr = None
-
-    def __init__(self):
-        self.cvr = None
+        self.cpr = None
         self.claimant_ids = []
         self.company = None
+        self.person = None
+        super().__init__(*args, **kwargs)
 
     def get_claimants(self, request):
-        if 'claimantIds' in request.session['user_info']:
-            return request.session['user_info']['claimantIds']
+        if 'claimantIds' in request.session:
+            return request.session['claimantIds']
         elif self.cvr is not None:
             try:
                 cvr = self.cvr
-                cvr = "31290937"
+                # cvr = "31290937"
                 claimant_ids = flatten([
                     response.claimant_id
                     for response in Prisme().process_service(PrismeCvrCheckRequest(cvr), 'cvr_check')
                 ])
-                request.session['user_info']['claimantIds'] = claimant_ids
+                request.session['claimantIds'] = claimant_ids
+                request.session.save()
                 return claimant_ids
             except PrismeNotFoundException as e:
                 return []
@@ -68,7 +69,7 @@ class HasUserMixin(object):
     def get_company(self, request):
         if 'company' in request.session['user_info']:
             return request.session['user_info']['company']
-        else:
+        elif self.cvr is not None:
             company = Dafo().lookup_cvr(self.cvr)
             request.session['user_info']['company'] = company
             return company
@@ -83,8 +84,10 @@ class HasUserMixin(object):
 
         try:
             self.cpr = request.session['user_info']['CPR']
+            # self.cpr = '0101601919'
+            self.person = {'navn': request.session['user_info']['name']}
         except (KeyError, TypeError):
-            self.cpr = '0101601919'
+            pass
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -93,7 +96,8 @@ class HasUserMixin(object):
             'cpr': self.cpr,
             'cvr': self.cvr,
             'claimant_ids': self.claimant_ids,
-            'company': self.company
+            'company': self.company,
+            'person': self.person
         }
         context.update(kwargs)
         return super().get_context_data(**context)
@@ -101,11 +105,12 @@ class HasUserMixin(object):
 
 class RequireCprMixin(HasUserMixin):
     def dispatch(self, request, *args, **kwargs):
+
+        # self.cpr = '0101601919'
         try:
             self.cpr = request.session['user_info']['CPR']
         except (KeyError, TypeError):
-            self.cpr = '0101601919'
-            # raise PermissionDenied('no_cpr')
+            raise PermissionDenied('no_cpr')
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -114,8 +119,7 @@ class RequireCvrMixin(HasUserMixin):
         try:
             self.cvr = request.session['user_info']['CVR']
         except (KeyError, TypeError):
-            # raise PermissionDenied('no_cvr')
-            pass
+            raise PermissionDenied('no_cvr')
 
         return super().dispatch(request, *args, **kwargs)
 

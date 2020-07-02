@@ -139,6 +139,12 @@ msgstr "Konfigurationsfejl på serveren [kl]"
 msgid "error.invalid_cpr"
 msgstr "Ugyldigt CPR-nummer [kl]"
 
+msgid "error.invalid_cvr"
+msgstr "Ugyldigt CVR-nummer [kl]"
+
+msgid "error.invalid_cpr_cvr"
+msgstr "Ugyldigt CPR- eller CVR-nummer [kl]"
+
 # File lists
 
 msgid "filliste.mappeindhold"
@@ -265,7 +271,10 @@ msgid "fordring.success"
 msgstr "Fordring oprettet [kl]"
 
 msgid "fordring.result"
-msgstr "Oprettede fordingsnumre: [kl]"
+msgstr "Oprettede fordringsnumre: [kl]"
+
+msgid "fordring.bill_date_before_due_date"
+msgstr "Betalingsdato skal være før forfaldsdato [kl]"
 
 
 # 6.2
@@ -296,6 +305,12 @@ msgstr "Nettoløn [kl]"
 
 msgid "loentraek.sum_mismatch"
 msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækker [kl]"
+
+msgid "loentraek.success"
+msgstr "Løntræk indberettet [kl]"
+
+msgid "loentraek.results"
+msgstr "Oprettede notater [kl]"
 
 
 # 6.4

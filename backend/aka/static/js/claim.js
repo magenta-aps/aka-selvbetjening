@@ -32,10 +32,10 @@ $(function(){
         const updateChildRequired = function () {
             let subgroup = group_dict[groupSelect.val()][typeSelect.val()];
             if (subgroup['has_child_cpr']) {
-                childCpr.attr("required", "required");
+                childCpr.attr({"required": "required", "data-required": "true"});
                 childCprParents.show();
             } else {
-                childCpr.removeAttr("required");
+                childCpr.removeAttr("required data-required");
                 childCprParents.hide();
             }
         };

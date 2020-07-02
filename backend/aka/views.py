@@ -4,7 +4,7 @@ import os
 import re
 
 from aka.clients.dafo import Dafo
-from aka.clients.prisme import Prisme, PrismeException, PrismeNotFoundException
+from aka.clients.prisme import Prisme, PrismeException
 from aka.clients.prisme import PrismeCitizenAccountRequest
 from aka.clients.prisme import PrismeClaimRequest
 from aka.clients.prisme import PrismeEmployerAccountRequest
@@ -12,7 +12,6 @@ from aka.clients.prisme import PrismeImpairmentRequest
 from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
 from aka.data.fordringsgruppe import groups
-from aka.exceptions import AccessDeniedException
 from aka.forms import InkassoCoDebitorFormItem
 from aka.forms import InkassoForm, InkassoUploadForm
 from aka.forms import InterestNoteForm
@@ -26,12 +25,14 @@ from aka.mixins import RequireCprMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
 from aka.utils import format_filesize
+from aka.utils import get_ordereddict_key_index
 from aka.utils import list_lstrip
 from aka.utils import list_rstrip
+from aka.utils import spreadsheet_col_letter
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.forms import formset_factory
 from django.http import JsonResponse, HttpResponse, FileResponse
-from django.shortcuts import redirect
 from django.template import Engine, Context
 from django.template.response import TemplateResponse
 from django.utils import translation
@@ -45,7 +46,6 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
-
 from sullissivik.login.nemid.nemid import NemId
 from sullissivik.login.openid.openid import OpenId
 
@@ -92,11 +92,6 @@ class CustomJavaScriptCatalog(JavaScriptCatalog):
 
 class SetLanguageView(View):
 
-    locale_map = {
-        'da': 'da-DK',
-        'kl': 'kl-GL'
-    }
-
     def post(self, request, *args, **kwargs):
         language = request.POST.get('language', settings.LANGUAGE_CODE)
         translation.activate(language)
@@ -104,7 +99,7 @@ class SetLanguageView(View):
         response = JsonResponse("OK", safe=False)
         response.set_cookie(
             settings.LANGUAGE_COOKIE_NAME,
-            self.locale_map.get(language, language),
+            settings.LOCALE_MAP.get(language, language),
             domain=settings.LANGUAGE_COOKIE_DOMAIN,
             path=settings.LANGUAGE_COOKIE_PATH,
         )
@@ -128,26 +123,16 @@ class LoginView(TemplateView):
     def get_context_data(self, **kwargs):
         context = {'back': self.request.GET.get('back')}
         context.update(kwargs)
-        print(context)
-        return super().get_context_data(**context)
-
-
-class LoginView(TemplateView):
-    template_name = 'login.html'
-
-    def get_context_data(self, **kwargs):
-        context = {'back': self.request.GET.get('back')}
-        context.update(kwargs)
         return super().get_context_data(**context)
 
 
 class LogoutView(View):
     def get(self, request, *args, **kwargs):
-        method = self.request.session['login_method']
+        method = self.request.session.get('login_method')
         if method == 'openid':
             return OpenId.logout(self.request.session)
         else:
-            return NemId.logout()
+            return NemId.logout(self.request.session)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -251,7 +236,6 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
             {'name': 'claim_type_code', 'class': 'nb'},
             {'name': 'invoice_number', 'class': 'nb'},
             {'name': 'transaction_type', 'class': 'nb'},
-            {'name': 'payment_code', 'class': 'nb'},
             {'name': 'rate_number', 'class': 'nb'},
         ]
 
@@ -319,13 +303,6 @@ class BorgerKontoView(RequireCprMixin, KontoView):
             {'name':'claimant_id', 'class': 'nb'},
             {'name':'child_claimant', 'class': 'nb'},
         ]
-
-    def get_context_data(self, **kwargs):
-        context = {
-            'citizen': Dafo().lookup_cpr(self.cpr)
-        }
-        context.update(kwargs)
-        return super().get_context_data(**context)
 
 
 # 6.1
@@ -432,22 +409,24 @@ class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
         return self.form_invalid(form, formset)
 
     @staticmethod
-    def send_claim(form, formset):
+    def send_claim(claimant_id, form, formset=None, codebtors=None):
         prisme = Prisme()
 
-        codebtors = []
-        for subform in formset:
-            cpr = subform.cleaned_data.get("cpr")
-            cvr = subform.cleaned_data.get("cvr")
-            if cpr is not None:
-                codebtors.append(cpr)
-            elif cvr is not None:
-                codebtors.append(cvr)
+        if codebtors is None:
+            codebtors = []
+        if formset:
+            for subform in formset:
+                cpr = subform.cleaned_data.get("cpr")
+                cvr = subform.cleaned_data.get("cvr")
+                if cpr is not None:
+                    codebtors.append(cpr)
+                elif cvr is not None:
+                    codebtors.append(cvr)
 
         claim_type = form.cleaned_data['fordringstype'].split(".")
 
         claim = PrismeClaimRequest(
-            claimant_id=form.cleaned_data.get('fordringshaver'),
+            claimant_id=claimant_id,
             cpr_cvr=form.cleaned_data.get('debitor'),
             external_claimant=form.cleaned_data.get('fordringshaver2'),
             claim_group_number=claim_type[0],
@@ -470,7 +449,7 @@ class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
         return prisme_reply
 
     def form_valid(self, form, formset):
-        prisme_reply = self.send_claim(form, formset)
+        prisme_reply = InkassoSagView.send_claim(self.claimant_ids[0], form, formset)
         return TemplateResponse(
             request=self.request,
             template="aka/claim/success.html",
@@ -491,8 +470,15 @@ class InkassoSagUploadView(RequireCvrMixin, FormView):
 
     def form_valid(self, form):
         responses = []
+        codebtor_re = re.compile("^codebtor_\d+$")
+        claimant_id = self.claimant_ids[0]
         for subform in form.subforms:
-            prisme_reply = InkassoSagView.send_claim(subform, [])
+            codebtors = []
+            for field, value in subform.cleaned_data.items():
+                match = codebtor_re.match(field)
+                if match and len(value):
+                    codebtors.append(value)
+            prisme_reply = InkassoSagView.send_claim(claimant_id, subform, codebtors=codebtors)
             responses.append(prisme_reply.rec_id)
 
         return TemplateResponse(
@@ -592,9 +578,29 @@ class LoentraekUploadView(LoentraekView):
         if form.is_valid():
             if self.forms_valid(form.subforms) and form.check_sum(form.subforms, True):
                 return self.form_valid(form, form.subforms)
-        return self.form_invalid(form)
+        return self.form_invalid(form, form.subforms if hasattr(form, "subforms") else None)
 
-    def form_invalid(self, form):
+    def form_invalid(self, form, formset=None):
+        if formset is not None:
+            for row_index, subform in enumerate(formset, start=2):
+                if subform.errors:
+                    for field, errorlist in subform.errors.items():
+                        try:
+                            col_index = get_ordereddict_key_index(subform.fields, field)
+                        except ValueError:
+                            col_index = None
+                        for error in errorlist.as_data():
+                            form.add_error('file', ValidationError(
+                                'error.upload_validation_item',
+                                code='error.upload_validation_item',
+                                params={
+                                    'field': field,
+                                    'message': (str(error.message), error.params),
+                                    'row': row_index,
+                                    'col': col_index,
+                                    'col_letter': spreadsheet_col_letter(col_index)
+                                }
+                            ))
         return self.render_to_response(
             self.get_context_data(form=form)
         )

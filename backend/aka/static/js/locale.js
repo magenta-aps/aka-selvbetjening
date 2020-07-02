@@ -71,20 +71,17 @@ $(function() {
             return text.replace("&amp;", "&");
         };
 
-        const localeChanger = $("*[data-locale-changer]");
-        localeChanger.each(function(){
-            const langChooser = $(this);
-            const flagElements = $(langChooser.attr("data-locale-flag"));
-            const update = function(){
-                const language = $(this).val();
-                flagElements.removeClass().addClass("option-" + language);
-                django.language = language;
-                $(document).trigger('language-change', language);
-            };
-            $(this).change(update);
+        const localeFlag = $("#locale_flag_change");
+        localeFlag.click(function () {
+            const $this = $(this);
+            const language = $this.attr("data-language");
+            const otherLanguage = (language === 'da') ? 'kl' : 'da';
+            $this.removeClass().addClass("option-" + otherLanguage).attr("data-language", otherLanguage);
+            django.language = language;
+            $(document).trigger('language-change', language);
         });
+
         django.jsi18n_initialized = true;
-        django.language = localeChanger.val();
 
         const $document = $(document);
         $document.on('language-change', function(event, language) {

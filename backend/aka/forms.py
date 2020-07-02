@@ -1,5 +1,6 @@
 import csv
 import logging
+import re
 from io import StringIO
 
 import chardet
@@ -9,7 +10,7 @@ from aka.widgets import TranslatedSelect
 from django import forms
 from django.conf import settings
 from django.core.validators import FileExtensionValidator, MinLengthValidator, \
-    MaxLengthValidator
+    MaxLengthValidator, RegexValidator
 from django.forms import ValidationError, MultipleHiddenInput, TextInput
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
@@ -17,6 +18,11 @@ from django.utils.translation import gettext_lazy as _
 logger = logging.getLogger(__name__)
 
 valid_date_formats = ['%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%Y-%m-%d', '%d-%m-%y']
+
+
+cprvalidator = RegexValidator("^\d{10}$", "error.invalid_cpr")
+cvrvalidator = RegexValidator("^\d{8}$", "error.invalid_cvr")
+cprcvrvalidator = RegexValidator("^\d{8}(\d{2})?$", "error.invalid_cpr_cvr")
 
 
 class CsvUploadMixin(object):
@@ -53,13 +59,17 @@ class CsvUploadMixin(object):
             subform = self.subform_class(data=data)
             missing = subform.fields.keys() - data
             if missing:
+                missing_required = False
                 for field in missing:
-                    self.add_error('file', ValidationError(
-                        'error.upload_validation_header',
-                        code='error.upload_validation_header',
-                        params={'field': field}
-                    ))
-                break
+                    if subform.fields[field].required:
+                        self.add_error('file', ValidationError(
+                            'error.upload_validation_header',
+                            code='error.upload_validation_header',
+                            params={'field': field}
+                        ))
+                        missing_required = True
+                if missing_required:
+                    break
             if not subform.is_valid():  # Catch row errors early
                 for field, errorlist in subform.errors.items():
                     if 'error.required' in errorlist and field not in row and field not in missing:
@@ -101,6 +111,22 @@ class AcceptingMultipleChoiceField(forms.MultipleChoiceField):
     def valid_value(self, value):
         return True
 
+
+class PrependCharField(forms.CharField):
+
+    def __init__(self, *args, prepend_char, total_length, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.prepend_char = prepend_char
+        self.total_length = total_length
+
+    def to_python(self, value):
+        value = super().to_python(value)
+        if len(self.prepend_char) > 0:
+            while (len(value) < self.total_length):
+                value = self.prepend_char + value
+        return value
+
+
 class KontoForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
@@ -114,7 +140,7 @@ class KontoForm(forms.Form):
         input_formats=valid_date_formats
     )
     to_date = forms.DateField(
-        widget=forms.DateInput(attrs={'class': 'datepicker', 'data-validate-after': '#id_from_date'}),
+        widget=forms.DateInput(attrs={'class': 'datepicker', 'data-validate-after': '#id_from_date', 'data-validate-after-errormessage': 'error.from_date_before_to_date'}),
         required=False,
         error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
@@ -171,9 +197,12 @@ class InkassoForm(forms.Form):
         error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
     )
-    barns_cpr = forms.CharField(
+    barns_cpr = PrependCharField(
         required=False,
-        widget=TextInput(attrs={'data-cpr': 'true'})
+        widget=TextInput(attrs={'data-cpr': 'true'}),
+        validators=[cprvalidator],
+        prepend_char='0',
+        total_length=10
     )
     ekstern_sagsnummer = forms.CharField(
         required=True,
@@ -192,7 +221,7 @@ class InkassoForm(forms.Form):
         required=False,
     )
     forfaldsdato = forms.DateField(
-        widget=forms.DateInput(attrs={'class': 'datepicker'}),
+        widget=forms.DateInput(attrs={'class': 'datepicker', 'data-validate-after': '#id_betalingsdato', 'data-validate-after-errormessage': 'fordring.bill_date_before_due_date'}),
         required=True,
         error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
@@ -221,12 +250,6 @@ class InkassoForm(forms.Form):
         for validator in self.fields['barns_cpr'].validators:
             if isinstance(validator, (MinLengthValidator, MaxLengthValidator)):
                 validator.message = "error.invalid_cpr"
-
-    def clean_cpr(self):
-        cpr = self.cleaned_data['barns_cpr']
-        if len(cpr) == 9:
-            cpr = '0' + cpr
-        return cpr
 
     def set_typefield_choices(self):
         try:
@@ -281,7 +304,6 @@ class InkassoForm(forms.Form):
                     'barns_cpr',
                     ValidationError(self.fields['barns_cpr'].error_messages['required'], code='required')
                 )
-        print(self.errors)
 
     @staticmethod
     def convert_group_type_text(groupname, typename):
@@ -298,21 +320,36 @@ class InkassoForm(forms.Form):
 
 class InkassoCoDebitorFormItem(forms.Form):
 
-    cpr = forms.CharField(
+    cpr = PrependCharField(
         required=False,
         min_length=10,
-        max_length=10
+        max_length=10,
+        prepend_char='0',
+        total_length=10
     )
-    cvr = forms.CharField(
+    cvr = PrependCharField(
         required=False,
         min_length=8,
-        max_length=8
+        max_length=8,
+        prepend_char='0',
+        total_length=8
     )
+
+
+class InkassoUploadFormRow(InkassoForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for i in range(1, 100):
+            self.fields["codebtor_%d" % i] = forms.CharField(
+                required=False,
+                validators=[cprcvrvalidator]
+            )
 
 
 class InkassoUploadForm(CsvUploadMixin, forms.Form):
 
-    subform_class = InkassoForm
+    subform_class = InkassoUploadFormRow
 
     file = forms.FileField(
         required=True,
@@ -359,10 +396,14 @@ class LoentraekForm(forms.Form):
         initial=date.today().year
     )
     month = forms.ChoiceField(
-        choices=[(x, x) for x in range(1, 13)],
+        choices=[
+            (1, "January"), (2, "February"), (3, "March"), (4, "April"),
+            (5, "May"), (6, "June"), (7, "July"), (8, "August"),
+            (9, "September"), (10, "October"), (11, "November"), (12, "December")
+        ],
         required=True,
         error_messages={'required': 'error.required'},
-        widget=forms.Select(attrs={'class': 'dropdown'}),
+        widget=TranslatedSelect(attrs={'class': 'dropdown'}),
         initial=date.today().month
     )
     total_amount = forms.DecimalField(
@@ -386,14 +427,19 @@ class LoentraekForm(forms.Form):
 
 class LoentraekFormItem(forms.Form):
 
-    cpr = forms.CharField(
+    cpr = PrependCharField(
         required=True,
         error_messages={'required': 'error.required'},
-        widget=TextInput(attrs={'data-cpr': 'true'})
+        widget=TextInput(attrs={'data-cpr': 'true'}),
+        validators=[cprvalidator],
+        prepend_char='0',
+        total_length=10
     )
-    agreement_number = forms.CharField(
+    agreement_number = PrependCharField(
         required=True,
-        error_messages={'required': 'error.required'}
+        error_messages={'required': 'error.required'},
+        prepend_char='0',
+        total_length=8
     )
     amount = forms.DecimalField(
         decimal_places=2,
@@ -413,12 +459,6 @@ class LoentraekFormItem(forms.Form):
         for validator in self.fields['cpr'].validators:
             if isinstance(validator, (MinLengthValidator, MaxLengthValidator)):
                 validator.message = "error.invalid_cpr"
-
-    def clean_cpr(self):
-        cpr = self.cleaned_data['cpr']
-        if len(cpr) == 9:
-            cpr = '0' + cpr
-        return cpr
 
 
 class LoentraekUploadForm(CsvUploadMixin, LoentraekForm):
@@ -441,7 +481,6 @@ class NedskrivningForm(forms.Form):
     )
     ekstern_sagsnummer = forms.CharField(
         required=True,
-        max_length=10,
         error_messages={'required': 'error.required'}
     )
     beloeb = forms.DecimalField(
