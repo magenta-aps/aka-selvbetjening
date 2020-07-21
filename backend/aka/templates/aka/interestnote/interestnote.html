@@ -59,6 +59,7 @@
                     <span class="line">{{ company.adresse }}</span>
                     <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
                     <span class="line" data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
+                    <span class="line">CVR: {{ cvr }}</span>
                 </div>
 
                 <div class="col-4-sm">
@@ -66,7 +67,7 @@
                     <table class="dl-table">
                         <tr>
                             <th data-trans="common.konto">{% trans 'common.konto' %}</th>
-                            <td>{{ company.cvr }}</td>
+                            <td>{{ cvr }}</td>
                         </tr>
                         <tr>
                             <th data-trans="common.dato">{% trans 'common.dato' %}</th>
