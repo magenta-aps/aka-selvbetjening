@@ -1,3 +1,54 @@
+@media print {
+
+    body {
+        background-color: #fff;
+    }
+    .printhide {
+        display: none;
+    }
+    main,
+    article {
+        width: 100%;
+        margin: 0;
+    }
+
+    .output {
+        margin: 0;
+        padding: 0;
+    }
+
+    .printhide {
+        display: none;
+    }
+    .page {
+        page-break-after: always;
+        /*border: 1px dashed #000;*/
+        height: 1700px;
+        position: relative;
+    }
+    .page:last-child {
+        page-break-after: auto;
+    }
+    .output-table {
+        font-size: 9.5pt;
+    }
+    .output-table tr,
+    .output-table tr td {
+        page-break-inside: avoid;
+    }
+    .output-table td {
+        /*border: 1px solid #000;*/
+    }
+    .pagefooter {
+        text-align: center;
+        font-size: 10pt;
+        margin-top: 2em;
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+    }
+}
+
 body.pdf {
     background-color: #fff;
 }
