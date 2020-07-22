@@ -475,8 +475,8 @@ msgstr "Nummer [kl]"
 msgid "employeraccount.date"
 msgstr "Dato [kl]"
 
-msgid "employeraccount.cprcvr"
-msgstr "CPR/CVR [kl]"
+msgid "employeraccount.cvr"
+msgstr "CVR [kl]"
 
 msgid "employeraccount.yourref"
 msgstr "Deres reference [kl]"
@@ -612,8 +612,8 @@ msgstr "Nummer [kl]"
 msgid "citizenaccount.date"
 msgstr "Dato [kl]"
 
-msgid "citizenaccount.cprcvr"
-msgstr "CPR/CVR [kl]"
+msgid "citizenaccount.cpr"
+msgstr "CPR [kl]"
 
 msgid "citizenaccount.yourref"
 msgstr "Deres reference [kl]"
