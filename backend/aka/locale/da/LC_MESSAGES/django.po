@@ -439,6 +439,8 @@ msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne pe
 
 
 # NY16
+msgid "employeraccount.description"
+msgstr "Udfyld fra- og til-dato for at få poster for en given periode. Lad felterne stå tomme for at få alle poster"
 
 msgid "employeraccount.swift"
 msgstr "SWIFT"

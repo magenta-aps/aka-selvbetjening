@@ -159,6 +159,7 @@
                     {% endfor %}
                 </ul>
             {% endif %}
+            <p data-trans="employeraccount.description">{{ employeraccount.description }}</p>
             <div class="employeraccount-actions row">
                 <div class="col-4-sm">
                     {% include 'aka/util/field.html' with field=form.from_date key='employeraccount.from_date' %}
@@ -263,7 +264,7 @@
                                 </tr>
                                 <tr>
                                     <th data-trans="employeraccount.cvr">{% trans 'employeraccount.cvr' %}</th>
-                                    <td>{{ company.cvr }}</td>
+                                    <td>{{ cvr }}</td>
                                 </tr>
                                 <tr>
                                     <th data-trans="employeraccount.yourref">{% trans 'employeraccount.yourref' %}</th>
