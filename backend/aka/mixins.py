@@ -55,7 +55,6 @@ class HasUserMixin(object):
         elif self.cvr is not None:
             try:
                 cvr = self.cvr
-                # cvr = "31290937"
                 claimant_ids = flatten([
                     response.claimant_id
                     for response in Prisme().process_service(PrismeCvrCheckRequest(cvr), 'cvr_check')
@@ -74,6 +73,14 @@ class HasUserMixin(object):
             request.session['user_info']['company'] = company
             return company
 
+    def get_person(self, request):
+        if 'person' in request.session['user_info']:
+            return request.session['user_info']['person']
+        elif self.cpr is not None:
+            person = Dafo().lookup_cpr(self.cpr, False)
+            request.session['user_info']['person'] = person
+            return person
+
     def dispatch(self, request, *args, **kwargs):
         try:
             self.cvr = request.session['user_info'].get('CVR')
@@ -84,8 +91,8 @@ class HasUserMixin(object):
 
         try:
             self.cpr = request.session['user_info']['CPR']
-            # self.cpr = '0101601919'
             self.person = {'navn': request.session['user_info']['name']}
+            self.p = self.get_person(request)
         except (KeyError, TypeError):
             pass
 

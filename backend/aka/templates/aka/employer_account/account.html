@@ -159,6 +159,7 @@
                     {% endfor %}
                 </ul>
             {% endif %}
+            <p data-trans="employeraccount.description">{{ employeraccount.description }}</p>
             <div class="employeraccount-actions row">
                 <div class="col-4-sm">
                     {% include 'aka/util/field.html' with field=form.from_date key='employeraccount.from_date' %}
@@ -262,8 +263,8 @@
                                     <td>{{ date }}</td>
                                 </tr>
                                 <tr>
-                                    <th data-trans="employeraccount.cprcvr">{% trans 'employeraccount.cprcvr' %}</th>
-                                    <td>{{ company.cvr }}</td>
+                                    <th data-trans="employeraccount.cvr">{% trans 'employeraccount.cvr' %}</th>
+                                    <td>{{ cvr }}</td>
                                 </tr>
                                 <tr>
                                     <th data-trans="employeraccount.yourref">{% trans 'employeraccount.yourref' %}</th>
@@ -318,7 +319,15 @@
                             {% for item in items %}
                                 <tr>
                                     {% for field in fields %}
-                                        <td class="{{ field.class }}">{{ item|get:field.name|default:'' }}</td>
+                                        {% with value=item|get:field.name|default:'' %}
+                                        <td class="{{ field.class }}" data-original="{{ value }}">
+                                        {% if field.number %}
+                                            {{ value|number }}
+                                        {% else %}
+                                            {{ value }}
+                                        {% endif %}
+                                        </td>
+                                        {% endwith %}
                                     {% endfor %}
                                 </tr>
                             {% endfor %}

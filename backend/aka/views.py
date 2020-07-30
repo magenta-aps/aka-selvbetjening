@@ -13,7 +13,6 @@ from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
 from aka.clients.samba import SmbcClient
 from aka.data.fordringsgruppe import groups
-from aka.exceptions import AccessDeniedException
 from aka.forms import InkassoCoDebitorFormItem
 from aka.forms import InkassoForm, InkassoUploadForm
 from aka.forms import InterestNoteForm
@@ -228,8 +227,8 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
             {'name': 'text', 'class': ''},
             {'name': 'payment_code', 'class': 'nb'},
             {'name': 'payment_code_name', 'class': 'nb'},
-            {'name': 'amount', 'class': 'nb'},
-            {'name': 'remaining_amount', 'class': 'nb'},
+            {'name': 'amount', 'class': 'nb', 'number': True},
+            {'name': 'remaining_amount', 'class': 'nb', 'number': True},
             {'name': 'due_date', 'class': 'nb'},
             {'name': 'closed_date', 'class': 'nb'},
             {'name': 'last_settlement_voucher', 'class': 'nb'},
@@ -291,8 +290,8 @@ class BorgerKontoView(RequireCprMixin, KontoView):
             {'name':'text', 'class': ''},
             {'name':'payment_code', 'class': 'nb'},
             {'name':'payment_code_name', 'class': 'nb'},
-            {'name':'amount', 'class': 'nb'},
-            {'name':'remaining_amount', 'class': 'nb'},
+            {'name':'amount', 'class': 'nb', 'number': True},
+            {'name':'remaining_amount', 'class': 'nb', 'number': True},
             {'name':'due_date', 'class': 'nb'},
             {'name':'closed_date', 'class': 'nb'},
             {'name':'last_settlement_voucher', 'class': 'nb'},

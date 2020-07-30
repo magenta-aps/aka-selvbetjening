@@ -433,11 +433,8 @@ msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne pe
 
 
 # NY16
-msgid "employeraccount.telefon"
-msgstr "Telefon [kl]"
-
-msgid "employeraccount.fax"
-msgstr "Fax [kl]"
+msgid "employeraccount.description"
+msgstr "Udfyld fra- og til-dato for at få poster for en given periode. Lad felterne stå tomme for at få alle poster"
 
 msgid "employeraccount.swift"
 msgstr "SWIFT"
@@ -475,8 +472,8 @@ msgstr "Nummer [kl]"
 msgid "employeraccount.date"
 msgstr "Dato [kl]"
 
-msgid "employeraccount.cprcvr"
-msgstr "CPR/CVR [kl]"
+msgid "employeraccount.cvr"
+msgstr "CVR [kl]"
 
 msgid "employeraccount.yourref"
 msgstr "Deres reference [kl]"
@@ -612,8 +609,8 @@ msgstr "Nummer [kl]"
 msgid "citizenaccount.date"
 msgstr "Dato [kl]"
 
-msgid "citizenaccount.cprcvr"
-msgstr "CPR/CVR [kl]"
+msgid "citizenaccount.cpr"
+msgstr "CPR [kl]"
 
 msgid "citizenaccount.yourref"
 msgstr "Deres reference [kl]"

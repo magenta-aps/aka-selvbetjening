@@ -1,5 +1,6 @@
 import json as jsonlib
 import re
+import locale
 from html import unescape
 
 from django.template.defaultfilters import register
@@ -9,6 +10,7 @@ from django.utils.translation import gettext
 trans_re = re.compile("_\\((.*)\\)")
 format_re = re.compile("{(.*)}")
 
+locale.setlocale(locale.LC_ALL, '')
 
 @register.filter
 def split(text, filter):
@@ -76,3 +78,10 @@ def get(item, attribute):
         return getattr(item, attribute)
     if hasattr(item, 'get'):
         return item.get(attribute)
+
+
+@register.filter
+def number(item):
+    locale.setlocale(locale.LC_ALL, ('da_dk', 'utf-8'))
+    value = float(item.replace(',', '.')) if isinstance(item, str) else item
+    return locale.format("%.2f", value, grouping=True)

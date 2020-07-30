@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load aka_tags %}
 
 {% block extra_headers %}
     {% if pdf %}
@@ -59,6 +60,7 @@
                     <span class="line">{{ company.adresse }}</span>
                     <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
                     <span class="line" data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
+                    <span class="line">CVR: {{ cvr }}</span>
                 </div>
 
                 <div class="col-4-sm">
@@ -66,7 +68,7 @@
                     <table class="dl-table">
                         <tr>
                             <th data-trans="common.konto">{% trans 'common.konto' %}</th>
-                            <td>{{ company.cvr }}</td>
+                            <td>{{ cvr }}</td>
                         </tr>
                         <tr>
                             <th data-trans="common.dato">{% trans 'common.dato' %}</th>
@@ -149,8 +151,8 @@
                                     <td>{{ post.InterestNote }}</td>
                                     <td>{{ post.Txt }}</td>
                                     <td class="numbercell">{{ post.DueDate }}</td>
-                                    <td class="numbercell">{{ post.InvoiceAmount }}</td>
-                                    <td class="numbercell">{{ post.InterestAmount }}</td>
+                                    <td class="numbercell">{{ post.InvoiceAmount|number }}</td>
+                                    <td class="numbercell">{{ post.InterestAmount|number }}</td>
                                     <td>{{ post.TransDate }}</td>
                                     <td>{{ post.Invoice }}</td>
                                     <td>{{ post.CalcFrom }}</td>
@@ -160,7 +162,7 @@
                             {% endfor %}
                         <tr class="rentenota-post-table-sumrow">
                             <td colspan="8"></td>
-                            <td class="numbercell rentenota-total sum">{{ total }}</td>
+                            <td class="numbercell rentenota-total sum">{{ total|number }}</td>
                             <td colspan="6">kr</td>
                         </tr>
                         {% endif %}

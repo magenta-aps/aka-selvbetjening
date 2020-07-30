@@ -25,7 +25,7 @@ class Dafo(object):
         else:
             raise Exception("Login to DAFO failed")
 
-    def lookup_cpr(self, cpr):
+    def lookup_cpr(self, cpr, raise_on_fail=True):
         if DEBUG:
             return {}
         config = settings.DAFO_CONNECT
@@ -35,10 +35,10 @@ class Dafo(object):
         )
         if response.status_code == 200:
             return response.json()
-        else:
+        elif raise_on_fail:
             raise Exception(f"Lookup for cpr {cpr} failed")
 
-    def lookup_cvr(self, cvr):
+    def lookup_cvr(self, cvr, raise_on_fail=True):
         if DEBUG:
             return {}
         config = settings.DAFO_CONNECT
@@ -48,5 +48,5 @@ class Dafo(object):
         )
         if response.status_code == 200:
             return response.json()
-        else:
+        elif raise_on_fail:
             raise Exception(f"Lookup for cvr {cvr} failed")
