@@ -93,7 +93,6 @@ class HasUserMixin(object):
             self.cpr = request.session['user_info']['CPR']
             self.person = {'navn': request.session['user_info']['name']}
             self.p = self.get_person(request)
-            print(self.p)
         except (KeyError, TypeError):
             pass
 
