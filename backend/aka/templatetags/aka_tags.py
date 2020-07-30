@@ -83,4 +83,5 @@ def get(item, attribute):
 @register.filter
 def number(item):
     locale.setlocale(locale.LC_ALL, ('da_dk', 'utf-8'))
-    return locale.format("%.2f", float(item), grouping=True)
+    value = float(item.replace(',', '.')) if isinstance(item, str) else item
+    return locale.format("%.2f", value, grouping=True)

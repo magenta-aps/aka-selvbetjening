@@ -318,7 +318,15 @@
                             {% for item in items %}
                                 <tr>
                                     {% for field in fields %}
-                                        <td class="{{ field.class }}">{{ item|get:field.name|default:'' }}</td>
+                                        {% with value=item|get:field.name|default:'' %}
+                                            <td class="{{ field.class }}" data-original="{{ value }}">
+                                                {% if field.number %}
+                                                    {{ value|number }}
+                                                {% else %}
+                                                    {{ value }}
+                                                {% endif %}
+                                            </td>
+                                        {% endwith %}
                                     {% endfor %}
                                 </tr>
                             {% endfor %}
