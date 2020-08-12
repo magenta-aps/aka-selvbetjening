@@ -380,46 +380,46 @@ msgstr "Rentenota"
 msgid "rentenota.rentenota"
 msgstr "Rentenota"
 
-msgid "rentenota.postdato"
+msgid "rentenota.transaction_date"
 msgstr "Postdato"
 
-msgid "rentenota.dato"
+msgid "rentenota.updated"
 msgstr "Dato"
 
-msgid "rentenota.debitorkonto"
-msgstr "Debitor&#173;konto"
+msgid "rentenota.account_number"
+msgstr "Debitor&shy;konto"
 
-msgid "rentenota.faktureringsklassifikation"
-msgstr "Fakturerings&#173;klassifikation"
+msgid "rentenota.billing_classification"
+msgstr "Fakturerings&shy;klassifikation"
 
-msgid "rentenota.rentenotanummer"
-msgstr "Rentenota&#173;nummer"
+msgid "rentenota.interest_note"
+msgstr "Rentenota&shy;nummer"
 
-msgid "rentenota.bilag"
+msgid "rentenota.voucher"
 msgstr "Bilag"
 
-msgid "rentenota.faktura"
+msgid "rentenota.invoice"
 msgstr "Faktura"
 
-msgid "rentenota.tekst"
+msgid "rentenota.text"
 msgstr "Tekst"
 
-msgid "rentenota.fradato"
+msgid "rentenota.calculate_from_date"
 msgstr "Fradato"
 
-msgid "rentenota.tildato"
+msgid "rentenota.calculate_to_date"
 msgstr "Tildato"
 
-msgid "rentenota.dage"
+msgid "rentenota.interest_days"
 msgstr "Dage"
 
-msgid "rentenota.grundlag"
+msgid "rentenota.invoice_amount"
 msgstr "Grundlag"
 
-msgid "rentenota.forfald"
-msgstr "Forfalds&#173;dato"
+msgid "rentenota.due_date"
+msgstr "Forfalds&shy;dato"
 
-msgid "rentenota.beloeb"
+msgid "rentenota.interest_amount"
 msgstr "Beløb"
 
 msgid "rentenota.ingenposter"

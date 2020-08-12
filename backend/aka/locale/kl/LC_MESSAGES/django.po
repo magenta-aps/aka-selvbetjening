@@ -374,46 +374,46 @@ msgstr "Rentenota [kl]"
 msgid "rentenota.rentenota"
 msgstr "Rentenota [kl]"
 
-msgid "rentenota.dato"
+msgid "rentenota.updated"
 msgstr "Dato [kl]"
 
-msgid "rentenota.postdato"
+msgid "rentenota.transaction_date"
 msgstr "Postdato [kl]"
 
-msgid "rentenota.debitorkonto"
+msgid "rentenota.account_number"
 msgstr "Debitor&#173;konto [kl]"
 
-msgid "rentenota.faktureringsklassifikation"
+msgid "rentenota.billing_classification"
 msgstr "Fakturerings&#173;klassifikation [kl]"
 
-msgid "rentenota.rentenotanummer"
+msgid "rentenota.interest_note"
 msgstr "Rentenota&#173;nummer [kl]"
 
-msgid "rentenota.bilag"
+msgid "rentenota.voucher"
 msgstr "Bilag [kl]"
 
-msgid "rentenota.faktura"
+msgid "rentenota.invoice"
 msgstr "Faktura [kl]"
 
-msgid "rentenota.tekst"
+msgid "rentenota.text"
 msgstr "Tekst [kl]"
 
-msgid "rentenota.fradato"
+msgid "rentenota.calculate_from_date"
 msgstr "Fradato [kl]"
 
-msgid "rentenota.tildato"
+msgid "rentenota.calculate_to_date"
 msgstr "Tildato [kl]"
 
-msgid "rentenota.dage"
+msgid "rentenota.interest_days"
 msgstr "Dage [kl]"
 
-msgid "rentenota.grundlag"
+msgid "rentenota.invoice_amount"
 msgstr "Grundlag [kl]"
 
-msgid "rentenota.forfald"
+msgid "rentenota.due_date"
 msgstr "Forfalds&#173;dato [kl]"
 
-msgid "rentenota.beloeb"
+msgid "rentenota.interest_amount"
 msgstr "Beløb [kl]"
 
 msgid "rentenota.ingenposter"

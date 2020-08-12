@@ -225,7 +225,7 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
         ]
 
     def get_fields(self):
-        return [
+        fields = [
             {'name': 'account_number', 'class': 'nb'},
             {'name': 'transaction_date', 'class': 'nb'},
             {'name': 'accounting_date', 'class': 'nb'},
@@ -247,6 +247,9 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
             {'name': 'transaction_type', 'class': 'nb'},
             {'name': 'rate_number', 'class': 'nb'},
         ]
+        for field in fields:
+            field['title'] = _("employeraccount.%s" % field['name']).replace("&shy;", "")
+        return fields
 
     def get_context_data(self, **kwargs):
         context = {
@@ -296,7 +299,7 @@ class BorgerKontoView(RequireCprMixin, KontoView):
         ]
 
     def get_fields(self):
-        return [
+        fields = [
             {'name':'account_number', 'class': 'nb'},
             {'name':'transaction_date', 'class': 'nb'},
             {'name':'accounting_date', 'class': 'nb'},
@@ -320,6 +323,9 @@ class BorgerKontoView(RequireCprMixin, KontoView):
             {'name':'claimant_id', 'class': 'nb'},
             {'name':'child_claimant', 'class': 'nb'},
         ]
+        for field in fields:
+            field['title'] = _("citizenaccount.%s" % field['name']).replace("&shy;", "")
+        return fields
 
 
 # 6.1
@@ -749,7 +755,7 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, JsonR
         ]
 
     def get_fields(self):
-        return [
+        fields = [
             {'name': 'updated', 'class': 'nb'},
             {'name': 'account_number', 'class': 'nb'},
             {'name': 'billing_classification', 'class': 'nb'},
@@ -765,6 +771,9 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, JsonR
             {'name': 'calculate_to_date', 'class': 'nb numbercell'},
             {'name': 'interest_days', 'class': 'nb numbercell'},
         ]
+        for field in fields:
+            field['title'] = _("rentenota.%s" % field['name']).replace("&shy;", "")
+        return fields
 
     def get_items(self, form):
         prisme = Prisme()

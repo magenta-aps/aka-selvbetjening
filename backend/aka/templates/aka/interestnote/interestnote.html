@@ -118,20 +118,11 @@
                 <table class="output-table" style="font-size: 0.8em">
                     <thead>
                     <tr>
-                        <th data-trans="rentenota.dato">{% trans 'rentenota.dato' %}</th>
-                        <th data-trans="rentenota.debitorkonto">{% trans 'rentenota.debitorkonto' %}</th>
-                        <th data-trans="rentenota.faktureringsklassifikation">{% trans 'rentenota.faktureringsklassifikation' %}</th>
-                        <th data-trans="rentenota.bilag">{% trans 'rentenota.bilag' %}</th>
-                        <th data-trans="rentenota.rentenotanummer">{% trans 'rentenota.rentenotanummer' %}</th>
-                        <th data-trans="rentenota.tekst">{% trans 'rentenota.tekst' %}</th>
-                        <th data-trans="rentenota.forfald">{% trans 'rentenota.forfald' %}</th>
-                        <th data-trans="rentenota.grundlag">{% trans 'rentenota.grundlag' %}</th>
-                        <th data-trans="rentenota.beloeb">{% trans 'rentenota.beloeb' %}</th>
-                        <th data-trans="rentenota.postdato">{% trans 'rentenota.postdato' %}</th>
-                        <th data-trans="rentenota.faktura">{% trans 'rentenota.faktura' %}</th>
-                        <th data-trans="rentenota.fradato">{% trans 'rentenota.fradato' %}</th>
-                        <th data-trans="rentenota.tildato">{% trans 'rentenota.tildato' %}</th>
-                        <th data-trans="rentenota.dage">{% trans 'rentenota.dage' %}</th>
+                        {% for field in fields %}
+                            {% with "rentenota."|add:field.name as transkey %}
+                                <th data-field="{{ field.name }}" data-trans="{{ transkey }}">{% trans transkey|safe %}</th>
+                            {% endwith %}
+                        {% endfor %}
                     </tr>
                     </thead>
                     <tbody>

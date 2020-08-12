@@ -279,7 +279,7 @@ class SpreadsheetRendererMixin(RendererMixin):
             fields = context['fields']  # List of dicts
             items = context['items']  # List of dicts
             data = [
-                [field['name'] for field in fields]
+                [field.get("title", field['name']) for field in fields]
             ] + [
                 [
                     item[field['name']] for field in fields
