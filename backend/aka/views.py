@@ -21,6 +21,7 @@ from aka.forms import NedskrivningForm, NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
 from aka.mixins import HasUserMixin
 from aka.mixins import PdfRendererMixin
+from aka.mixins import JsonRendererMixin
 from aka.mixins import RequireCprMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
@@ -48,6 +49,7 @@ from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
 from sullissivik.login.nemid.nemid import NemId
 from sullissivik.login.openid.openid import OpenId
+
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -136,7 +138,7 @@ class LogoutView(View):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
+class KontoView(SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, TemplateView):
 
     form_class = KontoForm
 
@@ -151,16 +153,12 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
         except PrismeException as e:
             form.add_error(None, e.as_validationerror)
             return self.form_invalid(form)
-        format = self.request.GET.get('format')
-        if format:
-            if format == 'pdf':
-                return self.render_pdf()
-        return super().form_valid(form)
+        if 'format' in self.request.GET:
+            response = self.render()
+            if response is not None:
+                return response
+        return super(KontoView, self).form_valid(form)
 
-    def form_invalid(self, form):
-        if self.request.GET.get('format') == 'pdf':
-            return self.render_pdf()
-        return super().form_invalid(form)
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -747,9 +745,6 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
             self.posts = self.get_posts(form)
         except PrismeException as e:
             self.errors.append(e.as_error_dict)
-
-        if self.request.GET.get('format') == 'pdf':
-            return self.render_pdf()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

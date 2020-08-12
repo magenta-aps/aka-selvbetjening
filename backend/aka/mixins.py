@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 import pdfkit
 from aka.clients.dafo import Dafo
@@ -9,7 +10,7 @@ from aka.exceptions import AkaException
 from aka.utils import flatten
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template.loader import select_template
 from django.template.response import TemplateResponse
 from django.views.generic.edit import FormMixin
@@ -55,7 +56,6 @@ class HasUserMixin(object):
         elif self.cvr is not None:
             try:
                 cvr = self.cvr
-                print(Prisme().process_service(PrismeCvrCheckRequest(cvr), 'cvr_check'))
                 claimant_ids = flatten([
                     response.claimant_id
                     for response in Prisme().process_service(PrismeCvrCheckRequest(cvr), 'cvr_check')
@@ -159,56 +159,104 @@ class SimpleGetFormMixin(FormMixin):
         return kwargs
 
 
-class PdfRendererMixin(object):
+class RendererMixin(object):
+
+    def render(self):
+        pass
+
+    @property
+    def format(self):
+        return self.request.GET.get('format')
+
+    @property
+    def format_url(self):
+        full_path = self.request.get_full_path_info()
+        full_path = re.sub(r"[&?]format=[^&?]*", "", full_path)
+        full_path += ('&' if '?' in full_path else '?') + 'format=pdf'
+        return full_path
+
+
+class PdfRendererMixin(RendererMixin):
 
     pdf_template_name = ''
 
     def get_pdf_filename(self):
         raise NotImplementedError
 
-    def render_pdf(self):
-        filename = self.get_pdf_filename()
-        context = self.get_context_data()
+    def render(self):
+        if self.format == 'pdf':
+            filename = self.get_pdf_filename()
+            context = self.get_context_data()
 
-        css_data = []
-        for css_file in ['css/output.css', 'css/main.css', 'css/print.css']:
-            css_static_path = css_file.split('/')
-            css_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', *css_static_path)
-            if not os.path.exists(css_path):
-                css_path = os.path.join(settings.STATIC_ROOT, *css_static_path)
-            with open(css_path) as file:
-                css_data.append(file.read())
-        context['css'] = ''.join(css_data)
+            css_data = []
+            for css_file in ['css/output.css', 'css/main.css', 'css/print.css']:
+                css_static_path = css_file.split('/')
+                css_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', *css_static_path)
+                if not os.path.exists(css_path):
+                    css_path = os.path.join(settings.STATIC_ROOT, *css_static_path)
+                with open(css_path) as file:
+                    css_data.append(file.read())
+            context['css'] = ''.join(css_data)
 
-        html = select_template(self.get_template_names()).render(context)
+            html = select_template(self.get_template_names()).render(context)
+            html = html.replace(
+                "\"%s" % settings.STATIC_URL,
+                "\"file://%s/" % os.path.abspath(settings.STATIC_ROOT)
+            )
 
-        # return HttpResponse(html)
+            pdf = pdfkit.from_string(html, False, options={
+                'javascript-delay': 1000,
+                'debug-javascript': '',
+                'default-header': '',
+                'margin-top': '20mm',
+                'margin-bottom': '20mm',
+                'margin-left': '20mm',
+                'margin-right': '20mm',
+            })
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
+            return response
 
-        html = html.replace(
-            "\"%s" % settings.STATIC_URL,
-            "\"file://%s/" % os.path.abspath(settings.STATIC_ROOT)
-        )
-
-
-        pdf = pdfkit.from_string(html, False, options={
-            'javascript-delay': 1000,
-            'debug-javascript': '',
-            'default-header': '',
-            'margin-top': '20mm',
-            'margin-bottom': '20mm',
-            'margin-left': '20mm',
-            'margin-right': '20mm',
-        })
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
-        return response
+        return super().render()
 
     def get_context_data(self, **kwargs):
-        full_path = self.request.get_full_path_info()
-        full_path += ('&' if '?' in full_path else '?') + 'format=pdf'
         context = {
-            'pdf': self.request.GET.get('format') == 'pdf',
-            'pdflink': full_path
+            'pdf': self.format == 'pdf',
+            'pdflink': self.format_url
+        }
+        context.update(kwargs)
+        return super().get_context_data(**context)
+
+
+    def form_invalid(self, form):
+        if self.format == 'pdf':
+            return self.render()
+        return super().form_invalid(form)
+
+
+class JsonRendererMixin(RendererMixin):
+
+    def render(self):
+        if self.format == 'json':
+            context = self.get_context_data()
+            fields = context['fields']  # List of dicts
+            items = context['items']  # List of PrismeResponse instances
+            data = {
+                'count': len(items),
+                'items': [
+                    {
+                        field['name']: getattr(item, field['name'])
+                        for field in fields
+                    }
+                    for item in items
+                ]
+            }
+            return JsonResponse(data)
+        return super().render()
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'jsonlink': self.format_url
         }
         context.update(kwargs)
         return super().get_context_data(**context)
