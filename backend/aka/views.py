@@ -151,12 +151,14 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
         except PrismeException as e:
             form.add_error(None, e.as_validationerror)
             return self.form_invalid(form)
-        if 'pdf' in self.request.GET:
-            return self.render_pdf()
+        format = self.request.GET.get('format')
+        if format:
+            if format == 'pdf':
+                return self.render_pdf()
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        if 'pdf' in self.request.GET:
+        if self.request.GET.get('format') == 'pdf':
             return self.render_pdf()
         return super().form_invalid(form)
 
@@ -165,7 +167,7 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, TemplateView):
         if self.form.is_bound:
             formdata = self.form.cleaned_data
             fields = self.get_fields()
-            if 'pdf' in self.request.GET:
+            if self.request.GET.get('format') == 'pdf':
                 fields = [
                     field for field in fields
                     if field not in formdata['hidden']
@@ -746,7 +748,7 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
         except PrismeException as e:
             self.errors.append(e.as_error_dict)
 
-        if 'pdf' in self.request.GET:
+        if self.request.GET.get('format') == 'pdf':
             return self.render_pdf()
         return super().form_valid(form)
 

@@ -55,6 +55,7 @@ class HasUserMixin(object):
         elif self.cvr is not None:
             try:
                 cvr = self.cvr
+                print(Prisme().process_service(PrismeCvrCheckRequest(cvr), 'cvr_check'))
                 claimant_ids = flatten([
                     response.claimant_id
                     for response in Prisme().process_service(PrismeCvrCheckRequest(cvr), 'cvr_check')
@@ -204,9 +205,9 @@ class PdfRendererMixin(object):
 
     def get_context_data(self, **kwargs):
         full_path = self.request.get_full_path_info()
-        full_path += ('&' if '?' in full_path else '?') + 'pdf'
+        full_path += ('&' if '?' in full_path else '?') + 'format=pdf'
         context = {
-            'pdf': 'pdf' in self.request.GET,
+            'pdf': self.request.GET.get('format') == 'pdf',
             'pdflink': full_path
         }
         context.update(kwargs)
