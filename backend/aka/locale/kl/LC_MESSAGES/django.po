@@ -420,7 +420,7 @@ msgid "rentenota.ingenposter"
 msgstr "Ingen poster [kl]"
 
 msgid "rentenota.filename"
-msgstr "Rentenota {month}/{year} [kl].pdf"
+msgstr "Rentenota {month}/{year} [kl]"
 
 msgid "rentenota.year"
 msgstr "År [kl]"
@@ -455,7 +455,7 @@ msgid "employeraccount.to_date"
 msgstr "Til dato [kl]"
 
 msgid "employeraccount.filename"
-msgstr "Kontoudtog {from_date} - {to_date} [kl].pdf"
+msgstr "Kontoudtog {from_date} - {to_date} [kl]"
 
 msgid "employeraccount.bankaccount"
 msgstr "Bankkonto [kl]"
@@ -592,7 +592,7 @@ msgid "citizenaccount.to_date"
 msgstr "Til dato [kl]"
 
 msgid "citizenaccount.filename"
-msgstr "Kontoudtog {from_date} - {to_date} [kl].pdf"
+msgstr "Kontoudtog {from_date} - {to_date} [kl]"
 
 msgid "citizenaccount.bankaccount"
 msgstr "Bankkonto [kl]"

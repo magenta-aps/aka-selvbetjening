@@ -1,8 +1,9 @@
 import json
 import os
 import re
-
 import pdfkit
+import django_excel as excel
+
 from aka.clients.dafo import Dafo
 from aka.clients.prisme import PrismeCvrCheckRequest, Prisme
 from aka.clients.prisme import PrismeNotFoundException
@@ -180,12 +181,12 @@ class PdfRendererMixin(RendererMixin):
 
     pdf_template_name = ''
 
-    def get_pdf_filename(self):
+    def get_filename(self):
         raise NotImplementedError
 
     def render(self):
+        print("format: %s" % self.format)
         if self.format == 'pdf':
-            filename = self.get_pdf_filename()
             context = self.get_context_data()
 
             css_data = []
@@ -214,7 +215,7 @@ class PdfRendererMixin(RendererMixin):
                 'margin-right': '20mm',
             })
             response = HttpResponse(pdf, content_type='application/pdf')
-            response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
+            response['Content-Disposition'] = "attachment; filename=\"%s.pdf\"" % self.get_filename()
             return response
 
         return super().render()
@@ -226,7 +227,6 @@ class PdfRendererMixin(RendererMixin):
         }
         context.update(kwargs)
         return super().get_context_data(**context)
-
 
     def form_invalid(self, form):
         if self.format == 'pdf':
@@ -260,3 +260,39 @@ class JsonRendererMixin(RendererMixin):
         }
         context.update(kwargs)
         return super().get_context_data(**context)
+
+
+class SpreadsheetRendererMixin(RendererMixin):
+
+    def get_filename(self):
+        raise NotImplementedError
+
+    def get_sheetname(self):
+        return "Sheet 1"
+
+    accepted_formats = ['xlsx', 'ods', 'csv']
+
+    def render(self):
+        format = self.format
+        if format in self.accepted_formats:
+            context = self.get_context_data()
+            fields = context['fields']  # List of dicts
+            items = context['items']  # List of dicts
+            data = [
+                [field['name'] for field in fields]
+            ] + [
+                [
+                    item[field['name']] for field in fields
+                ] for item in items
+            ]
+            sheet = excel.pe.Sheet(
+                data,
+                name=self.get_sheetname(),
+                name_columns_by_row=0
+            )
+            return excel.make_response(
+                sheet,
+                file_type=format,
+                file_name="%s.%s" % (self.get_filename(), format),
+            )
+        return super().render()

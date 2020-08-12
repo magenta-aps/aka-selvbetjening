@@ -113,7 +113,7 @@
                 </div>
             {% endif %}
 
-            {% if posts is not None %}
+            {% if items is not None %}
                 <div class="output-data">
                 <table class="output-table" style="font-size: 0.8em">
                     <thead>
@@ -135,29 +135,26 @@
                     </tr>
                     </thead>
                     <tbody>
-                        {% if posts|length == 0 %}
+                        {% if items|length == 0 %}
                             <tr>
                                 <td colspan="14" style="text-align: center">
                                     {% trans 'rentenota.ingenposter' %}
                                 </td>
                             </tr>
                         {% else %}
-                            {% for post in posts %}
-                                <tr class="rentenota-post-table-datarow">
-                                    <td>{{ post.Updated }}</td>
-                                    <td>{{ post.AccountNum }}</td>
-                                    <td>{{ post.BillingClassification }}</td>
-                                    <td>{{ post.Voucher }}</td>
-                                    <td>{{ post.InterestNote }}</td>
-                                    <td>{{ post.Txt }}</td>
-                                    <td class="numbercell">{{ post.DueDate }}</td>
-                                    <td class="numbercell">{{ post.InvoiceAmount|number }}</td>
-                                    <td class="numbercell">{{ post.InterestAmount|number }}</td>
-                                    <td>{{ post.TransDate }}</td>
-                                    <td>{{ post.Invoice }}</td>
-                                    <td>{{ post.CalcFrom }}</td>
-                                    <td>{{ post.CalcTo }}</td>
-                                    <td class="numbercell">{{ post.InterestDays }}</td>
+                            {% for item in items %}
+                                <tr>
+                                {% for field in fields %}
+                                    {% with value=item|get:field.name|default:'' %}
+                                        <td class="{{ field.class }}" data-original="{{ value }}">
+                                            {% if field.number %}
+                                                {{ value|number }}
+                                            {% else %}
+                                                {{ value }}
+                                            {% endif %}
+                                        </td>
+                                    {% endwith %}
+                                {% endfor %}
                                 </tr>
                             {% endfor %}
                         <tr class="rentenota-post-table-sumrow">

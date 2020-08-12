@@ -22,6 +22,7 @@ from aka.mixins import ErrorHandlerMixin
 from aka.mixins import HasUserMixin
 from aka.mixins import PdfRendererMixin
 from aka.mixins import JsonRendererMixin
+from aka.mixins import SpreadsheetRendererMixin
 from aka.mixins import RequireCprMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
@@ -138,7 +139,7 @@ class LogoutView(View):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class KontoView(SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, TemplateView):
+class KontoView(SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, SpreadsheetRendererMixin, TemplateView):
 
     form_class = KontoForm
 
@@ -174,7 +175,7 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, Templat
             context.update({
                 'items': self.items,
                 'date': date.today().strftime('%d/%m/%Y'),
-                'sum': sum([item.amount for item in self.items]) if self.items else 0,
+                'sum': sum([item['amount'] for item in self.items]) if self.items else 0,
                 'period': {
                     'from_date': formdata['from_date'].strftime('%d-%m-%Y') if formdata.get('from_date') is not None else None,
                     'to_date': formdata['to_date'].strftime('%d-%m-%Y') if formdata.get('to_date') is not None else None
@@ -190,7 +191,7 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
     template_name = 'aka/employer_account/account.html'
 
-    def get_pdf_filename(self):
+    def get_filename(self):
         try:
             from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d')
         except:
@@ -204,6 +205,9 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
             to_date=to_date
         )
 
+    def get_sheetname(self):
+        return "Arbejdsgiverkonto"
+
     def get_items(self, form):
         prisme = Prisme()
         account_request = PrismeEmployerAccountRequest(
@@ -213,7 +217,12 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
             form.cleaned_data['open_closed']
         )
         prisme_reply = prisme.process_service(account_request, 'arbejdsgiverkonto')[0]
-        return prisme_reply
+        return [
+            {
+                field['name']: getattr(entry, field['name'])
+                for field in self.get_fields()
+            } for entry in prisme_reply
+        ]
 
     def get_fields(self):
         return [
@@ -253,7 +262,7 @@ class BorgerKontoView(RequireCprMixin, KontoView):
 
     template_name = 'aka/citizen_account/account.html'
 
-    def get_pdf_filename(self):
+    def get_filename(self):
         try:
             from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d')
         except:
@@ -267,6 +276,9 @@ class BorgerKontoView(RequireCprMixin, KontoView):
             to_date=to_date
         )
 
+    def get_sheetname(self):
+        return "Borgerkonto"
+
     def get_items(self, form):
         prisme = Prisme()
         account_request = PrismeCitizenAccountRequest(
@@ -276,7 +288,12 @@ class BorgerKontoView(RequireCprMixin, KontoView):
             form.cleaned_data['open_closed']
         )
         prisme_reply = prisme.process_service(account_request, 'borgerkonto')[0]
-        return prisme_reply
+        return [
+            {
+                field['name']: getattr(entry, field['name'])
+                for field in self.get_fields()
+            } for entry in prisme_reply
+        ]
 
     def get_fields(self):
         return [
@@ -699,16 +716,57 @@ class PrivatdebitorkontoView(View):
 # NY18
 
 @method_decorator(csrf_exempt, name='dispatch')
-class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, TemplateView):
+class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, SpreadsheetRendererMixin, TemplateView):
     form_class = InterestNoteForm
     template_name = 'aka/interestnote/interestnote.html'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.errors = []
-        self.posts = None
+        self.items = None
 
-    def get_posts(self, form):
+
+    def get_journal_fields(self):
+        return [
+            {'name': 'updated', 'class': 'nb'},
+            {'name': 'account_number', 'class': 'nb'},
+            {'name': 'interest_note', 'class': 'nb'},
+            {'name': 'billing_classification', 'class': 'nb'},
+        ]
+
+    def get_transaction_fields(self):
+        return [
+            {'name': 'voucher', 'class': 'nb'},
+            {'name': 'text', 'class': ''},
+            {'name': 'due_date', 'class': 'nb'},
+            {'name': 'invoice_amount', 'class': 'nb numbercell'},
+            {'name': 'interest_amount', 'class': 'nb numbercell'},
+            {'name': 'transaction_date', 'class': 'nb numbercell'},
+            {'name': 'invoice', 'class': 'nb'},
+            {'name': 'calculate_from_date', 'class': 'nb numbercell'},
+            {'name': 'calculate_to_date', 'class': 'nb numbercell'},
+            {'name': 'interest_days', 'class': 'nb'},
+        ]
+
+    def get_fields(self):
+        return [
+            {'name': 'updated', 'class': 'nb'},
+            {'name': 'account_number', 'class': 'nb'},
+            {'name': 'billing_classification', 'class': 'nb'},
+            {'name': 'voucher', 'class': 'nb'},
+            {'name': 'interest_note', 'class': 'nb'},
+            {'name': 'text', 'class': ''},
+            {'name': 'due_date', 'class': 'nb numbercell'},
+            {'name': 'invoice_amount', 'class': 'nb numbercell'},
+            {'name': 'interest_amount', 'class': 'nb numbercell'},
+            {'name': 'transaction_date', 'class': 'nb numbercell'},
+            {'name': 'invoice', 'class': 'nb'},
+            {'name': 'calculate_from_date', 'class': 'nb numbercell'},
+            {'name': 'calculate_to_date', 'class': 'nb numbercell'},
+            {'name': 'interest_days', 'class': 'nb numbercell'},
+        ]
+
+    def get_items(self, form):
         prisme = Prisme()
         posts = []
         # Response is of type PrismeInterestNoteResponse
@@ -720,39 +778,45 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, Templ
         for interest_note_response in interest_note_data:
             for journal in interest_note_response.interest_journal:
                 journaldata = {
-                    k: v
-                    for k, v in journal.data.items()
-                    if k in [
-                        'Updated', 'AccountNum', 'InterestNote',
-                        'ToDate', 'BillingClassification'
-                    ]
+                    key['name']: getattr(journal, key['name'])
+                    for key in self.get_journal_fields()
                 }
                 for transaction in journal.interest_transactions:
-                    data = {}
-                    data.update(transaction.data)
+                    data = {
+                        key['name']: getattr(transaction, key['name'])
+                        for key in self.get_transaction_fields()
+                    }
                     data.update(journaldata)
                     posts.append(data)
         return posts
 
-    def get_pdf_filename(self):
+    def get_filename(self):
         return _("rentenota.filename").format(
             **dict(self.form.cleaned_data.items())
         )
 
+    def get_sheetname(self):
+        return "Rentenota"
+
     def form_valid(self, form):
         self.form = form
         try:
-            self.posts = self.get_posts(form)
+            self.items = self.get_items(form)
         except PrismeException as e:
             self.errors.append(e.as_error_dict)
+        if 'format' in self.request.GET:
+            response = self.render()
+            if response is not None:
+                return response
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = {
             'date': date.today().strftime('%d/%m/%Y'),
-            'posts': self.posts,
-            'total': sum([float(post['InterestAmount']) for post in self.posts])
-            if self.posts is not None else None,
+            'items': self.items,
+            'fields': self.get_fields(),
+            'total': sum([float(item['interest_amount']) for item in self.items])
+            if self.items is not None else None,
             'errors': self.errors
         }
         context.update(kwargs)

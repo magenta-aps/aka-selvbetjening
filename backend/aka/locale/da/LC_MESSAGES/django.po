@@ -426,7 +426,7 @@ msgid "rentenota.ingenposter"
 msgstr "Ingen poster"
 
 msgid "rentenota.filename"
-msgstr "Rentenota {month}/{year}.pdf"
+msgstr "Rentenota {month}/{year}"
 
 msgid "rentenota.year"
 msgstr "År"
@@ -461,7 +461,7 @@ msgid "employeraccount.to_date"
 msgstr "Til dato"
 
 msgid "employeraccount.filename"
-msgstr "Kontoudtog {from_date} - {to_date}.pdf"
+msgstr "Kontoudtog {from_date} - {to_date}"
 
 msgid "employeraccount.footer"
 msgstr "Side {index} af {count}"
@@ -596,7 +596,7 @@ msgid "citizenaccount.to_date"
 msgstr "Til dato"
 
 msgid "citizenaccount.filename"
-msgstr "Kontoudtog {from_date} - {to_date}.pdf"
+msgstr "Kontoudtog {from_date} - {to_date}"
 
 msgid "citizenaccount.footer"
 msgstr "Side {index} af {count}"
