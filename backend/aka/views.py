@@ -128,7 +128,7 @@ class LoginView(TemplateView):
 
 class LogoutView(View):
     def get(self, request, *args, **kwargs):
-        method = self.request.session.get('login_method')
+        method = request.session.get('login_method')
         if method == 'openid':
             return OpenId.logout(self.request.session)
         else:
