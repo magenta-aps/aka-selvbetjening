@@ -81,3 +81,8 @@ body.pdf .output {
 .output table.output-table.dataTable {
     min-width: 100%;
 }
+
+.employeraccount-data,
+.citizenaccount-data {
+    font-size: 0.8em;
+}

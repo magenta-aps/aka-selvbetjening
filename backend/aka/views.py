@@ -309,8 +309,8 @@ class BorgerKontoView(RequireCprMixin, KontoView):
             {'name':'text', 'class': ''},
             {'name':'payment_code', 'class': 'nb'},
             {'name':'payment_code_name', 'class': 'nb'},
-            {'name':'amount', 'class': 'nb', 'number': True},
-            {'name':'remaining_amount', 'class': 'nb', 'number': True},
+            {'name':'amount', 'class': 'nb numbercell', 'number': True},
+            {'name':'remaining_amount', 'class': 'nb numbercell', 'number': True},
             {'name':'due_date', 'class': 'nb'},
             {'name':'closed_date', 'class': 'nb'},
             {'name':'last_settlement_voucher', 'class': 'nb'},
@@ -734,24 +734,24 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, JsonR
 
     def get_journal_fields(self):
         return [
-            {'name': 'updated', 'class': 'nb'},
-            {'name': 'account_number', 'class': 'nb'},
-            {'name': 'interest_note', 'class': 'nb'},
-            {'name': 'billing_classification', 'class': 'nb'},
+            'updated',
+            'account_number',
+            'interest_note',
+            'billing_classification'
         ]
 
     def get_transaction_fields(self):
         return [
-            {'name': 'voucher', 'class': 'nb'},
-            {'name': 'text', 'class': ''},
-            {'name': 'due_date', 'class': 'nb'},
-            {'name': 'invoice_amount', 'class': 'nb numbercell'},
-            {'name': 'interest_amount', 'class': 'nb numbercell'},
-            {'name': 'transaction_date', 'class': 'nb numbercell'},
-            {'name': 'invoice', 'class': 'nb'},
-            {'name': 'calculate_from_date', 'class': 'nb numbercell'},
-            {'name': 'calculate_to_date', 'class': 'nb numbercell'},
-            {'name': 'interest_days', 'class': 'nb'},
+            'voucher',
+            'text',
+            'due_date',
+            'invoice_amount',
+            'interest_amount',
+            'transaction_date',
+            'invoice',
+            'calculate_from_date',
+            'calculate_to_date',
+            'interest_days',
         ]
 
     def get_fields(self):
@@ -763,8 +763,8 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, JsonR
             {'name': 'interest_note', 'class': 'nb'},
             {'name': 'text', 'class': ''},
             {'name': 'due_date', 'class': 'nb numbercell'},
-            {'name': 'invoice_amount', 'class': 'nb numbercell'},
-            {'name': 'interest_amount', 'class': 'nb numbercell'},
+            {'name': 'invoice_amount', 'class': 'nb numbercell', 'number': True},
+            {'name': 'interest_amount', 'class': 'nb numbercell', 'number': True},
             {'name': 'transaction_date', 'class': 'nb numbercell'},
             {'name': 'invoice', 'class': 'nb'},
             {'name': 'calculate_from_date', 'class': 'nb numbercell'},
@@ -787,12 +787,12 @@ class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, JsonR
         for interest_note_response in interest_note_data:
             for journal in interest_note_response.interest_journal:
                 journaldata = {
-                    key['name']: getattr(journal, key['name'])
+                    key: getattr(journal, key)
                     for key in self.get_journal_fields()
                 }
                 for transaction in journal.interest_transactions:
                     data = {
-                        key['name']: getattr(transaction, key['name'])
+                        key: getattr(transaction, key)
                         for key in self.get_transaction_fields()
                     }
                     data.update(journaldata)
