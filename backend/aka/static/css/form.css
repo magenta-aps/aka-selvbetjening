@@ -24,8 +24,7 @@ button,
 a.button,
 a.button:link,
 a.button:visited,
-div.SumoSelect > .CaptionCont
-{
+div.SumoSelect > .CaptionCont {
     color: #fff;
     border: none;
     padding: .75rem 2.25rem;
@@ -34,6 +33,7 @@ div.SumoSelect > .CaptionCont
     margin: 0 .75rem .75rem 0;
     background-color: #31495b;
     text-decoration: none;
+    vertical-align: top;
 }
 button:active, button:hover,
 a.button:active, a.button:hover {
@@ -47,16 +47,29 @@ button[type=submit]:active, button[type=submit]:hover {
     background-color: #fbb84f;
 }
 
+div.SumoSelect > .CaptionCont {
+    border-radius: 0;
+}
+
 div.SumoSelect > .CaptionCont > label {
     display: none;
 }
 
 div.SumoSelect > .CaptionCont > span {
     padding-right: 0;
+    line-height: 1.214em;
+}
+
+div.SumoSelect > .optWrapper {
+    width: 300px;
 }
 
 div.SumoSelect > .optWrapper label {
     margin: 0;
+}
+
+.SumoSelect > .CaptionCont > span {
+    text-align: center !important;
 }
 
 /* Input fields */
@@ -152,12 +165,4 @@ select {
 .err-msg {
     color:red;
     display: block;
-}
-
-.SumoSelect {
-    width: 300px !important;
-}
-
-.SumoSelect > .CaptionCont > span {
-    text-align: center !important;
 }

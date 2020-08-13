@@ -39,8 +39,20 @@ msgstr "Gentag"
 msgid "common.print"
 msgstr "Print"
 
+msgid "common.download"
+msgstr "Download"
+
 msgid "common.pdf"
 msgstr "Download PDF"
+
+msgid "common.xlsx"
+msgstr "Download Excel-regneark"
+
+msgid "common.ods"
+msgstr "Download LibreOffice-regneark"
+
+msgid "common.csv"
+msgstr "Download CSV-fil"
 
 msgid "common.download_template"
 msgstr "Download skabelon"
@@ -475,6 +487,15 @@ msgstr "Kontoudtog"
 msgid "employeraccount.period"
 msgstr "Gældende for perioden: {from_date} - {to_date}"
 
+msgid "employeraccount.period_to"
+msgstr "Gældende frem til {to_date}"
+
+msgid "employeraccount.period_from"
+msgstr "Gældende fra {from_date}"
+
+msgid "employeraccount.period_all"
+msgstr "Alle kendte poster"
+
 msgid "employeraccount.number"
 msgstr "Nummer"
 
@@ -609,6 +630,15 @@ msgstr "Kontoudtog"
 
 msgid "citizenaccount.period"
 msgstr "Gældende for perioden: {from_date} - {to_date}"
+
+msgid "citizenaccount.period_to"
+msgstr "Gældende frem til {to_date}"
+
+msgid "citizenaccount.period_from"
+msgstr "Gældende fra {from_date}"
+
+msgid "citizenaccount.period_all"
+msgstr "Alle kendte poster"
 
 msgid "citizenaccount.number"
 msgstr "Nummer"

@@ -65,6 +65,10 @@ body.pdf .output {
     text-align: right;
 }
 
+.output .output-actions .optWrapper {
+    text-align: left;
+}
+
 .output-table {
     font-size: 1em;
 }

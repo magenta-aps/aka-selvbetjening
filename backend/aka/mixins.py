@@ -18,6 +18,7 @@ from django.views.generic.edit import FormMixin
 
 
 class ErrorHandlerMixin(object):
+
     def dispatch(self, request, *args, **kwargs):
         try:
             return super(ErrorHandlerMixin, self).dispatch(request, *args, **kwargs)
@@ -90,14 +91,12 @@ class HasUserMixin(object):
             self.company = self.get_company(request)
         except (KeyError, TypeError):
             pass
-
         try:
             self.cpr = request.session['user_info']['CPR']
             self.person = {'navn': request.session['user_info']['name']}
             self.p = self.get_person(request)
         except (KeyError, TypeError):
             pass
-
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -113,9 +112,8 @@ class HasUserMixin(object):
 
 
 class RequireCprMixin(HasUserMixin):
-    def dispatch(self, request, *args, **kwargs):
 
-        # self.cpr = '0101601919'
+    def dispatch(self, request, *args, **kwargs):
         try:
             self.cpr = request.session['user_info']['CPR']
         except (KeyError, TypeError):
@@ -124,12 +122,12 @@ class RequireCprMixin(HasUserMixin):
 
 
 class RequireCvrMixin(HasUserMixin):
+
     def dispatch(self, request, *args, **kwargs):
         try:
             self.cvr = request.session['user_info']['CVR']
         except (KeyError, TypeError):
             raise PermissionDenied('no_cvr')
-
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -169,11 +167,10 @@ class RendererMixin(object):
     def format(self):
         return self.request.GET.get('format')
 
-    @property
-    def format_url(self):
+    def format_url(self, format):
         full_path = self.request.get_full_path_info()
         full_path = re.sub(r"[&?]format=[^&?]*", "", full_path)
-        full_path += ('&' if '?' in full_path else '?') + 'format=pdf'
+        full_path += "%sformat=%s" % (('&' if '?' in full_path else '?'), format)
         return full_path
 
 
@@ -185,7 +182,6 @@ class PdfRendererMixin(RendererMixin):
         raise NotImplementedError
 
     def render(self):
-        print("format: %s" % self.format)
         if self.format == 'pdf':
             context = self.get_context_data()
 
@@ -221,12 +217,10 @@ class PdfRendererMixin(RendererMixin):
         return super().render()
 
     def get_context_data(self, **kwargs):
-        context = {
+        return super().get_context_data(**dict({
             'pdf': self.format == 'pdf',
-            'pdflink': self.format_url
-        }
-        context.update(kwargs)
-        return super().get_context_data(**context)
+            'pdflink': self.format_url('pdf')
+        }, **kwargs))
 
     def form_invalid(self, form):
         if self.format == 'pdf':
@@ -255,11 +249,9 @@ class JsonRendererMixin(RendererMixin):
         return super().render()
 
     def get_context_data(self, **kwargs):
-        context = {
-            'jsonlink': self.format_url
-        }
-        context.update(kwargs)
-        return super().get_context_data(**context)
+        return super().get_context_data(**dict({
+            'jsonlink': self.format_url('json')
+        }, **kwargs))
 
 
 class SpreadsheetRendererMixin(RendererMixin):
@@ -296,3 +288,9 @@ class SpreadsheetRendererMixin(RendererMixin):
                 file_name="%s.%s" % (self.get_filename(), format),
             )
         return super().render()
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**dict({
+            ("%slink" % format) : self.format_url(format)
+            for format in self.accepted_formats
+        }, **kwargs))
