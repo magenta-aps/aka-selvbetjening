@@ -38,8 +38,20 @@ msgstr "Gentag [kl]"
 msgid "common.print"
 msgstr "Print [kl]"
 
+msgid "common.download"
+msgstr "Download [kl]"
+
 msgid "common.pdf"
 msgstr "Download PDF [kl]"
+
+msgid "common.xlsx"
+msgstr "Download Excel-regneark [kl]"
+
+msgid "common.ods"
+msgstr "Download LibreOffice-regneark [kl]"
+
+msgid "common.csv"
+msgstr "Download CSV-fil [kl]"
 
 msgid "common.download_template"
 msgstr "Download skabelon [kl]"
@@ -55,6 +67,12 @@ msgstr "Log ind som virksomhed [kl]"
 
 msgid "login.nemid"
 msgstr "Log ind som borger [kl]"
+
+msgid "common.telefon"
+msgstr "Telefon [kl]"
+
+msgid "common.fax"
+msgstr "Fax [kl]"
 
 msgid "prisme.error"
 msgstr ""
@@ -85,6 +103,7 @@ msgstr "Skattestyrelsen [kl]"
 
 msgid "common.showcolumns"
 msgstr "Vis/skjul kolonner [kl]"
+
 
 # Errors
 
@@ -144,6 +163,7 @@ msgstr "Ugyldigt CVR-nummer [kl]"
 
 msgid "error.invalid_cpr_cvr"
 msgstr "Ugyldigt CPR- eller CVR-nummer [kl]"
+
 
 # File lists
 
@@ -222,6 +242,9 @@ msgstr "Fordringshaver [kl]"
 msgid "fordring.anden_fordringshaver"
 msgstr "Anden fordringshaver [kl]"
 
+msgid "fordring.dokumentation"
+msgstr "Dokumentation [kl]"
+
 msgid "fordring.fordringsgruppe"
 msgstr "Ekstern fordringsgruppe [kl]"
 
@@ -266,6 +289,9 @@ msgstr "Kontaktperson [kl]"
 
 msgid "fordring.noter"
 msgstr "Noter [kl]"
+
+msgid "fordring.meddebitor"
+msgstr "Meddebitor [kl]"
 
 msgid "fordring.success"
 msgstr "Fordring oprettet [kl]"
@@ -327,32 +353,20 @@ msgstr "Der opstod følgende fejl: [kl]"
 msgid "nedskrivning.error_250"
 msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber} [kl]"
 
-#: aka/templates/aka/impairmentForm.html:12
 msgid "nedskrivning.title"
 msgstr "Nedskrivning - Opret [kl]"
 
-msgid "common.upload.template"
-msgstr "Download skabelon [kl]"
-
-#: aka/templates/aka/impairmentForm.html:18
 msgid "nedskrivning.debitor"
 msgstr "Debitor [kl]"
 
-#: aka/templates/aka/impairmentForm.html:29
 msgid "nedskrivning.ekstern_sagsnummer"
 msgstr "Ekstern sagsnummer [kl]"
 
-#: aka/templates/aka/impairmentForm.html:39
 msgid "nedskrivning.beloeb"
 msgstr "Beløb [kl]"
 
-#: aka/templates/aka/impairmentForm.html:48
 msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnummer [kl]"
-
-
-# 6.5
-
 
 
 # NY16
@@ -374,20 +388,20 @@ msgstr "Rentenota [kl]"
 msgid "rentenota.rentenota"
 msgstr "Rentenota [kl]"
 
-msgid "rentenota.updated"
-msgstr "Dato [kl]"
-
 msgid "rentenota.transaction_date"
 msgstr "Postdato [kl]"
 
+msgid "rentenota.updated"
+msgstr "Dato [kl]"
+
 msgid "rentenota.account_number"
-msgstr "Debitor&#173;konto [kl]"
+msgstr "Debitor&shy;konto [kl]"
 
 msgid "rentenota.billing_classification"
-msgstr "Fakturerings&#173;klassifikation [kl]"
+msgstr "Fakturerings&shy;klassifikation [kl]"
 
 msgid "rentenota.interest_note"
-msgstr "Rentenota&#173;nummer [kl]"
+msgstr "Rentenota&shy;nummer [kl]"
 
 msgid "rentenota.voucher"
 msgstr "Bilag [kl]"
@@ -457,6 +471,9 @@ msgstr "Til dato [kl]"
 msgid "employeraccount.filename"
 msgstr "Kontoudtog {from_date} - {to_date} [kl]"
 
+msgid "employeraccount.footer"
+msgstr "Side {index} af {count} [kl]"
+
 msgid "employeraccount.bankaccount"
 msgstr "Bankkonto [kl]"
 
@@ -465,6 +482,15 @@ msgstr "Kontoudtog [kl]"
 
 msgid "employeraccount.period"
 msgstr "Gældende for perioden: {from_date} - {to_date} [kl]"
+
+msgid "employeraccount.period_to"
+msgstr "Gældende frem til {to_date} [kl]"
+
+msgid "employeraccount.period_from"
+msgstr "Gældende fra {from_date} [kl]"
+
+msgid "employeraccount.period_all"
+msgstr "Alle kendte poster [kl]"
 
 msgid "employeraccount.number"
 msgstr "Nummer [kl]"
@@ -567,11 +593,6 @@ msgstr "Ratenummer [kl]"
 
 
 # S23
-msgid "citizenaccount.telefon"
-msgstr "Telefon [kl]"
-
-msgid "citizenaccount.fax"
-msgstr "Fax [kl]"
 
 msgid "citizenaccount.swift"
 msgstr "SWIFT"
@@ -592,7 +613,10 @@ msgid "citizenaccount.to_date"
 msgstr "Til dato [kl]"
 
 msgid "citizenaccount.filename"
-msgstr "Kontoudtog {from_date} - {to_date} [kl]"
+msgstr "Kontoudtog {from_date} - {to_date}"
+
+msgid "citizenaccount.footer"
+msgstr "Side {index} af {count} [kl]"
 
 msgid "citizenaccount.bankaccount"
 msgstr "Bankkonto [kl]"
@@ -602,6 +626,15 @@ msgstr "Kontoudtog [kl]"
 
 msgid "citizenaccount.period"
 msgstr "Gældende for perioden: {from_date} - {to_date} [kl]"
+
+msgid "citizenaccount.period_to"
+msgstr "Gældende frem til {to_date} [kl]"
+
+msgid "citizenaccount.period_from"
+msgstr "Gældende fra {from_date} [kl]"
+
+msgid "citizenaccount.period_all"
+msgstr "Alle kendte poster [kl]"
 
 msgid "citizenaccount.number"
 msgstr "Nummer [kl]"

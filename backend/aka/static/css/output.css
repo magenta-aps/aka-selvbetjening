@@ -73,6 +73,10 @@ body.pdf .output {
     font-size: 1em;
 }
 
+.numbercell {
+    text-align: right;
+}
+
 .nb {
     white-space: nowrap;
 }

@@ -136,10 +136,10 @@ msgid "error.upload_empty"
 msgstr "Der er ingen rækker i det uploadede regneark"
 
 msgid "error.upload_no_encoding"
-msgstr "Kunne ikke finde tegnkodningen i det uploadede regneark. Er det en korrekt CSV-fil i UTF-8 eller UTF-16LE?"
+msgstr "Kunne ikke finde tegnkodningen i det uploadede regneark. Er det en korrekt CSV-fil?"
 
 msgid "error.upload_read_error"
-msgstr "Kunne ikke læse CSV-filen. Er det en korrekt formatteret CSV-fil?"
+msgstr "Kunne ikke læse CSV-filen. Er det en korrekt formatteret CSV-fil i UTF-8 eller UTF-16LE?"
 
 msgid "error.upload_validation_item"
 msgstr "Celle {col_letter}{row} ({field}): {message}"
@@ -164,7 +164,6 @@ msgstr "Ugyldigt CVR-nummer"
 
 msgid "error.invalid_cpr_cvr"
 msgstr "Ugyldigt CPR- eller CVR-nummer"
-
 
 
 # File lists
@@ -370,8 +369,6 @@ msgstr "Beløb"
 msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnummer"
 
-
-# 6.5
 
 # NY16
 
