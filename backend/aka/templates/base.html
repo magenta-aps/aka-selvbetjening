@@ -57,7 +57,7 @@
             {% endif %}
             <main>
                 {% if not pdf %}
-                <div class="userinfo">
+                <div class="userinfo printhide">
                     {% if company.navn %}
                         <span id="company" data-trans="common.logged_in_as" data-trans-params="{{ company|json }}">{{ 'common.logged_in_as'|format:company }}</span>
                     {% elif person.navn %}

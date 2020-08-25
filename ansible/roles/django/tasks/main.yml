@@ -29,6 +29,10 @@
   apt:
     name: libxmlsec1-dev
 
+- name: Install language-pack-da
+  apt:
+    name: language-pack-da
+
 - name: Install requirements
   pip:
     requirements: "{{django_requirements_file}}"

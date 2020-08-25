@@ -134,6 +134,7 @@
             <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/jquery.sumoselect.min.js"></script>
             <script src="{% static 'js/datatable.js' %}"></script>
         {% endif %}
+        <script src="{% static 'js/download.js' %}"></script>
     {% endif %}
 {% endblock %}
 
@@ -195,7 +196,20 @@
                                 <strong>Skattestyrelsen</strong>
                             </div>
                             <div class="col-5-sm output-actions printhide">
-                                <a class="button" href="{{ pdflink }}" data-trans="common.pdf">{% trans 'common.pdf' %}</a>
+                                <select id="download">
+                                    {% if pdflink %}
+                                        <option value="{{ pdflink }}" data-trans="common.pdf">{% trans 'common.pdf' %}</option>
+                                    {% endif %}
+                                    {% if xlsxlink %}
+                                        <option value="{{ xlsxlink }}" data-trans="common.xlsx">{% trans 'common.xlsx' %}</option>
+                                    {% endif %}
+                                    {% if odslink %}
+                                        <option value="{{ odslink }}" data-trans="common.ods">{% trans 'common.ods' %}</option>
+                                    {% endif %}
+                                    {% if csvlink %}
+                                        <option value="{{ csvlink }}" data-trans="common.csv">{% trans 'common.csv' %}</option>
+                                    {% endif %}
+                                </select>
                                 <button class="btn-print" data-trans="common.print">{% trans 'common.print' %}</button>
                             </div>
                         </div>
@@ -245,9 +259,16 @@
 
                     <div class="output-details row">
                         <div class="col-6-sm offset-6-sm">
-
                             <h3 data-trans="citizenaccount.account">{% trans 'citizenaccount.account' %}</h3>
-                            <h4 data-trans="citizenaccount.period" data-trans-params="{{ period|json }}">{{ 'citizenaccount.period'|format:period }}</h4>
+                            {% if period.from_date and period.to_date %}
+                                <h4 data-trans="citizenaccount.period" data-trans-params="{{ period|json }}">{{ 'citizenaccount.period'|format:period }}</h4>
+                            {% elif period.from_date and not period.to_date %}
+                                <h4 data-trans="citizenaccount.period_from" data-trans-params="{{ period|json }}">{{ 'citizenaccount.period_from'|format:period }}</h4>
+                            {% elif not period.from_date and period.to_date %}
+                                <h4 data-trans="citizenaccount.period_to" data-trans-params="{{ period|json }}">{{ 'citizenaccount.period_to'|format:period }}</h4>
+                            {% else %}
+                                <h4 data-trans="citizenaccount.period_all">{% trans 'citizenaccount.period_all' %}</h4>
+                            {% endif %}
                         </div>
 
                         <div class="output-details row">
@@ -262,8 +283,8 @@
                                     <td>{{ date }}</td>
                                 </tr>
                                 <tr>
-                                    <th data-trans="citizenaccount.cprcvr">{% trans 'citizenaccount.cprcvr' %}</th>
-                                    <td>{{ company.cvr }}</td>
+                                    <th data-trans="citizenaccount.cpr">{% trans 'citizenaccount.cpr' %}</th>
+                                    <td>{{ cpr }}</td>
                                 </tr>
                                 <tr>
                                     <th data-trans="citizenaccount.yourref">{% trans 'citizenaccount.yourref' %}</th>
@@ -318,7 +339,15 @@
                             {% for item in items %}
                                 <tr>
                                     {% for field in fields %}
-                                        <td class="{{ field.class }}">{{ item|get:field.name|default:'' }}</td>
+                                        {% with value=item|get:field.name|default:'' %}
+                                            <td class="{{ field.class }}" data-original="{{ value }}">
+                                                {% if field.number %}
+                                                    {{ value|number }}
+                                                {% else %}
+                                                    {{ value }}
+                                                {% endif %}
+                                            </td>
+                                        {% endwith %}
                                     {% endfor %}
                                 </tr>
                             {% endfor %}

@@ -440,7 +440,7 @@ class PrismeEmployerAccountResponseTransaction(PrismeAccountResponseTransaction)
 
     def __init__(self, data):
         super().__init__(data)
-        self.rate_number = data['RateNmb']
+        self.rate_number = data.get('RateNmb')
 
 
 class PrismeEmployerAccountResponse(PrismeAccountResponse):

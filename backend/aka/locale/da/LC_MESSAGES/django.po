@@ -39,8 +39,20 @@ msgstr "Gentag"
 msgid "common.print"
 msgstr "Print"
 
+msgid "common.download"
+msgstr "Download"
+
 msgid "common.pdf"
 msgstr "Download PDF"
+
+msgid "common.xlsx"
+msgstr "Download Excel-regneark"
+
+msgid "common.ods"
+msgstr "Download LibreOffice-regneark"
+
+msgid "common.csv"
+msgstr "Download CSV-fil"
 
 msgid "common.download_template"
 msgstr "Download skabelon"
@@ -124,10 +136,10 @@ msgid "error.upload_empty"
 msgstr "Der er ingen rækker i det uploadede regneark"
 
 msgid "error.upload_no_encoding"
-msgstr "Kunne ikke finde tegnkodningen i det uploadede regneark. Er det en korrekt CSV-fil i UTF-8 eller UTF-16LE?"
+msgstr "Kunne ikke finde tegnkodningen i det uploadede regneark. Er det en korrekt CSV-fil?"
 
 msgid "error.upload_read_error"
-msgstr "Kunne ikke læse CSV-filen. Er det en korrekt formatteret CSV-fil?"
+msgstr "Kunne ikke læse CSV-filen. Er det en korrekt formatteret CSV-fil i UTF-8 eller UTF-16LE?"
 
 msgid "error.upload_validation_item"
 msgstr "Celle {col_letter}{row} ({field}): {message}"
@@ -152,7 +164,6 @@ msgstr "Ugyldigt CVR-nummer"
 
 msgid "error.invalid_cpr_cvr"
 msgstr "Ugyldigt CPR- eller CVR-nummer"
-
 
 
 # File lists
@@ -359,8 +370,6 @@ msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnummer"
 
 
-# 6.5
-
 # NY16
 
 msgid "account.entries_open"
@@ -380,53 +389,53 @@ msgstr "Rentenota"
 msgid "rentenota.rentenota"
 msgstr "Rentenota"
 
-msgid "rentenota.postdato"
+msgid "rentenota.transaction_date"
 msgstr "Postdato"
 
-msgid "rentenota.dato"
+msgid "rentenota.updated"
 msgstr "Dato"
 
-msgid "rentenota.debitorkonto"
-msgstr "Debitor&#173;konto"
+msgid "rentenota.account_number"
+msgstr "Debitor&shy;konto"
 
-msgid "rentenota.faktureringsklassifikation"
-msgstr "Fakturerings&#173;klassifikation"
+msgid "rentenota.billing_classification"
+msgstr "Fakturerings&shy;klassifikation"
 
-msgid "rentenota.rentenotanummer"
-msgstr "Rentenota&#173;nummer"
+msgid "rentenota.interest_note"
+msgstr "Rentenota&shy;nummer"
 
-msgid "rentenota.bilag"
+msgid "rentenota.voucher"
 msgstr "Bilag"
 
-msgid "rentenota.faktura"
+msgid "rentenota.invoice"
 msgstr "Faktura"
 
-msgid "rentenota.tekst"
+msgid "rentenota.text"
 msgstr "Tekst"
 
-msgid "rentenota.fradato"
+msgid "rentenota.calculate_from_date"
 msgstr "Fradato"
 
-msgid "rentenota.tildato"
+msgid "rentenota.calculate_to_date"
 msgstr "Tildato"
 
-msgid "rentenota.dage"
+msgid "rentenota.interest_days"
 msgstr "Dage"
 
-msgid "rentenota.grundlag"
+msgid "rentenota.invoice_amount"
 msgstr "Grundlag"
 
-msgid "rentenota.forfald"
-msgstr "Forfalds&#173;dato"
+msgid "rentenota.due_date"
+msgstr "Forfalds&shy;dato"
 
-msgid "rentenota.beloeb"
+msgid "rentenota.interest_amount"
 msgstr "Beløb"
 
 msgid "rentenota.ingenposter"
 msgstr "Ingen poster"
 
 msgid "rentenota.filename"
-msgstr "Rentenota {month}/{year}.pdf"
+msgstr "Rentenota {month}/{year}"
 
 msgid "rentenota.year"
 msgstr "År"
@@ -439,6 +448,8 @@ msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne pe
 
 
 # NY16
+msgid "employeraccount.description"
+msgstr "Udfyld fra- og til-dato for at få poster for en given periode. Lad felterne stå tomme for at få alle poster"
 
 msgid "employeraccount.swift"
 msgstr "SWIFT"
@@ -459,7 +470,7 @@ msgid "employeraccount.to_date"
 msgstr "Til dato"
 
 msgid "employeraccount.filename"
-msgstr "Kontoudtog {from_date} - {to_date}.pdf"
+msgstr "Kontoudtog {from_date} - {to_date}"
 
 msgid "employeraccount.footer"
 msgstr "Side {index} af {count}"
@@ -473,14 +484,23 @@ msgstr "Kontoudtog"
 msgid "employeraccount.period"
 msgstr "Gældende for perioden: {from_date} - {to_date}"
 
+msgid "employeraccount.period_to"
+msgstr "Gældende frem til {to_date}"
+
+msgid "employeraccount.period_from"
+msgstr "Gældende fra {from_date}"
+
+msgid "employeraccount.period_all"
+msgstr "Alle kendte poster"
+
 msgid "employeraccount.number"
 msgstr "Nummer"
 
 msgid "employeraccount.date"
 msgstr "Dato"
 
-msgid "employeraccount.cprcvr"
-msgstr "CPR/CVR"
+msgid "employeraccount.cvr"
+msgstr "CVR"
 
 msgid "employeraccount.yourref"
 msgstr "Deres reference"
@@ -594,7 +614,7 @@ msgid "citizenaccount.to_date"
 msgstr "Til dato"
 
 msgid "citizenaccount.filename"
-msgstr "Kontoudtog {from_date} - {to_date}.pdf"
+msgstr "Kontoudtog {from_date} - {to_date}"
 
 msgid "citizenaccount.footer"
 msgstr "Side {index} af {count}"
@@ -608,14 +628,23 @@ msgstr "Kontoudtog"
 msgid "citizenaccount.period"
 msgstr "Gældende for perioden: {from_date} - {to_date}"
 
+msgid "citizenaccount.period_to"
+msgstr "Gældende frem til {to_date}"
+
+msgid "citizenaccount.period_from"
+msgstr "Gældende fra {from_date}"
+
+msgid "citizenaccount.period_all"
+msgstr "Alle kendte poster"
+
 msgid "citizenaccount.number"
 msgstr "Nummer"
 
 msgid "citizenaccount.date"
 msgstr "Dato"
 
-msgid "citizenaccount.cprcvr"
-msgstr "CPR/CVR"
+msgid "citizenaccount.cpr"
+msgstr "CPR"
 
 msgid "citizenaccount.yourref"
 msgstr "Deres reference"
