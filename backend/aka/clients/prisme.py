@@ -149,7 +149,7 @@ class PrismeAccountRequest(PrismeRequestObject):
         return PrismeAccountResponse
 
 
-class PrismeEmployerAccountRequest(PrismeAccountRequest):
+class PrismeSELRequest(PrismeAccountRequest):
 
     @property
     def method(self):
@@ -160,7 +160,7 @@ class PrismeEmployerAccountRequest(PrismeAccountRequest):
         return PrismeEmployerAccountResponse
 
 
-class PrismeCitizenAccountRequest(PrismeAccountRequest):
+class PrismeAKIRequest(PrismeAccountRequest):
 
     @property
     def method(self):

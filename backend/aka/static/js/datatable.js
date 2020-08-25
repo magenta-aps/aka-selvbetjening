@@ -1,5 +1,5 @@
 $(function(){
-    var table = $('#data-table').DataTable({
+    var table = $('.output-table').DataTable({
         scrollX: true,
         searching: false,
         lengthChange: false,

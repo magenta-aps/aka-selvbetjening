@@ -87,36 +87,39 @@
 
 
             $(function() {
-                var table = $("#data-table");
+                var table = $(".output-table");
+                table.each(function(){
+                    var thistable = $(this);
 
-                // Expressly set row height - this is to maintain row height across split tables
-                // (So if cell content makes one row higher, that row should maintain its height even as the table splits)
-                table.find("tr").each(function(index, el) {
-                    var $this = $(this);
-                    $this.height($this.height());
-                });
+                    // Expressly set row height - this is to maintain row height across split tables
+                    // (So if cell content makes one row higher, that row should maintain its height even as the table splits)
+                        thistable.find("tr").each(function(index, el) {
+                        var $this = $(this);
+                        $this.height($this.height());
+                    });
 
-                // Split the table vertically into parallel tables
-                splitTable(table);
+                    // Split the table vertically into parallel tables
+                    splitTable(thistable);
 
-                // Split the pages to get a nice border (and copy headers to pages)
-                $(".page").each(function(index, el) {
-                    splitPage($(this));
-                });
+                    // Split the pages to get a nice border (and copy headers to pages)
+                    $(".page").each(function(index, el) {
+                        splitPage($(this));
+                    });
 
-                var footerTemplate = "{% trans 'employeraccount.footer' %}";
+                    var footerTemplate = "{% trans 'employeraccount.footer' %}";
 
-                var footers = $(".page .pagefooter");
-                footers.each(function(index, el){
-                    var params = {'index':index+1, 'count':footers.length};
-                    var text = footerTemplate;
-                    for (let key in params) {
-                        if (params.hasOwnProperty(key)) {
-                            text = text.replace("{" + key + "}", params[key]);
+                    var footers = $(".page .pagefooter");
+                    footers.each(function(index, el){
+                        var params = {'index':index+1, 'count':footers.length};
+                        var text = footerTemplate;
+                        for (let key in params) {
+                            if (params.hasOwnProperty(key)) {
+                                text = text.replace("{" + key + "}", params[key]);
+                            }
                         }
-                    }
-                    $(this).text(text);
-                 });
+                        $(this).text(text);
+                    });
+                });
             });
         </script>
 
@@ -163,6 +166,11 @@
             {% endif %}
             <p data-trans="employeraccount.description">{{ employeraccount.description }}</p>
             <div class="employeraccount-actions row">
+                {% if cpr and cvr %}
+                <div class="col-4-sm">
+                    {% include 'aka/util/field.html' with field=form.cprcvr key='employeraccount.cprcvr' %}
+                </div>
+                {% endif %}
                 <div class="col-4-sm">
                     {% include 'aka/util/field.html' with field=form.from_date key='employeraccount.from_date' %}
                 </div>
@@ -187,185 +195,189 @@
 
         {% if form.is_bound %}
 
-            <div class="output account-data">
-                <div class="page">
+            {% for item in items %}
+                {% with item.data as data %}
+                <div class="output account-data">
+                    <div class="page">
+                        <div class="output-header">
+                            <div class="row">
+                                <div class="col-7-sm">
+                                    <h2>{{ item.key }}</h2>
+                                    <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
+                                    <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
+                                    <strong>Skattestyrelsen</strong>
+                                </div>
+                                <div class="col-5-sm output-actions printhide">
 
-                    <div class="output-header">
-                        <div class="row">
-                            <div class="col-7-sm">
-                                <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
-                                <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
-                                <strong>Skattestyrelsen</strong>
+                                    <select id="download">
+                                        {% if pdflink %}
+                                            <option value="{{ pdflink }}&key={{ item.key }}" data-trans="common.pdf">{% trans 'common.pdf' %}</option>
+                                        {% endif %}
+                                        {% if xlsxlink %}
+                                            <option value="{{ xlsxlink }}&key={{ item.key }}" data-trans="common.xlsx">{% trans 'common.xlsx' %}</option>
+                                        {% endif %}
+                                        {% if odslink %}
+                                            <option value="{{ odslink }}&key={{ item.key }}" data-trans="common.ods">{% trans 'common.ods' %}</option>
+                                        {% endif %}
+                                        {% if csvlink %}
+                                            <option value="{{ csvlink }}&key={{ item.key }}" data-trans="common.csv">{% trans 'common.csv' %}</option>
+                                        {% endif %}
+                                    </select>
+
+                                    <button class="btn-print" data-trans="common.print">{% trans 'common.print' %}</button>
+                                </div>
                             </div>
-                            <div class="col-5-sm output-actions printhide">
+                        </div>
 
-                                <select id="download">
-                                    {% if pdflink %}
-                                        <option value="{{ pdflink }}" data-trans="common.pdf">{% trans 'common.pdf' %}</option>
-                                    {% endif %}
-                                    {% if xlsxlink %}
-                                        <option value="{{ xlsxlink }}" data-trans="common.xlsx">{% trans 'common.xlsx' %}</option>
-                                    {% endif %}
-                                    {% if odslink %}
-                                        <option value="{{ odslink }}" data-trans="common.ods">{% trans 'common.ods' %}</option>
-                                    {% endif %}
-                                    {% if csvlink %}
-                                        <option value="{{ csvlink }}" data-trans="common.csv">{% trans 'common.csv' %}</option>
-                                    {% endif %}
-                                </select>
+                        <hr/>
 
-                                <button class="btn-print" data-trans="common.print">{% trans 'common.print' %}</button>
+                        <div class="output-details row">
+                            <div class="col-6-sm">
+                                <span class="line">{{ company.navn }}</span>
+                                <span class="line">{{ company.adresse }}</span>
+                                <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
+                                <span class="line" data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
                             </div>
-                        </div>
-                    </div>
-
-                    <hr/>
-
-                    <div class="output-details row">
-                        <div class="col-6-sm">
-                            <span class="line">{{ company.navn }}</span>
-                            <span class="line">{{ company.adresse }}</span>
-                            <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
-                            <span class="line" data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
-                        </div>
-                        <div class="col-3-sm">
-                            <table class="dl-table">
-                                <tr>
-                                    <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <th data-trans="common.fax">{% trans 'common.fax' %}</th>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <th data-trans="employeraccount.swift">{% trans 'employeraccount.swift' %}</th>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <th data-trans="employeraccount.iban">{% trans 'employeraccount.iban' %}</th>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <th data-trans="employeraccount.cvrse">{% trans 'employeraccount.cvrse' %}</th>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <th data-trans="employeraccount.bankaccount">{% trans 'employeraccount.bankaccount' %}</th>
-                                    <td></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-3-sm">
-                            <img src="{% static 'img/naalakkersuisut.png' %}" style="width:100%"/>
-                        </div>
-                    </div>
-
-                    <div class="output-details row">
-                        <div class="col-6-sm offset-6-sm">
-                            <h3 data-trans="employeraccount.account">{% trans 'employeraccount.account' %}</h3>
-                            {% if period.from_date and period.to_date %}
-                                <h4 data-trans="employeraccount.period" data-trans-params="{{ period|json }}">{{ 'employeraccount.period'|format:period }}</h4>
-                            {% elif period.from_date and not period.to_date %}
-                                <h4 data-trans="employeraccount.period_from" data-trans-params="{{ period|json }}">{{ 'employeraccount.period_from'|format:period }}</h4>
-                            {% elif not period.from_date and period.to_date %}
-                                <h4 data-trans="employeraccount.period_to" data-trans-params="{{ period|json }}">{{ 'employeraccount.period_to'|format:period }}</h4>
-                            {% else %}
-                                <h4 data-trans="employeraccount.period_all">{% trans 'employeraccount.period_all' %}</h4>
-                            {% endif %}
+                            <div class="col-3-sm">
+                                <table class="dl-table">
+                                    <tr>
+                                        <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th data-trans="common.fax">{% trans 'common.fax' %}</th>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th data-trans="employeraccount.swift">{% trans 'employeraccount.swift' %}</th>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th data-trans="employeraccount.iban">{% trans 'employeraccount.iban' %}</th>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th data-trans="employeraccount.cvrse">{% trans 'employeraccount.cvrse' %}</th>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th data-trans="employeraccount.bankaccount">{% trans 'employeraccount.bankaccount' %}</th>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-3-sm">
+                                <img src="{% static 'img/naalakkersuisut.png' %}" style="width:100%"/>
+                            </div>
                         </div>
 
                         <div class="output-details row">
-                            <div class="col-4-sm offset-6-sm">
-                            <table class="dl-table">
-                                <tr>
-                                    <th data-trans="employeraccount.number">{% trans 'employeraccount.number' %}</th>
-                                    <td>{{ number }}</td>
-                                </tr>
-                                <tr>
-                                    <th data-trans="common.dato">{% trans 'common.dato' %}</th>
-                                    <td>{{ date }}</td>
-                                </tr>
-                                <tr>
-                                    <th data-trans="employeraccount.cvr">{% trans 'employeraccount.cvr' %}</th>
-                                    <td>{{ cvr }}</td>
-                                </tr>
-                                <tr>
-                                    <th data-trans="employeraccount.yourref">{% trans 'employeraccount.yourref' %}</th>
-                                    <td>{{ yourref }}</td>
-                                </tr>
-                                <tr>
-                                    <th data-trans="employeraccount.contact">{% trans 'employeraccount.contact' %}</th>
-                                    <td>{{ contact }}</td>
-                                </tr>
-                                <tr>
-                                    <th data-trans="employeraccount.localnumber">{% trans 'employeraccount.localnumber' %}</th>
-                                    <td>{{ localnumber }}</td>
-                                </tr>
-                                <tr>
-                                    <th data-trans="employeraccount.payment1">{% trans 'employeraccount.payment1' %}</th>
-                                    <td>{{ payment1 }}</td>
-                                </tr>
-                                <tr>
-                                    <th data-trans="employeraccount.invoiceaccount">{% trans 'employeraccount.invoiceaccount' %}</th>
-                                    <td>{{ account }}</td>
-                                </tr>
-                            </table>
+                            <div class="col-6-sm offset-6-sm">
+                                <h3 data-trans="employeraccount.account">{% trans 'employeraccount.account' %}</h3>
+                                {% if period.from_date and period.to_date %}
+                                    <h4 data-trans="employeraccount.period" data-trans-params="{{ period|json }}">{{ 'employeraccount.period'|format:period }}</h4>
+                                {% elif period.from_date and not period.to_date %}
+                                    <h4 data-trans="employeraccount.period_from" data-trans-params="{{ period|json }}">{{ 'employeraccount.period_from'|format:period }}</h4>
+                                {% elif not period.from_date and period.to_date %}
+                                    <h4 data-trans="employeraccount.period_to" data-trans-params="{{ period|json }}">{{ 'employeraccount.period_to'|format:period }}</h4>
+                                {% else %}
+                                    <h4 data-trans="employeraccount.period_all">{% trans 'employeraccount.period_all' %}</h4>
+                                {% endif %}
+                            </div>
+
+                            <div class="output-details row">
+                                <div class="col-4-sm offset-6-sm">
+                                <table class="dl-table">
+                                    <tr>
+                                        <th data-trans="employeraccount.number">{% trans 'employeraccount.number' %}</th>
+                                        <td>{{ number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th data-trans="common.dato">{% trans 'common.dato' %}</th>
+                                        <td>{{ date }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th data-trans="employeraccount.cvr">{% trans 'employeraccount.cvr' %}</th>
+                                        <td>{{ cvr }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th data-trans="employeraccount.yourref">{% trans 'employeraccount.yourref' %}</th>
+                                        <td>{{ yourref }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th data-trans="employeraccount.contact">{% trans 'employeraccount.contact' %}</th>
+                                        <td>{{ contact }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th data-trans="employeraccount.localnumber">{% trans 'employeraccount.localnumber' %}</th>
+                                        <td>{{ localnumber }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th data-trans="employeraccount.payment1">{% trans 'employeraccount.payment1' %}</th>
+                                        <td>{{ payment1 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th data-trans="employeraccount.invoiceaccount">{% trans 'employeraccount.invoiceaccount' %}</th>
+                                        <td>{{ account }}</td>
+                                    </tr>
+                                </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="employeraccount-data">
+                        <div class="employeraccount-data">
 
-                        {% if items and items|length > 0 %}
+                            {% if data and data|length > 0 %}
 
-                            {% if not pdf %}
-                                <select name="columns" multiple="multiple">
-                                    {% for field in fields %}
-                                        {% with "employeraccount."|add:field.name as transkey %}
-                                            <option value="{{ field.name }}" {% if not field in form.hidden.value %}selected="selected"{% endif %}>{% trans transkey %}</option>
-                                        {% endwith %}
-                                    {% endfor %}
-                                </select>
-                            {% endif %}
+                                {% if not pdf %}
+                                    <select name="columns" multiple="multiple">
+                                        {% for field in item.fields %}
+                                            {% with "employeraccount."|add:field.name as transkey %}
+                                                <option value="{{ field.name }}" {% if not field in form.hidden.value %}selected="selected"{% endif %}>{% trans transkey %}</option>
+                                            {% endwith %}
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
 
-                            <table id="data-table" class="output-table">
-                            <thead>
-                            <tr>
-                                {% for field in fields %}
-                                    {% with "employeraccount."|add:field.name as transkey %}
-                                        <th data-field="{{ field.name }}" data-trans="{{ transkey }}">{% trans transkey|safe %}</th>
-                                    {% endwith %}
-                                {% endfor %}
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for item in items %}
+                                <table class="output-table">
+                                <thead>
                                 <tr>
-                                    {% for field in fields %}
-                                        {% with value=item|get:field.name|default:'' %}
-                                        <td class="{{ field.class }}" data-original="{{ value }}">
-                                        {% if field.number %}
-                                            {{ value|number }}
-                                        {% else %}
-                                            {{ value }}
-                                        {% endif %}
-                                        </td>
+                                    {% for field in item.fields %}
+                                        {% with "employeraccount."|add:field.name as transkey %}
+                                            <th data-field="{{ field.name }}" data-trans="{{ transkey }}">{% trans transkey|safe %}</th>
                                         {% endwith %}
                                     {% endfor %}
                                 </tr>
-                            {% endfor %}
-                            </tbody>
-                            </table>
-                        {% else %}
-                            <p data-trans="employeraccount.ingenposter">{% trans 'citizenaccount.ingenposter' %}</p>
+                                </thead>
+                                <tbody>
+                                {% for dataitem in data %}
+                                    <tr>
+                                        {% for field in item.fields %}
+                                            {% with value=dataitem|get:field.name|default:'' %}
+                                            <td class="{{ field.class }}" data-original="{{ value }}">
+                                            {% if field.number %}
+                                                {{ value|number }}
+                                            {% else %}
+                                                {{ value }}
+                                            {% endif %}
+                                            </td>
+                                            {% endwith %}
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                </table>
+                            {% else %}
+                                <p data-trans="employeraccount.ingenposter">{% trans 'citizenaccount.ingenposter' %}</p>
+                            {% endif %}
+                        </div>
+                        {% if pdf %}
+                            <div class="pagefooter"></div>
                         {% endif %}
                     </div>
-                    {% if pdf %}
-                        <div class="pagefooter"></div>
-                    {% endif %}
                 </div>
-            </div>
+                {% endwith %}
+            {% endfor %}
         {% endif %}
     </div>
 </article>
