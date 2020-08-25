@@ -45,7 +45,6 @@ class NemId:
             except Exception as e:
                 exc_info = sys.exc_info()
                 traceback.print_exception(*exc_info)
-                raise e
         return user
 
     @staticmethod
