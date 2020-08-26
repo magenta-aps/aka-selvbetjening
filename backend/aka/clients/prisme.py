@@ -157,7 +157,7 @@ class PrismeSELRequest(PrismeAccountRequest):
 
     @property
     def reply_class(self):
-        return PrismeEmployerAccountResponse
+        return PrismeSELAccountResponse
 
 
 class PrismeAKIRequest(PrismeAccountRequest):
@@ -168,7 +168,7 @@ class PrismeAKIRequest(PrismeAccountRequest):
 
     @property
     def reply_class(self):
-        return PrismeCitizenAccountResponse
+        return PrismeAKIAccountResponse
 
 
 
@@ -443,7 +443,7 @@ class PrismeEmployerAccountResponseTransaction(PrismeAccountResponseTransaction)
         self.rate_number = data.get('RateNmb')
 
 
-class PrismeEmployerAccountResponse(PrismeAccountResponse):
+class PrismeSELAccountResponse(PrismeAccountResponse):
     itemclass = PrismeEmployerAccountResponseTransaction
 
 
@@ -456,7 +456,7 @@ class PrismeCitizenAccountResponseTransaction(PrismeAccountResponseTransaction):
         self.child_claimant = data['ChildClaimant']
 
 
-class PrismeCitizenAccountResponse(PrismeAccountResponse):
+class PrismeAKIAccountResponse(PrismeAccountResponse):
     itemclass = PrismeCitizenAccountResponseTransaction
 
 

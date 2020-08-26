@@ -45,6 +45,7 @@ class ErrorHandlerMixin(object):
 class HasUserMixin(object):
 
     def __init__(self, *args, **kwargs):
+        print("hasusermixin init")
         self.cvr = None
         self.cpr = None
         self.claimant_ids = []

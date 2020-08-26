@@ -167,23 +167,26 @@ select {
     display: block;
 }
 
-.can-collapse img {
+.can-collapse {
+    cursor: pointer;
 }
 
 .can-collapse.has-expanded img {
-    -webkit-animation:spin-down 400ms linear ;
-    -moz-animation:spin-down 400ms linear ;
-    animation:spin-down 400ms linear ;
-
+    -moz-animation: spin-down 400ms linear;
     -moz-transform: rotate(90deg);
+    -webkit-animation: spin-down 400ms linear;
+    -webkit-transform: rotate(90deg);
+    animation: spin-down 400ms linear;
+    transform: rotate(90deg);
 }
 
 .can-collapse.has-collapsed img {
-    -webkit-animation:spin-right 400ms linear ;
-    -moz-animation:spin-right 400ms linear ;
-    animation:spin-right 400ms linear ;
-
+    -moz-animation: spin-right 400ms linear;
     -moz-transform: rotate(0deg);
+    -webkit-animation: spin-right 400ms linear;
+    -webkit-transform: rotate(0deg);
+    animation: spin-right 400ms linear;
+    transform: rotate(0deg);
 }
 
 @-moz-keyframes spin-right {

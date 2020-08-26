@@ -139,9 +139,10 @@ class LogoutView(View):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class KontoView(SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, SpreadsheetRendererMixin, TemplateView):
+class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, SpreadsheetRendererMixin, TemplateView):
 
     form_class = KontoForm
+    template_name = 'aka/account/account.html'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -187,11 +188,6 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, Spreads
         return super().get_context_data(**context)
 
 
-# NY16
-class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
-
-    template_name = 'aka/employer_account/account.html'
-
     def get_filename(self):
         try:
             from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d')
@@ -201,13 +197,13 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
             to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d')
         except:
             to_date = "alle"
-        return _("employeraccount.filename").format(
+        return _("account.filename").format(
             from_date=from_date,
             to_date=to_date
         )
 
     def get_sheetname(self):
-        return "Arbejdsgiverkonto"
+        return "Kontoudtog"
 
     def hide_fields(self, form, fields):
         return [
@@ -249,7 +245,7 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
         data = self.get_data(key)
         return {
             'key': key,
-            'title': 'employeraccount.title_' + key,
+            'title': 'account.title_' + key,
             'fields': self.hide_fields(form, self.get_fields(key)),
             'data': data,
             'sum': sum([dataitem['amount'] for dataitem in data]) if data else 0,
@@ -294,83 +290,7 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
                 {'name': 'child_claimant', 'class': 'nb'}
             ]
         for field in fields:
-            field['title'] = _("employeraccount.%s" % field['name']).replace("&shy;", "")
-        return fields
-
-    def get_context_data(self, **kwargs):
-        context = {
-            'company': Dafo().lookup_cvr(self.cvr)
-        }
-        context.update(kwargs)
-        return super().get_context_data(**context)
-
-
-# S23
-
-class BorgerKontoView(RequireCprMixin, KontoView):
-
-    template_name = 'aka/citizen_account/account.html'
-
-    def get_filename(self):
-        try:
-            from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d')
-        except:
-            from_date = "alle"
-        try:
-            to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d')
-        except:
-            to_date = "alle"
-        return _("citizenaccount.filename").format(
-            from_date=from_date,
-            to_date=to_date
-        )
-
-    def get_sheetname(self):
-        return "Borgerkonto"
-
-    def get_items(self, form):
-        prisme = Prisme()
-        account_request = PrismeAKIRequest(
-            self.cpr,
-            form.cleaned_data['from_date'],
-            form.cleaned_data['to_date'],
-            form.cleaned_data['open_closed']
-        )
-        prisme_reply = prisme.process_service(account_request, 'borgerkonto')[0]
-        return [
-            {
-                field['name']: getattr(entry, field['name'])
-                for field in self.get_fields()
-            } for entry in prisme_reply
-        ]
-
-    def get_fields(self):
-        fields = [
-            {'name':'account_number', 'class': 'nb'},
-            {'name':'transaction_date', 'class': 'nb'},
-            {'name':'accounting_date', 'class': 'nb'},
-            {'name':'debitor_group_id', 'class': 'nb'},
-            {'name':'debitor_group_name', 'class': 'nb'},
-            {'name':'voucher', 'class': 'nb'},
-            {'name':'text', 'class': ''},
-            {'name':'payment_code', 'class': 'nb'},
-            {'name':'payment_code_name', 'class': 'nb'},
-            {'name':'amount', 'class': 'nb numbercell', 'number': True},
-            {'name':'remaining_amount', 'class': 'nb numbercell', 'number': True},
-            {'name':'due_date', 'class': 'nb'},
-            {'name':'closed_date', 'class': 'nb'},
-            {'name':'last_settlement_voucher', 'class': 'nb'},
-            {'name':'collection_letter_date', 'class': 'nb'},
-            {'name':'collection_letter_code', 'class': 'nb'},
-            {'name':'claim_type_code', 'class': 'nb'},
-            {'name':'invoice_number', 'class': 'nb'},
-            {'name':'transaction_type', 'class': 'nb'},
-            {'name':'claimant_name', 'class': 'nb'},
-            {'name':'claimant_id', 'class': 'nb'},
-            {'name':'child_claimant', 'class': 'nb'},
-        ]
-        for field in fields:
-            field['title'] = _("citizenaccount.%s" % field['name']).replace("&shy;", "")
+            field['title'] = _("account.%s" % field['name']).replace("&shy;", "")
         return fields
 
 
