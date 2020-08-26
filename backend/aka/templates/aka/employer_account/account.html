@@ -59,8 +59,8 @@
             };
 
             const splitPage = function(page) {
-                var maxHeight = page.outerHeight() + 100;
-                var height = 0;
+                const maxHeight = page.outerHeight() + 100;
+                let height = 0;
                 page.children().each(function () {
                     height += $(this).outerHeight();
                 });
@@ -85,16 +85,14 @@
                 }
             };
 
-
             $(function() {
-                var table = $(".output-table");
-                table.each(function(){
-                    var thistable = $(this);
+                $(".output-table").each(function(){
+                    const thistable = $(this);
 
                     // Expressly set row height - this is to maintain row height across split tables
                     // (So if cell content makes one row higher, that row should maintain its height even as the table splits)
-                        thistable.find("tr").each(function(index, el) {
-                        var $this = $(this);
+                    thistable.find("tr").each(function(index, el) {
+                        const $this = $(this);
                         $this.height($this.height());
                     });
 
@@ -106,12 +104,12 @@
                         splitPage($(this));
                     });
 
-                    var footerTemplate = "{% trans 'employeraccount.footer' %}";
+                    const footerTemplate = "{% trans 'employeraccount.footer' %}";
 
-                    var footers = $(".page .pagefooter");
+                    const footers = $(".page .pagefooter");
                     footers.each(function(index, el){
-                        var params = {'index':index+1, 'count':footers.length};
-                        var text = footerTemplate;
+                        const params = {'index':index+1, 'count':footers.length};
+                        let text = footerTemplate;
                         for (let key in params) {
                             if (params.hasOwnProperty(key)) {
                                 text = text.replace("{" + key + "}", params[key]);
@@ -149,7 +147,8 @@
 
     <div class="employeraccount-main">
 
-        <form method="get" id="mainform" class="printhide">
+        <form method="get" id="mainform">
+            <div class="printhide">
             {% if form.non_field_errors %}
                 <ul class="errorlist">
                     {% for error in form.non_field_errors.as_data %}
@@ -191,7 +190,7 @@
                 </div>
             </div>
             {{ form.hidden }}
-        </form>
+            </div>
 
         {% if form.is_bound %}
 
@@ -199,10 +198,14 @@
                 {% with item.data as data %}
                 <div class="output account-data">
                     <div class="page">
+                        <h2 class="can-collapse printhide" data-collapse="#content-{{ item.key }}">
+                            <img src="{% static 'img/sullisivk_arrow_right.svg' %}" width="20" height="20"/>
+                            <span data-trans="{{ item.title }}">{% trans item.title %}</span>
+                        </h2>
+                        <div id="content-{{ item.key }}" {% if not pdf %}class="page-content collapsed" style="display:none"{% endif %}>
                         <div class="output-header">
                             <div class="row">
                                 <div class="col-7-sm">
-                                    <h2>{{ item.key }}</h2>
                                     <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
                                     <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
                                     <strong>Skattestyrelsen</strong>
@@ -211,16 +214,16 @@
 
                                     <select id="download">
                                         {% if pdflink %}
-                                            <option value="{{ pdflink }}&key={{ item.key }}" data-trans="common.pdf">{% trans 'common.pdf' %}</option>
+                                            <option value="{{ item.key }}.pdf" data-trans="common.pdf">{% trans 'common.pdf' %}</option>
                                         {% endif %}
                                         {% if xlsxlink %}
-                                            <option value="{{ xlsxlink }}&key={{ item.key }}" data-trans="common.xlsx">{% trans 'common.xlsx' %}</option>
+                                            <option value="{{ item.key }}.xlsx" data-trans="common.xlsx">{% trans 'common.xlsx' %}</option>
                                         {% endif %}
                                         {% if odslink %}
-                                            <option value="{{ odslink }}&key={{ item.key }}" data-trans="common.ods">{% trans 'common.ods' %}</option>
+                                            <option value="{{ item.key }}.ods" data-trans="common.ods">{% trans 'common.ods' %}</option>
                                         {% endif %}
                                         {% if csvlink %}
-                                            <option value="{{ csvlink }}&key={{ item.key }}" data-trans="common.csv">{% trans 'common.csv' %}</option>
+                                            <option value="{{ item.key }}.csv" data-trans="common.csv">{% trans 'common.csv' %}</option>
                                         {% endif %}
                                     </select>
 
@@ -330,7 +333,7 @@
                             {% if data and data|length > 0 %}
 
                                 {% if not pdf %}
-                                    <select name="columns" multiple="multiple">
+                                    <select class="columnselect" multiple="multiple" data-key="{{ item.key }}">
                                         {% for field in item.fields %}
                                             {% with "employeraccount."|add:field.name as transkey %}
                                                 <option value="{{ field.name }}" {% if not field in form.hidden.value %}selected="selected"{% endif %}>{% trans transkey %}</option>
@@ -339,7 +342,7 @@
                                     </select>
                                 {% endif %}
 
-                                <table class="output-table">
+                                <table class="output-table" data-key="{{ item.key }}">
                                 <thead>
                                 <tr>
                                     {% for field in item.fields %}
@@ -374,11 +377,15 @@
                         {% if pdf %}
                             <div class="pagefooter"></div>
                         {% endif %}
+                        </div>
                     </div>
                 </div>
                 {% endwith %}
             {% endfor %}
         {% endif %}
+
+
+        </form>
     </div>
 </article>
 {% endblock %}

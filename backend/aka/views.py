@@ -249,6 +249,7 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
         data = self.get_data(key)
         return {
             'key': key,
+            'title': 'employeraccount.title_' + key,
             'fields': self.hide_fields(form, self.get_fields(key)),
             'data': data,
             'sum': sum([dataitem['amount'] for dataitem in data]) if data else 0,
@@ -256,8 +257,10 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
 
     def get_items(self, form):
         items = []
-        items.append(self.get_item_data('sel', form))
-        items.append(self.get_item_data('aki', form))
+        key = self.request.GET.get("key")
+        keys = [key] if key else ['sel', 'aki']
+        for key in keys:
+            items.append(self.get_item_data(key, form))
         return items
 
     def get_fields(self, key='sel'):

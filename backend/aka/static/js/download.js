@@ -9,7 +9,12 @@ $(function(){
         this.sumo.setText();
     });
     downloadSelect.change(function() {
-        window.location = this.value;
+        const form = downloadSelect.parents("form");
+        const s = this.value.split("."),
+            key = s[0],
+            format = s[1];
+        form.append('<input type="hidden" name="key" value="'+key+'"/>');
+        form.append('<input type="hidden" name="format" value="'+format+'"/>');
+        form.submit();
     });
-
 });

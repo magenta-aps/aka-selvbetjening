@@ -592,6 +592,12 @@ msgstr "?? Barn Fordringshaver ??"
 msgid "employeraccount.rate_number"
 msgstr "Rate&shy;nummer"
 
+msgid "employeraccount.title_sel"
+msgstr "SEL-regnskab"
+
+msgid "employeraccount.title_aki"
+msgstr "AKI-regnskab"
+
 
 # S23
 

@@ -215,6 +215,7 @@ class PdfRendererMixin(RendererMixin):
             context['css'] = ''.join(css_data)
 
             html = select_template(self.get_template_names()).render(context)
+
             html = html.replace(
                 "\"%s" % settings.STATIC_URL,
                 "\"file://%s/" % os.path.abspath(settings.STATIC_ROOT)
@@ -288,11 +289,16 @@ class SpreadsheetRendererMixin(RendererMixin):
             fields = self.get_fields(self.key)  # List of dicts
             items = self.get_data(self.key)  # List of dicts
             data = [
-                [field.get("title", field['name']) for field in fields]
+                [
+                    field.get("title", field['name'])
+                    for field in fields
+                ]
             ] + [
                 [
-                    item[field['name']] for field in fields
-                ] for item in items
+                    item[field['name']]
+                    for field in fields
+                ]
+                for item in items
             ]
             sheet = excel.pe.Sheet(
                 data,
