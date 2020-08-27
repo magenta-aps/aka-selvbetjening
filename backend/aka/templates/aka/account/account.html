@@ -196,7 +196,7 @@
 
             {% for item in items %}
                 {% with item.data as data %}
-                <div class="output account-data">
+                <div id="output-{{ item.key }}" class="output account-data">
                     <div class="page">
                         <h2 class="can-collapse printhide" data-collapse="#content-{{ item.key }}">
                             <img src="{% static 'img/sullisivk_arrow_right.svg' %}" width="20" height="20"/>
@@ -227,7 +227,7 @@
                                         {% endif %}
                                     </select>
 
-                                    <button class="btn-print" data-trans="common.print">{% trans 'common.print' %}</button>
+                                    <button class="btn-print" data-trans="common.print" data-printhide=".output.account-data:not(#output-{{ item.key }})">{% trans 'common.print' %}</button>
                                 </div>
                             </div>
                         </div>
@@ -299,10 +299,18 @@
                                         <th data-trans="common.dato">{% trans 'common.dato' %}</th>
                                         <td>{{ date }}</td>
                                     </tr>
+
                                     <tr>
+                                    {% if cprcvr|get:'1' == 'cpr' %}
+                                        <th data-trans="account.cpr">{% trans 'account.cpr' %}</th>
+                                    {% elif cprcvr|get:'1' == 'cvr' %}
                                         <th data-trans="account.cvr">{% trans 'account.cvr' %}</th>
-                                        <td>{{ cvr }}</td>
+                                    {% else %}
+                                        <th></th>
+                                    {% endif %}
+                                        <td>{{ cprcvr|get:'0' }}</td>
                                     </tr>
+
                                     <tr>
                                         <th data-trans="account.yourref">{% trans 'account.yourref' %}</th>
                                         <td>{{ yourref }}</td>
@@ -333,6 +341,7 @@
                             {% if data and data|length > 0 %}
 
                                 {% if not pdf %}
+                                    <div class="printhide">
                                     <select class="columnselect" multiple="multiple" data-key="{{ item.key }}">
                                         {% for field in item.fields %}
                                             {% with "account."|add:field.name as transkey %}
@@ -340,6 +349,7 @@
                                             {% endwith %}
                                         {% endfor %}
                                     </select>
+                                    </div>
                                 {% endif %}
 
                                 <table class="output-table" data-key="{{ item.key }}">

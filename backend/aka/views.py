@@ -183,6 +183,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
                     'from_date': formdata['from_date'].strftime('%d-%m-%Y') if formdata.get('from_date') is not None else None,
                     'to_date': formdata['to_date'].strftime('%d-%m-%Y') if formdata.get('to_date') is not None else None
                 },
+                'cprcvr': self.cprcvr_choice
             })
         context.update(kwargs)
         return super().get_context_data(**context)
@@ -223,9 +224,17 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
         if key == 'aki':
             return PrismeAKIRequest
 
+    @property
+    def cprcvr_choice(self):
+        cprcvr = self.form.cleaned_data.get('cprcvr') or self.cpr or self.cvr
+        if cprcvr == self.cpr:
+            return (cprcvr, 'cpr')
+        elif cprcvr == self.cvr:
+            return (cprcvr, 'cvr')
+
     def get_data(self, key):
         if key not in self._data:
-            cprcvr = self.form.cleaned_data.get('cprcvr') or self.cpr or self.cvr
+            (cprcvr, c) = self.cprcvr_choice
             lookup_class = self.get_lookup_class(key)
             prisme_reply = self.prisme.process_service(lookup_class(
                 cprcvr,

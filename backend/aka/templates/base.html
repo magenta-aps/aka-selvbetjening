@@ -24,7 +24,13 @@
                         if (!options.headers) options.headers = {};
                         options.headers["X-CSRFToken"] = django.getCookie('csrftoken');
                     });
-                    $(".btn-print").click(window.print.bind(window));
+                    $(".btn-print").click(function(){
+                        const printhide = $(this).attr("data-printhide");
+                        const elements = printhide ? $(printhide).filter(":visible") : $();
+                        elements.hide();
+                        window.print();
+                        elements.show();
+                    });
                     $('input[type="submit"]').click(function(){
                         $(this).parents("form").addClass('submitted');
                     });
@@ -73,7 +79,7 @@
             </main>
             {% if not pdf %}
             <footer>
-                <div class="footer-wrapper">
+                <div class="footer-wrapper printhide">
                     Footer
                 </div>
             </footer>

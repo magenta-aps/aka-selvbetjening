@@ -500,6 +500,9 @@ msgstr "Dato"
 msgid "account.cvr"
 msgstr "CVR"
 
+msgid "account.cpr"
+msgstr "CPR"
+
 msgid "account.yourref"
 msgstr "Deres reference"
 

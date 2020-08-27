@@ -498,6 +498,9 @@ msgstr "Dato [kl]"
 msgid "account.cvr"
 msgstr "CVR [kl]"
 
+msgid "account.cpr"
+msgstr "CPR [kl]"
+
 msgid "account.yourref"
 msgstr "Deres reference [kl]"
 
