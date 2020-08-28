@@ -28,8 +28,11 @@
                         const printhide = $(this).attr("data-printhide");
                         const elements = printhide ? $(printhide).filter(":visible") : $();
                         elements.hide();
-                        window.print();
-                        elements.show();
+                        setTimeout(function() {
+                            window.print();
+                            elements.show();
+                        },0);
+                        return false;
                     });
                     $('input[type="submit"]').click(function(){
                         $(this).parents("form").addClass('submitted');
@@ -78,8 +81,8 @@
                 {% endblock %}
             </main>
             {% if not pdf %}
-            <footer>
-                <div class="footer-wrapper printhide">
+            <footer class="printhide">
+                <div class="footer-wrapper">
                     Footer
                 </div>
             </footer>

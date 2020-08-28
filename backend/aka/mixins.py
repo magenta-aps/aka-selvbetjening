@@ -45,7 +45,6 @@ class ErrorHandlerMixin(object):
 class HasUserMixin(object):
 
     def __init__(self, *args, **kwargs):
-        print("hasusermixin init")
         self.cvr = None
         self.cpr = None
         self.claimant_ids = []
@@ -189,7 +188,6 @@ class RendererMixin(object):
         }, **kwargs))
 
 
-
 class PdfRendererMixin(RendererMixin):
 
     pdf_template_name = ''
@@ -216,7 +214,7 @@ class PdfRendererMixin(RendererMixin):
             context['css'] = ''.join(css_data)
 
             html = select_template(self.get_template_names()).render(context)
-
+            # return HttpResponse(html)
             html = html.replace(
                 "\"%s" % settings.STATIC_URL,
                 "\"file://%s/" % os.path.abspath(settings.STATIC_ROOT)

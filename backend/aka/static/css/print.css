@@ -10,6 +10,10 @@
     article {
         width: 100%;
         margin: 0;
+        padding: 0;
+    }
+    form {
+        margin: 0;
     }
 
     .output {
@@ -22,11 +26,10 @@
     }
     .page {
         page-break-after: always;
-        /*border: 1px dashed #000;*/
-        height: 1700px;
+        /*height: 29cm;*/
         position: relative;
     }
-    .page:last-child {
+    .output:last-child .page {
         page-break-after: auto;
     }
     .output-table {
@@ -38,6 +41,9 @@
     }
     .output-table td {
         /*border: 1px solid #000;*/
+    }
+    .output-details {
+        font-size: 0.9em;
     }
     .pagefooter {
         text-align: center;
@@ -71,11 +77,10 @@ body.pdf .printhide {
 }
 body.pdf .page {
     page-break-after: always;
-    /*border: 1px dashed #000;*/
-    height: 1700px;
+    height: 1680px !important;
     position: relative;
 }
-body.pdf .page:last-child {
+body.pdf .output:last-child .page {
     page-break-after: auto;
 }
 body.pdf .output-table {
