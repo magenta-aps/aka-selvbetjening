@@ -156,6 +156,7 @@ class ChooseCvrView(TemplateView):
         if cvr and cvr in self.request.session.get('cvrs'):
             back = self.request.GET.get('back')
             request.session['user_info']['CVR'] = cvr
+            request.session['has_checked_cvr'] = True
             request.session.save()
             return redirect(back)
         return super().get(request, *args, **kwargs)

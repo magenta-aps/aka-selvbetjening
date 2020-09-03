@@ -86,12 +86,7 @@ class HasUserMixin(object):
             return person
 
     def dispatch(self, request, *args, **kwargs):
-        try:
-            self.cvr = request.session['user_info'].get('CVR')
-            self.claimant_ids = self.get_claimants(request)
-            self.company = self.get_company(request)
-        except (KeyError, TypeError):
-            pass
+
         try:
             self.cpr = request.session['user_info']['CPR']
             self.person = {'navn': request.session['user_info']['name']}
@@ -99,15 +94,25 @@ class HasUserMixin(object):
         except (KeyError, TypeError):
             pass
 
-        if self.cpr and not self.cvr:
+        if self.cpr and not self.cvr and not request.session.get('has_checked_cvr'):
             # cvrs = Dafo().lookup_cvr_by_cpr(self.cpr, false)
+            print("check cvr")
             cvrs = [30808460]
             if len(cvrs) == 1:
-                self.cvr = cvrs[0]
+                self.cvr = request.session['user_info']['CVR'] = cvrs[0]
+                request.session['has_checked_cvr'] = True
+                request.session.save()
             elif len(cvrs) > 1:
                 request.session['cvrs'] = [str(x) for x in cvrs]
                 request.session.save()
                 return redirect(reverse('aka:choose_cvr')+"?back="+request.get_full_path())
+
+        try:
+            self.cvr = request.session['user_info'].get('CVR')
+            self.claimant_ids = self.get_claimants(request)
+            self.company = self.get_company(request)
+        except (KeyError, TypeError):
+            pass
 
         return super().dispatch(request, *args, **kwargs)
 
