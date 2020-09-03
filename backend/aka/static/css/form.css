@@ -1,6 +1,6 @@
 /* Form */
 
-form {
+form > div {
     background-color: #fff;
     padding: 1.875rem;
     margin: 1.5rem 0;
@@ -24,8 +24,7 @@ button,
 a.button,
 a.button:link,
 a.button:visited,
-div.SumoSelect > .CaptionCont
-{
+div.SumoSelect > .CaptionCont {
     color: #fff;
     border: none;
     padding: .75rem 2.25rem;
@@ -34,6 +33,7 @@ div.SumoSelect > .CaptionCont
     margin: 0 .75rem .75rem 0;
     background-color: #31495b;
     text-decoration: none;
+    vertical-align: top;
 }
 button:active, button:hover,
 a.button:active, a.button:hover {
@@ -47,16 +47,29 @@ button[type=submit]:active, button[type=submit]:hover {
     background-color: #fbb84f;
 }
 
+div.SumoSelect > .CaptionCont {
+    border-radius: 0;
+}
+
 div.SumoSelect > .CaptionCont > label {
     display: none;
 }
 
 div.SumoSelect > .CaptionCont > span {
     padding-right: 0;
+    line-height: 1.214em;
+}
+
+div.SumoSelect > .optWrapper {
+    width: 300px;
 }
 
 div.SumoSelect > .optWrapper label {
     margin: 0;
+}
+
+.SumoSelect > .CaptionCont > span {
+    text-align: center !important;
 }
 
 /* Input fields */
@@ -151,12 +164,77 @@ select {
 
 .err-msg {
     color:red;
+    display: block;
 }
 
-.SumoSelect {
-    width: 300px !important;
+.can-collapse {
+    cursor: pointer;
 }
 
-.SumoSelect > .CaptionCont > span {
-    text-align: center !important;
+.can-collapse.has-expanded img {
+    -moz-animation: spin-down 400ms linear;
+    -moz-transform: rotate(90deg);
+    -webkit-animation: spin-down 400ms linear;
+    -webkit-transform: rotate(90deg);
+    animation: spin-down 400ms linear;
+    transform: rotate(90deg);
+}
+
+.can-collapse.has-collapsed img {
+    -moz-animation: spin-right 400ms linear;
+    -moz-transform: rotate(0deg);
+    -webkit-animation: spin-right 400ms linear;
+    -webkit-transform: rotate(0deg);
+    animation: spin-right 400ms linear;
+    transform: rotate(0deg);
+}
+
+@-moz-keyframes spin-right {
+    0% {
+        -moz-transform: rotate(90deg);
+    }
+    100% {
+        -moz-transform: rotate(0deg);
+    }
+}
+@-webkit-keyframes spin-right {
+    0% {
+        -webkit-transform: rotate(90deg);
+    }
+    100% {
+        -webkit-transform: rotate(0deg);
+    }
+}
+@keyframes spin-right {
+    0% {
+        transform: rotate(90deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@-moz-keyframes spin-down {
+    0% {
+        -moz-transform: rotate(0deg);
+    }
+    100% {
+        -moz-transform: rotate(90deg);
+    }
+}
+@-webkit-keyframes spin-down {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(90deg);
+    }
+}
+@keyframes spin-down {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(90deg);
+    }
 }

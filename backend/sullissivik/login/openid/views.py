@@ -142,6 +142,15 @@ class LoginCallback(TemplateView):
                 context = self.get_context_data(errors=resp.to_dict())
                 return self.render_to_response(context)
             else:
+                respdict = resp.to_dict()
+                their_nonce = respdict['id_token']['nonce']
+                if their_nonce != nonce:
+                    del request.session['oid_state']
+                    logger.error("Nonce mismatch: Token service responded with incorrect nonce (expected %s, got %s)" % (nonce, their_nonce))
+                    context = self.get_context_data(errors={'Nonce mismatch': 'Got incorrect nonce from token server'})
+                    return self.render_to_response(context)
+                request.session['access_token_data'] = respdict
+                request.session['raw_id_token'] = resp.raw_id_token
                 userinfo = client.do_user_info_request(state=request.session['oid_state'])
                 user_info_dict = userinfo.to_dict()
                 request.session['user_info'] = user_info_dict
@@ -155,12 +164,12 @@ class LogoutCallback(View):
 
     @xframe_options_exempt
     def get(self, request):
+        their_sid = request.GET.get('sid')
+        our_sid = request.session['access_token_data']['id_token']['sid']
+        if their_sid != our_sid:
+            print("Logout SID mismatch (ours: %s, theirs: %s)" % (our_sid, their_sid))
+
         # according to the specs this is rendered in a iframe when the user triggers a logout from OP`s side
         # do a total cleanup and delete everything related to openID
-        if 'oid_state' in request.session:
-            del request.session['oid_state']
-        if 'oid_nonce' in request.session:
-            del request.session['oid_nonce']
-        if 'user_info' in request.session:
-            del request.session['user_info']
-        return HttpResponseRedirect('index')
+        OpenId.clear_session(request.session)
+        return HttpResponse("")

@@ -11,6 +11,9 @@
     {% endif %}
     <span class="err-msg" for="{{ field.id_for_label }}">
         {% if field.errors %}
+            {% if upload %}
+                <span data-trans="error.upload_validation">{% trans 'error.upload_validation' %}</span>
+            {% endif %}
             <ul class="errorlist">
                 {% for error in field.errors.as_data %}
                     <li

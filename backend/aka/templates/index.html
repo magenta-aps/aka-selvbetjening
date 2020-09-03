@@ -32,6 +32,8 @@
     {% if cvr %}
         {% url 'aka:rentenota' as rentenota_url %}
         {% include 'toc-item.html' with url=rentenota_url text='index.rentenota' icon='tax' %}
+
+        {% if claimant_ids %}
         {% url 'aka:inkassosag' as inkassosag_url %}
         {% include 'toc-item.html' with url=inkassosag_url text='index.fordring' icon='business' %}
         {% url 'aka:inkassosag-upload' as inkassosag_upload_url %}
@@ -40,18 +42,14 @@
         {% include 'toc-item.html' with url=nedskrivning_url text='index.nedskrivning' icon='tax' %}
         {% url 'aka:nedskrivning-upload' as nedskrivning_upload_url %}
         {% include 'toc-item.html' with url=nedskrivning_upload_url text='index.nedskrivning-upload' icon='tax' %}
+        {% endif %}
+
         {% url 'aka:loentraek' as loentraek_url %}
         {% include 'toc-item.html' with url=loentraek_url text='index.løntræk' icon='briefcase' %}
         {% url 'aka:loentraek-upload' as loentraek_upload_url %}
         {% include 'toc-item.html' with url=loentraek_upload_url text='index.løntræk-upload' icon='briefcase' %}
-        {% url 'aka:fordringshaverkonto' as fordringshaverkonto_url %}
-        {% include 'toc-item.html' with url=fordringshaverkonto_url text='index.fordringshaverkonto' icon='tax' %}
-        {% url 'aka:arbejdsgiverkonto' as arbejdsgiverkonto_url %}
-        {% include 'toc-item.html' with url=arbejdsgiverkonto_url text='index.arbejdsgiverkonto' icon='tax' %}
     {% endif %}
-    {% if cpr %}
-        {% include 'toc-item.html' with url='borgerkonto' text='index.borgerkonto' icon='tax' %}
-    {% endif %}
+    {% include 'toc-item.html' with url='konto' text='index.konto' icon='tax' %}
 </nav>
 
 {% endblock %}

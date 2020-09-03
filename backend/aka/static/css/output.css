@@ -65,8 +65,16 @@ body.pdf .output {
     text-align: right;
 }
 
+.output .output-actions .optWrapper {
+    text-align: left;
+}
+
 .output-table {
     font-size: 1em;
+}
+
+.numbercell {
+    text-align: right;
 }
 
 .nb {
@@ -76,4 +84,8 @@ body.pdf .output {
 .output .dataTables_scrollHeadInner,
 .output table.output-table.dataTable {
     min-width: 100%;
+}
+
+.account-data {
+    font-size: 0.8em;
 }

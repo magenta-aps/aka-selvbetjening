@@ -21,21 +21,28 @@ class PrismeException(AkaException):
     title = "prisme.error"
     error_parse = {
         '250': {
-            'inkasso': {
+            'inkasso': [{
                 're': re.compile(r'Der findes ikke en inkassosag med det eksterne ref.nr. (.*)'),
                 'args': ['refnumber']
-            },
-            'rentenota': {
+            }],
+            'nedskrivning': [{
+                're': re.compile(r'Der findes ikke en inkassosag med det eksterne ref.nr. (.*)'),
+                'args': ['refnumber']
+            }],
+            'rentenota': [{
                 're': re.compile(
                     r'Der findes ingen renter for dette CPR/CVR (\d{8}) eller for '
                     r'den angivne periode (\d{2}-\d{2}-\d{4}) (\d{2}-\d{2}-\d{4})'
                 ),
                 'args': ['cvr', 'start', 'end']
-            },
-            'loentraek': {
+            }],
+            'loentraek': [{
                 're': re.compile(r'Aftalenummer (.+) findes ikke'),
                 'args': ['nr']
-            }
+            },{
+                're': re.compile(r'Det samme CPR-Nummer (\d+) må kun optræde en gang pr. indberetning'),
+                'args': ['cpr']
+            }]
         }
     }
 
@@ -47,10 +54,12 @@ class PrismeException(AkaException):
         try:
             parsedata = self.error_parse.get(str(code)).get(context)
             if parsedata:
-                match = parsedata['re'].search(text)
-                if match:
-                    for i, argname in enumerate(parsedata['args'], start=1):
-                        self.params[argname] = match.group(i)
+                for p in parsedata:
+                    match = p['re'].search(text)
+                    if match:
+                        for i, argname in enumerate(p['args'], start=1):
+                            self.params[argname] = match.group(i)
+                        break
         except Exception as e:
             print("Failed to parse prisme error response: %s" % str(e))
             pass
@@ -140,7 +149,7 @@ class PrismeAccountRequest(PrismeRequestObject):
         return PrismeAccountResponse
 
 
-class PrismeEmployerAccountRequest(PrismeAccountRequest):
+class PrismeSELRequest(PrismeAccountRequest):
 
     @property
     def method(self):
@@ -148,10 +157,10 @@ class PrismeEmployerAccountRequest(PrismeAccountRequest):
 
     @property
     def reply_class(self):
-        return PrismeEmployerAccountResponse
+        return PrismeSELAccountResponse
 
 
-class PrismeCitizenAccountRequest(PrismeAccountRequest):
+class PrismeAKIRequest(PrismeAccountRequest):
 
     @property
     def method(self):
@@ -159,7 +168,7 @@ class PrismeCitizenAccountRequest(PrismeAccountRequest):
 
     @property
     def reply_class(self):
-        return PrismeCitizenAccountResponse
+        return PrismeAKIAccountResponse
 
 
 
@@ -343,7 +352,7 @@ class PrismePayrollRequest(PrismeRequestObject):
 
     @property
     def reply_class(self):
-        return PrismeInterestNoteResponse
+        return PrismePayrollResponse
 
 
 class PrismePayrollRequestLine(PrismeRequestObject):
@@ -431,10 +440,10 @@ class PrismeEmployerAccountResponseTransaction(PrismeAccountResponseTransaction)
 
     def __init__(self, data):
         super().__init__(data)
-        self.rate_number = data['RateNmb']
+        self.rate_number = data.get('RateNmb')
 
 
-class PrismeEmployerAccountResponse(PrismeAccountResponse):
+class PrismeSELAccountResponse(PrismeAccountResponse):
     itemclass = PrismeEmployerAccountResponseTransaction
 
 
@@ -447,7 +456,7 @@ class PrismeCitizenAccountResponseTransaction(PrismeAccountResponseTransaction):
         self.child_claimant = data['ChildClaimant']
 
 
-class PrismeCitizenAccountResponse(PrismeAccountResponse):
+class PrismeAKIAccountResponse(PrismeAccountResponse):
     itemclass = PrismeCitizenAccountResponseTransaction
 
 

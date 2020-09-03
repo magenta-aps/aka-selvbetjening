@@ -1,7 +1,9 @@
 import json
 import os
-
+import re
 import pdfkit
+import django_excel as excel
+
 from aka.clients.dafo import Dafo
 from aka.clients.prisme import PrismeCvrCheckRequest, Prisme
 from aka.clients.prisme import PrismeNotFoundException
@@ -9,13 +11,14 @@ from aka.exceptions import AkaException
 from aka.utils import flatten
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template.loader import select_template
 from django.template.response import TemplateResponse
 from django.views.generic.edit import FormMixin
 
 
 class ErrorHandlerMixin(object):
+
     def dispatch(self, request, *args, **kwargs):
         try:
             return super(ErrorHandlerMixin, self).dispatch(request, *args, **kwargs)
@@ -41,26 +44,26 @@ class ErrorHandlerMixin(object):
 
 class HasUserMixin(object):
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.cvr = None
-
-    def __init__(self):
-        self.cvr = None
+        self.cpr = None
         self.claimant_ids = []
         self.company = None
+        self.person = None
+        super().__init__(*args, **kwargs)
 
     def get_claimants(self, request):
-        if 'claimantIds' in request.session['user_info']:
-            return request.session['user_info']['claimantIds']
+        if 'claimantIds' in request.session:
+            return request.session['claimantIds']
         elif self.cvr is not None:
             try:
                 cvr = self.cvr
-                cvr = "31290937"
                 claimant_ids = flatten([
                     response.claimant_id
                     for response in Prisme().process_service(PrismeCvrCheckRequest(cvr), 'cvr_check')
                 ])
-                request.session['user_info']['claimantIds'] = claimant_ids
+                request.session['claimantIds'] = claimant_ids
+                request.session.save()
                 return claimant_ids
             except PrismeNotFoundException as e:
                 return []
@@ -68,10 +71,18 @@ class HasUserMixin(object):
     def get_company(self, request):
         if 'company' in request.session['user_info']:
             return request.session['user_info']['company']
-        else:
+        elif self.cvr is not None:
             company = Dafo().lookup_cvr(self.cvr)
             request.session['user_info']['company'] = company
             return company
+
+    def get_person(self, request):
+        if 'person' in request.session['user_info']:
+            return request.session['user_info']['person']
+        elif self.cpr is not None:
+            person = Dafo().lookup_cpr(self.cpr, False)
+            request.session['user_info']['person'] = person
+            return person
 
     def dispatch(self, request, *args, **kwargs):
         try:
@@ -80,12 +91,12 @@ class HasUserMixin(object):
             self.company = self.get_company(request)
         except (KeyError, TypeError):
             pass
-
         try:
             self.cpr = request.session['user_info']['CPR']
+            self.person = {'navn': request.session['user_info']['name']}
+            self.p = self.get_person(request)
         except (KeyError, TypeError):
-            self.cpr = '0101601919'
-
+            pass
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -93,30 +104,30 @@ class HasUserMixin(object):
             'cpr': self.cpr,
             'cvr': self.cvr,
             'claimant_ids': self.claimant_ids,
-            'company': self.company
+            'company': self.company,
+            'person': self.person
         }
         context.update(kwargs)
         return super().get_context_data(**context)
 
 
 class RequireCprMixin(HasUserMixin):
+
     def dispatch(self, request, *args, **kwargs):
         try:
             self.cpr = request.session['user_info']['CPR']
         except (KeyError, TypeError):
-            self.cpr = '0101601919'
-            # raise PermissionDenied('no_cpr')
+            raise PermissionDenied('no_cpr')
         return super().dispatch(request, *args, **kwargs)
 
 
 class RequireCvrMixin(HasUserMixin):
+
     def dispatch(self, request, *args, **kwargs):
         try:
             self.cvr = request.session['user_info']['CVR']
         except (KeyError, TypeError):
-            # raise PermissionDenied('no_cvr')
-            pass
-
+            raise PermissionDenied('no_cvr')
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -147,56 +158,155 @@ class SimpleGetFormMixin(FormMixin):
         return kwargs
 
 
-class PdfRendererMixin(object):
+class RendererMixin(object):
+
+    def render(self):
+        pass
+
+    @property
+    def format(self):
+        return self.request.GET.get('format')
+
+    @property
+    def accepted_formats(self):
+        return []
+
+    @property
+    def key(self):
+        return self.request.GET.get('key')
+
+    def format_url(self, format, **kwargs):
+        params = self.request.GET.copy()
+        params['format'] = format
+        params.update(kwargs)
+        return self.request.path + "?" + params.urlencode()
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**dict({
+            ("%slink" % format) : self.format_url(format, key=self.key)
+            for format in self.accepted_formats
+        }, **kwargs))
+
+
+class PdfRendererMixin(RendererMixin):
 
     pdf_template_name = ''
 
-    def get_pdf_filename(self):
+    def get_filename(self):
         raise NotImplementedError
 
-    def render_pdf(self):
-        filename = self.get_pdf_filename()
-        context = self.get_context_data()
+    @property
+    def accepted_formats(self):
+        return super().accepted_formats + ['pdf']
 
-        css_data = []
-        for css_file in ['css/output.css', 'css/main.css', 'css/print.css']:
-            css_static_path = css_file.split('/')
-            css_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', *css_static_path)
-            if not os.path.exists(css_path):
-                css_path = os.path.join(settings.STATIC_ROOT, *css_static_path)
-            with open(css_path) as file:
-                css_data.append(file.read())
-        context['css'] = ''.join(css_data)
+    def render(self):
+        if self.format == 'pdf':
+            context = self.get_context_data()
 
-        html = select_template(self.get_template_names()).render(context)
+            css_data = []
+            for css_file in ['css/output.css', 'css/main.css', 'css/print.css']:
+                css_static_path = css_file.split('/')
+                css_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', *css_static_path)
+                if not os.path.exists(css_path):
+                    css_path = os.path.join(settings.STATIC_ROOT, *css_static_path)
+                with open(css_path) as file:
+                    css_data.append(file.read())
+            context['css'] = ''.join(css_data)
 
-        # return HttpResponse(html)
+            html = select_template(self.get_template_names()).render(context)
+            # return HttpResponse(html)
+            html = html.replace(
+                "\"%s" % settings.STATIC_URL,
+                "\"file://%s/" % os.path.abspath(settings.STATIC_ROOT)
+            )
 
-        html = html.replace(
-            "\"%s" % settings.STATIC_URL,
-            "\"file://%s/" % os.path.abspath(settings.STATIC_ROOT)
-        )
+            pdf = pdfkit.from_string(html, False, options={
+                'javascript-delay': 1000,
+                'debug-javascript': '',
+                'default-header': '',
+                'margin-top': '20mm',
+                'margin-bottom': '20mm',
+                'margin-left': '20mm',
+                'margin-right': '20mm',
+            })
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = "attachment; filename=\"%s.pdf\"" % self.get_filename()
+            return response
 
-
-        pdf = pdfkit.from_string(html, False, options={
-            'javascript-delay': 1000,
-            'debug-javascript': '',
-            'default-header': '',
-            'margin-top': '20mm',
-            'margin-bottom': '20mm',
-            'margin-left': '20mm',
-            'margin-right': '20mm',
-        })
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = "attachment; filename=\"%s\"" % filename
-        return response
+        return super().render()
 
     def get_context_data(self, **kwargs):
-        full_path = self.request.get_full_path_info()
-        full_path += ('&' if '?' in full_path else '?') + 'pdf'
-        context = {
-            'pdf': 'pdf' in self.request.GET,
-            'pdflink': full_path
-        }
-        context.update(kwargs)
-        return super().get_context_data(**context)
+        return super().get_context_data(**dict({
+            'pdf': self.format == 'pdf'
+        }, **kwargs))
+
+    def form_invalid(self, form):
+        if self.format == 'pdf':
+            return self.render()
+        return super().form_invalid(form)
+
+
+class JsonRendererMixin(RendererMixin):
+
+    @property
+    def accepted_formats(self):
+        return super().accepted_formats + ['json']
+
+    def render(self):
+        if self.format == 'json':
+            fields = self.get_fields(self.key)  # List of dicts
+            items = self.get_data(self.key)  # List of dicts
+            data = {
+                'count': len(items),
+                'items': [
+                    {
+                        field['name']: getattr(item, field['name'])
+                        for field in fields
+                    }
+                    for item in items
+                ]
+            }
+            return JsonResponse(data)
+        return super().render()
+
+
+class SpreadsheetRendererMixin(RendererMixin):
+
+    def get_filename(self):
+        raise NotImplementedError
+
+    def get_sheetname(self):
+        return "Sheet 1"
+
+    @property
+    def accepted_formats(self):
+        return super().accepted_formats + ['xlsx', 'ods', 'csv']
+
+    def render(self):
+        format = self.format
+        if format in self.accepted_formats:
+            fields = self.get_fields(self.key)  # List of dicts
+            items = self.get_data(self.key)  # List of dicts
+            data = [
+                [
+                    field.get("title", field['name'])
+                    for field in fields
+                ]
+            ] + [
+                [
+                    item[field['name']]
+                    for field in fields
+                ]
+                for item in items
+            ]
+            sheet = excel.pe.Sheet(
+                data,
+                name=self.get_sheetname(),
+                name_columns_by_row=0
+            )
+            return excel.make_response(
+                sheet,
+                file_type=format,
+                file_name="%s.%s" % (self.get_filename(), format),
+            )
+        return super().render()

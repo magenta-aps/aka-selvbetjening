@@ -24,14 +24,14 @@ class SessionOnlyUser(AnonymousUser):
         return True
 
     def dict(self):
-        return {'cpr': self.cpr, 'name': self.name}
+        return {'CPR': self.cpr, 'name': self.name}
 
     @staticmethod
     def get_user(session, cpr=None, name=None):
         user_dict = session.get('user')
         if cpr is not None:
-            user_dict = {'cpr': cpr, 'name': name}
+            user_dict = {'CPR': cpr, 'name': name}
             session['user'] = user_dict
         elif user_dict is None:
             return AnonymousUser()
-        return SessionOnlyUser(user_dict.get('cpr'), user_dict.get('name', name))
+        return SessionOnlyUser(user_dict.get('CPR'), user_dict.get('name', name))

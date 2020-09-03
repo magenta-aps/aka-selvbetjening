@@ -24,11 +24,21 @@
                         if (!options.headers) options.headers = {};
                         options.headers["X-CSRFToken"] = django.getCookie('csrftoken');
                     });
-                    $(".btn-print").click(window.print.bind(window));
+                    $(".btn-print").click(function(){
+                        const printhide = $(this).attr("data-printhide");
+                        const elements = printhide ? $(printhide).filter(":visible") : $();
+                        elements.hide();
+                        setTimeout(function() {
+                            window.print();
+                            elements.show();
+                        },0);
+                        return false;
+                    });
                     $('input[type="submit"]').click(function(){
                         $(this).parents("form").addClass('submitted');
                     });
                 });
+                django.language = "{{ LANGUAGE_CODE|split:'-'|first }}";
             </script>
         {% endif %}
         {% block extra_headers %}{% endblock %}
@@ -45,29 +55,33 @@
                         </a>
                     </h1>
                     <div class="locale-changer">
-                        <span id="locale_flag" class="option-{{LANGUAGE_CODE|split:'-'|first}}"></span>
-                        <select class="dropdown" data-locale-changer="true" data-locale-flag="#locale_flag" autocomplete="off">
-                            <option value="kl" {% if LANGUAGE_CODE|split:'-'|first == 'kl' %}selected="selected"{% endif %}>Kalaallisut</option>
-                            <option value="da" {% if LANGUAGE_CODE|split:'-'|first == 'da' %}selected="selected"{% endif %}>Dansk</option>
-                        </select>
+                        {% if LANGUAGE_CODE|split:'-'|first == 'kl' %}
+                            <span id="locale_flag_change" class="option-da" data-language="da"></span>
+                        {% else %}
+                            <span id="locale_flag_change" class="option-kl" data-language="kl"></span>
+                        {% endif %}
                     </div>
                 </div>
             </header>
             {% endif %}
             <main>
-                <div class="userinfo">
+                {% if not pdf %}
+                <div class="userinfo printhide">
                     {% if company.navn %}
-                    <span id="company" data-trans="common.logged_in_as" data-trans-params="{{ company|json }}">{{ 'common.logged_in_as'|format:company }}</span>
+                        <span id="company" data-trans="common.logged_in_as" data-trans-params="{{ company|json }}">{{ 'common.logged_in_as'|format:company }}</span>
+                    {% elif person.navn %}
+                        <span id="person" data-trans="common.logged_in_as" data-trans-params="{{ person|json }}">{{ 'common.logged_in_as'|format:person }}</span>
                     {% endif %}
                     {% if cpr or cvr %}
                         <a href="{% url 'aka:logout' %}" data-trans="common.logout">{% trans 'common.logout' %}</a>
                     {% endif %}
                 </div>
+                {% endif %}
                 {% block content %}
                 {% endblock %}
             </main>
             {% if not pdf %}
-            <footer>
+            <footer class="printhide">
                 <div class="footer-wrapper">
                     Footer
                 </div>
