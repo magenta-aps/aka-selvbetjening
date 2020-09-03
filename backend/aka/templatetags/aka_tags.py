@@ -73,6 +73,20 @@ def back(url, backurl):
 
 
 @register.filter
+def urlparam(url, param):
+    if param:
+        (key, value) = param.split("=")
+        return ''.join([
+            url,
+            '&' if '?' in url else '?',
+            key,
+            '=',
+            urlquote(value)
+        ])
+    return url
+
+
+@register.filter
 def get(item, attribute):
     if hasattr(item, attribute):
         return getattr(item, attribute)

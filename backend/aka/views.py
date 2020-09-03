@@ -35,6 +35,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.forms import formset_factory
 from django.http import JsonResponse, HttpResponse, FileResponse
+from django.shortcuts import redirect
 from django.template import Engine, Context
 from django.template.response import TemplateResponse
 from django.utils import translation
@@ -136,6 +137,28 @@ class LogoutView(View):
             return OpenId.logout(self.request.session)
         else:
             return NemId.logout(self.request.session)
+
+
+class ChooseCvrView(TemplateView):
+
+    template_name = "choose_cvr.html"
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'cvrs': self.request.session.get('cvrs'),
+            'back': self.request.GET.get('back')
+        }
+        context.update(kwargs)
+        return super().get_context_data(**context)
+
+    def get(self, request, *args, **kwargs):
+        cvr = request.GET.get("cvr")
+        if cvr and cvr in self.request.session.get('cvrs'):
+            back = self.request.GET.get('back')
+            request.session['user_info']['CVR'] = cvr
+            request.session.save()
+            return redirect(back)
+        return super().get(request, *args, **kwargs)
 
 
 @method_decorator(csrf_exempt, name='dispatch')

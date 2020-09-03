@@ -68,6 +68,9 @@ msgstr "Log ind som virksomhed [kl]"
 msgid "login.nemid"
 msgstr "Log ind som borger [kl]"
 
+msgid "login.multiple_cvr"
+msgstr "Der er flere CVR-numre tilknyttet dette CPR-nummer. Vælg hvilket nummer der skal bruges: [kl]"
+
 msgid "common.telefon"
 msgstr "Telefon [kl]"
 

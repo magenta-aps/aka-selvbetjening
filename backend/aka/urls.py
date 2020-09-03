@@ -14,6 +14,7 @@ Includinganother URLconf
    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from aka.views import KontoView
+from aka.views import ChooseCvrView
 from aka.views import CustomJavaScriptCatalog, SetLanguageView
 from aka.views import FordringshaverkontoView
 from aka.views import IndexTemplateView
@@ -39,6 +40,7 @@ urlpatterns = [
     url(r'^$', IndexTemplateView.as_view(), name='index'),
     url(r'^login$', LoginView.as_view(), name='login'),
     url(r'^logout$', LogoutView.as_view(), name='logout'),
+    url(r'^choose_cvr$', ChooseCvrView.as_view(), name='choose_cvr'),
     url(r'^inkassosag$', InkassoSagView.as_view(), name='inkassosag'),
     url(r'^inkassosag/upload', InkassoSagUploadView.as_view(), name='inkassosag-upload'),
     url(r'^fordringsgrupper/(?P<var>[a-z_]+)?', InkassoGroupDataView.as_view(), name='fordringsgrupper'),
