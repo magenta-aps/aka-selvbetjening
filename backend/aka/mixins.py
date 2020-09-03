@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 import django_excel as excel
 import pdfkit
@@ -11,7 +12,7 @@ from aka.utils import flatten
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.template.loader import select_template
 from django.template.response import TemplateResponse
 from django.urls import reverse
@@ -96,16 +97,15 @@ class HasUserMixin(object):
 
         if self.cpr and not self.cvr and not request.session.get('has_checked_cvr'):
             # cvrs = Dafo().lookup_cvr_by_cpr(self.cpr, false)
-            print("check cvr")
             cvrs = [30808460]
-            if len(cvrs) == 1:
-                self.cvr = request.session['user_info']['CVR'] = cvrs[0]
-                request.session['has_checked_cvr'] = True
-                request.session.save()
-            elif len(cvrs) > 1:
+            if len(cvrs) > 1:
                 request.session['cvrs'] = [str(x) for x in cvrs]
                 request.session.save()
                 return redirect(reverse('aka:choose_cvr')+"?back="+request.get_full_path())
+            if len(cvrs) == 1:
+                self.cvr = request.session['user_info']['CVR'] = cvrs[0]
+            request.session['has_checked_cvr'] = True
+            request.session.save()
 
         try:
             self.cvr = request.session['user_info'].get('CVR')
