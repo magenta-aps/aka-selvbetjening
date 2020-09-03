@@ -86,7 +86,6 @@ body.pdf .output {
     min-width: 100%;
 }
 
-.employeraccount-data,
-.citizenaccount-data {
+.account-data {
     font-size: 0.8em;
 }

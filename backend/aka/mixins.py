@@ -167,11 +167,25 @@ class RendererMixin(object):
     def format(self):
         return self.request.GET.get('format')
 
-    def format_url(self, format):
-        full_path = self.request.get_full_path_info()
-        full_path = re.sub(r"[&?]format=[^&?]*", "", full_path)
-        full_path += "%sformat=%s" % (('&' if '?' in full_path else '?'), format)
-        return full_path
+    @property
+    def accepted_formats(self):
+        return []
+
+    @property
+    def key(self):
+        return self.request.GET.get('key')
+
+    def format_url(self, format, **kwargs):
+        params = self.request.GET.copy()
+        params['format'] = format
+        params.update(kwargs)
+        return self.request.path + "?" + params.urlencode()
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**dict({
+            ("%slink" % format) : self.format_url(format, key=self.key)
+            for format in self.accepted_formats
+        }, **kwargs))
 
 
 class PdfRendererMixin(RendererMixin):
@@ -180,6 +194,10 @@ class PdfRendererMixin(RendererMixin):
 
     def get_filename(self):
         raise NotImplementedError
+
+    @property
+    def accepted_formats(self):
+        return super().accepted_formats + ['pdf']
 
     def render(self):
         if self.format == 'pdf':
@@ -196,6 +214,7 @@ class PdfRendererMixin(RendererMixin):
             context['css'] = ''.join(css_data)
 
             html = select_template(self.get_template_names()).render(context)
+            # return HttpResponse(html)
             html = html.replace(
                 "\"%s" % settings.STATIC_URL,
                 "\"file://%s/" % os.path.abspath(settings.STATIC_ROOT)
@@ -218,8 +237,7 @@ class PdfRendererMixin(RendererMixin):
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**dict({
-            'pdf': self.format == 'pdf',
-            'pdflink': self.format_url('pdf')
+            'pdf': self.format == 'pdf'
         }, **kwargs))
 
     def form_invalid(self, form):
@@ -230,11 +248,14 @@ class PdfRendererMixin(RendererMixin):
 
 class JsonRendererMixin(RendererMixin):
 
+    @property
+    def accepted_formats(self):
+        return super().accepted_formats + ['json']
+
     def render(self):
         if self.format == 'json':
-            context = self.get_context_data()
-            fields = context['fields']  # List of dicts
-            items = context['items']  # List of PrismeResponse instances
+            fields = self.get_fields(self.key)  # List of dicts
+            items = self.get_data(self.key)  # List of dicts
             data = {
                 'count': len(items),
                 'items': [
@@ -248,11 +269,6 @@ class JsonRendererMixin(RendererMixin):
             return JsonResponse(data)
         return super().render()
 
-    def get_context_data(self, **kwargs):
-        return super().get_context_data(**dict({
-            'jsonlink': self.format_url('json')
-        }, **kwargs))
-
 
 class SpreadsheetRendererMixin(RendererMixin):
 
@@ -262,20 +278,26 @@ class SpreadsheetRendererMixin(RendererMixin):
     def get_sheetname(self):
         return "Sheet 1"
 
-    accepted_formats = ['xlsx', 'ods', 'csv']
+    @property
+    def accepted_formats(self):
+        return super().accepted_formats + ['xlsx', 'ods', 'csv']
 
     def render(self):
         format = self.format
         if format in self.accepted_formats:
-            context = self.get_context_data()
-            fields = context['fields']  # List of dicts
-            items = context['items']  # List of dicts
+            fields = self.get_fields(self.key)  # List of dicts
+            items = self.get_data(self.key)  # List of dicts
             data = [
-                [field.get("title", field['name']) for field in fields]
+                [
+                    field.get("title", field['name'])
+                    for field in fields
+                ]
             ] + [
                 [
-                    item[field['name']] for field in fields
-                ] for item in items
+                    item[field['name']]
+                    for field in fields
+                ]
+                for item in items
             ]
             sheet = excel.pe.Sheet(
                 data,
@@ -288,9 +310,3 @@ class SpreadsheetRendererMixin(RendererMixin):
                 file_name="%s.%s" % (self.get_filename(), format),
             )
         return super().render()
-
-    def get_context_data(self, **kwargs):
-        return super().get_context_data(**dict({
-            ("%slink" % format) : self.format_url(format)
-            for format in self.accepted_formats
-        }, **kwargs))

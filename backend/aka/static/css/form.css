@@ -1,6 +1,6 @@
 /* Form */
 
-form {
+form > div {
     background-color: #fff;
     padding: 1.875rem;
     margin: 1.5rem 0;
@@ -165,4 +165,76 @@ select {
 .err-msg {
     color:red;
     display: block;
+}
+
+.can-collapse {
+    cursor: pointer;
+}
+
+.can-collapse.has-expanded img {
+    -moz-animation: spin-down 400ms linear;
+    -moz-transform: rotate(90deg);
+    -webkit-animation: spin-down 400ms linear;
+    -webkit-transform: rotate(90deg);
+    animation: spin-down 400ms linear;
+    transform: rotate(90deg);
+}
+
+.can-collapse.has-collapsed img {
+    -moz-animation: spin-right 400ms linear;
+    -moz-transform: rotate(0deg);
+    -webkit-animation: spin-right 400ms linear;
+    -webkit-transform: rotate(0deg);
+    animation: spin-right 400ms linear;
+    transform: rotate(0deg);
+}
+
+@-moz-keyframes spin-right {
+    0% {
+        -moz-transform: rotate(90deg);
+    }
+    100% {
+        -moz-transform: rotate(0deg);
+    }
+}
+@-webkit-keyframes spin-right {
+    0% {
+        -webkit-transform: rotate(90deg);
+    }
+    100% {
+        -webkit-transform: rotate(0deg);
+    }
+}
+@keyframes spin-right {
+    0% {
+        transform: rotate(90deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@-moz-keyframes spin-down {
+    0% {
+        -moz-transform: rotate(0deg);
+    }
+    100% {
+        -moz-transform: rotate(90deg);
+    }
+}
+@-webkit-keyframes spin-down {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(90deg);
+    }
+}
+@keyframes spin-down {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(90deg);
+    }
 }

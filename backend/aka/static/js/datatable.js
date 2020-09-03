@@ -1,21 +1,25 @@
 $(function(){
-    var table = $('#data-table').DataTable({
-        scrollX: true,
-        searching: false,
-        lengthChange: false,
-        paging: false,
-        info: false,
-        fixedHeader: true,
-        buttons: [
-            'pdf'
-        ]
+
+    const tables = $(".output-table");
+    const datatables = {};
+    tables.each(function () {
+        const thistable = $(this),
+            key = thistable.attr("data-key");
+        datatables[key] = thistable.DataTable({
+            scrollX: true,
+            searching: false,
+            lengthChange: false,
+            paging: false,
+            info: false,
+            fixedHeader: true,
+        });
     });
 
     $("[data-action='display-column']").each(function(index, element){
         $(element).attr("data-column-index", index);
     });
 
-    var columnSelect = $("[name=columns]");
+    var columnSelect = $(".columnselect");
     var columnSelectMessage = django.gettext(django.language, "common.showcolumns");
     var sumo = [];
     columnSelect.SumoSelect();
@@ -27,39 +31,53 @@ $(function(){
         this.sumo.setText();
     });
 
-    var headers = $('#data-table th');
-
-    columnSelect.change(function() {
-        var showColumns = $(this).val();
-        var hash = {};
+    const updateColumns = function() {
+        const $this = $(this),
+            key = $this.attr("data-key"),
+            thistable = $(".dataTables_scrollHeadInner .output-table[data-key='"+key+"']"),
+            headers = thistable.find("th"),
+            showColumns = $this.val(),
+            hash = {};
 
         for (var i=0; i<showColumns.length; i++) {
             hash[showColumns[i]] = true;
         }
 
         headers.each(function(index, el) {
-            var field = $(this).attr("data-field");
-            var show = hash[field] || false;
-            table.column(index).visible(show);
+            let field = $(this).attr("data-field");
+            const show = hash[field] || false;
+            datatables[key].column(index).visible(show);
+            field = key + "." + field;
             if (show) {
-                $("input[name=hidden][value="+field+"]").remove();
-            } else if (!($("input[name=hidden][value="+field+"]").length)) {
+                $("input[name='hidden'][value='"+field+"']").remove();
+            } else if (!($("input[name='hidden'][value='"+field+"']").length)) {
                 $("form").append('<input type="hidden" name="hidden" value="' + field + '"/>');
             }
         });
-    });
+    };
 
+    columnSelect.change(updateColumns);
+    columnSelect.each(updateColumns);
+
+    //columnSelect.find("option").prop("selected", true);
     $("input[name=hidden]").each(function () {
-        var field = $(this).val();
-        var header = $('#data-table th[data-field='+field+']').first();
-        var headers = $('#data-table th');
-        var index = headers.index(header);
-        var column = table.column(index);
+        const value = $(this).val().split('.'),
+            key = value[0],
+            field = value[1],
+            headers = $(".output-table[data-key='"+key+"']").find("th"),
+            header = headers.filter("th[data-field='"+field+"']").first(),
+            index = headers.index(header),
+            column = datatables[key].column(index);
         column.visible(false);
+        //columnSelect.filter("[data-key='"+key+"']").find("option[value='"+field+"']").prop("selected", false);
     });
 
     $(document).on('language-change', function(event, language) {
-        table.draw();
+        for (let key in datatables) {
+            if (datatables.hasOwnProperty(key)) {
+                datatables[key].draw();
+            }
+        }
         columnSelectMessage = django.gettext(language, "common.showcolumns");
         for (var i=0; i<sumo.length; i++) {
             sumo[i].setText();

@@ -149,7 +149,7 @@ class PrismeAccountRequest(PrismeRequestObject):
         return PrismeAccountResponse
 
 
-class PrismeEmployerAccountRequest(PrismeAccountRequest):
+class PrismeSELRequest(PrismeAccountRequest):
 
     @property
     def method(self):
@@ -157,10 +157,10 @@ class PrismeEmployerAccountRequest(PrismeAccountRequest):
 
     @property
     def reply_class(self):
-        return PrismeEmployerAccountResponse
+        return PrismeSELAccountResponse
 
 
-class PrismeCitizenAccountRequest(PrismeAccountRequest):
+class PrismeAKIRequest(PrismeAccountRequest):
 
     @property
     def method(self):
@@ -168,7 +168,7 @@ class PrismeCitizenAccountRequest(PrismeAccountRequest):
 
     @property
     def reply_class(self):
-        return PrismeCitizenAccountResponse
+        return PrismeAKIAccountResponse
 
 
 
@@ -443,7 +443,7 @@ class PrismeEmployerAccountResponseTransaction(PrismeAccountResponseTransaction)
         self.rate_number = data.get('RateNmb')
 
 
-class PrismeEmployerAccountResponse(PrismeAccountResponse):
+class PrismeSELAccountResponse(PrismeAccountResponse):
     itemclass = PrismeEmployerAccountResponseTransaction
 
 
@@ -456,7 +456,7 @@ class PrismeCitizenAccountResponseTransaction(PrismeAccountResponseTransaction):
         self.child_claimant = data['ChildClaimant']
 
 
-class PrismeCitizenAccountResponse(PrismeAccountResponse):
+class PrismeAKIAccountResponse(PrismeAccountResponse):
     itemclass = PrismeCitizenAccountResponseTransaction
 
 

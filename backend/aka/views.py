@@ -5,9 +5,9 @@ import re
 
 from aka.clients.dafo import Dafo
 from aka.clients.prisme import Prisme, PrismeException
-from aka.clients.prisme import PrismeCitizenAccountRequest
+from aka.clients.prisme import PrismeAKIRequest
 from aka.clients.prisme import PrismeClaimRequest
-from aka.clients.prisme import PrismeEmployerAccountRequest
+from aka.clients.prisme import PrismeSELRequest
 from aka.clients.prisme import PrismeImpairmentRequest
 from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
@@ -139,13 +139,16 @@ class LogoutView(View):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class KontoView(SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, SpreadsheetRendererMixin, TemplateView):
+class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, SpreadsheetRendererMixin, TemplateView):
 
     form_class = KontoForm
+    template_name = 'aka/account/account.html'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.items = None
+        self._data = {}
+        self._prisme = None
 
     def form_valid(self, form):
         self.form = form
@@ -160,36 +163,31 @@ class KontoView(SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, Spreads
                 return response
         return super(KontoView, self).form_valid(form)
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['cprcvr_choices'] = [
+            (getattr(self, key), "%s: %s" % (key.upper(), getattr(self, key)))
+            for key in ('cpr', 'cvr')
+            if getattr(self, key)
+        ]
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = {}
         if self.form.is_bound:
             formdata = self.form.cleaned_data
-            fields = self.get_fields()
-            if self.request.GET.get('format') == 'pdf':
-                fields = [
-                    field for field in fields
-                    if field not in formdata['hidden']
-                ]
-
             context.update({
                 'items': self.items,
                 'date': date.today().strftime('%d/%m/%Y'),
-                'sum': sum([item['amount'] for item in self.items]) if self.items else 0,
                 'period': {
                     'from_date': formdata['from_date'].strftime('%d-%m-%Y') if formdata.get('from_date') is not None else None,
                     'to_date': formdata['to_date'].strftime('%d-%m-%Y') if formdata.get('to_date') is not None else None
                 },
-                'fields': fields
+                'cprcvr': self.cprcvr_choice
             })
         context.update(kwargs)
         return super().get_context_data(**context)
 
-
-# NY16
-class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
-
-    template_name = 'aka/employer_account/account.html'
 
     def get_filename(self):
         try:
@@ -200,31 +198,77 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
             to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d')
         except:
             to_date = "alle"
-        return _("employeraccount.filename").format(
+        return _("account.filename").format(
             from_date=from_date,
             to_date=to_date
         )
 
     def get_sheetname(self):
-        return "Arbejdsgiverkonto"
+        return "Kontoudtog"
 
-    def get_items(self, form):
-        prisme = Prisme()
-        account_request = PrismeEmployerAccountRequest(
-            self.cvr,
-            form.cleaned_data['from_date'],
-            form.cleaned_data['to_date'],
-            form.cleaned_data['open_closed']
-        )
-        prisme_reply = prisme.process_service(account_request, 'arbejdsgiverkonto')[0]
+    def hide_fields(self, form, fields):
         return [
-            {
-                field['name']: getattr(entry, field['name'])
-                for field in self.get_fields()
-            } for entry in prisme_reply
+            field for field in fields
+            if field not in form.cleaned_data['hidden']
         ]
 
-    def get_fields(self):
+    @property
+    def prisme(self):
+        if not self._prisme:
+            self._prisme = Prisme()
+        return self._prisme
+
+    def get_lookup_class(self, key):
+        if key == 'sel':
+            return PrismeSELRequest
+        if key == 'aki':
+            return PrismeAKIRequest
+
+    @property
+    def cprcvr_choice(self):
+        cprcvr = self.form.cleaned_data.get('cprcvr') or self.cpr or self.cvr
+        if cprcvr == self.cpr:
+            return (cprcvr, 'cpr')
+        elif cprcvr == self.cvr:
+            return (cprcvr, 'cvr')
+
+    def get_data(self, key):
+        if key not in self._data:
+            (cprcvr, c) = self.cprcvr_choice
+            lookup_class = self.get_lookup_class(key)
+            prisme_reply = self.prisme.process_service(lookup_class(
+                cprcvr,
+                self.form.cleaned_data['from_date'],
+                self.form.cleaned_data['to_date'],
+                self.form.cleaned_data['open_closed']
+            ), 'konto')[0]
+            self._data[key] = [
+                {
+                    field['name']: getattr(entry, field['name'])
+                    for field in self.get_fields(key)
+                } for entry in prisme_reply
+            ]
+        return self._data[key]
+
+    def get_item_data(self, key, form):
+        data = self.get_data(key)
+        return {
+            'key': key,
+            'title': 'account.title_' + key,
+            'fields': self.hide_fields(form, self.get_fields(key)),
+            'data': data,
+            'sum': sum([dataitem['amount'] for dataitem in data]) if data else 0,
+        }
+
+    def get_items(self, form):
+        items = []
+        key = self.request.GET.get("key")
+        keys = [key] if key else ['sel', 'aki']
+        for key in keys:
+            items.append(self.get_item_data(key, form))
+        return items
+
+    def get_fields(self, key='sel'):
         fields = [
             {'name': 'account_number', 'class': 'nb'},
             {'name': 'transaction_date', 'class': 'nb'},
@@ -245,86 +289,17 @@ class ArbejdsgiverKontoView(RequireCvrMixin, KontoView):
             {'name': 'claim_type_code', 'class': 'nb'},
             {'name': 'invoice_number', 'class': 'nb'},
             {'name': 'transaction_type', 'class': 'nb'},
-            {'name': 'rate_number', 'class': 'nb'},
         ]
+        if key == 'sel':
+            fields += [
+                {'name': 'rate_number', 'class': 'nb'}
+            ]
+        if key == 'aki':
+            fields += [
+                {'name': 'child_claimant', 'class': 'nb'}
+            ]
         for field in fields:
-            field['title'] = _("employeraccount.%s" % field['name']).replace("&shy;", "")
-        return fields
-
-    def get_context_data(self, **kwargs):
-        context = {
-            'company': Dafo().lookup_cvr(self.cvr)
-        }
-        context.update(kwargs)
-        return super().get_context_data(**context)
-
-
-# S23
-
-class BorgerKontoView(RequireCprMixin, KontoView):
-
-    template_name = 'aka/citizen_account/account.html'
-
-    def get_filename(self):
-        try:
-            from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d')
-        except:
-            from_date = "alle"
-        try:
-            to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d')
-        except:
-            to_date = "alle"
-        return _("citizenaccount.filename").format(
-            from_date=from_date,
-            to_date=to_date
-        )
-
-    def get_sheetname(self):
-        return "Borgerkonto"
-
-    def get_items(self, form):
-        prisme = Prisme()
-        account_request = PrismeCitizenAccountRequest(
-            self.cpr,
-            form.cleaned_data['from_date'],
-            form.cleaned_data['to_date'],
-            form.cleaned_data['open_closed']
-        )
-        prisme_reply = prisme.process_service(account_request, 'borgerkonto')[0]
-        return [
-            {
-                field['name']: getattr(entry, field['name'])
-                for field in self.get_fields()
-            } for entry in prisme_reply
-        ]
-
-    def get_fields(self):
-        fields = [
-            {'name':'account_number', 'class': 'nb'},
-            {'name':'transaction_date', 'class': 'nb'},
-            {'name':'accounting_date', 'class': 'nb'},
-            {'name':'debitor_group_id', 'class': 'nb'},
-            {'name':'debitor_group_name', 'class': 'nb'},
-            {'name':'voucher', 'class': 'nb'},
-            {'name':'text', 'class': ''},
-            {'name':'payment_code', 'class': 'nb'},
-            {'name':'payment_code_name', 'class': 'nb'},
-            {'name':'amount', 'class': 'nb numbercell', 'number': True},
-            {'name':'remaining_amount', 'class': 'nb numbercell', 'number': True},
-            {'name':'due_date', 'class': 'nb'},
-            {'name':'closed_date', 'class': 'nb'},
-            {'name':'last_settlement_voucher', 'class': 'nb'},
-            {'name':'collection_letter_date', 'class': 'nb'},
-            {'name':'collection_letter_code', 'class': 'nb'},
-            {'name':'claim_type_code', 'class': 'nb'},
-            {'name':'invoice_number', 'class': 'nb'},
-            {'name':'transaction_type', 'class': 'nb'},
-            {'name':'claimant_name', 'class': 'nb'},
-            {'name':'claimant_id', 'class': 'nb'},
-            {'name':'child_claimant', 'class': 'nb'},
-        ]
-        for field in fields:
-            field['title'] = _("citizenaccount.%s" % field['name']).replace("&shy;", "")
+            field['title'] = _("account.%s" % field['name']).replace("&shy;", "")
         return fields
 
 

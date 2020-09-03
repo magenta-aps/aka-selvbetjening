@@ -78,7 +78,8 @@ def get(item, attribute):
         return getattr(item, attribute)
     if hasattr(item, 'get'):
         return item.get(attribute)
-
+    if isinstance(item, (tuple, list)):
+        return item[int(attribute)]
 
 @register.filter
 def number(item):

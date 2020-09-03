@@ -12,7 +12,7 @@ class BasicTestCase(TestMixin, TestCase):
 
     def setUp(self):
         logging.disable(logging.CRITICAL)
-        self.url = '/arbejdsgiverkonto/'
+        self.url = '/konto/'
         self.soapmock = self.mock('aka.clients.prisme.Prisme.process_service')
         self.soapmock.return_value = [PrismeAccountResponse(
             None,

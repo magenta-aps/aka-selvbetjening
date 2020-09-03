@@ -78,4 +78,18 @@ $(function(){
         }
         return null;
     };
+
+    $("[data-collapse]").click(function () {
+        const target = $($(this).attr("data-collapse"));
+        target.toggleClass("collapsed");
+        if (target.hasClass("collapsed")) {
+            $(this).addClass("has-collapsed");
+            $(this).removeClass("has-expanded");
+            target.slideUp();
+        } else {
+            $(this).removeClass("has-collapsed");
+            $(this).addClass("has-expanded");
+            target.slideDown();
+        }
+    })
 });
