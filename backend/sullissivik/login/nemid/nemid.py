@@ -26,7 +26,7 @@ class NemId:
                 token = request.COOKIES.get(config.get('cookie_name'))
                 if token:
                     response = requests.post(
-                        "https://qaip.sullissivik.gl/rest/identityservice/GetUser",
+                        config['get_user_service'],
                         data={'token': token},
                         cert=(
                             config['client_certificate'],

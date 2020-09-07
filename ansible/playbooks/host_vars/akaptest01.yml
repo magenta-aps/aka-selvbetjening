@@ -65,6 +65,7 @@ django_nemid:
   redirect_field: "returnurl"
   client_certificate: "/etc/ssl/nemid/test.akap.sullissivik.gl.cer"
   private_key: "/etc/ssl/nemid/test.akap.sullissivik.gl.key"
+  get_user_service: "https://qaip.sullissivik.gl/rest/identityservice/GetUser"
 
 restart_apache: True
 
