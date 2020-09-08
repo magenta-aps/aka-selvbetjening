@@ -369,18 +369,6 @@ msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnummer [kl]"
 
 
-# NY16
-
-msgid "account.entries_open"
-msgstr "Åbne poster [kl]"
-
-msgid "account.entries_closed"
-msgstr "Lukkede poster [kl]"
-
-msgid "account.entries_all"
-msgstr "Alle poster [kl]"
-
-
 # NY18
 msgid "rentenota.title"
 msgstr "Rentenota [kl]"
@@ -447,6 +435,16 @@ msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne pe
 
 
 # NY16
+
+msgid "account.entries_open"
+msgstr "Åbne poster [kl]"
+
+msgid "account.entries_closed"
+msgstr "Lukkede poster [kl]"
+
+msgid "account.entries_all"
+msgstr "Alle poster [kl]"
+
 msgid "account.description"
 msgstr "Udfyld fra- og til-dato for at få poster for en given periode. Lad felterne stå tomme for at få alle poster"
 
@@ -594,7 +592,17 @@ msgstr "Rate&shy;nummer [kl]"
 msgid "account.child_claimant"
 msgstr "Fordringshavers barns CPR [kl]"
 
+msgid "account.total_claim"
+msgstr "Krav (total): [kl]"
 
+msgid "account.total_payment"
+msgstr "Indbetalt (total): [kl]"
+
+msgid "account.total_sum"
+msgstr "Saldo (total): [kl]"
+
+msgid "account.total_restance"
+msgstr "Restance (total): [kl]"
 
 
 msgid "DK"
