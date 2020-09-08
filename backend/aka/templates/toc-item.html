@@ -1,12 +1,16 @@
 {% load static %}
 {% load i18n %}
 <div class="medium-4 columns">
+    {% if url %}
     <a href="{{ url }}" class="box--selfservice" data-equalizer-watch="">
+    {% endif %}
         <div class="box__content">
             <svg class="box__icon">
                 <use xlink:href="#{{ icon }}"></use>
             </svg>
             <p data-trans="{{ text }}">{% trans text %}</p>
         </div>
+    {% if url %}
     </a>
+    {% endif %}
 </div>

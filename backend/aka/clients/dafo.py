@@ -50,3 +50,16 @@ class Dafo(object):
             return response.json()
         elif raise_on_fail:
             raise Exception(f"Lookup for cvr {cvr} failed")
+
+    def lookup_cvr_by_cpr(self, cpr, raise_on_fail=True):
+        if DEBUG:
+            return {}
+        config = settings.DAFO_CONNECT
+        response = requests.get(
+            config['address']['cprcvr'].format(cpr=cpr),
+            headers={'Authorization': f"SAML {self.token}"},
+        )
+        if response.status_code == 200:
+            return response.json()
+        elif raise_on_fail:
+            raise Exception(f"Ownership lookup for cpr {cpr} failed")

@@ -97,7 +97,7 @@ class NemId:
 
     @staticmethod
     def clear_session(session):
-        for key in ['user_info', 'login_method', 'user']:
+        for key in ['user_info', 'login_method', 'user', 'has_checked_cvr']:
             if key in session:
                 del session[key]
         session.save()

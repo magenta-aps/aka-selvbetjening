@@ -1,9 +1,9 @@
 import json
 import os
 import re
-import pdfkit
-import django_excel as excel
 
+import django_excel as excel
+import pdfkit
 from aka.clients.dafo import Dafo
 from aka.clients.prisme import PrismeCvrCheckRequest, Prisme
 from aka.clients.prisme import PrismeNotFoundException
@@ -12,8 +12,10 @@ from aka.utils import flatten
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect
 from django.template.loader import select_template
 from django.template.response import TemplateResponse
+from django.urls import reverse
 from django.views.generic.edit import FormMixin
 
 
@@ -85,18 +87,33 @@ class HasUserMixin(object):
             return person
 
     def dispatch(self, request, *args, **kwargs):
-        try:
-            self.cvr = request.session['user_info'].get('CVR')
-            self.claimant_ids = self.get_claimants(request)
-            self.company = self.get_company(request)
-        except (KeyError, TypeError):
-            pass
+
         try:
             self.cpr = request.session['user_info']['CPR']
             self.person = {'navn': request.session['user_info']['name']}
             self.p = self.get_person(request)
         except (KeyError, TypeError):
             pass
+
+        if self.cpr and not self.cvr and not request.session.get('has_checked_cvr'):
+            # cvrs = Dafo().lookup_cvr_by_cpr(self.cpr, false)
+            cvrs = [30808460]
+            if len(cvrs) > 1:
+                request.session['cvrs'] = [str(x) for x in cvrs]
+                request.session.save()
+                return redirect(reverse('aka:choose_cvr')+"?back="+request.get_full_path())
+            if len(cvrs) == 1:
+                self.cvr = request.session['user_info']['CVR'] = cvrs[0]
+            request.session['has_checked_cvr'] = True
+            request.session.save()
+
+        try:
+            self.cvr = request.session['user_info'].get('CVR')
+            self.claimant_ids = self.get_claimants(request)
+            self.company = self.get_company(request)
+        except (KeyError, TypeError):
+            pass
+
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
