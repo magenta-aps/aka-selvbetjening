@@ -4,7 +4,7 @@ psycopg2-binary
 requests
 requests[socks]
 requests_ntlm
-oic
+oic>=1.2.0
 httpretty
 lxml>=4.2.5
 zeep>=3.4.0

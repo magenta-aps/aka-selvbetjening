@@ -150,7 +150,6 @@ class LoginCallback(TemplateView):
                     context = self.get_context_data(errors={'Nonce mismatch': 'Got incorrect nonce from token server'})
                     return self.render_to_response(context)
                 request.session['access_token_data'] = respdict
-                request.session['raw_id_token'] = resp.raw_id_token
                 userinfo = client.do_user_info_request(state=request.session['oid_state'])
                 user_info_dict = userinfo.to_dict()
                 request.session['user_info'] = user_info_dict

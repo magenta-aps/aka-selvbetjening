@@ -58,7 +58,7 @@ class OpenId:
             'scope': cls.open_id_settings['scope'],
             'client_id': cls.open_id_settings['client_id'],
             'redirect_uri': cls.open_id_settings['front_channel_logout_uri'],
-            'id_token_hint': session.get('raw_id_token'),
+            # 'id_token_hint': session.get('raw_id_token'),
             'post_logout_redirect_uri': cls.open_id_settings['post_logout_redirect_uri'],
             'state': rndstr(32),
         }
