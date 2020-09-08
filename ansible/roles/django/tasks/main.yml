@@ -1,37 +1,19 @@
 ---
 
-- name: Install Python 3
+- name: Install system-level depndencies
   apt:
-    name: python3
     update_cache: true
-
-- name: Install pip3
-  apt:
-    name: python3-pip
-
-- name: Install python3-venv
-  apt:
-    name: python3-venv
-
-- name: Install setuptools
-  apt:
-    name: python-setuptools
-
-- name: Install gettext
-  apt:
-    name: gettext
-
-- name: Install wkhtmltopdf
-  apt:
-    name: wkhtmltopdf
-
-- name: Install libxmlsec1-dev
-  apt:
-    name: libxmlsec1-dev
-
-- name: Install language-pack-da
-  apt:
-    name: language-pack-da
+    name:
+      - python3
+      - python3-pip
+      - python3-venv
+      - python3-psycopg2
+      - python-psycopg2
+      - python-setuptools
+      - gettext
+      - wkhtmltopdf
+      - libxmlsec1-dev
+      - language-pack-da
 
 - name: Install requirements
   pip:
@@ -81,6 +63,11 @@
     src: templates/local_settings.j2
     dest: "{{django_local_settings_file}}"
     force: yes
+
+- name: Migrate
+  shell: ". {{django_virtual_env_path}}/bin/activate && python {{django_manage_file}} migrate"
+  tags:
+    - django
 
 - name: Collect static files
   shell: ". {{django_virtual_env_path}}/bin/activate && python {{django_manage_file}} collectstatic --no-input"

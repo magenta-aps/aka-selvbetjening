@@ -38,8 +38,20 @@ msgstr "Gentag [kl]"
 msgid "common.print"
 msgstr "Print [kl]"
 
+msgid "common.download"
+msgstr "Download [kl]"
+
 msgid "common.pdf"
 msgstr "Download PDF [kl]"
+
+msgid "common.xlsx"
+msgstr "Download Excel-regneark [kl]"
+
+msgid "common.ods"
+msgstr "Download LibreOffice-regneark [kl]"
+
+msgid "common.csv"
+msgstr "Download CSV-fil [kl]"
 
 msgid "common.download_template"
 msgstr "Download skabelon [kl]"
@@ -55,6 +67,15 @@ msgstr "Log ind som virksomhed [kl]"
 
 msgid "login.nemid"
 msgstr "Log ind som borger [kl]"
+
+msgid "login.multiple_cvr"
+msgstr "Der er flere CVR-numre tilknyttet dette CPR-nummer. Vælg hvilket nummer der skal bruges: [kl]"
+
+msgid "common.telefon"
+msgstr "Telefon [kl]"
+
+msgid "common.fax"
+msgstr "Fax [kl]"
 
 msgid "prisme.error"
 msgstr ""
@@ -85,6 +106,7 @@ msgstr "Skattestyrelsen [kl]"
 
 msgid "common.showcolumns"
 msgstr "Vis/skjul kolonner [kl]"
+
 
 # Errors
 
@@ -145,6 +167,7 @@ msgstr "Ugyldigt CVR-nummer [kl]"
 msgid "error.invalid_cpr_cvr"
 msgstr "Ugyldigt CPR- eller CVR-nummer [kl]"
 
+
 # File lists
 
 msgid "filliste.mappeindhold"
@@ -192,11 +215,8 @@ msgstr "Upload løntræk [kl]"
 msgid "index.fordringshaverkonto"
 msgstr "Vis fordringshaverkonto [kl]"
 
-msgid "index.arbejdsgiverkonto"
-msgstr "Vis arbejdsgiverkonto [kl]"
-
-msgid "index.borgerkonto"
-msgstr "Vis Borgerkonto [kl]"
+msgid "index.konto"
+msgstr "Vis konto [kl]"
 
 
 # 6.1
@@ -221,6 +241,9 @@ msgstr "Fordringshaver [kl]"
 
 msgid "fordring.anden_fordringshaver"
 msgstr "Anden fordringshaver [kl]"
+
+msgid "fordring.dokumentation"
+msgstr "Dokumentation [kl]"
 
 msgid "fordring.fordringsgruppe"
 msgstr "Ekstern fordringsgruppe [kl]"
@@ -266,6 +289,9 @@ msgstr "Kontaktperson [kl]"
 
 msgid "fordring.noter"
 msgstr "Noter [kl]"
+
+msgid "fordring.meddebitor"
+msgstr "Meddebitor [kl]"
 
 msgid "fordring.success"
 msgstr "Fordring oprettet [kl]"
@@ -327,32 +353,20 @@ msgstr "Der opstod følgende fejl: [kl]"
 msgid "nedskrivning.error_250"
 msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber} [kl]"
 
-#: aka/templates/aka/impairmentForm.html:12
 msgid "nedskrivning.title"
 msgstr "Nedskrivning - Opret [kl]"
 
-msgid "common.upload.template"
-msgstr "Download skabelon [kl]"
-
-#: aka/templates/aka/impairmentForm.html:18
 msgid "nedskrivning.debitor"
 msgstr "Debitor [kl]"
 
-#: aka/templates/aka/impairmentForm.html:29
 msgid "nedskrivning.ekstern_sagsnummer"
 msgstr "Ekstern sagsnummer [kl]"
 
-#: aka/templates/aka/impairmentForm.html:39
 msgid "nedskrivning.beloeb"
 msgstr "Beløb [kl]"
 
-#: aka/templates/aka/impairmentForm.html:48
 msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnummer [kl]"
-
-
-# 6.5
-
 
 
 # NY16
@@ -374,53 +388,53 @@ msgstr "Rentenota [kl]"
 msgid "rentenota.rentenota"
 msgstr "Rentenota [kl]"
 
-msgid "rentenota.dato"
-msgstr "Dato [kl]"
-
-msgid "rentenota.postdato"
+msgid "rentenota.transaction_date"
 msgstr "Postdato [kl]"
 
-msgid "rentenota.debitorkonto"
-msgstr "Debitor&#173;konto [kl]"
+msgid "rentenota.updated"
+msgstr "Dato [kl]"
 
-msgid "rentenota.faktureringsklassifikation"
-msgstr "Fakturerings&#173;klassifikation [kl]"
+msgid "rentenota.account_number"
+msgstr "Debitor&shy;konto [kl]"
 
-msgid "rentenota.rentenotanummer"
-msgstr "Rentenota&#173;nummer [kl]"
+msgid "rentenota.billing_classification"
+msgstr "Fakturerings&shy;klassifikation [kl]"
 
-msgid "rentenota.bilag"
+msgid "rentenota.interest_note"
+msgstr "Rentenota&shy;nummer [kl]"
+
+msgid "rentenota.voucher"
 msgstr "Bilag [kl]"
 
-msgid "rentenota.faktura"
+msgid "rentenota.invoice"
 msgstr "Faktura [kl]"
 
-msgid "rentenota.tekst"
+msgid "rentenota.text"
 msgstr "Tekst [kl]"
 
-msgid "rentenota.fradato"
+msgid "rentenota.calculate_from_date"
 msgstr "Fradato [kl]"
 
-msgid "rentenota.tildato"
+msgid "rentenota.calculate_to_date"
 msgstr "Tildato [kl]"
 
-msgid "rentenota.dage"
+msgid "rentenota.interest_days"
 msgstr "Dage [kl]"
 
-msgid "rentenota.grundlag"
+msgid "rentenota.invoice_amount"
 msgstr "Grundlag [kl]"
 
-msgid "rentenota.forfald"
+msgid "rentenota.due_date"
 msgstr "Forfalds&#173;dato [kl]"
 
-msgid "rentenota.beloeb"
+msgid "rentenota.interest_amount"
 msgstr "Beløb [kl]"
 
 msgid "rentenota.ingenposter"
 msgstr "Ingen poster [kl]"
 
 msgid "rentenota.filename"
-msgstr "Rentenota {month}/{year} [kl].pdf"
+msgstr "Rentenota {month}/{year} [kl]"
 
 msgid "rentenota.year"
 msgstr "År [kl]"
@@ -433,286 +447,153 @@ msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne pe
 
 
 # NY16
-msgid "employeraccount.description"
+msgid "account.description"
 msgstr "Udfyld fra- og til-dato for at få poster for en given periode. Lad felterne stå tomme for at få alle poster"
 
-msgid "employeraccount.swift"
+msgid "account.swift"
 msgstr "SWIFT"
 
-msgid "employeraccount.iban"
+msgid "account.iban"
 msgstr "IBAN"
 
-msgid "employeraccount.cvrse"
+msgid "account.cvrse"
 msgstr "CVR/SE"
 
-msgid "employeraccount.title"
-msgstr "Kontoudtog for arbejdsgivere [kl]"
-
-msgid "employeraccount.from_date"
-msgstr "Fra dato [kl]"
-
-msgid "employeraccount.to_date"
-msgstr "Til dato [kl]"
-
-msgid "employeraccount.filename"
-msgstr "Kontoudtog {from_date} - {to_date} [kl].pdf"
-
-msgid "employeraccount.bankaccount"
-msgstr "Bankkonto [kl]"
-
-msgid "employeraccount.account"
+msgid "account.title"
 msgstr "Kontoudtog [kl]"
 
-msgid "employeraccount.period"
+msgid "account.from_date"
+msgstr "Fra dato [kl]"
+
+msgid "account.to_date"
+msgstr "Til dato [kl]"
+
+msgid "account.filename"
+msgstr "Kontoudtog {from_date} - {to_date} [kl]"
+
+msgid "account.footer"
+msgstr "Side {index} af {count} [kl]"
+
+msgid "account.bankaccount"
+msgstr "Bankkonto [kl]"
+
+msgid "account.account"
+msgstr "Kontoudtog [kl]"
+
+msgid "account.period"
 msgstr "Gældende for perioden: {from_date} - {to_date} [kl]"
 
-msgid "employeraccount.number"
+msgid "account.period_to"
+msgstr "Gældende frem til {to_date} [kl]"
+
+msgid "account.period_from"
+msgstr "Gældende fra {from_date} [kl]"
+
+msgid "account.period_all"
+msgstr "Alle kendte poster [kl]"
+
+msgid "account.number"
 msgstr "Nummer [kl]"
 
-msgid "employeraccount.date"
+msgid "account.date"
 msgstr "Dato [kl]"
 
-msgid "employeraccount.cvr"
+msgid "account.cvr"
 msgstr "CVR [kl]"
 
-msgid "employeraccount.yourref"
-msgstr "Deres reference [kl]"
-
-msgid "employeraccount.contact"
-msgstr "Sagsbehandler [kl]"
-
-msgid "employeraccount.localnumber"
-msgstr "Lokalnummer [kl]"
-
-msgid "employeraccount.payment1"
-msgstr "Betaling [kl]"
-
-msgid "employeraccount.invoiceaccount"
-msgstr "Fakturakonto [kl]"
-
-msgid "employeraccount.ingenposter"
-msgstr "Ingen poster for perioden [kl]"
-
-msgid "employeraccount.paymentdate"
-msgstr "Forfaldsdato [kl]"
-
-msgid "employeraccount.account_number"
-msgstr "Debitorkonto [kl]"
-
-msgid "employeraccount.transaction_date"
-msgstr "Posterings&shy;dato [kl]"
-
-msgid "employeraccount.accounting_date"
-msgstr "Bogførings&shy;dato [kl]"
-
-msgid "employeraccount.debitor_group_id"
-msgstr "Debitor&shy;gruppe [kl]"
-
-msgid "employeraccount.debitor_group_name"
-msgstr "Debitor&shy;gruppenavn [kl]"
-
-msgid "employeraccount.voucher"
-msgstr "Bilag [kl]"
-
-msgid "employeraccount.text"
-msgstr "Posteringstekst [kl]"
-
-msgid "employeraccount.payment_code"
-msgstr "Indbetalingskode [kl]"
-
-msgid "employeraccount.payment_code_name"
-msgstr "Indbetalingskodenavn [kl]"
-
-msgid "employeraccount.amount"
-msgstr "Beløb [kl]"
-
-msgid "employeraccount.remaining_amount"
-msgstr "Restsaldo [kl]"
-
-msgid "employeraccount.due_date"
-msgstr "Forfaldsdato [kl]"
-
-msgid "employeraccount.closed_date"
-msgstr "Lukkedato [kl]"
-
-msgid "employeraccount.last_settlement_voucher"
-msgstr "Sidste udligningsbilag [kl]"
-
-msgid "employeraccount.collection_letter_date"
-msgstr "Rykkerdato [kl]"
-
-msgid "employeraccount.collection_letter_code"
-msgstr "Rykkerkode [kl]"
-
-msgid "employeraccount.claim_type_code"
-msgstr "Fordringsartskode [kl]"
-
-msgid "employeraccount.invoice_number"
-msgstr "Fakturanummer [kl]"
-
-msgid "employeraccount.transaction_type"
-msgstr "Posterings&shy;type [kl]"
-
-msgid "employeraccount.claimant_name"
-msgstr "Fordringshaver navn [kl]"
-
-msgid "employeraccount.claimant_id"
-msgstr "Fordringshaver ID [kl]"
-
-msgid "employeraccount.child_claimant"
-msgstr "?? Barn Fordringshaver ?? [kl]"
-
-msgid "employeraccount.rate_number"
-msgstr "Ratenummer [kl]"
-
-
-# S23
-msgid "citizenaccount.telefon"
-msgstr "Telefon [kl]"
-
-msgid "citizenaccount.fax"
-msgstr "Fax [kl]"
-
-msgid "citizenaccount.swift"
-msgstr "SWIFT"
-
-msgid "citizenaccount.iban"
-msgstr "IBAN"
-
-msgid "citizenaccount.cvrse"
-msgstr "CVR/SE"
-
-msgid "citizenaccount.title"
-msgstr "Kontoudtog for borgere [kl]"
-
-msgid "citizenaccount.from_date"
-msgstr "Fra dato [kl]"
-
-msgid "citizenaccount.to_date"
-msgstr "Til dato [kl]"
-
-msgid "citizenaccount.filename"
-msgstr "Kontoudtog {from_date} - {to_date} [kl].pdf"
-
-msgid "citizenaccount.bankaccount"
-msgstr "Bankkonto [kl]"
-
-msgid "citizenaccount.account"
-msgstr "Kontoudtog [kl]"
-
-msgid "citizenaccount.period"
-msgstr "Gældende for perioden: {from_date} - {to_date} [kl]"
-
-msgid "citizenaccount.number"
-msgstr "Nummer [kl]"
-
-msgid "citizenaccount.date"
-msgstr "Dato [kl]"
-
-msgid "citizenaccount.cpr"
+msgid "account.cpr"
 msgstr "CPR [kl]"
 
-msgid "citizenaccount.yourref"
+msgid "account.yourref"
 msgstr "Deres reference [kl]"
 
-msgid "citizenaccount.contact"
+msgid "account.contact"
 msgstr "Sagsbehandler [kl]"
 
-msgid "citizenaccount.localnumber"
+msgid "account.localnumber"
 msgstr "Lokalnummer [kl]"
 
-msgid "citizenaccount.payment1"
+msgid "account.payment1"
 msgstr "Betaling [kl]"
 
-msgid "citizenaccount.invoiceaccount"
+msgid "account.invoiceaccount"
 msgstr "Fakturakonto [kl]"
 
-msgid "citizenaccount.ingenposter"
+msgid "account.ingenposter"
 msgstr "Ingen poster for perioden [kl]"
 
-msgid "citizenaccount.claimant"
-msgstr "Fordringshaver [kl]"
-
-msgid "citizenaccount.reference"
-msgstr "Eksternt referencenummer [kl]"
-
-msgid "citizenaccount.childcpr"
-msgstr "Barns cpr.nr. [kl]"
-
-msgid "citizenaccount.payment2"
-msgstr "Indbetaling [kl]"
-
-msgid "citizenaccount.paymentdate"
+msgid "account.paymentdate"
 msgstr "Forfaldsdato [kl]"
 
-msgid "citizenaccount.account_number"
+msgid "account.account_number"
 msgstr "Debitorkonto [kl]"
 
-msgid "citizenaccount.transaction_date"
-msgstr "Posteringsdato [kl]"
+msgid "account.transaction_date"
+msgstr "Posterings&shy;dato [kl]"
 
-msgid "citizenaccount.accounting_date"
-msgstr "Bogføringsdato [kl]"
+msgid "account.accounting_date"
+msgstr "Bogførings&shy;dato [kl]"
 
-msgid "citizenaccount.debitor_group_id"
-msgstr "Debitorgruppe [kl]"
+msgid "account.debitor_group_id"
+msgstr "Debitor&shy;gruppe [kl]"
 
-msgid "citizenaccount.debitor_group_name"
-msgstr "Debitorgruppenavn [kl]"
+msgid "account.debitor_group_name"
+msgstr "Debitor&shy;gruppenavn [kl]"
 
-msgid "citizenaccount.voucher"
+msgid "account.voucher"
 msgstr "Bilag [kl]"
 
-msgid "citizenaccount.text"
+msgid "account.text"
 msgstr "Posteringstekst [kl]"
 
-msgid "citizenaccount.payment_code"
+msgid "account.payment_code"
 msgstr "Indbetalingskode [kl]"
 
-msgid "citizenaccount.payment_code_name"
+msgid "account.payment_code_name"
 msgstr "Indbetalingskodenavn [kl]"
 
-msgid "citizenaccount.amount"
+msgid "account.amount"
 msgstr "Beløb [kl]"
 
-msgid "citizenaccount.remaining_amount"
+msgid "account.remaining_amount"
 msgstr "Restsaldo [kl]"
 
-msgid "citizenaccount.due_date"
+msgid "account.due_date"
 msgstr "Forfaldsdato [kl]"
 
-msgid "citizenaccount.closed_date"
+msgid "account.closed_date"
 msgstr "Lukkedato [kl]"
 
-msgid "citizenaccount.last_settlement_voucher"
+msgid "account.last_settlement_voucher"
 msgstr "Sidste udligningsbilag [kl]"
 
-msgid "citizenaccount.collection_letter_date"
+msgid "account.collection_letter_date"
 msgstr "Rykkerdato [kl]"
 
-msgid "citizenaccount.collection_letter_code"
+msgid "account.collection_letter_code"
 msgstr "Rykkerkode [kl]"
 
-msgid "citizenaccount.claim_type_code"
+msgid "account.claim_type_code"
 msgstr "Fordringsartskode [kl]"
 
-msgid "citizenaccount.invoice_number"
+msgid "account.invoice_number"
 msgstr "Fakturanummer [kl]"
 
-msgid "citizenaccount.transaction_type"
-msgstr "Posteringstype [kl]"
+msgid "account.transaction_type"
+msgstr "Posterings&shy;type [kl]"
 
-msgid "citizenaccount.claimant_name"
+msgid "account.claimant_name"
 msgstr "Fordringshaver navn [kl]"
 
-msgid "citizenaccount.claimant_id"
+msgid "account.claimant_id"
 msgstr "Fordringshaver ID [kl]"
 
-msgid "citizenaccount.child_claimant"
+msgid "account.rate_number"
+msgstr "Rate&shy;nummer [kl]"
+
+msgid "account.child_claimant"
 msgstr "Fordringshavers barns CPR [kl]"
 
-msgid "citizenaccount.rate_number"
-msgstr "Ratenummer [kl]"
 
 
 

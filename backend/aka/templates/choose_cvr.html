@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block extra_headers %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/toc.css' %}"/>
+{% endblock %}
+
+{% block content %}
+
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="display: none">
+    <symbol viewBox="0 0 50.5 50.5" id="business"><title>business</title> <path class="a" d="M25.25,50.5A25.25,25.25,0,1,1,50.5,25.25,25.28,25.28,0,0,1,25.25,50.5Zm0-48.5A23.25,23.25,0,1,0,48.5,25.25,23.28,23.28,0,0,0,25.25,2Z"></path><path class="a" d="M12.07,15.45v20h15v-7h4v7h6v-17a.57.57,0,0,0-.84-.5l-9.16,5v-4.5a.57.57,0,0,0-.84-.5l-9.16,5V15.45Z"></path> </symbol>
+</svg>
+
+    <nav class="toc row">
+        <p data-trans="login.multiple_cvr">{% trans 'login.multiple_cvr' %}</p>
+        {% for cvr in cvrs %}
+            {% url 'aka:choose_cvr' as choose_url %}
+            {% with cvrparam='cvr='|addstr:cvr backparam='back='|addstr:back %}
+            {% include 'toc-item.html' with text=cvr icon='business' url=choose_url|urlparam:cvrparam|urlparam:backparam %}
+            {% endwith %}
+        {% endfor %}
+    </nav>
+
+{% endblock %}

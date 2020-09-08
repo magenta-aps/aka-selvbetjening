@@ -26,7 +26,7 @@ class NemId:
                 token = request.COOKIES.get(config.get('cookie_name'))
                 if token:
                     response = requests.post(
-                        "https://qaip.sullissivik.gl/rest/identityservice/GetUser",
+                        config['get_user_service'],
                         data={'token': token},
                         cert=(
                             config['client_certificate'],
@@ -45,7 +45,6 @@ class NemId:
             except Exception as e:
                 exc_info = sys.exc_info()
                 traceback.print_exception(*exc_info)
-                raise e
         return user
 
     @staticmethod
@@ -98,7 +97,7 @@ class NemId:
 
     @staticmethod
     def clear_session(session):
-        for key in ['user_info', 'login_method', 'user']:
+        for key in ['user_info', 'login_method', 'user', 'has_checked_cvr']:
             if key in session:
                 del session[key]
         session.save()

@@ -130,8 +130,10 @@ class PrependCharField(forms.CharField):
 class KontoForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
+        cprcvr_choices = kwargs.pop('cprcvr_choices', ())
         super(KontoForm, self).__init__(*args, **kwargs)
         self.initial['open_closed'] = 2
+        self.fields['cprcvr'].choices = cprcvr_choices
 
     from_date = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
@@ -154,6 +156,10 @@ class KontoForm(forms.Form):
     hidden = AcceptingMultipleChoiceField(
         widget=MultipleHiddenInput,
         required=False
+    )
+    cprcvr = forms.ChoiceField(
+        required=False,
+        choices=[]
     )
 
     def clean(self):

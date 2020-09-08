@@ -13,8 +13,8 @@ Includinganother URLconf
    1. Import the include() function: from django.conf.urls import url, include
    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from aka.views import ArbejdsgiverKontoView
-from aka.views import BorgerKontoView
+from aka.views import KontoView
+from aka.views import ChooseCvrView
 from aka.views import CustomJavaScriptCatalog, SetLanguageView
 from aka.views import FordringshaverkontoView
 from aka.views import IndexTemplateView
@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^$', IndexTemplateView.as_view(), name='index'),
     url(r'^login$', LoginView.as_view(), name='login'),
     url(r'^logout$', LogoutView.as_view(), name='logout'),
+    url(r'^choose_cvr$', ChooseCvrView.as_view(), name='choose_cvr'),
     url(r'^inkassosag$', InkassoSagView.as_view(), name='inkassosag'),
     url(r'^inkassosag/upload', InkassoSagUploadView.as_view(), name='inkassosag-upload'),
     url(r'^fordringsgrupper/(?P<var>[a-z_]+)?', InkassoGroupDataView.as_view(), name='fordringsgrupper'),
@@ -52,6 +53,5 @@ urlpatterns = [
     url(r'^netsopkraevning$', NetsopkraevningView.as_view(), name='netsopkraevning'),
     url(r'^fordringshaverkonto(?P<path>/.*)$', FordringshaverkontoView.as_view(), name='fordringshaverkonto-path'),
     url(r'^fordringshaverkonto/$', FordringshaverkontoView.as_view(), name='fordringshaverkonto', kwargs={'path': '/'}),
-    url(r'^arbejdsgiverkonto$', ArbejdsgiverKontoView.as_view(), name='arbejdsgiverkonto'),
-    url(r'^borgerkonto$', BorgerKontoView.as_view(), name='borgerkonto'),
+    url(r'^konto$', KontoView.as_view(), name='konto'),
 ]
