@@ -144,10 +144,6 @@ class PrismeAccountRequest(PrismeRequestObject):
         self.open_closed = open_closed
 
     @property
-    def method(self):
-        return 'getAccountStatementAKI'
-
-    @property
     def xml(self):
         return dict_to_xml({
             'CustIdentificationNumber': self.prepare(self.customer_id_number),
@@ -182,6 +178,41 @@ class PrismeAKIRequest(PrismeAccountRequest):
     def reply_class(self):
         return PrismeAKIAccountResponse
 
+
+class PrismeAccountTotalRequest(PrismeRequestObject):
+
+    wrap = 'CustTable'
+
+    def __init__(self, customer_id_number):
+        self.customer_id_number = customer_id_number
+
+    @property
+    def xml(self):
+        return dict_to_xml({
+            'CustIdentificationNumber': self.prepare(self.customer_id_number),
+        }, wrap=self.wrap)
+
+
+class PrismeSELTotalRequest(PrismeAccountTotalRequest):
+
+    @property
+    def method(self):
+        return 'getAccountStatementTotalSEL'
+
+    @property
+    def reply_class(self):
+        return PrismeAccountTotalResponse
+
+
+class PrismeAKITotalRequest(PrismeAccountTotalRequest):
+
+    @property
+    def method(self):
+        return 'getAccountStatementTotalAKI'
+
+    @property
+    def reply_class(self):
+        return PrismeAccountTotalResponse
 
 
 class PrismeClaimRequest(PrismeRequestObject):
@@ -471,6 +502,16 @@ class PrismeCitizenAccountResponseTransaction(PrismeAccountResponseTransaction):
 class PrismeAKIAccountResponse(PrismeAccountResponse):
     itemclass = PrismeCitizenAccountResponseTransaction
 
+
+class PrismeAccountTotalResponse(PrismeResponseObject):
+
+    def __init__(self, request, xml):
+        super(PrismeResponseObject, self).__init__(request, xml)
+        data = xml_to_dict(xml)
+        self.total_claim = data['TotalClaim']
+        self.total_payment = data['TotalPayment']
+        self.total_sum = data['TotalSum']
+        self.total_restance = data['TotalRestance']
 
 
 class PrismeRecIdResponse(PrismeResponseObject):
