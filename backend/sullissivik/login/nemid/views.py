@@ -34,7 +34,6 @@ class Login(View):
 
         # Sullissivik redirects back here, so if login somehow fails (and we don't trust sullisivik to keep the user in that case), we re-check and direct back
 
-
         login_url_parts = list(urlparse(self.config.get('login_url')))
         querystring = QueryDict(login_url_parts[4], mutable=True)
         querystring['sc_lang'] = settings.LOCALE_MAP.get(translation.get_language(), "da-DK")

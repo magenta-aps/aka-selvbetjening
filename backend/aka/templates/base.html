@@ -67,10 +67,10 @@
             <main>
                 {% if not pdf %}
                 <div class="userinfo printhide">
-                    {% if company.navn %}
+                    {% if person.navn %}
+                    <span id="person" data-trans="common.logged_in_as" data-trans-params="{{ person|json }}">{{ 'common.logged_in_as'|format:person }}</span>
+                    {% elif company.navn %}
                         <span id="company" data-trans="common.logged_in_as" data-trans-params="{{ company|json }}">{{ 'common.logged_in_as'|format:company }}</span>
-                    {% elif person.navn %}
-                        <span id="person" data-trans="common.logged_in_as" data-trans-params="{{ person|json }}">{{ 'common.logged_in_as'|format:person }}</span>
                     {% endif %}
                     {% if cpr or cvr %}
                         <a href="{% url 'aka:logout' %}" data-trans="common.logout">{% trans 'common.logout' %}</a>
