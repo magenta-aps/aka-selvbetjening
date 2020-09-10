@@ -58,7 +58,7 @@ django_openid:
 
 django_nemid:
   federation_service: "https://ip.sullissivik.gl/services/IdentityServiceV2.svc?wsdl"
-  cookie_name: "QA.Sullissivik.Federation.Cookie"
+  cookie_name: "Sullissivik.Federation.Cookie"
   cookie_path: "/"
   cookie_domain: ".sullissivik.gl"
   login_url: "https://ip.sullissivik.gl/login.aspx"
