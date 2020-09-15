@@ -60,7 +60,7 @@ msgid "common.logout"
 msgstr "Log ud [kl]"
 
 msgid "common.logged_in_as"
-msgstr "Logget ind som: {navn} [kl]"
+msgstr "Logget ind som: [kl]"
 
 msgid "login.openid"
 msgstr "Log ind som virksomhed [kl]"
