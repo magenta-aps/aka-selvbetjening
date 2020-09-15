@@ -38,9 +38,11 @@ from django.http import JsonResponse, HttpResponse, FileResponse
 from django.shortcuts import redirect
 from django.template import Engine, Context
 from django.template.response import TemplateResponse
+from django.urls import reverse
 from django.utils import translation
 from django.utils.datetime_safe import date
 from django.utils.decorators import method_decorator
+from django.utils.http import urlquote
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
@@ -124,10 +126,16 @@ class IndexTemplateView(HasUserMixin, TemplateView):
 class LoginView(TemplateView):
     template_name = 'login.html'
 
-    def get_context_data(self, **kwargs):
-        context = {'back': self.request.GET.get('back')}
-        context.update(kwargs)
-        return super().get_context_data(**context)
+    def dispatch(self, request, *args, **kwargs):
+        url = reverse('openid:login')
+        if 'back' in self.request.GET:
+            url += "?back=" + urlquote(self.request.GET['back'])
+        return redirect(url)
+
+    # def get_context_data(self, **kwargs):
+    #     context = {'back': self.request.GET.get('back')}
+    #     context.update(kwargs)
+    #     return super().get_context_data(**context)
 
 
 class LogoutView(View):
@@ -211,7 +219,6 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
             })
         context.update(kwargs)
         return super().get_context_data(**context)
-
 
     def get_filename(self):
         try:

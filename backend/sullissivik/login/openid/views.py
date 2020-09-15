@@ -12,11 +12,8 @@ from oic.oauth2 import ErrorResponse
 from oic.oic import Client, rndstr
 from oic.oic.message import AuthorizationResponse, RegistrationResponse
 from oic.utils.authn.client import CLIENT_AUTHN_METHOD
-from sullissivik.login.openid.openid import OpenId
-from django.conf import settings
-from oic.oic.message import AuthorizationResponse, RegistrationResponse
-from django.views.decorators.clickjacking import xframe_options_exempt
 from oic.utils.keyio import KeyBundle
+from sullissivik.login.openid.openid import OpenId
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +61,6 @@ class Login(View):
         request.session['oid_nonce'] = nonce
         request.session['login_method'] = 'openid'
         auth_req = client.construct_AuthorizationRequest(request_args=request_args)
-        print("client.authorization_endpoint: "+client.authorization_endpoint)
         login_url = auth_req.request(client.authorization_endpoint)
         return HttpResponseRedirect(login_url)
 
