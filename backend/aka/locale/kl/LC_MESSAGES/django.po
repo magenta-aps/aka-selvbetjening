@@ -18,31 +18,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "common.error.generic"
-msgstr "Fejl [kl]"
+msgstr "Kukkuneq"
 
 msgid "common.error.access_denied"
-msgstr "Adgang nægtet [kl]"
+msgstr "Isersinnaanngilatit"
 
 msgid "common.forside"
-msgstr "Forside [kl]"
+msgstr "Saqqaa"
 
 msgid "common.gem"
-msgstr "Gem [kl]"
+msgstr "Toqqoruk"
 
 msgid "common.send"
-msgstr "Send [kl]"
+msgstr "Nassiuguk"
 
 msgid "common.repeat"
-msgstr "Gentag [kl]"
+msgstr "Uteqqiguk"
 
 msgid "common.print"
-msgstr "Print [kl]"
+msgstr "Naqitaq anillatsiguk"
 
 msgid "common.download"
-msgstr "Download [kl]"
+msgstr "Aajuk"
 
 msgid "common.pdf"
-msgstr "Download PDF [kl]"
+msgstr "PDF aajuk"
 
 msgid "common.xlsx"
 msgstr "Download Excel-regneark [kl]"
@@ -54,28 +54,28 @@ msgid "common.csv"
 msgstr "Download CSV-fil [kl]"
 
 msgid "common.download_template"
-msgstr "Download skabelon [kl]"
+msgstr "Skabelon aajuk"
 
 msgid "common.logout"
-msgstr "Log ud [kl]"
+msgstr "Aniffissaq"
 
 msgid "common.logged_in_as"
 msgstr "Logget ind som: [kl]"
 
 msgid "login.openid"
-msgstr "Log ind som virksomhed [kl]"
+msgstr "Suliffeqarfittut Iserit"
 
 msgid "login.nemid"
-msgstr "Log ind som borger [kl]"
+msgstr "Innuttaasutut Iserit"
 
 msgid "login.multiple_cvr"
 msgstr "Der er flere CVR-numre tilknyttet dette CPR-nummer. Vælg hvilket nummer der skal bruges: [kl]"
 
 msgid "common.telefon"
-msgstr "Telefon [kl]"
+msgstr "Oqarasuaat"
 
 msgid "common.fax"
-msgstr "Fax [kl]"
+msgstr "Fax"
 
 msgid "prisme.error"
 msgstr ""
@@ -84,163 +84,142 @@ msgid "prisme.error_250"
 msgstr "{text}"
 
 msgid "prisme.cvrcheck_no_result"
-msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet [kl]"
+msgstr "CVR-normu {cvr} naassarineqanngilaq"
 
 msgid "common.dato"
-msgstr "Dato [kl]"
+msgstr "UIloq"
 
 msgid "common.konto"
-msgstr "Konto [kl]"
+msgstr "Konto"
 
 msgid "common.postboks"
-msgstr "Postboks {box} [kl]"
+msgstr "Postboks {box}"
 
 msgid "common.email"
-msgstr "Email [kl]"
+msgstr "Email"
 
 msgid "common.webadresse"
-msgstr "Web-adresse [kl]"
+msgstr "Web-adresse"
 
 msgid "common.skattestyrelsen"
-msgstr "Skattestyrelsen [kl]"
+msgstr "Akileraartarnermut Aqutsisoqarfik"
 
 msgid "common.showcolumns"
-msgstr "Vis/skjul kolonner [kl]"
+msgstr "Kolonnit nuisikkit/tarrisikkit"
 
 
 # Errors
 
 msgid "error.from_date_before_to_date"
-msgstr "Fra-dato skal være før til-dato [kl]"
+msgstr "Ullormit siusinnerussaaq ullormumiit"
 
 msgid "error.start_date_before_end_date"
-msgstr "Start-dato skal være før slut-dato [kl]"
+msgstr "Ulloq aallartiffiusoq ulloq naaffiusumit siusinnerussaaq"
 
 msgid "error.invalid_date"
-msgstr "Ugyldig dato [kl]"
+msgstr "Ulloq atorsinnaanngilaq"
 
 msgid "error.required"
-msgstr "Dette felt er påkrævet [kl]"
+msgstr "Una pisariaqarpoq"
 
 msgid "error.number_required"
-msgstr "Dette felt skal indeholde et tal [kl]"
+msgstr "Una kisitsimmik imaqartussaavoq"
 
 msgid "error.invalid_extension"
-msgstr "Filendelse '{extension}' er ikke tilladt. Tilladte filendelser er: '{allowed_extensions}' [kl]."
+msgstr "Fiilip naanera '{extension}' atoqqusaanngilaq. Fiilit naaneri atorsinnaasut: '{allowed_extensions}'."
 
 msgid "error.upload_too_large"
-msgstr "Den uploadede fil er for stor [kl]"
+msgstr "Fiili uploaderneqartoq angivallaarpoq"
 
 msgid "error.upload_validation"
-msgstr "Der er fejl i det uploadede regneark: [kl]"
+msgstr "Regnearki uploaderneqartoq kukkuneqarpoq:"
 
 msgid "error.upload_empty"
-msgstr "Der er ingen rækker i det uploadede regneark [kl]"
+msgstr "Regnearki uploaderneqartoq rækkeqanngilaq"
 
 msgid "error.upload_no_encoding"
-msgstr "Kunne ikke finde tegnkodningen i det uploadede regneark. Er det en korrekt CSV-fil? [kl]"
+msgstr "Regnearki uploaderneqartumi tegnkodning nanineqarsinnaanngilaq CSV-fiili eqqortuua?"
 
 msgid "error.upload_read_error"
-msgstr "Kunne ikke læse CSV-filen. Er det en korrekt formatteret CSV-fil i UTF-8 eller UTF-16LE? [kl]"
+msgstr "CSV-fiili atuarneqarsinnaanngilaq. CSV-fiili UTF-8-nngorlugu UTF-16LE-nngorluguluunniit eqqortumik formatererneqarpa?"
 
 msgid "error.upload_validation_item"
-msgstr "Celle {col_letter}{row} ({field}): {message} [kl]"
+msgstr "Celle {col_letter}{row} ({field}): {message}"
 
 msgid "error.upload_validation_header"
-msgstr "Der mangler en kolonne med navnet '{field}' [kl]"
+msgstr "Kolonne '{field}'-mik taaneqartoq amigaataavoq"
 
 msgid "error.fordringsgruppe_not_found"
-msgstr "Fordringsgruppe findes ikke [kl]"
+msgstr "Fordringgruppe nassaassaanngilaq"
 
 msgid "error.fordringstype_not_found"
-msgstr "Fordringstype findes ikke i fordringsgruppe [kl]"
+msgstr "Fordringstype Fordringsgruppemi nassaassaanngilaq"
 
 msgid "error.multiple_fordringsgruppe_found"
-msgstr "Konfigurationsfejl på serveren [kl]"
+msgstr "Serverimi aaqqissuussineq ajutoorpoq"
 
 msgid "error.invalid_cpr"
-msgstr "Ugyldigt CPR-nummer [kl]"
+msgstr "CPR-normu atorsinnaanngilaq"
 
 msgid "error.invalid_cvr"
-msgstr "Ugyldigt CVR-nummer [kl]"
+msgstr "CVR-normu atorsinnaanngilaq"
 
 msgid "error.invalid_cpr_cvr"
-msgstr "Ugyldigt CPR- eller CVR-nummer [kl]"
-
-
-# File lists
-
-msgid "filliste.mappeindhold"
-msgstr "{size} elementer [kl]"
-
-msgid "filliste.mappe"
-msgstr "Mappe [kl]"
-
-msgid "filliste.filnavn"
-msgstr "Filnavn [kl]"
-
-msgid "filliste.filstoerrelse"
-msgstr "Størrelse [kl]"
-
-msgid "filliste.filtype"
-msgstr "Type [kl]"
-
-msgid "filliste.op"
-msgstr "Op [kl]"
+msgstr "CPR- imaluunniit CVR-normu artorsinnaanngilaq"
 
 
 # Index
 
 msgid "index.rentenota"
-msgstr "Hent rentenota [kl]"
+msgstr "Erniat pillugit allakkiaq aajuk"
 
 msgid "index.fordring"
-msgstr "Indberet fordring [kl]"
+msgstr "Fordring-it nalunaarutigikkit"
 
 msgid "index.fordring-upload"
-msgstr "Upload fordring [kl]"
+msgstr "Fordring-it uploadikkit"
 
 msgid "index.nedskrivning"
-msgstr "Indberet nedskrivning [kl]"
+msgstr "Milliliineq nalunaarutigiuk"
 
 msgid "index.nedskrivning-upload"
-msgstr "Upload nedskrivning [kl]"
+msgstr "Milliliineq uploaderuk"
 
 msgid "index.løntræk"
-msgstr "Indberet løntræk [kl]"
+msgstr "Akissarsianik ilanngaaneq nalunaarutigiuk"
 
 msgid "index.løntræk-upload"
-msgstr "Upload løntræk [kl]"
+msgstr "Akissarsianik ilanngaaneq uploaderuk"
 
 msgid "index.fordringshaverkonto"
-msgstr "Vis fordringshaverkonto [kl]"
+msgstr "Fordringshaverip kontoa takuuk"
 
 msgid "index.konto"
-msgstr "Vis konto [kl]"
+msgstr "Kontoa takuuk"
 
 
 # 6.1
 
 msgid "fordring.title"
-msgstr "Indberet fordring [kl]"
+msgstr "Fordring-it nalunaarutigikkit"
 
 msgid "fordring.debitor"
-msgstr "Debitor [kl]"
+msgstr "Akiligassalik"
 
 msgid "fordring.codebitorer"
-msgstr "Meddebitorer [kl]"
+msgstr "Akiligassaqaqataasut"
 
 msgid "fordring.cpr"
-msgstr "cpr [kl]"
+msgstr "cpr"
 
 msgid "fordring.cvr"
-msgstr "cvr [kl]"
+msgstr "cvr"
 
 msgid "fordring.fordringshaver"
-msgstr "Fordringshaver [kl]"
+msgstr "Pissarsisussaq"
 
 msgid "fordring.anden_fordringshaver"
-msgstr "Anden fordringshaver [kl]"
+msgstr "Pissarsisussaq alla"
 
 msgid "fordring.dokumentation"
 msgstr "Dokumentation [kl]"
@@ -252,109 +231,109 @@ msgid "fordring.fordringstype"
 msgstr "Ekstern fordringstype [kl]"
 
 msgid "fordring.barns_cpr"
-msgstr "Barns CPR-nr [kl]"
+msgstr "Meeqqap CPR-normua"
 
 msgid "fordring.ekstern_sagsnummer"
-msgstr "Ekstern sagsnummer [kl]"
+msgstr "Suliap avataaneersup normua"
 
 msgid "fordring.fakturanr"
-msgstr "Fakturanr [kl]"
+msgstr "Akiligassap nr."
 
 msgid "fordring.bnr"
-msgstr "B-nr [kl]"
+msgstr "B-nr."
 
 msgid "fordring.hovedstol"
-msgstr "Hovedstol [kl]"
+msgstr "Akiligassaq tamakkiisoq"
 
 msgid "fordring.posteringstekst"
-msgstr "Posteringstekst [kl]"
+msgstr "Oqaasertaliussaq"
 
 msgid "fordring.periodestart"
-msgstr "Periodestart [kl]"
+msgstr "Piffissap aallartiffia"
 
 msgid "fordring.periodeslut"
-msgstr "Periodeslut [kl]"
+msgstr "Piffissap naaffia"
 
 msgid "fordring.forfaldsdato"
-msgstr "Forfaldsdato [kl]"
+msgstr "Ulloq akiliiffissaq kingulleq"
 
 msgid "fordring.betalingsdato"
-msgstr "Betalingsdato [kl]"
+msgstr "Ulloq akiliiffissaq"
 
 msgid "fordring.foraeldelsesdato"
-msgstr "Forældelsesdato [kl]"
+msgstr "Ulloq pisoqaliffissaq"
 
 msgid "fordring.kontaktperson"
-msgstr "Kontaktperson [kl]"
+msgstr "Attavissaq"
 
 msgid "fordring.noter"
-msgstr "Noter [kl]"
+msgstr "Nalunaarsukkat"
 
 msgid "fordring.meddebitor"
 msgstr "Meddebitor [kl]"
 
 msgid "fordring.success"
-msgstr "Fordring oprettet [kl]"
+msgstr "Fordring ikkuppoq"
 
 msgid "fordring.result"
-msgstr "Oprettede fordringsnumre: [kl]"
+msgstr "Fodrings normut ikkupput"
 
 msgid "fordring.bill_date_before_due_date"
-msgstr "Betalingsdato skal være før forfaldsdato [kl]"
+msgstr "Ulloq akiliiffissaq ullormit akiliiffissamit kingulermit siusinnerussaaq"
 
 
 # 6.2
 
 msgid "loentraek.title"
-msgstr "Indberet løntræk [kl]"
+msgstr "Akissarsianik ilanngaaneq nalunaarutigiuk"
 
 msgid "loentraek.year"
-msgstr "År [kl]"
+msgstr "Ukioq"
 
 msgid "loentraek.month"
-msgstr "Måned [kl]"
+msgstr "Qaammat"
 
 msgid "loentraek.total_amount"
-msgstr "Totalt beløb [kl]"
+msgstr "Katinneri"
 
 msgid "loentraek.cpr"
-msgstr "CPR [kl]"
+msgstr "CPR"
 
 msgid "loentraek.agreement_number"
-msgstr "Aftalenummer [kl]"
+msgstr "Isumaqatigiissutip normua"
 
 msgid "loentraek.amount"
-msgstr "Løntræk [kl]"
+msgstr "Akissarsianik ilanngaasarneq"
 
 msgid "loentraek.net_salary"
-msgstr "Nettoløn [kl]"
+msgstr "Akissarsiat ilanngareerlugit"
 
 msgid "loentraek.sum_mismatch"
-msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækker [kl]"
+msgstr "Katinnerata tamarmiusup akit rækkeniittut tamarmik katinneri amerlaqatigissavai"
 
 msgid "loentraek.success"
-msgstr "Løntræk indberettet [kl]"
+msgstr "Akissarsianit ilanngaaneq nalunaarutigineqarpoq"
 
 msgid "loentraek.results"
-msgstr "Oprettede notater [kl]"
+msgstr "Nalunaarsukkat ikkutat"
 
 
 # 6.4
 
 msgid "nedskrivning.success"
-msgstr "Nedskrivninger indberettet [kl]"
+msgstr "Milliliinerit nalunaarutigineqarput"
 
 msgid "nedskrivning.result"
-msgstr "Oprettede nedskrivninger [kl]"
+msgstr "Milliliinerit ikkutat"
 
 msgid "nedskrivning.errors"
-msgstr "Der opstod følgende fejl: [kl]"
+msgstr "Ukuninnga kukkuneqarpoq:"
 
 msgid "nedskrivning.error_250"
-msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber} [kl]"
+msgstr "Ref.nr-mi {refnumber} avataaneersumi akiliisitsiniarnermi suliap normuanik soqanngilaq"
 
 msgid "nedskrivning.title"
-msgstr "Nedskrivning - Opret [kl]"
+msgstr "Milliliigit"
 
 msgid "nedskrivning.debitor"
 msgstr "Debitor [kl]"
@@ -363,92 +342,92 @@ msgid "nedskrivning.ekstern_sagsnummer"
 msgstr "Ekstern sagsnummer [kl]"
 
 msgid "nedskrivning.beloeb"
-msgstr "Beløb [kl]"
+msgstr "Aningaasat amerlassusaat"
 
 msgid "nedskrivning.sekvensnummer"
-msgstr "Sekvensnummer [kl]"
+msgstr "Sekvensnormu"
 
 
 # NY16
 
 msgid "account.entries_open"
-msgstr "Åbne poster [kl]"
+msgstr "Akiligassat/akiliutit ammasut"
 
 msgid "account.entries_closed"
-msgstr "Lukkede poster [kl]"
+msgstr "Akiligassat/akiliutit matoqqasut"
 
 msgid "account.entries_all"
-msgstr "Alle poster [kl]"
+msgstr "Akiligassat/akiliutit tamarmik"
 
 
 # NY18
 msgid "rentenota.title"
-msgstr "Rentenota [kl]"
+msgstr "Erniat pillugit allakkiaq"
 
 msgid "rentenota.rentenota"
-msgstr "Rentenota [kl]"
+msgstr "Erniat pillugit allakkiaq"
 
 msgid "rentenota.transaction_date"
-msgstr "Postdato [kl]"
+msgstr "Akiligassat/akiliutit ullua"
 
 msgid "rentenota.updated"
 msgstr "Dato [kl]"
 
 msgid "rentenota.account_number"
-msgstr "Debitor&shy;konto [kl]"
+msgstr "Akiligassallip kontoa"
 
 msgid "rentenota.billing_classification"
-msgstr "Fakturerings&shy;klassifikation [kl]"
+msgstr "Akileqqussutip suussusaa"
 
 msgid "rentenota.interest_note"
-msgstr "Rentenota&shy;nummer [kl]"
+msgstr "Erniat pillugit allakkianut normu"
 
 msgid "rentenota.voucher"
-msgstr "Bilag [kl]"
+msgstr "Ilanngussaq"
 
 msgid "rentenota.invoice"
-msgstr "Faktura [kl]"
+msgstr "Akileeqqussut"
 
 msgid "rentenota.text"
-msgstr "Tekst [kl]"
+msgstr "Oqaasertaa"
 
 msgid "rentenota.calculate_from_date"
-msgstr "Fradato [kl]"
+msgstr "Ullormit"
 
 msgid "rentenota.calculate_to_date"
-msgstr "Tildato [kl]"
+msgstr "Ullormut"
 
 msgid "rentenota.interest_days"
-msgstr "Dage [kl]"
+msgstr "Ullut"
 
 msgid "rentenota.invoice_amount"
-msgstr "Grundlag [kl]"
+msgstr "Tunngavigineqartoq"
 
 msgid "rentenota.due_date"
-msgstr "Forfalds&#173;dato [kl]"
+msgstr "Ulloq akiliiffissaq kingulleq"
 
 msgid "rentenota.interest_amount"
 msgstr "Beløb [kl]"
 
 msgid "rentenota.ingenposter"
-msgstr "Ingen poster [kl]"
+msgstr "Akiligassaqanngilaq/akiliuteqanngilaq"
 
 msgid "rentenota.filename"
-msgstr "Rentenota {month}/{year} [kl]"
+msgstr "Erniat pillugit allakkiaq {month}/{year}"
 
 msgid "rentenota.year"
-msgstr "År [kl]"
+msgstr "Ukioq"
 
 msgid "rentenota.month"
-msgstr "Måned [kl]"
+msgstr "Qaammat"
 
 msgid "rentenota.error_250"
-msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne periode {start} {end} [kl]"
+msgstr "Uunga CPR/CVR {cvr} imaluunniit piffissamut pineqartumut {start} {end} erniaqanngilaq"
 
 
 # NY16
 msgid "account.description"
-msgstr "Udfyld fra- og til-dato for at få poster for en given periode. Lad felterne stå tomme for at få alle poster"
+msgstr "Ullormit ullormut immersoruk piffissamut pineqartumut akiligassat/akiliutinik pissarsiniarlutit. Akiligassat/akiliutit tamaasa pissarsiariniarukkit immersugassat imaqartissanngilat"
 
 msgid "account.swift"
 msgstr "SWIFT"
@@ -457,31 +436,31 @@ msgid "account.iban"
 msgstr "IBAN"
 
 msgid "account.cvrse"
-msgstr "CVR/SE"
+msgstr "CVR/SE:"
 
 msgid "account.title"
-msgstr "Kontoudtog [kl]"
+msgstr "Kontup assilinera"
 
 msgid "account.from_date"
-msgstr "Fra dato [kl]"
+msgstr "Ullormit"
 
 msgid "account.to_date"
-msgstr "Til dato [kl]"
+msgstr "Ullormut"
 
 msgid "account.filename"
-msgstr "Kontoudtog {from_date} - {to_date} [kl]"
+msgstr "Kontup assilinera {from_date} - {to_date}"
 
 msgid "account.footer"
 msgstr "Side {index} af {count} [kl]"
 
 msgid "account.bankaccount"
-msgstr "Bankkonto [kl]"
+msgstr "Aningaaserivimmi konto"
 
 msgid "account.account"
-msgstr "Kontoudtog [kl]"
+msgstr "Kontup assilinera"
 
 msgid "account.period"
-msgstr "Gældende for perioden: {from_date} - {to_date} [kl]"
+msgstr "Piffissamut {from_date} - {to_date} atuuppoq"
 
 msgid "account.period_to"
 msgstr "Gældende frem til {to_date} [kl]"
@@ -493,7 +472,7 @@ msgid "account.period_all"
 msgstr "Alle kendte poster [kl]"
 
 msgid "account.number"
-msgstr "Nummer [kl]"
+msgstr "Normu"
 
 msgid "account.date"
 msgstr "Dato [kl]"
@@ -505,34 +484,34 @@ msgid "account.cpr"
 msgstr "CPR [kl]"
 
 msgid "account.yourref"
-msgstr "Deres reference [kl]"
+msgstr "Saaffissat"
 
 msgid "account.contact"
-msgstr "Sagsbehandler [kl]"
+msgstr "Suliamik sullissisoq"
 
 msgid "account.localnumber"
-msgstr "Lokalnummer [kl]"
+msgstr "Normu toqqaannartoq"
 
 msgid "account.payment1"
-msgstr "Betaling [kl]"
+msgstr "Akiliineq"
 
 msgid "account.invoiceaccount"
-msgstr "Fakturakonto [kl]"
+msgstr "Akileeqqussutip kontoa"
 
 msgid "account.ingenposter"
-msgstr "Ingen poster for perioden [kl]"
+msgstr "Piffissami pineqartumi Akiligassaqanngilaq/akiliuteqanngilaq"
 
 msgid "account.paymentdate"
 msgstr "Forfaldsdato [kl]"
 
 msgid "account.account_number"
-msgstr "Debitorkonto [kl]"
+msgstr "Akiligassallip kontoa"
 
 msgid "account.transaction_date"
-msgstr "Posterings&shy;dato [kl]"
+msgstr "Akiligassat/akiliutit ullua"
 
 msgid "account.accounting_date"
-msgstr "Bogførings&shy;dato [kl]"
+msgstr "Naatsorsuutinik nalunaarsuinerup ullua"
 
 msgid "account.debitor_group_id"
 msgstr "Debitor&shy;gruppe [kl]"
@@ -547,52 +526,52 @@ msgid "account.text"
 msgstr "Posteringstekst [kl]"
 
 msgid "account.payment_code"
-msgstr "Indbetalingskode [kl]"
+msgstr "Akiliinissamut kode"
 
 msgid "account.payment_code_name"
-msgstr "Indbetalingskodenavn [kl]"
+msgstr "Akiliinissamut kodep aqqa"
 
 msgid "account.amount"
 msgstr "Beløb [kl]"
 
 msgid "account.remaining_amount"
-msgstr "Restsaldo [kl]"
+msgstr "Akiligassat sinneruttut"
 
 msgid "account.due_date"
 msgstr "Forfaldsdato [kl]"
 
 msgid "account.closed_date"
-msgstr "Lukkedato [kl]"
+msgstr "Matunissaata ullua"
 
 msgid "account.last_settlement_voucher"
-msgstr "Sidste udligningsbilag [kl]"
+msgstr "Nalimmassaanermut ilanngussaq kingulleq"
 
 msgid "account.collection_letter_date"
-msgstr "Rykkerdato [kl]"
+msgstr "Nukingisaarinerup ullua"
 
 msgid "account.collection_letter_code"
-msgstr "Rykkerkode [kl]"
+msgstr "Nukingisaarinermut kode"
 
 msgid "account.claim_type_code"
 msgstr "Fordringsartskode [kl]"
 
 msgid "account.invoice_number"
-msgstr "Fakturanummer [kl]"
+msgstr "Akileeqqussutip normua"
 
 msgid "account.transaction_type"
-msgstr "Posterings&shy;type [kl]"
+msgstr "Akilgassap/akiliutip suussusaa"
 
 msgid "account.claimant_name"
-msgstr "Fordringshaver navn [kl]"
+msgstr "Fordringshaver-ip aqqa"
 
 msgid "account.claimant_id"
-msgstr "Fordringshaver ID [kl]"
+msgstr "Fordringshaver-ip ID-a"
 
 msgid "account.rate_number"
-msgstr "Rate&shy;nummer [kl]"
+msgstr "Naafferaartup normua"
 
 msgid "account.child_claimant"
-msgstr "Fordringshavers barns CPR [kl]"
+msgstr "Meeqqap cpr.nr."
 
 
 
