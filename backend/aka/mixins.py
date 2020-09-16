@@ -122,7 +122,11 @@ class HasUserMixin(object):
             'cvr': self.cvr,
             'claimant_ids': self.claimant_ids,
             'company': self.company,
-            'person': self.person
+            'person': self.person,
+            'logged_in': {'navn': ' | '.join([
+                x['navn'] for x in [self.person, self.company]
+                if x is not None
+            ])}
         }
         context.update(kwargs)
         return super().get_context_data(**context)

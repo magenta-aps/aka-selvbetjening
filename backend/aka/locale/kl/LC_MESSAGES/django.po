@@ -60,7 +60,7 @@ msgid "common.logout"
 msgstr "Aniffissaq"
 
 msgid "common.logged_in_as"
-msgstr "Logget ind som: [kl]"
+msgstr "{navn} isersimavoq"
 
 msgid "login.openid"
 msgstr "Suliffeqarfittut Iserit"
@@ -87,7 +87,7 @@ msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-normu {cvr} naassarineqanngilaq"
 
 msgid "common.dato"
-msgstr "UIloq"
+msgstr "Ulloq"
 
 msgid "common.konto"
 msgstr "Konto"
@@ -225,10 +225,10 @@ msgid "fordring.dokumentation"
 msgstr "Dokumentation [kl]"
 
 msgid "fordring.fordringsgruppe"
-msgstr "Ekstern fordringsgruppe [kl]"
+msgstr "Ekstern fordringsgruppe"
 
 msgid "fordring.fordringstype"
-msgstr "Ekstern fordringstype [kl]"
+msgstr "Ekstern fordringstype"
 
 msgid "fordring.barns_cpr"
 msgstr "Meeqqap CPR-normua"
@@ -336,10 +336,10 @@ msgid "nedskrivning.title"
 msgstr "Milliliigit"
 
 msgid "nedskrivning.debitor"
-msgstr "Debitor [kl]"
+msgstr "Akiligassalik"
 
 msgid "nedskrivning.ekstern_sagsnummer"
-msgstr "Ekstern sagsnummer [kl]"
+msgstr "Suliap avataaneersup normua"
 
 msgid "nedskrivning.beloeb"
 msgstr "Aningaasat amerlassusaat"
@@ -371,7 +371,7 @@ msgid "rentenota.transaction_date"
 msgstr "Akiligassat/akiliutit ullua"
 
 msgid "rentenota.updated"
-msgstr "Dato [kl]"
+msgstr "Ulloq"
 
 msgid "rentenota.account_number"
 msgstr "Akiligassallip kontoa"
@@ -475,13 +475,13 @@ msgid "account.number"
 msgstr "Normu"
 
 msgid "account.date"
-msgstr "Dato [kl]"
+msgstr "Ulloq"
 
 msgid "account.cvr"
-msgstr "CVR [kl]"
+msgstr "CVR"
 
 msgid "account.cpr"
-msgstr "CPR [kl]"
+msgstr "CPR"
 
 msgid "account.yourref"
 msgstr "Saaffissat"
@@ -502,7 +502,7 @@ msgid "account.ingenposter"
 msgstr "Piffissami pineqartumi Akiligassaqanngilaq/akiliuteqanngilaq"
 
 msgid "account.paymentdate"
-msgstr "Forfaldsdato [kl]"
+msgstr "Ulloq akiliiffissaq kingulleq"
 
 msgid "account.account_number"
 msgstr "Akiligassallip kontoa"
@@ -514,16 +514,16 @@ msgid "account.accounting_date"
 msgstr "Naatsorsuutinik nalunaarsuinerup ullua"
 
 msgid "account.debitor_group_id"
-msgstr "Debitor&shy;gruppe [kl]"
+msgstr "Debitor&shy;gruppe"
 
 msgid "account.debitor_group_name"
-msgstr "Debitor&shy;gruppenavn [kl]"
+msgstr "Debitorgruppe-p aqqa"
 
 msgid "account.voucher"
-msgstr "Bilag [kl]"
+msgstr "Ilanngussaq"
 
 msgid "account.text"
-msgstr "Posteringstekst [kl]"
+msgstr "Oqaasertaliussaq"
 
 msgid "account.payment_code"
 msgstr "Akiliinissamut kode"
@@ -532,13 +532,13 @@ msgid "account.payment_code_name"
 msgstr "Akiliinissamut kodep aqqa"
 
 msgid "account.amount"
-msgstr "Beløb [kl]"
+msgstr "Aningaasat amerlassusaat"
 
 msgid "account.remaining_amount"
 msgstr "Akiligassat sinneruttut"
 
 msgid "account.due_date"
-msgstr "Forfaldsdato [kl]"
+msgstr "Ulloq akiliiffissaq kingulleq"
 
 msgid "account.closed_date"
 msgstr "Matunissaata ullua"
@@ -553,7 +553,7 @@ msgid "account.collection_letter_code"
 msgstr "Nukingisaarinermut kode"
 
 msgid "account.claim_type_code"
-msgstr "Fordringsartskode [kl]"
+msgstr "Fordringsartskode"
 
 msgid "account.invoice_number"
 msgstr "Akileeqqussutip normua"
