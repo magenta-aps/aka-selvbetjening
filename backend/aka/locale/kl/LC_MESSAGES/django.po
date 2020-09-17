@@ -45,13 +45,13 @@ msgid "common.pdf"
 msgstr "PDF aajuk"
 
 msgid "common.xlsx"
-msgstr "Download Excel-regneark [kl]"
+msgstr "Excel-regneark download-eruk"
 
 msgid "common.ods"
-msgstr "Download LibreOffice-regneark [kl]"
+msgstr "LibreOffice-regneark Download-eruk"
 
 msgid "common.csv"
-msgstr "Download CSV-fil [kl]"
+msgstr "CSV-fil downloaderuk"
 
 msgid "common.download_template"
 msgstr "Skabelon aajuk"
@@ -69,7 +69,7 @@ msgid "login.nemid"
 msgstr "Innuttaasutut Iserit"
 
 msgid "login.multiple_cvr"
-msgstr "Der er flere CVR-numre tilknyttet dette CPR-nummer. Vælg hvilket nummer der skal bruges: [kl]"
+msgstr "Cpr.normumut CVR normut arlallit attuumassuteqarput, sorliussanersoq toqqaruk"
 
 msgid "common.telefon"
 msgstr "Oqarasuaat"
@@ -222,7 +222,7 @@ msgid "fordring.anden_fordringshaver"
 msgstr "Pissarsisussaq alla"
 
 msgid "fordring.dokumentation"
-msgstr "Dokumentation [kl]"
+msgstr "Uppernarsaat"
 
 msgid "fordring.fordringsgruppe"
 msgstr "Ekstern fordringsgruppe"
@@ -270,7 +270,7 @@ msgid "fordring.noter"
 msgstr "Nalunaarsukkat"
 
 msgid "fordring.meddebitor"
-msgstr "Meddebitor [kl]"
+msgstr "Akiligassaqaqataasoq"
 
 msgid "fordring.success"
 msgstr "Fordring ikkuppoq"
@@ -407,7 +407,7 @@ msgid "rentenota.due_date"
 msgstr "Ulloq akiliiffissaq kingulleq"
 
 msgid "rentenota.interest_amount"
-msgstr "Beløb [kl]"
+msgstr "Erniat annertussusaat"
 
 msgid "rentenota.ingenposter"
 msgstr "Akiligassaqanngilaq/akiliuteqanngilaq"
@@ -451,7 +451,8 @@ msgid "account.filename"
 msgstr "Kontup assilinera {from_date} - {to_date}"
 
 msgid "account.footer"
-msgstr "Side {index} af {count} [kl]"
+msgstr "Qupperneq {index} quppernernit {count}"
+
 
 msgid "account.bankaccount"
 msgstr "Aningaaserivimmi konto"
@@ -463,13 +464,13 @@ msgid "account.period"
 msgstr "Piffissamut {from_date} - {to_date} atuuppoq"
 
 msgid "account.period_to"
-msgstr "Gældende frem til {to_date} [kl]"
+msgstr "Ulloq killiffissaa {to_date}"
 
 msgid "account.period_from"
-msgstr "Gældende fra {from_date} [kl]"
+msgstr "Ulloq aallartiffia {from_date}"
 
 msgid "account.period_all"
-msgstr "Alle kendte poster [kl]"
+msgstr "Akiligassat akiliutit tamarmik"
 
 msgid "account.number"
 msgstr "Normu"
