@@ -348,18 +348,6 @@ msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnormu"
 
 
-# NY16
-
-msgid "account.entries_open"
-msgstr "Akiligassat/akiliutit ammasut"
-
-msgid "account.entries_closed"
-msgstr "Akiligassat/akiliutit matoqqasut"
-
-msgid "account.entries_all"
-msgstr "Akiligassat/akiliutit tamarmik"
-
-
 # NY18
 msgid "rentenota.title"
 msgstr "Erniat pillugit allakkiaq"
@@ -426,6 +414,16 @@ msgstr "Uunga CPR/CVR {cvr} imaluunniit piffissamut pineqartumut {start} {end} e
 
 
 # NY16
+
+msgid "account.entries_open"
+msgstr "Akiligassat/akiliutit ammasut"
+
+msgid "account.entries_closed"
+msgstr "Akiligassat/akiliutit matoqqasut"
+
+msgid "account.entries_all"
+msgstr "Akiligassat/akiliutit tamarmik"
+
 msgid "account.description"
 msgstr "Ullormit ullormut immersoruk piffissamut pineqartumut akiligassat/akiliutinik pissarsiniarlutit. Akiligassat/akiliutit tamaasa pissarsiariniarukkit immersugassat imaqartissanngilat"
 
@@ -574,7 +572,17 @@ msgstr "Naafferaartup normua"
 msgid "account.child_claimant"
 msgstr "Meeqqap cpr.nr."
 
+msgid "account.total_claim"
+msgstr "Krav (total): [kl]"
 
+msgid "account.total_payment"
+msgstr "Indbetalt (total): [kl]"
+
+msgid "account.total_sum"
+msgstr "Saldo (total): [kl]"
+
+msgid "account.total_restance"
+msgstr "Restance (total): [kl]"
 
 
 msgid "DK"

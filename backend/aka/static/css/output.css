@@ -89,3 +89,10 @@ body.pdf .output {
 .account-data {
     font-size: 0.8em;
 }
+
+.account-total .total-label {
+    font-weight: bold;
+    margin-right: 0.5em;
+}
+.account-total .total-data {
+}

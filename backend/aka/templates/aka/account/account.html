@@ -30,6 +30,7 @@
                             // Create a new table to hold punted columns
                             newTable = $("<table><thead><tr></tr></thead><tbody></tbody></table>");
                             const newPage = table.parents(".page").clone();
+                            newPage.find(".no-copy").remove();
                             newPage.find(".output-table").replaceWith(newTable);
                             table.parents(".page").parent().append(newPage);
                             newTable.addClass(table.get(0).className);
@@ -198,7 +199,7 @@
         {% if form.is_bound %}
 
             {% for item in items %}
-                {% with item.data as data %}
+                {% with data=item.data total=item.total %}
                 <div id="output-{{ item.key }}" class="output">
 
                     <div class="page" style="page-break-after: always">
@@ -345,7 +346,7 @@
 
                             </div>
 
-                        <div class="page-data account-data">
+                            <div class="page-data account-data">
 
                             {% if data and data|length > 0 %}
 
@@ -392,6 +393,28 @@
                             {% else %}
                                 <p data-trans="account.ingenposter">{% trans 'account.ingenposter' %}</p>
                             {% endif %}
+
+                            {% if total %}
+                                <div class="row account-total no-copy">
+                                    <div class="col-3-sm">
+                                        <span class="total-label" data-trans="account.total_claim">{% trans 'account.total_claim' %}</span>
+                                        <span class="total-data">{{ total.total_claim }}</span>
+                                    </div>
+                                    <div class="col-3-sm">
+                                        <span class="total-label" data-trans="account.total_payment">{% trans 'account.total_payment' %}</span>
+                                        <span class="total-data">{{ total.total_payment }}</span>
+                                    </div>
+                                    <div class="col-3-sm">
+                                        <span class="total-label" data-trans="account.total_sum">{% trans 'account.total_sum' %}</span>
+                                        <span class="total-data">{{ total.total_sum }}</span>
+                                    </div>
+                                    <div class="col-3-sm">
+                                        <span class="total-label" data-trans="account.total_restance">{% trans 'account.total_restance' %}</span>
+                                        <span class="total-data">{{ total.total_restance }}</span>
+                                    </div>
+                                </div>
+                            {% endif %}
+
                             {% if pdf %}
                                 <div class="pagefooter"></div>
                             {% endif %}
