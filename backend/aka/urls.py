@@ -16,7 +16,7 @@ Includinganother URLconf
 from aka.views import KontoView
 from aka.views import ChooseCvrView
 from aka.views import CustomJavaScriptCatalog, SetLanguageView
-from aka.views import FordringshaverkontoView
+# from aka.views import FordringshaverkontoView
 from aka.views import IndexTemplateView
 from aka.views import InkassoGroupDataView
 from aka.views import InkassoSagView, InkassoSagUploadView
@@ -51,7 +51,7 @@ urlpatterns = [
     url(r'^nedskrivning$', NedskrivningView.as_view(), name='nedskrivning'),
     url(r'^nedskrivning/upload$', NedskrivningUploadView.as_view(), name='nedskrivning-upload'),
     url(r'^netsopkraevning$', NetsopkraevningView.as_view(), name='netsopkraevning'),
-    url(r'^fordringshaverkonto(?P<path>/.*)$', FordringshaverkontoView.as_view(), name='fordringshaverkonto-path'),
-    url(r'^fordringshaverkonto/$', FordringshaverkontoView.as_view(), name='fordringshaverkonto', kwargs={'path': '/'}),
+    # url(r'^fordringshaverkonto(?P<path>/.*)$', FordringshaverkontoView.as_view(), name='fordringshaverkonto-path'),
+    # url(r'^fordringshaverkonto/$', FordringshaverkontoView.as_view(), name='fordringshaverkonto', kwargs={'path': '/'}),
     url(r'^konto$', KontoView.as_view(), name='konto'),
 ]
