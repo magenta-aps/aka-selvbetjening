@@ -505,6 +505,9 @@ msgstr "CVR"
 msgid "account.cpr"
 msgstr "CPR"
 
+msgid "account.cprcvr"
+msgstr "CPR/CVR"
+
 msgid "account.yourref"
 msgstr "Deres reference"
 
@@ -612,6 +615,9 @@ msgstr "Saldo (total):"
 
 msgid "account.total_restance"
 msgstr "Restance (total):"
+
+msgid "account.error_250"
+msgstr "Der findes ingen debitorer for dette CPR/CVR"
 
 
 msgid "DK"

@@ -88,7 +88,7 @@ class CustomJavaScriptCatalog(JavaScriptCatalog):
         context.update(super(CustomJavaScriptCatalog, self).get_context_data(**kwargs))
         context['catalog_str'] = \
             json.dumps(context['catalog'], sort_keys=True, indent=2) \
-            if context['catalog'] else None
+                if context['catalog'] else None
         context['formats_str'] = json.dumps(context['formats'], sort_keys=True, indent=2)
         return context
 
@@ -132,11 +132,6 @@ class LoginView(TemplateView):
         if 'back' in self.request.GET:
             url += "?back=" + urlquote(self.request.GET['back'])
         return redirect(url)
-
-    # def get_context_data(self, **kwargs):
-    #     context = {'back': self.request.GET.get('back')}
-    #     context.update(kwargs)
-    #     return super().get_context_data(**context)
 
 
 class LogoutView(View):
