@@ -8,6 +8,8 @@ from aka.clients.prisme import Prisme, PrismeException
 from aka.clients.prisme import PrismeAKIRequest
 from aka.clients.prisme import PrismeClaimRequest
 from aka.clients.prisme import PrismeSELRequest
+from aka.clients.prisme import PrismeSELTotalRequest
+from aka.clients.prisme import PrismeAKITotalRequest
 from aka.clients.prisme import PrismeImpairmentRequest
 from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine

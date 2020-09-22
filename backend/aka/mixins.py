@@ -87,7 +87,6 @@ class HasUserMixin(object):
             return person
 
     def dispatch(self, request, *args, **kwargs):
-
         try:
             self.cpr = request.session['user_info']['CPR']
             self.person = {'navn': request.session['user_info']['name']}
@@ -96,8 +95,7 @@ class HasUserMixin(object):
             pass
 
         if self.cpr and not self.cvr and not request.session.get('has_checked_cvr'):
-            # cvrs = Dafo().lookup_cvr_by_cpr(self.cpr, false)
-            cvrs = [30808460]
+            cvrs = Dafo().lookup_cvr_by_cpr(self.cpr, False)
             if len(cvrs) > 1:
                 request.session['cvrs'] = [str(x) for x in cvrs]
                 request.session.save()
@@ -122,7 +120,11 @@ class HasUserMixin(object):
             'cvr': self.cvr,
             'claimant_ids': self.claimant_ids,
             'company': self.company,
-            'person': self.person
+            'person': self.person,
+            'logged_in': {'navn': ' | '.join([
+                x['navn'] for x in [self.person, self.company]
+                if x is not None
+            ])}
         }
         context.update(kwargs)
         return super().get_context_data(**context)

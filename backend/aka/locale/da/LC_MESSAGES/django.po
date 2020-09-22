@@ -61,7 +61,7 @@ msgid "common.logout"
 msgstr "Log ud"
 
 msgid "common.logged_in_as"
-msgstr "Logget ind som:"
+msgstr "Logget ind som: {navn}"
 
 msgid "login.openid"
 msgstr "Log ind som virksomhed"
@@ -506,6 +506,9 @@ msgstr "CVR"
 msgid "account.cpr"
 msgstr "CPR"
 
+msgid "account.cprcvr"
+msgstr "CPR/CVR"
+
 msgid "account.yourref"
 msgstr "Deres reference"
 
@@ -602,6 +605,9 @@ msgstr "AKI-regnskab"
 msgid "account.child_claimant"
 msgstr "Fordringshavers barns CPR"
 
+
+msgid "account.error_250"
+msgstr "Der findes ingen debitorer for dette CPR/CVR"
 
 
 msgid "DK"
