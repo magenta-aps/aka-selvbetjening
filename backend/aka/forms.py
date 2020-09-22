@@ -1,16 +1,18 @@
 import csv
 import logging
-import re
 from io import StringIO
 
 import chardet
 from aka.data.fordringsgruppe import groups
-from aka.utils import get_ordereddict_key_index, spreadsheet_col_letter
+from aka.utils import get_ordereddict_key_index
+from aka.utils import spreadsheet_col_letter
 from aka.widgets import TranslatedSelect
 from django import forms
 from django.conf import settings
-from django.core.validators import FileExtensionValidator, MinLengthValidator, \
-    MaxLengthValidator, RegexValidator
+from django.core.validators import FileExtensionValidator
+from django.core.validators import MaxLengthValidator
+from django.core.validators import MinLengthValidator
+from django.core.validators import RegexValidator
 from django.forms import ValidationError, MultipleHiddenInput, TextInput
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
