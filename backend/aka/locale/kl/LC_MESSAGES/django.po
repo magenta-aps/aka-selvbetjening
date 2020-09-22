@@ -446,7 +446,7 @@ msgid "account.to_date"
 msgstr "Ullormut"
 
 msgid "account.filename"
-msgstr "Kontup assilinera {from_date} - {to_date}"
+msgstr "Kontup assilinera {from_date} -> {to_date}"
 
 msgid "account.footer"
 msgstr "Qupperneq {index} quppernernit {count}"

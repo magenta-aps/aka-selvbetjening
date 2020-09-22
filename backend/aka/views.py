@@ -45,7 +45,7 @@ from django.utils import translation
 from django.utils.datetime_safe import date
 from django.utils.decorators import method_decorator
 from django.utils.http import urlquote
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, gettext
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
@@ -222,11 +222,11 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
         try:
             from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d')
         except:
-            from_date = "alle"
+            from_date = ""
         try:
             to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d')
         except:
-            to_date = "alle"
+            to_date = ""
         return _("account.filename").format(
             from_date=from_date,
             to_date=to_date
@@ -284,6 +284,13 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
                 } for entry in prisme_reply
             ]
         return self._data[key]
+
+    def get_extra(self, key):
+        total = self.get_total_data(key)
+        return [[]] + [
+            [gettext("account.%s" % x), getattr(total, x)]
+            for x in ['total_claim', 'total_payment', 'total_sum', 'total_restance']
+        ]
 
     def get_total_data(self, key):
         if key not in self._total:
