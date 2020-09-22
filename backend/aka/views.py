@@ -25,6 +25,7 @@ from aka.mixins import HasUserMixin
 from aka.mixins import PdfRendererMixin
 from aka.mixins import JsonRendererMixin
 from aka.mixins import SpreadsheetRendererMixin
+from aka.mixins import RequireCprMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
 from aka.utils import format_filesize
@@ -54,6 +55,7 @@ from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
 from sullissivik.login.nemid.nemid import NemId
 from sullissivik.login.openid.openid import OpenId
+
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):

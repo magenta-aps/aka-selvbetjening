@@ -144,6 +144,10 @@ class PrismeAccountRequest(PrismeRequestObject):
         self.open_closed = open_closed
 
     @property
+    def method(self):
+        return 'getAccountStatementAKI'
+
+    @property
     def xml(self):
         return dict_to_xml({
             'CustIdentificationNumber': self.prepare(self.customer_id_number),
