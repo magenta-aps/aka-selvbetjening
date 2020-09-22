@@ -128,10 +128,11 @@ class IndexTemplateView(HasUserMixin, TemplateView):
 class LoginView(TemplateView):
     template_name = 'login.html'
 
-    def get_context_data(self, **kwargs):
-        context = {'back': self.request.GET.get('back')}
-        context.update(kwargs)
-        return super().get_context_data(**context)
+    def dispatch(self, request, *args, **kwargs):
+        url = reverse('openid:login')
+        if 'back' in self.request.GET:
+            url += "?back=" + urlquote(self.request.GET['back'])
+        return redirect(url)
 
 
 class LogoutView(View):
