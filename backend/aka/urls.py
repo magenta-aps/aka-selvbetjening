@@ -46,7 +46,6 @@ urlpatterns = [
     url(r'^fordringsgrupper/(?P<var>[a-z_]+)?', InkassoGroupDataView.as_view(), name='fordringsgrupper'),
     url(r'^loentraek$', LoentraekView.as_view(), name='loentraek'),
     url(r'^loentraek/upload', LoentraekUploadView.as_view(), name='loentraek-upload'),
-    url(r'^loentraekdistribution/([0-9]{8})$', LoenTraekDistributionView.as_view(), name='loentraekdistribution'),
     url(r'^rentenota/$', RenteNotaView.as_view(), name='rentenota'),
     url(r'^nedskrivning$', NedskrivningView.as_view(), name='nedskrivning'),
     url(r'^nedskrivning/upload$', NedskrivningUploadView.as_view(), name='nedskrivning-upload'),

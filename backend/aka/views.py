@@ -285,7 +285,6 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
         return self._data[key]
 
     def get_total_data(self, key):
-        return None
         if key not in self._total:
             (cprcvr, c) = self.cprcvr_choice
             lookup_class = self.get_total_lookup_class(key)
@@ -560,17 +559,6 @@ class LoentraekUploadView(LoentraekView):
         return self.render_to_response(
             self.get_context_data(form=form)
         )
-
-
-class LoenTraekDistributionView(View):
-
-    def get(self, request, cvrnumber, *args, **kwargs):
-        data = [{'cprnumber': '1234567890',
-                 'aftalenummer': '15934',
-                 'lontraek': '1500',
-                 'nettolon': '15000'
-                 }]
-        return JsonResponse(data, safe=False)
 
 
 # 6.4
