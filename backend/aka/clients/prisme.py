@@ -12,6 +12,7 @@ from requests import Session
 from requests_ntlm import HttpNtlmAuth
 from xmltodict import parse as xml_to_dict
 from zeep.transports import Transport
+from django.utils.translation import gettext
 
 prisme_settings = settings.PRISME_CONNECT
 
@@ -42,7 +43,13 @@ class PrismeException(AkaException):
             },{
                 're': re.compile(r'Det samme CPR-Nummer (\d+) må kun optræde en gang pr. indberetning'),
                 'args': ['cpr']
-            }]
+            }],
+            'konto': [{
+                're': re.compile(
+                    r'Der findes ingen debitorer for dette CPR/CVR'
+                ),
+                'args': []
+            }],
         }
     }
 
@@ -51,6 +58,11 @@ class PrismeException(AkaException):
         self.code = int(code)
         self.text = text
         self.context = context
+
+        translation_key = f"{context}.error_{code}"
+        translation = gettext(translation_key)
+        if translation != translation_key:
+            self.error_code = translation_key
         try:
             parsedata = self.error_parse.get(str(code)).get(context)
             if parsedata:

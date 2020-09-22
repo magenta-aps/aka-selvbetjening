@@ -574,7 +574,20 @@ msgstr "Naafferaartup normua"
 msgid "account.child_claimant"
 msgstr "Meeqqap cpr.nr."
 
+msgid "account.total_claim"
+msgstr "Akiligassat (katillugit):"
 
+msgid "account.total_payment"
+msgstr "Akiliutit (katillugit):"
+
+msgid "account.total_sum"
+msgstr "Inernera:"
+
+msgid "account.total_restance"
+msgstr "Akiitsut sinneruttut (katillugit):"
+
+msgid "account.error_250"
+msgstr "Der findes ingen debitorer for dette CPR/CVR [kl]"
 
 
 msgid "DK"
