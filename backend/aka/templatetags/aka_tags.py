@@ -1,6 +1,6 @@
 import json as jsonlib
-import re
 import locale
+import re
 from html import unescape
 
 from django.template.defaultfilters import register

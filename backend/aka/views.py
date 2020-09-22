@@ -1,42 +1,40 @@
 import json
 import logging
-import os
 import re
 
-from aka.clients.dafo import Dafo
 from aka.clients.prisme import Prisme, PrismeException
 from aka.clients.prisme import PrismeAKIRequest
-from aka.clients.prisme import PrismeClaimRequest
-from aka.clients.prisme import PrismeSELRequest
-from aka.clients.prisme import PrismeSELTotalRequest
 from aka.clients.prisme import PrismeAKITotalRequest
+from aka.clients.prisme import PrismeClaimRequest
 from aka.clients.prisme import PrismeImpairmentRequest
 from aka.clients.prisme import PrismeInterestNoteRequest
-from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
+from aka.clients.prisme import PrismePayrollRequest
+from aka.clients.prisme import PrismePayrollRequestLine
+from aka.clients.prisme import PrismeSELRequest
+from aka.clients.prisme import PrismeSELTotalRequest
 from aka.data.fordringsgruppe import groups
 from aka.forms import InkassoCoDebitorFormItem
 from aka.forms import InkassoForm, InkassoUploadForm
 from aka.forms import InterestNoteForm
 from aka.forms import KontoForm
-from aka.forms import LoentraekForm, LoentraekUploadForm, LoentraekFormItem
-from aka.forms import NedskrivningForm, NedskrivningUploadForm
+from aka.forms import LoentraekForm
+from aka.forms import LoentraekFormItem
+from aka.forms import LoentraekUploadForm
+from aka.forms import NedskrivningForm
+from aka.forms import NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
 from aka.mixins import HasUserMixin
-from aka.mixins import PdfRendererMixin
 from aka.mixins import JsonRendererMixin
-from aka.mixins import SpreadsheetRendererMixin
-from aka.mixins import RequireCprMixin
+from aka.mixins import PdfRendererMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
-from aka.utils import format_filesize
+from aka.mixins import SpreadsheetRendererMixin
 from aka.utils import get_ordereddict_key_index
-from aka.utils import list_lstrip
-from aka.utils import list_rstrip
 from aka.utils import spreadsheet_col_letter
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.forms import formset_factory
-from django.http import JsonResponse, HttpResponse, FileResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect
 from django.template import Engine, Context
 from django.template.response import TemplateResponse
@@ -55,7 +53,6 @@ from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
 from sullissivik.login.nemid.nemid import NemId
 from sullissivik.login.openid.openid import OpenId
-
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):

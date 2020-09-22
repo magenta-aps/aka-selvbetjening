@@ -1,11 +1,11 @@
 import json
 import os
-import re
 
 import django_excel as excel
 import pdfkit
 from aka.clients.dafo import Dafo
-from aka.clients.prisme import PrismeCvrCheckRequest, Prisme
+from aka.clients.prisme import Prisme
+from aka.clients.prisme import PrismeCvrCheckRequest
 from aka.clients.prisme import PrismeNotFoundException
 from aka.exceptions import AkaException
 from aka.utils import flatten

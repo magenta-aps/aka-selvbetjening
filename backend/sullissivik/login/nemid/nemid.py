@@ -7,7 +7,8 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from requests import Session
 from sullissivik.login.nemid.models import SessionOnlyUser
-from zeep import Client, Transport
+from zeep import Client
+from zeep import Transport
 from zeep.helpers import serialize_object
 
 

@@ -8,11 +8,11 @@ from aka.utils import flatten
 from aka.utils import get_file_contents_base64
 from dict2xml import dict2xml as dict_to_xml
 from django.conf import settings
+from django.utils.translation import gettext
 from requests import Session
 from requests_ntlm import HttpNtlmAuth
 from xmltodict import parse as xml_to_dict
 from zeep.transports import Transport
-from django.utils.translation import gettext
 
 prisme_settings = settings.PRISME_CONNECT
 
