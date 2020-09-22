@@ -297,6 +297,9 @@ class SpreadsheetRendererMixin(RendererMixin):
     def get_sheetname(self):
         return "Sheet 1"
 
+    def get_extra(self, key):
+        return None
+
     @property
     def accepted_formats(self):
         return super().accepted_formats + ['xlsx', 'ods', 'csv']
@@ -306,6 +309,7 @@ class SpreadsheetRendererMixin(RendererMixin):
         if format in self.accepted_formats:
             fields = self.get_fields(self.key)  # List of dicts
             items = self.get_data(self.key)  # List of dicts
+            extra = self.get_extra(self.key)  # List of lists
             data = [
                 [
                     field.get("title", field['name'])
@@ -318,6 +322,10 @@ class SpreadsheetRendererMixin(RendererMixin):
                 ]
                 for item in items
             ]
+
+            if extra:
+                data += extra
+
             sheet = excel.pe.Sheet(
                 data,
                 name=self.get_sheetname(),

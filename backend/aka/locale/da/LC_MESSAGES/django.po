@@ -470,7 +470,7 @@ msgid "account.to_date"
 msgstr "Til dato"
 
 msgid "account.filename"
-msgstr "Kontoudtog {from_date} - {to_date}"
+msgstr "Kontoudtog {from_date} -> {to_date}"
 
 msgid "account.footer"
 msgstr "Side {index} af {count}"
