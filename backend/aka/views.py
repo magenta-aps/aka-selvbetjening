@@ -13,7 +13,6 @@ from aka.clients.prisme import PrismeAKITotalRequest
 from aka.clients.prisme import PrismeImpairmentRequest
 from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest, PrismePayrollRequestLine
-from aka.clients.samba import SmbcClient
 from aka.data.fordringsgruppe import groups
 from aka.forms import InkassoCoDebitorFormItem
 from aka.forms import InkassoForm, InkassoUploadForm
