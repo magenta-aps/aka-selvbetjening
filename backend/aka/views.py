@@ -629,18 +629,6 @@ class NedskrivningUploadView(NedskrivningView):
         )
 
 
-class NetsopkraevningView(View):
-
-    def get(self, request, *args, **kwargs):
-        return JsonResponse("OK", safe=False)
-
-
-class PrivatdebitorkontoView(View):
-
-    def get(self, request, *args, **kwargs):
-        return JsonResponse("OK", safe=False)
-
-
 # NY18
 
 @method_decorator(csrf_exempt, name='dispatch')

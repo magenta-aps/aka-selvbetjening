@@ -510,7 +510,7 @@ class PrismeAKIAccountResponse(PrismeAccountResponse):
 class PrismeAccountTotalResponse(PrismeResponseObject):
 
     def __init__(self, request, xml):
-        super(PrismeResponseObject, self).__init__(request, xml)
+        super(PrismeAccountTotalResponse, self).__init__(request, xml)
         data = xml_to_dict(xml)['CustTable']
         self.total_claim = data['TotalClaim']
         self.total_payment = data['TotalPayment']
