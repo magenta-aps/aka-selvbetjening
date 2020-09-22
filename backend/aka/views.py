@@ -89,7 +89,7 @@ class CustomJavaScriptCatalog(JavaScriptCatalog):
         context.update(super(CustomJavaScriptCatalog, self).get_context_data(**kwargs))
         context['catalog_str'] = \
             json.dumps(context['catalog'], sort_keys=True, indent=2) \
-            if context['catalog'] else None
+                if context['catalog'] else None
         context['formats_str'] = json.dumps(context['formats'], sort_keys=True, indent=2)
         return context
 
@@ -134,11 +134,6 @@ class LoginView(TemplateView):
             url += "?back=" + urlquote(self.request.GET['back'])
         return redirect(url)
 
-    # def get_context_data(self, **kwargs):
-    #     context = {'back': self.request.GET.get('back')}
-    #     context.update(kwargs)
-    #     return super().get_context_data(**context)
-
 
 class LogoutView(View):
     def get(self, request, *args, **kwargs):
@@ -182,6 +177,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
         super().__init__(*args, **kwargs)
         self.items = None
         self._data = {}
+        self._total = {}
         self._prisme = None
 
     def form_valid(self, form):
@@ -257,6 +253,12 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
         if key == 'aki':
             return PrismeAKIRequest
 
+    def get_total_lookup_class(self, key):
+        if key == 'sel':
+            return PrismeSELTotalRequest
+        if key == 'aki':
+            return PrismeAKITotalRequest
+
     @property
     def cprcvr_choice(self):
         cprcvr = self.form.cleaned_data.get('cprcvr') or self.cpr or self.cvr
@@ -283,6 +285,17 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
             ]
         return self._data[key]
 
+    def get_total_data(self, key):
+        return None
+        if key not in self._total:
+            (cprcvr, c) = self.cprcvr_choice
+            lookup_class = self.get_total_lookup_class(key)
+            prisme_reply = self.prisme.process_service(lookup_class(
+                cprcvr
+            ), 'konto')[0]
+            self._total[key] = prisme_reply
+        return self._total[key]
+
     def get_item_data(self, key, form):
         data = self.get_data(key)
         return {
@@ -291,6 +304,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
             'fields': self.hide_fields(form, self.get_fields(key)),
             'data': data,
             'sum': sum([dataitem['amount'] for dataitem in data]) if data else 0,
+            'total': self.get_total_data(key)
         }
 
     def get_items(self, form):
