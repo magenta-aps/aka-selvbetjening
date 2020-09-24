@@ -96,11 +96,25 @@ $(function() {
         });
         $document.on('language-change', function(event, language) {
             $("*[data-trans]").each(function() {
-                let $this = $(this);
+                const $this = $(this);
                 let text = $this.attr('data-trans');
-                let params = $this.attr('data-trans-params');
+                const params = $this.attr('data-trans-params');
                 text = format(text, params && JSON.parse(params), language);
                 this.innerHTML = text;
+            });
+        });
+        const localeMap = {
+            'da': 'da-DK',
+            'kl': 'kl-GL'
+        };
+        $document.on('language-change', function(event, language) {
+            const locale = localeMap[language];
+            $("*[data-locale-attr]").each(function () {
+                const $this = $(this);
+                $this.attr(
+                    $this.attr('data-locale-attr'),
+                    $this.attr('data-locale-format').replaceAll("{locale}", locale)
+                );
             });
         });
 

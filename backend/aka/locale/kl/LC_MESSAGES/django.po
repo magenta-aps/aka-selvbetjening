@@ -203,6 +203,9 @@ msgstr "Kontoa takuuk"
 msgid "fordring.title"
 msgstr "Fordring-it nalunaarutigikkit"
 
+msgid "fordring.title-upload"
+msgstr "Fordring-it uploadikkit"
+
 msgid "fordring.debitor"
 msgstr "Akiligassalik"
 
@@ -333,7 +336,10 @@ msgid "nedskrivning.error_250"
 msgstr "Ref.nr-mi {refnumber} avataaneersumi akiliisitsiniarnermi suliap normuanik soqanngilaq"
 
 msgid "nedskrivning.title"
-msgstr "Milliliigit"
+msgstr "Milliliineq nalunaarutigiuk"
+
+msgid "nedskrivning.title-upload"
+msgstr "Milliliineq uploaderuk"
 
 msgid "nedskrivning.debitor"
 msgstr "Akiligassalik"

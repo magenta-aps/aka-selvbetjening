@@ -24,15 +24,17 @@
     <div class="rentenota-main">
 
         <form method="get" id="mainform" class="printhide">
-            <div class="rentenota-actions row">
-                <div class="col-4-sm">
-                    {% include 'aka/util/field.html' with field=form.month key='rentenota.month' %}
-                    {% include 'aka/util/field.html' with field=form.year key='rentenota.year' %}
+            <div class="printhide">
+                <div class="rentenota-actions row">
+                    <div class="col-4-sm">
+                        {% include 'aka/util/field.html' with field=form.month key='rentenota.month' %}
+                        {% include 'aka/util/field.html' with field=form.year key='rentenota.year' %}
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-4-sm">
-                    <button type="submit">{% trans 'common.send' %}</button>
+                <div class="row">
+                    <div class="col-4-sm">
+                        <button type="submit">{% trans 'common.send' %}</button>
+                    </div>
                 </div>
             </div>
         </form>
