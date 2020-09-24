@@ -22,6 +22,7 @@ from aka.forms import LoentraekFormItem
 from aka.forms import LoentraekUploadForm
 from aka.forms import NedskrivningForm
 from aka.forms import NedskrivningUploadForm
+from aka.mixins import AkaMixin
 from aka.mixins import ErrorHandlerMixin
 from aka.mixins import HasUserMixin
 from aka.mixins import IsContentMixin
@@ -115,7 +116,7 @@ class SetLanguageView(View):
 logger = logging.getLogger(__name__)
 
 
-class IndexTemplateView(HasUserMixin, TemplateView):
+class IndexTemplateView(HasUserMixin, AkaMixin, TemplateView):
     template_name = 'index.html'
 
     @method_decorator(ensure_csrf_cookie)
@@ -142,7 +143,7 @@ class LogoutView(View):
             return NemId.logout(self.request.session)
 
 
-class ChooseCvrView(TemplateView):
+class ChooseCvrView(AkaMixin, TemplateView):
 
     template_name = "choose_cvr.html"
 

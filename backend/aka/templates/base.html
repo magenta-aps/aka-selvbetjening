@@ -50,7 +50,7 @@
             <header class="globalheader printhide">
                 <div class="globalheader-wrapper">
                     <h1 class="globalheader-heading">
-                        <a href="{% url 'aka:index' %}" class="router-link-exact-active router-link-active">
+                        <a href="https://sullissivik.gl?sc_lang={{ locale_map|get:LANGUAGE_CODE }}" data-locale-attr="href" data-locale-format="https://sullissivik.gl?sc_lang={locale}" class="router-link-exact-active router-link-active">
                             <img src="{% static 'img/sullissivik_logo_gl.svg' %}" alt="Sullissivik" class="globalheader-logo">
                         </a>
                     </h1>
@@ -85,13 +85,13 @@
                 {% block content %}
                 {% endblock %}
             </main>
-            {% if not pdf %}
-            <footer class="printhide">
-                <div class="footer-wrapper">
-                    Footer
-                </div>
-            </footer>
-            {% endif %}
+{#            {% if not pdf %}#}
+{#            <footer class="printhide">#}
+{#                <div class="footer-wrapper">#}
+{#                    Footer#}
+{#                </div>#}
+{#            </footer>#}
+{#            {% endif %}#}
         </div>
     </body>
 </html>

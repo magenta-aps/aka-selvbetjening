@@ -226,6 +226,9 @@ msgstr "Vis konto"
 msgid "fordring.title"
 msgstr "Indberet fordring"
 
+msgid "fordring.title-upload"
+msgstr "Indberet fordring"
+
 msgid "fordring.debitor"
 msgstr "Debitor"
 
@@ -356,7 +359,10 @@ msgid "nedskrivning.error_250"
 msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber}"
 
 msgid "nedskrivning.title"
-msgstr "Nedskrivning - Opret"
+msgstr "Indberet nedskrivning"
+
+msgid "nedskrivning.title-upload"
+msgstr "Upload nedskrivning"
 
 msgid "nedskrivning.debitor"
 msgstr "Debitor"

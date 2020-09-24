@@ -177,12 +177,21 @@ class SimpleGetFormMixin(FormMixin):
         return kwargs
 
 
-class IsContentMixin(object):
+class AkaMixin(object):
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**dict({
+            'locale_map': settings.LOCALE_MAP
+        }, **kwargs))
+
+
+class IsContentMixin(AkaMixin):
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**dict({
             'is_content': True
         }, **kwargs))
+
 
 
 class RendererMixin(object):
