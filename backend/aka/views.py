@@ -273,7 +273,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
                 self.form.cleaned_data['from_date'],
                 self.form.cleaned_data['to_date'],
                 self.form.cleaned_data['open_closed']
-            ), 'konto')[0]
+            ), 'account')[0]
             self._data[key] = [
                 {
                     field['name']: getattr(entry, field['name'])
@@ -295,7 +295,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
             lookup_class = self.get_total_lookup_class(key)
             prisme_reply = self.prisme.process_service(lookup_class(
                 cprcvr
-            ), 'konto')[0]
+            ), 'account')[0]
             self._total[key] = prisme_reply
         return self._total[key]
 
