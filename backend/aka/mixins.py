@@ -177,6 +177,14 @@ class SimpleGetFormMixin(FormMixin):
         return kwargs
 
 
+class IsContentMixin(object):
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**dict({
+            'is_content': True
+        }, **kwargs))
+
+
 class RendererMixin(object):
 
     def render(self):

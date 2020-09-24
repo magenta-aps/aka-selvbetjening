@@ -66,14 +66,21 @@
             {% endif %}
             <main>
                 {% if not pdf %}
-                <div class="userinfo printhide">
-                    {% if logged_in.navn %}
-                        <span data-trans="common.logged_in_as" data-trans-params="{{ logged_in|json }}">{{ 'common.logged_in_as'|format:logged_in }}</span>
-                    {% endif %}
-                    {% if cpr or cvr %}
-                        <a href="{% url 'aka:logout' %}" data-trans="common.logout">{% trans 'common.logout' %}</a>
-                    {% endif %}
-                </div>
+                    <nav class="top-navigation printhide">
+                    <div class="indexlink">
+                        {% if is_content %}
+                        <a href="{% url 'aka:index' %}" data-trans="common.forside">{% trans 'common.forside' %}</a>
+                        {% endif %}
+                    </div>
+                    <div class="userinfo">
+                        {% if logged_in.navn %}
+                            <span data-trans="common.logged_in_as" data-trans-params="{{ logged_in|json }}">{{ 'common.logged_in_as'|format:logged_in }}</span>
+                        {% endif %}
+                        {% if cpr or cvr %}
+                            <a href="{% url 'aka:logout' %}" data-trans="common.logout">{% trans 'common.logout' %}</a>
+                        {% endif %}
+                    </div>
+                    </nav>
                 {% endif %}
                 {% block content %}
                 {% endblock %}

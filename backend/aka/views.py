@@ -24,6 +24,7 @@ from aka.forms import NedskrivningForm
 from aka.forms import NedskrivningUploadForm
 from aka.mixins import ErrorHandlerMixin
 from aka.mixins import HasUserMixin
+from aka.mixins import IsContentMixin
 from aka.mixins import JsonRendererMixin
 from aka.mixins import PdfRendererMixin
 from aka.mixins import RequireCvrMixin
@@ -165,7 +166,7 @@ class ChooseCvrView(TemplateView):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, SpreadsheetRendererMixin, TemplateView):
+class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, SpreadsheetRendererMixin, IsContentMixin, TemplateView):
 
     form_class = KontoForm
     template_name = 'aka/account/account.html'
@@ -353,7 +354,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
         return fields
 
 
-class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
+class InkassoSagView(RequireCvrMixin, IsContentMixin, FormSetView, FormView):
 
     form_class = InkassoForm
     template_name = 'aka/claim/form.html'
@@ -424,7 +425,7 @@ class InkassoSagView(RequireCvrMixin, FormSetView, FormView):
         return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
 
-class InkassoSagUploadView(RequireCvrMixin, FormView):
+class InkassoSagUploadView(RequireCvrMixin, IsContentMixin, FormView):
     form_class = InkassoUploadForm
     template_name = 'aka/claim/upload.html'
 
@@ -462,7 +463,7 @@ class InkassoGroupDataView(View):
 
 # 6.2
 
-class LoentraekView(RequireCvrMixin, FormSetView, FormView):
+class LoentraekView(RequireCvrMixin, IsContentMixin, FormSetView, FormView):
 
     form_class = LoentraekForm
     template_name = 'aka/payroll/form.html'
@@ -568,7 +569,7 @@ class LoentraekUploadView(LoentraekView):
 
 # 6.4
 
-class NedskrivningView(ErrorHandlerMixin, RequireCvrMixin, FormView):
+class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormView):
 
     form_class = NedskrivningForm
     template_name = 'aka/impairment/form.html'
@@ -636,7 +637,7 @@ class NedskrivningUploadView(NedskrivningView):
 # NY18
 
 @method_decorator(csrf_exempt, name='dispatch')
-class RenteNotaView(RequireCvrMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, SpreadsheetRendererMixin, TemplateView):
+class RenteNotaView(RequireCvrMixin, IsContentMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, SpreadsheetRendererMixin, TemplateView):
     form_class = InterestNoteForm
     template_name = 'aka/interestnote/interestnote.html'
 
