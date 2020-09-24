@@ -585,7 +585,7 @@ msgid "account.total_restance"
 msgstr "Akiitsut sinneruttut (katillugit):"
 
 msgid "account.error_250"
-msgstr "Der findes ingen debitorer for dette CPR/CVR [kl]"
+msgstr "CPR/CVR system-imi takuneqarsinnaanngilaq"
 
 
 msgid "DK"
