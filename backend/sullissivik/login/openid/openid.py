@@ -67,4 +67,5 @@ class OpenId:
             id_token=session['access_token_data']['id_token']
         )
         logout_url = auth_req.request(cls.open_id_settings['logout_uri'])
+        OpenId.clear_session(session)
         return HttpResponseRedirect(logout_url)
