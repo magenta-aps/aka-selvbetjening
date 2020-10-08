@@ -14,6 +14,7 @@
       - wkhtmltopdf
       - libxmlsec1-dev
       - language-pack-da
+      - gpg
 
 - name: Install requirements
   pip:
@@ -89,4 +90,5 @@
     hour: 2
     minute: 0
 
+# Touch logfile
 ...

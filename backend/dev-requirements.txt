@@ -2,4 +2,3 @@ ipython
 unittest-xml-reporting==2.2.0
 jsonschema
 lxml
-python-gnupg==0.4.3

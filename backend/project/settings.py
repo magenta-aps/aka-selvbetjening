@@ -35,7 +35,7 @@ logging.config.dictConfig({
             'style': '{',
         },
         'encrypted': {
-            '()': 'aka.logging.EncryptedLogFormatterFactory',
+            '()': 'aka.encrypted_logging.EncryptedLogFormatterFactory',
         },
     },
     'handlers': {
@@ -47,7 +47,7 @@ logging.config.dictConfig({
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'micsdebug.log',
+            'filename': '/var/log/aka.log.asc',
             'formatter': 'encrypted'
         },
     },
@@ -111,7 +111,7 @@ LOGGING = {
             'style': '{',
         },
         'encrypted': {
-            '()': 'aka.logging.EncryptedLogFormatterFactory',
+            '()': 'aka.encrypted_logging.EncryptedLogFormatterFactory',
         },
     },
     'handlers': {
@@ -123,7 +123,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'micsdebug.log',
+            'filename': '/var/log/aka.log.asc',
             'formatter': 'encrypted'
         },
     },
@@ -131,7 +131,7 @@ LOGGING = {
         'zeep.transports': {
             'level': 'DEBUG',
             'propagate': True,
-            'handlers': ['debug-console'],
+            'handlers': ['file'],
         },
         'aka': {
             'handlers': ['debug-console'],
