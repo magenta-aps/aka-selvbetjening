@@ -35,7 +35,7 @@ logging.config.dictConfig({
             'style': '{',
         },
         'encrypted': {
-            '()': 'aka.helpers.logging.EncryptedLogFormatterFactory',
+            '()': 'aka.logging.EncryptedLogFormatterFactory',
         },
     },
     'handlers': {
@@ -110,6 +110,9 @@ LOGGING = {
             'format': '{levelname} {message}',
             'style': '{',
         },
+        'encrypted': {
+            '()': 'aka.logging.EncryptedLogFormatterFactory',
+        },
     },
     'handlers': {
         'debug-console': {
@@ -117,8 +120,19 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'micsdebug.log',
+            'formatter': 'encrypted'
+        },
     },
     'loggers': {
+        'zeep.transports': {
+            'level': 'DEBUG',
+            'propagate': True,
+            'handlers': ['debug-console'],
+        },
         'aka': {
             'handlers': ['debug-console'],
             'filters': ['require_debug_true'],
@@ -131,6 +145,8 @@ LOGGING = {
         }
     }
 }
+
+ENCRYPTED_LOG_KEY_UID='AKA Selvbetjening'
 
 ALLOWED_HOSTS = ['*']
 
