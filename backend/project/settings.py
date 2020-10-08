@@ -12,58 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
-import logging.config
 from django.utils.translation import gettext_lazy as _
-
-logging.config.dictConfig({
-    'version': 1,
-    'filters': {
-        'require_debug_false': {  # A flag to only log specified in production
-            '()': 'django.utils.log.RequireDebugFalse'
-        },
-        'require_debug_true': {  # A flag used for DEBUGGING only logs
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
-    },
-    'formatters': {
-        'verbose': {
-            'format': '{name} {levelname} {asctime} {module} {funcName} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
-        },
-        'encrypted': {
-            '()': 'aka.encrypted_logging.EncryptedLogFormatterFactory',
-        },
-    },
-    'handlers': {
-        'debug-console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'encrypted'
-        },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': '/var/log/aka.log.asc',
-            'formatter': 'encrypted'
-        },
-    },
-    'loggers': {
-        'zeep.transports': {
-            'level': 'DEBUG',
-            'propagate': True,
-            'handlers': ['debug-console'],
-        },
-        'aka': {
-            'level': 'DEBUG',
-            'handlers': ['debug-console'],
-            'filters': ['require_debug_true']
-        }
-    }
-})
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -80,7 +29,7 @@ SHARED_DIR = os.path.join(PROJECT_DIR, "shared")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 X_FRAME_OPTIONS = 'DENY'
@@ -122,8 +71,9 @@ LOGGING = {
         },
         'file': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': '/var/log/aka.log.asc',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': '/home/lars/aka.log.asc',
+            'when': 'D', # Roll log each day
             'formatter': 'encrypted'
         },
     },
