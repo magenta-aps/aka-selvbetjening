@@ -60,6 +60,7 @@ LOGGING = {
             'style': '{',
         },
         'encrypted': {
+            'format': '\n%(asctime)s %(levelname)s %(name)s %(pathname)s:%(lineno)s    %(message)s',
             '()': 'aka.encrypted_logging.EncryptedLogFormatterFactory',
         },
     },
@@ -72,7 +73,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': '/home/lars/aka.log.asc',
+            'filename': '/var/log/aka/aka.log.asc',
             'when': 'D', # Roll log each day
             'formatter': 'encrypted'
         },

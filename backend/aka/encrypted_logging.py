@@ -4,17 +4,17 @@ from gnupg import GPG
 import time
 
 
-def EncryptedLogFormatterFactory():
-    return EncryptedLogFormatter()
+def EncryptedLogFormatterFactory(format=None):
+    return EncryptedLogFormatter(format)
 
 # NOTE TO SELF: registrér 3 timer på #25312 d. 08.10.2020
 
 class EncryptedLogFormatter(logging.Formatter):
 
-    def __init__(self, fmt=None, datefmt=None):
-        formatstring = '%(asctime)s %(levelname)s %(name)s %(pathname)s:%(lineno)s    %(message)s'
+    def __init__(self, format=None, datefmt=None):
+        # formatstring = '%(asctime)s %(levelname)s %(name)s %(pathname)s:%(lineno)s    %(message)s'
         self.gpg = GPG()
-        super(EncryptedLogFormatter, self).__init__(fmt=formatstring, datefmt=datefmt)
+        super(EncryptedLogFormatter, self).__init__(fmt=format, datefmt=datefmt)
 
     def format(self, record):
         s = super(EncryptedLogFormatter, self).format(record)
