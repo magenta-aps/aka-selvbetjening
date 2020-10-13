@@ -12,6 +12,9 @@ passphrase = p['pass']
 inputfiles = p.get('files')
 gpg = GPG()
 
+if len(gpg.list_keys(False)) == 0:
+    print("No keys found. Do you need to enter a virtual environment?")
+    exit(1)
 
 def decrypt(input):
     try:
@@ -22,7 +25,7 @@ def decrypt(input):
                 if line == '-----END PGP MESSAGE-----\n':
                     message = ''.join(lines)
                     d = gpg.decrypt(message, always_trust=True)
-                    print(d)
+                    print(d or "Couldn't decrypt message")
                     lines.clear()
     finally:
         pass
