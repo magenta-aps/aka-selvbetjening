@@ -65,6 +65,24 @@
     dest: "{{django_local_settings_file}}"
     force: yes
 
+- name: Create log dir
+  file:
+    path: /var/log/aka
+    state: directory
+    owner: www-data
+    group: akap-dev
+    mode: 0775
+    recurse: yes
+
+- name: Create log file
+  file:
+    path: /var/log/aka/aka.log.asc
+    state: file
+    owner: www-data
+    group: akap-dev
+    mode: 0775
+    recurse: yes
+
 - name: Migrate
   shell: ". {{django_virtual_env_path}}/bin/activate && python {{django_manage_file}} migrate"
   tags:
@@ -82,15 +100,6 @@
     state: restarted
     enabled: yes
   when: restart_apache == true
-
-- name: Create log dir
-  file:
-    path: /var/log/aka
-    state: directory
-    owner: www-data
-    group: akap-dev
-    mode: 0775
-    recurse: yes
 
 - name: Create gpg dir for webuser
   file:
