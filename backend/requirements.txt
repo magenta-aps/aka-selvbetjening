@@ -15,3 +15,4 @@ pdfkit
 django-excel
 pyexcel-xlsx
 pyexcel-ods3
+python-gnupg==0.4.3

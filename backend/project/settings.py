@@ -12,31 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
-import logging.config
 from django.utils.translation import gettext_lazy as _
-
-logging.config.dictConfig({
-    'version': 1,
-    'formatters': {
-        'verbose': {
-            'format': '%(name)s: %(message)s'
-        }
-    },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-        },
-    },
-    'loggers': {
-        'zeep.transports': {
-            'level': 'DEBUG',
-            'propagate': True,
-            'handlers': ['console'],
-        },
-    }
-})
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -53,7 +29,7 @@ SHARED_DIR = os.path.join(PROJECT_DIR, "shared")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 X_FRAME_OPTIONS = 'DENY'
@@ -83,6 +59,10 @@ LOGGING = {
             'format': '{levelname} {message}',
             'style': '{',
         },
+        'encrypted': {
+            'format': '\n%(asctime)s %(levelname)s %(name)s %(pathname)s:%(lineno)s    %(message)s',
+            '()': 'aka.encrypted_logging.EncryptedLogFormatterFactory',
+        },
     },
     'handlers': {
         'debug-console': {
@@ -90,8 +70,20 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': '/var/log/aka/aka.log.asc',
+            'when': 'D', # Roll log each day
+            'formatter': 'encrypted'
+        },
     },
     'loggers': {
+        'zeep.transports': {
+            'level': 'DEBUG',
+            'propagate': True,
+            'handlers': ['file'],
+        },
         'aka': {
             'handlers': ['debug-console'],
             'filters': ['require_debug_true'],
@@ -104,6 +96,8 @@ LOGGING = {
         }
     }
 }
+
+ENCRYPTED_LOG_KEY_UID='AKA Selvbetjening'
 
 ALLOWED_HOSTS = ['*']
 

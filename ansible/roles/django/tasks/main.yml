@@ -14,6 +14,7 @@
       - wkhtmltopdf
       - libxmlsec1-dev
       - language-pack-da
+      - gpg
 
 - name: Install requirements
   pip:
@@ -64,6 +65,24 @@
     dest: "{{django_local_settings_file}}"
     force: yes
 
+- name: Create log dir
+  file:
+    path: /var/log/aka
+    state: directory
+    owner: www-data
+    group: akap-dev
+    mode: 0775
+    recurse: yes
+
+- name: Create log file
+  file:
+    path: /var/log/aka/aka.log.asc
+    state: file
+    owner: www-data
+    group: akap-dev
+    mode: 0775
+    recurse: yes
+
 - name: Migrate
   shell: ". {{django_virtual_env_path}}/bin/activate && python {{django_manage_file}} migrate"
   tags:
@@ -82,6 +101,21 @@
     enabled: yes
   when: restart_apache == true
 
+- name: Create gpg dir for webuser
+  file:
+    path: /var/www/.gnupg
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: 0700
+
+# - name: Import public encryption key
+- name: Import public encryption key
+  become_user: www-data
+  shell:
+    cmd: "gpg --import"
+    stdin: "{{gpg.pubkey}}"
+
 - name: Setup session clearance as a CRON job
   cron:
     job: "{{django_virtual_env_path}}/bin/activate && {{django_manage_file}} clearsessions && deactivate"
@@ -89,4 +123,5 @@
     hour: 2
     minute: 0
 
+# Touch logfile
 ...

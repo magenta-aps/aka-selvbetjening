@@ -52,13 +52,25 @@ Different logging lvls:
     # which poses a critical problem to a bigger part of users.
     logger.critical(msg, *args, **kwargs)
     
+Encrypted log
+=============
 
+A Formatter has been added, which will encrypt the message part of any call to the logger,
+regardless of level. It can be found in aka/helpers.
+To use it, you need to import a public key (RSA) made with GPG, but keep the private key out 
+of the way, somewehere safe. You also need to add something like the following to the logging dict in Django/settings.py:
 
+.. code-block:: python
 
+    'formatters': {
+        'encrypted': {
+            '()': 'aka.helpers.logging.EncryptedLogFormatterFactory',
+        },
+    },
 
+The formatter 'encrypted' must then be added to the relevant handlers.
 
-
-Further Refferences
+Further references
 ===================
 
 `Python Docs <https://docs.python.org/3.7/library/logging.html>`_
