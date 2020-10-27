@@ -81,7 +81,6 @@
     owner: www-data
     group: akap-dev
     mode: 0775
-    recurse: yes
 
 - name: Migrate
   shell: ". {{django_virtual_env_path}}/bin/activate && python {{django_manage_file}} migrate"

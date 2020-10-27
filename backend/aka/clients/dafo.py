@@ -1,65 +1,51 @@
+import logging
+
 import requests
 from django.conf import settings
-
 
 DEBUG = False
 
 
 class Dafo(object):
 
-    def __init__(self):
-        self.login()
-
-    def login(self):
-        config = settings.DAFO_CONNECT
-        response = requests.get(
-            config['address']['token'].format(
-                username=config['auth']['username'],
-                password=config['auth']['password']
-            )
-        )
-        if response.status_code == 200:
-            self.token = response.text
-        elif DEBUG:
-            pass
-        else:
-            raise Exception("Login to DAFO failed")
-
     def lookup_cpr(self, cpr, raise_on_fail=True):
-        if DEBUG:
-            return {}
-        config = settings.DAFO_CONNECT
-        response = requests.get(
-            config['address']['cpr'].format(cpr=cpr),
-            headers={'Authorization': f"SAML {self.token}"},
+        return self._pitu(
+            cpr,
+            'cpr',
+            f"Lookup for cpr {cpr} failed" if raise_on_fail else None
         )
-        if response.status_code == 200:
-            return response.json()
-        elif raise_on_fail:
-            raise Exception(f"Lookup for cpr {cpr} failed")
 
     def lookup_cvr(self, cvr, raise_on_fail=True):
-        if DEBUG:
-            return {}
-        config = settings.DAFO_CONNECT
-        response = requests.get(
-            config['address']['cvr'].format(cvr=cvr),
-            headers={'Authorization': f"SAML {self.token}"},
+        return self._pitu(
+            cvr,
+            'cvr',
+            f"Lookup for cvr {cvr} failed" if raise_on_fail else None
         )
-        if response.status_code == 200:
-            return response.json()
-        elif raise_on_fail:
-            raise Exception(f"Lookup for cvr {cvr} failed")
 
     def lookup_cvr_by_cpr(self, cpr, raise_on_fail=True):
+        return self._pitu(
+            cpr,
+            'cprcvr',
+            f"Ownership lookup for cpr {cpr} failed" if raise_on_fail else None
+        )
+
+    def _pitu(self, rest_path, service_name, exception_message):
         if DEBUG:
             return {}
         config = settings.DAFO_CONNECT
         response = requests.get(
-            config['address']['cprcvr'].format(cpr=cpr),
-            headers={'Authorization': f"SAML {self.token}"},
+            "https://%s/restapi/%s" % (
+                config['pitu-server'],
+                rest_path
+            ),
+            headers={
+                "Uxp-Client": config['pitu-client'],
+                "Uxp-Service": config['pitu-service'][service_name],
+            },
+            verify=config['pitu-certificate'],
+            cert=(config['client-certificate'], config['private-key'])
         )
         if response.status_code == 200:
             return response.json()
-        elif raise_on_fail:
-            raise Exception(f"Ownership lookup for cpr {cpr} failed")
+        elif exception_message is not None:
+            raise Exception("%s: %s" % (exception_message, response.content))
