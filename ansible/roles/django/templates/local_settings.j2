@@ -13,7 +13,7 @@ DATABASES = {
 }
 
 PRISME_CONNECT = {
-    'wsdl_file': 'https://test.erp.gl/GWCServiceSetup/GenericService.svc?singleWsdl',
+    'wsdl_file': '{{django_prisme.service}}',
     'auth': {
         'basic': {
             'username': '{{django_prisme.username}}',
