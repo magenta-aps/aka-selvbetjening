@@ -632,12 +632,16 @@ class Prisme(object):
                         f"{ntlm_settings['domain']}\\{ntlm_settings['username']}",
                         ntlm_settings['password']
                     )
-            self._client = zeep.Client(
-                wsdl=wsdl,
-                transport=Transport(
-                    session=session
+            try:
+                self._client = zeep.Client(
+                    wsdl=wsdl,
+                    transport=Transport(
+                        session=session
+                    )
                 )
-            )
+            except Exception as e:
+                print("Failed connecting to prisme: %s" % str(e))
+                raise e
             self._client.set_ns_prefix("tns", 'http://schemas.datacontract.org/2004/07/Dynamics.Ax.Application')
         return self._client
 

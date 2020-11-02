@@ -67,7 +67,7 @@ class HasUserMixin(object):
                 request.session['claimantIds'] = claimant_ids
                 request.session.save()
                 return claimant_ids
-            except PrismeNotFoundException as e:
+            except:
                 return []
 
     def get_company(self, request):
