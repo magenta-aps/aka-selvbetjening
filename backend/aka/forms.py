@@ -25,9 +25,14 @@ valid_date_formats = ['%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%Y-%m-%d', '%d-%m-%y'
 cprvalidator = RegexValidator("^\d{10}$", "error.invalid_cpr")
 cvrvalidator = RegexValidator("^\d{8}$", "error.invalid_cvr")
 cprcvrvalidator = RegexValidator("^\d{8}(\d{2})?$", "error.invalid_cpr_cvr")
+csepcprcvrvalidator = RegexValidator("^\d{8}(\d{2})?(,\d{8}(\d{2})?)*$", "error.invalid_cpr_cvr")
 
 
 class CsvUploadMixin(object):
+
+    akadialect = csv.register_dialect('aka', 'excel', delimiter=';')
+
+    field_order = None
 
     def clean_file(self):
         file = self.cleaned_data['file']
@@ -46,13 +51,19 @@ class CsvUploadMixin(object):
             # preventing the contents from being validated
             raise ValidationError('error.upload_no_encoding', code='error.upload_no_encoding')
         subforms = []
+        print("field_names: %s" % str(self.field_order))
         try:
-            csv_reader = csv.DictReader(StringIO(data.decode(charset['encoding'])))
+            csv_reader = csv.DictReader(
+                StringIO(data.decode(charset['encoding'])),
+                dialect='aka',
+                fieldnames=self.field_order
+            )
             rows = [row for row in csv_reader]  # Catch csv reading errors early
         except csv.Error as e:
             raise ValidationError('error.upload_read_error', code='error.upload_read_error')
         if len(rows) == 0:
             raise ValidationError('error.upload_empty', code='error.upload_empty')
+        print(rows)
 
         # Use self.add_error to add validation errors on the file contents,
         # as there may be several in the same file
@@ -215,7 +226,8 @@ class InkassoForm(forms.Form):
     hovedstol = forms.DecimalField(
         decimal_places=2,
         required=True,
-        error_messages={'required': 'error.required'}
+        error_messages={'required': 'error.required'},
+        localize=True
     )
     hovedstol_posteringstekst = forms.CharField(
         required=True,
@@ -342,6 +354,11 @@ class InkassoCoDebitorFormItem(forms.Form):
 
 class InkassoUploadFormRow(InkassoForm):
 
+    meddebitorer = forms.CharField(
+        required=False,
+        validators=[csepcprcvrvalidator]
+    )
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for i in range(1, 100):
@@ -354,6 +371,34 @@ class InkassoUploadFormRow(InkassoForm):
 class InkassoUploadForm(CsvUploadMixin, forms.Form):
 
     subform_class = InkassoUploadFormRow
+
+    field_order = [
+        'fordringshaver',
+        'debitor',
+        'fordringshaver2',
+        'fordringsgruppe',
+        'fordringstype',
+        'barns_cpr',
+        'ekstern_sagsnummer',
+        'hovedstol',
+        'hovedstol_posteringstekst',
+
+        'bankrente', # Disse felter anvendes svjv. ikke
+        'bankrente_posteringstekst',
+        'bankgebyr',
+        'bankgebyr_posteringstekst',
+        'rente',
+        'rente_posteringstekst',
+
+        'kontaktperson',
+        'periodestart',
+        'periodeslut',
+        'forfaldsdato',
+        'betalingsdato',
+        'foraeldelsesdato',
+        'noter',
+        'meddebitorer'
+    ]
 
     file = forms.FileField(
         required=True,
@@ -415,6 +460,7 @@ class LoentraekForm(forms.Form):
         required=True,
         error_messages={'required': 'error.required'},
         min_value=0.01,
+        localize=True
     )
 
     def check_sum(self, formset, add_error=True):
@@ -449,13 +495,15 @@ class LoentraekFormItem(forms.Form):
         decimal_places=2,
         required=True,
         error_messages={'required': 'error.required'},
-        min_value=0.01
+        min_value=0.01,
+        localize=True
     )
     net_salary = forms.DecimalField(
         decimal_places=2,
         required=False,
         error_messages={'required': 'error.required'},
-        min_value=0.01
+        min_value=0.01,
+        localize=True
     )
 
     def __init__(self, *args, **kwargs):
@@ -476,6 +524,14 @@ class LoentraekUploadForm(CsvUploadMixin, LoentraekForm):
 
     subform_class = LoentraekFormItem
 
+    field_order = [
+        'cpr',
+        'agreement_number',
+        'amount',
+        'net_salary',
+    ]
+
+
 
 class NedskrivningForm(forms.Form):
 
@@ -490,7 +546,8 @@ class NedskrivningForm(forms.Form):
     beloeb = forms.DecimalField(
         decimal_places=2,
         required=True,
-        error_messages={'required': 'error.required'}
+        error_messages={'required': 'error.required'},
+        localize=True
     )
     sekvensnummer = forms.CharField(
         max_length=30,
@@ -508,3 +565,9 @@ class NedskrivningUploadForm(CsvUploadMixin, forms.Form):
     )
 
     subform_class = NedskrivningForm
+    field_order = [
+        'debitor',
+        'beloeb',
+        'ekstern_sagsnummer',
+        'sekvensnummer',
+    ]

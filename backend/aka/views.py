@@ -440,6 +440,8 @@ class InkassoSagUploadView(RequireCvrMixin, IsContentMixin, FormView):
                 match = codebtor_re.match(field)
                 if match and len(value):
                     codebtors.append(value)
+                if field == 'meddebitorer' and len(value):
+                    codebtors += value.split(',')
             prisme_reply = InkassoSagView.send_claim(claimant_id, subform, codebtors=codebtors)
             responses.append(prisme_reply.rec_id)
 

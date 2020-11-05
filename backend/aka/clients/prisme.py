@@ -672,28 +672,31 @@ class Prisme(object):
         }
 
     def process_service(self, request_object, context):
-        request_class = self.client.get_type("tns:GWSRequestDCFUJ")
-        request = request_class(
-            requestHeader=self.create_request_header(request_object.method),
-            xmlCollection=self.create_request_body(request_object.xml)
-        )
-        print("Sending:\n%s" % request_object.xml)
-        # reply is of type GWSReplyDCFUJ
-        reply = self.client.service.processService(request)
+        try:
+            request_class = self.client.get_type("tns:GWSRequestDCFUJ")
+            request = request_class(
+                requestHeader=self.create_request_header(request_object.method),
+                xmlCollection=self.create_request_body(request_object.xml)
+            )
+            print("Sending:\n%s" % request_object.xml)
+            # reply is of type GWSReplyDCFUJ
+            reply = self.client.service.processService(request)
 
-        # reply.status is of type GWSReplyStatusDCFUJ
-        if reply.status.replyCode != 0:
-            raise PrismeException(reply.status.replyCode, reply.status.replyText, context)
+            # reply.status is of type GWSReplyStatusDCFUJ
+            if reply.status.replyCode != 0:
+                raise PrismeException(reply.status.replyCode, reply.status.replyText, context)
 
-        outputs = []
-        # reply_item is of type GWSReplyInstanceDCFUJ
-        for reply_item in reply.instanceCollection.GWSReplyInstanceDCFUJ:
-            if reply_item.replyCode == 0:
-                print("Receiving:\n%s" % reply_item.xml)
-                outputs.append(request_object.reply_class(request_object, reply_item.xml))
-            else:
-                raise PrismeException(reply_item.replyCode, reply_item.replyText, context)
-        return outputs
+            outputs = []
+            # reply_item is of type GWSReplyInstanceDCFUJ
+            for reply_item in reply.instanceCollection.GWSReplyInstanceDCFUJ:
+                if reply_item.replyCode == 0:
+                    print("Receiving:\n%s" % reply_item.xml)
+                    outputs.append(request_object.reply_class(request_object, reply_item.xml))
+                else:
+                    raise PrismeException(reply_item.replyCode, reply_item.replyText, context)
+            return outputs
+        except Exception as e:
+            print("Error in process_service: %s" % str(e))
 
     def check_cvr(self, cvr):
         response = self.process_service(PrismeCvrCheckRequest(cvr), 'cvrcheck')
