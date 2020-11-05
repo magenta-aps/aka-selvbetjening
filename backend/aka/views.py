@@ -275,7 +275,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
                 self.form.cleaned_data['from_date'],
                 self.form.cleaned_data['to_date'],
                 self.form.cleaned_data['open_closed']
-            ), 'account')[0]
+            ), 'account', self.cpr, self.cvr)[0]
             self._data[key] = [
                 {
                     field['name']: getattr(entry, field['name'])
@@ -297,7 +297,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
             lookup_class = self.get_total_lookup_class(key)
             prisme_reply = self.prisme.process_service(lookup_class(
                 cprcvr
-            ), 'account')[0]
+            ), 'account', self.cpr, self.cvr)[0]
             self._total[key] = prisme_reply
         return self._total[key]
 
@@ -371,7 +371,7 @@ class InkassoSagView(RequireCvrMixin, IsContentMixin, FormSetView, FormView):
         return self.form_invalid(form, formset)
 
     @staticmethod
-    def send_claim(claimant_id, form, formset=None, codebtors=None):
+    def send_claim(claimant_id, form, cpr, cvr, formset=None, codebtors=None):
         prisme = Prisme()
 
         if codebtors is None:
@@ -407,11 +407,11 @@ class InkassoSagView(RequireCvrMixin, IsContentMixin, FormSetView, FormView):
             codebtors=codebtors,
             files=[file for name, file in form.files.items()]
         )
-        prisme_reply = prisme.process_service(claim, 'fordring')[0]
+        prisme_reply = prisme.process_service(claim, 'fordring', cpr, cvr)[0]
         return prisme_reply
 
     def form_valid(self, form, formset):
-        prisme_reply = InkassoSagView.send_claim(self.claimant_ids[0], form, formset)
+        prisme_reply = InkassoSagView.send_claim(self.claimant_ids[0], form, formset, self.cpr, self.cvr)
         return TemplateResponse(
             request=self.request,
             template="aka/claim/success.html",
@@ -501,7 +501,7 @@ class LoentraekView(RequireCvrMixin, IsContentMixin, FormSetView, FormView):
                     if subform.cleaned_data
                 ]
             )
-            rec_id = prisme.process_service(payroll, 'loentraek')[0].rec_id
+            rec_id = prisme.process_service(payroll, 'loentraek', self.cpr, self.cvr)[0].rec_id
             return TemplateResponse(
                 request=self.request,
                 template="aka/payroll/success.html",
@@ -586,7 +586,7 @@ class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormV
             amount_balance=-abs(form.cleaned_data.get('beloeb', 0)),
             claim_number_seq=form.cleaned_data.get('sekvensnummer')
         )
-        return prisme.process_service(impairment, 'nedskrivning')[0].rec_id
+        return prisme.process_service(impairment, 'nedskrivning', self.cpr, self.cvr)[0].rec_id
 
     def form_valid(self, form):
         prisme = Prisme()
@@ -699,7 +699,7 @@ class RenteNotaView(RequireCvrMixin, IsContentMixin, SimpleGetFormMixin, PdfRend
         # Response is of type PrismeInterestNoteResponse
         interest_note_data = prisme.process_service(
             PrismeInterestNoteRequest(self.cvr, form.cleaned_data['year'], form.cleaned_data['month']),
-            'rentenota'
+            'rentenota', self.cpr, self.cvr
         )
 
         for interest_note_response in interest_note_data:

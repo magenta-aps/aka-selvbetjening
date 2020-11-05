@@ -1,6 +1,7 @@
 import os
 import re
 from datetime import date, datetime, time
+import logging
 
 import zeep
 from aka.exceptions import AkaException
@@ -15,6 +16,7 @@ from xmltodict import parse as xml_to_dict
 from zeep.transports import Transport
 
 prisme_settings = settings.PRISME_CONNECT
+logger = logging.getLogger(__name__)
 
 
 class PrismeException(AkaException):
@@ -671,14 +673,14 @@ class Prisme(object):
             'description': response.serverVersionDescription
         }
 
-    def process_service(self, request_object, context):
+    def process_service(self, request_object, context, cpr, cvr):
         try:
             request_class = self.client.get_type("tns:GWSRequestDCFUJ")
             request = request_class(
                 requestHeader=self.create_request_header(request_object.method),
                 xmlCollection=self.create_request_body(request_object.xml)
             )
-            print("Sending:\n%s" % request_object.xml)
+            logger.info("CPR=%s CVR=%s Sending:\n%s" % (cpr, cvr, request_object.xml))
             # reply is of type GWSReplyDCFUJ
             reply = self.client.service.processService(request)
 
@@ -690,14 +692,14 @@ class Prisme(object):
             # reply_item is of type GWSReplyInstanceDCFUJ
             for reply_item in reply.instanceCollection.GWSReplyInstanceDCFUJ:
                 if reply_item.replyCode == 0:
-                    print("Receiving:\n%s" % reply_item.xml)
+                    logger.info("CPR=%s CVR=%s Receiving:\n%s" % (cpr, cvr, reply_item.xml))
                     outputs.append(request_object.reply_class(request_object, reply_item.xml))
                 else:
                     raise PrismeException(reply_item.replyCode, reply_item.replyText, context)
             return outputs
         except Exception as e:
-            print("Error in process_service: %s" % str(e))
+            logger.info("Error in process_service: %s" % str(e))
 
     def check_cvr(self, cvr):
-        response = self.process_service(PrismeCvrCheckRequest(cvr), 'cvrcheck')
+        response = self.process_service(PrismeCvrCheckRequest(cvr), 'cvrcheck', None, cvr)
         return response[0].claimant_id

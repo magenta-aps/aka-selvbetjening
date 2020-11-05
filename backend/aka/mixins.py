@@ -62,7 +62,7 @@ class HasUserMixin(object):
                 cvr = self.cvr
                 claimant_ids = flatten([
                     response.claimant_id
-                    for response in Prisme().process_service(PrismeCvrCheckRequest(cvr), 'cvr_check')
+                    for response in Prisme().process_service(PrismeCvrCheckRequest(cvr), 'cvr_check', self.cpr, self.cvr)
                 ])
                 request.session['claimantIds'] = claimant_ids
                 request.session.save()
