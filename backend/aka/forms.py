@@ -51,7 +51,6 @@ class CsvUploadMixin(object):
             # preventing the contents from being validated
             raise ValidationError('error.upload_no_encoding', code='error.upload_no_encoding')
         subforms = []
-        print("field_names: %s" % str(self.field_order))
         try:
             csv_reader = csv.DictReader(
                 StringIO(data.decode(charset['encoding'])),
@@ -323,11 +322,24 @@ class InkassoForm(forms.Form):
 
     @staticmethod
     def convert_group_type_text(groupname, typename):
-        group_match = [group for group in groups if group['name'] == groupname]
+        for group in groups:
+            for type in group['sub_groups']:
+                if str(type['group_id']) == str(groupname) and str(type['type_id']) == str(typename):
+                    return (group['id'], "%d.%d" % (type['group_id'], type['type_id']))
+
+        group_match = [
+            group
+            for group in groups
+            if group['name'] == groupname
+        ]
         if not group_match:
             raise ValidationError('error.fordringsgruppe_not_found')
         group = group_match[0]
-        type_match = [type for type in group['sub_groups'] if type['name'] == typename]
+        type_match = [
+            type
+            for type in group['sub_groups']
+            if type['name'] == typename
+        ]
         if not type_match:
             raise ValidationError('error.fordringstype_not_found')
         type = type_match[0]
@@ -354,6 +366,9 @@ class InkassoCoDebitorFormItem(forms.Form):
 
 class InkassoUploadFormRow(InkassoForm):
 
+    fordringshaver = forms.CharField(
+        required=False,
+    )
     meddebitorer = forms.CharField(
         required=False,
         validators=[csepcprcvrvalidator]
