@@ -699,6 +699,7 @@ class Prisme(object):
             return outputs
         except Exception as e:
             logger.info("Error in process_service: %s" % str(e))
+            raise e
 
     def check_cvr(self, cvr):
         response = self.process_service(PrismeCvrCheckRequest(cvr), 'cvrcheck', None, cvr)
