@@ -201,13 +201,13 @@ class InkassoForm(forms.Form):
     )
     periodestart = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
-        required=True,
+        required=False,
         error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
     )
     periodeslut = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'datepicker'}),
-        required=True,
+        required=False,
         error_messages={'required': 'error.required', 'invalid': 'error.invalid_date'},
         input_formats=valid_date_formats
     )
@@ -300,6 +300,28 @@ class InkassoForm(forms.Form):
         if len(items) > 1:
             raise ValidationError('error.multiple_fordringsgruppe_found')
         return value
+
+    # Prisme depends on the value for periodestart, so set it to today if
+    # it was not specified.
+    def clean_periodestart(self):
+        value = self.cleaned_data.get('periodestart')
+
+        if not value:
+            value = date.today()
+
+        return value
+
+
+    # Prisme depends on the value for periodeslut, so set it to today if
+    # it was not specified.
+    def clean_periodeslut(self):
+        value = self.cleaned_data.get('periodeslut')
+
+        if not value:
+            value = date.today()
+
+        return value
+
 
     def clean(self):
         cleaned_data = super(InkassoForm, self).clean()
@@ -581,8 +603,11 @@ class NedskrivningUploadForm(CsvUploadMixin, forms.Form):
 
     subform_class = NedskrivningForm
     field_order = [
+        'fordringshaver',               # Not sent to Prisme service
         'debitor',
+        'inkassonummer',                # Not sent to Primse service
         'beloeb',
+        'oprindeligt_overfoert_beloeb', # Not sent to Primse service
         'ekstern_sagsnummer',
         'sekvensnummer',
     ]
