@@ -605,7 +605,7 @@ class NedskrivningUploadForm(CsvUploadMixin, forms.Form):
     field_order = [
         'fordringshaver',               # Not sent to Prisme service
         'debitor',
-        'inkassonummer',                # Not sent to Primse service
+        'inkassonummer',                # Not sent to Prisme service
         'beloeb',
         'oprindeligt_overfoert_beloeb', # Not sent to Primse service
         'ekstern_sagsnummer',
