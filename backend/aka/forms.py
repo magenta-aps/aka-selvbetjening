@@ -607,7 +607,7 @@ class NedskrivningUploadForm(CsvUploadMixin, forms.Form):
         'debitor',
         'inkassonummer',                # Not sent to Prisme service
         'beloeb',
-        'oprindeligt_overfoert_beloeb', # Not sent to Primse service
+        'oprindeligt_overfoert_beloeb', # Not sent to Prisme service
         'ekstern_sagsnummer',
         'sekvensnummer',
     ]
