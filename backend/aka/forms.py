@@ -440,7 +440,10 @@ class InkassoUploadForm(CsvUploadMixin, forms.Form):
     file = forms.FileField(
         required=True,
         validators=[
-            FileExtensionValidator(['csv'], code='error.invalid_extension')
+            FileExtensionValidator(
+                ['csv', 'txt'],
+                code='error.invalid_extension'
+            )
         ]
     )
 
@@ -555,7 +558,10 @@ class LoentraekUploadForm(CsvUploadMixin, LoentraekForm):
     file = forms.FileField(
         required=True,
         validators=[
-            FileExtensionValidator(['csv'], code='error.invalid_extension')
+            FileExtensionValidator(
+                ['csv', 'txt'],
+                code='error.invalid_extension'
+            )
         ]
     )
 
@@ -597,7 +603,10 @@ class NedskrivningUploadForm(CsvUploadMixin, forms.Form):
     file = forms.FileField(
         required=True,
         validators=[
-            FileExtensionValidator(['csv'])
+            FileExtensionValidator(
+                ['csv', 'txt'],
+                code='error.invalid_extension'
+            )
         ],
     )
 
