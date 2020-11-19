@@ -62,7 +62,6 @@ class CsvUploadMixin(object):
             raise ValidationError('error.upload_read_error', code='error.upload_read_error')
         if len(rows) == 0:
             raise ValidationError('error.upload_empty', code='error.upload_empty')
-        print(rows)
 
         # Use self.add_error to add validation errors on the file contents,
         # as there may be several in the same file
