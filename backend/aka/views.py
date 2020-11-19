@@ -355,7 +355,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
         return fields
 
 
-class InkassoSagView(RequireCvrMixin, IsContentMixin, FormSetView, FormView):
+class InkassoSagView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSetView, FormView):
 
     form_class = InkassoForm
     template_name = 'aka/claim/form.html'
@@ -371,19 +371,8 @@ class InkassoSagView(RequireCvrMixin, IsContentMixin, FormSetView, FormView):
         return self.form_invalid(form, formset)
 
     @staticmethod
-    def send_claim(claimant_id, form, cpr, cvr, formset=None, codebtors=None):
+    def send_claim(claimant_id, form, codebtors, cpr, cvr):
         prisme = Prisme()
-
-        if codebtors is None:
-            codebtors = []
-        if formset:
-            for subform in formset:
-                cpr = subform.cleaned_data.get("cpr")
-                cvr = subform.cleaned_data.get("cvr")
-                if cpr is not None:
-                    codebtors.append(cpr)
-                elif cvr is not None:
-                    codebtors.append(cvr)
 
         claim_type = form.cleaned_data['fordringstype'].split(".")
 
@@ -411,7 +400,18 @@ class InkassoSagView(RequireCvrMixin, IsContentMixin, FormSetView, FormView):
         return prisme_reply
 
     def form_valid(self, form, formset):
-        prisme_reply = InkassoSagView.send_claim(self.claimant_ids[0], form, formset, self.cpr, self.cvr)
+
+        codebtors = []
+        if formset:
+            for subform in formset:
+                cpr = subform.cleaned_data.get("cpr")
+                cvr = subform.cleaned_data.get("cvr")
+                if cpr is not None:
+                    codebtors.append(cpr)
+                elif cvr is not None:
+                    codebtors.append(cvr)
+
+        prisme_reply = InkassoSagView.send_claim(self.claimant_ids[0], form, codebtors, self.cpr, self.cvr)
         return TemplateResponse(
             request=self.request,
             template="aka/claim/success.html",
@@ -426,16 +426,15 @@ class InkassoSagView(RequireCvrMixin, IsContentMixin, FormSetView, FormView):
         return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
 
-class InkassoSagUploadView(RequireCvrMixin, IsContentMixin, FormView):
+class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormView):
     form_class = InkassoUploadForm
     template_name = 'aka/claim/upload.html'
 
     def form_valid(self, form):
         responses = []
         codebtor_re = re.compile("^codebtor_\d+$")
-        claimant_id = self.claimant_ids[0]
         for subform in form.subforms:
-            claimant = subform.cleaned_data['fordringshaver'] or claimant_id
+            claimant = subform.cleaned_data['fordringshaver'] or self.claimant_ids[0]
             codebtors = []
             for field, value in subform.cleaned_data.items():
                 match = codebtor_re.match(field)
@@ -443,7 +442,7 @@ class InkassoSagUploadView(RequireCvrMixin, IsContentMixin, FormView):
                     codebtors.append(value)
                 if field == 'meddebitorer' and len(value):
                     codebtors += value.split(',')
-            prisme_reply = InkassoSagView.send_claim(claimant, subform, codebtors=codebtors)
+            prisme_reply = InkassoSagView.send_claim(claimant, subform, codebtors, self.cpr, self.cvr)
             responses.append(prisme_reply.rec_id)
 
         return TemplateResponse(
@@ -579,9 +578,10 @@ class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormV
     template_name = 'aka/impairment/form.html'
 
     def send_impairment(self, form, prisme):
+        claimant = form.cleaned_data['fordringshaver'] or self.claimant_ids[0]
         impairment = PrismeImpairmentRequest(
             # claimant_id=self.get_claimant_id(self.request),
-            claimant_id=self.claimant_ids[0],
+            claimant_id=claimant,
             cpr_cvr=form.cleaned_data.get('debitor'),
             claim_ref=form.cleaned_data.get('ekstern_sagsnummer'),
             amount_balance=-abs(form.cleaned_data.get('beloeb', 0)),

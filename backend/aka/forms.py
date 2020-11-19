@@ -1,6 +1,7 @@
 import csv
 import logging
 from io import StringIO
+import re
 
 import chardet
 from aka.data.fordringsgruppe import groups
@@ -52,8 +53,11 @@ class CsvUploadMixin(object):
             raise ValidationError('error.upload_no_encoding', code='error.upload_no_encoding')
         subforms = []
         try:
+            data = data.decode(charset['encoding'])
+            data = re.sub('("[\n\r]+|$)', '\n', data, flags=re.MULTILINE)
+            data = re.sub('(^|[\n\r]+)"', '\n', data, flags=re.MULTILINE)
             csv_reader = csv.DictReader(
-                StringIO(data.decode(charset['encoding'])),
+                StringIO(data),
                 dialect='aka',
                 fieldnames=self.field_order
             )
@@ -62,7 +66,6 @@ class CsvUploadMixin(object):
             raise ValidationError('error.upload_read_error', code='error.upload_read_error')
         if len(rows) == 0:
             raise ValidationError('error.upload_empty', code='error.upload_empty')
-        print(rows)
 
         # Use self.add_error to add validation errors on the file contents,
         # as there may be several in the same file
@@ -577,6 +580,10 @@ class LoentraekUploadForm(CsvUploadMixin, LoentraekForm):
 
 
 class NedskrivningForm(forms.Form):
+
+    fordringshaver = forms.CharField(
+        required=False,
+    )
 
     debitor = forms.CharField(
         required=True,
