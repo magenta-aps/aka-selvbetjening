@@ -12,11 +12,11 @@
             {% csrf_token %}
             <h1 data-trans="loentraek.title">{% trans 'loentraek.title' %}</h1>
             <div class="container-fluid">
-{#                <div class="row">#}
-{#                    <div class="col-12">#}
-{#                        <a href="{% static '/csv/Løntræk.csv' %}" data-trans="common.download_template">{% trans 'common.download_template' %}</a>#}
-{#                    </div>#}
-{#                </div>#}
+                <div class="row">
+                    <div class="col-12">
+                        <a href="{% static '/csv/Løntræk.csv' %}" data-trans="common.download_template">{% trans 'common.download_template' %}</a>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-12">
                         {% include 'aka/util/field.html' with field=form.year key='loentraek.year' %}
