@@ -171,31 +171,49 @@ msgstr "CPR- imaluunniit CVR-normu artorsinnaanngilaq"
 # Index
 
 msgid "index.rentenota"
-msgstr "Erniat pillugit allakkiaq aajuk"
+msgstr "Piffisami aalajangersimasumi Ernianut nalunaarut"
+
+msgid "index.rentenota.sub"
+msgstr "Piffissami nammineq aalajangikkami ernianut nalunaarut uani aasinnaavat"
 
 msgid "index.fordring"
-msgstr "Fordring-it nalunaarutigikkit"
+msgstr "Akiligassanik nalunaarsuineq"
+
+msgid "index.fordring.sub"
+msgstr "Uani pisortanut akiligassat Akiliisitsiniartarfimmut nalunaarutigikkit"
 
 msgid "index.fordring-upload"
 msgstr "Fordring-it uploadikkit"
 
 msgid "index.nedskrivning"
-msgstr "Milliliineq nalunaarutigiuk"
+msgstr "Milliliinerit nalunaarutigikkit"
+
+msgid "index.nedskrivning.sub"
+msgstr "Uani milliliinerit akiliisitsiniartarfimmut nalunaarutigikkit"
 
 msgid "index.nedskrivning-upload"
 msgstr "Milliliineq uploaderuk"
 
 msgid "index.løntræk"
-msgstr "Akissarsianik ilanngaaneq nalunaarutigiuk"
+msgstr "Aningaasarsianiit ilanngatuinerit nalunaarutigikkit"
+
+msgid "index.løntræk.sub"
+msgstr "Uani Aningaasarsianiit  ilanngatuinerit nalunaarutigikkit"
 
 msgid "index.løntræk-upload"
 msgstr "Akissarsianik ilanngaaneq uploaderuk"
 
 msgid "index.fordringshaverkonto"
-msgstr "Fordringshaverip kontoa takuuk"
+msgstr "Konto-mi nikerartut Akiligassaqartitsisutut"
+
+msgid "index.fordringshaverkonto.sub"
+msgstr "Akilisassaqartitsisutut kontomi nikerartut, alliliinerit milliliinerit uani takuneqarsinnaapput"
 
 msgid "index.konto"
 msgstr "Kontoa takuuk"
+
+msgid "index.konto.sub"
+msgstr "Pisortanut akiligassatit uani takuneqarsinnaapput, sukumiinerusumik takuniarukkit uunga iserit"
 
 
 # 6.1

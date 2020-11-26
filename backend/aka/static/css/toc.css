@@ -31,6 +31,10 @@ p {
     text-rendering: optimizeLegibility;
 }
 
+p.sub {
+    font-size: 0.75rem;
+}
+
 .box__content {
     padding-top: 2.5rem;
     font-size: .9375rem;

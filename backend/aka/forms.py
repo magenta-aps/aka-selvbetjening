@@ -575,6 +575,8 @@ class LoentraekUploadForm(CsvUploadMixin, LoentraekForm):
         'agreement_number',
         'amount',
         'net_salary',
+        'head_reference_number',
+        'item_reference_number'
     ]
 
 
