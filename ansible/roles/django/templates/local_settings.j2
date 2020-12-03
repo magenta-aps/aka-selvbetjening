@@ -1,0 +1,74 @@
+import os
+
+ALLOWED_HOSTS = ['*']
+
+DATABASES = {
+{% for database, settings in django_databases.items() %}
+    '{{ database }}': {
+    {% for key, value in settings.items() %}
+        "{{ key|upper }}": "{{ value }}",
+    {% endfor %}
+    }
+{% endfor %}
+}
+
+PRISME_CONNECT = {
+    'wsdl_file': '{{django_prisme.service}}',
+    'auth': {
+        'basic': {
+            'username': '{{django_prisme.username}}',
+            'domain': 'codmz.local',
+            'password': '{{django_prisme.password}}'
+        }
+    }
+}
+
+DAFO_CONNECT = {
+    'pitu-server': '10.240.76.4',
+    'pitu-certificate': '{{django_dafo.pitu_server_certificate}}',
+    'client-certificate': '{{django_dafo.client_certificate}}',
+    'private-key': '{{django_dafo.private_key}}',
+    'pitu-client': 'PITU/GOV/AKA/AKA_Selvbetjening',
+    'pitu-service': {
+        'cpr': 'PITU/GOV/DIA/magenta_services/DAFO-PRISME-CPR-COMBINED/v1',
+        'cvr': 'PITU/GOV/DIA/magenta_services/DAFO-PRISME-CVR-COMBINED/v1',
+        'cprcvr': 'PITU/GOV/DIA/magenta_services/DAFO-CVR-OWNED-BY/v1',
+    },
+}
+
+OPENID_CONNECT = {
+    'issuer': '{{django_openid.issuer}}',  # top level url to the issuer, used for autodiscovery
+    'scope': '{{django_openid.scope}}',  # openid is mandatory to indicated is is a openid OP, we need to use digitalimik to get the cpr/cvr number.
+    'client_id': '{{django_openid.client_id}}',  # id of the system (ouath), registered at headnet
+    'client_certificate': '{{django_openid.client_certificate}}',  # path to client certificate used to secure the communication between the system and OP
+    'private_key': '{{django_openid.private_key}}',  # used for signing messages passed to the OP
+    'redirect_uri': '{{django_openid.redirect_uri}}',  # url registered at headnet to redirect the user to after a successfull login at OP
+    'logout_uri': '{{django_openid.logout_uri}}',  # url registered at headnet to call when logging out, removing session data there
+    'front_channel_logout_uri': '{{django_openid.front_channel_logout_uri}}',  # url registered at headnet to call when logging out, should clear our cookies etc.
+    'post_logout_redirect_uri': '{{django_openid.post_logout_redirect_uri}}'  # url registered at headnet to redirect to when logout is complete
+}
+
+NEMID_CONNECT = {
+    'federation_service': '{{django_nemid.federation_service}}',
+    'cookie_name': '{{django_nemid.cookie_name}}',
+    'cookie_path': '{{django_nemid.cookie_path}}',
+    'cookie_domain': '{{django_nemid.cookie_domain}}',
+    'login_url': '{{django_nemid.login_url}}',
+    'redirect_field': '{{django_nemid.redirect_field}}',
+    'client_certificate': '{{django_nemid.client_certificate}}',
+    'private_key': '{{django_nemid.private_key}}',
+    'get_user_service': '{{django_nemid.get_user_service}}',
+}
+
+MOUNTS = {
+    'claimant_account_statements': {
+        'maindir': os.path.join('media', '6.5'),
+        'subdir': '{cvr}*',
+        'files': '*'
+    }
+}
+
+
+SECURE_SSL_REDIRECT = True
+
+DEBUG = {{ debug }}

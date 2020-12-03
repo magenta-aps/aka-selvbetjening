@@ -1,23 +1,126 @@
 ---
 
-- name: Install Python 3
+- name: Install system-level depndencies
   apt:
-    name: python3
     update_cache: true
+    name:
+      - python3
+      - python3-pip
+      - python3-venv
+      - python3-psycopg2
+      - python-psycopg2
+      - python-setuptools
+      - gettext
+      - wkhtmltopdf
+      - libxmlsec1-dev
+      - language-pack-da
+      - gpg
 
-- name: Install Python Virtual Enviroment
-  apt:
-    name: python3-venv
+- name: Install requirements
+  pip:
+    requirements: "{{django_requirements_file}}"
+    virtualenv: "{{django_virtual_env_path}}"
+    virtualenv_command: "/usr/bin/python{{python_major_version}} -m venv"
+  when:
+    - django_requirements_file is defined
+    - django_requirements_file != none
 
-- name: Install Pip
-  apt:
-    name: python3-pip
+- name: Create Postgres Django User
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    name: "{{django_databases.default.user}}"
+    password: "{{django_databases.default.password}}"
+    encrypted: yes
+    role_attr_flags: SUPERUSER # needed to create test database
+  tags:
+    - django
 
+- name: Setup django database
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: "{{django_databases.default.name}}"
+    encoding: UTF-8
+    owner: "{{django_databases.default.user}}"
+    state: present
+  tags:
+    - django
 
-- name: Install Django
-  pip: 
-    name: Django
-    executable: pip3
+- name: Generate secret key
+  shell: ". {{django_virtual_env_path}}/bin/activate && python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'"
+  register: secret_key
+  tags:
+    - django
 
+- name: Install django secret key
+  copy:
+    content: "SECRET_KEY = '{{secret_key.stdout}}'"
+    dest: "{{django_secret_key_file}}"
+    force: no  # Very important - do not overwrite if it does not exist
 
+- name: Setup django local settings
+  template:
+    src: templates/local_settings.j2
+    dest: "{{django_local_settings_file}}"
+    force: yes
+
+- name: Create log dir
+  file:
+    path: /var/log/aka
+    state: directory
+    owner: www-data
+    group: akap-dev
+    mode: 0775
+    recurse: yes
+
+- name: Create log file
+  file:
+    path: /var/log/aka/aka.log.asc
+    state: file
+    owner: www-data
+    group: akap-dev
+    mode: 0775
+
+- name: Migrate
+  shell: ". {{django_virtual_env_path}}/bin/activate && python {{django_manage_file}} migrate"
+  tags:
+    - django
+
+- name: Collect static files
+  shell: ". {{django_virtual_env_path}}/bin/activate && python {{django_manage_file}} collectstatic --no-input"
+
+- name: Compile messages
+  shell: ". {{django_virtual_env_path}}/bin/activate && python {{django_manage_file}} compilemessages"
+
+- name: Restart apache
+  service:
+    name: apache2
+    state: restarted
+    enabled: yes
+  when: restart_apache == true
+
+- name: Create gpg dir for webuser
+  file:
+    path: /var/www/.gnupg
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: 0700
+
+# - name: Import public encryption key
+- name: Import public encryption key
+  become_user: www-data
+  shell:
+    cmd: "gpg --import"
+    stdin: "{{gpg.pubkey}}"
+
+- name: Setup session clearance as a CRON job
+  cron:
+    job: "{{django_virtual_env_path}}/bin/activate && {{django_manage_file}} clearsessions && deactivate"
+    name: "AKA session cache clear"
+    hour: 2
+    minute: 0
+
+# Touch logfile
 ...

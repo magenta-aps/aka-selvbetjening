@@ -1,0 +1,431 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load aka_tags %}
+
+{% block extra_headers %}
+    {% if pdf %}
+        <style>
+            {{ css|safe }}
+        </style>
+
+        <script src="{% static 'js/thirdparty/jquery-3.5.0.min.js' %}"></script>
+
+        <script>
+
+            const splitTable = function(table) {
+                var tables = [];
+                if (table.length) {
+                    var newTable;
+                    var tableLeft = table.offset().left;
+                    var maxWidth = 1200; // table.parent().innerWidth();
+                    tables.push(table);
+
+                    table.find("th").each(function (index) {
+
+                        const $this = $(this);
+                        const right = $this.offset().left + $this.outerWidth() - tableLeft;
+
+                        if (right > maxWidth) {
+                            // Create a new table to hold punted columns
+                            newTable = $("<table><thead><tr></tr></thead><tbody></tbody></table>");
+                            const newPage = table.parents(".page").clone();
+                            newPage.find(".no-copy").remove();
+                            newPage.find(".output-table").replaceWith(newTable);
+                            table.parents(".page").parent().append(newPage);
+                            newTable.addClass(table.get(0).className);
+                            // Move table headers (this + all to the right), and their cells to the new table
+                            var puntHeaders = $this.add($this.nextAll());
+                            if (puntHeaders.length) {
+                                newTable.find("thead tr").append(puntHeaders);
+                                table.find("tbody tr").each(function () {
+                                    var puntCells = $(this).find("td:nth-child(" + (index) + ")").nextAll();
+                                    var newRow = $("<tr/>");
+                                    newRow.append(puntCells);
+                                    newTable.find("tbody").append(newRow);
+                                    newRow.height($(this).height());
+                                });
+                            } else {
+                                newPage.remove();
+                                newTable = null;
+                            }
+                            return false;
+                        }
+                    });
+                    if (newTable) {
+                        // Run split on the new (smaller) table. This continues in a chain until the last table does not need to be split
+                        tables = tables.concat(
+                            splitTable(newTable)
+                        );
+                    }
+                }
+                return tables;
+            };
+
+            const splitPage = function(page) {
+                const maxHeight = page.outerHeight() - 30;
+                let height = 0;
+                page.children().each(function () {
+                    height += $(this).outerHeight();
+                });
+                if (height > maxHeight) {
+                    // Create new page to hold punted rows
+                    var pageOffset = page.offset().top;
+                    var newPage = $("<div style='page-break-after: always'><table><thead/><tbody/></table></div>");
+                    newPage.addClass(page.get(0).className);
+                    newPage.find("table").addClass(page.find("table.output-table").get(0).className);
+                    newPage.find("thead").append(page.find("table.output-table thead tr").clone());
+                    var body = newPage.find("tbody");
+                    // Find rows that would spill over our maxHeight, and send them to the new page
+                    page.find("table.output-table tbody tr").each(function(index) {
+                        if ($(this).offset().top - pageOffset > maxHeight) {
+                            body.append($(this).add($(this).nextAll()));
+                            return false;
+                        }
+                    });
+                    newPage.append($(".pagefooter").first().clone());
+                    page.parent().append(newPage);
+                    splitPage(newPage);
+                }
+            };
+
+            $(function() {
+                $(".output-table").each(function(){
+                    const thistable = $(this);
+
+                    // Expressly set row height - this is to maintain row height across split tables
+                    // (So if cell content makes one row higher, that row should maintain its height even as the table splits)
+                    thistable.find("tr").each(function(index, el) {
+                        const $this = $(this);
+                        $this.height($this.height());
+                    });
+
+                    // Split the table vertically into parallel tables
+                    splitTable(thistable);
+
+                    // Split the pages to get a nice border (and copy headers to pages)
+                    $(".page").each(function(index, el) {
+                        splitPage($(this));
+                    });
+
+                    const footerTemplate = "{% trans 'account.footer' %}";
+
+                    const footers = $(".page .pagefooter");
+                    footers.each(function(index, el){
+                        const params = {'index':index+1, 'count':footers.length};
+                        let text = footerTemplate;
+                        for (let key in params) {
+                            if (params.hasOwnProperty(key)) {
+                                text = text.replace("{" + key + "}", params[key]);
+                            }
+                        }
+                        $(this).text(text);
+                    });
+                });
+            });
+        </script>
+
+    {% else %}
+        {% include 'aka/util/calendar_headers.html' %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}"/>
+        <script src="{% static 'js/form.js' %}"></script>
+
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/sumoselect.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/jquery.sumoselect.min.js"></script>
+
+        {% if items %}
+            <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>
+            <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+            <script src="{% static 'js/datatable.js' %}"></script>
+        {% endif %}
+
+        <script src="{% static 'js/download.js' %}"></script>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<article>
+
+    <h1 class="account-title printhide" data-trans="account.title">{% trans 'account.title' %} </h1>
+
+    <div class="account-main">
+
+        <form method="get" id="mainform">
+            <div class="printhide">
+            {% if form.non_field_errors %}
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors.as_data %}
+                        <li {% if error.code %}data-trans="{{ error.code }}"{% endif %} {% if error.params %}data-trans-params="{{ error.params|json }}"{% endif %}>
+                            {% if error.code %}
+                                {% trans error.code as error_message %}
+                                {{ error_message|format:error.params }}
+                            {% else %}
+                                {{ error }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <p data-trans="account.description">{{ account.description }}</p>
+            <div class="account-actions row">
+                {% if cpr and cvr %}
+                <div class="col-4-sm">
+                    {% include 'aka/util/field.html' with field=form.cprcvr key='account.cprcvr' %}
+                </div>
+                {% endif %}
+                <div class="col-4-sm">
+                    {% include 'aka/util/field.html' with field=form.from_date key='account.from_date' %}
+                </div>
+                <div class="col-4-sm">
+                    {% include 'aka/util/field.html' with field=form.to_date key='account.to_date' %}
+                </div>
+            </div>
+
+            <div class="account-actions row">
+                <div class="col-12-sm">
+                    {% include 'aka/util/field.html' with field=form.open_closed %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12-sm">
+                    <button type="submit" data-trans="common.send">{% trans 'common.send' %}</button>
+                </div>
+            </div>
+            {{ form.hidden }}
+            </div>
+
+        {% if form.is_bound %}
+
+            {% for item in items %}
+                {% with data=item.data total=item.total %}
+                <div id="output-{{ item.key }}" class="output">
+
+                    <div class="page" style="page-break-after: always">
+                        <h2 class="can-collapse printhide" data-collapse="#content-{{ item.key }}">
+                            <img src="{% static 'img/sullisivk_arrow_right.svg' %}" width="20" height="20"/>
+                            <span data-trans="{{ item.title }}">{% trans item.title %}</span>
+                        </h2>
+                        <div id="content-{{ item.key }}" {% if not pdf %}class="page-content collapsed" style="display:none"{% endif %}>
+
+                            <div class="page-header">
+
+                                <div class="output-header">
+                                    <div class="row">
+                                        <div class="col-7-sm">
+                                            <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
+                                            <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
+                                            <strong>Skattestyrelsen</strong>
+                                        </div>
+                                        <div class="col-5-sm output-actions printhide">
+
+                                            <select id="download">
+                                                {% if pdflink %}
+                                                    <option value="{{ item.key }}.pdf" data-trans="common.pdf">{% trans 'common.pdf' %}</option>
+                                                {% endif %}
+                                                {% if xlsxlink %}
+                                                    <option value="{{ item.key }}.xlsx" data-trans="common.xlsx">{% trans 'common.xlsx' %}</option>
+                                                {% endif %}
+                                                {% if odslink %}
+                                                    <option value="{{ item.key }}.ods" data-trans="common.ods">{% trans 'common.ods' %}</option>
+                                                {% endif %}
+                                                {% if csvlink %}
+                                                    <option value="{{ item.key }}.csv" data-trans="common.csv">{% trans 'common.csv' %}</option>
+                                                {% endif %}
+                                            </select>
+
+                                            <button type="button" class="btn-print" data-trans="common.print" data-printhide=".output:not(#output-{{ item.key }})">{% trans 'common.print' %}</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr/>
+
+                                <div class="output-details row">
+                                    <div class="col-6-sm">
+                                        <span class="line">{{ company.navn }}</span>
+                                        <span class="line">{{ company.adresse }}</span>
+                                        <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
+                                        <span class="line" data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
+                                    </div>
+                                    <div class="col-3-sm">
+                                        <table class="dl-table">
+                                            <tr>
+                                                <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <th data-trans="common.fax">{% trans 'common.fax' %}</th>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <th data-trans="account.swift">{% trans 'account.swift' %}</th>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <th data-trans="account.iban">{% trans 'account.iban' %}</th>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <th data-trans="account.cvrse">{% trans 'account.cvrse' %}</th>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <th data-trans="account.bankaccount">{% trans 'account.bankaccount' %}</th>
+                                                <td></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-3-sm">
+                                        <img src="{% static 'img/naalakkersuisut.png' %}" style="width:100%"/>
+                                    </div>
+                                </div>
+
+                                <div class="output-details row">
+                                    <div class="col-6-sm offset-6-sm">
+                                        <h3 data-trans="account.account">{% trans 'account.account' %}</h3>
+                                        {% if period.from_date and period.to_date %}
+                                            <h4 data-trans="account.period" data-trans-params="{{ period|json }}">{{ 'account.period'|format:period }}</h4>
+                                        {% elif period.from_date and not period.to_date %}
+                                            <h4 data-trans="account.period_from" data-trans-params="{{ period|json }}">{{ 'account.period_from'|format:period }}</h4>
+                                        {% elif not period.from_date and period.to_date %}
+                                            <h4 data-trans="account.period_to" data-trans-params="{{ period|json }}">{{ 'account.period_to'|format:period }}</h4>
+                                        {% else %}
+                                            <h4 data-trans="account.period_all">{% trans 'account.period_all' %}</h4>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="output-details row">
+                                        <div class="col-4-sm offset-6-sm">
+                                        <table class="dl-table">
+                                            <tr>
+                                                <th data-trans="account.number">{% trans 'account.number' %}</th>
+                                                <td>{{ number }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th data-trans="common.dato">{% trans 'common.dato' %}</th>
+                                                <td>{{ date }}</td>
+                                            </tr>
+
+                                            <tr>
+                                            {% if cprcvr|get:'1' == 'cpr' %}
+                                                <th data-trans="account.cpr">{% trans 'account.cpr' %}</th>
+                                            {% elif cprcvr|get:'1' == 'cvr' %}
+                                                <th data-trans="account.cvr">{% trans 'account.cvr' %}</th>
+                                            {% else %}
+                                                <th></th>
+                                            {% endif %}
+                                                <td>{{ cprcvr|get:'0' }}</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th data-trans="account.yourref">{% trans 'account.yourref' %}</th>
+                                                <td>{{ yourref }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th data-trans="account.contact">{% trans 'account.contact' %}</th>
+                                                <td>{{ contact }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th data-trans="account.localnumber">{% trans 'account.localnumber' %}</th>
+                                                <td>{{ localnumber }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th data-trans="account.payment1">{% trans 'account.payment1' %}</th>
+                                                <td>{{ payment1 }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th data-trans="account.invoiceaccount">{% trans 'account.invoiceaccount' %}</th>
+                                                <td>{{ account }}</td>
+                                            </tr>
+                                        </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="page-data account-data">
+
+                            {% if data and data|length > 0 %}
+
+                                {% if not pdf %}
+                                    <div class="printhide">
+                                    <select class="columnselect" multiple="multiple" data-key="{{ item.key }}">
+                                        {% for field in item.fields %}
+                                            {% with "account."|add:field.name as transkey %}
+                                                <option value="{{ field.name }}" {% if not field in form.hidden.value %}selected="selected"{% endif %}>{% trans transkey %}</option>
+                                            {% endwith %}
+                                        {% endfor %}
+                                    </select>
+                                    </div>
+                                {% endif %}
+
+                                <table class="output-table" data-key="{{ item.key }}">
+                                <thead>
+                                <tr>
+                                    {% for field in item.fields %}
+                                        {% with "account."|add:field.name as transkey %}
+                                            <th data-field="{{ field.name }}" data-trans="{{ transkey }}">{% trans transkey|safe %}</th>
+                                        {% endwith %}
+                                    {% endfor %}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for dataitem in data %}
+                                    <tr>
+                                        {% for field in item.fields %}
+                                            {% with value=dataitem|get:field.name|default:'' %}
+                                            <td class="{{ field.class }}" data-original="{{ value }}">
+                                            {% if field.number %}
+                                                {{ value|number }}
+                                            {% else %}
+                                                {{ value }}
+                                            {% endif %}
+                                            </td>
+                                            {% endwith %}
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                </table>
+                            {% else %}
+                                <p data-trans="account.ingenposter">{% trans 'account.ingenposter' %}</p>
+                            {% endif %}
+
+                            {% if total %}
+                                <div class="row account-total no-copy">
+                                    <div class="col-3-sm">
+                                        <span class="total-label" data-trans="account.total_claim">{% trans 'account.total_claim' %}</span>
+                                        <span class="total-data">{{ total.total_claim }}</span>
+                                    </div>
+                                    <div class="col-3-sm">
+                                        <span class="total-label" data-trans="account.total_payment">{% trans 'account.total_payment' %}</span>
+                                        <span class="total-data">{{ total.total_payment }}</span>
+                                    </div>
+                                    <div class="col-3-sm">
+                                        <span class="total-label" data-trans="account.total_sum">{% trans 'account.total_sum' %}</span>
+                                        <span class="total-data">{{ total.total_sum }}</span>
+                                    </div>
+                                    <div class="col-3-sm">
+                                        <span class="total-label" data-trans="account.total_restance">{% trans 'account.total_restance' %}</span>
+                                        <span class="total-data">{{ total.total_restance }}</span>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {% if pdf %}
+                                <div class="pagefooter"></div>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endwith %}
+            {% endfor %}
+        {% endif %}
+        </form>
+    </div>
+</article>
+{% endblock %}

@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load aka_tags %}
+
+{% block extra_headers %}
+    {% if pdf %}
+        <style>
+            {{ css|safe }}
+        </style>
+    {% else %}
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/sumoselect.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/jquery.sumoselect.min.js"></script>
+        <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}"/>
+        <script src="{% static 'js/download.js' %}"></script>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<article>
+
+    <h1 class="rentenota-title printhide">{% trans 'rentenota.title' %}</h1>
+
+    <div class="rentenota-main">
+
+        <form method="get" id="mainform" class="printhide">
+            <div class="printhide">
+                <div class="rentenota-actions row">
+                    <div class="col-4-sm">
+                        {% include 'aka/util/field.html' with field=form.month key='rentenota.month' %}
+                        {% include 'aka/util/field.html' with field=form.year key='rentenota.year' %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4-sm">
+                        <button type="submit">{% trans 'common.send' %}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+        <div class="output rentenota-data">
+
+            <div class="output-header">
+                <div class="row">
+                    <div class="col-7-sm">
+                        <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
+                        <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
+                        <strong>Skattestyrelsen</strong>
+                    </div>
+                    <div class="col-5-sm output-actions printhide">
+                        <select id="download">
+                            {% if pdflink %}
+                                <option value="{{ pdflink }}" data-trans="common.pdf">{% trans 'common.pdf' %}</option>
+                            {% endif %}
+                            {% if xlsxlink %}
+                                <option value="{{ xlsxlink }}" data-trans="common.xlsx">{% trans 'common.xlsx' %}</option>
+                            {% endif %}
+                            {% if odslink %}
+                                <option value="{{ odslink }}" data-trans="common.ods">{% trans 'common.ods' %}</option>
+                            {% endif %}
+                            {% if csvlink %}
+                                <option value="{{ csvlink }}" data-trans="common.csv">{% trans 'common.csv' %}</option>
+                            {% endif %}
+                        </select>
+                        <button class="btn-print" data-trans="common.print">{% trans 'common.print' %}</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="output-details row">
+
+                <div class="col-8-sm">
+                    <span class="line">{{ company.navn }}</span>
+                    <span class="line">{{ company.adresse }}</span>
+                    <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
+                    <span class="line" data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
+                    <span class="line">CVR: {{ cvr }}</span>
+                </div>
+
+                <div class="col-4-sm">
+                    <h3 data-trans="rentenota.rentenota">{% trans 'rentenota.rentenota' %}</h3>
+                    <table class="dl-table">
+                        <tr>
+                            <th data-trans="common.konto">{% trans 'common.konto' %}</th>
+                            <td>{{ cvr }}</td>
+                        </tr>
+                        <tr>
+                            <th data-trans="common.dato">{% trans 'common.dato' %}</th>
+                            <td>{{ date }}</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" data-trans="common.postboks" data-trans-params="{&quot;box&quot;:1605}">{{ 'common.postboks'|format:'{"box":1605}' }}</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2">3900 Nuuk</th>
+                        </tr>
+                        <tr>
+                            <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
+                            <td>346500</td>
+                        </tr>
+                        <tr>
+                            <th data-trans="common.fax">{% trans 'common.fax' %}</th>
+                            <td>346577</td>
+                        </tr>
+                        <tr>
+                            <th data-trans="common.email">{% trans 'common.email' %}</th>
+                            <td>sulinal@nanoq.gl</td>
+                        </tr>
+                        <tr>
+                            <th data-trans="common.webadresse">{% trans 'common.webadresse' %}</th>
+                            <td>www.aka.gl</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            {% if errors %}
+                <div class="errors">
+                {% for error in errors %}
+                    <div class="error err-msg" data-trans="{{ error.key }}" data-trans-params="{{ error.params|json }}">
+                        {{ error.key|format:error.params }}
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if items is not None %}
+                <div class="output-data">
+                <table class="output-table" style="font-size: 0.8em">
+                    <thead>
+                    <tr>
+                        {% for field in fields %}
+                            {% with "rentenota."|add:field.name as transkey %}
+                                <th data-field="{{ field.name }}" data-trans="{{ transkey }}">{% trans transkey|safe %}</th>
+                            {% endwith %}
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% if items|length == 0 %}
+                            <tr>
+                                <td colspan="14" style="text-align: center">
+                                    {% trans 'rentenota.ingenposter' %}
+                                </td>
+                            </tr>
+                        {% else %}
+                            {% for item in items %}
+                                <tr>
+                                {% for field in fields %}
+                                    {% with value=item|get:field.name|default:'' %}
+                                        <td class="{{ field.class }}" data-original="{{ value }}">
+                                            {% if field.number %}
+                                                {{ value|number }}
+                                            {% else %}
+                                                {{ value }}
+                                            {% endif %}
+                                        </td>
+                                    {% endwith %}
+                                {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        <tr class="rentenota-post-table-sumrow">
+                            <td colspan="8"></td>
+                            <td class="numbercell rentenota-total sum">{{ total|number }}</td>
+                            <td colspan="6">kr</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+</article>
+{% endblock %}

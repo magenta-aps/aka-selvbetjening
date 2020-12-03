@@ -1,0 +1,704 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-07 12:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "common.error.generic"
+msgstr "Kukkuneq"
+
+msgid "common.error.access_denied"
+msgstr "Isersinnaanngilatit"
+
+msgid "common.forside"
+msgstr "Saqqaa"
+
+msgid "common.gem"
+msgstr "Toqqoruk"
+
+msgid "common.send"
+msgstr "Nassiuguk"
+
+msgid "common.repeat"
+msgstr "Uteqqiguk"
+
+msgid "common.print"
+msgstr "Naqitaq anillatsiguk"
+
+msgid "common.download"
+msgstr "Aajuk"
+
+msgid "common.pdf"
+msgstr "PDF aajuk"
+
+msgid "common.xlsx"
+msgstr "Excel-regneark download-eruk"
+
+msgid "common.ods"
+msgstr "LibreOffice-regneark Download-eruk"
+
+msgid "common.csv"
+msgstr "CSV-fil downloaderuk"
+
+msgid "common.download_template"
+msgstr "Skabelon aajuk"
+
+msgid "common.logout"
+msgstr "Aniffissaq"
+
+msgid "common.logged_in_as"
+msgstr "{navn} isersimavoq"
+
+msgid "login.openid"
+msgstr "Suliffeqarfittut Iserit"
+
+msgid "login.nemid"
+msgstr "Innuttaasutut Iserit"
+
+msgid "login.multiple_cvr"
+msgstr "Cpr.normumut CVR normut arlallit attuumassuteqarput, sorliussanersoq toqqaruk"
+
+msgid "common.telefon"
+msgstr "Oqarasuaat"
+
+msgid "common.fax"
+msgstr "Fax"
+
+msgid "prisme.error"
+msgstr ""
+
+msgid "prisme.error_250"
+msgstr "{text}"
+
+msgid "prisme.cvrcheck_no_result"
+msgstr "CVR-normu {cvr} naassarineqanngilaq"
+
+msgid "common.dato"
+msgstr "Ulloq"
+
+msgid "common.konto"
+msgstr "Konto"
+
+msgid "common.postboks"
+msgstr "Postboks {box}"
+
+msgid "common.email"
+msgstr "Email"
+
+msgid "common.webadresse"
+msgstr "Web-adresse"
+
+msgid "common.skattestyrelsen"
+msgstr "Akileraartarnermut Aqutsisoqarfik"
+
+msgid "common.showcolumns"
+msgstr "Kolonnit nuisikkit/tarrisikkit"
+
+
+# Errors
+
+msgid "error.from_date_before_to_date"
+msgstr "Ullormit siusinnerussaaq ullormumiit"
+
+msgid "error.start_date_before_end_date"
+msgstr "Ulloq aallartiffiusoq ulloq naaffiusumit siusinnerussaaq"
+
+msgid "error.invalid_date"
+msgstr "Ulloq atorsinnaanngilaq"
+
+msgid "error.required"
+msgstr "Una pisariaqarpoq"
+
+msgid "error.number_required"
+msgstr "Una kisitsimmik imaqartussaavoq"
+
+msgid "error.invalid_extension"
+msgstr "Fiilip naanera '{extension}' atoqqusaanngilaq. Fiilit naaneri atorsinnaasut: '{allowed_extensions}'."
+
+msgid "error.upload_too_large"
+msgstr "Fiili uploaderneqartoq angivallaarpoq"
+
+msgid "error.upload_validation"
+msgstr "Regnearki uploaderneqartoq kukkuneqarpoq:"
+
+msgid "error.upload_empty"
+msgstr "Regnearki uploaderneqartoq rækkeqanngilaq"
+
+msgid "error.upload_no_encoding"
+msgstr "Regnearki uploaderneqartumi tegnkodning nanineqarsinnaanngilaq CSV-fiili eqqortuua?"
+
+msgid "error.upload_read_error"
+msgstr "CSV-fiili atuarneqarsinnaanngilaq. CSV-fiili UTF-8-nngorlugu UTF-16LE-nngorluguluunniit eqqortumik formatererneqarpa?"
+
+msgid "error.upload_validation_item"
+msgstr "Celle {col_letter}{row} ({field}): {message}"
+
+msgid "error.upload_validation_header"
+msgstr "Kolonne '{field}'-mik taaneqartoq amigaataavoq"
+
+msgid "error.fordringsgruppe_not_found"
+msgstr "Fordringgruppe nassaassaanngilaq"
+
+msgid "error.fordringstype_not_found"
+msgstr "Fordringstype Fordringsgruppemi nassaassaanngilaq"
+
+msgid "error.multiple_fordringsgruppe_found"
+msgstr "Serverimi aaqqissuussineq ajutoorpoq"
+
+msgid "error.invalid_cpr"
+msgstr "CPR-normu atorsinnaanngilaq"
+
+msgid "error.invalid_cvr"
+msgstr "CVR-normu atorsinnaanngilaq"
+
+msgid "error.invalid_cpr_cvr"
+msgstr "CPR- imaluunniit CVR-normu artorsinnaanngilaq"
+
+
+# Index
+
+msgid "index.rentenota"
+msgstr "Piffisami aalajangersimasumi Ernianut nalunaarut"
+
+msgid "index.rentenota.sub"
+msgstr "Piffissami nammineq aalajangikkami ernianut nalunaarut uani aasinnaavat"
+
+msgid "index.fordring"
+msgstr "Akiligassanik nalunaarsuineq"
+
+msgid "index.fordring.sub"
+msgstr "Uani pisortanut akiligassat Akiliisitsiniartarfimmut nalunaarutigikkit"
+
+msgid "index.fordring-upload"
+msgstr "Fordring-it uploadikkit"
+
+msgid "index.nedskrivning"
+msgstr "Milliliinerit nalunaarutigikkit"
+
+msgid "index.nedskrivning.sub"
+msgstr "Uani milliliinerit akiliisitsiniartarfimmut nalunaarutigikkit"
+
+msgid "index.nedskrivning-upload"
+msgstr "Milliliineq uploaderuk"
+
+msgid "index.løntræk"
+msgstr "Aningaasarsianiit ilanngatuinerit nalunaarutigikkit"
+
+msgid "index.løntræk.sub"
+msgstr "Uani Aningaasarsianiit  ilanngatuinerit nalunaarutigikkit"
+
+msgid "index.løntræk-upload"
+msgstr "Akissarsianik ilanngaaneq uploaderuk"
+
+msgid "index.fordringshaverkonto"
+msgstr "Konto-mi nikerartut Akiligassaqartitsisutut"
+
+msgid "index.fordringshaverkonto.sub"
+msgstr "Akilisassaqartitsisutut kontomi nikerartut, alliliinerit milliliinerit uani takuneqarsinnaapput"
+
+msgid "index.konto"
+msgstr "Kontoa takuuk"
+
+msgid "index.konto.sub"
+msgstr "Pisortanut akiligassatit uani takuneqarsinnaapput, sukumiinerusumik takuniarukkit uunga iserit"
+
+
+# 6.1
+
+msgid "fordring.title"
+msgstr "Fordring-it nalunaarutigikkit"
+
+msgid "fordring.title-upload"
+msgstr "Fordring-it uploadikkit"
+
+msgid "fordring.debitor"
+msgstr "Akiligassalik"
+
+msgid "fordring.codebitorer"
+msgstr "Akiligassaqaqataasut"
+
+msgid "fordring.cpr"
+msgstr "cpr"
+
+msgid "fordring.cvr"
+msgstr "cvr"
+
+msgid "fordring.fordringshaver"
+msgstr "Pissarsisussaq"
+
+msgid "fordring.anden_fordringshaver"
+msgstr "Pissarsisussaq alla"
+
+msgid "fordring.dokumentation"
+msgstr "Uppernarsaat"
+
+msgid "fordring.fordringsgruppe"
+msgstr "Ekstern fordringsgruppe"
+
+msgid "fordring.fordringstype"
+msgstr "Ekstern fordringstype"
+
+msgid "fordring.barns_cpr"
+msgstr "Meeqqap CPR-normua"
+
+msgid "fordring.ekstern_sagsnummer"
+msgstr "Suliap avataaneersup normua"
+
+msgid "fordring.fakturanr"
+msgstr "Akiligassap nr."
+
+msgid "fordring.bnr"
+msgstr "B-nr."
+
+msgid "fordring.hovedstol"
+msgstr "Akiligassaq tamakkiisoq"
+
+msgid "fordring.posteringstekst"
+msgstr "Oqaasertaliussaq"
+
+msgid "fordring.periodestart"
+msgstr "Piffissap aallartiffia"
+
+msgid "fordring.periodeslut"
+msgstr "Piffissap naaffia"
+
+msgid "fordring.forfaldsdato"
+msgstr "Ulloq akiliiffissaq kingulleq"
+
+msgid "fordring.betalingsdato"
+msgstr "Ulloq akiliiffissaq"
+
+msgid "fordring.foraeldelsesdato"
+msgstr "Ulloq pisoqaliffissaq"
+
+msgid "fordring.kontaktperson"
+msgstr "Attavissaq"
+
+msgid "fordring.noter"
+msgstr "Nalunaarsukkat"
+
+msgid "fordring.meddebitor"
+msgstr "Akiligassaqaqataasoq"
+
+msgid "fordring.success"
+msgstr "Fordring ikkuppoq"
+
+msgid "fordring.result"
+msgstr "Fodrings normut ikkupput"
+
+msgid "fordring.bill_date_before_due_date"
+msgstr "Ulloq akiliiffissaq ullormit akiliiffissamit kingulermit siusinnerussaaq"
+
+
+# 6.2
+
+msgid "loentraek.title"
+msgstr "Akissarsianik ilanngaaneq nalunaarutigiuk"
+
+msgid "loentraek.year"
+msgstr "Ukioq"
+
+msgid "loentraek.month"
+msgstr "Qaammat"
+
+msgid "loentraek.total_amount"
+msgstr "Katinneri"
+
+msgid "loentraek.cpr"
+msgstr "CPR"
+
+msgid "loentraek.agreement_number"
+msgstr "Isumaqatigiissutip normua"
+
+msgid "loentraek.amount"
+msgstr "Akissarsianik ilanngaasarneq"
+
+msgid "loentraek.net_salary"
+msgstr "Akissarsiat ilanngareerlugit"
+
+msgid "loentraek.sum_mismatch"
+msgstr "Katinnerata tamarmiusup akit rækkeniittut tamarmik katinneri amerlaqatigissavai"
+
+msgid "loentraek.success"
+msgstr "Akissarsianit ilanngaaneq nalunaarutigineqarpoq"
+
+msgid "loentraek.results"
+msgstr "Nalunaarsukkat ikkutat"
+
+
+# 6.4
+
+msgid "nedskrivning.success"
+msgstr "Milliliinerit nalunaarutigineqarput"
+
+msgid "nedskrivning.result"
+msgstr "Milliliinerit ikkutat"
+
+msgid "nedskrivning.errors"
+msgstr "Ukuninnga kukkuneqarpoq:"
+
+msgid "nedskrivning.error_250"
+msgstr "Ref.nr-mi {refnumber} avataaneersumi akiliisitsiniarnermi suliap normuanik soqanngilaq"
+
+msgid "nedskrivning.title"
+msgstr "Milliliineq nalunaarutigiuk"
+
+msgid "nedskrivning.title-upload"
+msgstr "Milliliineq uploaderuk"
+
+msgid "nedskrivning.debitor"
+msgstr "Akiligassalik"
+
+msgid "nedskrivning.ekstern_sagsnummer"
+msgstr "Suliap avataaneersup normua"
+
+msgid "nedskrivning.beloeb"
+msgstr "Aningaasat amerlassusaat"
+
+msgid "nedskrivning.sekvensnummer"
+msgstr "Sekvensnormu"
+
+
+# NY18
+msgid "rentenota.title"
+msgstr "Erniat pillugit allakkiaq"
+
+msgid "rentenota.rentenota"
+msgstr "Erniat pillugit allakkiaq"
+
+msgid "rentenota.transaction_date"
+msgstr "Akiligassat/akiliutit ullua"
+
+msgid "rentenota.updated"
+msgstr "Ulloq"
+
+msgid "rentenota.account_number"
+msgstr "Akiligassallip kontoa"
+
+msgid "rentenota.billing_classification"
+msgstr "Akileqqussutip suussusaa"
+
+msgid "rentenota.interest_note"
+msgstr "Erniat pillugit allakkianut normu"
+
+msgid "rentenota.voucher"
+msgstr "Ilanngussaq"
+
+msgid "rentenota.invoice"
+msgstr "Akileeqqussut"
+
+msgid "rentenota.text"
+msgstr "Oqaasertaa"
+
+msgid "rentenota.calculate_from_date"
+msgstr "Ullormit"
+
+msgid "rentenota.calculate_to_date"
+msgstr "Ullormut"
+
+msgid "rentenota.interest_days"
+msgstr "Ullut"
+
+msgid "rentenota.invoice_amount"
+msgstr "Tunngavigineqartoq"
+
+msgid "rentenota.due_date"
+msgstr "Ulloq akiliiffissaq kingulleq"
+
+msgid "rentenota.interest_amount"
+msgstr "Erniat annertussusaat"
+
+msgid "rentenota.ingenposter"
+msgstr "Akiligassaqanngilaq/akiliuteqanngilaq"
+
+msgid "rentenota.filename"
+msgstr "Erniat pillugit allakkiaq {month}/{year}"
+
+msgid "rentenota.year"
+msgstr "Ukioq"
+
+msgid "rentenota.month"
+msgstr "Qaammat"
+
+msgid "rentenota.error_250"
+msgstr "Uunga CPR/CVR {cvr} imaluunniit piffissamut pineqartumut {start} {end} erniaqanngilaq"
+
+
+# NY16
+
+msgid "account.entries_open"
+msgstr "Akiligassat/akiliutit ammasut"
+
+msgid "account.entries_closed"
+msgstr "Akiligassat/akiliutit matoqqasut"
+
+msgid "account.entries_all"
+msgstr "Akiligassat/akiliutit tamarmik"
+
+msgid "account.description"
+msgstr "Ullormit ullormut immersoruk piffissamut pineqartumut akiligassat/akiliutinik pissarsiniarlutit. Akiligassat/akiliutit tamaasa pissarsiariniarukkit immersugassat imaqartissanngilat"
+
+msgid "account.swift"
+msgstr "SWIFT"
+
+msgid "account.iban"
+msgstr "IBAN"
+
+msgid "account.cvrse"
+msgstr "CVR/SE:"
+
+msgid "account.title"
+msgstr "Kontup assilinera"
+
+msgid "account.from_date"
+msgstr "Ullormit"
+
+msgid "account.to_date"
+msgstr "Ullormut"
+
+msgid "account.filename"
+msgstr "Kontup assilinera {from_date} -> {to_date}"
+
+msgid "account.footer"
+msgstr "Qupperneq {index} quppernernit {count}"
+
+
+msgid "account.bankaccount"
+msgstr "Aningaaserivimmi konto"
+
+msgid "account.account"
+msgstr "Kontup assilinera"
+
+msgid "account.period"
+msgstr "Piffissamut {from_date} - {to_date} atuuppoq"
+
+msgid "account.period_to"
+msgstr "Ulloq killiffissaa {to_date}"
+
+msgid "account.period_from"
+msgstr "Ulloq aallartiffia {from_date}"
+
+msgid "account.period_all"
+msgstr "Akiligassat akiliutit tamarmik"
+
+msgid "account.number"
+msgstr "Normu"
+
+msgid "account.date"
+msgstr "Ulloq"
+
+msgid "account.cvr"
+msgstr "CVR"
+
+msgid "account.cpr"
+msgstr "CPR"
+
+msgid "account.yourref"
+msgstr "Saaffissat"
+
+msgid "account.contact"
+msgstr "Suliamik sullissisoq"
+
+msgid "account.localnumber"
+msgstr "Normu toqqaannartoq"
+
+msgid "account.payment1"
+msgstr "Akiliineq"
+
+msgid "account.invoiceaccount"
+msgstr "Akileeqqussutip kontoa"
+
+msgid "account.ingenposter"
+msgstr "Piffissami pineqartumi Akiligassaqanngilaq/akiliuteqanngilaq"
+
+msgid "account.paymentdate"
+msgstr "Ulloq akiliiffissaq kingulleq"
+
+msgid "account.account_number"
+msgstr "Akiligassallip kontoa"
+
+msgid "account.transaction_date"
+msgstr "Akiligassat/akiliutit ullua"
+
+msgid "account.accounting_date"
+msgstr "Naatsorsuutinik nalunaarsuinerup ullua"
+
+msgid "account.debitor_group_id"
+msgstr "Debitor&shy;gruppe"
+
+msgid "account.debitor_group_name"
+msgstr "Debitorgruppe-p aqqa"
+
+msgid "account.voucher"
+msgstr "Ilanngussaq"
+
+msgid "account.text"
+msgstr "Oqaasertaliussaq"
+
+msgid "account.payment_code"
+msgstr "Akiliinissamut kode"
+
+msgid "account.payment_code_name"
+msgstr "Akiliinissamut kodep aqqa"
+
+msgid "account.amount"
+msgstr "Aningaasat amerlassusaat"
+
+msgid "account.remaining_amount"
+msgstr "Akiligassat sinneruttut"
+
+msgid "account.due_date"
+msgstr "Ulloq akiliiffissaq kingulleq"
+
+msgid "account.closed_date"
+msgstr "Matunissaata ullua"
+
+msgid "account.last_settlement_voucher"
+msgstr "Nalimmassaanermut ilanngussaq kingulleq"
+
+msgid "account.collection_letter_date"
+msgstr "Nukingisaarinerup ullua"
+
+msgid "account.collection_letter_code"
+msgstr "Nukingisaarinermut kode"
+
+msgid "account.claim_type_code"
+msgstr "Fordringsartskode"
+
+msgid "account.invoice_number"
+msgstr "Akileeqqussutip normua"
+
+msgid "account.transaction_type"
+msgstr "Akilgassap/akiliutip suussusaa"
+
+msgid "account.claimant_name"
+msgstr "Fordringshaver-ip aqqa"
+
+msgid "account.claimant_id"
+msgstr "Fordringshaver-ip ID-a"
+
+msgid "account.rate_number"
+msgstr "Naafferaartup normua"
+
+msgid "account.child_claimant"
+msgstr "Meeqqap cpr.nr."
+
+msgid "account.total_claim"
+msgstr "Akiligassat (katillugit):"
+
+msgid "account.total_payment"
+msgstr "Akiliutit (katillugit):"
+
+msgid "account.total_sum"
+msgstr "Inernera:"
+
+msgid "account.total_restance"
+msgstr "Akiitsut sinneruttut (katillugit):"
+
+msgid "account.error_250"
+msgstr "CPR/CVR system-imi takuneqarsinnaanngilaq"
+
+msgid "account.title_sel"
+msgstr "SEL - Skattestyrelsens kontoudtog"
+
+msgid "account.title_aki"
+msgstr "AKI - Inddrivelsens kontoudtog"
+
+
+msgid "DK"
+msgstr "Danmarki"
+
+msgid "GL"
+msgstr "Kalaallit Nunaat"
+
+
+msgid "January"
+msgstr "januaari"
+
+msgid "February"
+msgstr "februaari"
+
+msgid "March"
+msgstr "marsi"
+
+msgid "April"
+msgstr "apriili"
+
+msgid "May"
+msgstr "maaji"
+
+msgid "June"
+msgstr "juuni"
+
+msgid "July"
+msgstr "juuli"
+
+msgid "August"
+msgstr "aggusti"
+
+msgid "September"
+msgstr "septembari"
+
+msgid "October"
+msgstr "oktobari"
+
+msgid "November"
+msgstr "novembari"
+
+msgid "December"
+msgstr "decembari"
+
+msgid "Mon"
+msgstr "Ata"
+
+msgid "Tue"
+msgstr "Mar"
+
+msgid "Wed"
+msgstr "Pin"
+
+msgid "Thu"
+msgstr "Tal"
+
+msgid "Fri"
+msgstr "Sis"
+
+msgid "Sat"
+msgstr "Arf"
+
+msgid "Sun"
+msgstr "Sap"
+
+msgid "Monday"
+msgstr "Ataasinngorneq"
+
+msgid "Tuesday"
+msgstr "Marlunngorneq"
+
+msgid "Wednesday"
+msgstr "Pingasunngorneq"
+
+msgid "Thursday"
+msgstr "Tallimanngorneq"
+
+msgid "Friday"
+msgstr "Sisamanngorneq"
+
+msgid "Saturday"
+msgstr "Arfininngorneq"
+
+msgid "Sunday"
+msgstr "Sapaat"

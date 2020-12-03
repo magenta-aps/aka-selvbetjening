@@ -1,0 +1,651 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-07 12:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "common.error.generic"
+msgstr "Fejl"
+
+msgid "common.error.access_denied"
+msgstr "Adgang nægtet"
+
+msgid "common.forside"
+msgstr "Forside"
+
+msgid "common.gem"
+msgstr "Gem"
+
+msgid "common.send"
+msgstr "Send"
+
+msgid "common.repeat"
+msgstr "Gentag"
+
+msgid "common.print"
+msgstr "Print"
+
+msgid "common.download"
+msgstr "Download"
+
+msgid "common.pdf"
+msgstr "Download PDF"
+
+msgid "common.xlsx"
+msgstr "Download Excel-regneark"
+
+msgid "common.ods"
+msgstr "Download LibreOffice-regneark"
+
+msgid "common.csv"
+msgstr "Download CSV-fil"
+
+msgid "common.download_template"
+msgstr "Download skabelon"
+
+msgid "common.logout"
+msgstr "Log ud"
+
+msgid "common.logged_in_as"
+msgstr "Logget ind som: {navn}"
+
+msgid "login.openid"
+msgstr "Log ind som virksomhed"
+
+msgid "login.nemid"
+msgstr "Log ind som borger"
+
+msgid "login.multiple_cvr"
+msgstr "Der er flere CVR-numre tilknyttet dette CPR-nummer. Vælg hvilket nummer der skal bruges:"
+
+msgid "common.telefon"
+msgstr "Telefon"
+
+msgid "common.fax"
+msgstr "Fax"
+
+msgid "prisme.error"
+msgstr ""
+
+msgid "prisme.error_250"
+msgstr "{text}"
+
+msgid "prisme.cvrcheck_no_result"
+msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet"
+
+msgid "common.dato"
+msgstr "Dato"
+
+msgid "common.konto"
+msgstr "Konto"
+
+msgid "common.postboks"
+msgstr "Postboks {box}"
+
+msgid "common.email"
+msgstr "Email"
+
+msgid "common.webadresse"
+msgstr "Web-adresse"
+
+msgid "common.skattestyrelsen"
+msgstr "Skattestyrelsen"
+
+msgid "common.showcolumns"
+msgstr "Vis/skjul kolonner"
+
+
+# Errors
+
+msgid "error.from_date_before_to_date"
+msgstr "Fra-dato skal være før til-dato"
+
+msgid "error.start_date_before_end_date"
+msgstr "Start-dato skal være før slut-dato"
+
+msgid "error.invalid_date"
+msgstr "Ugyldig dato"
+
+msgid "error.required"
+msgstr "Dette felt er påkrævet"
+
+msgid "error.number_required"
+msgstr "Dette felt skal indeholde et tal"
+
+msgid "error.invalid_extension"
+msgstr "Filendelse '{extension}' er ikke tilladt. Tilladte filendelser er: '{allowed_extensions}'"
+
+msgid "error.upload_too_large"
+msgstr "Den uploadede fil er for stor"
+
+msgid "error.upload_validation"
+msgstr "Der er fejl i det uploadede regneark: "
+
+msgid "error.upload_empty"
+msgstr "Der er ingen rækker i det uploadede regneark"
+
+msgid "error.upload_no_encoding"
+msgstr "Kunne ikke finde tegnkodningen i det uploadede regneark. Er det en korrekt CSV-fil?"
+
+msgid "error.upload_read_error"
+msgstr "Kunne ikke læse CSV-filen. Er det en korrekt formatteret CSV-fil i UTF-8 eller UTF-16LE?"
+
+msgid "error.upload_validation_item"
+msgstr "Celle {col_letter}{row} ({field}): {message}"
+
+msgid "error.upload_validation_header"
+msgstr "Der mangler en kolonne med navnet '{field}'"
+
+msgid "error.fordringsgruppe_not_found"
+msgstr "Fordringsgruppe findes ikke"
+
+msgid "error.fordringstype_not_found"
+msgstr "Fordringstype findes ikke i fordringsgruppe"
+
+msgid "error.multiple_fordringsgruppe_found"
+msgstr "Konfigurationsfejl på serveren"
+
+msgid "error.invalid_cpr"
+msgstr "Ugyldigt CPR-nummer"
+
+msgid "error.invalid_cvr"
+msgstr "Ugyldigt CVR-nummer"
+
+msgid "error.invalid_cpr_cvr"
+msgstr "Ugyldigt CPR- eller CVR-nummer"
+
+
+# File lists
+
+msgid "filliste.mappeindhold"
+msgstr "{size} elementer"
+
+msgid "filliste.mappe"
+msgstr "Mappe"
+
+msgid "filliste.filnavn"
+msgstr "Filnavn"
+
+msgid "filliste.filstoerrelse"
+msgstr "Størrelse"
+
+msgid "filliste.filtype"
+msgstr "Type"
+
+msgid "filliste.op"
+msgstr "Op"
+
+
+# Index
+
+msgid "index.rentenota"
+msgstr "Rentenota for udvalgte perioder"
+
+msgid "index.rentenota.sub"
+msgstr "For at hente rentenota for udvalgte perioder - klik her"
+
+msgid "index.fordring"
+msgstr "Indberetning af fordringer"
+
+msgid "index.fordring.sub"
+msgstr "For at indberette offentlig fordringer til Inddrivelsen - klik her"
+
+msgid "index.fordring-upload"
+msgstr "Upload fordring"
+
+msgid "index.nedskrivning"
+msgstr "Indberetning af nedskrivninger"
+
+msgid "index.nedskrivning.sub"
+msgstr "For at indberette nedskrivninger til Inddrivelsen - Klik her"
+
+msgid "index.nedskrivning-upload"
+msgstr "Upload nedskrivning"
+
+msgid "index.løntræk"
+msgstr "Indberetning af løntræk"
+
+msgid "index.løntræk.sub"
+msgstr "For at indberette de pålagte løntræk til Inddrivelsen - klik her"
+
+msgid "index.løntræk-upload"
+msgstr "Upload løntræk"
+
+msgid "index.fordringshaverkonto"
+msgstr "Kontobevægelser for fordringshaver op og nedskrivninger"
+
+msgid "index.fordringshaverkonto.sub"
+msgstr "For at se kontobevægelser, op og nedskrivninger som fordringshaver - klik her"
+
+msgid "index.konto"
+msgstr "Vis konto"
+
+msgid "index.konto.sub"
+msgstr "Her kan du se dine offentlige restancer, klik her for specificeret opgørelser"
+
+
+
+# 6.1
+
+msgid "fordring.title"
+msgstr "Indberet fordring"
+
+msgid "fordring.title-upload"
+msgstr "Indberet fordring"
+
+msgid "fordring.debitor"
+msgstr "Debitor"
+
+msgid "fordring.codebitorer"
+msgstr "Meddebitorer"
+
+msgid "fordring.cpr"
+msgstr "cpr"
+
+msgid "fordring.cvr"
+msgstr "cvr"
+
+msgid "fordring.fordringshaver"
+msgstr "Fordringshaver"
+
+msgid "fordring.anden_fordringshaver"
+msgstr "Anden fordringshaver"
+
+msgid "fordring.dokumentation"
+msgstr "Dokumentation"
+
+msgid "fordring.fordringsgruppe"
+msgstr "Ekstern fordringsgruppe"
+
+msgid "fordring.fordringstype"
+msgstr "Ekstern fordringstype"
+
+msgid "fordring.barns_cpr"
+msgstr "Barns CPR-nr"
+
+msgid "fordring.ekstern_sagsnummer"
+msgstr "Ekstern sagsnummer"
+
+msgid "fordring.fakturanr"
+msgstr "Fakturanr"
+
+msgid "fordring.bnr"
+msgstr "B-nr"
+
+msgid "fordring.hovedstol"
+msgstr "Hovedstol"
+
+msgid "fordring.posteringstekst"
+msgstr "Posteringstekst"
+
+msgid "fordring.periodestart"
+msgstr "Periodestart"
+
+msgid "fordring.periodeslut"
+msgstr "Periodeslut"
+
+msgid "fordring.forfaldsdato"
+msgstr "Forfaldsdato"
+
+msgid "fordring.betalingsdato"
+msgstr "Betalingsdato"
+
+msgid "fordring.foraeldelsesdato"
+msgstr "Forældelsesdato"
+
+msgid "fordring.kontaktperson"
+msgstr "Kontaktperson"
+
+msgid "fordring.noter"
+msgstr "Noter"
+
+msgid "fordring.meddebitor"
+msgstr "Meddebitor"
+
+msgid "fordring.success"
+msgstr "Fordring oprettet"
+
+msgid "fordring.result"
+msgstr "Oprettede fordringsnumre:"
+
+msgid "fordring.bill_date_before_due_date"
+msgstr "Betalingsdato skal være før forfaldsdato"
+
+
+# 6.2
+
+msgid "loentraek.title"
+msgstr "Indberet løntræk"
+
+msgid "loentraek.year"
+msgstr "År"
+
+msgid "loentraek.month"
+msgstr "Måned"
+
+msgid "loentraek.total_amount"
+msgstr "Totalt beløb"
+
+msgid "loentraek.cpr"
+msgstr "CPR"
+
+msgid "loentraek.agreement_number"
+msgstr "Aftalenummer"
+
+msgid "loentraek.amount"
+msgstr "Løntræk"
+
+msgid "loentraek.net_salary"
+msgstr "Nettoløn"
+
+msgid "loentraek.sum_mismatch"
+msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækker"
+
+msgid "loentraek.success"
+msgstr "Løntræk indberettet"
+
+msgid "loentraek.results"
+msgstr "Oprettede notater"
+
+
+# 6.4
+
+msgid "nedskrivning.success"
+msgstr "Nedskrivninger indberettet"
+
+msgid "nedskrivning.result"
+msgstr "Oprettede nedskrivninger"
+
+msgid "nedskrivning.errors"
+msgstr "Der opstod følgende fejl:"
+
+msgid "nedskrivning.error_250"
+msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber}"
+
+msgid "nedskrivning.title"
+msgstr "Indberet nedskrivning"
+
+msgid "nedskrivning.title-upload"
+msgstr "Upload nedskrivning"
+
+msgid "nedskrivning.debitor"
+msgstr "Debitor"
+
+msgid "nedskrivning.ekstern_sagsnummer"
+msgstr "Ekstern sagsnummer"
+
+msgid "nedskrivning.beloeb"
+msgstr "Beløb"
+
+msgid "nedskrivning.sekvensnummer"
+msgstr "Sekvensnummer"
+
+
+# NY18
+msgid "rentenota.title"
+msgstr "Rentenota"
+
+msgid "rentenota.rentenota"
+msgstr "Rentenota"
+
+msgid "rentenota.transaction_date"
+msgstr "Postdato"
+
+msgid "rentenota.updated"
+msgstr "Dato"
+
+msgid "rentenota.account_number"
+msgstr "Debitor&shy;konto"
+
+msgid "rentenota.billing_classification"
+msgstr "Fakturerings&shy;klassifikation"
+
+msgid "rentenota.interest_note"
+msgstr "Rentenota&shy;nummer"
+
+msgid "rentenota.voucher"
+msgstr "Bilag"
+
+msgid "rentenota.invoice"
+msgstr "Faktura"
+
+msgid "rentenota.text"
+msgstr "Tekst"
+
+msgid "rentenota.calculate_from_date"
+msgstr "Fradato"
+
+msgid "rentenota.calculate_to_date"
+msgstr "Tildato"
+
+msgid "rentenota.interest_days"
+msgstr "Dage"
+
+msgid "rentenota.invoice_amount"
+msgstr "Grundlag"
+
+msgid "rentenota.due_date"
+msgstr "Forfalds&shy;dato"
+
+msgid "rentenota.interest_amount"
+msgstr "Beløb"
+
+msgid "rentenota.ingenposter"
+msgstr "Ingen poster"
+
+msgid "rentenota.filename"
+msgstr "Rentenota {month}/{year}"
+
+msgid "rentenota.year"
+msgstr "År"
+
+msgid "rentenota.month"
+msgstr "Måned"
+
+msgid "rentenota.error_250"
+msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne periode {start} {end}"
+
+
+
+# NY16
+
+msgid "account.entries_open"
+msgstr "Åbne poster"
+
+msgid "account.entries_closed"
+msgstr "Lukkede poster"
+
+msgid "account.entries_all"
+msgstr "Alle poster"
+
+msgid "account.description"
+msgstr "Udfyld fra- og til-dato for at få poster for en given periode. Lad felterne stå tomme for at få alle poster"
+
+msgid "account.swift"
+msgstr "SWIFT"
+
+msgid "account.iban"
+msgstr "IBAN"
+
+msgid "account.cvrse"
+msgstr "CVR/SE"
+
+msgid "account.title"
+msgstr "Kontoudtog"
+
+msgid "account.from_date"
+msgstr "Fra dato"
+
+msgid "account.to_date"
+msgstr "Til dato"
+
+msgid "account.filename"
+msgstr "Kontoudtog {from_date} -> {to_date}"
+
+msgid "account.footer"
+msgstr "Side {index} af {count}"
+
+msgid "account.bankaccount"
+msgstr "Bankkonto"
+
+msgid "account.account"
+msgstr "Kontoudtog"
+
+msgid "account.period"
+msgstr "Gældende for perioden: {from_date} - {to_date}"
+
+msgid "account.period_to"
+msgstr "Gældende frem til {to_date}"
+
+msgid "account.period_from"
+msgstr "Gældende fra {from_date}"
+
+msgid "account.period_all"
+msgstr "Alle kendte poster"
+
+msgid "account.number"
+msgstr "Nummer"
+
+msgid "account.date"
+msgstr "Dato"
+
+msgid "account.cvr"
+msgstr "CVR"
+
+msgid "account.cpr"
+msgstr "CPR"
+
+msgid "account.cprcvr"
+msgstr "CPR/CVR"
+
+msgid "account.yourref"
+msgstr "Deres reference"
+
+msgid "account.contact"
+msgstr "Sagsbehandler"
+
+msgid "account.localnumber"
+msgstr "Lokalnummer"
+
+msgid "account.payment1"
+msgstr "Betaling"
+
+msgid "account.invoiceaccount"
+msgstr "Fakturakonto"
+
+msgid "account.ingenposter"
+msgstr "Ingen poster for perioden"
+
+msgid "account.paymentdate"
+msgstr "Forfalds&shy;dato"
+
+msgid "account.account_number"
+msgstr "Debitor&shy;konto"
+
+msgid "account.transaction_date"
+msgstr "Posterings&shy;dato"
+
+msgid "account.accounting_date"
+msgstr "Bogførings&shy;dato"
+
+msgid "account.debitor_group_id"
+msgstr "Debitor&shy;gruppe"
+
+msgid "account.debitor_group_name"
+msgstr "Debitor&shy;gruppenavn"
+
+msgid "account.voucher"
+msgstr "Bilag"
+
+msgid "account.text"
+msgstr "Posterings&shy;tekst"
+
+msgid "account.payment_code"
+msgstr "Indbetalings&shy;kode"
+
+msgid "account.payment_code_name"
+msgstr "Indbetalings&shy;kodenavn"
+
+msgid "account.amount"
+msgstr "Beløb"
+
+msgid "account.remaining_amount"
+msgstr "Restsaldo"
+
+msgid "account.due_date"
+msgstr "Forfalds&shy;dato"
+
+msgid "account.closed_date"
+msgstr "Lukkedato"
+
+msgid "account.last_settlement_voucher"
+msgstr "Sidste udligningsbilag"
+
+msgid "account.collection_letter_date"
+msgstr "Rykker&shy;dato"
+
+msgid "account.collection_letter_code"
+msgstr "Rykker&shy;kode"
+
+msgid "account.claim_type_code"
+msgstr "Fordringsarts&shy;kode"
+
+msgid "account.invoice_number"
+msgstr "Faktura&shy;nummer"
+
+msgid "account.transaction_type"
+msgstr "Posterings&shy;type"
+
+msgid "account.claimant_name"
+msgstr "Fordringshaver navn"
+
+msgid "account.claimant_id"
+msgstr "Fordringshaver ID"
+
+msgid "account.rate_number"
+msgstr "Rate&shy;nummer"
+
+msgid "account.title_sel"
+msgstr "SEL - Skattestyrelsens kontoudtog"
+
+msgid "account.title_aki"
+msgstr "AKI - Inddrivelsens kontoudtog"
+
+msgid "account.child_claimant"
+msgstr "Fordringshavers barns CPR"
+
+msgid "account.total_claim"
+msgstr "Krav (total):"
+
+msgid "account.total_payment"
+msgstr "Indbetalt (total):"
+
+msgid "account.total_sum"
+msgstr "Saldo (total):"
+
+msgid "account.total_restance"
+msgstr "Restance (total):"
+
+msgid "account.error_250"
+msgstr "Der findes ingen debitorer for dette CPR/CVR"
+
+
+msgid "DK"
+msgstr "Danmark"
+
+msgid "GL"
+msgstr "Grønland"

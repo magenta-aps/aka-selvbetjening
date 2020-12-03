@@ -5,7 +5,6 @@
 # MacOS system files
 .DS_Store
 
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -32,6 +31,7 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+/backend/static/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -68,6 +68,21 @@ db.sqlite3
 instance/
 .webassets-cache
 
+### Intellij ###
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
+# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+# User-specific stuff
+
+
+# Generated files
+.idea/**/contentModel.xml
+
+# Sensitive or high-churn files
+.idea/
+*.iml
+###
+
 # Scrapy stuff:
 .scrapy
 
@@ -97,6 +112,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+src/venv/
 
 # Spyder project settings
 .spyderproject
@@ -110,3 +126,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+## Komodo edit ##
+*.komodoproject

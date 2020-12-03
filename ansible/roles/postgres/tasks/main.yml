@@ -1,0 +1,12 @@
+---
+# tasks file for postgres
+
+- name: Install Postgresql
+  apt:
+    name: postgresql
+    state: present
+
+- name: Install psycopg2
+  apt:
+    name: python-psycopg2
+    state: present
