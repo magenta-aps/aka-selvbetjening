@@ -620,10 +620,10 @@ msgid "account.rate_number"
 msgstr "Rate&shy;nummer"
 
 msgid "account.title_sel"
-msgstr "SEL-regnskab"
+msgstr "SEL - Skattestyrelsens kontoudtog"
 
 msgid "account.title_aki"
-msgstr "AKI-regnskab"
+msgstr "AKI - Inddrivelsens kontoudtog"
 
 msgid "account.child_claimant"
 msgstr "Fordringshavers barns CPR"

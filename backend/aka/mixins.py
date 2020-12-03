@@ -89,8 +89,9 @@ class HasUserMixin(object):
     def dispatch(self, request, *args, **kwargs):
         try:
             self.cpr = request.session['user_info']['CPR']
-            self.person = {'navn': request.session['user_info']['name']}
-            self.p = self.get_person(request)
+            p = self.get_person(request)
+            p['navn'] = ' '.join([x for x in [p['fornavn'], p['efternavn']] if x])
+            self.person = p
         except (KeyError, TypeError):
             pass
 

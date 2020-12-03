@@ -104,9 +104,9 @@ input[type=text] {
     height: 32px;
 }
 
-form.submitted input:invalid,
+form.submitted input:invalid:not([type=checkbox],[type=radio]),
 form.submitted select:invalid,
-.has-error input, .has-error select {
+.has-error input:not([type=checkbox],[type=radio]), .has-error select {
     border: 2px solid #d7404d;
     width: 221px;
     height: 32px;

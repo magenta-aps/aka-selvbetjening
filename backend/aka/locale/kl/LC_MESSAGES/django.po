@@ -611,6 +611,12 @@ msgstr "Akiitsut sinneruttut (katillugit):"
 msgid "account.error_250"
 msgstr "CPR/CVR system-imi takuneqarsinnaanngilaq"
 
+msgid "account.title_sel"
+msgstr "SEL - Skattestyrelsens kontoudtog"
+
+msgid "account.title_aki"
+msgstr "AKI - Inddrivelsens kontoudtog"
+
 
 msgid "DK"
 msgstr "Danmarki"
