@@ -24,4 +24,3 @@ class MiddlewareTestCase(TestCase):
         r = self.client.post(reverse('aka:inkassosag'), data=data)
         self.assertEqual(r.status_code, 302)
         self.assertEqual(r.url, reverse('aka:login') + "?back=" + reverse('aka:inkassosag'))
-

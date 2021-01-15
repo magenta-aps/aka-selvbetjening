@@ -43,7 +43,7 @@ class NemId:
                         )
                         if user.is_authenticated:
                             request.session['user_info'] = user.dict()
-            except Exception as e:
+            except Exception:
                 exc_info = sys.exc_info()
                 traceback.print_exception(*exc_info)
         return user

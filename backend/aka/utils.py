@@ -120,11 +120,11 @@ def dummy_management_form(name, total_forms=1, initial_forms=1, min_forms=1, max
 
 def flatten(lst):
     if type(lst) == list:
-        l = []
+        combined = []
         for x in lst:
             if type(x) == list:
-                l.extend(flatten(x))
+                combined.extend(flatten(x))
             else:
-                l.append(x)
-        return l
+                combined.append(x)
+        return combined
     return [lst]

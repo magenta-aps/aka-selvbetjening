@@ -1,5 +1,4 @@
 import re
-import urllib
 from http.cookiejar import Cookie
 from unittest.mock import patch
 
@@ -84,10 +83,9 @@ class LoginTestCase(TestCase):
         response = self.client.get(reverse('nemid:login') + "?back=" + reverse('aka:inkassosag'))
         self.assertEqual(302, response.status_code)
         location = response._headers.get('location')
-        env = self.client._base_environ()
+        # env = self.client._base_environ()
         self.assertIn(reverse('aka:inkassosag'), location)
         self.assertTrue(self.outcome)
-
 
     def testInvalidCookieDoesRedirect(self):
         # Test what happens when a user shows up with a valid cookie
@@ -109,7 +107,6 @@ class LoginTestCase(TestCase):
         self.assertEqual(302, response.status_code)
         location = response._headers.get('location')
         self.assertIn(reverse('aka:login') + "?back=/", location)
-
 
     def testValidCookieDoesRedirect2(self):
         # Test what happens when a user logs in through the views, and for some reason comes back from the SSO with an invalid cookie

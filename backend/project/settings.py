@@ -74,7 +74,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': '/var/log/aka/aka.log.asc',
-            'when': 'D', # Roll log each day
+            'when': 'D',  # Roll log each day
             'formatter': 'encrypted'
         },
     },
@@ -102,7 +102,7 @@ LOGGING = {
     }
 }
 
-ENCRYPTED_LOG_KEY_UID='AKA Selvbetjening'
+ENCRYPTED_LOG_KEY_UID = 'AKA Selvbetjening'
 
 ALLOWED_HOSTS = ['*']
 

@@ -39,7 +39,6 @@ class OpenId:
                 del session[key]
         session.save()
 
-
     @classmethod
     def logout(cls, session):
         # See also doc here: https://github.com/IdentityServer/IdentityServer4/blob/master/docs/endpoints/endsession.rst

@@ -88,7 +88,7 @@ class CustomJavaScriptCatalog(JavaScriptCatalog):
         context.update(super(CustomJavaScriptCatalog, self).get_context_data(**kwargs))
         context['catalog_str'] = \
             json.dumps(context['catalog'], sort_keys=True, indent=2) \
-                if context['catalog'] else None
+            if context['catalog'] else None
         context['formats_str'] = json.dumps(context['formats'], sort_keys=True, indent=2)
         return context
 
@@ -220,11 +220,11 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
     def get_filename(self):
         try:
             from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d')
-        except:
+        except (KeyError, ValueError):
             from_date = ""
         try:
             to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d')
-        except:
+        except (KeyError, ValueError):
             to_date = ""
         return _("account.filename").format(
             from_date=from_date,
@@ -327,7 +327,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
             {'name': 'accounting_date', 'class': 'nb'},
             {'name': 'debitor_group_id', 'class': 'nb'},
             {'name': 'debitor_group_name', 'class': 'nb'},
-            {'name': 'voucher',  'class': 'nb'},
+            {'name': 'voucher', 'class': 'nb'},
             {'name': 'text', 'class': ''},
             {'name': 'payment_code', 'class': 'nb'},
             {'name': 'payment_code_name', 'class': 'nb'},
@@ -432,7 +432,7 @@ class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, F
 
     def form_valid(self, form):
         responses = []
-        codebtor_re = re.compile("^codebtor_\d+$")
+        codebtor_re = re.compile(r"^codebtor_\d+$")
         for subform in form.subforms:
             claimant = subform.cleaned_data['fordringshaver'] or self.claimant_ids[0]
             codebtors = []
@@ -649,7 +649,6 @@ class RenteNotaView(RequireCvrMixin, IsContentMixin, SimpleGetFormMixin, PdfRend
         super().__init__(*args, **kwargs)
         self.errors = []
         self.items = None
-
 
     def get_journal_fields(self):
         return [
