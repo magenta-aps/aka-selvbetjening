@@ -63,7 +63,7 @@ class BasicTestCase(TestMixin, TestCase):
     def test_claim_success_1(self):
         # Contains just the required fields
         self.service_mock.return_value = [
-            PrismeClaimResponse(None, f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
+            PrismeClaimResponse(None, "<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
         ]
         formData = {
             'fordringshaver': 'test-fordringshaver',
@@ -95,7 +95,7 @@ class BasicTestCase(TestMixin, TestCase):
     def test_claim_success_2(self):
         # Contains all required fields, and some more
         self.service_mock.return_value = [
-            PrismeClaimResponse(None, f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
+            PrismeClaimResponse(None, "<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
         ]
         formData = {
             'fordringshaver': 'test-fordringshaver',
@@ -128,7 +128,7 @@ class BasicTestCase(TestMixin, TestCase):
     def test_claim_upload_success(self):
         # Contains all required fields, and some more
         self.service_mock.return_value = [
-            PrismeClaimResponse(None, f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
+            PrismeClaimResponse(None, "<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
         ]
         fp = open('aka/tests/resources/inkasso.csv', "rb")
         uploadfile = SimpleUploadedFile(

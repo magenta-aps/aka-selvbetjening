@@ -67,7 +67,7 @@ class HasUserMixin(object):
                 request.session['claimantIds'] = claimant_ids
                 request.session.save()
                 return claimant_ids
-            except:
+            except (PrismeNotFoundException, AttributeError):
                 return []
 
     def get_company(self, request):
@@ -194,7 +194,6 @@ class IsContentMixin(AkaMixin):
         }, **kwargs))
 
 
-
 class RendererMixin(object):
 
     def render(self):
@@ -220,7 +219,7 @@ class RendererMixin(object):
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**dict({
-            ("%slink" % format) : self.format_url(format, key=self.key)
+            ("%slink" % format): self.format_url(format, key=self.key)
             for format in self.accepted_formats
         }, **kwargs))
 

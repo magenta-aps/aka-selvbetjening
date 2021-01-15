@@ -2,7 +2,6 @@ from django.test import TestCase, override_settings
 from gnupg import GPG
 from django.conf import settings
 import logging
-import io
 
 
 @override_settings(ENCRYPTED_LOG_KEY_UID='AKA Selvbetjening test')
@@ -16,7 +15,7 @@ class BasicTestCase(TestCase):
 
     def test_key(self):
         gpg = GPG()
-        keylist = gpg.list_keys(secret=False) # Only public keys.
+        keylist = gpg.list_keys(secret=False)  # Only public keys.
         self.assertTrue(len(keylist) > 0)
         keycount = 0
         for key in keylist:

@@ -4,6 +4,7 @@ from django.test import Client
 import requests
 from lxml import html
 
+
 class LoginTestCase(TestCase):
     sfc = 'Sullissivik.Federation.Cookie'
 

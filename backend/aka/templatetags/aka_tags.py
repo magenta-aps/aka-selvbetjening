@@ -12,6 +12,7 @@ format_re = re.compile("{(.*)}")
 
 locale.setlocale(locale.LC_ALL, '')
 
+
 @register.filter
 def split(text, filter):
     return text.split(filter)
@@ -94,6 +95,7 @@ def get(item, attribute):
         return item.get(attribute)
     if isinstance(item, (tuple, list)):
         return item[int(attribute)]
+
 
 @register.filter
 def number(item):

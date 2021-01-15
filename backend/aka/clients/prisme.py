@@ -42,7 +42,7 @@ class PrismeException(AkaException):
             'loentraek': [{
                 're': re.compile(r'Aftalenummer (.+) findes ikke'),
                 'args': ['nr']
-            },{
+            }, {
                 're': re.compile(r'Det samme CPR-Nummer (\d+) må kun optræde en gang pr. indberetning'),
                 'args': ['cpr']
             }],

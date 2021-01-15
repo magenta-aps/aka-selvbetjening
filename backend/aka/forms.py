@@ -23,10 +23,10 @@ logger = logging.getLogger(__name__)
 valid_date_formats = ['%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%Y-%m-%d', '%d-%m-%y']
 
 
-cprvalidator = RegexValidator("^\d{10}$", "error.invalid_cpr")
-cvrvalidator = RegexValidator("^\d{8}$", "error.invalid_cvr")
-cprcvrvalidator = RegexValidator("^\d{8}(\d{2})?$", "error.invalid_cpr_cvr")
-csepcprcvrvalidator = RegexValidator("^\d{8}(\d{2})?(,\d{8}(\d{2})?)*$", "error.invalid_cpr_cvr")
+cprvalidator = RegexValidator(r"^\d{10}$", "error.invalid_cpr")
+cvrvalidator = RegexValidator(r"^\d{8}$", "error.invalid_cvr")
+cprcvrvalidator = RegexValidator(r"^\d{8}(\d{2})?$", "error.invalid_cpr_cvr")
+csepcprcvrvalidator = RegexValidator(r"^\d{8}(\d{2})?(,\d{8}(\d{2})?)*$", "error.invalid_cpr_cvr")
 
 
 class CsvUploadMixin(object):
@@ -62,7 +62,7 @@ class CsvUploadMixin(object):
                 fieldnames=self.field_order
             )
             rows = [row for row in csv_reader]  # Catch csv reading errors early
-        except csv.Error as e:
+        except csv.Error:
             raise ValidationError('error.upload_read_error', code='error.upload_read_error')
         if len(rows) == 0:
             raise ValidationError('error.upload_empty', code='error.upload_empty')
@@ -119,7 +119,7 @@ class CsvUploadMixin(object):
 
 
 class RadioSelect(forms.RadioSelect):
-    option_template_name='aka/util/optionfield.html'
+    option_template_name = 'aka/util/optionfield.html'
 
 
 class AcceptingMultipleChoiceField(forms.MultipleChoiceField):
@@ -314,17 +314,13 @@ class InkassoForm(forms.Form):
 
         return value
 
-
     # Prisme depends on the value for periodeslut, so set it to today if
     # it was not specified.
     def clean_periodeslut(self):
         value = self.cleaned_data.get('periodeslut')
-
         if not value:
             value = date.today()
-
         return value
-
 
     def clean(self):
         cleaned_data = super(InkassoForm, self).clean()
@@ -423,7 +419,7 @@ class InkassoUploadForm(CsvUploadMixin, forms.Form):
         'hovedstol',
         'hovedstol_posteringstekst',
 
-        'bankrente', # Disse felter anvendes svjv. ikke
+        'bankrente',  # Disse felter anvendes svjv. ikke
         'bankrente_posteringstekst',
         'bankgebyr',
         'bankgebyr_posteringstekst',
@@ -580,7 +576,6 @@ class LoentraekUploadForm(CsvUploadMixin, LoentraekForm):
     ]
 
 
-
 class NedskrivningForm(forms.Form):
 
     fordringshaver = forms.CharField(
@@ -621,11 +616,11 @@ class NedskrivningUploadForm(CsvUploadMixin, forms.Form):
 
     subform_class = NedskrivningForm
     field_order = [
-        'fordringshaver',               # Not sent to Prisme service
+        'fordringshaver',                # Not sent to Prisme service
         'debitor',
-        'inkassonummer',                # Not sent to Prisme service
+        'inkassonummer',                 # Not sent to Prisme service
         'beloeb',
-        'oprindeligt_overfoert_beloeb', # Not sent to Prisme service
+        'oprindeligt_overfoert_beloeb',  # Not sent to Prisme service
         'ekstern_sagsnummer',
         'sekvensnummer',
     ]

@@ -21,9 +21,6 @@ class BasicTestCase(TestMixin, TestCase):
             self.get_file_contents('aka/tests/resources/interestnote_response.xml')
         )]
 
-        dafologinmock = self.mock('aka.clients.dafo.Dafo.login')
-        dafologinmock.return_value = ""
-
         self.dafomock = self.mock('aka.clients.dafo.Dafo.lookup_cvr')
         self.dafomock.return_value = {
             'navn': 'Testfirma',
@@ -153,7 +150,7 @@ class BasicTestCase(TestMixin, TestCase):
         session = self.client.session
         session['user_info'] = None
         session.save()
-        expected = {'errors': ['Access denied'], 'fieldErrors': []}
+        # expected = {'errors': ['Access denied'], 'fieldErrors': []}
         for y in range(2000, 2019):
             for m in range(1, 13):
                 response = self.client.get(self.url, {

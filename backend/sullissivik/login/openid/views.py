@@ -39,7 +39,7 @@ class Login(View):
 
     def get(self, request, *args, **kwargs):
         client = Client(client_authn_method=CLIENT_AUTHN_METHOD, client_cert=OpenId.client_cert)
-        provider_info = client.provider_config(OpenId.open_id_settings['issuer'])
+        provider_info = client.provider_config(OpenId.open_id_settings['issuer'])  # noqa
         client_reg = RegistrationResponse(**{
             'client_id': OpenId.open_id_settings['client_id'],
             'redirect_uris': [OpenId.open_id_settings['redirect_uri']]
@@ -116,7 +116,7 @@ class LoginCallback(TemplateView):
                 logger.exception(SuspiciousOperation('Session `oid_state` does not match the OID callback state'))
                 return HttpResponseRedirect(reverse('openid:login'))
 
-            provider_info = client.provider_config(settings.OPENID_CONNECT['issuer'])
+            provider_info = client.provider_config(settings.OPENID_CONNECT['issuer'])  # noqa
             logger.debug('provider info: {}'.format(client.config))
 
             request_args = {

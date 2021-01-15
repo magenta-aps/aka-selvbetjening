@@ -14,7 +14,7 @@ class AkaException(Exception):
     def message(self):
         try:
             return _(self.error_code).format(**self.params)
-        except KeyError as e:
+        except KeyError:
             return _(self.error_code)
 
     @property
