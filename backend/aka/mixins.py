@@ -95,7 +95,10 @@ class HasUserMixin(object):
         except (KeyError, TypeError):
             pass
 
-        if self.cpr and not self.cvr and not request.session.get('has_checked_cvr'):
+        if not self.cpr and settings.DEFAULT_CPR:
+            self.cpr = settings.DEFAULT_CPR
+
+        if self.cpr and not self.cvr and not request.session.get('has_checked_cvr') and not settings.DEBUG:
             cvrs = Dafo().lookup_cvr_by_cpr(self.cpr, False)
             if len(cvrs) > 1:
                 request.session['cvrs'] = [str(x) for x in cvrs]
@@ -112,6 +115,9 @@ class HasUserMixin(object):
             self.company = self.get_company(request)
         except (KeyError, TypeError):
             pass
+
+        if not self.cvr and settings.DEFAULT_CVR:
+            self.cvr = settings.DEFAULT_CVR
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -137,7 +143,10 @@ class RequireCprMixin(HasUserMixin):
         try:
             self.cpr = request.session['user_info']['CPR']
         except (KeyError, TypeError):
-            raise PermissionDenied('no_cpr')
+            if settings.DEFAULT_CPR:
+                self.cvr = settings.DEFAULT_CPR
+            else:
+                raise PermissionDenied('no_cpr')
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -147,7 +156,10 @@ class RequireCvrMixin(HasUserMixin):
         try:
             self.cvr = request.session['user_info']['CVR']
         except (KeyError, TypeError):
-            raise PermissionDenied('no_cvr')
+            if settings.DEFAULT_CVR:
+                self.cvr = settings.DEFAULT_CVR
+            else:
+                raise PermissionDenied('no_cvr')
         return super().dispatch(request, *args, **kwargs)
 
 

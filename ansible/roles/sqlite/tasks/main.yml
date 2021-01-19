@@ -1,0 +1,8 @@
+---
+- name: Install sqlite3
+  apt:
+    update_cache: true
+    name:
+      - sqlite3
+
+...

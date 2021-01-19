@@ -1,3 +1,0 @@
-#!/bin/bash
-
-ansible-playbook -i akapprod01, -K playbooks/production.yml --ask-vault-pass
