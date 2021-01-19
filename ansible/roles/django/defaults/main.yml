@@ -1,4 +1,5 @@
 ---
+django_https: True
 django_virtual_env_path: /srv/venv/
 django_manage_file: /srv/backend/manage.py
 django_requirements_file: /srv/backend/requirements.txt

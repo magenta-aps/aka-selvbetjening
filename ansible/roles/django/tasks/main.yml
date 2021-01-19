@@ -1,6 +1,7 @@
 ---
 
-- name: Install system-level depndencies
+- name: Install system-level dependencies
+  become: yes
   apt:
     update_cache: true
     name:
@@ -8,8 +9,6 @@
       - python3-pip
       - python3-venv
       - python3-psycopg2
-      - python-psycopg2
-      - python-setuptools
       - gettext
       - wkhtmltopdf
       - libxmlsec1-dev
@@ -20,32 +19,10 @@
   pip:
     requirements: "{{django_requirements_file}}"
     virtualenv: "{{django_virtual_env_path}}"
-    virtualenv_command: "/usr/bin/python{{python_major_version}} -m venv"
+    virtualenv_python: "python{{python_major_version}}"
   when:
     - django_requirements_file is defined
     - django_requirements_file != none
-
-- name: Create Postgres Django User
-  become: yes
-  become_user: postgres
-  postgresql_user:
-    name: "{{django_databases.default.user}}"
-    password: "{{django_databases.default.password}}"
-    encrypted: yes
-    role_attr_flags: SUPERUSER # needed to create test database
-  tags:
-    - django
-
-- name: Setup django database
-  become: yes
-  become_user: postgres
-  postgresql_db:
-    name: "{{django_databases.default.name}}"
-    encoding: UTF-8
-    owner: "{{django_databases.default.user}}"
-    state: present
-  tags:
-    - django
 
 - name: Generate secret key
   shell: ". {{django_virtual_env_path}}/bin/activate && python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'"
@@ -67,19 +44,19 @@
 
 - name: Create log dir
   file:
-    path: /var/log/aka
+    path: "{{django_log_dir}}"
     state: directory
-    owner: www-data
-    group: akap-dev
+    owner: "{{django_log_owner}}"
+    group: "{{django_log_group}}"
     mode: 0775
     recurse: yes
 
 - name: Create log file
   file:
-    path: /var/log/aka/aka.log.asc
-    state: file
-    owner: www-data
-    group: akap-dev
+    path: "{{django_log_dir}}/aka.log.asc"
+    state: touch
+    owner: "{{django_log_owner}}"
+    group: "{{django_log_group}}"
     mode: 0775
 
 - name: Migrate
@@ -91,7 +68,7 @@
   shell: ". {{django_virtual_env_path}}/bin/activate && python {{django_manage_file}} collectstatic --no-input"
 
 - name: Compile messages
-  shell: ". {{django_virtual_env_path}}/bin/activate && python {{django_manage_file}} compilemessages"
+  shell: ". {{django_virtual_env_path}}/bin/activate && cd {{project_dir}} && python {{django_manage_file}} compilemessages"
 
 - name: Restart apache
   service:
@@ -102,15 +79,15 @@
 
 - name: Create gpg dir for webuser
   file:
-    path: /var/www/.gnupg
+    path: "{{webuser_homedir}}/.gnupg"
     state: directory
-    owner: www-data
-    group: www-data
+    owner: "{{webuser}}"
+    group: "{{webuser}}"
     mode: 0700
 
 # - name: Import public encryption key
 - name: Import public encryption key
-  become_user: www-data
+  become_user: "{{webuser}}"
   shell:
     cmd: "gpg --import"
     stdin: "{{gpg.pubkey}}"

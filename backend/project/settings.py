@@ -115,6 +115,8 @@ AUTHENTICATION_BACKENDS = [
 # See local_settings_example.py
 SULLISSIVIK_FEDERATION_SERVICE = None
 
+DEFAULT_CPR = None
+
 # Application definition
 
 INSTALLED_APPS = [

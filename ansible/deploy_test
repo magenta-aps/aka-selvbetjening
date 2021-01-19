@@ -1,3 +1,0 @@
-#!/bin/bash
-
-ansible-playbook -i akaptest01, -K playbooks/deploy.yml --ask-vault-pass

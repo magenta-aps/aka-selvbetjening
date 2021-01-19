@@ -107,9 +107,10 @@ class NemId:
     def logout(session):
         NemId.clear_session(session)
         response = redirect('aka:index')
-        response.delete_cookie(
-            settings.NEMID_CONNECT['cookie_name'],
-            path=settings.NEMID_CONNECT['cookie_path'],
-            domain=settings.NEMID_CONNECT['cookie_domain']
-        )
+        if settings.NEMID_CONNECT['enabled']:
+            response.delete_cookie(
+                settings.NEMID_CONNECT['cookie_name'],
+                path=settings.NEMID_CONNECT['cookie_path'],
+                domain=settings.NEMID_CONNECT['cookie_domain']
+            )
         return response

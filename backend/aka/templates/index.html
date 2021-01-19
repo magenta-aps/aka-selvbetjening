@@ -33,7 +33,7 @@
         {% url 'aka:rentenota' as rentenota_url %}
         {% include 'toc-item.html' with url=rentenota_url text='index.rentenota' subtext='index.rentenota.sub' icon='tax' %}
 
-        {% if claimant_ids %}
+{#        {% if claimant_ids %}#}
         {% url 'aka:inkassosag' as inkassosag_url %}
         {% include 'toc-item.html' with url=inkassosag_url text='index.fordring' subtext='index.fordring.sub' icon='business' %}
         {% url 'aka:inkassosag-upload' as inkassosag_upload_url %}
@@ -42,7 +42,7 @@
         {% include 'toc-item.html' with url=nedskrivning_url text='index.nedskrivning' subtext='index.nedskrivning.sub' icon='tax' %}
         {% url 'aka:nedskrivning-upload' as nedskrivning_upload_url %}
         {% include 'toc-item.html' with url=nedskrivning_upload_url text='index.nedskrivning-upload' icon='tax' %}
-        {% endif %}
+{#        {% endif %}#}
 
         {% url 'aka:loentraek' as loentraek_url %}
         {% include 'toc-item.html' with url=loentraek_url text='index.løntræk' subtext='index.løntræk.sub' icon='briefcase' %}
