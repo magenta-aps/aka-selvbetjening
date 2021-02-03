@@ -432,7 +432,7 @@ class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, F
     parallel = True
 
     def handle_subform(self, subform):
-        codebtor_re = re.compile("^codebtor_\d+$")
+        codebtor_re = re.compile(r"^codebtor_\d+$")
         claimant = subform.cleaned_data['fordringshaver'] or self.claimant_ids[0]
         codebtors = []
         for field, value in subform.cleaned_data.items():
