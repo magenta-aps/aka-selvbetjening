@@ -454,18 +454,8 @@ class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, F
                 responses = results
 
         else:
-            codebtor_re = re.compile("^codebtor_\d+$")
             for subform in form.subforms:
-                claimant = subform.cleaned_data['fordringshaver'] or self.claimant_ids[0]
-                codebtors = []
-                for field, value in subform.cleaned_data.items():
-                    match = codebtor_re.match(field)
-                    if match and len(value):
-                        codebtors.append(value)
-                    if field == 'meddebitorer' and len(value):
-                        codebtors += value.split(',')
-                prisme_reply = InkassoSagView.send_claim(claimant, subform, codebtors, self.cpr, self.cvr)
-                responses.append(prisme_reply.rec_id)
+                responses.append(self.handle_subform(subform))
 
         return TemplateResponse(
             request=self.request,
