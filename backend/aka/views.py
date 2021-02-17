@@ -450,12 +450,26 @@ class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, F
         if self.parallel:
             import concurrent.futures
             with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
-                results = executor.map(self.handle_subform, [subform for subform in form.subforms])
-                responses = results
+                try:
+                    results = executor.map(self.handle_subform, [subform for subform in form.subforms])
+                    responses = results
+                except PrismeException as e:
+                    if e.code == 250:
+                        form.add_error(None, e.as_validationerror)
+                        return self.form_invalid(form)
+                    else:
+                        raise e
 
         else:
             for subform in form.subforms:
-                responses.append(self.handle_subform(subform))
+                try:
+                    responses.append(self.handle_subform(subform))
+                except PrismeException as e:
+                    if e.code == 250:
+                        form.add_error(None, e.as_validationerror)
+                        return self.form_invalid(form)
+                    else:
+                        raise e
 
         return TemplateResponse(
             request=self.request,
