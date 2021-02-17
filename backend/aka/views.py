@@ -429,21 +429,33 @@ class InkassoSagView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSet
 class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormView):
     form_class = InkassoUploadForm
     template_name = 'aka/claim/upload.html'
+    parallel = True
+
+    def handle_subform(self, subform):
+        codebtor_re = re.compile(r"^codebtor_\d+$")
+        claimant = subform.cleaned_data['fordringshaver'] or self.claimant_ids[0]
+        codebtors = []
+        for field, value in subform.cleaned_data.items():
+            match = codebtor_re.match(field)
+            if match and len(value):
+                codebtors.append(value)
+            if field == 'meddebitorer' and len(value):
+                codebtors += value.split(',')
+        prisme_reply = InkassoSagView.send_claim(claimant, subform, codebtors, self.cpr, self.cvr)
+        return prisme_reply.rec_id
 
     def form_valid(self, form):
         responses = []
-        codebtor_re = re.compile(r"^codebtor_\d+$")
-        for subform in form.subforms:
-            claimant = subform.cleaned_data['fordringshaver'] or self.claimant_ids[0]
-            codebtors = []
-            for field, value in subform.cleaned_data.items():
-                match = codebtor_re.match(field)
-                if match and len(value):
-                    codebtors.append(value)
-                if field == 'meddebitorer' and len(value):
-                    codebtors += value.split(',')
-            prisme_reply = InkassoSagView.send_claim(claimant, subform, codebtors, self.cpr, self.cvr)
-            responses.append(prisme_reply.rec_id)
+
+        if self.parallel:
+            import concurrent.futures
+            with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
+                results = executor.map(self.handle_subform, [subform for subform in form.subforms])
+                responses = results
+
+        else:
+            for subform in form.subforms:
+                responses.append(self.handle_subform(subform))
 
         return TemplateResponse(
             request=self.request,
@@ -578,14 +590,15 @@ class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormV
     template_name = 'aka/impairment/form.html'
 
     def send_impairment(self, form, prisme):
-        claimant = form.cleaned_data['fordringshaver'] or self.claimant_ids[0]
+        data = form if type(form) == dict else form.cleaned_data
+        claimant = data['fordringshaver'] or self.claimant_ids[0]
         impairment = PrismeImpairmentRequest(
             # claimant_id=self.get_claimant_id(self.request),
             claimant_id=claimant,
-            cpr_cvr=form.cleaned_data.get('debitor'),
-            claim_ref=form.cleaned_data.get('ekstern_sagsnummer'),
-            amount_balance=-abs(form.cleaned_data.get('beloeb', 0)),
-            claim_number_seq=form.cleaned_data.get('sekvensnummer')
+            cpr_cvr=data.get('debitor'),
+            claim_ref=data.get('ekstern_sagsnummer'),
+            amount_balance=-abs(data.get('beloeb', 0)),
+            claim_number_seq=data.get('sekvensnummer')
         )
         return prisme.process_service(impairment, 'nedskrivning', self.cpr, self.cvr)[0].rec_id
 
@@ -612,19 +625,36 @@ class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormV
 class NedskrivningUploadView(NedskrivningView):
     form_class = NedskrivningUploadForm
     template_name = 'aka/impairment/upload.html'
+    parallel = True
+
+    def handle_form(self, data):
+        rec_id = None
+        error = None
+        prisme = Prisme()
+        try:
+            rec_id = self.send_impairment(data, prisme)
+        except PrismeException as e:
+            error = e.as_error_dict
+        return (rec_id, error)
 
     def form_valid(self, form):
         rec_ids = []
-        prisme = Prisme()
         errors = []
-        for subform in form.subforms:
-            try:
-                rec_ids.append(self.send_impairment(subform, prisme))
-            except PrismeException as e:
-                if e.code == 250:
-                    errors.append(e.as_error_dict)
-                else:
-                    raise e
+        if self.parallel:
+            import concurrent.futures
+            with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
+                results = executor.map(self.handle_form, [subform.cleaned_data for subform in form.subforms])
+                rec_ids = [r[0] for r in results if r[0]]
+                errors = [r[1] for r in results if r[1]]
+        else:
+            for subform in form.subforms:
+                try:
+                    rec_ids.append(self.handle_form(subform.cleaned_data))
+                except PrismeException as e:
+                    if e.code == 250:
+                        errors.append(e.as_error_dict)
+                    else:
+                        raise e
 
         return TemplateResponse(
             request=self.request,
