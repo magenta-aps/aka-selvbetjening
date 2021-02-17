@@ -31,6 +31,7 @@ from aka.mixins import PdfRendererMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
 from aka.mixins import SpreadsheetRendererMixin
+from aka.utils import flatten
 from aka.utils import get_ordereddict_key_index
 from aka.utils import spreadsheet_col_letter
 from django.conf import settings
@@ -396,8 +397,8 @@ class InkassoSagView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSet
             codebtors=codebtors,
             files=[file for name, file in form.files.items()]
         )
-        prisme_reply = prisme.process_service(claim, 'fordring', cpr, cvr)[0]
-        return prisme_reply
+        prisme_replies = prisme.process_service(claim, 'fordring', cpr, cvr)
+        return prisme_replies
 
     def form_valid(self, form, formset):
 
@@ -411,12 +412,12 @@ class InkassoSagView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSet
                 elif cvr is not None:
                     codebtors.append(cvr)
 
-        prisme_reply = InkassoSagView.send_claim(self.claimant_ids[0], form, codebtors, self.cpr, self.cvr)
+        prisme_replies = InkassoSagView.send_claim(self.claimant_ids[0], form, codebtors, self.cpr, self.cvr)
         return TemplateResponse(
             request=self.request,
             template="aka/claim/success.html",
             context={
-                'rec_ids': [prisme_reply.rec_id],
+                'rec_ids': [reply.rec_id for reply in prisme_replies],
                 'upload': False
             },
             using=self.template_engine
@@ -441,8 +442,8 @@ class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, F
                 codebtors.append(value)
             if field == 'meddebitorer' and len(value):
                 codebtors += value.split(',')
-        prisme_reply = InkassoSagView.send_claim(claimant, subform, codebtors, self.cpr, self.cvr)
-        return prisme_reply.rec_id
+        prisme_replies = InkassoSagView.send_claim(claimant, subform, codebtors, self.cpr, self.cvr)
+        return [reply.rec_id for reply in prisme_replies]
 
     def form_valid(self, form):
         responses = []
@@ -452,7 +453,7 @@ class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, F
             with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
                 try:
                     results = executor.map(self.handle_subform, [subform for subform in form.subforms])
-                    responses = results
+                    responses = flatten(list(results))
                 except PrismeException as e:
                     if e.code == 250:
                         form.add_error(None, e.as_validationerror)
