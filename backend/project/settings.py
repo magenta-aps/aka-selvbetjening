@@ -90,9 +90,9 @@ LOGGING = {
             'handlers': ['file'],
         },
         'aka': {
-            'handlers': ['debug-console'],
             'filters': ['require_debug_true'],
-            'level': 'DEBUG'
+            'level': 'DEBUG',
+            'handlers': ['file'],
         },
         'oic': {
             'handlers': ['debug-console'],
@@ -182,6 +182,8 @@ LOCALE_MAP = {
 }
 
 DEFAULT_CHARSET = 'utf-8'
+
+USE_THOUSAND_SEPARATOR = True
 
 
 # Static files (CSS, JavaScript, Images)
