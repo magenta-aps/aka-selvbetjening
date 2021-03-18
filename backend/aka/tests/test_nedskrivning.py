@@ -64,7 +64,7 @@ class LocalTestCase(BasicTestCase):
         super().setUp()
         self.service_mock = self.mock('aka.clients.prisme.Prisme.process_service')
         self.service_mock.return_value = [
-            PrismeImpairmentResponse(None, f"<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
+            PrismeImpairmentResponse(None, "<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
         ]
         self.cvrcheck_mock = self.mock('aka.clients.prisme.Prisme.check_cvr')
         self.cvrcheck_mock.return_value = '12345678'  # claimant_id

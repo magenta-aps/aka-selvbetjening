@@ -43,7 +43,7 @@ class NemId:
                         )
                         if user.is_authenticated:
                             request.session['user_info'] = user.dict()
-            except Exception as e:
+            except Exception:
                 exc_info = sys.exc_info()
                 traceback.print_exception(*exc_info)
         return user
@@ -107,9 +107,10 @@ class NemId:
     def logout(session):
         NemId.clear_session(session)
         response = redirect('aka:index')
-        response.delete_cookie(
-            settings.NEMID_CONNECT['cookie_name'],
-            path=settings.NEMID_CONNECT['cookie_path'],
-            domain=settings.NEMID_CONNECT['cookie_domain']
-        )
+        if settings.NEMID_CONNECT['enabled']:
+            response.delete_cookie(
+                settings.NEMID_CONNECT['cookie_name'],
+                path=settings.NEMID_CONNECT['cookie_path'],
+                domain=settings.NEMID_CONNECT['cookie_domain']
+            )
         return response

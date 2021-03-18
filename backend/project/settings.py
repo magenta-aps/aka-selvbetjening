@@ -74,7 +74,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': '/var/log/aka/aka.log.asc',
-            'when': 'D', # Roll log each day
+            'when': 'D',  # Roll log each day
             'formatter': 'encrypted'
         },
     },
@@ -90,9 +90,9 @@ LOGGING = {
             'handlers': ['file'],
         },
         'aka': {
-            'handlers': ['debug-console'],
             'filters': ['require_debug_true'],
-            'level': 'DEBUG'
+            'level': 'DEBUG',
+            'handlers': ['file'],
         },
         'oic': {
             'handlers': ['debug-console'],
@@ -102,7 +102,7 @@ LOGGING = {
     }
 }
 
-ENCRYPTED_LOG_KEY_UID='AKA Selvbetjening'
+ENCRYPTED_LOG_KEY_UID = 'AKA Selvbetjening'
 
 ALLOWED_HOSTS = ['*']
 
@@ -114,6 +114,8 @@ AUTHENTICATION_BACKENDS = [
 
 # See local_settings_example.py
 SULLISSIVIK_FEDERATION_SERVICE = None
+
+DEFAULT_CPR = None
 
 # Application definition
 
@@ -180,6 +182,8 @@ LOCALE_MAP = {
 }
 
 DEFAULT_CHARSET = 'utf-8'
+
+USE_THOUSAND_SEPARATOR = True
 
 
 # Static files (CSS, JavaScript, Images)

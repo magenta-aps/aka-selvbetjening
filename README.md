@@ -1,57 +1,43 @@
-AKA Selvbetjenningsløsninger
+AKA Selvbetjeningsløsninger
 ========================================
 
-
-
-## Requirements:
-
-### Development:
-- Vagrant is needed to spin up a virtualized enviroment.  
-- Virtualbox  
-see [Vagrant README](https://github.com/magenta-aps/aka-selvbetjening/blob/develop/vagrant/README.md) for installation info.
-
-
 ## Setup:
-
-### Important files:
-`doc/requirements.txt`: the python requirement file. All packages will be installed by provisioning.
-
-
-## Usage:
+- Clone to local machine:
+  - `git clone git@git.magenta.dk:gronlandsprojekter/aka-selvbetjening.git`
+  - `cd aka-selvbetjening`
+- Install Ansible, Virtualenv and Python3-apt:
+  - `sudo apt install ansible virtualenv python3-apt`
+- Create a virtual environment and enter it:
+  - `virtualenv -p python3 --system-site-packages venv`
+  - `source venv/bin/activate`
+- Set up a local installation of AKA with ansible:
+  - Install ansible python package: `pip3 install ansible `
+  - Run `./deploy_local`
+  - You will be asked for your local sudo password and the test-environment vault password (present in bitwarden under key "Ansible Vault Password (AKAP test deployment)")
+- Connect to the Greenland VPN
+- Create a tunnel to the dev server for socks, allowing you access to the Prisme development service 
+  - Run `./socks.sh`
+  - This will open a connection to the server that is closed if you log out of the ssh shell
+- Start Django
+  - Run `python3 backend/manage.py runserver`
 
 ### Development:
-From the vagrant folder:  
-`vagrant up` will spin up a virtual machine and provision it.  
-`vagrant ssh` can then be used to ssh into the machine.
+When the system has been set up, you don't need to recreate the virtual environment or run `deploy_local`.
+Just enter the virtual environment, set up the socks connection, and run django on localhost.
+Since we cannot integrate with sullissivik's login in local development, we've defined an override
+CPR and CVR in settings_local.py when deployed through the localhost ansible configuration.
+Development on the login solution needs to be verified on the akaptest01 server.
 
-Everything in this(the root folder of this project) folder will be shared with the VM and accessible in the  `/vagrant` folder inside the VM.
+Eventually we may want to put the system in a docker container, but that's out of scope for now.
 
-From `/vagrant` in the virtual machine:  
-- `make runserver`: Will build everything and run the webserver. accessible at localhost:8000 on the host machine
-- `make documentation`: Will generate the static html pages for the documentation. accesible in the folder `doc/_build/html/` (index.html is the frontpage)
-- `make test`: Will run the test-suite.
-- `make frontend`: Will build the frontend components.
-
-For further documentation for developers, run `make documentation`
-(possibly from the Virtual Machine).
-Then open `doc/_build/html/index.html` in a browser, and navigate to: *Docs/Development*
+### Test:
+To deploy on the test server, run: `./deploy_test`.
+This will start the ansible playbook for test setup. You will be prompted for:
+- your test server password
+- the test vault password
 
 ### Production:
-
-### Running specific playbooks:
-
-By default the `default.yml` playbook is run, but any playbook can be run, by
-changing the `PLAYBOOK` environmental variable before running `vagrant provision`,
-as done by:
-
-    PLAYBOOK=demo.yml vagrant provision
-
-#### For further refference on Ansible/Vagrant setup:
-Basic template cloned from github.com:magenta-aps/vagrant-ansible-example.git
-
-For the Windows equivalent, see [here](https://github.com/magenta-aps/vagrant-ansible-example-windows)
-
-### ansible
-
-deply to testing (vault pass is in bitwarden) 
-ansible-playbook -i akaptest01, -K playbooks/deploy.yml --ask-vault-pass
+To deploy on the production server, run: `./deploy_prod`.
+This will start the ansible playbook for prod setup. You will be prompted for:
+- your prod server password
+- the prod vault password

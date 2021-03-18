@@ -35,7 +35,7 @@ class BasicTestCase(TestMixin, TestCase):
         session['user_info'] = {'CVR': '12345678'}
         session.save()
 
-    ### PRISME INTERFACE TESTS ###
+    # PRISME INTERFACE TESTS #
 
     def test_account_request_parse(self):
         request = PrismeAccountRequest('12345678', date(2019, 1, 22), date(2019, 1, 22), 0)

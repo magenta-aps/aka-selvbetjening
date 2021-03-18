@@ -5,6 +5,6 @@
 
   roles:
     - postgres
-    - deploy
+    - aka
     - xvfb
     - django

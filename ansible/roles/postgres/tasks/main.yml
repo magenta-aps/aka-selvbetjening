@@ -10,3 +10,25 @@
   apt:
     name: python-psycopg2
     state: present
+
+- name: Create Postgres Django User
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    name: "{{django_databases.default.user}}"
+    password: "{{django_databases.default.password}}"
+    encrypted: yes
+    role_attr_flags: SUPERUSER # needed to create test database
+  tags:
+    - django
+
+- name: Setup django database
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: "{{django_databases.default.name}}"
+    encoding: UTF-8
+    owner: "{{django_databases.default.user}}"
+    state: present
+  tags:
+    - django

@@ -20,7 +20,7 @@ class BasicTestCase(TestMixin, TestCase):
         self.service_mock.return_value = [
             PrismePayrollResponse(
                 None,
-                f"<CustPayrollFromEmployerHeaderFUJ><RecId>1234</RecId></CustPayrollFromEmployerHeaderFUJ>"
+                "<CustPayrollFromEmployerHeaderFUJ><RecId>1234</RecId></CustPayrollFromEmployerHeaderFUJ>"
             )
         ]
         session = self.client.session

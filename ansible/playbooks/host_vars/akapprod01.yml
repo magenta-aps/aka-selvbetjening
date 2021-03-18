@@ -1,10 +1,16 @@
 project_dir: /srv/aka-selvbetjening
+webuser: "www-data"
+webuser_homedir: "/var/www"
 debug: False
 django_virtual_env_path: "{{project_dir}}/venv"
 django_manage_file: "{{project_dir}}/backend/manage.py"
 django_requirements_file: "{{project_dir}}/backend/requirements.txt"
 django_local_settings_file: "{{project_dir}}/backend/project/local_settings.py"
 django_secret_key_file: "{{project_dir}}/backend/project/secret_key.py"
+django_log_dir: "/var/log/aka"
+django_log_owner: "www-data"
+django_log_group: "akap-dev"
+
 
 django_databases:
   default:
@@ -46,6 +52,7 @@ django_prisme:
     3861656564366137320a363335373435646232623866633264656562623530363132633536393138
     31653437323961643336326565366138323332643663653164323037613065333531383631336563
     6164613864303762663464643437646163313063663836353236
+  extra: ""
 
 django_dafo:
   pitu_server_certificate: "/etc/ssl/certs/ss-aka-pitu-data-gl.pem"
@@ -53,6 +60,7 @@ django_dafo:
   private_key: "/etc/ssl/openid/*.akap.sullissivik.gl.key"
 
 django_openid:
+  enabled: "True"
   issuer: "https://login.sullissivik.gl"
   scope: "openid digitalimik"
   client_id: "sullissivik_company_tax"
@@ -64,6 +72,7 @@ django_openid:
   post_logout_redirect_uri: "https://akap.sullissivik.gl/"
 
 django_nemid:
+  enabled: "True"
   federation_service: "https://ip.sullissivik.gl/services/IdentityServiceV2.svc?wsdl"
   cookie_name: "Sullissivik.Federation.Cookie"
   cookie_path: "/"

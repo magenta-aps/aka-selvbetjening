@@ -31,6 +31,7 @@ from aka.mixins import PdfRendererMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
 from aka.mixins import SpreadsheetRendererMixin
+from aka.utils import flatten
 from aka.utils import get_ordereddict_key_index
 from aka.utils import spreadsheet_col_letter
 from django.conf import settings
@@ -88,7 +89,7 @@ class CustomJavaScriptCatalog(JavaScriptCatalog):
         context.update(super(CustomJavaScriptCatalog, self).get_context_data(**kwargs))
         context['catalog_str'] = \
             json.dumps(context['catalog'], sort_keys=True, indent=2) \
-                if context['catalog'] else None
+            if context['catalog'] else None
         context['formats_str'] = json.dumps(context['formats'], sort_keys=True, indent=2)
         return context
 
@@ -220,11 +221,11 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
     def get_filename(self):
         try:
             from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d')
-        except:
+        except (KeyError, ValueError):
             from_date = ""
         try:
             to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d')
-        except:
+        except (KeyError, ValueError):
             to_date = ""
         return _("account.filename").format(
             from_date=from_date,
@@ -327,7 +328,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
             {'name': 'accounting_date', 'class': 'nb'},
             {'name': 'debitor_group_id', 'class': 'nb'},
             {'name': 'debitor_group_name', 'class': 'nb'},
-            {'name': 'voucher',  'class': 'nb'},
+            {'name': 'voucher', 'class': 'nb'},
             {'name': 'text', 'class': ''},
             {'name': 'payment_code', 'class': 'nb'},
             {'name': 'payment_code_name', 'class': 'nb'},
@@ -396,8 +397,8 @@ class InkassoSagView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSet
             codebtors=codebtors,
             files=[file for name, file in form.files.items()]
         )
-        prisme_reply = prisme.process_service(claim, 'fordring', cpr, cvr)[0]
-        return prisme_reply
+        prisme_replies = prisme.process_service(claim, 'fordring', cpr, cvr)
+        return prisme_replies
 
     def form_valid(self, form, formset):
 
@@ -411,12 +412,12 @@ class InkassoSagView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSet
                 elif cvr is not None:
                     codebtors.append(cvr)
 
-        prisme_reply = InkassoSagView.send_claim(self.claimant_ids[0], form, codebtors, self.cpr, self.cvr)
+        prisme_replies = InkassoSagView.send_claim(self.claimant_ids[0], form, codebtors, self.cpr, self.cvr)
         return TemplateResponse(
             request=self.request,
             template="aka/claim/success.html",
             context={
-                'rec_ids': [prisme_reply.rec_id],
+                'rec_ids': [reply.rec_id for reply in prisme_replies],
                 'upload': False
             },
             using=self.template_engine
@@ -429,21 +430,49 @@ class InkassoSagView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSet
 class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormView):
     form_class = InkassoUploadForm
     template_name = 'aka/claim/upload.html'
+    parallel = True
+
+    def handle_subform(self, subform):
+        codebtor_re = re.compile(r"^codebtor_\d+$")
+        claimant = subform.cleaned_data['fordringshaver'] or self.claimant_ids[0]
+        codebtors = []
+        for field, value in subform.cleaned_data.items():
+            match = codebtor_re.match(field)
+            if match and len(value):
+                codebtors.append(value)
+            if field == 'meddebitorer' and len(value):
+                codebtors += value.split(',')
+        prisme_replies = InkassoSagView.send_claim(claimant, subform, codebtors, self.cpr, self.cvr)
+        return [reply.rec_id for reply in prisme_replies]
 
     def form_valid(self, form):
         responses = []
-        codebtor_re = re.compile("^codebtor_\d+$")
-        for subform in form.subforms:
-            claimant = subform.cleaned_data['fordringshaver'] or self.claimant_ids[0]
-            codebtors = []
-            for field, value in subform.cleaned_data.items():
-                match = codebtor_re.match(field)
-                if match and len(value):
-                    codebtors.append(value)
-                if field == 'meddebitorer' and len(value):
-                    codebtors += value.split(',')
-            prisme_reply = InkassoSagView.send_claim(claimant, subform, codebtors, self.cpr, self.cvr)
-            responses.append(prisme_reply.rec_id)
+
+        if self.parallel:
+            import concurrent.futures
+            with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+                try:
+                    results = executor.map(self.handle_subform, [subform for subform in form.subforms])
+                    responses = flatten(list(results))
+                except PrismeException as e:
+                    if e.code == 250 or e.code == '250':
+                        form.add_error(None, e.as_validationerror)
+                        return self.form_invalid(form)
+                    else:
+                        logger.info("Got error code %s from prisme" % str(e.code))
+                        raise e
+
+        else:
+            for subform in form.subforms:
+                try:
+                    responses.append(self.handle_subform(subform))
+                except PrismeException as e:
+                    if e.code == 250 or e.code == '250':
+                        form.add_error(None, e.as_validationerror)
+                        return self.form_invalid(form)
+                    else:
+                        logger.info("Got error code %s from prisme" % str(e.code))
+                        raise e
 
         return TemplateResponse(
             request=self.request,
@@ -510,13 +539,15 @@ class LoentraekView(RequireCvrMixin, IsContentMixin, FormSetView, FormView):
             )
         except PrismeException as e:
             found = False
-            if e.code == 250:
+            if e.code == 250 or e.code == '250':
                 d = e.as_error_dict
                 if 'params' in d and 'nr' in d['params']:
                     for subform in formset:
                         if subform.cleaned_data.get('agreement_number') == d['params']['nr']:
                             subform.add_error('agreement_number', e.as_validationerror)
                             found = True
+            else:
+                logger.info("Got error code %s from prisme" % str(e.code))
             if not found:
                 form.add_error(None, e.as_validationerror)
             return self.form_invalid(form, formset)
@@ -578,14 +609,15 @@ class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormV
     template_name = 'aka/impairment/form.html'
 
     def send_impairment(self, form, prisme):
-        claimant = form.cleaned_data['fordringshaver'] or self.claimant_ids[0]
+        data = form if type(form) == dict else form.cleaned_data
+        claimant = data['fordringshaver'] or self.claimant_ids[0]
         impairment = PrismeImpairmentRequest(
             # claimant_id=self.get_claimant_id(self.request),
             claimant_id=claimant,
-            cpr_cvr=form.cleaned_data.get('debitor'),
-            claim_ref=form.cleaned_data.get('ekstern_sagsnummer'),
-            amount_balance=-abs(form.cleaned_data.get('beloeb', 0)),
-            claim_number_seq=form.cleaned_data.get('sekvensnummer')
+            cpr_cvr=data.get('debitor'),
+            claim_ref=data.get('ekstern_sagsnummer'),
+            amount_balance=-abs(data.get('beloeb', 0)),
+            claim_number_seq=data.get('sekvensnummer')
         )
         return prisme.process_service(impairment, 'nedskrivning', self.cpr, self.cvr)[0].rec_id
 
@@ -603,28 +635,48 @@ class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormV
                 using=self.template_engine
             )
         except PrismeException as e:
-            if e.code == 250:
+            if e.code == 250 or e.code == '250':
                 form.add_error('ekstern_sagsnummer', e.as_validationerror)
                 return self.form_invalid(form)
+            logger.info("Got error code %s from prisme" % str(e.code))
             raise e
 
 
 class NedskrivningUploadView(NedskrivningView):
     form_class = NedskrivningUploadForm
     template_name = 'aka/impairment/upload.html'
+    parallel = True
+
+    def handle_form(self, data):
+        rec_id = None
+        error = None
+        prisme = Prisme()
+        try:
+            rec_id = self.send_impairment(data, prisme)
+        except PrismeException as e:
+            logger.info("Got error from prisme: %s %s" % (str(e.code), e.text))
+            error = e.as_error_dict
+        return (rec_id, error)
 
     def form_valid(self, form):
         rec_ids = []
-        prisme = Prisme()
         errors = []
-        for subform in form.subforms:
-            try:
-                rec_ids.append(self.send_impairment(subform, prisme))
-            except PrismeException as e:
-                if e.code == 250:
-                    errors.append(e.as_error_dict)
-                else:
-                    raise e
+        if self.parallel:
+            import concurrent.futures
+            with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+                results = executor.map(self.handle_form, [subform.cleaned_data for subform in form.subforms])
+                rec_ids = [r[0] for r in results if r[0]]
+                errors = [r[1] for r in results if r[1]]
+        else:
+            for subform in form.subforms:
+                try:
+                    rec_ids.append(self.handle_form(subform.cleaned_data))
+                except PrismeException as e:
+                    if e.code == 250 or e.code == '250':
+                        errors.append(e.as_error_dict)
+                    else:
+                        logger.info("Got error code %s from prisme" % str(e.code))
+                        raise e
 
         return TemplateResponse(
             request=self.request,
@@ -649,7 +701,6 @@ class RenteNotaView(RequireCvrMixin, IsContentMixin, SimpleGetFormMixin, PdfRend
         super().__init__(*args, **kwargs)
         self.errors = []
         self.items = None
-
 
     def get_journal_fields(self):
         return [
