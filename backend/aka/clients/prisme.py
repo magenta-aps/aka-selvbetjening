@@ -638,7 +638,9 @@ class Prisme(object):
                 self._client = zeep.Client(
                     wsdl=wsdl,
                     transport=Transport(
-                        session=session
+                        session=session,
+                        timeout=3600,
+                        operation_timeout=3600
                     )
                 )
             except Exception as e:
@@ -696,6 +698,8 @@ class Prisme(object):
                     outputs.append(request_object.reply_class(request_object, reply_item.xml))
                 elif reply_item.replyText.startswith("Der er allerede oprettet en inkassofordring"):
                     # Harmless
+                    pass
+                elif reply_item.replyText.startswith("Det fremsendte beløb"):
                     pass
                 else:
                     raise PrismeException(reply_item.replyCode, reply_item.replyText, context)

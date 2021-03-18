@@ -450,15 +450,16 @@ class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, F
 
         if self.parallel:
             import concurrent.futures
-            with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
                 try:
                     results = executor.map(self.handle_subform, [subform for subform in form.subforms])
                     responses = flatten(list(results))
                 except PrismeException as e:
-                    if e.code == 250:
+                    if e.code == 250 or e.code == '250':
                         form.add_error(None, e.as_validationerror)
                         return self.form_invalid(form)
                     else:
+                        logger.info("Got error code %s from prisme" % str(e.code))
                         raise e
 
         else:
@@ -466,10 +467,11 @@ class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, F
                 try:
                     responses.append(self.handle_subform(subform))
                 except PrismeException as e:
-                    if e.code == 250:
+                    if e.code == 250 or e.code == '250':
                         form.add_error(None, e.as_validationerror)
                         return self.form_invalid(form)
                     else:
+                        logger.info("Got error code %s from prisme" % str(e.code))
                         raise e
 
         return TemplateResponse(
@@ -537,13 +539,15 @@ class LoentraekView(RequireCvrMixin, IsContentMixin, FormSetView, FormView):
             )
         except PrismeException as e:
             found = False
-            if e.code == 250:
+            if e.code == 250 or e.code == '250':
                 d = e.as_error_dict
                 if 'params' in d and 'nr' in d['params']:
                     for subform in formset:
                         if subform.cleaned_data.get('agreement_number') == d['params']['nr']:
                             subform.add_error('agreement_number', e.as_validationerror)
                             found = True
+            else:
+                logger.info("Got error code %s from prisme" % str(e.code))
             if not found:
                 form.add_error(None, e.as_validationerror)
             return self.form_invalid(form, formset)
@@ -566,6 +570,7 @@ class LoentraekUploadView(LoentraekView):
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
+        e = form.errors
         if form.is_valid():
             if self.forms_valid(form.subforms) and form.check_sum(form.subforms, True):
                 return self.form_valid(form, form.subforms)
@@ -631,9 +636,10 @@ class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormV
                 using=self.template_engine
             )
         except PrismeException as e:
-            if e.code == 250:
+            if e.code == 250 or e.code == '250':
                 form.add_error('ekstern_sagsnummer', e.as_validationerror)
                 return self.form_invalid(form)
+            logger.info("Got error code %s from prisme" % str(e.code))
             raise e
 
 
@@ -649,6 +655,7 @@ class NedskrivningUploadView(NedskrivningView):
         try:
             rec_id = self.send_impairment(data, prisme)
         except PrismeException as e:
+            logger.info("Got error from prisme: %s %s" % (str(e.code), e.text))
             error = e.as_error_dict
         return (rec_id, error)
 
@@ -657,7 +664,7 @@ class NedskrivningUploadView(NedskrivningView):
         errors = []
         if self.parallel:
             import concurrent.futures
-            with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
                 results = executor.map(self.handle_form, [subform.cleaned_data for subform in form.subforms])
                 rec_ids = [r[0] for r in results if r[0]]
                 errors = [r[1] for r in results if r[1]]
@@ -666,9 +673,10 @@ class NedskrivningUploadView(NedskrivningView):
                 try:
                     rec_ids.append(self.handle_form(subform.cleaned_data))
                 except PrismeException as e:
-                    if e.code == 250:
+                    if e.code == 250 or e.code == '250':
                         errors.append(e.as_error_dict)
                     else:
+                        logger.info("Got error code %s from prisme" % str(e.code))
                         raise e
 
         return TemplateResponse(
