@@ -570,7 +570,6 @@ class LoentraekUploadView(LoentraekView):
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        e = form.errors
         if form.is_valid():
             if self.forms_valid(form.subforms) and form.check_sum(form.subforms, True):
                 return self.form_valid(form, form.subforms)
