@@ -277,15 +277,15 @@ class PrismeClaimRequest(PrismeRequestObject):
                 {'coDebtor': {'CustCollCprCvr': self.prepare(codebtor)}}
                 for codebtor in self.codebtors
             ],
-            'files': [
-                {
-                    'file': {
+            'files': {
+                'file': [
+                    {
                         'Name': file[0],
                         'Content': file[1]
                     }
-                }
-                for file in self.files
-            ]
+                    for file in self.files
+                ]
+            }
         }, wrap=self.wrap)
 
     @property
