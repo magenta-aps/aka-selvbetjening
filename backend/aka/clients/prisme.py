@@ -696,11 +696,6 @@ class Prisme(object):
                 if reply_item.replyCode == 0:
                     logger.info("CPR=%s CVR=%s Receiving:\n%s" % (cpr, cvr, reply_item.xml))
                     outputs.append(request_object.reply_class(request_object, reply_item.xml))
-                elif reply_item.replyText.startswith("Der er allerede oprettet en inkassofordring"):
-                    # Harmless
-                    pass
-                elif reply_item.replyText.startswith("Det fremsendte beløb"):
-                    pass
                 else:
                     raise PrismeException(reply_item.replyCode, reply_item.replyText, context)
             return outputs
