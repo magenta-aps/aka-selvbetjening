@@ -430,7 +430,7 @@ class InkassoSagView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSet
 class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormView):
     form_class = InkassoUploadForm
     template_name = 'aka/claim/upload.html'
-    parallel = True
+    parallel = False
 
     def handle_subform(self, subform):
         codebtor_re = re.compile(r"^codebtor_\d+$")
@@ -455,11 +455,11 @@ class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, F
                     results = executor.map(self.handle_subform, [subform for subform in form.subforms])
                     responses = flatten(list(results))
                 except PrismeException as e:
+                    logger.info("Got error code %s from prisme (%s)" % (str(e.code), e.context))
                     if e.code == 250 or e.code == '250':
                         form.add_error(None, e.as_validationerror)
                         return self.form_invalid(form)
                     else:
-                        logger.info("Got error code %s from prisme" % str(e.code))
                         raise e
 
         else:
@@ -645,7 +645,7 @@ class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormV
 class NedskrivningUploadView(NedskrivningView):
     form_class = NedskrivningUploadForm
     template_name = 'aka/impairment/upload.html'
-    parallel = True
+    parallel = False
 
     def handle_form(self, data):
         rec_id = None
@@ -654,8 +654,9 @@ class NedskrivningUploadView(NedskrivningView):
         try:
             rec_id = self.send_impairment(data, prisme)
         except PrismeException as e:
-            logger.info("Got error from prisme: %s %s" % (str(e.code), e.text))
+            logger.info("Got error from prisme: %s %s for %s" % (str(e.code), e.text, str(data)))
             error = e.as_error_dict
+            logger.info("Error_dict: %s" % str(e.as_error_dict))
         return (rec_id, error)
 
     def form_valid(self, form):
@@ -670,12 +671,18 @@ class NedskrivningUploadView(NedskrivningView):
         else:
             for subform in form.subforms:
                 try:
-                    rec_ids.append(self.handle_form(subform.cleaned_data))
+                    rec_id, error = self.handle_form(subform.cleaned_data)
+                    if rec_id:
+                        rec_ids.append(rec_id)
+                    if error:
+                        errors.append(error)
                 except PrismeException as e:
+                    logger.info("Error_dict: %s" % str(e.as_error_dict))
                     if e.code == 250 or e.code == '250':
                         errors.append(e.as_error_dict)
+                        logger.info("Got error code %s from prisme for %s" % (str(e.code), str(subform.cleaned_data)))
                     else:
-                        logger.info("Got error code %s from prisme" % str(e.code))
+                        logger.info("Got error code %s from prisme for %s" % (str(e.code), str(subform.cleaned_data)))
                         raise e
 
         return TemplateResponse(
