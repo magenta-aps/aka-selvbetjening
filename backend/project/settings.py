@@ -63,6 +63,9 @@ LOGGING = {
             'format': '\n%(asctime)s %(levelname)s %(name)s %(pathname)s:%(lineno)s    %(message)s',
             '()': 'aka.encrypted_logging.EncryptedLogFormatterFactory',
         },
+        'unencrypted': {
+            'format': '\n%(asctime)s %(levelname)s %(name)s %(pathname)s:%(lineno)s    %(message)s',
+        },
     },
     'handlers': {
         'debug-console': {
@@ -76,6 +79,13 @@ LOGGING = {
             'filename': '/var/log/aka/aka.log.asc',
             'when': 'D',  # Roll log each day
             'formatter': 'encrypted'
+        },
+        'unencrypted_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': '/var/log/aka/aka.log',
+            'when': 'D',  # Roll log each day
+            'formatter': 'unencrypted'
         },
     },
     'loggers': {
@@ -165,7 +175,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 LANGUAGE_CODE = 'da-dk'
 TIME_ZONE = 'America/Godthab'
 USE_I18N = True
-USE_L10N = True
+USE_L10N = False
 USE_TZ = True
 LANGUAGE_COOKIE_NAME = 'Sullissivik.Portal.Lang'
 LANGUAGE_COOKIE_DOMAIN = 'sullissivik.gl'
