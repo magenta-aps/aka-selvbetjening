@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load l10n %}
 {% load aka_tags %}
 
 {% block extra_headers %}
@@ -8,6 +9,7 @@
 
 {% block content %}
 <article class="success">
+    {% localize off %}
     <form>
         <h1 class="page-header" data-trans="fordring.success">{% trans 'fordring.success' %}</h1>
         <div class="container-fluid">
@@ -44,5 +46,6 @@
             </div>
         </div>
     </form>
+    {% endlocalize %}
 </article>
 {% endblock %}
