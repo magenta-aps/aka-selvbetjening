@@ -465,7 +465,7 @@ class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, F
         else:
             for subform in form.subforms:
                 try:
-                    responses.append(self.handle_subform(subform))
+                    responses.extend(self.handle_subform(subform))
                 except PrismeException as e:
                     if e.code == 250 or e.code == '250':
                         form.add_error(None, e.as_validationerror)
