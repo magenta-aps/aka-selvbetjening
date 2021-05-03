@@ -687,7 +687,7 @@ class Prisme(object):
                 requestHeader=self.create_request_header(request_object.method),
                 xmlCollection=self.create_request_body(request_object.xml)
             )
-            logger.info("CPR=%s CVR=%s Sending:\n%s" % (cpr, cvr, request_object.xml))
+            logger.info("CPR=%s CVR=%s Sending to %s:\n%s" % (cpr, cvr, request_object.method, request_object.xml))
             # reply is of type GWSReplyDCFUJ
             reply = self.client.service.processService(request)
 
@@ -699,13 +699,13 @@ class Prisme(object):
             # reply_item is of type GWSReplyInstanceDCFUJ
             for reply_item in reply.instanceCollection.GWSReplyInstanceDCFUJ:
                 if reply_item.replyCode == 0:
-                    logger.info("CPR=%s CVR=%s Receiving:\n%s" % (cpr, cvr, reply_item.xml))
+                    logger.info("CPR=%s CVR=%s Receiving from %s:\n%s" % (cpr, cvr, request_object.method, reply_item.xml))
                     outputs.append(request_object.reply_class(request_object, reply_item.xml))
                 else:
                     raise PrismeException(reply_item.replyCode, reply_item.replyText, context)
             return outputs
         except Exception as e:
-            logger.info("Error in process_service: %s" % str(e))
+            logger.info("CPR=%s CVR=%s Error in process_service for %s: %s" % (cpr, cvr, request_object.method, str(e)))
             raise e
 
     def check_cvr(self, cvr):

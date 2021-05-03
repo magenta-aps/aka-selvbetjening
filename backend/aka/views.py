@@ -269,38 +269,46 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
 
     def get_data(self, key):
         if key not in self._data:
-            (cprcvr, c) = self.cprcvr_choice
-            lookup_class = self.get_lookup_class(key)
-            prisme_reply = self.prisme.process_service(lookup_class(
-                cprcvr,
-                self.form.cleaned_data['from_date'],
-                self.form.cleaned_data['to_date'],
-                self.form.cleaned_data['open_closed']
-            ), 'account', self.cpr, self.cvr)[0]
-            self._data[key] = [
-                {
-                    field['name']: getattr(entry, field['name'])
-                    for field in self.get_fields(key)
-                } for entry in prisme_reply
-            ]
-        return self._data[key]
+            try:
+                (cprcvr, c) = self.cprcvr_choice
+                lookup_class = self.get_lookup_class(key)
+                prisme_reply = self.prisme.process_service(lookup_class(
+                    cprcvr,
+                    self.form.cleaned_data['from_date'],
+                    self.form.cleaned_data['to_date'],
+                    self.form.cleaned_data['open_closed']
+                ), "account_%s" % key, self.cpr, self.cvr)[0]
+                self._data[key] = [
+                    {
+                        field['name']: getattr(entry, field['name'])
+                        for field in self.get_fields(key)
+                    } for entry in prisme_reply
+                ]
+            except PrismeException:
+                pass
+        return self._data.get(key, [])
 
     def get_extra(self, key):
         total = self.get_total_data(key)
-        return [[]] + [
-            [gettext("account.%s" % x), getattr(total, x)]
-            for x in ['total_claim', 'total_payment', 'total_sum', 'total_restance']
-        ]
+        if total:
+            return [[]] + [
+                [gettext("account.%s" % x), getattr(total, x)]
+                for x in ['total_claim', 'total_payment', 'total_sum', 'total_restance']
+            ]
+        return None
 
     def get_total_data(self, key):
         if key not in self._total:
-            (cprcvr, c) = self.cprcvr_choice
-            lookup_class = self.get_total_lookup_class(key)
-            prisme_reply = self.prisme.process_service(lookup_class(
-                cprcvr
-            ), 'account', self.cpr, self.cvr)[0]
-            self._total[key] = prisme_reply
-        return self._total[key]
+            try:
+                (cprcvr, c) = self.cprcvr_choice
+                lookup_class = self.get_total_lookup_class(key)
+                prisme_reply = self.prisme.process_service(lookup_class(
+                    cprcvr
+                ), "account_%s" % key, self.cpr, self.cvr)[0]
+                self._total[key] = prisme_reply
+            except PrismeException:
+                pass
+        return self._total.get(key)
 
     def get_item_data(self, key, form):
         data = self.get_data(key)

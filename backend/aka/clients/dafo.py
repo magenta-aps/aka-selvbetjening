@@ -41,7 +41,8 @@ class Dafo(object):
                 "Uxp-Service": config['pitu-service'][service_name],
             },
             verify=config['pitu-certificate'],
-            cert=(config['client-certificate'], config['private-key'])
+            cert=(config['client-certificate'], config['private-key']),
+            timeout=15,
         )
         if response.status_code == 200:
             return response.json()

@@ -17,6 +17,7 @@ from django.template.loader import select_template
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.views.generic.edit import FormMixin
+from requests import ReadTimeout
 
 
 class ErrorHandlerMixin(object):
@@ -74,17 +75,50 @@ class HasUserMixin(object):
         if 'company' in request.session['user_info']:
             return request.session['user_info']['company']
         elif self.cvr is not None:
-            company = Dafo().lookup_cvr(self.cvr)
-            request.session['user_info']['company'] = company
-            return company
+            try:
+                company = Dafo().lookup_cvr(self.cvr)
+                request.session['user_info']['company'] = company
+                return company
+            except Exception:
+                pass
 
     def get_person(self, request):
         if 'person' in request.session['user_info']:
             return request.session['user_info']['person']
         elif self.cpr is not None:
-            person = Dafo().lookup_cpr(self.cpr, False)
-            request.session['user_info']['person'] = person
-            return person
+            try:
+                person = Dafo().lookup_cpr(self.cpr, False)
+                request.session['user_info']['person'] = person
+                return person
+            except Exception:
+                pass
+
+    def obtain_cvr(self, request):
+
+        if self.cpr and not self.cvr and not request.session.get('has_checked_cvr') and not settings.DEBUG:
+            try:
+                cvrs = Dafo().lookup_cvr_by_cpr(self.cpr, False)
+                if cvrs is not None:
+                    if len(cvrs) > 1:
+                        request.session['cvrs'] = [str(x) for x in cvrs]
+                        request.session.save()
+                        return redirect(reverse('aka:choose_cvr')+"?back="+request.get_full_path())
+                    if len(cvrs) == 1:
+                        self.cvr = request.session['user_info']['CVR'] = cvrs[0]
+                request.session['has_checked_cvr'] = True
+                request.session.save()
+            except ReadTimeout:
+                pass
+
+        try:
+            self.cvr = request.session['user_info'].get('CVR')
+            self.claimant_ids = self.get_claimants(request)
+            self.company = self.get_company(request)
+        except (KeyError, TypeError):
+            pass
+
+        if not self.cvr and settings.DEFAULT_CVR:
+            self.cvr = settings.DEFAULT_CVR
 
     def dispatch(self, request, *args, **kwargs):
         try:
@@ -98,26 +132,7 @@ class HasUserMixin(object):
         if not self.cpr and settings.DEFAULT_CPR:
             self.cpr = settings.DEFAULT_CPR
 
-        if self.cpr and not self.cvr and not request.session.get('has_checked_cvr') and not settings.DEBUG:
-            cvrs = Dafo().lookup_cvr_by_cpr(self.cpr, False)
-            if len(cvrs) > 1:
-                request.session['cvrs'] = [str(x) for x in cvrs]
-                request.session.save()
-                return redirect(reverse('aka:choose_cvr')+"?back="+request.get_full_path())
-            if len(cvrs) == 1:
-                self.cvr = request.session['user_info']['CVR'] = cvrs[0]
-            request.session['has_checked_cvr'] = True
-            request.session.save()
-
-        try:
-            self.cvr = request.session['user_info'].get('CVR')
-            self.claimant_ids = self.get_claimants(request)
-            self.company = self.get_company(request)
-        except (KeyError, TypeError):
-            pass
-
-        if not self.cvr and settings.DEFAULT_CVR:
-            self.cvr = settings.DEFAULT_CVR
+        self.obtain_cvr(request)
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -153,13 +168,9 @@ class RequireCprMixin(HasUserMixin):
 class RequireCvrMixin(HasUserMixin):
 
     def dispatch(self, request, *args, **kwargs):
-        try:
-            self.cvr = request.session['user_info']['CVR']
-        except (KeyError, TypeError):
-            if settings.DEFAULT_CVR:
-                self.cvr = settings.DEFAULT_CVR
-            else:
-                raise PermissionDenied('no_cvr')
+        self.obtain_cvr(request)
+        if not self.cvr:
+            raise PermissionDenied('no_cvr')
         return super().dispatch(request, *args, **kwargs)
 
 
