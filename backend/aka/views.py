@@ -221,11 +221,11 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
     def get_filename(self):
         try:
             from_date = self.form.cleaned_data['from_date'].strftime('%Y-%m-%d')
-        except (KeyError, ValueError):
+        except (KeyError, ValueError, AttributeError):
             from_date = ""
         try:
             to_date = self.form.cleaned_data['to_date'].strftime('%Y-%m-%d')
-        except (KeyError, ValueError):
+        except (KeyError, ValueError, AttributeError):
             to_date = ""
         return _("account.filename").format(
             from_date=from_date,
