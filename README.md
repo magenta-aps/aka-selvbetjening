@@ -30,6 +30,15 @@ Development on the login solution needs to be verified on the akaptest01 server.
 
 Eventually we may want to put the system in a docker container, but that's out of scope for now.
 
+#### vagrant
+IF you dont want to clutter your local machine with all kinds of cruft you could just use vagarnt to setup the test environment.
+From the vagrant dir simply run `vagrant up`. This should start and provision the machine in a virtual machine/container.
+Now you should be able to run the django project:
+
+    cd /vagrant/backend/
+    python manage.py runserver 0.0.0.0:8000
+    #point your browser to http://127.0.0.0:8000
+
 ### Test:
 To deploy on the test server, run: `./deploy_test`.
 This will start the ansible playbook for test setup. You will be prompted for:

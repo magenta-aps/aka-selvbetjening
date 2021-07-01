@@ -1,3 +1,6 @@
+static/
+log/
+backend/project/secret_key.py
 # Vagrant
 .vagrant
 *.retry

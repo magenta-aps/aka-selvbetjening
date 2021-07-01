@@ -46,4 +46,4 @@ ansible-galaxy install -r $REQUIREMENTS_PATH
 # Run the playbook
 cd /vagrant/
 ANSIBLE_STDOUT_CALLBACK=debug ANSIBLE_ROLES_PATH=$ROLES_PATH PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=true \
-ansible-playbook --timeout=30 -vv -i "localhost," -c local $PLAYBOOK_PATH
+ansible-playbook --timeout=30 -vv -i "vagrant," -c local $PLAYBOOK_PATH

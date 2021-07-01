@@ -1,0 +1,43 @@
+ansible_connection: local
+ansible_python_interpreter: "{{ansible_playbook_python}}"
+
+project_dir: "{{playbook_dir}}/../.."
+webuser: "{{ansible_user_id}}"
+webuser_homedir: "{{ansible_env.HOME}}"
+debug: True
+django_https: False
+django_virtual_env_path: "{{project_dir}}/venv"
+django_manage_file: "{{project_dir}}/backend/manage.py"
+django_requirements_file: "{{project_dir}}/backend/requirements.txt"
+django_local_settings_file: "{{project_dir}}/backend/project/local_settings.py"
+django_secret_key_file: "{{project_dir}}/backend/project/secret_key.py"
+django_log_dir: "{{project_dir}}/log"
+django_log_owner: "1000"
+django_log_group: "1000"
+
+django_databases:
+  default:
+    name: "{{project_dir}}/db.sqlite3"
+    engine: django.db.backends.sqlite3
+
+django_prisme:
+  service: ""
+  username: ""
+  password: ""
+  extra: "'proxy': {'socks':'localhost:8888'}"
+
+django_dafo:
+  pitu_server_certificate: "/etc/ssl/certs/ss-aka-pitu-data-gl.pem"
+  client_certificate: "/etc/ssl/openid/*.akap.sullissivik.gl.cer"
+  private_key: "/etc/ssl/openid/*.akap.sullissivik.gl.key"
+
+django_openid:
+  enabled: "False"
+
+django_nemid:
+  enabled: "False"
+
+django_default_cpr: "'0606606063'"
+django_default_cvr: "'30808460'"
+
+restart_apache: False

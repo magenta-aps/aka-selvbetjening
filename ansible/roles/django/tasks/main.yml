@@ -9,17 +9,21 @@
       - python3-pip
       - python3-venv
       - python3-psycopg2
+      - python3-wheel
       - gettext
       - wkhtmltopdf
       - libxmlsec1-dev
       - language-pack-da
       - gpg
 
+#- name: update pip
+#  command: python3 -m pip install -U pip
+
 - name: Install requirements
   pip:
     requirements: "{{django_requirements_file}}"
     virtualenv: "{{django_virtual_env_path}}"
-    virtualenv_python: "python{{python_major_version}}"
+    virtualenv_command: "/usr/bin/python{{python_major_version}} -m venv"
   when:
     - django_requirements_file is defined
     - django_requirements_file != none
@@ -91,6 +95,7 @@
   shell:
     cmd: "gpg --import"
     stdin: "{{gpg.pubkey}}"
+  when: gpg.pubkey is defined
 
 - name: Setup session clearance as a CRON job
   cron:

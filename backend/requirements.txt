@@ -16,3 +16,4 @@ django-excel
 pyexcel-xlsx
 pyexcel-ods3
 python-gnupg==0.4.3
+cryptography==3.3
