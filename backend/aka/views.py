@@ -278,12 +278,18 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
                     self.form.cleaned_data['to_date'],
                     self.form.cleaned_data['open_closed']
                 ), "account_%s" % key, self.cpr, self.cvr)[0]
-                self._data[key] = [
-                    {
-                        field['name']: getattr(entry, field['name'])
-                        for field in self.get_fields(key)
-                    } for entry in prisme_reply
-                ]
+                self._data[key] = []
+                for entry in prisme_reply:
+                    data = []
+                    for field in self.get_fields(key):
+                        value = getattr(entry, field['name'])
+                        if 'modifier' in field:
+                            value = field['modifier'](value)
+                        data.append({
+                            **field,
+                            'value': value,
+                        })
+                    self._data[key].append(data)
             except PrismeException:
                 pass
         return self._data.get(key, [])
@@ -312,12 +318,13 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
 
     def get_item_data(self, key, form):
         data = self.get_data(key)
+
         return {
             'key': key,
             'title': 'account.title_' + key,
             'fields': self.hide_fields(form, self.get_fields(key)),
             'data': data,
-            'sum': sum([dataitem['amount'] for dataitem in data]) if data else 0,
+            'sum': sum([item['value'] for row in data for item in row if item['name'] == 'amount']) if data else 0,
             'total': self.get_total_data(key)
         }
 
@@ -353,14 +360,22 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
         ]
         if key == 'sel':
             fields += [
-                {'name': 'rate_number', 'class': 'nb'}
+                {'name': 'rate_number', 'class': 'nb'},
+                {
+                    'name': 'claim_type_code',
+                    'labelkey': 'submitted_to_claims',
+                    'class': 'nb',
+                    'modifier': lambda d: (d == 'INDR'),
+                    'boolean': True
+                }
             ]
         if key == 'aki':
             fields += [
                 {'name': 'child_claimant', 'class': 'nb'}
             ]
         for field in fields:
-            field['title'] = _("account.%s" % field['name']).replace("&shy;", "")
+            field['transkey'] = "account.%s" % field.get('labelkey', field['name'])
+            field['title'] = _(field['transkey']).replace("&shy;", "")
         return fields
 
 

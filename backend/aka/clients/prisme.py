@@ -1,7 +1,7 @@
+import logging
 import os
 import re
 from datetime import date, datetime, time
-import logging
 
 import zeep
 from aka.exceptions import AkaException
@@ -343,7 +343,7 @@ class PrismeCvrCheckRequest(PrismeRequestObject):
     def xml(self):
         return dict_to_xml({
             'CvrLegalEntity': self.cvr
-        }, wrap=self.wrap)
+        }, wrap=self.wrap, newlines=False)
 
     @property
     def reply_class(self):

@@ -16,6 +16,7 @@ from django.shortcuts import redirect
 from django.template.loader import select_template
 from django.template.response import TemplateResponse
 from django.urls import reverse
+from django.utils.translation import gettext
 from django.views.generic.edit import FormMixin
 from requests import ReadTimeout
 
@@ -355,13 +356,15 @@ class SpreadsheetRendererMixin(RendererMixin):
                     field.get("title", field['name'])
                     for field in fields
                 ]
-            ] + [
-                [
-                    item[field['name']]
-                    for field in fields
-                ]
-                for item in items
             ]
+            for item in items:
+                row = []
+                for i in item:
+                    value = i['value']
+                    if i.get('boolean'):
+                        value = gettext("ja") if value else gettext("nej")
+                    row.append(value)
+                data.append(row)
 
             if extra:
                 data += extra

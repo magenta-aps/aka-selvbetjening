@@ -83,4 +83,11 @@ $(function(){
             sumo[i].setText();
         }
     });
+
+    $(".collapsed[data-key]").on("expanded", function() {
+        const key = $(this).data("key");
+        if (key && datatables[key]) {
+            datatables[key].draw();
+        }
+    });
 });

@@ -208,7 +208,7 @@
                             <img src="{% static 'img/sullisivk_arrow_right.svg' %}" width="20" height="20"/>
                             <span data-trans="{{ item.title }}">{% trans item.title %}</span>
                         </h2>
-                        <div id="content-{{ item.key }}" {% if not pdf %}class="page-content collapsed" style="display:none"{% endif %}>
+                        <div id="content-{{ item.key }}" data-key="{{ item.key }}" {% if not pdf %}class="page-content collapsed" style="display:none"{% endif %}>
 
                             <div class="page-header">
 
@@ -370,25 +370,23 @@
                                 <thead>
                                 <tr>
                                     {% for field in item.fields %}
-                                        {% with "account."|add:field.name as transkey %}
-                                            <th data-field="{{ field.name }}" data-trans="{{ transkey }}">{% trans transkey|safe %}</th>
-                                        {% endwith %}
+                                        <th data-field="{{ field.name }}" data-trans="{{ field.transkey }}">{% trans field.transkey|safe %}</th>
                                     {% endfor %}
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for dataitem in data %}
+                                {% for row in data %}
                                     <tr>
-                                        {% for field in item.fields %}
-                                            {% with value=dataitem|get:field.name|default:'' %}
-                                            <td class="{{ field.class }}" data-original="{{ value }}">
-                                            {% if field.number %}
-                                                {{ value|number }}
-                                            {% else %}
-                                                {{ value }}
-                                            {% endif %}
+                                        {% for item in row %}
+                                            <td class="{{ item.class }}" data-original="{{ item.value }}">
+                                                {% if item.number %}
+                                                    {{ item.value|number }}
+                                                {% elif item.boolean %}
+                                                    {{ item.value|yesno }}
+                                                {% else %}
+                                                    {{ item.value|default_if_none:'' }}
+                                                {% endif %}
                                             </td>
-                                            {% endwith %}
                                         {% endfor %}
                                     </tr>
                                 {% endfor %}
