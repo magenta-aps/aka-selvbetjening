@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load l10n %}
 
 {% block extra_headers %}
     <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
@@ -28,12 +29,14 @@
             {{ formset.management_form }}
             <h1 data-trans="loentraek.title">{% trans 'loentraek.title' %}</h1>
             <div class="container-fluid">
+                {% localize off %}
                 <div class="row">
                     <div class="col-12">
                         {% include 'aka/util/field.html' with field=form.year key='loentraek.year' %}
                         {% include 'aka/util/field.html' with field=form.month key='loentraek.month' %}
                     </div>
                 </div>
+                {% endlocalize %}
                 <div class="row">
                     <div class="col-12">
                         {% include 'aka/util/field.html' with field=form.total_amount key='loentraek.total_amount' %}

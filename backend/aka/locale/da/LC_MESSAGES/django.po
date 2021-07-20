@@ -619,6 +619,9 @@ msgstr "Fordringshaver ID"
 msgid "account.rate_number"
 msgstr "Rate&shy;nummer"
 
+msgid "account.submitted_to_claims"
+msgstr "Indberettet til inddrivelsen"
+
 msgid "account.title_sel"
 msgstr "SEL - Skattestyrelsens kontoudtog"
 

@@ -1,5 +1,6 @@
 {% load static %}
 {% load i18n %}
+{% load l10n %}
 {% get_current_language as LANGUAGE_CODE %}
 {% load aka_tags %}
 
@@ -66,6 +67,7 @@
             {% endif %}
             <main>
                 {% if not pdf %}
+                    {% localize off %}
                     <nav class="top-navigation printhide">
                     <div class="indexlink">
                         {% if is_content %}
@@ -81,6 +83,7 @@
                         {% endif %}
                     </div>
                     </nav>
+                    {% endlocalize %}
                 {% endif %}
                 {% block content %}
                 {% endblock %}

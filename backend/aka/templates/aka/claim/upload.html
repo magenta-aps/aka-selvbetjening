@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load l10n %}
 
 {% block extra_headers %}
 {% endblock %}
 
 {% block content %}
+    {% localize off %}
     <article class="indberet_fordring">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -47,4 +49,5 @@
             </div>
         </form>
     </article>
+    {% endlocalize %}
 {% endblock %}

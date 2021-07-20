@@ -63,6 +63,9 @@ LOGGING = {
             'format': '\n%(asctime)s %(levelname)s %(name)s %(pathname)s:%(lineno)s    %(message)s',
             '()': 'aka.encrypted_logging.EncryptedLogFormatterFactory',
         },
+        'unencrypted': {
+            'format': '\n%(asctime)s %(levelname)s %(name)s %(pathname)s:%(lineno)s    %(message)s',
+        },
     },
     'handlers': {
         'debug-console': {
@@ -76,6 +79,13 @@ LOGGING = {
             'filename': '/var/log/aka/aka.log.asc',
             'when': 'D',  # Roll log each day
             'formatter': 'encrypted'
+        },
+        'unencrypted_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': '/var/log/aka/aka.log',
+            'when': 'D',  # Roll log each day
+            'formatter': 'unencrypted'
         },
     },
     'loggers': {

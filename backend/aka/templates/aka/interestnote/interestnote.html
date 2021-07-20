@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load l10n %}
 {% load aka_tags %}
 
 {% block extra_headers %}
@@ -24,7 +25,7 @@
     <h1 class="rentenota-title printhide">{% trans 'rentenota.title' %}</h1>
 
     <div class="rentenota-main">
-
+        {% localize off %}
         <form method="get" id="mainform" class="printhide">
             <div class="printhide">
                 <div class="rentenota-actions row">
@@ -40,7 +41,7 @@
                 </div>
             </div>
         </form>
-
+        {% endlocalize %}
 
         <div class="output rentenota-data">
 
@@ -72,7 +73,7 @@
             </div>
 
             <div class="output-details row">
-
+                {% localize off %}
                 <div class="col-8-sm">
                     <span class="line">{{ company.navn }}</span>
                     <span class="line">{{ company.adresse }}</span>
@@ -119,6 +120,7 @@
                         </tr>
                     </table>
                 </div>
+                {% endlocalize %}
             </div>
 
             {% if errors %}

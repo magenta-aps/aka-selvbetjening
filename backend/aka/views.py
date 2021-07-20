@@ -269,47 +269,62 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
 
     def get_data(self, key):
         if key not in self._data:
-            (cprcvr, c) = self.cprcvr_choice
-            lookup_class = self.get_lookup_class(key)
-            prisme_reply = self.prisme.process_service(lookup_class(
-                cprcvr,
-                self.form.cleaned_data['from_date'],
-                self.form.cleaned_data['to_date'],
-                self.form.cleaned_data['open_closed']
-            ), 'account', self.cpr, self.cvr)[0]
-            self._data[key] = [
-                {
-                    field['name']: getattr(entry, field['name'])
-                    for field in self.get_fields(key)
-                } for entry in prisme_reply
-            ]
-        return self._data[key]
+            try:
+                (cprcvr, c) = self.cprcvr_choice
+                lookup_class = self.get_lookup_class(key)
+                prisme_reply = self.prisme.process_service(lookup_class(
+                    cprcvr,
+                    self.form.cleaned_data['from_date'],
+                    self.form.cleaned_data['to_date'],
+                    self.form.cleaned_data['open_closed']
+                ), "account_%s" % key, self.cpr, self.cvr)[0]
+                self._data[key] = []
+                for entry in prisme_reply:
+                    data = []
+                    for field in self.get_fields(key):
+                        value = getattr(entry, field['name'])
+                        if 'modifier' in field:
+                            value = field['modifier'](value)
+                        data.append({
+                            **field,
+                            'value': value,
+                        })
+                    self._data[key].append(data)
+            except PrismeException:
+                pass
+        return self._data.get(key, [])
 
     def get_extra(self, key):
         total = self.get_total_data(key)
-        return [[]] + [
-            [gettext("account.%s" % x), getattr(total, x)]
-            for x in ['total_claim', 'total_payment', 'total_sum', 'total_restance']
-        ]
+        if total:
+            return [[]] + [
+                [gettext("account.%s" % x), getattr(total, x)]
+                for x in ['total_claim', 'total_payment', 'total_sum', 'total_restance']
+            ]
+        return None
 
     def get_total_data(self, key):
         if key not in self._total:
-            (cprcvr, c) = self.cprcvr_choice
-            lookup_class = self.get_total_lookup_class(key)
-            prisme_reply = self.prisme.process_service(lookup_class(
-                cprcvr
-            ), 'account', self.cpr, self.cvr)[0]
-            self._total[key] = prisme_reply
-        return self._total[key]
+            try:
+                (cprcvr, c) = self.cprcvr_choice
+                lookup_class = self.get_total_lookup_class(key)
+                prisme_reply = self.prisme.process_service(lookup_class(
+                    cprcvr
+                ), "account_%s" % key, self.cpr, self.cvr)[0]
+                self._total[key] = prisme_reply
+            except PrismeException:
+                pass
+        return self._total.get(key)
 
     def get_item_data(self, key, form):
         data = self.get_data(key)
+
         return {
             'key': key,
             'title': 'account.title_' + key,
             'fields': self.hide_fields(form, self.get_fields(key)),
             'data': data,
-            'sum': sum([dataitem['amount'] for dataitem in data]) if data else 0,
+            'sum': sum([item['value'] for row in data for item in row if item['name'] == 'amount']) if data else 0,
             'total': self.get_total_data(key)
         }
 
@@ -345,14 +360,22 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
         ]
         if key == 'sel':
             fields += [
-                {'name': 'rate_number', 'class': 'nb'}
+                {'name': 'rate_number', 'class': 'nb'},
+                {
+                    'name': 'claim_type_code',
+                    'labelkey': 'submitted_to_claims',
+                    'class': 'nb',
+                    'modifier': lambda d: (d == 'INDR'),
+                    'boolean': True
+                }
             ]
         if key == 'aki':
             fields += [
                 {'name': 'child_claimant', 'class': 'nb'}
             ]
         for field in fields:
-            field['title'] = _("account.%s" % field['name']).replace("&shy;", "")
+            field['transkey'] = "account.%s" % field.get('labelkey', field['name'])
+            field['title'] = _(field['transkey']).replace("&shy;", "")
         return fields
 
 
@@ -430,7 +453,7 @@ class InkassoSagView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSet
 class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormView):
     form_class = InkassoUploadForm
     template_name = 'aka/claim/upload.html'
-    parallel = True
+    parallel = False
 
     def handle_subform(self, subform):
         codebtor_re = re.compile(r"^codebtor_\d+$")
@@ -455,17 +478,17 @@ class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, F
                     results = executor.map(self.handle_subform, [subform for subform in form.subforms])
                     responses = flatten(list(results))
                 except PrismeException as e:
+                    logger.info("Got error code %s from prisme (%s)" % (str(e.code), e.context))
                     if e.code == 250 or e.code == '250':
                         form.add_error(None, e.as_validationerror)
                         return self.form_invalid(form)
                     else:
-                        logger.info("Got error code %s from prisme" % str(e.code))
                         raise e
 
         else:
             for subform in form.subforms:
                 try:
-                    responses.append(self.handle_subform(subform))
+                    responses.extend(self.handle_subform(subform))
                 except PrismeException as e:
                     if e.code == 250 or e.code == '250':
                         form.add_error(None, e.as_validationerror)
@@ -645,7 +668,7 @@ class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormV
 class NedskrivningUploadView(NedskrivningView):
     form_class = NedskrivningUploadForm
     template_name = 'aka/impairment/upload.html'
-    parallel = True
+    parallel = False
 
     def handle_form(self, data):
         rec_id = None
@@ -654,8 +677,9 @@ class NedskrivningUploadView(NedskrivningView):
         try:
             rec_id = self.send_impairment(data, prisme)
         except PrismeException as e:
-            logger.info("Got error from prisme: %s %s" % (str(e.code), e.text))
+            logger.info("Got error from prisme: %s %s for %s" % (str(e.code), e.text, str(data)))
             error = e.as_error_dict
+            logger.info("Error_dict: %s" % str(e.as_error_dict))
         return (rec_id, error)
 
     def form_valid(self, form):
@@ -670,12 +694,18 @@ class NedskrivningUploadView(NedskrivningView):
         else:
             for subform in form.subforms:
                 try:
-                    rec_ids.append(self.handle_form(subform.cleaned_data))
+                    rec_id, error = self.handle_form(subform.cleaned_data)
+                    if rec_id:
+                        rec_ids.append(rec_id)
+                    if error:
+                        errors.append(error)
                 except PrismeException as e:
+                    logger.info("Error_dict: %s" % str(e.as_error_dict))
                     if e.code == 250 or e.code == '250':
                         errors.append(e.as_error_dict)
+                        logger.info("Got error code %s from prisme for %s" % (str(e.code), str(subform.cleaned_data)))
                     else:
-                        logger.info("Got error code %s from prisme" % str(e.code))
+                        logger.info("Got error code %s from prisme for %s" % (str(e.code), str(subform.cleaned_data)))
                         raise e
 
         return TemplateResponse(

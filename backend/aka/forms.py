@@ -455,7 +455,7 @@ class InkassoUploadForm(CsvUploadMixin, forms.Form):
 class InterestNoteForm(forms.Form):
 
     year = forms.ChoiceField(
-        choices=[(x, x) for x in range(date.today().year - 10, date.today().year + 1)],
+        choices=[(x, str(x)) for x in range(date.today().year - 10, date.today().year + 1)],
         required=True,
         error_messages={'required': 'error.required'},
         widget=forms.Select(attrs={'class': 'dropdown'}),
@@ -477,7 +477,7 @@ class InterestNoteForm(forms.Form):
 class LoentraekForm(forms.Form):
 
     year = forms.ChoiceField(
-        choices=[(x, x) for x in range(date.today().year - 10, date.today().year + 1)],
+        choices=[(x, str(x)) for x in range(date.today().year - 10, date.today().year + 1)],
         required=True,
         error_messages={'required': 'error.required'},
         widget=forms.Select(attrs={'class': 'dropdown'}),

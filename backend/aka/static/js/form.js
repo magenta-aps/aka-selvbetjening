@@ -85,11 +85,15 @@ $(function(){
         if (target.hasClass("collapsed")) {
             $(this).addClass("has-collapsed");
             $(this).removeClass("has-expanded");
-            target.slideUp();
+            target.slideUp({complete: function () {
+                target.trigger("collapsed");
+            }});
         } else {
             $(this).removeClass("has-collapsed");
             $(this).addClass("has-expanded");
-            target.slideDown();
+            target.slideDown({complete: function () {
+                target.trigger("expanded");
+            }});
         }
     })
 });

@@ -593,6 +593,9 @@ msgstr "Fordringshaver-ip ID-a"
 msgid "account.rate_number"
 msgstr "Naafferaartup normua"
 
+msgid "account.submitted_to_claims"
+msgstr "Akiliisitsiniartarfimmiippoq"
+
 msgid "account.child_claimant"
 msgstr "Meeqqap cpr.nr."
 

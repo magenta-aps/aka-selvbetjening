@@ -13,8 +13,13 @@ $(function(){
         const s = this.value.split("."),
             key = s[0],
             format = s[1];
-        form.append('<input type="hidden" name="key" value="'+key+'"/>');
-        form.append('<input type="hidden" name="format" value="'+format+'"/>');
+        const keyField = $('<input type="hidden" name="key" value="'+key+'"/>');
+        const formatField = $('<input type="hidden" name="format" value="'+format+'"/>');
+        form.append(keyField, formatField);
+        form.attr("target", "_blank");
         form.submit();
+        keyField.remove();
+        formatField.remove();
+        form.removeAttr("target");
     });
 });

@@ -1,8 +1,9 @@
 #!/usr/bin/python
 
+import os
 import sys
 import argparse
-from gnupg import GPG
+import subprocess
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--pass')
@@ -10,11 +11,6 @@ parser.add_argument('files', nargs='*')
 p = vars(parser.parse_args(sys.argv[1:]))
 passphrase = p['pass']
 inputfiles = p.get('files')
-gpg = GPG()
-
-if len(gpg.list_keys(False)) == 0:
-    print("No keys found. Do you need to enter a virtual environment?")
-    exit(1)
 
 def decrypt(input):
     try:
@@ -24,10 +20,15 @@ def decrypt(input):
                 lines.append(line)
                 if line == '-----END PGP MESSAGE-----\n':
                     message = ''.join(lines)
-                    d = gpg.decrypt(message, always_trust=True)
-                    print(d or "Couldn't decrypt message")
+                    subprocess.run(["/usr/bin/gpg", "-d"], input=bytes(message, 'utf-8'))
                     lines.clear()
     finally:
+        pass
+
+def mkdir(folder):
+    try:
+        os.mkdir(folder)
+    except FileExistsError:
         pass
 
 if len(inputfiles):
@@ -38,3 +39,4 @@ if len(inputfiles):
         input.close()
 else:
     decrypt(sys.stdin)
+

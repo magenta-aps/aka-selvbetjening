@@ -1,7 +1,7 @@
+import logging
 import os
 import re
 from datetime import date, datetime, time
-import logging
 
 import zeep
 from aka.exceptions import AkaException
@@ -28,10 +28,15 @@ class PrismeException(AkaException):
                 're': re.compile(r'Der findes ikke en inkassosag med det eksterne ref.nr. (.*)'),
                 'args': ['refnumber']
             }],
-            'nedskrivning': [{
-                're': re.compile(r'Der findes ikke en inkassosag med det eksterne ref.nr. (.*)'),
-                'args': ['refnumber']
-            }],
+            'nedskrivning': [
+                {
+                    're': re.compile(r'Der findes ikke en inkassosag med det eksterne ref.nr. (.*)'),
+                    'args': ['refnumber']
+                }, {
+                    're': re.compile(r'Det fremsendte bel\u00f8b (.*) er st\u00f8rre end restsaldoen p\u00e5 inkassosagen (.*)'),
+                    'args': ['amount', 'saldo']
+                }
+            ],
             'rentenota': [{
                 're': re.compile(
                     r'Der findes ingen renter for dette CPR/CVR (\d{8}) eller for '
@@ -277,15 +282,15 @@ class PrismeClaimRequest(PrismeRequestObject):
                 {'coDebtor': {'CustCollCprCvr': self.prepare(codebtor)}}
                 for codebtor in self.codebtors
             ],
-            'files': [
-                {
-                    'file': {
+            'files': {
+                'file': [
+                    {
                         'Name': file[0],
                         'Content': file[1]
                     }
-                }
-                for file in self.files
-            ]
+                    for file in self.files
+                ]
+            }
         }, wrap=self.wrap)
 
     @property
@@ -338,7 +343,7 @@ class PrismeCvrCheckRequest(PrismeRequestObject):
     def xml(self):
         return dict_to_xml({
             'CvrLegalEntity': self.cvr
-        }, wrap=self.wrap)
+        }, wrap=self.wrap, newlines=False)
 
     @property
     def reply_class(self):
@@ -682,7 +687,7 @@ class Prisme(object):
                 requestHeader=self.create_request_header(request_object.method),
                 xmlCollection=self.create_request_body(request_object.xml)
             )
-            logger.info("CPR=%s CVR=%s Sending:\n%s" % (cpr, cvr, request_object.xml))
+            logger.info("CPR=%s CVR=%s Sending to %s:\n%s" % (cpr, cvr, request_object.method, request_object.xml))
             # reply is of type GWSReplyDCFUJ
             reply = self.client.service.processService(request)
 
@@ -694,18 +699,13 @@ class Prisme(object):
             # reply_item is of type GWSReplyInstanceDCFUJ
             for reply_item in reply.instanceCollection.GWSReplyInstanceDCFUJ:
                 if reply_item.replyCode == 0:
-                    logger.info("CPR=%s CVR=%s Receiving:\n%s" % (cpr, cvr, reply_item.xml))
+                    logger.info("CPR=%s CVR=%s Receiving from %s:\n%s" % (cpr, cvr, request_object.method, reply_item.xml))
                     outputs.append(request_object.reply_class(request_object, reply_item.xml))
-                elif reply_item.replyText.startswith("Der er allerede oprettet en inkassofordring"):
-                    # Harmless
-                    pass
-                elif reply_item.replyText.startswith("Det fremsendte beløb"):
-                    pass
                 else:
                     raise PrismeException(reply_item.replyCode, reply_item.replyText, context)
             return outputs
         except Exception as e:
-            logger.info("Error in process_service: %s" % str(e))
+            logger.info("CPR=%s CVR=%s Error in process_service for %s: %s" % (cpr, cvr, request_object.method, str(e)))
             raise e
 
     def check_cvr(self, cvr):
