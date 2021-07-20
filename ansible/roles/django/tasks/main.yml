@@ -96,6 +96,8 @@
   cron:
     job: "{{django_virtual_env_path}}/bin/activate && {{django_manage_file}} clearsessions && deactivate"
     name: "AKA session cache clear"
+    cron_file: "aka"
+    user: "{{webuser}}"
     hour: 2
     minute: 0
 
