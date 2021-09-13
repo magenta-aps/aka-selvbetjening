@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 from django.utils.translation import gettext_lazy as _
-
+from distutils.util import strtobool
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SITE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -27,7 +27,10 @@ SHARED_DIR = os.path.join(PROJECT_DIR, "shared")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+
+DEBUG = bool(strtobool(os.environ.get('DJANGO_DEBUG', 'False')))
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+TIME_ZONE = os.environ.get('DJANGO_TIMEZONE', 'America/Godthab')
 
 SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = True
@@ -38,6 +41,16 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 MEDIA_URL = BASE_DIR + '/upload/'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'HOST': os.environ['POSTGRES_HOST'],
+    }
+}
 
 LOGGING = {
     'version': 1,
@@ -125,8 +138,6 @@ AUTHENTICATION_BACKENDS = [
 # See local_settings_example.py
 SULLISSIVIK_FEDERATION_SERVICE = None
 
-DEFAULT_CPR = None
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -173,7 +184,6 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 LANGUAGE_CODE = 'da-dk'
-TIME_ZONE = 'America/Godthab'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -245,6 +255,9 @@ MOUNTS = {
 
 # Max 2 MB - can be lower if we want
 MAX_UPLOAD_FILESIZE = 22097152
+
+DEFAULT_CPR = os.environ.get('DEFAULT_CPR', None)
+DEFAULT_CVR = os.environ.get('DEFAULT_CVR', None)
 
 LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
 if os.path.exists(LOCAL_SETTINGS_FILE):

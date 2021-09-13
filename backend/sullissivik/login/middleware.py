@@ -36,6 +36,7 @@ class LoginManager:
                         if request.GET:
                             backpage += "?" + urlencode(request.GET, True)
                         return redirect(reverse_lazy('aka:login') + "?back=" + backpage)
+
         return self.get_response(request)
 
     @staticmethod
