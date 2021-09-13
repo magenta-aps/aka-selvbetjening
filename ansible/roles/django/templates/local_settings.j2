@@ -139,7 +139,7 @@ LOGGING = {
         'aka.clients.prisme': {
             'level': 'DEBUG',
             'propagate': False,
-            'handlers': ['file'],
+            'handlers': ['file', 'unencrypted_file'],
         },
         'aka': {
             'handlers': ['debug-console'],
