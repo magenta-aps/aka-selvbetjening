@@ -1,9 +1,26 @@
 stages:
-  - test
+  - linting
+  - build
 
-linting:
-  stage: test
+variables:
+  # Project variables
+  RELEASE_REGISTRY: docker.io
+  #RELEASE_REGISTRY_IMAGE: index.docker.io/magentaaps/kas
+  IMAGE_SHA: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
+  IMAGE_DEV: ${CI_REGISTRY_IMAGE}:dev
+
+
+# Lint stage
+#############
+.lint-default: &lint-default
+  stage: lint
+  needs: []
   image: python:3.6
+  tags:
+    - docker
+
+Lint python:
+  <<: *lint-default
   before_script:
     - apt update
     - apt install -y libxmlsec1-dev
@@ -11,3 +28,33 @@ linting:
     - pip3 install -r backend/requirements.txt
   script:
     - flake8 --ignore E501,E226 backend/
+
+Lint Dockerfiles:
+  <<: *lint-default
+  image: hadolint/hadolint:latest-debian
+  before_script:
+    - apt-get -y update
+    - apt-get -y install --no-install-recommends git
+  script:
+    - git ls-files --exclude='Dockerfile*' --ignored | xargs --max-lines=1 hadolint
+
+# Build stage
+#############
+
+Build kas image:
+  stage: build
+  needs: []
+  dependencies: []
+  image:
+    name: gcr.io/kaniko-project/executor:debug-v0.16.0
+    entrypoint: [""]
+  tags:
+    - docker
+  script:
+    # Login to GitLab registry
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor
+      --cache
+      --context=$CI_PROJECT_DIR
+      --dockerfile=$CI_PROJECT_DIR/docker/Dockerfile
+      --destination=${IMAGE_SHA}
