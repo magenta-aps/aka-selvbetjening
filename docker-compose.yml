@@ -25,7 +25,6 @@ services:
       - ./dev-environment/selvbetjening.env
     volumes:
       - ./backend/:/backend
-      #- ./data/kas:/srv/media
     command: gunicorn -b 0.0.0.0:8000 project.wsgi:application --reload -w 1 --access-logfile - --error-logfile - --capture-output # reload on code changes
 
 volumes:
