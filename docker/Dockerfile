@@ -1,10 +1,12 @@
 FROM python:3.6
-RUN mkdir /backend && mkdir -p /var/log/aka
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# hadolint ignore=DL3008
+RUN mkdir /backend && mkdir -p /var/log/aka && \
+apt-get update && apt-get install -y --no-install-recommends \
 gettext \
 wkhtmltopdf \
 libxmlsec1-dev \
-gpg
+gpg &&\
+apt-get clean && rm -rf /var/lib/apt/lists/*
 COPY backend/requirements.txt /backend/requirements.txt
 RUN pip install --no-cache-dir -r /backend/requirements.txt
 ENV PYTHONUNBUFFERED=1
