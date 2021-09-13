@@ -40,7 +40,6 @@ Lint Dockerfiles:
 
 # Build stage
 #############
-
 Build kas image:
   stage: build
   needs: []
@@ -58,3 +57,5 @@ Build kas image:
       --context=$CI_PROJECT_DIR
       --dockerfile=$CI_PROJECT_DIR/docker/Dockerfile
       --destination=${IMAGE_SHA}
+
+#TODO release stage

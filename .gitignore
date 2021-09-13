@@ -130,3 +130,5 @@ src/venv/
 ## Komodo edit ##
 *.komodoproject
 .idea
+logs/*
+!logs/.gitkeep
