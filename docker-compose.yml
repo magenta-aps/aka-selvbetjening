@@ -10,7 +10,6 @@ services:
       - ./dev-environment/selvbetjening.env
     volumes:
       - selvbetjening-postgres-data:/var/lib/postgresql/data
-      - ./dev-environment/postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
 
   selvbetjening:
     build:
