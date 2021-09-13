@@ -10,7 +10,8 @@ RUN pip install --no-cache-dir -r /backend/requirements.txt
 ENV PYTHONUNBUFFERED=1
 COPY ./docker/entrypoint.sh /entrypoint.sh
 COPY ./backend /backend
+WORKDIR /backend
+RUN django-admin compilemessages
 EXPOSE 8000
 ENTRYPOINT ["/entrypoint.sh"]
-WORKDIR /backend
 CMD ["gunicorn","-b","0.0.0.0:8000","project.wsgi:application","-w 4","--timeout 240", "--error-logfile", "-","--capture-output"]
