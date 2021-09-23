@@ -4,6 +4,7 @@ After=network.target
 
 [Service]
 ExecStart=/usr/bin/Xvfb :1 -screen 0 1024x768x24
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target

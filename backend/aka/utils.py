@@ -5,6 +5,7 @@ import logging
 import os
 from math import floor
 
+from decimal import Decimal
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
@@ -128,3 +129,10 @@ def flatten(lst):
                 combined.append(x)
         return combined
     return [lst]
+
+
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return str(obj)
+        return json.JSONEncoder.default(self, obj)

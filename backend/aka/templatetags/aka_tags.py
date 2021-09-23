@@ -7,6 +7,8 @@ from django.template.defaultfilters import register
 from django.utils.http import urlquote
 from django.utils.translation import gettext
 
+from aka.utils import DecimalEncoder
+
 trans_re = re.compile("_\\((.*)\\)")
 format_re = re.compile("{(.*)}")
 
@@ -20,7 +22,7 @@ def split(text, filter):
 
 @register.filter
 def json(data):
-    return jsonlib.dumps(data)
+    return jsonlib.dumps(data, cls=DecimalEncoder)
 
 
 @register.filter
@@ -37,6 +39,7 @@ def format(text, params):
             else:
                 value = format(str(value), None)
             text = text.replace("{" + key + "}", value)
+            text = text.replace("%(" + key + ")s", value)
     return unescape(text)
 
 
