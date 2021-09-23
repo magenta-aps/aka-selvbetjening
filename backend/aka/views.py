@@ -261,11 +261,13 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
 
     @property
     def cprcvr_choice(self):
-        cprcvr = self.form.cleaned_data.get('cprcvr') or self.cpr or self.cvr
-        if cprcvr == self.cpr:
+        cprcvr = str(self.form.cleaned_data.get('cprcvr') or self.cpr or self.cvr)
+        if cprcvr == str(self.cpr):
             return (cprcvr, 'cpr')
-        elif cprcvr == self.cvr:
+        elif cprcvr == str(self.cvr):
             return (cprcvr, 'cvr')
+        else:
+            logger.info("cprcvr_choice got: "+str({'cprcvr': cprcvr, 'cpr': self.cpr, 'cvr': self.cvr}))
 
     def get_data(self, key):
         if key not in self._data:
