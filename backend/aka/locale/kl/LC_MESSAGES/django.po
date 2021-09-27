@@ -71,6 +71,9 @@ msgstr "Innuttaasutut Iserit"
 msgid "login.multiple_cvr"
 msgstr "Cpr.normumut CVR normut arlallit attuumassuteqarput, sorliussanersoq toqqaruk"
 
+msgid "login.error_no_claimants"
+msgstr "Der findes ingen fordringshavere for dette login"
+
 msgid "common.telefon"
 msgstr "Oqarasuaat"
 
