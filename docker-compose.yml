@@ -26,5 +26,17 @@ services:
       - ./logs:/var/log/aka
     command: gunicorn -b 0.0.0.0:8000 project.wsgi:application --reload -w 1 --access-logfile - --error-logfile - --capture-output # reload on code changes
 
+  selvbetjening-cron:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    entrypoint: [ ]
+    volumes:
+      - ./backend/:/backend
+      - ./logs:/var/log/aka
+    depends_on:
+      - selvbetjening-db
+    command: [ "supercronic", "/crontab" ]
+
 volumes:
   selvbetjening-postgres-data:
