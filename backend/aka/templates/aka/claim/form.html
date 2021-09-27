@@ -15,6 +15,7 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ formset.management_form }}
+        {{ form.non_field_errors }}
         <h1 class="page-header" data-trans="fordring.title">{% trans 'fordring.title' %}</h1>
         <div class="container-fluid">
             <div class="row">
