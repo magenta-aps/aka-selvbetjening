@@ -426,7 +426,9 @@ class InkassoSagView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSet
         return prisme_replies
 
     def form_valid(self, form, formset):
-
+        if len(self.claimant_ids) == 0:
+            form.add_error('__all__', _("login.error_no_claimants"))
+            return self.form_invalid(form, formset)
         codebtors = []
         if formset:
             for subform in formset:
@@ -436,7 +438,6 @@ class InkassoSagView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSet
                     codebtors.append(cpr)
                 elif cvr is not None:
                     codebtors.append(cvr)
-
         prisme_replies = InkassoSagView.send_claim(self.claimant_ids[0], form, codebtors, self.cpr, self.cvr)
         return TemplateResponse(
             request=self.request,
@@ -471,6 +472,11 @@ class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, F
         return [reply.rec_id for reply in prisme_replies]
 
     def form_valid(self, form):
+
+        if len(self.claimant_ids) == 0:
+            form.add_error('__all__', "login.error_no_claimants")
+            return self.form_invalid(form)
+
         responses = []
 
         if self.parallel:

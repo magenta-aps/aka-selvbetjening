@@ -72,6 +72,9 @@ msgstr "Log ind som borger"
 msgid "login.multiple_cvr"
 msgstr "Der er flere CVR-numre tilknyttet dette CPR-nummer. Vælg hvilket nummer der skal bruges:"
 
+msgid "login.error_no_claimants"
+msgstr "Der findes ingen fordringshavere for dette login"
+
 msgid "common.telefon"
 msgstr "Telefon"
 
@@ -645,7 +648,6 @@ msgstr "Restance (total):"
 
 msgid "account.error_250"
 msgstr "Der findes ingen debitorer for dette CPR/CVR"
-
 
 msgid "DK"
 msgstr "Danmark"
