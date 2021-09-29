@@ -78,6 +78,8 @@ Selvbetjening Unittest:
     DJANGO_TIMEZONE: Europe/Copenhagen
     DJANGO_SECRET_KEY: zuvd9h*iw+hhefxld(bqq*^7_ksk0(jy^1*fe=b_7(9p*=hn5$
     SKIP_MIGRATIONS: "true"
+  before_script:
+    - cd /backend
   script:
     - python manage.py test
 
