@@ -1,6 +1,7 @@
 stages:
   - lint
   - build
+  - test
 
 variables:
   # Project variables
@@ -21,11 +22,6 @@ variables:
 
 Lint python:
   <<: *lint-default
-  before_script:
-    - apt update
-    - apt install -y libxmlsec1-dev
-    - pip3 install flake8==3.8.1
-    - pip3 install -r backend/requirements.txt
   script:
     - flake8 --ignore E501,E226 backend/
 
@@ -40,7 +36,7 @@ Lint Dockerfiles:
 
 # Build stage
 #############
-Build kas image:
+Build selvbetjening:
   stage: build
   needs: []
   dependencies: []
@@ -57,5 +53,30 @@ Build kas image:
       --context=$CI_PROJECT_DIR
       --dockerfile=$CI_PROJECT_DIR/docker/Dockerfile
       --destination=${IMAGE_SHA}
+
+# Test stage
+.test-default: &test-default
+  stage: test
+  dependencies: []
+  tags:
+    - docker
+
+Selvbetjening Unittest:
+  <<: *test-default
+  needs: ["Build selvbetjening"]
+  image: ${IMAGE_SHA}
+  services:
+    - name: postgres:13
+      alias: kas-db
+  variables:
+    POSTGRES_USER: selvbetjening
+    POSTGRES_PASSWORD: selvbetjening
+    POSTGRES_DB: selvbetjening
+    POSTGRES_HOST: db
+    DJANGO_TIMEZONE: Europe/Copenhagen
+    DJANGO_SECRET_KEY: zuvd9h*iw+hhefxld(bqq*^7_ksk0(jy^1*fe=b_7(9p*=hn5$
+  script:
+    - python manage test
+
 
 #TODO release stage

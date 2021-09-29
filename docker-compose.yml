@@ -31,6 +31,8 @@ services:
       context: .
       dockerfile: docker/Dockerfile
     entrypoint: [ ]
+    environment:
+      - SKIP_MIGRATIONS=true
     volumes:
       - ./backend/:/backend
       - ./logs:/var/log/aka
