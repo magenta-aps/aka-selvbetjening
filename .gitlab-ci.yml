@@ -69,7 +69,7 @@ Selvbetjening Unittest:
   image: ${IMAGE_SHA}
   services:
     - name: postgres:13
-      alias: kas-db
+      alias: db
   variables:
     POSTGRES_USER: selvbetjening
     POSTGRES_PASSWORD: selvbetjening
