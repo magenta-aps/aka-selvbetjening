@@ -2,6 +2,7 @@ stages:
   - lint
   - build
   - test
+  - release
 
 variables:
   # Project variables
@@ -82,6 +83,30 @@ Selvbetjening Unittest:
     - cd /backend
   script:
     - python manage.py test
+  allow_failure: true
 
+.release-default: &release-default
+  stage: release
+  image: alpine
+  needs: ["Selvbetjening Unittest"]
+  variables:
+    GIT_STRATEGY: none # We do not need the source code
+  dependencies: []
+  tags:
+    - docker
+  before_script:
+    # install skopeo
+    - apk add skopeo
 
-#TODO release stage
+Release kas dev image:
+  <<: *release-default
+  only:
+    refs:
+      - master
+      - feature/docker
+  script:
+    - skopeo copy
+      --src-creds=${CI_REGISTRY_USER}:${CI_BUILD_TOKEN}
+      --dest-creds=${CI_REGISTRY_USER}:${CI_BUILD_TOKEN}
+      "docker://${IMAGE_SHA}"
+      "docker://${IMAGE_DEV}"
