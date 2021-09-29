@@ -77,8 +77,9 @@ Selvbetjening Unittest:
     POSTGRES_HOST: db
     DJANGO_TIMEZONE: Europe/Copenhagen
     DJANGO_SECRET_KEY: zuvd9h*iw+hhefxld(bqq*^7_ksk0(jy^1*fe=b_7(9p*=hn5$
+    SKIP_MIGRATIONS: "true"
   script:
-    - python manage test
+    - python manage.py test
 
 
 #TODO release stage
