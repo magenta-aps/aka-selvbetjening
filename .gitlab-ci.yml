@@ -22,6 +22,8 @@ variables:
 
 Lint python:
   <<: *lint-default
+  before_script:
+    - pip3 install flake8
   script:
     - flake8 --ignore E501,E226 backend/
 
