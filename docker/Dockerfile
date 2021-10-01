@@ -24,4 +24,4 @@ WORKDIR /backend
 RUN django-admin compilemessages
 EXPOSE 8000
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["gunicorn","-b","0.0.0.0:8000","project.wsgi:application","-w 4","--timeout 240", "--error-logfile", "-","--capture-output"]
+CMD ["gunicorn","-b","0.0.0.0:8000","project.wsgi:application","-w 4","--timeout", "240", "--error-logfile", "-","--capture-output"]
