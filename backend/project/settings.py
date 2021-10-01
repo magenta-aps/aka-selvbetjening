@@ -32,7 +32,7 @@ DEBUG = bool(strtobool(os.environ.get('DJANGO_DEBUG', 'False')))
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 TIME_ZONE = os.environ.get('DJANGO_TIMEZONE', 'America/Godthab')
 
-SECURE_SSL_REDIRECT = False
+SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', False)
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 X_FRAME_OPTIONS = 'DENY'
@@ -213,35 +213,43 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 STATICFILES_DIRS = []
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # expire session on browser close
 
 PRISME_CONNECT = {
-    'wsdl_file': 'https://test.erp.gl/GWCServiceSetup/GenericService.svc?singleWsdl',
-    'proxy': {
-        'socks': ''
-    },
+    'wsdl_file': os.environ.get('PRISME_WSDL', ''),
     'auth': {
         'basic': {
-            'username': '',
-            'domain': '',
-            'password': ''
+            'username': os.environ.get('PRISME_USERNAME', ''),
+            'domain': os.environ.get('PRISME_DOMAIN', ''),
+            'password': os.environ.get('PRISME_PASSWORD', '')
         }
-    }
+    },
 }
 
 DAFO_CONNECT = {
-    'address': {
-        'token': 'https://sts.data.gl/get_token_passive?username={username}&password={password}',
-        'cpr': 'https://data.gl/prisme/cpr/1/{cpr}',
-        'cvr': 'https://data.gl/prisme/cvr/1/{cvr}',
-        'cprcvr': 'https://data.gl/cvr/owned_by/{cpr}'
+    'pitu-server': '10.240.76.4',
+    'client-certificate': os.environ.get('DAFO_CERTIFICATE', ''),
+    'private-key': os.environ.get('DAFO_KEY', ''),
+    'pitu-certificate': os.environ.get('DAFO_CA_CERTIFICATE', ''),
+    'pitu-client': 'PITU/GOV/AKA/AKA_Selvbetjening',
+    'pitu-service': {
+        'cpr': 'PITU/GOV/DIA/magenta_services/DAFO-PRISME-CPR-COMBINED/v1',
+        'cvr': 'PITU/GOV/DIA/magenta_services/DAFO-PRISME-CVR-COMBINED/v1',
+        'cprcvr': 'PITU/GOV/DIA/magenta_services/DAFO-CVR-OWNED-BY/v1',
     },
-    'auth': {
-        'username': '',
-        'password': ''
-    }
 }
-OPENID_CONNECT = {}
+
+OPENID_CONNECT = {
+    'enabled': os.environ.get('OPENID_ENABLED', False),
+    'issuer': os.environ.get('OPENID_ISSUER', ''),  # top level url to the issuer, used for autodiscovery
+    'scope': os.environ.get('OPENID_SCOPE', ''),  # openid is mandatory to indicated is is a openid OP, we need to use digitalimik to get the cpr/cvr number.
+    'client_id': os.environ.get('OPENID_CLIENT_ID', ''),  # id of the system (ouath), registered at headnet
+    'client_certificate': os.environ.get('OPENID_CERTIFICATE', ''),  # path to client certificate used to secure the communication between the system and OP
+    'private_key': os.environ.get('OPENID_KEY', ''),  # used for signing messages passed to the OP
+    'redirect_uri': os.environ.get('OPENID_REDIRECT_URI', ''),  # url registered at headnet to redirect the user to after a successfull login at OP
+    'logout_uri': os.environ.get('OPENID_LOGOUT_URI', ''),  # url registered at headnet to call when logging out, removing session data there
+    'front_channel_logout_uri': os.environ.get('OPENID_FRONT_LOGOUT_URI', ''),  # url registered at headnet to call when logging out, should clear our cookies etc.
+    'post_logout_redirect_uri': os.environ.get('OPENID_POST_REDIRECT_URI', '')  # url registered at headnet to redirect to when logout is complete
+}
 
 NEMID_CONNECT = {}
 
@@ -259,6 +267,7 @@ MAX_UPLOAD_FILESIZE = 22097152
 DEFAULT_CPR = os.environ.get('DEFAULT_CPR', None)
 DEFAULT_CVR = os.environ.get('DEFAULT_CVR', None)
 
+# Should be deleted when deployment is done with salt
 LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
 if os.path.exists(LOCAL_SETTINGS_FILE):
     from .local_settings import *  # noqa
@@ -266,3 +275,4 @@ if os.path.exists(LOCAL_SETTINGS_FILE):
 SECRET_KEY_FILE = os.path.join(SITE_DIR, "secret_key.py")
 if os.path.exists(SECRET_KEY_FILE):
     from .secret_key import *  # noqa
+# Should be deleted when deployment is done with salt
