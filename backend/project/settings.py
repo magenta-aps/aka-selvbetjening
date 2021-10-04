@@ -239,7 +239,7 @@ DAFO_CONNECT = {
 }
 
 OPENID_CONNECT = {
-    'enabled': os.environ.get('OPENID_ENABLED', False),
+    'enabled': bool(strtobool(os.environ.get('OPENID_ENABLED', 'False'))),
     'issuer': os.environ.get('OPENID_ISSUER', ''),  # top level url to the issuer, used for autodiscovery
     'scope': os.environ.get('OPENID_SCOPE', ''),  # openid is mandatory to indicated is is a openid OP, we need to use digitalimik to get the cpr/cvr number.
     'client_id': os.environ.get('OPENID_CLIENT_ID', ''),  # id of the system (ouath), registered at headnet
@@ -252,7 +252,7 @@ OPENID_CONNECT = {
 }
 
 NEMID_CONNECT = {
-    'enabled': os.environ.get('NEMID_ENABLED', False),
+    'enabled': bool(strtobool(os.environ.get('NEMID_ENABLED', 'False'))),
     'federation_service': os.environ.get('NEMID_FEDERATION_SERVICE', ""),
     'cookie_name': os.environ.get('NEMID_COOKIE_NAME', ""),
     'cookie_path': os.environ.get('NEMID_COOKIE_PATH', ""),
