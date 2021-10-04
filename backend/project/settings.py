@@ -251,7 +251,18 @@ OPENID_CONNECT = {
     'post_logout_redirect_uri': os.environ.get('OPENID_POST_REDIRECT_URI', '')  # url registered at headnet to redirect to when logout is complete
 }
 
-NEMID_CONNECT = {}
+NEMID_CONNECT = {
+    'enabled': os.environ.get('NEMID_ENABLED', False),
+    'federation_service': os.environ.get('NEMID_FEDERATION_SERVICE', ""),
+    'cookie_name': os.environ.get('NEMID_COOKIE_NAME', ""),
+    'cookie_path': os.environ.get('NEMID_COOKIE_PATH', ""),
+    'cookie_domain': os.environ.get('NEMID_COOKIE_DOMAIN', ""),
+    'login_url': os.environ.get('NEMID_LOGIN_URL', ""),
+    'redirect_field': os.environ.get('NEMID_REDIRECT_FIELD', ""),
+    'client_certificate': os.environ.get('NEMID_CERTIFICATE', ''),
+    'private_key': os.environ.get('NEMID_KEY', ""),
+    'get_user_service': os.environ.get('NEMID_USER_SERVICE', ""),
+}
 
 MOUNTS = {
     'claimant_account_statements': {  # 6.5
