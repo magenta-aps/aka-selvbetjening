@@ -12,17 +12,15 @@ from xmltodict import parse as xml_to_dict
 class BasicTestCase(TestMixin, TestCase):
 
     def setUp(self):
+        super(BasicTestCase, self).setUp()
         logging.disable(logging.CRITICAL)
         self.url = '/nedskrivning/upload'
-        self.service_mock = self.mock('aka.clients.prisme.Prisme.process_service')
-        self.service_mock.return_value = [
-            PrismeImpairmentResponse(None, "<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
-        ]
-        self.cvrcheck_mock = self.mock('aka.clients.prisme.Prisme.check_cvr')
-        self.cvrcheck_mock.return_value = '12345678'  # claimant_id
         session = self.client.session
         session['user_info'] = {'CVR': '12479182'}  # 12479182
         session.save()
+        self.prisme_return = {
+            'PrismeImpairmentRequest': PrismeImpairmentResponse(None, "<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
+        }
 
 # PRISME INTERFACE TESTS ###
 
@@ -77,24 +75,23 @@ class BasicTestCase(TestMixin, TestCase):
             erroritems = root.xpath("//div[@data-field='id_file']//ul[@class='errorlist']/li")
             self.assertEqual(3, len(erroritems))
             self.assertEqual('error.upload_validation_item', erroritems[0].attrib.get('data-trans'))
-            print(erroritems[0].attrib.get('data-trans-params'))
             self.assertEqual(
                 {
                     'field': 'ekstern_sagsnummer',
                     'message': ['error.required', None],
                     'row': 2,
-                    'col': 1,
-                    'col_letter': 'B'
+                    'col': 5,
+                    'col_letter': 'F'
                 },
                 json.loads(erroritems[0].attrib.get('data-trans-params'))
             )
             self.assertEqual('error.upload_validation_item', erroritems[1].attrib.get('data-trans'))
             self.assertEqual(
-                {'field': 'beloeb', 'message': ['Indtast et tal.', None], 'row': 2, 'col': 2, 'col_letter': 'C'},
+                {'field': 'beloeb', 'message': ['error.required', None], 'row': 2, 'col': 3, 'col_letter': 'D'},
                 json.loads(erroritems[1].attrib.get('data-trans-params'))
             )
             self.assertEqual('error.upload_validation_item', erroritems[2].attrib.get('data-trans'))
             self.assertEqual(
-                {'field': 'sekvensnummer', 'message': ['error.required', None], 'row': 2, 'col': 3, 'col_letter': 'D'},
+                {'field': 'sekvensnummer', 'message': ['error.required', None], 'row': 2, 'col': 6, 'col_letter': 'G'},
                 json.loads(erroritems[2].attrib.get('data-trans-params'))
             )

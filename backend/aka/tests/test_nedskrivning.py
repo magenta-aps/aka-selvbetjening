@@ -10,6 +10,7 @@ from xmltodict import parse as xml_to_dict
 class BasicTestCase(TestMixin, TestCase):
 
     def setUp(self):
+        super(BasicTestCase, self).setUp()
         logging.disable(logging.CRITICAL)
         self.url = '/nedskrivning'
 
@@ -61,16 +62,13 @@ class RemoteTestCase(BasicTestCase):
 class LocalTestCase(BasicTestCase):
 
     def setUp(self):
-        super().setUp()
-        self.service_mock = self.mock('aka.clients.prisme.Prisme.process_service')
-        self.service_mock.return_value = [
-            PrismeImpairmentResponse(None, "<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
-        ]
-        self.cvrcheck_mock = self.mock('aka.clients.prisme.Prisme.check_cvr')
-        self.cvrcheck_mock.return_value = '12345678'  # claimant_id
+        super(LocalTestCase, self).setUp()
         session = self.client.session
         session['user_info'] = {'CVR': '12479182'}
         session.save()
+        self.prisme_return = {
+            'PrismeImpairmentRequest': PrismeImpairmentResponse(None, "<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
+        }
 
     # PRISME INTERFACE TESTS
 

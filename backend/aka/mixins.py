@@ -115,7 +115,7 @@ class HasUserMixin(object):
             self.cvr = request.session['user_info'].get('CVR')
             self.claimant_ids = self.get_claimants(request)
             self.company = self.get_company(request)
-        except (KeyError, TypeError):
+        except (KeyError, TypeError, AttributeError):
             pass
 
         if not self.cvr and settings.DEFAULT_CVR:

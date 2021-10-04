@@ -19,6 +19,8 @@
         <ClaimTypeCode/>
         <Invoice>AKI-000001</Invoice>
         <TransType>Debitor</TransType>
-        <RateNmb>2</RateNmb>
+        <ClaimantName>Avannaata Kommunia</ClaimantName>
+        <ClaimantId>37AK</ClaimantId>
+        <ChildClaimant/>
     </CustTrans>
 </CustTable>
