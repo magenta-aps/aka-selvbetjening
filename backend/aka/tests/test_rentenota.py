@@ -13,13 +13,9 @@ from xmltodict import parse as xml_to_dict
 class BasicTestCase(TestMixin, TestCase):
 
     def setUp(self):
+        super(BasicTestCase, self).setUp()
         logging.disable(logging.CRITICAL)
         self.url = '/rentenota/'
-        self.soapmock = self.mock('aka.clients.prisme.Prisme.process_service')
-        self.soapmock.return_value = [PrismeInterestNoteResponse(
-            None,
-            self.get_file_contents('aka/tests/resources/interestnote_response.xml')
-        )]
 
         self.dafomock = self.mock('aka.clients.dafo.Dafo.lookup_cvr')
         self.dafomock.return_value = {
@@ -33,6 +29,9 @@ class BasicTestCase(TestMixin, TestCase):
         session = self.client.session
         session['user_info'] = {'CVR': '12479182'}
         session.save()
+        self.prisme_return = {
+            'PrismeInterestNoteRequest': PrismeInterestNoteResponse(None, self.get_file_contents('aka/tests/resources/interestnote_response.xml'))
+        }
 
     # PRISME INTERFACE TESTS
 
@@ -102,7 +101,7 @@ class BasicTestCase(TestMixin, TestCase):
         header_row = root.xpath("//table[@class='output-table']/thead/tr")[0]
         headers = [cell.text for cell in header_row.iterchildren()]
         rows = root.xpath("//table[@class='output-table']/tbody/tr[@class='rentenota-post-table-datarow']")
-        data = [{headers[i]: cell.text for i, cell in enumerate(row.iterchildren())} for row in rows]
+        data = [{headers[i]: cell.text.strip() for i, cell in enumerate(row.iterchildren())} for row in rows]
         self.assertEqual(2, len(data))
         self.assertEqual([
             {
@@ -118,7 +117,7 @@ class BasicTestCase(TestMixin, TestCase):
                 'Postdato': '02-01-2018',
                 'Faktura': '00000044',
                 'Fradato': '01-01-2019',
-                'Tildato': 'None',
+                'Tildato': '',
                 'Dage': '0',
             },
             {
@@ -134,7 +133,7 @@ class BasicTestCase(TestMixin, TestCase):
                 'Postdato': '02-01-2018',
                 'Faktura': '00000043',
                 'Fradato': '01-01-2019',
-                'Tildato': 'None',
+                'Tildato': '',
                 'Dage': '0',
             },
         ], data)
@@ -143,18 +142,15 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(3, len(data))
         self.assertEqual([None, '440,0', 'kr'], data)
 
-    # NEGATIVE TESTS
-
+    @override_settings(DEFAULT_CVR=None)
     def test_invalid_cvr(self):
-
         session = self.client.session
         session['user_info'] = None
         session.save()
-        # expected = {'errors': ['Access denied'], 'fieldErrors': []}
         for y in range(2000, 2019):
             for m in range(1, 13):
                 response = self.client.get(self.url, {
                     'year': y,
                     'month': m
                 })
-                self.assertEqual(response.status_code, 403)
+                self.assertEqual(response.status_code, 302)
