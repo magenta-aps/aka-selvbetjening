@@ -23,7 +23,8 @@ class LoginManager:
             '/favicon.ico',
             reverse('aka:javascript-language-catalog', kwargs={'locale': 'da'}),
             reverse('aka:javascript-language-catalog', kwargs={'locale': 'kl'}),
-            reverse('aka:set-language')
+            reverse('aka:set-language'),
+            reverse('aka:downtime'),
         ]
 
     def __call__(self, request):
