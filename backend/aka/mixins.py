@@ -138,7 +138,7 @@ class HasUserMixin(object):
             self.obtain_cvr(request)
             return super().dispatch(request, *args, **kwargs)
         except SSLError:
-            return redirect('aka:downtime')
+            return TemplateResponse('aka/downtime.html')
 
     def get_context_data(self, **kwargs):
         context = {
