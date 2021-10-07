@@ -17,7 +17,6 @@ from django.template.loader import select_template
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.translation import gettext
-from django.views.generic import RedirectView
 from django.views.generic.edit import FormMixin
 from requests import ReadTimeout
 from requests.exceptions import SSLError
