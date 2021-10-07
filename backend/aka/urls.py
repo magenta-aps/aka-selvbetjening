@@ -24,7 +24,6 @@ from aka.views import LoginView, LogoutView
 from aka.views import NedskrivningView, NedskrivningUploadView
 from aka.views import RenteNotaView
 from django.conf.urls import url
-from django.views.generic.base import TemplateView
 
 app_name = 'aka'
 
@@ -48,5 +47,4 @@ urlpatterns = [
     url(r'^nedskrivning$', NedskrivningView.as_view(), name='nedskrivning'),
     url(r'^nedskrivning/upload$', NedskrivningUploadView.as_view(), name='nedskrivning-upload'),
     url(r'^konto$', KontoView.as_view(), name='konto'),
-    url(r'^downtime$', TemplateView.as_view(template_name='downtime.html'), name='downtime'),
 ]
