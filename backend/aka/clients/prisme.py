@@ -9,7 +9,6 @@ from aka.utils import flatten
 from aka.utils import get_file_contents_base64
 from dict2xml import dict2xml as dict_to_xml
 from django.conf import settings
-from django.utils.translation import gettext
 from requests import Session
 from requests_ntlm import HttpNtlmAuth
 from xmltodict import parse as xml_to_dict
@@ -24,34 +23,41 @@ class PrismeException(AkaException):
     title = "prisme.error"
     error_parse = {
         '250': {
-            'inkasso': [{
+            'fordring': [{
+                'id': 0,
                 're': re.compile(r'Der findes ikke en inkassosag med det eksterne ref.nr. (.*)'),
                 'args': ['refnumber']
             }],
             'nedskrivning': [
                 {
+                    'id': 0,
                     're': re.compile(r'Der findes ikke en inkassosag med det eksterne ref.nr. (.*)'),
                     'args': ['refnumber']
                 }, {
+                    'id': 1,
                     're': re.compile(r'Det fremsendte bel\u00f8b (.*) er st\u00f8rre end restsaldoen p\u00e5 inkassosagen (.*)'),
                     'args': ['amount', 'saldo']
                 }
             ],
             'rentenota': [{
+                'id': 0,
                 're': re.compile(
-                    r'Der findes ingen renter for dette CPR/CVR (\d{8}) eller for '
+                    r'Der findes ingen renter for dette CPR/CVR (\d+) eller for '
                     r'den angivne periode (\d{2}-\d{2}-\d{4}) (\d{2}-\d{2}-\d{4})'
                 ),
                 'args': ['cvr', 'start', 'end']
             }],
             'loentraek': [{
+                'id': 0,
                 're': re.compile(r'Aftalenummer (.+) findes ikke'),
                 'args': ['nr']
             }, {
+                'id': 1,
                 're': re.compile(r'Det samme CPR-Nummer (\d+) må kun optræde en gang pr. indberetning'),
                 'args': ['cpr']
             }],
-            'konto': [{
+            'account': [{
+                'id': 0,
                 're': re.compile(
                     r'Der findes ingen debitorer for dette CPR/CVR'
                 ),
@@ -66,10 +72,6 @@ class PrismeException(AkaException):
         self.text = text
         self.context = context
 
-        translation_key = f"{context}.error_{code}"
-        translation = gettext(translation_key)
-        if translation != translation_key:
-            self.error_code = translation_key
         try:
             parsedata = self.error_parse.get(str(code)).get(context)
             if parsedata:
@@ -78,6 +80,7 @@ class PrismeException(AkaException):
                     if match:
                         for i, argname in enumerate(p['args'], start=1):
                             self.params[argname] = match.group(i)
+                        self.error_code = f"{context}.error_{code}.{p['id']}"
                         break
         except Exception as e:
             print("Failed to parse prisme error response: %s" % str(e))
