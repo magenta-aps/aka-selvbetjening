@@ -328,6 +328,9 @@ msgstr "Oprettede fordringsnumre:"
 msgid "fordring.bill_date_before_due_date"
 msgstr "Betalingsdato skal være før forfaldsdato"
 
+msgid "fordring.error_250.0"
+msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber}"
+
 
 # 6.2
 
@@ -364,6 +367,12 @@ msgstr "Løntræk indberettet"
 msgid "loentraek.results"
 msgstr "Oprettede notater"
 
+msgid "loentraek.error_250.0"
+msgstr "Aftalenummer {nr} findes ikke"
+
+msgid "loentraek.error_250.1"
+msgstr "Det samme CPR-Nummer {cpr} må kun optræde en gang pr. indberetning"
+
 
 # 6.4
 
@@ -376,8 +385,11 @@ msgstr "Oprettede nedskrivninger"
 msgid "nedskrivning.errors"
 msgstr "Der opstod følgende fejl:"
 
-msgid "nedskrivning.error_250"
+msgid "nedskrivning.error_250.0"
 msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber}"
+
+msgid "nedskrivning.error_250.1"
+msgstr "Det fremsendte beløb {amount} er større end restsaldoen på inkassosagen {saldo}"
 
 msgid "nedskrivning.title"
 msgstr "Indberet nedskrivning"
@@ -459,7 +471,7 @@ msgstr "År"
 msgid "rentenota.month"
 msgstr "Måned"
 
-msgid "rentenota.error_250"
+msgid "rentenota.error_250.0"
 msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne periode {start} {end}"
 
 
@@ -625,12 +637,6 @@ msgstr "Rate&shy;nummer"
 msgid "account.submitted_to_claims"
 msgstr "Indberettet til inddrivelsen"
 
-msgid "account.title_sel"
-msgstr "SEL - Skattestyrelsens kontoudtog"
-
-msgid "account.title_aki"
-msgstr "AKI - Inddrivelsens kontoudtog"
-
 msgid "account.child_claimant"
 msgstr "Fordringshavers barns CPR"
 
@@ -646,8 +652,15 @@ msgstr "Saldo (total):"
 msgid "account.total_restance"
 msgstr "Restance (total):"
 
-msgid "account.error_250"
+msgid "account.error_250.0"
 msgstr "Der findes ingen debitorer for dette CPR/CVR"
+
+msgid "account.title_sel"
+msgstr "SEL - Skattestyrelsens kontoudtog"
+
+msgid "account.title_aki"
+msgstr "AKI - Inddrivelsens kontoudtog"
+
 
 msgid "DK"
 msgstr "Danmark"
