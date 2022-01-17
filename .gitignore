@@ -1,3 +1,4 @@
+!logs/.gitkeep
 # Vagrant
 .vagrant
 *.retry
@@ -129,3 +130,6 @@ src/venv/
 
 ## Komodo edit ##
 *.komodoproject
+.idea
+logs/*
+!logs/.gitkeep

@@ -17,11 +17,13 @@ class BasicTestCase(TestMixin, TestCase):
 
     def setUp(self):
         logging.disable(logging.CRITICAL)
-        self.url = '/inkassosag'
-        self.service_mock = self.mock('aka.clients.prisme.Prisme.process_service')
         session = self.client.session
         session['user_info'] = {'CVR': '12479182'}
         session.save()
+        super(BasicTestCase, self).setUp()
+        self.prisme_return = {
+            'PrismeClaimRequest': PrismeClaimResponse(None, "<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
+        }
 
     # PRISME INTERFACE TESTS
 
@@ -62,9 +64,6 @@ class BasicTestCase(TestMixin, TestCase):
 
     def test_claim_success_1(self):
         # Contains just the required fields
-        self.service_mock.return_value = [
-            PrismeClaimResponse(None, "<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
-        ]
         formData = {
             'fordringshaver': 'test-fordringshaver',
             'debitor': 'test-debitor',
@@ -127,9 +126,6 @@ class BasicTestCase(TestMixin, TestCase):
 
     def test_claim_upload_success(self):
         # Contains all required fields, and some more
-        self.service_mock.return_value = [
-            PrismeClaimResponse(None, "<CustCollClaimTableFuj><RecId>1234</RecId></CustCollClaimTableFuj>")
-        ]
         fp = open('aka/tests/resources/inkasso.csv', "rb")
         uploadfile = SimpleUploadedFile(
             'test.csv',
@@ -163,7 +159,7 @@ class BasicTestCase(TestMixin, TestCase):
         formData.update(dummy_management_form("form"))
         response = self.client.post(self.url, formData)
         root = etree.fromstring(response.content, etree.HTMLParser())
-        for field in ['fordringshaver', 'hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']:
+        for field in ['hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']:
             erroritems = root.xpath("//div[@data-field='id_%s']//ul[@class='errorlist']/li" % field)
             self.assertEqual(1, len(erroritems))
             self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))
@@ -181,7 +177,7 @@ class BasicTestCase(TestMixin, TestCase):
         formData.update(dummy_management_form("form"))
         response = self.client.post(self.url, formData)
         root = etree.fromstring(response.content, etree.HTMLParser())
-        for field in ['fordringshaver', 'debitor', 'hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']:
+        for field in ['debitor', 'hovedstol', 'forfaldsdato', 'betalingsdato', 'foraeldelsesdato']:
             erroritems = root.xpath("//div[@data-field='id_%s']//ul[@class='errorlist']/li" % field)
             self.assertEqual(1, len(erroritems))
             self.assertEqual('error.required', erroritems[0].attrib.get('data-trans'))

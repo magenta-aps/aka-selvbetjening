@@ -1,0 +1,44 @@
+version: "3.4"
+
+services:
+  selvbetjening-db:
+    image: postgres:13
+    ports:
+      # expose to localhost for easier debugging
+      - "5432:5432"
+    env_file:
+      - ./dev-environment/selvbetjening.env
+    volumes:
+      - selvbetjening-postgres-data:/var/lib/postgresql/data
+
+  selvbetjening:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    depends_on:
+      - selvbetjening-db
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./dev-environment/selvbetjening.env
+    volumes:
+      - ./backend/:/backend
+      - ./logs:/var/log/aka
+    command: gunicorn -b 0.0.0.0:8000 project.wsgi:application --reload -w 1 --access-logfile - --error-logfile - --capture-output # reload on code changes
+
+  selvbetjening-cron:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    entrypoint: [ ]
+    environment:
+      - SKIP_MIGRATIONS=true
+    volumes:
+      - ./backend/:/backend
+      - ./logs:/var/log/aka
+    depends_on:
+      - selvbetjening-db
+    command: [ "supercronic", "/crontab" ]
+
+volumes:
+  selvbetjening-postgres-data:

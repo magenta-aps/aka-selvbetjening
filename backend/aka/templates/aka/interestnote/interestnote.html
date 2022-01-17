@@ -154,14 +154,16 @@
                             </tr>
                         {% else %}
                             {% for item in items %}
-                                <tr>
+                                <tr class="rentenota-post-table-datarow">
                                 {% for field in fields %}
                                     {% with value=item|get:field.name|default:'' %}
                                         <td class="{{ field.class }}" data-original="{{ value }}">
                                             {% if field.number %}
-                                                {{ value|number }}
-                                            {% else %}
                                                 {{ value }}
+                                            {% else %}
+                                                {% localize off %}
+                                                {{ value }}
+                                                {% endlocalize %}
                                             {% endif %}
                                         </td>
                                     {% endwith %}
@@ -170,7 +172,7 @@
                             {% endfor %}
                         <tr class="rentenota-post-table-sumrow">
                             <td colspan="8"></td>
-                            <td class="numbercell rentenota-total sum">{{ total|number }}</td>
+                            <td class="numbercell rentenota-total sum">{{ total }}</td>
                             <td colspan="6">kr</td>
                         </tr>
                         {% endif %}

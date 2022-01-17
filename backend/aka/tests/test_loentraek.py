@@ -13,18 +13,15 @@ from xmltodict import parse as xml_to_dict
 class BasicTestCase(TestMixin, TestCase):
 
     def setUp(self):
+        super(BasicTestCase, self).setUp()
         logging.disable(logging.CRITICAL)
         self.url = '/loentraek'
-        self.service_mock = self.mock('aka.clients.prisme.Prisme.process_service')
-        self.service_mock.return_value = [
-            PrismePayrollResponse(
-                None,
-                "<CustPayrollFromEmployerHeaderFUJ><RecId>1234</RecId></CustPayrollFromEmployerHeaderFUJ>"
-            )
-        ]
         session = self.client.session
         session['user_info'] = {'CVR': '12479182'}
         session.save()
+        self.prisme_return = {
+            'PrismePayrollRequest': PrismePayrollResponse(None, "<CustPayrollFromEmployerHeaderFUJ><RecId>1234</RecId></CustPayrollFromEmployerHeaderFUJ>")
+        }
 
     # PRISME INTERFACE TESTS
 
@@ -170,7 +167,7 @@ class BasicTestCase(TestMixin, TestCase):
         formData = {
             'year': 2019,
             'month': 11,
-            'total_amount': 200,
+            'total_amount': 1000,
             'form-0-cpr': '1234567890',
             'form-0-amount': 1000,
             'form-0-net_salary': 40000,
