@@ -24,7 +24,7 @@ class OpenId:
 
     @staticmethod
     def enabled():
-        return settings.OPENID_CONNECT.get('enabled', True)
+        return settings.OPENID_CONNECT.get('enabled', False)
 
     @staticmethod
     def authenticate(request):

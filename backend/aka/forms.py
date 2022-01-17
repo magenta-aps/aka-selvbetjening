@@ -136,6 +136,8 @@ class PrependCharField(forms.CharField):
 
     def to_python(self, value):
         value = super().to_python(value)
+        if value == self.empty_value:
+            return value
         if len(self.prepend_char) > 0:
             while (len(value) < self.total_length):
                 value = self.prepend_char + value

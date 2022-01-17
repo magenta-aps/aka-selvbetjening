@@ -10,11 +10,11 @@ class MiddlewareTestCase(TestCase):
 
     def test_not_logged_in(self):
         """
-        ensure we can't reach the index when not logged in
+        ensure we can't reach the konto view when not logged in
         """
-        r = self.client.get(reverse('aka:index'), follow=False)
+        r = self.client.get(reverse('aka:konto'), follow=False)
         self.assertEqual(r.status_code, 302)
-        self.assertEqual(r.url, reverse('aka:login') + "?back=" + reverse('aka:index'))
+        self.assertEqual(r.url, reverse('aka:login') + "?back=" + reverse('aka:konto'))
 
     def test_not_logged_in_form_view(self):
         """

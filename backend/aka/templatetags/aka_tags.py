@@ -98,10 +98,3 @@ def get(item, attribute):
         return item.get(attribute)
     if isinstance(item, (tuple, list)):
         return item[int(attribute)]
-
-
-@register.filter
-def number(item):
-    locale.setlocale(locale.LC_ALL, ('da_dk', 'utf-8'))
-    value = float(item.replace(',', '.')) if isinstance(item, str) else item
-    return locale.format("%.2f", value, grouping=True)

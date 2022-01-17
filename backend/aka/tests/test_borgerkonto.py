@@ -1,12 +1,11 @@
 import logging
 from datetime import date
 
+from aka.clients.prisme import PrismeAKIAccountResponse
 from aka.clients.prisme import PrismeAccountRequest, PrismeAccountResponse
 from aka.tests.mixins import TestMixin
 from django.test import TestCase, override_settings
 from xmltodict import parse as xml_to_dict
-
-from aka.clients.prisme import PrismeSELAccountResponse
 
 
 @override_settings(OPENID_CONNECT={'enabled': False})
@@ -30,7 +29,7 @@ class BasicTestCase(TestMixin, TestCase):
         session.save()
 
         self.prisme_return = {
-            'PrismeAccountRequest': PrismeAccountResponse(None, self.get_file_contents('aka/tests/resources/employeraccount_response.xml'))
+            'PrismeAccountRequest': PrismeAccountResponse(None, self.get_file_contents('aka/tests/resources/citizenaccount_response.xml'))
         }
 
     # PRISME INTERFACE TESTS #
@@ -38,13 +37,13 @@ class BasicTestCase(TestMixin, TestCase):
     def test_account_request_parse(self):
         request = PrismeAccountRequest('12345678', date(2019, 1, 22), date(2019, 1, 22), 0)
         self.compare(
-            xml_to_dict(self.get_file_contents('aka/tests/resources/employeraccount_request.xml')),
+            xml_to_dict(self.get_file_contents('aka/tests/resources/citizenaccount_request.xml')),
             xml_to_dict(request.xml),
             ""
         )
 
     def test_account_response_parse(self):
-        response = PrismeSELAccountResponse(None, self.get_file_contents('aka/tests/resources/employeraccount_response.xml'))
+        response = PrismeAKIAccountResponse(None, self.get_file_contents('aka/tests/resources/citizenaccount_response.xml'))
         self.assertEqual(1, len(response.transactions))
         transaction0 = response.transactions[0]
         self.assertEqual("00000001", transaction0.account_number)
@@ -66,4 +65,6 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(None, transaction0.claim_type_code)
         self.assertEqual("AKI-000001", transaction0.invoice_number)
         self.assertEqual("Debitor", transaction0.transaction_type)
-        self.assertEqual("2", transaction0.rate_number)
+        self.assertEqual("Avannaata Kommunia", transaction0.claimant_name)
+        self.assertEqual("37AK", transaction0.claimant_id)
+        self.assertEqual(None, transaction0.child_claimant)

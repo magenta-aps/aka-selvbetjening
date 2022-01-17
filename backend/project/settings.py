@@ -13,12 +13,13 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 from django.utils.translation import gettext_lazy as _
-
+from distutils.util import strtobool
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SITE_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SITE_DIR)
 PROJECT_DIR = os.path.dirname(BASE_DIR)
+AKA_DIR = os.path.join(BASE_DIR, 'aka')
 SHARED_DIR = os.path.join(PROJECT_DIR, "shared")
 
 
@@ -27,9 +28,11 @@ SHARED_DIR = os.path.join(PROJECT_DIR, "shared")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 
-SECURE_SSL_REDIRECT = False
+DEBUG = bool(strtobool(os.environ.get('DJANGO_DEBUG', 'False')))
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+TIME_ZONE = os.environ.get('DJANGO_TIMEZONE', 'America/Godthab')
+
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 X_FRAME_OPTIONS = 'DENY'
@@ -38,6 +41,16 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 MEDIA_URL = BASE_DIR + '/upload/'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'HOST': os.environ['POSTGRES_HOST'],
+    }
+}
 
 LOGGING = {
     'version': 1,
@@ -102,7 +115,7 @@ LOGGING = {
         'aka': {
             'filters': ['require_debug_true'],
             'level': 'DEBUG',
-            'handlers': ['file'],
+            'handlers': ['debug-console', 'file'],
         },
         'oic': {
             'handlers': ['debug-console'],
@@ -116,16 +129,12 @@ ENCRYPTED_LOG_KEY_UID = 'AKA Selvbetjening'
 
 ALLOWED_HOSTS = ['*']
 
-SITE_URL = "https://aka.sullissivik.gl"
-
 AUTHENTICATION_BACKENDS = [
     'sullissivik.login.nemid.authentication.CookieAuthBackend'
 ]
 
 # See local_settings_example.py
 SULLISSIVIK_FEDERATION_SERVICE = None
-
-DEFAULT_CPR = None
 
 # Application definition
 
@@ -141,6 +150,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -173,7 +183,6 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 LANGUAGE_CODE = 'da-dk'
-TIME_ZONE = 'America/Godthab'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -200,40 +209,59 @@ USE_THOUSAND_SEPARATOR = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+STATIC_ROOT = os.path.join(AKA_DIR, 'static')
 STATICFILES_DIRS = []
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # expire session on browser close
 
 PRISME_CONNECT = {
-    'wsdl_file': 'https://test.erp.gl/GWCServiceSetup/GenericService.svc?singleWsdl',
-    'proxy': {
-        'socks': ''
-    },
+    'wsdl_file': os.environ.get('PRISME_WSDL', ''),
     'auth': {
         'basic': {
-            'username': '',
-            'domain': '',
-            'password': ''
+            'username': os.environ.get('PRISME_USERNAME', ''),
+            'domain': os.environ.get('PRISME_DOMAIN', ''),
+            'password': os.environ.get('PRISME_PASSWORD', '')
         }
-    }
+    },
 }
 
 DAFO_CONNECT = {
-    'address': {
-        'token': 'https://sts.data.gl/get_token_passive?username={username}&password={password}',
-        'cpr': 'https://data.gl/prisme/cpr/1/{cpr}',
-        'cvr': 'https://data.gl/prisme/cvr/1/{cvr}',
-        'cprcvr': 'https://data.gl/cvr/owned_by/{cpr}'
+    'pitu-server': '10.240.76.4',
+    'client-certificate': os.environ.get('DAFO_CERTIFICATE', ''),
+    'private-key': os.environ.get('DAFO_KEY', ''),
+    'pitu-certificate': os.environ.get('DAFO_CA_CERTIFICATE', ''),
+    'pitu-client': 'PITU/GOV/AKA/AKA_Selvbetjening',
+    'pitu-service': {
+        'cpr': 'PITU/GOV/DIA/magenta_services/DAFO-PRISME-CPR-COMBINED/v1',
+        'cvr': 'PITU/GOV/DIA/magenta_services/DAFO-PRISME-CVR-COMBINED/v1',
+        'cprcvr': 'PITU/GOV/DIA/magenta_services/DAFO-CVR-OWNED-BY/v1',
     },
-    'auth': {
-        'username': '',
-        'password': ''
-    }
 }
-OPENID_CONNECT = {}
 
-NEMID_CONNECT = {}
+OPENID_CONNECT = {
+    'enabled': bool(strtobool(os.environ.get('OPENID_ENABLED', 'False'))),
+    'issuer': os.environ.get('OPENID_ISSUER', ''),  # top level url to the issuer, used for autodiscovery
+    'scope': os.environ.get('OPENID_SCOPE', ''),  # openid is mandatory to indicated is is a openid OP, we need to use digitalimik to get the cpr/cvr number.
+    'client_id': os.environ.get('OPENID_CLIENT_ID', ''),  # id of the system (ouath), registered at headnet
+    'client_certificate': os.environ.get('OPENID_CERTIFICATE', ''),  # path to client certificate used to secure the communication between the system and OP
+    'private_key': os.environ.get('OPENID_KEY', ''),  # used for signing messages passed to the OP
+    'redirect_uri': os.environ.get('OPENID_REDIRECT_URI', ''),  # url registered at headnet to redirect the user to after a successfull login at OP
+    'logout_uri': os.environ.get('OPENID_LOGOUT_URI', ''),  # url registered at headnet to call when logging out, removing session data there
+    'front_channel_logout_uri': os.environ.get('OPENID_FRONT_LOGOUT_URI', ''),  # url registered at headnet to call when logging out, should clear our cookies etc.
+    'post_logout_redirect_uri': os.environ.get('OPENID_POST_REDIRECT_URI', '')  # url registered at headnet to redirect to when logout is complete
+}
+
+NEMID_CONNECT = {
+    'enabled': bool(strtobool(os.environ.get('NEMID_ENABLED', 'False'))),
+    'federation_service': os.environ.get('NEMID_FEDERATION_SERVICE', ""),
+    'cookie_name': os.environ.get('NEMID_COOKIE_NAME', ""),
+    'cookie_path': os.environ.get('NEMID_COOKIE_PATH', ""),
+    'cookie_domain': os.environ.get('NEMID_COOKIE_DOMAIN', ""),
+    'login_url': os.environ.get('NEMID_LOGIN_URL', ""),
+    'redirect_field': os.environ.get('NEMID_REDIRECT_FIELD', ""),
+    'client_certificate': os.environ.get('NEMID_CERTIFICATE', ''),
+    'private_key': os.environ.get('NEMID_KEY', ""),
+    'get_user_service': os.environ.get('NEMID_USER_SERVICE', ""),
+}
 
 MOUNTS = {
     'claimant_account_statements': {  # 6.5
@@ -246,10 +274,5 @@ MOUNTS = {
 # Max 2 MB - can be lower if we want
 MAX_UPLOAD_FILESIZE = 22097152
 
-LOCAL_SETTINGS_FILE = os.path.join(SITE_DIR, "local_settings.py")
-if os.path.exists(LOCAL_SETTINGS_FILE):
-    from .local_settings import *  # noqa
-
-SECRET_KEY_FILE = os.path.join(SITE_DIR, "secret_key.py")
-if os.path.exists(SECRET_KEY_FILE):
-    from .secret_key import *  # noqa
+DEFAULT_CPR = os.environ.get('DEFAULT_CPR', None)
+DEFAULT_CVR = os.environ.get('DEFAULT_CVR', None)

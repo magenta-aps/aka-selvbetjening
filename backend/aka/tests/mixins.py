@@ -1,12 +1,29 @@
 from unittest.mock import patch
 
+from aka.clients.prisme import PrismeCvrCheckRequest
+from aka.clients.prisme import PrismeCvrCheckResponse
+
 
 class TestMixin(object):
+
+    def process_service_mock(self, prisme_request, *args):
+        if prisme_request.__class__ == PrismeCvrCheckRequest:
+            return [PrismeCvrCheckResponse(None, '<FujClaimant><ClaimantId>32SE</ClaimantId></FujClaimant>')]
+        for classname, response in self.prisme_return.items():
+            if prisme_request.__class__.__name__ == classname:
+                if type(response) != list:
+                    response = [response]
+                return response
+
+    def setUp(self):
+        self.prisme_return = {}
+        self.url = '/inkassosag'
+        self.service_mock = self.mock('aka.clients.prisme.Prisme.process_service')
+        self.service_mock.side_effect = self.process_service_mock
 
     def mock(self, method):
         patch_object = patch(method)
         mock_object = patch_object.start()
-        self.addCleanup(patch_object.stop)
         return mock_object
 
     @staticmethod

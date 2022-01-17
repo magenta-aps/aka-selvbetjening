@@ -380,11 +380,13 @@
                                         {% for item in row %}
                                             <td class="{{ item.class }}" data-original="{{ item.value }}">
                                                 {% if item.number %}
-                                                    {{ item.value|number }}
+                                                    {{ item.value }}
                                                 {% elif item.boolean %}
                                                     {{ item.value|yesno }}
                                                 {% else %}
+                                                    {% localize off %}
                                                     {{ item.value|default_if_none:'' }}
+                                                    {% endlocalize %}
                                                 {% endif %}
                                             </td>
                                         {% endfor %}
