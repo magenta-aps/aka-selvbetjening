@@ -107,12 +107,12 @@ LOGGING = {
         'zeep.transports': {
             'level': 'DEBUG',
             'propagate': False,
-            'handlers': ['file'],
+            'handlers': ['debug-console'],
         },
         'aka.clients.prisme': {
             'level': 'DEBUG',
             'propagate': False,
-            'handlers': ['file'],
+            'handlers': ['debug-console'],
         },
         'aka': {
             'filters': ['require_debug_true'],
