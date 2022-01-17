@@ -121,7 +121,7 @@ class LoginCallback(TemplateView):
 
             request_args = {
                 'code': aresp['code'],
-                'redirect_uri': settings.OPENID_CONNECT['redirect_uri']
+                'redirect_uri': request.build_absolute_uri(reverse('openid:callback'))
             }
 
             resp = client.do_access_token_request(
