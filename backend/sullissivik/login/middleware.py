@@ -24,7 +24,8 @@ class LoginManager:
             '/favicon.ico',
             reverse('aka:javascript-language-catalog', kwargs={'locale': 'da'}),
             reverse('aka:javascript-language-catalog', kwargs={'locale': 'kl'}),
-            reverse('aka:set-language')
+            reverse('aka:set-language'),
+            reverse('status')
         ]
 
     def redirect_to_login(self, request):
