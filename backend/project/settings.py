@@ -146,6 +146,7 @@ INSTALLED_APPS = [
     'sullissivik.login.nemid',
     'sullissivik.login.openid',
     'aka',
+    'watchman'
 ]
 
 MIDDLEWARE = [
@@ -276,3 +277,6 @@ MAX_UPLOAD_FILESIZE = 22097152
 
 DEFAULT_CPR = os.environ.get('DEFAULT_CPR', None)
 DEFAULT_CVR = os.environ.get('DEFAULT_CVR', None)
+
+# Skip health_check for cache layer and storage since we are not using it
+WATCHMAN_CHECKS = ('watchman.checks.databases', )
