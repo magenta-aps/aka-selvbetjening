@@ -16,7 +16,8 @@ apt-get update && apt-get install -y --no-install-recommends \
  && mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" \
  && ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic \
  && groupadd -g 75080 -r aka  \
- && useradd -m -u 75080 --no-log-init -r -g aka aka \
+ && groupadd -g 75100 -r certificate_exporter \
+ && useradd -m -u 75080 --no-log-init -r -g aka -G certificate_exporter aka \
  && chown aka:aka /var/log/aka
 
 COPY docker/crontab /crontab
