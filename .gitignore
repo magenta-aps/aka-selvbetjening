@@ -133,3 +133,5 @@ src/venv/
 .idea
 logs/*
 !logs/.gitkeep
+
+docker-compose.override.yml
