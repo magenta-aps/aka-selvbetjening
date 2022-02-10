@@ -19,7 +19,7 @@ class LoginManager:
         self.get_response = get_response
         # Urls that should not redirect an anonymous user to login page
         self.white_listed_urls = NemId.whitelist + OpenId.whitelist + [
-            reverse('aka:index'),
+            # reverse('aka:index'),
             reverse('aka:login'),
             '/favicon.ico',
             reverse('aka:javascript-language-catalog', kwargs={'locale': 'da'}),
