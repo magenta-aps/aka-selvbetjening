@@ -143,8 +143,28 @@ Deploy test:
     SALTAPI_EAUTH: file
     GIT_STRATEGY: none
   script:
-    - echo Attempting to call deployment
+    - echo Deploying test
     - pepper --client runner --fail-any state.orchestrate ${DEPLOYMENT_NAMESPACE}
   environment:
     name: test
     url: "https://test.akap.sullissivik.gl"
+
+Deploy production:
+  <<: *deploy-default
+  needs: ["Release production image"]
+  only:
+    variables:
+      # Matches all of SemVer 2.0.0
+      - $CI_COMMIT_TAG =~ /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
+  when: manual
+  variables:
+    DEPLOYMENT_NAMESPACE: aka_selvbetjening.service-prod
+    SALTAPI_URL: https://ctrl1.magenta-aps.dk/api/
+    SALTAPI_EAUTH: file
+    GIT_STRATEGY: none
+  script:
+    - echo Deploying production
+    - pepper --client runner --fail-any state.orchestrate ${DEPLOYMENT_NAMESPACE}
+  environment:
+    name: production
+    url: "https://akap.sullissivik.gl"
