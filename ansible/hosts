@@ -1,3 +1,0 @@
-[production]
-akaptest01 ansible_host=10.240.76.38
-akapprod01 ansible_host=10.240.76.37
