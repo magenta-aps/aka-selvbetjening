@@ -1,4 +1,0 @@
-[flake8]
-exclude = manage.py
-ignore = F841
-max-line-length = 120
