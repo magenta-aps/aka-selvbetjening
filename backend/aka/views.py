@@ -786,6 +786,8 @@ class RenteNotaView(RequireCvrMixin, IsContentMixin, SimpleGetFormMixin, PdfRend
     def get_items(self, form):
         prisme = Prisme()
         posts = []
+        if prisme.mock:
+            return posts
         # Response is of type PrismeInterestNoteResponse
         interest_note_data = prisme.process_service(
             PrismeInterestNoteRequest(self.cvr, form.cleaned_data['year'], form.cleaned_data['month']),

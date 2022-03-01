@@ -616,11 +616,11 @@ class Prisme(object):
     _client = None
 
     def __init__(self):
-        pass
+        self.mock = prisme_settings.get('mock', False)
 
     @property
     def client(self):
-        if self._client is None:
+        if self._client is None and self.mock is False:
             wsdl = prisme_settings['wsdl_file']
             session = Session()
             if 'proxy' in prisme_settings:
@@ -684,6 +684,8 @@ class Prisme(object):
         }
 
     def process_service(self, request_object, context, cpr, cvr):
+        if self.mock is True:
+            return ['']
         try:
             request_class = self.client.get_type("tns:GWSRequestDCFUJ")
             request = request_class(
