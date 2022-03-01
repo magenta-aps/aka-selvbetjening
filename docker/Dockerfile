@@ -4,7 +4,10 @@ ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.
     SUPERCRONIC_SHA1SUM=048b95b48b708983effb2e5c935a1ef8483d9e3e\
     PYTHONUNBUFFERED=1
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
+RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz && \
+  tar xvf wkhtmltox*.tar.xz && \
+  mv wkhtmltox/bin/wkhtmlto* /usr/bin \
+    
 # hadolint ignore=DL3008
 RUN mkdir /backend && mkdir -p /var/log/aka && \
 apt-get update && apt-get install -y --no-install-recommends \
