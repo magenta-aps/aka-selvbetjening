@@ -7,3 +7,4 @@ AKA Selvbetjeningsløsninger
   - `cd aka-selvbetjening`
 - Start docker containers:
   - `docker-compose up`
+#TODO udvikler guide mm bør tilføjes her: https://gronlandsprojekter.docs.magenta.dk/gl.docs.magenta.dk/projekter/aka_selvbetjening/index.html
