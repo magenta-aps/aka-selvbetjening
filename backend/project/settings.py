@@ -215,6 +215,7 @@ STATICFILES_DIRS = []
 
 
 PRISME_CONNECT = {
+    'mock': bool(strtobool(os.environ.get('PRISME_MOCK', 'False'))),
     'wsdl_file': os.environ.get('PRISME_WSDL', ''),
     'auth': {
         'basic': {
