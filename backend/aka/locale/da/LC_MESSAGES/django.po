@@ -172,27 +172,6 @@ msgid "error.invalid_cpr_cvr"
 msgstr "Ugyldigt CPR- eller CVR-nummer"
 
 
-# File lists
-
-msgid "filliste.mappeindhold"
-msgstr "{size} elementer"
-
-msgid "filliste.mappe"
-msgstr "Mappe"
-
-msgid "filliste.filnavn"
-msgstr "Filnavn"
-
-msgid "filliste.filstoerrelse"
-msgstr "Størrelse"
-
-msgid "filliste.filtype"
-msgstr "Type"
-
-msgid "filliste.op"
-msgstr "Op"
-
-
 # Index
 
 msgid "index.rentenota"
@@ -319,8 +298,14 @@ msgstr "Noter"
 msgid "fordring.meddebitor"
 msgstr "Meddebitor"
 
+msgid "fordring.errors"
+msgstr "Der opstod følgende fejl:"
+
 msgid "fordring.success"
-msgstr "Fordring oprettet"
+msgstr "Fordring indberettet"
+
+msgid "fordring.failed"
+msgstr "Der opstod et problem med indberetning"
 
 msgid "fordring.result"
 msgstr "Oprettede fordringsnumre:"
@@ -330,6 +315,21 @@ msgstr "Betalingsdato skal være før forfaldsdato"
 
 msgid "fordring.error_250.0"
 msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber}"
+
+msgid "fordring.report_date"
+msgstr "Indberetningsdato"
+
+msgid "fordring.effective"
+msgstr "Gældende for"
+
+msgid "fordring.receipt_headline"
+msgstr "Kvittering for indberetning af fordring"
+
+msgid "fordring.get_receipt"
+msgstr "Download kvittering"
+
+msgid "fordring.record_id"
+msgstr "Registrerings&shy;nummer"
 
 
 # 6.2
@@ -364,6 +364,9 @@ msgstr "Det totale beløb skal stemme med summen af beløbene i de enkelte rækk
 msgid "loentraek.success"
 msgstr "Løntræk indberettet"
 
+msgid "loentraek.failed"
+msgstr "Der opstod et problem med indberetning"
+
 msgid "loentraek.results"
 msgstr "Oprettede notater"
 
@@ -373,11 +376,28 @@ msgstr "Aftalenummer {nr} findes ikke"
 msgid "loentraek.error_250.1"
 msgstr "Det samme CPR-Nummer {cpr} må kun optræde en gang pr. indberetning"
 
+msgid "loentraek.report_date"
+msgstr "Indberetningsdato"
+
+msgid "loentraek.effective"
+msgstr "Gældende for"
+
+msgid "loentraek.receipt_headline"
+msgstr "Kvittering for indberetning af løntræk"
+
+msgid "loentraek.get_receipt"
+msgstr "Download kvittering"
+
+msgid "loentraek.record_id"
+msgstr "Registrerings&shy;nummer"
 
 # 6.4
 
 msgid "nedskrivning.success"
 msgstr "Nedskrivninger indberettet"
+
+msgid "nedskrivning.failed"
+msgstr "Der opstod et problem med indberetning"
 
 msgid "nedskrivning.result"
 msgstr "Oprettede nedskrivninger"
@@ -409,6 +429,17 @@ msgstr "Beløb"
 msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnummer"
 
+msgid "nedskrivning.report_date"
+msgstr "Indberetningsdato"
+
+msgid "nedskrivning.receipt_headline"
+msgstr "Kvittering for indberetning af nedskrivning"
+
+msgid "nedskrivning.get_receipt"
+msgstr "Download kvittering"
+
+msgid "nedskrivning.record_id"
+msgstr "Registrerings&shy;nummer"
 
 # NY18
 msgid "rentenota.title"
@@ -473,6 +504,9 @@ msgstr "Måned"
 
 msgid "rentenota.error_250.0"
 msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne periode {start} {end}"
+
+msgid "account.error_250.1"
+msgstr "Der findes ingen debitorer for dette CPR/CVR"
 
 
 

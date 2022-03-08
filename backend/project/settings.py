@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import sys
 
 from django.utils.translation import gettext_lazy as _
 from distutils.util import strtobool
@@ -39,6 +40,7 @@ X_FRAME_OPTIONS = 'DENY'
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SERIALIZER = 'aka.utils.AKAJSONSerializer'
 
 MEDIA_URL = BASE_DIR + '/upload/'
 
@@ -81,10 +83,11 @@ LOGGING = {
         },
     },
     'handlers': {
-        'debug-console': {
+        'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
+            'formatter': 'verbose',
+            'stream': sys.stdout,
         },
         'file': {
             'level': 'DEBUG',
@@ -113,16 +116,20 @@ LOGGING = {
             'handlers': ['file'],
         },
         'aka': {
-            'filters': ['require_debug_true'],
             'level': 'DEBUG',
-            'handlers': ['debug-console', 'file'],
+            'handlers': ['console', 'file'],
+            'propagate': True,
         },
         'oic': {
-            'handlers': ['debug-console'],
-            'filters': ['require_debug_true'],
-            'level': 'DEBUG'
-        }
-    }
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
 }
 
 ENCRYPTED_LOG_KEY_UID = 'AKA Selvbetjening'
@@ -179,16 +186,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/1.11/topics/i18n/
-
 LANGUAGE_CODE = 'da-dk'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 LANGUAGE_COOKIE_NAME = 'Sullissivik.Portal.Lang'
-LANGUAGE_COOKIE_DOMAIN = 'sullissivik.gl'
+LANGUAGE_COOKIE_DOMAIN = os.environ['DJANGO_LANGUAGE_COOKIE_DOMAIN']
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'i18n')]
 LANGUAGES = [
     ('da', _('Danish')),
@@ -227,6 +230,7 @@ PRISME_CONNECT = {
 }
 
 DAFO_CONNECT = {
+    'enabled': bool(strtobool(os.environ.get('DAFO_ENABLED', 'True'))),
     'pitu-server': '10.240.76.4',
     'client-certificate': os.environ.get('DAFO_CERTIFICATE', ''),
     'private-key': os.environ.get('DAFO_KEY', ''),

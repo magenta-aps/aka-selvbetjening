@@ -1103,3 +1103,13 @@ groups = [
         ]
     }
 ]
+groups_by_id = {}
+subgroups_by_id = {}
+for group in groups:
+    groups_by_id[group['id']] = group
+    for sub_group in group['sub_groups']:
+        group_id = sub_group['group_id']
+        type_id = sub_group['type_id']
+        if group_id not in subgroups_by_id:
+            subgroups_by_id[group_id] = {}
+        subgroups_by_id[group_id][type_id] = sub_group

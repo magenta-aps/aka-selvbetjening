@@ -62,15 +62,20 @@ class HasUserMixin(object):
         elif self.cvr is not None:
             try:
                 cvr = self.cvr
+                prisme = Prisme()
+                if prisme.mock:
+                    return ['1234']
                 claimant_ids = flatten([
                     response.claimant_id
-                    for response in Prisme().process_service(PrismeCvrCheckRequest(cvr), 'cvr_check', self.cpr, self.cvr)
+                    for response in prisme.process_service(PrismeCvrCheckRequest(cvr), 'cvr_check', self.cpr, self.cvr)
                 ])
                 request.session['claimantIds'] = claimant_ids
                 request.session.save()
                 return claimant_ids
             except (PrismeNotFoundException, AttributeError):
                 return []
+        else:
+            return []
 
     def get_company(self, request):
         if 'company' in request.session['user_info']:

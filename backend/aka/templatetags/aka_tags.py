@@ -3,11 +3,11 @@ import locale
 import re
 from html import unescape
 
+from aka.utils import month_name as util_month_name
 from django.template.defaultfilters import register
 from django.utils.http import urlquote
 from django.utils.translation import gettext
-
-from aka.utils import DecimalEncoder
+from django.core.serializers.json import DjangoJSONEncoder
 
 trans_re = re.compile("_\\((.*)\\)")
 format_re = re.compile("{(.*)}")
@@ -22,7 +22,7 @@ def split(text, filter):
 
 @register.filter
 def json(data):
-    return jsonlib.dumps(data, cls=DecimalEncoder)
+    return jsonlib.dumps(data, cls=DjangoJSONEncoder)
 
 
 @register.filter
@@ -98,3 +98,13 @@ def get(item, attribute):
         return item.get(attribute)
     if isinstance(item, (tuple, list)):
         return item[int(attribute)]
+
+
+@register.filter
+def cpr(item):
+    return f"{item[0:6]}-{item[6:10]}"
+
+
+@register.filter
+def month_name(month_number):
+    return util_month_name(month_number)

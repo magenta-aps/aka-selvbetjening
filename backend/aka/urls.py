@@ -25,6 +25,8 @@ from aka.views import NedskrivningView, NedskrivningUploadView
 from aka.views import RenteNotaView
 from django.conf.urls import url
 
+from aka.views import LoentraekReceiptView, FordringReceiptView, NedskrivningReceiptView
+
 app_name = 'aka'
 
 urlpatterns = [
@@ -47,4 +49,8 @@ urlpatterns = [
     url(r'^nedskrivning$', NedskrivningView.as_view(), name='nedskrivning'),
     url(r'^nedskrivning/upload$', NedskrivningUploadView.as_view(), name='nedskrivning-upload'),
     url(r'^konto$', KontoView.as_view(), name='konto'),
+
+    url(r'^loentraek/kvittering/(?P<pdf_id>[\w\-]+)', LoentraekReceiptView.as_view(), name='loentraek-kvittering'),
+    url(r'^inkassosag/kvittering/(?P<pdf_id>[\w\-]+)', FordringReceiptView.as_view(), name='inkassosag-kvittering'),
+    url(r'^nedskrivning/kvittering/(?P<pdf_id>[\w\-]+)', NedskrivningReceiptView.as_view(), name='nedskrivning-kvittering'),
 ]

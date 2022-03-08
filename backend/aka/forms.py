@@ -4,7 +4,7 @@ from io import StringIO
 import re
 
 import chardet
-from aka.data.fordringsgruppe import groups
+from aka.data.fordringsgruppe import groups, groups_by_id, subgroups_by_id
 from aka.utils import get_ordereddict_key_index
 from aka.utils import spreadsheet_col_letter
 from aka.widgets import TranslatedSelect
@@ -367,6 +367,15 @@ class InkassoForm(forms.Form):
             raise ValidationError('error.fordringstype_not_found')
         type = type_match[0]
         return (group['id'], "%d.%d" % (type['group_id'], type['type_id']))
+
+    @staticmethod
+    def get_group_type_text(group_type_str):
+        group_id, type_id = group_type_str.split('.')
+        return subgroups_by_id[int(group_id)][int(type_id)]['name']
+
+    @staticmethod
+    def get_group_name(group_id):
+        return groups_by_id[int(group_id)]['name']
 
 
 class InkassoCoDebitorFormItem(forms.Form):

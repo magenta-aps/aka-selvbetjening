@@ -1,0 +1,52 @@
+{% extends 'aka/receipt.html' %}
+{% load i18n %}
+{% load l10n %}
+{% block content %}
+
+<h1>{% trans 'nedskrivning.receipt_headline' %}</h1>
+
+{% localize off %}
+<table class="overview">
+    <tr>
+        <th>{% trans 'nedskrivning.report_date' %}</th>
+        <td>{{received_date|date:'j. F Y'}}</td>
+    </tr>
+</table>
+{% endlocalize %}
+<br/>
+<table class="details">
+    <thead>
+        <tr>
+            <th>
+                {% trans 'nedskrivning.debitor' %}
+            </th>
+            <th>
+                {% trans 'nedskrivning.ekstern_sagsnummer' %}
+            </th>
+            <th>
+                {% trans 'nedskrivning.beloeb' %}
+            </th>
+            <th>
+                {% trans 'nedskrivning.sekvensnummer' %}
+            </th>
+            <th>
+                {% trans 'nedskrivning.record_id' %}
+            </th>
+        </tr>
+    </thead>
+
+    {% for line in lines %}
+        <tr>
+            {% localize off %}
+            <td>{{line.debitor|cpr}}</td>
+            <td>{{line.ekstern_sagsnummer}}</td>
+            {% endlocalize %}
+            <td>{{line.beloeb}}</td>
+            {% localize off %}
+            <td>{{line.sekvensnummer}}</td>
+            <td>{{line.rec_ids|join:', '}}</td>
+            {% endlocalize %}
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

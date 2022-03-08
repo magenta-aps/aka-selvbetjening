@@ -42,6 +42,12 @@ class LoginManager:
                 if 'user_info' not in request.session or not request.session['user_info']:
                     if not self.authenticate(request):  # The user might not have anything in his session, but he may have a cookie that can log him in anyway
                         return self.redirect_to_login(request)
+        else:
+            if 'user_info' not in request.session or not request.session['user_info']:
+                request.session['user_info'] = {
+                    'CVR': settings.DEFAULT_CVR,
+                    'CPR': settings.DEFAULT_CPR,
+                }
         try:
             response = self.get_response(request)
             if response.status_code == 403:
