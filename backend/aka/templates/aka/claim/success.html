@@ -11,7 +11,11 @@
 <article class="success">
     {% localize off %}
     <form>
+        {% if rec_ids %}
         <h1 class="page-header" data-trans="fordring.success">{% trans 'fordring.success' %}</h1>
+        {% else %}
+        <h1 class="page-header" data-trans="fordring.failed">{% trans 'fordring.failed' %}</h1>
+        {% endif %}
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
@@ -35,7 +39,10 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-4">
+                <div class="col-12">
+                    {% if pdf_id %}
+                        <a href="{% url 'aka:inkassosag-kvittering' pdf_id=pdf_id %}" class="button" data-trans="fordring.get_receipt" target="_blank">{% trans 'fordring.get_receipt' %}</a>
+                    {% endif %}
                     {% if upload %}
                         <a href="{% url 'aka:inkassosag-upload' %}" class="button"  data-trans="common.repeat">{% trans 'common.repeat' %}</a>
                     {% else %}

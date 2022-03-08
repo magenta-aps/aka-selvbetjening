@@ -26,7 +26,7 @@
 
                 {% if form.non_field_errors %}
                     <div class="err-msg">
-                        <span data-trans="common.upload.validation">{% trans 'common.upload.validation' %}</span>
+                        <span data-trans="error.upload_validation">{% trans 'error.upload_validation' %}</span>
                         <ul class="errorlist">
                             {% for error in form.non_field_errors.as_data %}
                                 <li {% if error.code %}data-trans="{{ error.code }}"{% endif %} {% if error.params %}data-trans-params="{{ error.params|json }}"{% endif %}>

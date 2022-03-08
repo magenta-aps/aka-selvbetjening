@@ -1,6 +1,8 @@
 import json
 import logging
 import re
+import uuid
+from io import BytesIO
 
 from aka.clients.prisme import Prisme, PrismeException
 from aka.clients.prisme import PrismeAKIRequest
@@ -33,15 +35,18 @@ from aka.mixins import SimpleGetFormMixin
 from aka.mixins import SpreadsheetRendererMixin
 from aka.utils import flatten
 from aka.utils import get_ordereddict_key_index
+from aka.utils import render_pdf
 from aka.utils import spreadsheet_col_letter
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.forms import formset_factory
-from django.http import JsonResponse, HttpResponse
+from django.http import Http404
+from django.http import JsonResponse, HttpResponse, FileResponse
 from django.shortcuts import redirect
 from django.template import Engine, Context
 from django.template.response import TemplateResponse
 from django.urls import reverse
+from django.utils import timezone
 from django.utils import translation
 from django.utils.datetime_safe import date
 from django.utils.decorators import method_decorator
@@ -112,6 +117,24 @@ class SetLanguageView(View):
             path=settings.LANGUAGE_COOKIE_PATH,
         )
         return response
+
+
+class GetPDFView(RequireCvrMixin, View):
+    def get(self, request, *args, **kwargs):
+        pdf_id = kwargs['pdf_id']
+        try:
+            pdf_context = request.session['receipts'][pdf_id]
+        except KeyError:
+            raise Http404
+        return FileResponse(
+            BytesIO(render_pdf(pdf_context['template'], pdf_context['context'])),
+            filename=pdf_context['filename'],
+            as_attachment=True
+        )
+
+
+class GetReceiptView(GetPDFView):
+    type = 'receipts'
 
 
 logger = logging.getLogger(__name__)
@@ -399,6 +422,8 @@ class InkassoSagView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSet
     @staticmethod
     def send_claim(claimant_id, form, codebtors, cpr, cvr):
         prisme = Prisme()
+        if prisme.mock:
+            return ['1234']
 
         claim_type = form.cleaned_data['fordringstype'].split(".")
 
@@ -423,11 +448,11 @@ class InkassoSagView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSet
             files=[file for name, file in form.files.items()]
         )
         prisme_replies = prisme.process_service(claim, 'fordring', cpr, cvr)
-        return prisme_replies
+        return [reply.rec_id for reply in prisme_replies]
 
     def form_valid(self, form, formset):
         if len(self.claimant_ids) == 0:
-            form.add_error('__all__', _("login.error_no_claimants"))
+            form.add_error(None, _("login.error_no_claimants"))
             return self.form_invalid(form, formset)
         codebtors = []
         if formset:
@@ -438,19 +463,62 @@ class InkassoSagView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSet
                     codebtors.append(cpr)
                 elif cvr is not None:
                     codebtors.append(cvr)
-        prisme_replies = InkassoSagView.send_claim(self.claimant_ids[0], form, codebtors, self.cpr, self.cvr)
+        pdf_id = None
+        try:
+            rec_ids = InkassoSagView.send_claim(self.claimant_ids[0], form, codebtors, self.cpr, self.cvr)
+            if rec_ids:
+                pdf_id = InkassoSagView.store_pdf_context(
+                    self.request.session,
+                    self.cvr,
+                    [{**form.cleaned_data, 'rec_ids': rec_ids}],
+                )
+        except PrismeException as e:
+            form.add_error(None, e.as_validationerror)
+            return self.form_invalid(form, formset)
+
         return TemplateResponse(
             request=self.request,
             template="aka/claim/success.html",
             context={
-                'rec_ids': [reply.rec_id for reply in prisme_replies],
-                'upload': False
+                'rec_ids': rec_ids,
+                'upload': False,
+                'pdf_id': pdf_id,
             },
             using=self.template_engine
         )
 
     def form_invalid(self, form, formset):
         return self.render_to_response(self.get_context_data(form=form, formset=formset))
+
+    @staticmethod
+    def store_pdf_context(session, cvr, data):
+        now = timezone.now().strftime('%Y-%m-%d %H:%M:%S')
+        pdf_context = {
+            'received_date': date.today(),
+            'cvr': cvr,
+            'lines': [
+                {
+                    'debitor': subdata.get('debitor'),
+                    'fordringsgruppe': InkassoForm.get_group_name(subdata.get('fordringsgruppe')),
+                    'fordringstype': InkassoForm.get_group_type_text(subdata.get('fordringstype')),
+                    'ekstern_sagsnummer': subdata.get('ekstern_sagsnummer'),
+                    'hovedstol': subdata.get('hovedstol'),
+                    'forfaldsdato': subdata.get('forfaldsdato'),
+                    'rec_ids': subdata['rec_ids'],
+                }
+                for subdata in data
+            ]
+        }
+        if 'receipts' not in session:
+            session['receipts'] = {}
+        pdf_id = str(uuid.uuid4())
+        session['receipts'][pdf_id] = {
+            'context': pdf_context,
+            'filename': f'kvittering_fordring_{now}.pdf',
+            'template': 'aka/claim/receipt.html',
+        }
+        session.modified = True
+        return pdf_id
 
 
 class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormView):
@@ -468,52 +536,52 @@ class InkassoSagUploadView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, F
                 codebtors.append(value)
             if field == 'meddebitorer' and len(value):
                 codebtors += value.split(',')
-        prisme_replies = InkassoSagView.send_claim(claimant, subform, codebtors, self.cpr, self.cvr)
-        return [reply.rec_id for reply in prisme_replies]
+        try:
+            rec_ids = InkassoSagView.send_claim(claimant, subform, codebtors, self.cpr, self.cvr)
+            return {**subform.cleaned_data, 'rec_ids': rec_ids}
+        except PrismeException as e:
+            logger.exception(e)
+            return {'error': e}
 
     def form_valid(self, form):
-
         if len(self.claimant_ids) == 0:
-            form.add_error('__all__', "login.error_no_claimants")
+            form.add_error(None, ValidationError(_("login.error_no_claimants"), 'login.error_no_claimants'))
             return self.form_invalid(form)
-
-        responses = []
 
         if self.parallel:
             import concurrent.futures
             with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-                try:
-                    results = executor.map(self.handle_subform, [subform for subform in form.subforms])
-                    responses = flatten(list(results))
-                except PrismeException as e:
-                    logger.info("Got error code %s from prisme (%s)" % (str(e.code), e.context))
-                    if e.code == 250 or e.code == '250':
-                        form.add_error(None, e.as_validationerror)
-                        return self.form_invalid(form)
-                    else:
-                        raise e
-
+                results = list(executor.map(self.handle_subform, [subform for subform in form.subforms]))
         else:
-            for subform in form.subforms:
-                try:
-                    responses.extend(self.handle_subform(subform))
-                except PrismeException as e:
-                    if e.code == 250 or e.code == '250':
-                        form.add_error(None, e.as_validationerror)
-                        return self.form_invalid(form)
-                    else:
-                        logger.info("Got error code %s from prisme" % str(e.code))
-                        raise e
+            results = [self.handle_subform(subform) for subform in form.subforms]
+
+        responses = []
+        errors = []
+        for result in results:
+            if 'rec_ids' in result:
+                responses.append(result)
+            if 'error' in result:
+                errors.append(result['error'].as_error_dict)
+
+        pdf_id = None
+        if responses:
+            pdf_id = InkassoSagView.store_pdf_context(self.request.session, self.cvr, responses)
 
         return TemplateResponse(
             request=self.request,
             template="aka/claim/success.html",
             context={
-                'rec_ids': responses,
-                'upload': True
+                'rec_ids': flatten([response['rec_ids'] for response in responses]),
+                'upload': True,
+                'errors': errors,
+                'pdf_id': pdf_id
             },
             using=self.template_engine
         )
+
+
+class FordringReceiptView(GetReceiptView):
+    context = 'fordring'
 
 
 class InkassoGroupDataView(View):
@@ -543,29 +611,36 @@ class LoentraekView(RequireCvrMixin, IsContentMixin, FormSetView, FormView):
 
     def form_valid(self, form, formset):
         prisme = Prisme()
-
         try:
-            payroll = PrismePayrollRequest(
-                cvr=self.cvr,
-                date=date(int(form.cleaned_data['year']), int(form.cleaned_data['month']), 1),
-                received_date=date.today(),
-                amount=form.cleaned_data['total_amount'],
-                lines=[
-                    PrismePayrollRequestLine(
-                        subform.cleaned_data.get('cpr'),
-                        subform.cleaned_data.get('agreement_number'),
-                        subform.cleaned_data.get('amount'),
-                        subform.cleaned_data.get('net_salary')
-                    )
-                    for subform in formset
-                    if subform.cleaned_data
-                ]
-            )
-            rec_id = prisme.process_service(payroll, 'loentraek', self.cpr, self.cvr)[0].rec_id
+            if prisme.mock:
+                rec_ids = ['1234']
+            else:
+                payroll = PrismePayrollRequest(
+                    cvr=self.cvr,
+                    date=date(int(form.cleaned_data['year']), int(form.cleaned_data['month']), 1),
+                    received_date=date.today(),
+                    amount=form.cleaned_data['total_amount'],
+                    lines=[
+                        PrismePayrollRequestLine(
+                            subform.cleaned_data.get('cpr'),
+                            subform.cleaned_data.get('agreement_number'),
+                            subform.cleaned_data.get('amount'),
+                            subform.cleaned_data.get('net_salary')
+                        )
+                        for subform in formset
+                        if subform.cleaned_data
+                    ]
+                )
+                rec_ids = [x.rec_id for x in prisme.process_service(payroll, 'loentraek', self.cpr, self.cvr)]
+            if rec_ids:
+                pdf_id = self.store_pdf_context(form.cleaned_data, [subform.cleaned_data for subform in formset], rec_ids)
             return TemplateResponse(
                 request=self.request,
                 template="aka/payroll/success.html",
-                context={'rec_ids': [rec_id]},
+                context={
+                    'rec_ids': rec_ids,
+                    'pdf_id': pdf_id,
+                },
                 using=self.template_engine
             )
         except PrismeException as e:
@@ -587,6 +662,40 @@ class LoentraekView(RequireCvrMixin, IsContentMixin, FormSetView, FormView):
         return self.render_to_response(
             self.get_context_data(form=form, formset=formset)
         )
+
+    def store_pdf_context(self, formdata, formsetdata, rec_ids):
+        now = timezone.now().strftime('%Y-%m-%d %H:%M:%S')
+        pdf_context = {
+            'received_date': date.today(),
+            'date': {'year': int(formdata['year']), 'month': int(formdata['month'])},
+            'total_amount': formdata['total_amount'],
+            'rec_ids': rec_ids,
+            'cvr': self.cvr,
+            'lines': [
+                {
+                    'cpr': subformdata.get('cpr'),
+                    'agreement_number': subformdata.get('agreement_number'),
+                    'amount': subformdata.get('amount'),
+                    'net_salary': subformdata.get('net_salary')
+                }
+                for subformdata in formsetdata
+            ]
+        }
+        session = self.request.session
+        if 'receipts' not in session:
+            session['receipts'] = {}
+        pdf_id = str(uuid.uuid4())
+        session['receipts'][pdf_id] = {
+            'context': pdf_context,
+            'filename': f'kvittering_løntræk_{now}.pdf',
+            'template': 'aka/payroll/receipt.html',
+        }
+        session.modified = True
+        return pdf_id
+
+
+class LoentraekReceiptView(GetReceiptView):
+    context = 'loentraek'
 
 
 class LoentraekUploadView(LoentraekView):
@@ -639,7 +748,10 @@ class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormV
     form_class = NedskrivningForm
     template_name = 'aka/impairment/form.html'
 
-    def send_impairment(self, form, prisme):
+    def send_impairment(self, form):
+        prisme = Prisme()
+        if prisme.mock:
+            return ['1234']
         data = form if type(form) == dict else form.cleaned_data
         claimant = data['fordringshaver'] or self.claimant_ids[0]
         impairment = PrismeImpairmentRequest(
@@ -650,27 +762,65 @@ class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormV
             amount_balance=-abs(data.get('beloeb', 0)),
             claim_number_seq=data.get('sekvensnummer')
         )
-        return prisme.process_service(impairment, 'nedskrivning', self.cpr, self.cvr)[0].rec_id
+        return [x.rec_id for x in prisme.process_service(impairment, 'nedskrivning', self.cpr, self.cvr)]
 
     def form_valid(self, form):
-        prisme = Prisme()
+        if len(self.claimant_ids) == 0:
+            form.add_error(None, ValidationError(_("login.error_no_claimants"), 'login.error_no_claimants'))
+            return self.form_invalid(form)
+        pdf_id = None
         try:
-            rec_id = self.send_impairment(form, prisme)
+            rec_ids = self.send_impairment(form)
+            if rec_ids:
+                pdf_id = self.store_pdf_context([{**form.cleaned_data, 'rec_ids': rec_ids}])
             return TemplateResponse(
                 request=self.request,
                 template="aka/impairment/success.html",
                 context={
-                    'rec_ids': [rec_id],
-                    'upload': False
+                    'rec_ids': rec_ids,
+                    'upload': False,
+                    'pdf_id': pdf_id,
                 },
                 using=self.template_engine
             )
         except PrismeException as e:
             if e.code == 250 or e.code == '250':
-                form.add_error('ekstern_sagsnummer', e.as_validationerror)
+                form.add_error(None, e.as_validationerror)
                 return self.form_invalid(form)
             logger.info("Got error code %s from prisme" % str(e.code))
             raise e
+
+    def store_pdf_context(self, data):
+        now = timezone.now().strftime('%Y-%m-%d %H:%M:%S')
+        pdf_context = {
+            'received_date': date.today(),
+            'cvr': self.cvr,
+            'lines': [
+                {
+                    'debitor': subdata.get('debitor'),
+                    'ekstern_sagsnummer': subdata.get('ekstern_sagsnummer'),
+                    'beloeb': -abs(subdata.get('beloeb', 0)),
+                    'sekvensnummer': subdata.get('sekvensnummer'),
+                    'rec_ids': subdata.get('rec_ids')
+                }
+                for subdata in data
+            ]
+        }
+        session = self.request.session
+        if 'receipts' not in session:
+            session['receipts'] = {}
+        pdf_id = str(uuid.uuid4())
+        session['receipts'][pdf_id] = {
+            'context': pdf_context,
+            'filename': f'kvittering_nedskrivning_{now}.pdf',
+            'template': 'aka/impairment/receipt.html',
+        }
+        session.modified = True
+        return pdf_id
+
+
+class NedskrivningReceiptView(GetReceiptView):
+    context = 'nedskrivning'
 
 
 class NedskrivningUploadView(NedskrivningView):
@@ -679,42 +829,34 @@ class NedskrivningUploadView(NedskrivningView):
     parallel = False
 
     def handle_form(self, data):
-        rec_id = None
-        error = None
-        prisme = Prisme()
         try:
-            rec_id = self.send_impairment(data, prisme)
+            rec_ids = self.send_impairment(data)
+            return {'rec_ids': rec_ids, **data}
         except PrismeException as e:
             logger.info("Got error from prisme: %s %s for %s" % (str(e.code), e.text, str(data)))
-            error = e.as_error_dict
-            logger.info("Error_dict: %s" % str(e.as_error_dict))
-        return (rec_id, error)
+            return {'error': e}
 
     def form_valid(self, form):
-        rec_ids = []
-        errors = []
         if self.parallel:
             import concurrent.futures
             with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-                results = executor.map(self.handle_form, [subform.cleaned_data for subform in form.subforms])
-                rec_ids = [r[0] for r in results if r[0]]
-                errors = [r[1] for r in results if r[1]]
+                results = list(executor.map(self.handle_form, [subform.cleaned_data for subform in form.subforms]))
         else:
-            for subform in form.subforms:
-                try:
-                    rec_id, error = self.handle_form(subform.cleaned_data)
-                    if rec_id:
-                        rec_ids.append(rec_id)
-                    if error:
-                        errors.append(error)
-                except PrismeException as e:
-                    logger.info("Error_dict: %s" % str(e.as_error_dict))
-                    if e.code == 250 or e.code == '250':
-                        errors.append(e.as_error_dict)
-                        logger.info("Got error code %s from prisme for %s" % (str(e.code), str(subform.cleaned_data)))
-                    else:
-                        logger.info("Got error code %s from prisme for %s" % (str(e.code), str(subform.cleaned_data)))
-                        raise e
+            results = [self.handle_form(subform.cleaned_data) for subform in form.subforms]
+
+        rec_ids = []
+        responses = []
+        errors = []
+        for result in results:
+            if 'rec_ids' in result:
+                rec_ids += result['rec_ids']
+                responses.append(result)
+            if 'error' in result:
+                errors.append(result['error'].as_error_dict)
+
+        pdf_id = None
+        if responses:
+            pdf_id = self.store_pdf_context(responses)
 
         return TemplateResponse(
             request=self.request,
@@ -722,7 +864,8 @@ class NedskrivningUploadView(NedskrivningView):
             context={
                 'rec_ids': rec_ids,
                 'errors': errors,
-                'upload': True
+                'upload': True,
+                'pdf_id': pdf_id,
             },
             using=self.template_engine
         )

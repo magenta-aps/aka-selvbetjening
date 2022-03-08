@@ -1,0 +1,61 @@
+{% extends 'aka/receipt.html' %}
+{% load i18n %}
+{% load l10n %}
+{% block content %}
+
+<h1>{% trans 'loentraek.receipt_headline' %}</h1>
+
+{% localize off %}
+<table class="overview">
+    <tr>
+        <th>{% trans 'loentraek.report_date' %}</th>
+        <td>{{received_date|date:'j. F Y'}}</td>
+    </tr>
+    <tr>
+        <th>{% trans 'loentraek.effective' %}</th>
+        <td>{{date.month|month_name|capfirst}} {{date.year}}</td>
+    </tr>
+    <tr>
+        <th>{% trans 'loentraek.total_amount' %}</th>
+        <td>{{total_amount}}</td>
+    </tr>
+    {% for rec_id in rec_ids %}
+    <tr>
+        {% if forloop.first %}
+        <th rowspan="{{rec_ids|length}}">{% trans 'loentraek.record_id' %}</th>
+        {% endif %}
+        <td>{{rec_id}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endlocalize %}
+<br/>
+<table class="details">
+    <thead>
+        <tr>
+            <th>
+                {% trans 'loentraek.cpr' %}
+            </th>
+            <th>
+                {% trans 'loentraek.agreement_number' %}
+            </th>
+            <th>
+                {% trans 'loentraek.amount' %}
+            </th>
+            <th>
+                {% trans 'loentraek.net_salary' %}
+            </th>
+        </tr>
+    </thead>
+    {% for line in lines %}
+        <tr>
+            {% localize off %}
+            <td>{{line.cpr|cpr}}</td>
+            <td>{{line.agreement_number}}</td>
+            {% endlocalize %}
+            <td>{{line.amount}}</td>
+            <td>{{line.net_salary}}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

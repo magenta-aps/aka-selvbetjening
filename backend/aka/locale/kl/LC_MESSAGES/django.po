@@ -72,7 +72,7 @@ msgid "login.multiple_cvr"
 msgstr "Cpr.normumut CVR normut arlallit attuumassuteqarput, sorliussanersoq toqqaruk"
 
 msgid "login.error_no_claimants"
-msgstr "Der findes ingen fordringshavere for dette login"
+msgstr "Tassunga login-imut akiligassiisoqarsimanngilaq"
 
 msgid "common.telefon"
 msgstr "Oqarasuaat"
@@ -96,13 +96,13 @@ msgid "common.konto"
 msgstr "Konto"
 
 msgid "common.postboks"
-msgstr "Postboks {box}"
+msgstr "Postboksi {box}"
 
 msgid "common.email"
-msgstr "Email"
+msgstr "E-maili"
 
 msgid "common.webadresse"
-msgstr "Web-adresse"
+msgstr "nittartakkap adressia"
 
 msgid "common.skattestyrelsen"
 msgstr "Akileraartarnermut Aqutsisoqarfik"
@@ -249,10 +249,10 @@ msgid "fordring.dokumentation"
 msgstr "Uppernarsaat"
 
 msgid "fordring.fordringsgruppe"
-msgstr "Ekstern fordringsgruppe"
+msgstr "Akiligassiissutigineqartut immikkoortui"
 
 msgid "fordring.fordringstype"
-msgstr "Ekstern fordringstype"
+msgstr "Akiligassiissutigineqartut suussusiisa immikkortui"
 
 msgid "fordring.barns_cpr"
 msgstr "Meeqqap CPR-normua"
@@ -296,8 +296,14 @@ msgstr "Nalunaarsukkat"
 msgid "fordring.meddebitor"
 msgstr "Akiligassaqaqataasoq"
 
+msgid "fordring.errors"
+msgstr "Ukuninnga kukkuneqarpoq:"
+
 msgid "fordring.success"
-msgstr "Fordring ikkuppoq"
+msgstr "Akiligassamik ikaartitsinermik nalunaartoqarpoq"
+
+msgid "fordring.failed"
+msgstr "Nalunaaruteqarnermi ajortoqarpoq"
 
 msgid "fordring.result"
 msgstr "Fodrings normut ikkupput"
@@ -306,7 +312,22 @@ msgid "fordring.bill_date_before_due_date"
 msgstr "Ulloq akiliiffissaq ullormit akiliiffissamit kingulermit siusinnerussaaq"
 
 msgid "fordring.error_250.0"
-msgstr "Der findes ikke en inkassosag med det eksterne ref.nr. {refnumber}"
+msgstr "Ref.nr.-mut {refnumber} tassunga akiligassaqanngilaq"
+
+msgid "fordring.report_date"
+msgstr "Ulloq nalunaaruteqarfik"
+
+msgid "fordring.effective"
+msgstr "Uunga tunngasoq"
+
+msgid "fordring.receipt_headline"
+msgstr "Akiligassamik nalunaaruteqarnermut uppernarsaat"
+
+msgid "fordring.get_receipt"
+msgstr "Uppernarsaammik aallerfik"
+
+msgid "fordring.record_id"
+msgstr "Nalunaarsuinermi normu"
 
 
 # 6.2
@@ -339,22 +360,42 @@ msgid "loentraek.sum_mismatch"
 msgstr "Katinnerata tamarmiusup akit rækkeniittut tamarmik katinneri amerlaqatigissavai"
 
 msgid "loentraek.success"
-msgstr "Akissarsianit ilanngaaneq nalunaarutigineqarpoq"
+msgstr "Akissarsianit ilanngaataasimasumik nalunaartoqarpoq"
+
+msgid "loentraek.failed"
+msgstr "Nalunaaruteqarnermi ajortoqarpoq"
 
 msgid "loentraek.results"
 msgstr "Nalunaarsukkat ikkutat"
 
 msgid "loentraek.error_250.0"
-msgstr "Aftalenummer {nr} findes ikke"
+msgstr "Isumaqatigiissutip normua {nr} kukkuvoq"
 
 msgid "loentraek.error_250.1"
-msgstr "Det samme CPR-Nummer {cpr} må kun optræde en gang pr. indberetning"
+msgstr "Inuup normua {cpr} ataasiaannarluni nalunaarsuinermi ilaasinnaavoq"
 
+msgid "loentraek.report_date"
+msgstr "Ulloq nalunaaruteqarfik"
+
+msgid "loentraek.effective"
+msgstr "Uunga tunngasoq"
+
+msgid "loentraek.receipt_headline"
+msgstr "Akissarsianit ilanngaataasimasunik nalunaaruteqarnermut uppernarsaat"
+
+msgid "loentraek.get_receipt"
+msgstr "Uppernarsaammik aallerfik"
+
+msgid "loentraek.record_id"
+msgstr "Nalunaarsuinermi normu"
 
 # 6.4
 
 msgid "nedskrivning.success"
-msgstr "Milliliinerit nalunaarutigineqarput"
+msgstr "Millilerinermik nalunaartoqarpoq"
+
+msgid "nedskrivning.failed"
+msgstr "Nalunaaruteqarnermi ajortoqarpoq"
 
 msgid "nedskrivning.result"
 msgstr "Milliliinerit ikkutat"
@@ -366,7 +407,7 @@ msgid "nedskrivning.error_250.0"
 msgstr "Ref.nr-mi {refnumber} avataaneersumi akiliisitsiniarnermi suliap normuanik soqanngilaq"
 
 msgid "nedskrivning.error_250.1"
-msgstr "Det fremsendte beløb {amount} er større end restsaldoen på inkassosagen {saldo}"
+msgstr "Nalunaarutiginiakkap annertussusia {amount} akiligassamit {saldo} anneruvoq"
 
 msgid "nedskrivning.title"
 msgstr "Milliliineq nalunaarutigiuk"
@@ -386,6 +427,17 @@ msgstr "Aningaasat amerlassusaat"
 msgid "nedskrivning.sekvensnummer"
 msgstr "Sekvensnormu"
 
+msgid "nedskrivning.report_date"
+msgstr "Ulloq nalunaaruteqarfik"
+
+msgid "nedskrivning.receipt_headline"
+msgstr "Millilikkamik nalunaaruteqarnermut uppernarsaat"
+
+msgid "nedskrivning.get_receipt"
+msgstr "Uppernarsaammik aallerfik"
+
+msgid "nedskrivning.record_id"
+msgstr "Nalunaarsuinermi normu"
 
 # NY18
 msgid "rentenota.title"
@@ -451,6 +503,8 @@ msgstr "Qaammat"
 msgid "rentenota.error_250.0"
 msgstr "Uunga CPR/CVR {cvr} imaluunniit piffissamut pineqartumut {start} {end} erniaqanngilaq"
 
+msgid "account.error_250.1"
+msgstr "CPR/CVR system-imi takuneqarsinnaanngilaq"
 
 # NY16
 
@@ -521,6 +575,9 @@ msgstr "CVR"
 msgid "account.cpr"
 msgstr "CPR"
 
+msgid "account.cprcvr"
+msgstr "CPR/CVR"
+
 msgid "account.yourref"
 msgstr "Saaffissat"
 
@@ -552,7 +609,7 @@ msgid "account.accounting_date"
 msgstr "Naatsorsuutinik nalunaarsuinerup ullua"
 
 msgid "account.debitor_group_id"
-msgstr "Debitor&shy;gruppe"
+msgstr "Akiligassat immikkoortut suussusiat"
 
 msgid "account.debitor_group_name"
 msgstr "Debitorgruppe-p aqqa"
@@ -591,7 +648,7 @@ msgid "account.collection_letter_code"
 msgstr "Nukingisaarinermut kode"
 
 msgid "account.claim_type_code"
-msgstr "Fordringsartskode"
+msgstr "Akiligassap suussusiata ilisarnaataa"
 
 msgid "account.invoice_number"
 msgstr "Akileeqqussutip normua"
@@ -630,11 +687,10 @@ msgid "account.error_250.0"
 msgstr "CPR/CVR system-imi takuneqarsinnaanngilaq"
 
 msgid "account.title_sel"
-msgstr "SEL - Skattestyrelsens kontoudtog"
+msgstr "SEL- Akileraartarnermi Aqutsisoqarfiup kontoudtog-ia"
 
 msgid "account.title_aki"
-msgstr "AKI - Inddrivelsens kontoudtog"
-
+msgstr "AKI- Akiliisitsiniartarfiup kontoudtog-ia"
 
 
 msgid "DK"

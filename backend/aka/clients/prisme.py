@@ -39,14 +39,23 @@ class PrismeException(AkaException):
                     'args': ['amount', 'saldo']
                 }
             ],
-            'rentenota': [{
-                'id': 0,
-                're': re.compile(
-                    r'Der findes ingen renter for dette CPR/CVR (\d+) eller for '
-                    r'den angivne periode (\d{2}-\d{2}-\d{4}) (\d{2}-\d{2}-\d{4})'
-                ),
-                'args': ['cvr', 'start', 'end']
-            }],
+            'rentenota': [
+                {
+                    'id': 0,
+                    're': re.compile(
+                        r'Der findes ingen renter for dette CPR/CVR (\d+) eller for '
+                        r'den angivne periode (\d{2}-\d{2}-\d{4}) (\d{2}-\d{2}-\d{4})'
+                    ),
+                    'args': ['cvr', 'start', 'end']
+                },
+                {
+                    'id': 1,
+                    're': re.compile(
+                        r'Der findes ingen debitorer for dette CPR/CVR'
+                    ),
+                    'args': []
+                }
+            ],
             'loentraek': [{
                 'id': 0,
                 're': re.compile(r'Aftalenummer (.+) findes ikke'),
@@ -98,7 +107,7 @@ class PrismeException(AkaException):
 
     @property
     def as_error_dict(self):
-        return {'key': "%s.error_250" % self.context, 'params': self.params}
+        return {'key': self.error_code, 'params': self.params}
 
 
 class PrismeNotFoundException(AkaException):
@@ -539,7 +548,7 @@ class PrismeRecIdResponse(PrismeResponseObject):
 
     @classmethod
     def test(cls, rec_id):
-        return cls(f"<{cls.response_tag}><RecId>{rec_id}</RecId></{cls.response_tag}>")
+        return cls(None, f"<{cls.response_tag}><RecId>{rec_id}</RecId></{cls.response_tag}>")
 
 
 class PrismeClaimResponse(PrismeRecIdResponse):
@@ -685,7 +694,7 @@ class Prisme(object):
 
     def process_service(self, request_object, context, cpr, cvr):
         if self.mock is True:
-            return ['']
+            return []
         try:
             request_class = self.client.get_type("tns:GWSRequestDCFUJ")
             request = request_class(

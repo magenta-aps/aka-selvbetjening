@@ -3,10 +3,16 @@ import datetime
 import json
 import logging
 import os
+from decimal import Decimal
 from math import floor
 
-from decimal import Decimal
+from dateutil import parser as datetimeparser
 from django.conf import settings
+from django.core.signing import JSONSerializer
+from django.template.loader import render_to_string
+from django.utils.translation import gettext_lazy as _
+from weasyprint import HTML
+from weasyprint.text.fonts import FontConfiguration
 
 logger = logging.getLogger(__name__)
 
@@ -131,8 +137,64 @@ def flatten(lst):
     return [lst]
 
 
-class DecimalEncoder(json.JSONEncoder):
+# Solves the issue where a datetime object and a string with an iso-encoded datetime will be serialized to the same json string,
+# and deserialized to the same object. When we care about the type of the deserialized object, we add the information about the
+# original class here. This is especially relevant if the user inputs a parseable datestring which is then rendered in a template.
+class AKAJSONEncoder(json.JSONEncoder):
     def default(self, obj):
+        if isinstance(obj, datetime.datetime):
+            return {'__datetime__': obj.isoformat()}
+        if isinstance(obj, datetime.date):
+            return {'__date__': obj.isoformat()}
         if isinstance(obj, Decimal):
-            return str(obj)
-        return json.JSONEncoder.default(self, obj)
+            return {'__decimal__': str(obj)}
+        return super().default(obj)
+
+
+class AKAJSONSerializer(JSONSerializer):
+
+    def dumps(self, obj):
+        return json.dumps(obj, separators=(',', ':'), cls=AKAJSONEncoder).encode('utf-8')
+
+    def loads(self, jsonstr, **kwargs):
+        obj = super().loads(jsonstr, **kwargs)
+        self.traverse(obj)
+        return obj
+
+    # convert strings that look like dates and datetimes to those classes
+    def traverse(self, item):
+        if isinstance(item, dict):
+            if '__datetime__' in item:
+                return datetimeparser.isoparse(item['__datetime__'])
+            if '__date__' in item:
+                return datetimeparser.isoparse(item['__date__']).date()
+            if '__decimal__' in item:
+                return Decimal(item['__decimal__'])
+            for k, v in item.items():
+                changed_value = self.traverse(v)
+                if changed_value is not None:
+                    item[k] = changed_value
+        elif isinstance(item, list):
+            for i, v in enumerate(item):
+                changed_value = self.traverse(v)
+                if changed_value is not None:
+                    item[i] = changed_value
+        return None
+
+
+def render_pdf(template_name, context):
+    html = render_to_string(template_name, context)
+    font_config = FontConfiguration()
+    return HTML(string=html).write_pdf(font_config=font_config)
+
+
+months = (
+    _('January'), _('February'), _('March'),
+    _('April'), _('May'), _('June'),
+    _('July'), _('August'), _('September'),
+    _('October'), _('November'), _('December')
+)
+
+
+def month_name(month_number):
+    return months[month_number-1]

@@ -31,6 +31,8 @@ class Dafo(object):
         if DEBUG:
             return {}
         config = settings.DAFO_CONNECT
+        if not config.enabled:
+            return {}
         response = requests.get(
             "https://%s/restapi/%s" % (
                 config['pitu-server'],

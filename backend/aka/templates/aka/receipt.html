@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=no">
+        <title>Kvittering</title>
+        <style>
+            body {
+                font: 0.6em Arial, sans-serif;
+            }
+            table {
+                border-collapse: collapse;
+            }
+            table.overview {
+                width: 50%;
+            }
+            table.details {
+                width: 100%;
+                table-layout: fixed;
+            }
+            td, th {
+                text-align: left;
+                border: 1px solid #dddddd;
+            }
+            table.overview th, table.overview td {
+                width: 50%;
+            }
+            table.details th, table.details td {
+            }
+        </style>
+    </head>
+    <body>
+    {% block content %}
+    {% endblock %}
+    </body>
+</html>

@@ -1,6 +1,7 @@
-from django.conf.urls import url, include
+from django.conf.urls import url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
+from django.urls import include
 
 urlpatterns = [
     url(r'^oid/', include('sullissivik.login.openid.urls', namespace='openid')),
