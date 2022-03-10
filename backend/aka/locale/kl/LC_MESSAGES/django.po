@@ -198,7 +198,7 @@ msgid "index.nedskrivning-upload"
 msgstr "Milliliineq uploaderuk"
 
 msgid "index.løntræk"
-msgstr "Aningaasarsianiit ilanngatuinerit nalunaarutigikkit"
+msgstr "Aningaasarsianiit ilanngartuinerit nalunaarutigikkit"
 
 msgid "index.løntræk.sub"
 msgstr "Uani Aningaasarsianiit  ilanngatuinerit nalunaarutigikkit"
