@@ -1,3 +1,5 @@
+import os.path
+
 from django.test import TestCase
 import gnupg
 import logging
@@ -11,6 +13,8 @@ class BasicTestCase(TestCase):
         super().setUpClass()
         cls.keyname = "TEST KEY"
         cls.folder = '/tmp/gnupg'
+        if not os.path.isdir(cls.folder):
+            os.mkdir(cls.folder)
         cls.gpg = gnupg.GPG(gnupghome=cls.folder)
         logging.disable(logging.CRITICAL)
         input_data = cls.gpg.gen_key_input(
