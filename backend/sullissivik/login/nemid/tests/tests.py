@@ -49,7 +49,7 @@ class LoginTestCase(TestCase):
     def testMissingCookieGivesRedirect(self):
         response = self.client.get(reverse('aka:inkassosag'))
         self.assertEqual(302, response.status_code)
-        location = response._headers.get('location')
+        location = response.headers.get('location')
         self.assertIn(reverse('aka:login') + "?back=" + reverse('aka:inkassosag'), location)
 
     def testValidCookieDoesLogin1(self):
@@ -89,14 +89,14 @@ class LoginTestCase(TestCase):
         # Go to a protected page, and be redirected to login (login_response fails)
         response = self.client.get(reverse('aka:inkassosag'), follow=False)
         self.assertEqual(302, response.status_code)
-        location = response._headers.get('location')
+        location = response.headers.get('location')
         self.assertIn(reverse('aka:login') + "?back=" + reverse('aka:inkassosag'), location)
 
         # Have a cookie, and "be redirected" from sullissivik back to nemid login view, which accepts and redirects to the original url
         self.client.cookies[self.sfc] = cookie
         response = self.client.get(reverse('nemid:login') + "?back=" + reverse('aka:inkassosag'))
         self.assertEqual(302, response.status_code)
-        location = response._headers.get('location')
+        location = response.headers.get('location')
         # env = self.client._base_environ()
         self.assertIn(reverse('aka:inkassosag'), location)
         self.assertTrue(self.outcome)
@@ -119,7 +119,7 @@ class LoginTestCase(TestCase):
 
         response = self.client.get(reverse('aka:inkassosag'))
         self.assertEqual(302, response.status_code)
-        location = response._headers.get('location')
+        location = response.headers.get('location')
         self.assertIn(reverse('aka:login') + "?back=" + reverse('aka:inkassosag'), location)
 
     def testValidCookieDoesRedirect2(self):
@@ -140,14 +140,14 @@ class LoginTestCase(TestCase):
         # Go to a protected page, and be redirected to login (login_response fails)
         response = self.client.get(reverse('aka:inkassosag'), follow=False)
         self.assertEqual(302, response.status_code)
-        location = response._headers.get('location')
+        location = response.headers.get('location')
         self.assertIn(reverse('aka:login') + "?back=" + reverse('aka:inkassosag'), location)
 
         # Have an invalid cookie, and "be redirected" from SSO back to nemid login view, which rejects and redirects back
         self.client.cookies[self.sfc] = cookie
         response = self.client.get(reverse('nemid:login'))
         self.assertEqual(302, response.status_code)
-        location = response._headers.get('location')
+        location = response.headers.get('location')
         env = self.client._base_environ()
         returnurl = "http://%s%s" % (env['SERVER_NAME'], reverse('nemid:login'))
 
