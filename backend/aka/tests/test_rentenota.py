@@ -5,6 +5,7 @@ from aka.clients.prisme import PrismeInterestNoteResponse
 from aka.tests.mixins import TestMixin
 from django.test import TestCase
 from django.test import override_settings
+from django.utils.translation import gettext as _
 from lxml import etree
 from xmltodict import parse as xml_to_dict
 
@@ -99,42 +100,42 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         root = etree.fromstring(response.content, etree.HTMLParser())
         header_row = root.xpath("//table[@class='output-table']/thead/tr")[0]
-        headers = [cell.text for cell in header_row.iterchildren()]
+        headers = [cell.text.strip(' \n').replace('\xad', '&shy;') for cell in header_row.iterchildren()]
         rows = root.xpath("//table[@class='output-table']/tbody/tr[@class='rentenota-post-table-datarow']")
-        data = [{headers[i]: cell.text.strip() for i, cell in enumerate(row.iterchildren())} for row in rows]
+        data = [{headers[i]: cell.text.strip(' \n') for i, cell in enumerate(row.iterchildren())} for row in rows]
         self.assertEqual(2, len(data))
         self.assertEqual([
             {
-                'Dato': '03-04-2019',
-                'Debitor\xadkonto': '00000725',
-                'Fakturerings\xadklassifikation': '200',
-                'Bilag': 'FAK-00000040',
-                'Rentenota\xadnummer': '00000001',
-                'Tekst': 'Renter af fakturanummer 00000044',
-                'Forfalds\xaddato': '02-01-2018',
-                'Grundlag': '4000.00',
-                'Beløb': '160.00',
-                'Postdato': '02-01-2018',
-                'Faktura': '00000044',
-                'Fradato': '01-01-2019',
-                'Tildato': '',
-                'Dage': '0',
+                _('rentenota.updated'): '03-04-2019',
+                _('rentenota.account_number'): '00000725',
+                _('rentenota.billing_classification'): '200',
+                _('rentenota.voucher'): 'FAK-00000040',
+                _('rentenota.interest_note'): '00000001',
+                _('rentenota.text'): 'Renter af fakturanummer 00000044',
+                _('rentenota.due_date'): '02-01-2018',
+                _('rentenota.invoice_amount'): '4000.00',
+                _('rentenota.interest_amount'): '160.00',
+                _('rentenota.transaction_date'): '02-01-2018',
+                _('rentenota.invoice'): '00000044',
+                _('rentenota.calculate_from_date'): '01-01-2019',
+                _('rentenota.calculate_to_date'): '',
+                _('rentenota.interest_days'): '0',
             },
             {
-                'Dato': '03-04-2019',
-                'Debitor\xadkonto': '00000726',
-                'Fakturerings\xadklassifikation': '200',
-                'Bilag': 'FAK-00000039',
-                'Rentenota\xadnummer': '00000002',
-                'Tekst': 'Renter af fakturanummer 00000043',
-                'Forfalds\xaddato': '02-01-2018',
-                'Grundlag': '7000.00',
-                'Beløb': '280.00',
-                'Postdato': '02-01-2018',
-                'Faktura': '00000043',
-                'Fradato': '01-01-2019',
-                'Tildato': '',
-                'Dage': '0',
+                _('rentenota.updated'): '03-04-2019',
+                _('rentenota.account_number'): '00000726',
+                _('rentenota.billing_classification'): '200',
+                _('rentenota.voucher'): 'FAK-00000039',
+                _('rentenota.interest_note'): '00000002',
+                _('rentenota.text'): 'Renter af fakturanummer 00000043',
+                _('rentenota.due_date'): '02-01-2018',
+                _('rentenota.invoice_amount'): '7000.00',
+                _('rentenota.interest_amount'): '280.00',
+                _('rentenota.transaction_date'): '02-01-2018',
+                _('rentenota.invoice'): '00000043',
+                _('rentenota.calculate_from_date'): '01-01-2019',
+                _('rentenota.calculate_to_date'): '',
+                _('rentenota.interest_days'): '0',
             },
         ], data)
         rows = root.xpath("//table[@class='output-table']/tbody/tr[@class='rentenota-post-table-sumrow']")
