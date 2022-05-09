@@ -120,6 +120,9 @@ Selvbetjening Unittest:
 Release dev image:
   extends:
     - .release-default
+  only:
+    refs:
+      - master
   script:
     - skopeo copy
       --src-creds=${CI_REGISTRY_USER}:${CI_BUILD_TOKEN}
@@ -141,15 +144,6 @@ Release production image:
 # Configure stage
 #################
 
-Configure test:
-  stage: configure
-  extends:
-    - .release-to-test
-  when: manual
-  needs: ["Release dev image"]
-  variables:
-    ENDPOINT: akap/update-test
-
 Configure prod:
   stage: configure
   extends:
@@ -165,12 +159,12 @@ Configure prod:
 
 Deploy test:
   stage: deploy
-  extends:
-    - .saltbert
-  needs: ["Configure test"]
+  when: manual
   only:
     refs:
       - master
+  extends:
+    - .saltbert
   variables:
     SALTBERT_ORCHESTRATION: aka_selvbetjening.service-test
     SALTBERT_URL: https://ctrldev1.magenta-aps.dk
