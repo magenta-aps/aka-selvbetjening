@@ -3,7 +3,9 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.http import urlencode, urlquote
-from django.utils.module_loading import import_string
+from sullissivik.login.nemid.nemid import NemId
+from sullissivik.login.openid.openid import OpenId
+from aka.login.saml import OIOSaml
 
 
 class LoginManager:
