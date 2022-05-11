@@ -12,12 +12,12 @@ from onelogin.saml2.utils import OneLogin_Saml2_Utils
 
 logger = logging.getLogger(__name__)
 
-"""
-Borrows heavily from python3-saml-django
-https://pypi.org/project/python3-saml-django/
-"""
-class Saml2:
 
+class Saml2:
+    """
+    Borrows heavily from python3-saml-django
+    https://pypi.org/project/python3-saml-django/
+    """
     def __init__(self, **settings):
         self.settings = settings
 
@@ -53,16 +53,6 @@ class Saml2:
     @cached_property
     def onelogin_settings(self):
         return OneLogin_Saml2_Settings(self.settings, self.settings['base_directory'])
-
-    def metadata(self, request):
-        """Render the metadata of this service."""
-        metadata_dict = self.onelogin_settings.get_sp_metadata()
-        errors = self.onelogin_settings.validate_metadata(metadata_dict)
-        if len(errors) == 0:
-            resp = HttpResponse(content=metadata_dict, content_type='text/xml')
-        else:
-            resp = HttpResponseServerError(content=', '.join(errors))
-        return resp
 
     def login(self, request):
         """Kick off a SAML login request."""
@@ -173,7 +163,6 @@ class Saml2:
         """Render the metadata of this service."""
         metadata_dict = self.onelogin_settings.get_sp_metadata()
         errors = self.onelogin_settings.validate_metadata(metadata_dict)
-
         if len(errors) == 0:
             resp = HttpResponse(content=metadata_dict, content_type='text/xml')
         else:
