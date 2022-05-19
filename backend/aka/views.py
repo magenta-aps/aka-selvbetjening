@@ -302,9 +302,11 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
                     self.form.cleaned_data['from_date'],
                     self.form.cleaned_data['to_date'],
                     self.form.cleaned_data['open_closed']
-                ), "account", self.cpr, self.cvr)[0]
+                ), "account", self.cpr, self.cvr)
                 self._data[key] = []
-                for entry in prisme_reply:
+                if len(prisme_reply) == 0:
+                    return []
+                for entry in prisme_reply[0]:
                     data = []
                     for field in self.get_fields(key):
                         value = getattr(entry, field['name'])
@@ -335,8 +337,10 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
                 lookup_class = self.get_total_lookup_class(key)
                 prisme_reply = self.prisme.process_service(lookup_class(
                     cprcvr
-                ), "account", self.cpr, self.cvr)[0]
-                self._total[key] = prisme_reply
+                ), "account", self.cpr, self.cvr)
+                if len(prisme_reply) == 0:
+                    return None
+                self._total[key] = prisme_reply[0]
             except PrismeException:
                 pass
         return self._total.get(key)

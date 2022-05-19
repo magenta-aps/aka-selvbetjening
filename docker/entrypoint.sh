@@ -3,6 +3,7 @@ set -e
 SKIP_MIGRATIONS=${SKIP_MIGRATIONS:=false}
 TEST=${TEST:=false}
 PGP_KEY=${PGP_KEY:=false}
+python manage.py compilemessages
 if [ "$SKIP_MIGRATIONS" = false ]; then
   python manage.py wait_for_db
   echo 'running migrations'

@@ -151,7 +151,7 @@ class HasUserMixin(object):
             'person': self.person,
             'logged_in': {'navn': ' | '.join([
                 x['navn'] for x in [self.person, self.company]
-                if x is not None
+                if x is not None and 'navn' in x
             ])}
         }
         context.update(kwargs)
