@@ -1,4 +1,4 @@
-FROM python:3.6
+FROM python:3.9
 ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-amd64 \
     SUPERCRONIC=supercronic-linux-amd64 \
     SUPERCRONIC_SHA1SUM=048b95b48b708983effb2e5c935a1ef8483d9e3e\
@@ -30,7 +30,6 @@ COPY ./docker/entrypoint.sh /entrypoint.sh
 COPY --chown=aka:aka ./backend /backend
 USER aka
 WORKDIR /backend
-RUN django-admin compilemessages
 EXPOSE 8000
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["gunicorn","-b","0.0.0.0:8000","project.wsgi:application","-w 4","--timeout", "240", "--error-logfile", "-","--capture-output"]
