@@ -21,7 +21,12 @@ class Saml2:
     def __init__(self, **settings):
         self.settings = settings
 
-    whitelist = [reverse_lazy('aka:login'), reverse_lazy('aka:login-callback'),  reverse_lazy('aka:logout-callback'), reverse_lazy('aka:metadata')]
+    whitelist = [
+        reverse_lazy('aka:login'),
+        reverse_lazy('aka:login-callback'),
+        reverse_lazy('aka:logout-callback'),
+        reverse_lazy('aka:metadata')
+    ]
 
     @property
     def name(self):
