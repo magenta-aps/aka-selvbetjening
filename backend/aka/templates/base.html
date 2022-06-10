@@ -80,6 +80,8 @@
                         {% endif %}
                         {% if cpr or cvr %}
                             <a href="{% url 'aka:logout' %}" data-trans="common.logout">{% trans 'common.logout' %}</a>
+                            {% else %}
+                            <a href="{% url 'aka:login' %}" data-trans="common.login">{% trans 'Log ind' %}</a>
                         {% endif %}
                     </div>
                     </nav>

@@ -24,3 +24,4 @@ django-watchman==1.2.0
 WeasyPrint>=54.1
 python-dateutil
 coverage
+python3-saml

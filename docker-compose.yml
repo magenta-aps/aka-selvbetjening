@@ -26,6 +26,7 @@ services:
     volumes:
       - ./backend/:/backend
       - ./logs:/var/log/aka
+      - ./dev-environment/cert:/ssl:ro
     command: gunicorn -b 0.0.0.0:8000 project.wsgi:application --reload -w 1 --access-logfile - --error-logfile - --capture-output # reload on code changes
 
   selvbetjening-cron:
@@ -41,6 +42,26 @@ services:
     depends_on:
       - selvbetjening-db
     command: [ "supercronic", "/crontab" ]
+
+
+  test-idp:
+    user: "1000:1000"
+    image: kenchan0130/simplesamlphp
+    container_name: idp
+    ports:
+      - "8888:8080"
+    environment:
+      SIMPLESAMLPHP_SP_ENTITY_ID: http://localhost:8000/saml/metadata/
+      # SIMPLESAMLPHP_SP_ENTITY_ID: http://aalisakkat.aka.nanoq.gl
+      SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost:8000/login/callback/
+      SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost:8000/logout/callback/
+      #SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost:8888/simplesaml/module.php/saml/sp/saml2-acs.php/example-userpass
+      #SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost:8888/simplesaml/module.php/saml/sp/saml2-logout.php/example-userpass
+
+    volumes:
+      - ./dev-environment/cert/idp:/var/www/simplesamlphp/cert:ro
+      - ./dev-idp/authsources.php:/var/www/simplesamlphp/config/authsources.php
+
 
 volumes:
   selvbetjening-postgres-data:

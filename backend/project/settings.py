@@ -13,8 +13,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import sys
 
-from django.utils.translation import gettext_lazy as _
 from distutils.util import strtobool
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SITE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -41,6 +41,7 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SERIALIZER = 'aka.utils.AKAJSONSerializer'
+
 
 MEDIA_URL = BASE_DIR + '/upload/'
 
@@ -153,7 +154,7 @@ INSTALLED_APPS = [
     'sullissivik.login.nemid',
     'sullissivik.login.openid',
     'aka',
-    'watchman'
+    'watchman',
 ]
 
 MIDDLEWARE = [
@@ -268,6 +269,59 @@ NEMID_CONNECT = {
     'private_key': os.environ.get('NEMID_KEY', ""),
     'get_user_service': os.environ.get('NEMID_USER_SERVICE', ""),
 }
+
+
+def read_file(filename):
+    try:
+        with open(filename, "r") as file:
+            return file.read()
+    except FileNotFoundError:
+        return None
+
+
+SAML = {
+    'enabled': bool(strtobool(os.environ.get('SAML_ENABLED', 'False'))),
+    'strict': False,
+    'debug': True,
+    'base_directory': None,
+    'destination_host': None,
+    'destination_https': None,
+    'destination_port': None,
+    'login_redirect': '/',
+    'logout_redirect': '/',
+    'sp': {
+        "entityId": "http://localhost:8000/saml/metadata/",
+        "assertionConsumerService": {
+            "url": "http://localhost:8000/saml/login/callback",
+            # DO NOT CHANGE THIS
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+        },
+        "singleLogoutService": {
+            "url": "http://localhost:8000/saml/logout/callback/",
+            # DO NOT CHANGE THIS
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        },
+        "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified",
+        "x509cert": read_file("/ssl/sp/certificate.pem"),
+        "privateKey": read_file("/ssl/sp/key.pem"),
+    },
+    'idp': {
+        "entityId": "http://localhost:8888/simplesaml/saml2/idp/metadata.php",
+        "singleSignOnService": {
+            "url": "http://localhost:8888/simplesaml/saml2/idp/SSOService.php",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        },
+        "singleLogoutService": {
+            "url": "http://localhost:8888/simplesaml/saml2/idp/SingleLogoutService.php",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        },
+        "x509cert": read_file("/ssl/idp/server.crt"),
+    }
+}
+
+
+LOGIN_PROVIDER_CLASS = 'aka.login.saml.OIOSaml'
+
 
 MOUNTS = {
     'claimant_account_statements': {  # 6.5
