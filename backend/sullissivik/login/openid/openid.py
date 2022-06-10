@@ -27,6 +27,10 @@ class OpenId:
         return settings.OPENID_CONNECT.get('enabled', False)
 
     @staticmethod
+    def is_logged_in(request):
+        return True if request.session.get('user_info') else False
+
+    @staticmethod
     def authenticate(request):
         return None  # If the user has nothing in the session, we just don't log him in - there's no SSO cookie that we may want to check
 
