@@ -50,17 +50,16 @@ from django.utils import timezone
 from django.utils import translation
 from django.utils.datetime_safe import date
 from django.utils.decorators import method_decorator
-from django.utils.http import urlquote
+from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _, gettext
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
-from sullissivik.login.nemid.nemid import NemId
-from sullissivik.login.openid.openid import OpenId
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -148,23 +147,58 @@ class IndexTemplateView(HasUserMixin, AkaMixin, TemplateView):
         return super(IndexTemplateView, self).get(*args, **kwargs)
 
 
-class LoginView(TemplateView):
-    template_name = 'login.html'
+LoginProvider = import_string(settings.LOGIN_PROVIDER_CLASS)
 
-    def dispatch(self, request, *args, **kwargs):
-        url = reverse('openid:login')
-        if 'back' in self.request.GET:
-            url += "?back=" + urlquote(self.request.GET['back'])
-        return redirect(url)
+
+class LoginView(View):
+    def get(self, request):
+        provider = LoginProvider.from_settings()
+        request.session['login_method'] = provider.__class__.__name__
+        return provider.login(request)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class LoginCallbackView(View):
+    def get(self, request):
+        provider = LoginProvider.from_settings()
+        return provider.handle_login_callback(
+            request=request,
+            success_url=reverse('aka:index'),
+            failure_url=reverse('aka:login')
+        )
+
+    def post(self, request, *args, **kwargs):
+        provider = LoginProvider.from_settings()
+        return provider.handle_login_callback(
+            request=request,
+            success_url=reverse('aka:index'),
+            failure_url=reverse('aka:login')
+        )
 
 
 class LogoutView(View):
-    def get(self, request, *args, **kwargs):
-        method = request.session.get('login_method')
-        if method == 'openid':
-            return OpenId.logout(self.request.session)
-        else:
-            return NemId.logout(self.request.session)
+    def get(self, request):
+        provider = LoginProvider.from_settings()
+        return provider.logout(request)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class LogoutCallbackView(View):
+
+    @xframe_options_exempt
+    def get(self, request):
+        provider = LoginProvider.from_settings()
+        return provider.handle_logout_callback(request)
+
+    def post(self, request, *args, **kwargs):
+        provider = LoginProvider.from_settings()
+        return provider.handle_logout_callback(request)
+
+
+class MetadataView(View):
+    def get(self, request):
+        provider = LoginProvider.from_settings()
+        return provider.metadata(request)
 
 
 class ChooseCvrView(AkaMixin, TemplateView):

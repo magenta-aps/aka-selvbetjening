@@ -3,30 +3,33 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.http import urlencode, urlquote
+from django.utils.module_loading import import_string
 from sullissivik.login.nemid.nemid import NemId
-from sullissivik.login.openid.openid import OpenId
 
 
 class LoginManager:
 
     @property
     def enabled(self):
-        return NemId.enabled() or OpenId.enabled()
+        return settings.LOGIN_PROVIDER_CLASS is not None
 
     white_listed_urls = []
 
     def __init__(self, get_response):
-        self.get_response = get_response
-        # Urls that should not redirect an anonymous user to login page
-        self.white_listed_urls = NemId.whitelist + OpenId.whitelist + [
-            # reverse('aka:index'),
-            reverse('aka:login'),
-            '/favicon.ico',
-            reverse('aka:javascript-language-catalog', kwargs={'locale': 'da'}),
-            reverse('aka:javascript-language-catalog', kwargs={'locale': 'kl'}),
-            reverse('aka:set-language'),
-            reverse('status')
-        ]
+        if self.enabled:
+            # LoginProvider is a class object defined in settings, e.g. aka.login.saml.OIOSaml
+            LoginProvider = import_string(settings.LOGIN_PROVIDER_CLASS)
+            self.get_response = get_response
+            # Urls that should not redirect an anonymous user to login page
+            self.white_listed_urls = LoginProvider.whitelist + [
+                # reverse('aka:index'),
+                reverse('aka:login'),
+                '/favicon.ico',
+                reverse('aka:javascript-language-catalog', kwargs={'locale': 'da'}),
+                reverse('aka:javascript-language-catalog', kwargs={'locale': 'kl'}),
+                reverse('aka:set-language'),
+                reverse('status')
+            ]
 
     def redirect_to_login(self, request):
         backpage = urlquote(request.path)
