@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 from django.utils.http import urlencode, urlquote
 
 
@@ -19,25 +19,24 @@ class LoginManager:
     white_listed_urls = []
 
     def __init__(self, get_response):
+        self.white_listed_urls = list(settings.LOGIN_WHITELISTED_URLS)
         if self.enabled:
             self.get_response = get_response
             # Urls that should not redirect an anonymous user to login page
-            self.white_listed_urls = self.login_provider_class.whitelist + [
-                # reverse('aka:index'),
-                reverse('aka:login'),
-                reverse('aka:logout'),
-                '/favicon.ico',
-                reverse('aka:javascript-language-catalog', kwargs={'locale': 'da'}),
-                reverse('aka:javascript-language-catalog', kwargs={'locale': 'kl'}),
-                reverse('aka:set-language'),
-                reverse('status')
+            if hasattr(self.login_provider_class, 'whitelist'):
+                self.white_listed_urls += self.login_provider_class.whitelist
+            self.white_listed_urls += [
+                reverse('login:login'),
+                reverse('login:login-callback'),
+                reverse('login:logout'),
+                reverse('login:logout-callback'),
             ]
 
     def redirect_to_login(self, request):
         backpage = urlquote(request.path)
         if request.GET:
             backpage += "?" + urlencode(request.GET, True)
-        return redirect(reverse_lazy('aka:login') + "?back=" + backpage)
+        return redirect(settings.LOGIN_URL + "?back=" + backpage)
 
     def __call__(self, request):
         if self.enabled:

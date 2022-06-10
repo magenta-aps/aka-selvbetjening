@@ -14,7 +14,7 @@ class MiddlewareTestCase(TestCase):
         """
         r = self.client.get(reverse('aka:konto'), follow=False)
         self.assertEqual(r.status_code, 302)
-        self.assertEqual(r.url, reverse('aka:login') + "?back=" + reverse('aka:konto'))
+        self.assertEqual(r.url, reverse('login:login') + "?back=" + reverse('aka:konto'))
 
     def test_not_logged_in_form_view(self):
         """
@@ -23,4 +23,4 @@ class MiddlewareTestCase(TestCase):
         data = {'fordringshaver': 'firstname', 'debitor': 'debitor'}
         r = self.client.post(reverse('aka:inkassosag'), data=data)
         self.assertEqual(r.status_code, 302)
-        self.assertEqual(r.url, reverse('aka:login') + "?back=" + reverse('aka:inkassosag'))
+        self.assertEqual(r.url, reverse('login:login') + "?back=" + reverse('aka:inkassosag'))

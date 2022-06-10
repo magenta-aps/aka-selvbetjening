@@ -14,6 +14,7 @@ import os
 import sys
 
 from distutils.util import strtobool
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -138,7 +139,7 @@ ENCRYPTED_LOG_KEY_UID = 'AKA Selvbetjening'
 ALLOWED_HOSTS = ['*']
 
 AUTHENTICATION_BACKENDS = [
-    'sullissivik.login.nemid.authentication.CookieAuthBackend'
+    'login.nemid.authentication.CookieAuthBackend'
 ]
 
 # See local_settings_example.py
@@ -151,8 +152,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.staticfiles',
     'django.contrib.auth',
-    'sullissivik.login.nemid',
-    'sullissivik.login.openid',
+    'login',
     'aka',
     'watchman',
 ]
@@ -164,7 +164,7 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'sullissivik.login.middleware.LoginManager',
+    'login.middleware.LoginManager',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -320,8 +320,17 @@ SAML = {
 }
 
 
-LOGIN_PROVIDER_CLASS = 'aka.login.saml.OIOSaml'
-
+LOGIN_PROVIDER_CLASS = 'login.saml.oiosaml.OIOSaml'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'
+LOGIN_WHITELISTED_URLS = [
+    # reverse('aka:index'),
+    '/favicon.ico',
+    reverse_lazy('aka:javascript-language-catalog', kwargs={'locale': 'da'}),
+    reverse_lazy('aka:javascript-language-catalog', kwargs={'locale': 'kl'}),
+    reverse_lazy('aka:set-language'),
+    reverse_lazy('status')
+]
 
 MOUNTS = {
     'claimant_account_statements': {  # 6.5

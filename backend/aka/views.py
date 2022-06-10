@@ -146,59 +146,53 @@ class IndexTemplateView(HasUserMixin, AkaMixin, TemplateView):
     def get(self, *args, **kwargs):
         return super(IndexTemplateView, self).get(*args, **kwargs)
 
-
-LoginProvider = import_string(settings.LOGIN_PROVIDER_CLASS)
-
-
-class LoginView(View):
-    def get(self, request):
-        provider = LoginProvider.from_settings()
-        request.session['login_method'] = provider.__class__.__name__
-        return provider.login(request)
-
-
-@method_decorator(csrf_exempt, name='dispatch')
-class LoginCallbackView(View):
-    def get(self, request):
-        provider = LoginProvider.from_settings()
-        return provider.handle_login_callback(
-            request=request,
-            success_url=reverse('aka:index'),
-            failure_url=reverse('aka:login')
-        )
-
-    def post(self, request, *args, **kwargs):
-        provider = LoginProvider.from_settings()
-        return provider.handle_login_callback(
-            request=request,
-            success_url=reverse('aka:index'),
-            failure_url=reverse('aka:login')
-        )
-
-
-class LogoutView(View):
-    def get(self, request):
-        provider = LoginProvider.from_settings()
-        return provider.logout(request)
-
-
-@method_decorator(csrf_exempt, name='dispatch')
-class LogoutCallbackView(View):
-
-    @xframe_options_exempt
-    def get(self, request):
-        provider = LoginProvider.from_settings()
-        return provider.handle_logout_callback(request)
-
-    def post(self, request, *args, **kwargs):
-        provider = LoginProvider.from_settings()
-        return provider.handle_logout_callback(request)
-
-
-class MetadataView(View):
-    def get(self, request):
-        provider = LoginProvider.from_settings()
-        return provider.metadata(request)
+#
+# LoginProvider = import_string(settings.LOGIN_PROVIDER_CLASS)
+#
+#
+# class LoginView(View):
+#     def get(self, request):
+#         provider = LoginProvider.from_settings()
+#         request.session['login_method'] = provider.name
+#         return provider.login(request)
+#
+#
+# @method_decorator(csrf_exempt, name='dispatch')
+# class LoginCallbackView(View):
+#     def get(self, request):
+#         provider = LoginProvider.from_settings()
+#         return provider.handle_login_callback(
+#             request=request,
+#             success_url=reverse('aka:index'),
+#             failure_url=reverse('aka:login')
+#         )
+#
+#     def post(self, request, *args, **kwargs):
+#         provider = LoginProvider.from_settings()
+#         return provider.handle_login_callback(
+#             request=request,
+#             success_url=reverse('aka:index'),
+#             failure_url=reverse('aka:login')
+#         )
+#
+#
+# class LogoutView(View):
+#     def get(self, request):
+#         provider = LoginProvider.from_settings()
+#         return provider.logout(request)
+#
+#
+# @method_decorator(csrf_exempt, name='dispatch')
+# class LogoutCallbackView(View):
+#
+#     @xframe_options_exempt
+#     def get(self, request):
+#         provider = LoginProvider.from_settings()
+#         return provider.handle_logout_callback(request)
+#
+#     def post(self, request, *args, **kwargs):
+#         provider = LoginProvider.from_settings()
+#         return provider.handle_logout_callback(request)
 
 
 class ChooseCvrView(AkaMixin, TemplateView):
