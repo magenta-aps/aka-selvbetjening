@@ -39,9 +39,13 @@ class LoginTestCase(TestCase):
             m = re.search("<Cookie %s=(.*) for %s/>" % (self.sfc, self.domain), request.COOKIES.get(self.sfc, ''))
             if m and m.group(1) == cookievalue:
                 self.outcome = True
-                return SessionOnlyUser.get_user(request.session, '1234567890', 'TestUserName')
-            self.outcome = False
-            return SessionOnlyUser.get_user(request.session)
+                user = SessionOnlyUser.get_user(request.session, '1234567890', 'TestUserName')
+            else:
+                self.outcome = False
+                user = SessionOnlyUser.get_user(request.session)
+            if user is not None and user.is_authenticated:
+                request.session['user_info'] = user.dict()
+            return user
         patch_object = patch('sullissivik.login.nemid.nemid.NemId.authenticate')
         login_mock = patch_object.start()
         login_mock.side_effect = login_response

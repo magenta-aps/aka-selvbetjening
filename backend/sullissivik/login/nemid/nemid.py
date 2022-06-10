@@ -19,6 +19,12 @@ class NemId:
         return settings.NEMID_CONNECT.get("enabled")
 
     @staticmethod
+    def is_logged_in(request):
+        NemId.authenticate(request)
+        # The user might not have anything in his session, but he may have a cookie that can log him in anyway
+        return True if request.session.get('user_info') else False
+
+    @staticmethod
     def authenticate(request):
         user = SessionOnlyUser.get_user(request.session)
         if not user.is_authenticated:
