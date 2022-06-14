@@ -1,12 +1,11 @@
+from django.conf import settings
 from django.conf.urls import url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.conf import settings
-from django.urls import include
+from django.urls import include, path
 
 urlpatterns = [
-    url(r'^oid/', include('sullissivik.login.openid.urls', namespace='openid')),
-    url(r'^nemid/', include('sullissivik.login.nemid.urls', namespace='nemid')),
     url(r'', include('aka.urls', namespace='aka')),
+    path('', include('django_mitid_auth.urls', namespace='login')),
     url(r'^_ht/', include('watchman.urls')),
 ]
 

@@ -79,9 +79,9 @@
                             <span data-trans="common.logged_in_as" data-trans-params="{{ logged_in|json }}">{{ 'common.logged_in_as'|format:logged_in }}</span>
                         {% endif %}
                         {% if cpr or cvr %}
-                            <a href="{% url 'aka:logout' %}" data-trans="common.logout">{% trans 'common.logout' %}</a>
+                            <a href="{% url 'login:logout' %}" data-trans="common.logout">{% trans 'common.logout' %}</a>
                             {% else %}
-                            <a href="{% url 'aka:login' %}" data-trans="common.login">{% trans 'Log ind' %}</a>
+                            <a href="{% url 'login:login' %}" data-trans="common.login">{% trans 'Log ind' %}</a>
                         {% endif %}
                     </div>
                     </nav>
