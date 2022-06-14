@@ -270,8 +270,8 @@ SAML = {
             "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
         },
         "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified",
-        "x509cert": os.environ.get('SAML_SP_CERT') or read_file("/ssl/sp/serviceprovider.crt"),
-        "privateKey": os.environ.get('SAML_SP_KEY') or read_file("/ssl/sp/serviceprovider.key"),
+        "x509cert": read_file(os.environ.get('SAML_SP_CERTIFICATE')) or read_file("/ssl/sp/serviceprovider.crt"),
+        "privateKey": read_file(os.environ.get('SAML_SP_KEY')) or read_file("/ssl/sp/serviceprovider.key"),
     },
     'idp': {
         "entityId": "http://localhost:8888/simplesaml/saml2/idp/metadata.php",
