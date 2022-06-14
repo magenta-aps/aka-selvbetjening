@@ -21,12 +21,10 @@ from aka.views import InkassoSagView, InkassoSagUploadView
 from aka.views import KontoView
 from aka.views import LoentraekReceiptView, FordringReceiptView, NedskrivningReceiptView
 from aka.views import LoentraekView, LoentraekUploadView
-from aka.views import LoginView, LogoutView
 from aka.views import NedskrivningView, NedskrivningUploadView
 from aka.views import RenteNotaView
 from django.conf.urls import url
 
-from aka.views import LoginCallbackView, LogoutCallbackView, MetadataView
 
 app_name = 'aka'
 
@@ -36,13 +34,6 @@ urlpatterns = [
         r'^language/(?P<locale>[a-z]{2})',
         CustomJavaScriptCatalog.as_view(domain='django', packages=['aka']), name='javascript-language-catalog'
     ),
-
-    url(r'^login$', LoginView.as_view(), name='login'),
-    url(r'^logout$', LogoutView.as_view(), name='logout'),
-    url(r'login/callback/?', LoginCallbackView.as_view(), name='login-callback'),
-    url(r'logout/callback/?', LogoutCallbackView.as_view(), name='logout-callback'),
-    url(r'metadata/?', MetadataView.as_view(), name='metadata'),
-
     url(r'^language', SetLanguageView.as_view(), name='set-language'),
     url(r'^$', IndexTemplateView.as_view(), name='index'),
     url(r'^choose_cvr$', ChooseCvrView.as_view(), name='choose_cvr'),
