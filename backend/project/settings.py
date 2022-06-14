@@ -240,11 +240,13 @@ OPENID_CONNECT = {
 
 
 def read_file(filename):
-    try:
-        with open(filename, "r") as file:
-            return file.read()
-    except FileNotFoundError:
-        return None
+    if filename is not None:
+        try:
+            with open(filename, "r") as file:
+                return file.read()
+        except FileNotFoundError:
+            pass
+    return None
 
 
 SAML = {
@@ -283,7 +285,7 @@ SAML = {
             "url": "http://localhost:8888/simplesaml/saml2/idp/SingleLogoutService.php",
             "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
         },
-        "x509cert": read_file("/ssl/idp/server.crt"),
+        "x509cert": read_file(os.environ.get('SAML_IDP_CERTIFICATE')) or read_file("/ssl/idp/server.crt"),
     }
 }
 
