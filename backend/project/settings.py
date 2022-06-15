@@ -320,15 +320,16 @@ SAML = {
     },
     'security': {
         "authnRequestsSigned": True,
+        "wantAssertionsEncrypted": True,
     },
     "contactPerson": {
         "technical": {
-            "givenName": "Lars Peter Thomsen",
-            "emailAddress": "larsp@magenta.dk"
+            "givenName": os.environ.get('SAML_CONTACT_TECHNICAL_NAME') or "Lars Peter Thomsen",
+            "emailAddress": os.environ.get('SAML_CONTACT_TECHNICAL_EMAIL') or "larsp@magenta.dk"
         },
         "support": {
-            "givenName": "Lars Peter Thomsen",
-            "emailAddress": "larsp@magenta.dk"
+            "givenName": os.environ.get('SAML_CONTACT_SUPPORT_NAME') or "Lars Peter Thomsen",
+            "emailAddress": os.environ.get('SAML_CONTACT_SUPPORT_EMAIL') or "larsp@magenta.dk"
         }
     },
 
