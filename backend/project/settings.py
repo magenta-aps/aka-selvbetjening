@@ -271,7 +271,38 @@ SAML = {
             # DO NOT CHANGE THIS
             "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
         },
-        "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified",
+        "attributeConsumingService": {
+            # index is an integer which identifies the attributeConsumingService used to the SP.
+            # OneLogin toolkit supports configuring only one attributeConsumingService but in certain
+            # cases the SP requires a different value.  Defaults to '1'.
+            # "index": '1',
+            "serviceName": "AKAP Test",
+            "serviceDescription": "AKAP Test",
+            "requestedAttributes": [
+                {
+                    "name": "https://data.gov.dk/model/core/specVersion",
+                    "isRequired": False,
+                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+                },
+                {
+                    "name": "https://data.gov.dk/concept/core/nsis/loa",
+                    "isRequired": False,
+                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+                },
+                {
+                    "name": "https://data.gov.dk/model/core/eid/professional/cvr",
+                    "isRequired": False,
+                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+                },
+                {
+                    "name": "https://data.gov.dk/model/core/eid/professional/orgName",
+                    "isRequired": False,
+                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+                }
+            ]
+        },
+        "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
+        "NameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
         "x509cert": read_file(os.environ.get('SAML_SP_CERTIFICATE')) or read_file("/ssl/sp/serviceprovider.crt"),
         "privateKey": read_file(os.environ.get('SAML_SP_KEY')) or read_file("/ssl/sp/serviceprovider.key"),
     },
@@ -286,7 +317,21 @@ SAML = {
             "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
         },
         "x509cert": read_file(os.environ.get('SAML_IDP_CERTIFICATE')) or read_file("/ssl/idp/server.crt"),
-    }
+    },
+    'security': {
+        "authnRequestsSigned": True,
+    },
+    "contactPerson": {
+        "technical": {
+            "givenName": "Lars Peter Thomsen",
+            "emailAddress": "larsp@magenta.dk"
+        },
+        "support": {
+            "givenName": "Lars Peter Thomsen",
+            "emailAddress": "larsp@magenta.dk"
+        }
+    },
+
 }
 
 
