@@ -260,14 +260,14 @@ SAML = {
     'login_redirect': '/',
     'logout_redirect': '/',
     'sp': {
-        "entityId": "http://localhost:8000/saml/metadata/",
+        "entityId": os.environ.get('SAML_SP_ENTITY_ID'),
         "assertionConsumerService": {
-            "url": "http://localhost:8000/saml/login/callback",
+            "url": os.environ.get('SAML_SP_LOGIN_CALLBACK_URI'),
             # DO NOT CHANGE THIS
             "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
         },
         "singleLogoutService": {
-            "url": "http://localhost:8000/saml/logout/callback/",
+            "url": os.environ.get('SAML_SP_LOGOUT_CALLBACK_URI'),
             # DO NOT CHANGE THIS
             "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
         },
@@ -276,13 +276,13 @@ SAML = {
         "privateKey": read_file(os.environ.get('SAML_SP_KEY')) or read_file("/ssl/sp/serviceprovider.key"),
     },
     'idp': {
-        "entityId": "http://localhost:8888/simplesaml/saml2/idp/metadata.php",
+        "entityId": os.environ.get('SAML_IDP_ENTITY_ID'),
         "singleSignOnService": {
-            "url": "http://localhost:8888/simplesaml/saml2/idp/SSOService.php",
+            "url": os.environ.get('SAML_IDP_LOGIN_URI'),
             "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
         },
         "singleLogoutService": {
-            "url": "http://localhost:8888/simplesaml/saml2/idp/SingleLogoutService.php",
+            "url": os.environ.get('SAML_IDP_LOGOUT_URI'),
             "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
         },
         "x509cert": read_file(os.environ.get('SAML_IDP_CERTIFICATE')) or read_file("/ssl/idp/server.crt"),
