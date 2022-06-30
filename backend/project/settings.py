@@ -298,7 +298,17 @@ SAML = {
                     "name": "https://data.gov.dk/model/core/eid/professional/orgName",
                     "isRequired": False,
                     "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
-                }
+                },
+                {
+                    "name": "https://data.gov.dk/model/core/eid/cprNumber",
+                    "isRequired": False,
+                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+                },
+                {
+                    "name": "https://data.gov.dk/model/core/eid/fullName",
+                    "isRequired": False,
+                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+                },
             ]
         },
         "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
