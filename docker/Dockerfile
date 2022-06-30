@@ -9,9 +9,9 @@ RUN curl -fsSLO https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.1
   mv wkhtmltox/bin/wkhtmlto* /usr/bin
     
 # hadolint ignore=DL3008
-RUN mkdir /backend && mkdir -p /var/log/aka && \
-apt-get update && apt-get install -y --no-install-recommends \
- gettext libxmlsec1-dev gpg nano\
+RUN mkdir /backend && mkdir -p /var/log/aka \
+ && apt-get update && apt-get install -y --no-install-recommends \
+    gettext libxmlsec1-dev gpg nano \
  && apt-get clean && rm -rf /var/lib/apt/lists/* \
  && curl -fsSLO "$SUPERCRONIC_URL" \
  && echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC}" | sha1sum -c - \
@@ -21,13 +21,18 @@ apt-get update && apt-get install -y --no-install-recommends \
  && groupadd -g 75080 -r aka  \
  && groupadd -g 75100 -r certificate_exporter \
  && useradd -m -u 75080 --no-log-init -r -g aka -G certificate_exporter aka \
- && chown aka:aka /var/log/aka
+ && chown aka:aka /var/log/aka \
+ && mkdir -p /ssl/sp \
+ && mkdir -p /ssl/idp
 
 COPY docker/crontab /crontab
 COPY backend/requirements.txt /backend/requirements.txt
 RUN pip install --no-cache-dir -r /backend/requirements.txt
 COPY ./docker/entrypoint.sh /entrypoint.sh
 COPY --chown=aka:aka ./backend /backend
+# Include self-signed certificates for testing in pipeline
+COPY dev-environment/cert/sp/selfsigned.* /ssl/sp/
+COPY dev-environment/cert/idp/selfsigned.crt /ssl/idp/selfsigned.crt
 USER aka
 WORKDIR /backend
 EXPOSE 8000

@@ -313,8 +313,8 @@ SAML = {
         },
         "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
         "NameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
-        "x509cert": read_file(os.environ.get('SAML_SP_CERTIFICATE')) or read_file("/ssl/sp/serviceprovider.crt"),
-        "privateKey": read_file(os.environ.get('SAML_SP_KEY')) or read_file("/ssl/sp/serviceprovider.key"),
+        "x509cert": read_file(os.environ.get('SAML_SP_CERTIFICATE')) or read_file("/ssl/sp/selfsigned.crt"),
+        "privateKey": read_file(os.environ.get('SAML_SP_KEY')) or read_file("/ssl/sp/selfsigned.key"),
     },
     'idp': {
         "entityId": os.environ.get('SAML_IDP_ENTITY_ID'),
@@ -326,7 +326,7 @@ SAML = {
             "url": os.environ.get('SAML_IDP_LOGOUT_URI'),
             "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
         },
-        "x509cert": read_file(os.environ.get('SAML_IDP_CERTIFICATE')) or read_file("/ssl/idp/server.crt"),
+        "x509cert": read_file(os.environ.get('SAML_IDP_CERTIFICATE')) or read_file("/ssl/idp/selfsigned.crt"),
     },
     'security': {
         "authnRequestsSigned": True,
