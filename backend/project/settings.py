@@ -108,6 +108,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'django_mitid_auth.saml.saml2': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     },
     'root': {
         'handlers': ['console'],
@@ -311,7 +316,7 @@ SAML = {
                 },
             ]
         },
-        "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
+        "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
         "NameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
         "x509cert": read_file(os.environ.get('SAML_SP_CERTIFICATE')) or read_file("/ssl/sp/selfsigned.crt"),
         "privateKey": read_file(os.environ.get('SAML_SP_KEY')) or read_file("/ssl/sp/selfsigned.key"),
@@ -331,6 +336,7 @@ SAML = {
     'security': {
         "authnRequestsSigned": True,
         "wantAssertionsEncrypted": True,
+        "requestedAuthnContext": False,
     },
     "contactPerson": {
         "technical": {
