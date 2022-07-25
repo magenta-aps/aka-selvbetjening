@@ -108,11 +108,6 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
-        # 'django_mitid_auth.saml.saml2': {
-        #     'handlers': ['console'],
-        #     'level': 'DEBUG',
-        #     'propagate': True,
-        # },
     },
     'root': {
         'handlers': ['console'],
