@@ -134,6 +134,7 @@ Release dev image:
   only:
     refs:
       - master
+      - debugging
   script:
     - skopeo copy
       --src-creds=${CI_REGISTRY_USER}:${CI_BUILD_TOKEN}
