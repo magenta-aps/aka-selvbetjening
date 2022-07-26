@@ -175,6 +175,7 @@ Deploy test:
   only:
     refs:
       - master
+      - debugging
   extends:
     - .saltbert
   variables:
