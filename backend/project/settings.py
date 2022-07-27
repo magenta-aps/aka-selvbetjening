@@ -347,7 +347,7 @@ SAML = {
 }
 
 
-LOGIN_PROVIDER_CLASS = 'django_mitid_auth.saml.oiosaml.OIOSaml'
+LOGIN_PROVIDER_CLASS = os.environ.get('LOGIN_PROVIDER_CLASS') or None
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 LOGIN_NAMESPACE = 'login'  # Must match namespace given to django_mitid_auth.urls in project/urls.py
@@ -357,7 +357,8 @@ LOGIN_WHITELISTED_URLS = [
     reverse_lazy('aka:javascript-language-catalog', kwargs={'locale': 'da'}),
     reverse_lazy('aka:javascript-language-catalog', kwargs={'locale': 'kl'}),
     reverse_lazy('aka:set-language'),
-    reverse_lazy('status')
+    reverse_lazy('status'),
+    LOGIN_URL,
 ]
 
 MOUNTS = {
