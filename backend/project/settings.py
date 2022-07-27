@@ -332,6 +332,7 @@ SAML = {
         "authnRequestsSigned": True,
         "wantAssertionsEncrypted": True,
         "requestedAuthnContext": False,
+        # "digestAlgorithm": "http://www.w3.org/2001/04/xmlenc#sha256",
     },
     "contactPerson": {
         "technical": {
