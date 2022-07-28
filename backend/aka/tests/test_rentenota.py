@@ -3,6 +3,7 @@ import logging
 from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismeInterestNoteResponse
 from aka.tests.mixins import TestMixin
+from django.conf import settings
 from django.test import TestCase
 from django.test import override_settings
 from django.utils.translation import gettext as _
@@ -154,4 +155,7 @@ class BasicTestCase(TestMixin, TestCase):
                     'year': y,
                     'month': m
                 })
-                self.assertEqual(response.status_code, 403)
+                if settings.LOGIN_PROVIDER_CLASS is None:
+                    self.assertEqual(response.status_code, 403)
+                else:
+                    self.assertEqual(response.status_code, 302)
