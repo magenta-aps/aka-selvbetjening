@@ -182,8 +182,10 @@ class AKAJSONSerializer(JSONSerializer):
         return None
 
 
-def render_pdf(template_name, context):
+def render_pdf(template_name, context, html_modifier=None):
     html = render_to_string(template_name, context)
+    if callable(html_modifier):
+        html = html_modifier(html)
     font_config = FontConfiguration()
     return HTML(string=html).write_pdf(font_config=font_config)
 
@@ -198,3 +200,9 @@ months = (
 
 def month_name(month_number):
     return months[month_number-1]
+
+
+def chunks(lst, size):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), size):
+        yield lst[i:i + size], i

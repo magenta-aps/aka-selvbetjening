@@ -45,9 +45,9 @@
         {% block extra_headers %}{% endblock %}
     </head>
     <body class="{% if pdf %}pdf{% endif %}">
-        {% csrf_token %}
         <div class="wrapper">
             {% if not pdf %}
+            {% csrf_token %}
             <header class="globalheader printhide">
                 <div class="globalheader-wrapper">
                     <h1 class="globalheader-heading">

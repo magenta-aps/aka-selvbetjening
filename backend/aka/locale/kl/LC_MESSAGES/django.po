@@ -692,6 +692,9 @@ msgstr "SEL- Akileraartarnermi Aqutsisoqarfiup kontoudtog-ia"
 msgid "account.title_aki"
 msgstr "AKI- Akiliisitsiniartarfiup kontoudtog-ia"
 
+msgid "account.linje"
+msgstr "Linje"
+
 
 msgid "DK"
 msgstr "Danmarki"

@@ -25,24 +25,6 @@
     <h1 class="rentenota-title printhide">{% trans 'rentenota.title' %}</h1>
 
     <div class="rentenota-main">
-        <form method="get" id="mainform">
-
-        {% localize off %}
-        <div class="printhide">
-            <div class="rentenota-actions row">
-                <div class="col-4-sm">
-                    {% include 'aka/util/field.html' with field=form.month key='rentenota.month' %}
-                    {% include 'aka/util/field.html' with field=form.year key='rentenota.year' %}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-4-sm">
-                    <button type="submit">{% trans 'common.send' %}</button>
-                </div>
-            </div>
-        </div>
-        {% endlocalize %}
-
         <div class="output rentenota-data">
 
             <div class="output-header">
@@ -51,23 +33,6 @@
                         <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
                         <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
                         <strong>Skattestyrelsen</strong>
-                    </div>
-                    <div class="col-5-sm output-actions printhide">
-                        <select id="download">
-                            {% if pdflink %}
-                                <option value=".pdf" data-trans="common.pdf">{% trans 'common.pdf' %}</option>
-                            {% endif %}
-                            {% if xlsxlink %}
-                                <option value=".xlsx" data-trans="common.xlsx">{% trans 'common.xlsx' %}</option>
-                            {% endif %}
-                            {% if odslink %}
-                                <option value=".ods" data-trans="common.ods">{% trans 'common.ods' %}</option>
-                            {% endif %}
-                            {% if csvlink %}
-                                <option value=".csv" data-trans="common.csv">{% trans 'common.csv' %}</option>
-                            {% endif %}
-                        </select>
-                        <button class="btn-print" data-trans="common.print">{% trans 'common.print' %}</button>
                     </div>
                 </div>
             </div>
@@ -135,7 +100,7 @@
 
             {% if items is not None %}
                 <div class="output-data">
-                <table class="output-table" style="font-size: 0.8em">
+                <table class="output-table" style="font-size:0.65em">
                     <thead>
                     <tr>
                         {% for field in fields %}
@@ -181,7 +146,6 @@
             {% endif %}
             </div>
         </div>
-        </form>
     </div>
 </article>
 {% endblock %}
