@@ -1,19 +1,19 @@
 import json
 import os
+from functools import cached_property
 
 import django_excel as excel
-import pdfkit
 from aka.clients.dafo import Dafo
 from aka.clients.prisme import Prisme
 from aka.clients.prisme import PrismeCvrCheckRequest
 from aka.clients.prisme import PrismeNotFoundException
 from aka.exceptions import AkaException
-from aka.utils import flatten
+from aka.utils import flatten, render_pdf
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
-from django.template.loader import select_template
+from django.template.loader import get_template
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.translation import gettext
@@ -264,12 +264,16 @@ class PdfRendererMixin(RendererMixin):
     def accepted_formats(self):
         return super().accepted_formats + ['pdf']
 
+    @cached_property
+    def is_pdf(self):
+        return self.format == 'pdf'
+
     def render(self):
-        if self.format == 'pdf':
+        if self.is_pdf:
             context = self.get_context_data()
 
             css_data = []
-            for css_file in ['css/output.css', 'css/main.css', 'css/print.css']:
+            for css_file in ['css/output.css', 'css/print.css', 'css/pdf.css']:
                 css_static_path = css_file.split('/')
                 css_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', *css_static_path)
                 if not os.path.exists(css_path):
@@ -278,35 +282,33 @@ class PdfRendererMixin(RendererMixin):
                     css_data.append(file.read())
             context['css'] = ''.join(css_data)
 
-            html = select_template(self.get_template_names()).render(context)
-            # return HttpResponse(html)
-            html = html.replace(
-                "\"%s" % settings.STATIC_URL,
-                "\"file://%s/" % os.path.abspath(settings.STATIC_ROOT)
-            )
-
-            pdf = pdfkit.from_string(html, False, options={
-                'javascript-delay': 1000,
-                'debug-javascript': '',
-                'default-header': '',
-                'margin-top': '20mm',
-                'margin-bottom': '20mm',
-                'margin-left': '20mm',
-                'margin-right': '20mm',
-            })
-            response = HttpResponse(pdf, content_type='application/pdf')
-            response['Content-Disposition'] = "attachment; filename=\"%s.pdf\"" % self.get_filename()
-            return response
+            html = False
+            if html:
+                return HttpResponse(
+                    get_template(self.pdf_template_name).render(context)
+                )
+            else:
+                pdf = render_pdf(
+                    self.pdf_template_name,
+                    context,
+                    lambda html: html.replace(
+                        "\"%s" % settings.STATIC_URL,
+                        "\"file://%s/" % os.path.abspath(settings.STATIC_ROOT)
+                    )
+                )
+                response = HttpResponse(pdf, content_type='application/pdf')
+                response['Content-Disposition'] = f'attachment; filename="{self.get_filename()}.pdf"'
+                return response
 
         return super().render()
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**dict({
-            'pdf': self.format == 'pdf'
+            'pdf': self.is_pdf
         }, **kwargs))
 
     def form_invalid(self, form):
-        if self.format == 'pdf':
+        if self.is_pdf:
             return self.render()
         return super().form_invalid(form)
 
@@ -343,19 +345,28 @@ class SpreadsheetRendererMixin(RendererMixin):
     def get_sheetname(self):
         return "Sheet 1"
 
-    def get_extra(self, key):
+    def get_extra(self):
         return None
 
     @property
     def accepted_formats(self):
         return super().accepted_formats + ['xlsx', 'ods', 'csv']
 
+    def get_spreadsheet_fields(self):
+        return self.get_fields()
+
+    def get_spreadsheet_data(self):
+        return self.get_data()
+
+    def get_spreadsheet_extra(self):
+        return self.get_extra()
+
     def render(self):
         format = self.format
         if format in self.accepted_formats:
-            fields = self.get_fields(self.key)  # List of dicts
-            items = self.get_data(self.key)  # List of dicts
-            extra = self.get_extra(self.key)  # List of lists
+            fields = self.get_spreadsheet_fields()  # List of dicts
+            items = self.get_spreadsheet_data()  # List of dicts
+            extra = self.get_spreadsheet_extra()  # List of lists
             data = [
                 [
                     field.get("title", field['name'])

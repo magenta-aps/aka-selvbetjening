@@ -33,6 +33,7 @@ from aka.mixins import PdfRendererMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
 from aka.mixins import SpreadsheetRendererMixin
+from aka.utils import chunks
 from aka.utils import flatten
 from aka.utils import get_ordereddict_key_index
 from aka.utils import render_pdf
@@ -172,6 +173,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
 
     form_class = KontoForm
     template_name = 'aka/account/account.html'
+    pdf_template_name = 'aka/account/account_pdf.html'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -215,6 +217,9 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
                 },
                 'cprcvr': self.cprcvr_choice
             })
+            if self.is_pdf:
+                context['pages'] = self.get_pages()
+
         context.update(kwargs)
         return super().get_context_data(**context)
 
@@ -341,6 +346,46 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
         for key in keys:
             items.append(self.get_item_data(key, form))
         return items
+
+    def get_pages(self, key=None):
+        if key is None:
+            key = self.request.GET.get("key")
+        if key:
+            pages = []
+            max_columns_per_page = 8  # if there are more columns than this number, we do a split
+            line_header = {'name': 'index', 'class': 'nb', 'transkey': 'account.linje', 'title': 'Linje'}
+            for item_collection in self.items:
+                if len(item_collection['data']):
+                    # item_collection is a dict of all items for a key (key = 'aki' or 'sel')
+                    # it contains title, sum, fields, and a list of rows
+                    # Read fields in chunks, creating a new page for each chunk
+                    for page_fields, startcol in chunks(item_collection['fields'], max_columns_per_page):
+                        page_data = [
+                            [{'value': rownumber}] + row[startcol:startcol+max_columns_per_page]
+                            for rownumber, row in enumerate(item_collection['data'], 1)
+                        ]
+                        pages.append({
+                            **{k: item_collection[k] for k in ('key', 'title', 'sum', 'total')},
+                            'fields': [line_header] + page_fields,
+                            'data': page_data,
+                        })
+                else:
+                    pages.append({
+                        **{k: item_collection[k] for k in ('key', 'title', 'sum', 'total')},
+                        'fields': [line_header] + item_collection['fields'],
+                        'data': [],
+                    })
+            return pages
+        return []
+
+    def get_spreadsheet_fields(self):
+        return self.get_fields(self.key)
+
+    def get_spreadsheet_data(self):
+        return self.get_data(self.key)
+
+    def get_spreadsheet_extra(self):
+        return self.get_extra(self.key)
 
     def get_fields(self, key='sel'):
         fields = [
@@ -858,6 +903,7 @@ class NedskrivningUploadView(NedskrivningView):
 class RenteNotaView(RequireCvrMixin, IsContentMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRendererMixin, SpreadsheetRendererMixin, TemplateView):
     form_class = InterestNoteForm
     template_name = 'aka/interestnote/interestnote.html'
+    pdf_template_name = 'aka/interestnote/interestnote_pdf.html'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -932,6 +978,9 @@ class RenteNotaView(RequireCvrMixin, IsContentMixin, SimpleGetFormMixin, PdfRend
                     posts.append(data)
         return posts
 
+    def get_pages(self, key):
+        return self.items
+
     def get_filename(self):
         return _("rentenota.filename").format(
             **dict(self.form.cleaned_data.items())
@@ -939,6 +988,16 @@ class RenteNotaView(RequireCvrMixin, IsContentMixin, SimpleGetFormMixin, PdfRend
 
     def get_sheetname(self):
         return "Rentenota"
+
+    def get_spreadsheet_data(self):
+        fields = self.get_fields()
+        return [
+            [
+                {**field, 'value': item[field['name']]}
+                for field in fields
+            ]
+            for item in self.items
+        ]
 
     def form_valid(self, form):
         self.form = form

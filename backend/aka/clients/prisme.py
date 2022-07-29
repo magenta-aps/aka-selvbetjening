@@ -626,6 +626,7 @@ class Prisme(object):
 
     def __init__(self):
         self.mock = prisme_settings.get('mock', False)
+        self.mock_data = prisme_settings.get('mock_data', {})
 
     @property
     def client(self):
@@ -693,15 +694,21 @@ class Prisme(object):
         }
 
     def process_service(self, request_object, context, cpr, cvr):
-        if self.mock is True:
-            return []
         try:
+            logger.info("CPR=%s CVR=%s Sending to %s:\n%s" % (cpr, cvr, request_object.method, request_object.xml))
+
+            outputs = []
+            if self.mock is True:
+                xml = self.mock_data.get(request_object.__class__.__name__)
+                if xml:
+                    outputs.append(request_object.reply_class(request_object, xml))
+                return outputs
+
             request_class = self.client.get_type("tns:GWSRequestDCFUJ")
             request = request_class(
                 requestHeader=self.create_request_header(request_object.method),
                 xmlCollection=self.create_request_body(request_object.xml)
             )
-            logger.info("CPR=%s CVR=%s Sending to %s:\n%s" % (cpr, cvr, request_object.method, request_object.xml))
             # reply is of type GWSReplyDCFUJ
             reply = self.client.service.processService(request)
 
@@ -709,7 +716,6 @@ class Prisme(object):
             if reply.status.replyCode != 0:
                 raise PrismeException(reply.status.replyCode, reply.status.replyText, context)
 
-            outputs = []
             # reply_item is of type GWSReplyInstanceDCFUJ
             for reply_item in reply.instanceCollection.GWSReplyInstanceDCFUJ:
                 if reply_item.replyCode == 0:

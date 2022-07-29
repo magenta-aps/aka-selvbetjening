@@ -199,6 +199,11 @@ STATIC_ROOT = os.path.join(AKA_DIR, 'static')
 STATICFILES_DIRS = []
 
 
+def get_file_contents(filename):
+    with open(filename, "r") as f:
+        return f.read()
+
+
 PRISME_CONNECT = {
     'mock': bool(strtobool(os.environ.get('PRISME_MOCK', 'False'))),
     'wsdl_file': os.environ.get('PRISME_WSDL', ''),
@@ -209,6 +214,10 @@ PRISME_CONNECT = {
             'password': os.environ.get('PRISME_PASSWORD', '')
         }
     },
+    'mock_data': {
+        'PrismeSELRequest': get_file_contents('aka/mockdata/citizenaccount_response.xml'),
+        'PrismeInterestNoteRequest': get_file_contents('aka/mockdata/interestnote_response.xml')
+    }
 }
 
 DAFO_CONNECT = {

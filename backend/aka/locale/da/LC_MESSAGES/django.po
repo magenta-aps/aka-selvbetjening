@@ -695,6 +695,9 @@ msgstr "SEL - Skattestyrelsens kontoudtog"
 msgid "account.title_aki"
 msgstr "AKI - Inddrivelsens kontoudtog"
 
+msgid "account.linje"
+msgstr "Linje"
+
 
 msgid "DK"
 msgstr "Danmark"

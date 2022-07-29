@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load l10n %}
+{% load aka_tags %}
+
+{% block extra_headers %}
+    <style>
+        {{ css|safe }}
+    </style>
+{% endblock %}
+
+{% block content %}
+<article>
+    <div class="account-main">
+
+        <div id="output-{{ page.key }}" class="output">
+        {% for page in pages %}
+            {% with data=page.data total=page.total %}
+                <div class="page" style="page-break-after: always">
+                        {% include 'aka/account/account_pageheader.html' %}
+                        <div class="page-data account-data">
+                        {% if data and data|length > 0 %}
+                            <table class="output-table" data-key="{{ page.key }}" style="font-size:0.9em">
+                                <thead>
+                                    <tr>
+                                        {% for field in page.fields %}
+                                            <th data-field="{{ field.name }}" data-trans="{{ field.transkey }}">{% trans field.transkey|safe %}</th>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for row in data %}
+                                    <tr>
+                                        {% for item in row %}
+                                            <td class="{{ item.class }}" data-original="{{ item.value }}">
+                                                {% if item.number %}
+                                                    {{ item.value }}
+                                                {% elif item.boolean %}
+                                                    {{ item.value|yesno }}
+                                                {% else %}
+                                                    {% localize off %}
+                                                    {{ item.value|default_if_none:'' }}
+                                                    {% endlocalize %}
+                                                {% endif %}
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p data-trans="account.ingenposter">{% trans 'account.ingenposter' %}</p>
+                        {% endif %}
+
+                        {% if total %}
+                            <div class="row account-total no-copy">
+                                <div class="col-3-sm">
+                                    <span class="total-label" data-trans="account.total_claim">{% trans 'account.total_claim' %}</span>
+                                    <span class="total-data">{{ total.total_claim }}</span>
+                                </div>
+                                <div class="col-3-sm">
+                                    <span class="total-label" data-trans="account.total_payment">{% trans 'account.total_payment' %}</span>
+                                    <span class="total-data">{{ total.total_payment }}</span>
+                                </div>
+                                <div class="col-3-sm">
+                                    <span class="total-label" data-trans="account.total_sum">{% trans 'account.total_sum' %}</span>
+                                    <span class="total-data">{{ total.total_sum }}</span>
+                                </div>
+                                <div class="col-3-sm">
+                                    <span class="total-label" data-trans="account.total_restance">{% trans 'account.total_restance' %}</span>
+                                    <span class="total-data">{{ total.total_restance }}</span>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if pdf %}
+                            <div class="pagefooter"></div>
+                        {% endif %}
+                        </div>
+                </div>
+            {% endwith %}
+        {% endfor %}
+    </div>
+    </div>
+</article>
+{% endblock %}
