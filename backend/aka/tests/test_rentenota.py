@@ -157,5 +157,7 @@ class BasicTestCase(TestMixin, TestCase):
                 })
                 if settings.LOGIN_PROVIDER_CLASS is None:
                     self.assertEqual(response.status_code, 403)
+                elif settings.LOGIN_BYPASS_ENABLED:
+                    self.assertEqual(response.status_code, 200)
                 else:
                     self.assertEqual(response.status_code, 302)
