@@ -154,7 +154,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(PROJECT_DIR, 'frontend', 'dist')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -383,6 +383,7 @@ MAX_UPLOAD_FILESIZE = 22097152
 
 DEFAULT_CPR = os.environ.get('DEFAULT_CPR', None)
 DEFAULT_CVR = os.environ.get('DEFAULT_CVR', None)
+LOGIN_BYPASS_ENABLED = os.environ.get('LOGIN_BYPASS_ENABLED', False)
 
 # Skip health_check for cache layer and storage since we are not using it
 WATCHMAN_CHECKS = ('watchman.checks.databases', )
