@@ -135,6 +135,7 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django_mitid_auth',
     'aka',
+    'mitid_test',
     'watchman',
 ]
 
@@ -369,6 +370,7 @@ LOGIN_WHITELISTED_URLS = [
     reverse_lazy('status'),
     LOGIN_URL,
 ]
+MITID_TEST_ENABLED = bool(strtobool(os.environ.get('MITID_TEST_ENABLED', 'False')))
 
 MOUNTS = {
     'claimant_account_statements': {  # 6.5
