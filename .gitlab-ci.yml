@@ -112,7 +112,9 @@ Selvbetjening Unittest:
   coverage: '/^TOTAL.+?(\d+\%)$/'
   artifacts:
     reports:
-      coverage_report: /backend/coverage.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: /backend/coverage.xml
   allow_failure: true
 
 # Release stage
