@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/sumoselect.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/jquery.sumoselect.min.js"></script>
 
-    {% if items %}
+    {% if sections %}
         <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>
         <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
         <script src="{% static 'js/datatable.js' %}"></script>
@@ -77,26 +77,26 @@
 
         {% if form.is_bound %}
 
-            {% for item in items %}
-                {% with data=item.data total=item.total %}
-                <div id="output-{{ item.key }}" class="output">
+            {% for section in sections %}
+                {% with rows=section.rows total=section.total key=section.key %}
+                <div id="output-{{ key }}" class="output">
 
                     <div class="page" style="page-break-after: always">
-                        <h2 class="can-collapse printhide" data-collapse="#content-{{ item.key }}">
+                        <h2 class="can-collapse printhide" data-collapse="#content-{{ key }}">
                             <img src="{% static 'img/sullisivk_arrow_right.svg' %}" width="20" height="20"/>
-                            <span data-trans="{{ item.title }}">{% trans item.title %}</span>
+                            <span data-trans="{{ item.title }}">{% trans section.title %}</span>
                         </h2>
-                        <div id="content-{{ item.key }}" data-key="{{ item.key }}" class="page-content collapsed" style="display:none">
+                        <div id="content-{{ key }}" data-key="{{ key }}" class="page-content collapsed" style="display:none">
 
-                            {% include 'aka/account/account_pageheader.html' %}
+                            {% include 'aka/account/account_pageheader.html' with key=key %}
 
                             <div class="page-data account-data">
 
-                            {% if data and data|length > 0 %}
+                            {% if rows and rows|length > 0 %}
 
                                 <div class="printhide">
-                                    <select class="columnselect" multiple="multiple" data-key="{{ item.key }}">
-                                        {% for field in item.fields %}
+                                    <select class="columnselect" multiple="multiple" data-key="{{ key }}">
+                                        {% for field in section.fields %}
                                             {% with "account."|add:field.name as transkey %}
                                                 <option value="{{ field.name }}" {% if not field in form.hidden.value %}selected="selected"{% endif %}>{% trans transkey %}</option>
                                             {% endwith %}
@@ -104,29 +104,31 @@
                                     </select>
                                 </div>
 
-                                <table class="output-table" data-key="{{ item.key }}">
+                                <table class="output-table" data-key="{{ key }}">
                                 <thead>
                                 <tr>
-                                    {% for field in item.fields %}
+                                    {% for field in section.fields %}
                                         <th data-field="{{ field.name }}" data-trans="{{ field.transkey }}">{% trans field.transkey|safe %}</th>
                                     {% endfor %}
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for row in data %}
+                                {% for row in rows %}
                                     <tr>
-                                        {% for item in row %}
-                                            <td class="{{ item.class }}" data-original="{{ item.value }}">
-                                                {% if item.number %}
-                                                    {{ item.value }}
-                                                {% elif item.boolean %}
-                                                    {{ item.value|yesno }}
+                                        {% for cell in row.cells %}
+                                            {% with field=cell.field %}
+                                            <td class="{{ field.klass }}" data-original="{{ cell.value }}">
+                                                {% if field.number %}
+                                                    {{ cell.value }}
+                                                {% elif field.boolean %}
+                                                    {{ cell.value|yesno }}
                                                 {% else %}
                                                     {% localize off %}
-                                                    {{ item.value|default_if_none:'' }}
+                                                    {{ cell.value|default_if_none:'' }}
                                                     {% endlocalize %}
                                                 {% endif %}
                                             </td>
+                                            {% endwith %}
                                         {% endfor %}
                                     </tr>
                                 {% endfor %}

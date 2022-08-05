@@ -216,7 +216,9 @@ PRISME_CONNECT = {
         }
     },
     'mock_data': {
-        'PrismeSELRequest': get_file_contents('aka/mockdata/citizenaccount_response.xml'),
+        'PrismeSELRequest': get_file_contents('aka/mockdata/employeraccount_response.xml'),
+        'PrismeSELTotalRequest': get_file_contents('aka/mockdata/employeraccount_total_response.xml'),
+        'PrismeAKIRequest': get_file_contents('aka/mockdata/citizenaccount_response.xml'),
         'PrismeInterestNoteRequest': get_file_contents('aka/mockdata/interestnote_response.xml')
     }
 }
