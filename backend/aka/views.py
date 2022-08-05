@@ -409,7 +409,8 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
         if key == 'sel':
             fields += [
                 Field(name='rate_number', klass='nb'),
-                Field(name='claim_type_code',
+                Field(
+                    name='claim_type_code',
                     labelkey='submitted_to_claims',
                     klass='nb',
                     modifier=lambda d: (d == 'INDR'),
