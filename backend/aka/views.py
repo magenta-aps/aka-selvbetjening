@@ -3,6 +3,7 @@ import logging
 import re
 import uuid
 from io import BytesIO
+from typing import List
 
 from aka.clients.prisme import Prisme, PrismeException
 from aka.clients.prisme import PrismeAKIRequest
@@ -33,6 +34,7 @@ from aka.mixins import PdfRendererMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
 from aka.mixins import SpreadsheetRendererMixin
+from aka.utils import Field, Cell, Row, Table
 from aka.utils import chunks
 from aka.utils import flatten
 from aka.utils import get_ordereddict_key_index
@@ -177,7 +179,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.items = None
+        self.sections = None
         self._data = {}
         self._total = {}
         self._prisme = None
@@ -185,7 +187,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
     def form_valid(self, form):
         self.form = form
         try:
-            self.items = self.get_items(form)
+            self.load_sections(form)
         except PrismeException as e:
             form.add_error(None, e.as_validationerror)
             return self.form_invalid(form)
@@ -209,7 +211,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
         if self.form.is_bound:
             formdata = self.form.cleaned_data
             context.update({
-                'items': self.items,
+                'sections': self.sections,
                 'date': date.today().strftime('%d/%m/%Y'),
                 'period': {
                     'from_date': formdata['from_date'].strftime('%d-%m-%Y') if formdata.get('from_date') is not None else None,
@@ -243,7 +245,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
     def hide_fields(self, form, fields):
         return [
             field for field in fields
-            if field not in form.cleaned_data['hidden']
+            if field.name not in form.cleaned_data['hidden']
         ]
 
     @property
@@ -274,7 +276,7 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
         else:
             logger.info("cprcvr_choice got: "+str({'cprcvr': cprcvr, 'cpr': self.cpr, 'cvr': self.cvr}))
 
-    def get_data(self, key):
+    def get_rows_by_key(self, key) -> List[Row]:
         if key not in self._data:
             try:
                 (cprcvr, c) = self.cprcvr_choice
@@ -289,30 +291,18 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
                 if len(prisme_reply) == 0:
                     return []
                 for entry in prisme_reply[0]:
-                    data = []
-                    for field in self.get_fields(key):
-                        value = getattr(entry, field['name'])
-                        if 'modifier' in field:
-                            value = field['modifier'](value)
-                        data.append({
-                            **field,
-                            'value': value,
-                        })
-                    self._data[key].append(data)
+                    row = Row()
+                    for field in self.get_fields_by_key(key):
+                        value = getattr(entry, field.name)
+                        if field.modifier:
+                            value = field.modifier(value)
+                        row.cells.append(Cell(field=field, value=value,))
+                    self._data[key].append(row)
             except PrismeException:
                 pass
         return self._data.get(key, [])
 
-    def get_extra(self, key):
-        total = self.get_total_data(key)
-        if total:
-            return [[]] + [
-                [gettext("account.%s" % x), getattr(total, x)]
-                for x in ['total_claim', 'total_payment', 'total_sum', 'total_restance']
-            ]
-        return None
-
-    def get_total_data(self, key):
+    def get_total_data(self, key) -> dict:
         if key not in self._total:
             try:
                 (cprcvr, c) = self.cprcvr_choice
@@ -322,30 +312,29 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
                 ), "account", self.cpr, self.cvr)
                 if len(prisme_reply) == 0:
                     return None
-                self._total[key] = prisme_reply[0]
+                reply = prisme_reply[0]
+                self._total[key] = {
+                    key: getattr(reply, key)
+                    for key in ['total_claim', 'total_payment', 'total_sum', 'total_restance']
+                }
             except PrismeException:
                 pass
         return self._total.get(key)
 
-    def get_item_data(self, key, form):
-        data = self.get_data(key)
-
-        return {
-            'key': key,
-            'title': 'account.title_' + key,
-            'fields': self.hide_fields(form, self.get_fields(key)),
-            'data': data,
-            'sum': sum([item['value'] for row in data for item in row if item['name'] == 'amount']) if data else 0,
-            'total': self.get_total_data(key)
-        }
-
-    def get_items(self, form):
-        items = []
+    def load_sections(self, form):
+        self.sections = []
         key = self.request.GET.get("key")
         keys = [key] if key else ['sel', 'aki']
         for key in keys:
-            items.append(self.get_item_data(key, form))
-        return items
+            rows = self.get_rows_by_key(key)
+            total = self.get_total_data(key)
+            self.sections.append({
+                'key': key,
+                'title': 'account.title_' + key,
+                'fields': self.hide_fields(form, self.get_fields_by_key(key)),
+                'rows': rows,
+                'total': total
+            })
 
     def get_pages(self, key=None):
         if key is None:
@@ -353,80 +342,87 @@ class KontoView(HasUserMixin, SimpleGetFormMixin, PdfRendererMixin, JsonRenderer
         if key:
             pages = []
             max_columns_per_page = 8  # if there are more columns than this number, we do a split
-            line_header = {'name': 'index', 'class': 'nb', 'transkey': 'account.linje', 'title': 'Linje'}
-            for item_collection in self.items:
-                if len(item_collection['data']):
+            line_field = Field(name='index', klass='nb', transkey='account.linje', title='Linje')
+            for section in self.sections:
+                total = section['total']
+                if len(section['rows']):
                     # item_collection is a dict of all items for a key (key = 'aki' or 'sel')
-                    # it contains title, sum, fields, and a list of rows
+                    # it contains title, fields, total, and a list of rows
                     # Read fields in chunks, creating a new page for each chunk
-                    for page_fields, startcol in chunks(item_collection['fields'], max_columns_per_page):
-                        page_data = [
-                            [{'value': rownumber}] + row[startcol:startcol+max_columns_per_page]
-                            for rownumber, row in enumerate(item_collection['data'], 1)
-                        ]
-                        pages.append({
-                            **{k: item_collection[k] for k in ('key', 'title', 'sum', 'total')},
-                            'fields': [line_header] + page_fields,
-                            'data': page_data,
-                        })
+                    for page_fields, startcol in chunks(section['fields'], max_columns_per_page):
+                        pages.append(Table(
+                            name=section['key'],
+                            fields=[line_field] + page_fields,
+                            rows=[
+                                Row(cells=[Cell(field=line_field, value=rownumber)] + row.cells[startcol:startcol+max_columns_per_page])
+                                for rownumber, row in enumerate(section['rows'], 1)
+                            ],
+                            total=total
+                        ))
+
+                        # Only show totals in first page of the section
+                        total = None
                 else:
-                    pages.append({
-                        **{k: item_collection[k] for k in ('key', 'title', 'sum', 'total')},
-                        'fields': [line_header] + item_collection['fields'],
-                        'data': [],
-                    })
+                    pages.append(Table(
+                        name=section['key'],
+                        fields=[line_field] + section['fields']
+                    ))
             return pages
         return []
 
-    def get_spreadsheet_fields(self):
-        return self.get_fields(self.key)
+    def get_rows(self) -> List[Row]:
+        return self.get_rows_by_key(self.key)
 
-    def get_spreadsheet_data(self):
-        return self.get_data(self.key)
+    def get_extra(self) -> dict:
+        total = self.get_total_data(self.key)
+        if total:
+            return {
+                gettext("account.%s" % x): total[x]
+                for x in ['total_claim', 'total_payment', 'total_sum', 'total_restance']
+            }
 
-    def get_spreadsheet_extra(self):
-        return self.get_extra(self.key)
+    def get_fields(self) -> List[Field]:
+        return self.get_fields_by_key(self.key)
 
-    def get_fields(self, key='sel'):
+    def get_fields_by_key(self, key='sel') -> List[Field]:
         fields = [
-            {'name': 'account_number', 'class': 'nb'},
-            {'name': 'transaction_date', 'class': 'nb'},
-            {'name': 'accounting_date', 'class': 'nb'},
-            {'name': 'debitor_group_id', 'class': 'nb'},
-            {'name': 'debitor_group_name', 'class': 'nb'},
-            {'name': 'voucher', 'class': 'nb'},
-            {'name': 'text', 'class': ''},
-            {'name': 'payment_code', 'class': 'nb'},
-            {'name': 'payment_code_name', 'class': 'nb'},
-            {'name': 'amount', 'class': 'nb numbercell', 'number': True},
-            {'name': 'remaining_amount', 'class': 'nb numbercell', 'number': True},
-            {'name': 'due_date', 'class': 'nb'},
-            {'name': 'closed_date', 'class': 'nb'},
-            {'name': 'last_settlement_voucher', 'class': 'nb'},
-            {'name': 'collection_letter_date', 'class': 'nb'},
-            {'name': 'collection_letter_code', 'class': 'nb'},
-            {'name': 'claim_type_code', 'class': 'nb'},
-            {'name': 'invoice_number', 'class': 'nb'},
-            {'name': 'transaction_type', 'class': 'nb'},
+            Field(name='account_number', klass='nb'),
+            Field(name='transaction_date', klass='nb'),
+            Field(name='accounting_date', klass='nb'),
+            Field(name='debitor_group_id', klass='nb'),
+            Field(name='debitor_group_name', klass='nb'),
+            Field(name='voucher', klass='nb'),
+            Field(name='text', klass=''),
+            Field(name='payment_code', klass='nb'),
+            Field(name='payment_code_name', klass='nb'),
+            Field(name='amount', klass='nb numbercell', number=True),
+            Field(name='remaining_amount', klass='nb numbercell', number=True),
+            Field(name='due_date', klass='nb'),
+            Field(name='closed_date', klass='nb'),
+            Field(name='last_settlement_voucher', klass='nb'),
+            Field(name='collection_letter_date', klass='nb'),
+            Field(name='collection_letter_code', klass='nb'),
+            Field(name='claim_type_code', klass='nb'),
+            Field(name='invoice_number', klass='nb'),
+            Field(name='transaction_type', klass='nb'),
         ]
         if key == 'sel':
             fields += [
-                {'name': 'rate_number', 'class': 'nb'},
-                {
-                    'name': 'claim_type_code',
-                    'labelkey': 'submitted_to_claims',
-                    'class': 'nb',
-                    'modifier': lambda d: (d == 'INDR'),
-                    'boolean': True
-                }
+                Field(name='rate_number', klass='nb'),
+                Field(name='claim_type_code',
+                    labelkey='submitted_to_claims',
+                    klass='nb',
+                    modifier=lambda d: (d == 'INDR'),
+                    boolean=True
+                )
             ]
         if key == 'aki':
             fields += [
-                {'name': 'child_claimant', 'class': 'nb'}
+                Field(name='child_claimant', klass='nb')
             ]
         for field in fields:
-            field['transkey'] = "account.%s" % field.get('labelkey', field['name'])
-            field['title'] = _(field['transkey']).replace("&shy;", "")
+            field.transkey = "account.%s" % (field.labelkey or field.name)
+            field.title = _(field.transkey).replace("&shy;", "")
         return fields
 
 
@@ -908,7 +904,7 @@ class RenteNotaView(RequireCvrMixin, IsContentMixin, SimpleGetFormMixin, PdfRend
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.errors = []
-        self.items = None
+        self.items = []
 
     def get_journal_fields(self):
         return [
@@ -932,28 +928,28 @@ class RenteNotaView(RequireCvrMixin, IsContentMixin, SimpleGetFormMixin, PdfRend
             'interest_days',
         ]
 
-    def get_fields(self):
+    def get_fields(self) -> List[Field]:
         fields = [
-            {'name': 'updated', 'class': 'nb'},
-            {'name': 'account_number', 'class': 'nb'},
-            {'name': 'billing_classification', 'class': 'nb'},
-            {'name': 'voucher', 'class': 'nb'},
-            {'name': 'interest_note', 'class': 'nb'},
-            {'name': 'text', 'class': ''},
-            {'name': 'due_date', 'class': 'nb numbercell'},
-            {'name': 'invoice_amount', 'class': 'nb numbercell', 'number': True},
-            {'name': 'interest_amount', 'class': 'nb numbercell', 'number': True},
-            {'name': 'transaction_date', 'class': 'nb numbercell'},
-            {'name': 'invoice', 'class': 'nb'},
-            {'name': 'calculate_from_date', 'class': 'nb numbercell'},
-            {'name': 'calculate_to_date', 'class': 'nb numbercell'},
-            {'name': 'interest_days', 'class': 'nb numbercell'},
+            Field(name='updated', klass='nb'),
+            Field(name='account_number', klass='nb'),
+            Field(name='billing_classification', klass='nb'),
+            Field(name='voucher', klass='nb'),
+            Field(name='interest_note', klass='nb'),
+            Field(name='text', klass=''),
+            Field(name='due_date', klass='nb numbercell'),
+            Field(name='invoice_amount', klass='nb numbercell', number=True),
+            Field(name='interest_amount', klass='nb numbercell', number=True),
+            Field(name='transaction_date', klass='nb numbercell'),
+            Field(name='invoice', klass='nb'),
+            Field(name='calculate_from_date', klass='nb numbercell'),
+            Field(name='calculate_to_date', klass='nb numbercell'),
+            Field(name='interest_days', klass='nb numbercell'),
         ]
         for field in fields:
-            field['title'] = _("rentenota.%s" % field['name']).replace("&shy;", "")
+            field.title = _("rentenota.%s" % field.name).replace("&shy;", "")
         return fields
 
-    def get_items(self, form):
+    def load_items(self, form):
         prisme = Prisme()
         posts = []
         # Response is of type PrismeInterestNoteResponse
@@ -976,7 +972,7 @@ class RenteNotaView(RequireCvrMixin, IsContentMixin, SimpleGetFormMixin, PdfRend
                     }
                     data.update(journaldata)
                     posts.append(data)
-        return posts
+        self.items = posts
 
     def get_pages(self, key):
         return self.items
@@ -989,20 +985,20 @@ class RenteNotaView(RequireCvrMixin, IsContentMixin, SimpleGetFormMixin, PdfRend
     def get_sheetname(self):
         return "Rentenota"
 
-    def get_spreadsheet_data(self):
+    def get_rows(self):
         fields = self.get_fields()
         return [
-            [
-                {**field, 'value': item[field['name']]}
+            Row(cells=[
+                Cell(field=field, value=item[field.name])
                 for field in fields
-            ]
+            ])
             for item in self.items
         ]
 
     def form_valid(self, form):
         self.form = form
         try:
-            self.items = self.get_items(form)
+            self.load_items(form)
         except PrismeException as e:
             self.errors.append(e.as_error_dict)
         if 'format' in self.request.GET:
@@ -1015,6 +1011,7 @@ class RenteNotaView(RequireCvrMixin, IsContentMixin, SimpleGetFormMixin, PdfRend
         context = {
             'date': date.today().strftime('%d/%m/%Y'),
             'items': self.items,
+            'rows': self.get_rows(),
             'fields': self.get_fields(),
             'total': sum([float(item['interest_amount']) for item in self.items])
             if self.items is not None else None,
