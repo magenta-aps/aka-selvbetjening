@@ -1,7 +1,7 @@
 django==3.2.13
 django-extra-views>=0.12.0
-requests
-requests[socks]
+requests==2.27.1
+requests[socks]==2.27.1
 pysocks
 requests_ntlm
 oic>=1.2.0
