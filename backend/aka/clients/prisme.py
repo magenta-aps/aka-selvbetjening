@@ -10,6 +10,7 @@ from aka.utils import get_file_contents_base64
 from dict2xml import dict2xml as dict_to_xml
 from django.conf import settings
 from requests import Session
+from requests.auth import HTTPBasicAuth
 from requests_ntlm import HttpNtlmAuth
 from xmltodict import parse as xml_to_dict
 from zeep.transports import Transport
@@ -642,7 +643,7 @@ class Prisme(object):
             if auth_settings:
                 if 'basic' in auth_settings:
                     basic_settings = auth_settings['basic']
-                    session.auth = (
+                    session.auth = HTTPBasicAuth(
                         f'{basic_settings["username"]}@{basic_settings["domain"]}',
                         basic_settings["password"]
                     )
