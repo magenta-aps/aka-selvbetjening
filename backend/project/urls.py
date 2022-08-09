@@ -11,7 +11,7 @@ urlpatterns = [
 
 if settings.MITID_TEST_ENABLED:
     urlpatterns.append(
-        url('mitid_test', include('mitid_test.urls', namespace='mitid_test'))
+        path('mitid_test/', include('mitid_test.urls', namespace='mitid_test'))
     )
 
 if settings.DEBUG:
