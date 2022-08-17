@@ -170,7 +170,6 @@ Configure prod:
   stage: configure
   extends:
     - .release-to-prod
-  when: manual
   needs: ["Release production image"]
   variables:
     ENDPOINT: akap/update-production
