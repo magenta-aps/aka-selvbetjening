@@ -166,13 +166,26 @@ Release production image:
 # Configure stage
 #################
 
-Configure prod:
+# We roll master out to test, so no need to update config
+#Configure test:
+#  stage: configure
+#  extends:
+#    - .rules:semver-all
+#    - .config:endpoint-with-tag
+#  needs: ["Release test image"]
+#  variables:
+#    # Matches routing in config-updater/config_updater/akap/main.py in salt repo
+#    ENDPOINT: akap/salt/update-test
+
+Configure production:
   stage: configure
   extends:
-    - .release-to-prod
+    - .rules:semver-core
+    - .config:endpoint-with-tag
   needs: ["Release production image"]
   variables:
-    ENDPOINT: akap/update-production
+    # Matches routing in config-updater/config_updater/akap/main.py in salt repo
+    ENDPOINT: akap/salt/update-production
 
 
 # Deploy stage
@@ -180,6 +193,7 @@ Configure prod:
 
 Deploy test:
   stage: deploy
+  when: manual
   only:
     refs:
       - master
@@ -196,9 +210,9 @@ Deploy production:
   stage: deploy
   when: manual
   extends:
-    - .rules:semver-all
+    - .rules:semver-core
     - .saltbert
-  needs: ["Release production image", "Configure prod"]
+  needs: ["Release production image", "Configure production"]
   variables:
     SALTBERT_ORCHESTRATION: aka_selvbetjening.service-prod
     SALTBERT_URL: https://ctrl1.magenta-aps.dk
