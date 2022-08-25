@@ -168,6 +168,7 @@ Configure prod:
   stage: configure
   extends:
     - .config:endpoint-with-tag
+    - .rules:semver-all
   needs: ["Release production image"]
   variables:
     ENDPOINT: akap/salt/update-production
