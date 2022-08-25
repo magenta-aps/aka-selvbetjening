@@ -182,6 +182,7 @@ Deploy test:
   extends:
     - .rules:semver-all
     - .saltbert
+  needs: ["Release dev image"]
   variables:
     SALTBERT_ORCHESTRATION: aka_selvbetjening.service-test
     SALTBERT_URL: https://ctrldev1.magenta-aps.dk
