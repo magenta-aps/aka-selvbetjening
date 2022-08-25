@@ -172,7 +172,7 @@ Configure prod:
     - .config:endpoint-with-tag
   needs: ["Release production image"]
   variables:
-    ENDPOINT: akap/update-production
+    ENDPOINT: akap/salt/update-production
 
 
 # Deploy stage
