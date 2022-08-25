@@ -142,9 +142,7 @@ Selvbetjening Unittest:
 Release dev image:
   extends:
     - .release-default
-  only:
-    refs:
-      - master
+    - .rules:semver-all
   script:
     - skopeo copy
       --src-creds=${CI_REGISTRY_USER}:${CI_BUILD_TOKEN}
@@ -180,10 +178,8 @@ Configure prod:
 
 Deploy test:
   stage: deploy
-  only:
-    refs:
-      - master
   extends:
+    - .rules:semver-all
     - .saltbert
   variables:
     SALTBERT_ORCHESTRATION: aka_selvbetjening.service-test
