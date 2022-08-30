@@ -357,7 +357,7 @@ SAML = {
 }
 
 
-LOGIN_PROVIDER_CLASS = os.environ.get('LOGIN_PROVIDER_CLASS') or None
+LOGIN_PROVIDER_CLASS = "django_mitid_auth.saml.oiosaml.OIOSaml"
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 LOGIN_NAMESPACE = 'login'  # Must match namespace given to django_mitid_auth.urls in project/urls.py
