@@ -1,0 +1,24 @@
+<CustTable>
+    <CustTrans>
+        <AccountNum>00000001</AccountNum>
+        <TransDate>2018-01-03</TransDate>
+        <AccountingDate>2019-01-22</AccountingDate>
+        <CustGroup>183000</CustGroup>
+        <CustGroupName/>
+        <Voucher>AKI-30000000</Voucher>
+        <Txt/>
+        <CustPaymCode/>
+        <CustPaymDescription/>
+        <AmountCur>200.00</AmountCur>
+        <RemainAmountCur>37.05</RemainAmountCur>
+        <DueDate>2018-01-03</DueDate>
+        <Closed/>
+        <LastSettleVoucher>KMO-000000001</LastSettleVoucher>
+        <CollectionLetterDate/>
+        <CollectionLetterCode>Ingen</CollectionLetterCode>
+        <ClaimTypeCode/>
+        <Invoice>AKI-000001</Invoice>
+        <TransType>Debitor</TransType>
+        <RateNmb>2</RateNmb>
+    </CustTrans>
+</CustTable>

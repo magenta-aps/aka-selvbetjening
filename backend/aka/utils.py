@@ -5,6 +5,8 @@ import logging
 import os
 from decimal import Decimal
 from math import floor
+from dataclasses import dataclass, field
+from typing import Any, List
 
 from dateutil import parser as datetimeparser
 from django.conf import settings
@@ -206,3 +208,34 @@ def chunks(lst, size):
     """Yield successive n-sized chunks from lst."""
     for i in range(0, len(lst), size):
         yield lst[i:i + size], i
+
+
+@dataclass
+class Field:
+    name: str
+    klass: str = 'nb'
+    title: str = None
+    transkey: str = None
+    labelkey: str = None
+    modifier: callable = None
+    number: bool = False
+    boolean: bool = False
+
+
+@dataclass
+class Cell:
+    field: Field
+    value: Any
+
+
+@dataclass
+class Row:
+    cells: List[Cell] = field(default_factory=list)
+
+
+@dataclass
+class Table:
+    fields: List[Field] = field(default_factory=list)
+    rows: List[Row] = field(default_factory=list)
+    name: str = None
+    total: dict = None

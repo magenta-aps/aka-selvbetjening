@@ -22,7 +22,7 @@
         <TransType>Debitor</TransType>
         <ClaimantName>Avannaata Kommunia</ClaimantName>
         <ClaimantId>37AK</ClaimantId>
-        <ChildClaimant/>
+        <ChildClaimant>1234567890</ChildClaimant>
     </CustTrans>
     <CustTrans>
         <AccountNum>00000001</AccountNum>

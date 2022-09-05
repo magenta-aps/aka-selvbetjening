@@ -23,20 +23,20 @@
 
                 <select id="download">
                     {% if pdflink %}
-                        <option value="{{ item.key }}.pdf" data-trans="common.pdf">{% trans 'common.pdf' %}</option>
+                        <option value="{{ key }}.pdf" data-trans="common.pdf">{% trans 'common.pdf' %}</option>
                     {% endif %}
                     {% if xlsxlink %}
-                        <option value="{{ item.key }}.xlsx" data-trans="common.xlsx">{% trans 'common.xlsx' %}</option>
+                        <option value="{{ key }}.xlsx" data-trans="common.xlsx">{% trans 'common.xlsx' %}</option>
                     {% endif %}
                     {% if odslink %}
-                        <option value="{{ item.key }}.ods" data-trans="common.ods">{% trans 'common.ods' %}</option>
+                        <option value="{{ key }}.ods" data-trans="common.ods">{% trans 'common.ods' %}</option>
                     {% endif %}
                     {% if csvlink %}
-                        <option value="{{ item.key }}.csv" data-trans="common.csv">{% trans 'common.csv' %}</option>
+                        <option value="{{ key }}.csv" data-trans="common.csv">{% trans 'common.csv' %}</option>
                     {% endif %}
                 </select>
 
-                <button type="button" class="btn-print" data-trans="common.print" data-printhide=".output:not(#output-{{ item.key }})">{% trans 'common.print' %}</button>
+                <button type="button" class="btn-print" data-trans="common.print" data-printhide=".output:not(#output-{{ key }})">{% trans 'common.print' %}</button>
             </div>
             {% endif %}
         </div>
