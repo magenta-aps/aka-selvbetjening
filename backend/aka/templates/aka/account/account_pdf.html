@@ -16,11 +16,11 @@
 
         <div id="output-{{ page.key }}" class="output">
         {% for page in pages %}
-            {% with data=page.data total=page.total %}
+            {% with rows=page.rows total=page.total %}
                 <div class="page" style="page-break-after: always">
                         {% include 'aka/account/account_pageheader.html' %}
                         <div class="page-data account-data">
-                        {% if data and data|length > 0 %}
+                        {% if rows and rows|length > 0 %}
                             <table class="output-table" data-key="{{ page.key }}" style="font-size:0.9em">
                                 <thead>
                                     <tr>
@@ -30,20 +30,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {% for row in data %}
+                                {% for row in rows %}
                                     <tr>
-                                        {% for item in row %}
-                                            <td class="{{ item.class }}" data-original="{{ item.value }}">
-                                                {% if item.number %}
-                                                    {{ item.value }}
-                                                {% elif item.boolean %}
-                                                    {{ item.value|yesno }}
+                                        {% for cell in row.cells %}
+                                            {% with field=cell.field %}
+                                            <td class="{{ field.klass }}" data-original="{{ cell.value }}">
+                                                {% if field.number %}
+                                                    {{ cell.value }}
+                                                {% elif field.boolean %}
+                                                    {{ cell.value|yesno }}
                                                 {% else %}
                                                     {% localize off %}
-                                                    {{ item.value|default_if_none:'' }}
+                                                    {{ cell.value|default_if_none:'' }}
                                                     {% endlocalize %}
                                                 {% endif %}
                                             </td>
+                                            {% endwith %}
                                         {% endfor %}
                                     </tr>
                                 {% endfor %}
