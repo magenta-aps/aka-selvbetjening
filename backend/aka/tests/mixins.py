@@ -5,10 +5,13 @@ from aka.clients.prisme import PrismeCvrCheckResponse
 
 
 class TestMixin(object):
-
     def process_service_mock(self, prisme_request, *args):
         if prisme_request.__class__ == PrismeCvrCheckRequest:
-            return [PrismeCvrCheckResponse(None, '<FujClaimant><ClaimantId>32SE</ClaimantId></FujClaimant>')]
+            return [
+                PrismeCvrCheckResponse(
+                    None, "<FujClaimant><ClaimantId>32SE</ClaimantId></FujClaimant>"
+                )
+            ]
         for classname, response in self.prisme_return.items():
             if prisme_request.__class__.__name__ == classname:
                 if type(response) != list:
@@ -17,8 +20,8 @@ class TestMixin(object):
 
     def setUp(self):
         self.prisme_return = {}
-        self.url = '/inkassosag/'
-        self.service_mock = self.mock('aka.clients.prisme.Prisme.process_service')
+        self.url = "/inkassosag/"
+        self.service_mock = self.mock("aka.clients.prisme.Prisme.process_service")
         self.service_mock.side_effect = self.process_service_mock
 
     def mock(self, method):
@@ -32,9 +35,17 @@ class TestMixin(object):
             return f.read()
 
     def compare(self, a, b, path):
-        self.assertEqual(type(a), type(b), f"mismatch on {path}, different type {type(a)} != {type(b)}")
+        self.assertEqual(
+            type(a),
+            type(b),
+            f"mismatch on {path}, different type {type(a)} != {type(b)}",
+        )
         if isinstance(a, list):
-            self.assertEqual(len(a), len(b), f"mismatch on {path}, different length {len(a)} != {len(b)}")
+            self.assertEqual(
+                len(a),
+                len(b),
+                f"mismatch on {path}, different length {len(a)} != {len(b)}",
+            )
             for index, item in enumerate(a):
                 self.compare(item, b[index], f"{path}[{index}]")
         elif isinstance(a, dict):

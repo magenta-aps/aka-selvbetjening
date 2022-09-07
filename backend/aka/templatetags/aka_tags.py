@@ -12,7 +12,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 trans_re = re.compile("_\\((.*)\\)")
 format_re = re.compile("{(.*)}")
 
-locale.setlocale(locale.LC_ALL, '')
+locale.setlocale(locale.LC_ALL, "")
 
 
 @register.filter
@@ -61,18 +61,13 @@ def startswith(text, prefix):
 
 @register.filter
 def addstr(arg1, arg2):
-    return ''.join([str(a) if a is not None else '' for a in [arg1, arg2]])
+    return "".join([str(a) if a is not None else "" for a in [arg1, arg2]])
 
 
 @register.filter
 def back(url, backurl):
     if backurl:
-        return ''.join([
-            url,
-            '&' if '?' in url else '?',
-            'back=',
-            urlquote(backurl)
-        ])
+        return "".join([url, "&" if "?" in url else "?", "back=", urlquote(backurl)])
     return url
 
 
@@ -80,13 +75,7 @@ def back(url, backurl):
 def urlparam(url, param):
     if param:
         (key, value) = param.split("=")
-        return ''.join([
-            url,
-            '&' if '?' in url else '?',
-            key,
-            '=',
-            urlquote(value)
-        ])
+        return "".join([url, "&" if "?" in url else "?", key, "=", urlquote(value)])
     return url
 
 
@@ -94,7 +83,7 @@ def urlparam(url, param):
 def get(item, attribute):
     if hasattr(item, attribute):
         return getattr(item, attribute)
-    if hasattr(item, 'get'):
+    if hasattr(item, "get"):
         return item.get(attribute)
     if isinstance(item, (tuple, list)):
         return item[int(attribute)]
