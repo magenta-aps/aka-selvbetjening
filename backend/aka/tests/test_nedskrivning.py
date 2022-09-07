@@ -12,7 +12,7 @@ class BasicTestCase(TestMixin, TestCase):
     def setUp(self):
         super(BasicTestCase, self).setUp()
         logging.disable(logging.CRITICAL)
-        self.url = '/nedskrivning'
+        self.url = '/nedskrivning/'
 
 
 class RemoteTestCase(BasicTestCase):

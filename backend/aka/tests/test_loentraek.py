@@ -15,7 +15,7 @@ class BasicTestCase(TestMixin, TestCase):
     def setUp(self):
         super(BasicTestCase, self).setUp()
         logging.disable(logging.CRITICAL)
-        self.url = '/loentraek'
+        self.url = '/loentraek/'
         session = self.client.session
         session['user_info'] = {'CVR': '12479182'}
         session.save()
