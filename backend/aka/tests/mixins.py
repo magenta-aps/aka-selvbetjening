@@ -17,7 +17,7 @@ class TestMixin(object):
 
     def setUp(self):
         self.prisme_return = {}
-        self.url = '/inkassosag'
+        self.url = '/inkassosag/'
         self.service_mock = self.mock('aka.clients.prisme.Prisme.process_service')
         self.service_mock.side_effect = self.process_service_mock
 
