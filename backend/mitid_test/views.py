@@ -17,58 +17,61 @@ class ClearSessionView(View):
 
 class PrivilegeView(TemplateView):
 
-    template_name = 'mitid_test/dummy.html'
-    description = 'dummy page'
+    template_name = "mitid_test/dummy.html"
+    description = "dummy page"
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data(**{
-            **kwargs,
-            'description': self.description
-        })
+        return super().get_context_data(**{**kwargs, "description": self.description})
 
 
 class Privilege0View(PrivilegeView):
     # SP-åben-side-1
-    description = 'Side der ikke kræver privilegier'
+    description = "Side der ikke kræver privilegier"
 
 
 class Privilege1View(MitIdLOAMixin, PrivilegeView):
     # SP-beskyttet-side-1
     required_level_of_assurance = MitIdLOAMixin.LEVEL_SUBSTANTIAL
-    description = 'Side der kræver Betydelige privilegier'
+    description = "Side der kræver Betydelige privilegier"
 
 
 class Privilege3View(MitIdLOAMixin, PrivilegeView):
     # SP-beskyttet-side-3
     required_level_of_assurance = MitIdLOAMixin.LEVEL_HIGH
-    description = 'Side der kræver Høje privilegier'
+    description = "Side der kræver Høje privilegier"
 
 
 class ForceAuthView(View):
     # SP-force-authn-side-1
     def get(self, request):
-        request.session['backpage'] = request.GET.get('back')
+        request.session["backpage"] = request.GET.get("back")
         provider = login_provider_class()
-        request.session['login_method'] = provider.__class__.__name__
-        return provider.login(request, login_params={'force_authn': True})
+        request.session["login_method"] = provider.__class__.__name__
+        return provider.login(request, login_params={"force_authn": True})
 
 
 class ShowSession(View):
     def get(self, request, *args, **kwargs):
-        return HttpResponse(json.dumps(
-            {key: value for key, value in request.session.items()}
-        ), 'application/json; charset="utf-8"')
+        return HttpResponse(
+            json.dumps({key: value for key, value in request.session.items()}),
+            'application/json; charset="utf-8"',
+        )
 
 
 class ListSessions(View):
     def get(self, request, *args, **kwargs):
-        return HttpResponse(json.dumps(
-            [
-                {
-                    'session_key': session.session_key,
-                    'expire_date': str(session.expire_date),
-                    'data': {key: value for key, value in session.get_decoded().items()}
-                }
-                for session in Session.objects.all()
-            ]
-        ), 'application/json; charset="utf-8"')
+        return HttpResponse(
+            json.dumps(
+                [
+                    {
+                        "session_key": session.session_key,
+                        "expire_date": str(session.expire_date),
+                        "data": {
+                            key: value for key, value in session.get_decoded().items()
+                        },
+                    }
+                    for session in Session.objects.all()
+                ]
+            ),
+            'application/json; charset="utf-8"',
+        )

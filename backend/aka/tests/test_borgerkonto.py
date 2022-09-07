@@ -8,42 +8,53 @@ from django.test import TestCase, override_settings
 from xmltodict import parse as xml_to_dict
 
 
-@override_settings(OPENID_CONNECT={'enabled': False})
+@override_settings(OPENID_CONNECT={"enabled": False})
 class BasicTestCase(TestMixin, TestCase):
-
     def setUp(self):
         super(BasicTestCase, self).setUp()
         logging.disable(logging.CRITICAL)
-        self.url = '/konto/'
-        self.dafomock = self.mock('aka.clients.dafo.Dafo.lookup_cvr')
+        self.url = "/konto/"
+        self.dafomock = self.mock("aka.clients.dafo.Dafo.lookup_cvr")
         self.dafomock.return_value = {
-            'navn': 'Testfirma',
-            'adresse': 'Testvej 42',
-            'postnummer': '1234',
-            'bynavn': 'Testby',
-            'landekode': 'DK'
+            "navn": "Testfirma",
+            "adresse": "Testvej 42",
+            "postnummer": "1234",
+            "bynavn": "Testby",
+            "landekode": "DK",
         }
 
         session = self.client.session
-        session['user_info'] = {'CVR': '12345678'}
+        session["user_info"] = {"CVR": "12345678"}
         session.save()
 
         self.prisme_return = {
-            'PrismeAccountRequest': PrismeAccountResponse(None, self.get_file_contents('aka/tests/resources/citizenaccount_response.xml'))
+            "PrismeAccountRequest": PrismeAccountResponse(
+                None,
+                self.get_file_contents(
+                    "aka/tests/resources/citizenaccount_response.xml"
+                ),
+            )
         }
 
     # PRISME INTERFACE TESTS #
 
     def test_account_request_parse(self):
-        request = PrismeAccountRequest('12345678', date(2019, 1, 22), date(2019, 1, 22), 0)
+        request = PrismeAccountRequest(
+            "12345678", date(2019, 1, 22), date(2019, 1, 22), 0
+        )
         self.compare(
-            xml_to_dict(self.get_file_contents('aka/tests/resources/citizenaccount_request.xml')),
+            xml_to_dict(
+                self.get_file_contents("aka/tests/resources/citizenaccount_request.xml")
+            ),
             xml_to_dict(request.xml),
-            ""
+            "",
         )
 
     def test_account_response_parse(self):
-        response = PrismeAKIAccountResponse(None, self.get_file_contents('aka/tests/resources/citizenaccount_response.xml'))
+        response = PrismeAKIAccountResponse(
+            None,
+            self.get_file_contents("aka/tests/resources/citizenaccount_response.xml"),
+        )
         self.assertEqual(1, len(response.transactions))
         transaction0 = response.transactions[0]
         self.assertEqual("00000001", transaction0.account_number)

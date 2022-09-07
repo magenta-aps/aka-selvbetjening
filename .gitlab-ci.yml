@@ -35,8 +35,10 @@ Lint python:
   <<: *lint-default
   before_script:
     - pip3 install flake8
+    - pip3 install black
   script:
-    - flake8 --ignore E501,E226 backend/
+    - flake8 --ignore E501,E226,E203,W503 backend/
+    - black --check --diff backend/
 
 Lint Dockerfiles:
   <<: *lint-default
