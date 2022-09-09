@@ -304,7 +304,6 @@ SAML = {
     "metadata": {  # IdP Metadata
         "remote": [{"url": os.environ.get("SAML_IDP_METADATA")}]
     },
-    "attribute_map_dir": "/backend/saml/attribute_maps",
     "service": {
         "sp": {
             "name": "AKAP Test",

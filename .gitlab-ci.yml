@@ -200,7 +200,6 @@ Deploy test:
   only:
     refs:
       - master
-      - 50806_mitid
   extends:
     - .saltbert
   variables:
