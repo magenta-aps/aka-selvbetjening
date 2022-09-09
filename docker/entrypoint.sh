@@ -4,8 +4,9 @@ SKIP_MIGRATIONS=${SKIP_MIGRATIONS:=false}
 TEST=${TEST:=false}
 PGP_KEY=${PGP_KEY:=false}
 python manage.py compilemessages
+python manage.py wait_for_db
+python manage.py createcachetable
 if [ "$SKIP_MIGRATIONS" = false ]; then
-  python manage.py wait_for_db
   echo 'running migrations'
   python manage.py migrate
 fi

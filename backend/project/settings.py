@@ -282,108 +282,107 @@ def read_file(filename):
     return None
 
 
-SAML = {
-    "enabled": bool(strtobool(os.environ.get("SAML_ENABLED", "False"))),
-    "strict": False,
-    "debug": True,
-    "base_directory": None,
-    "destination_host": None,
-    "destination_https": None,
-    "destination_port": None,
-    "login_redirect": "/",
-    "logout_redirect": "/",
-    "sp": {
-        "entityId": os.environ.get("SAML_SP_ENTITY_ID"),
-        "assertionConsumerService": {
-            "url": os.environ.get("SAML_SP_LOGIN_CALLBACK_URI"),
-            # DO NOT CHANGE THIS
-            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
-        },
-        "singleLogoutService": {
-            "url": os.environ.get("SAML_SP_LOGOUT_CALLBACK_URI"),
-            # DO NOT CHANGE THIS
-            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
-        },
-        "attributeConsumingService": {
-            # index is an integer which identifies the attributeConsumingService used to the SP.
-            # OneLogin toolkit supports configuring only one attributeConsumingService but in certain
-            # cases the SP requires a different value.  Defaults to '1'.
-            # "index": '1',
-            "serviceName": "AKAP Test",
-            "serviceDescription": "AKAP Test",
-            "requestedAttributes": [
-                {
-                    "name": "https://data.gov.dk/model/core/specVersion",
-                    "isRequired": False,
-                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
-                },
-                {
-                    "name": "https://data.gov.dk/concept/core/nsis/loa",
-                    "isRequired": False,
-                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
-                },
-                {
-                    "name": "https://data.gov.dk/model/core/eid/professional/cvr",
-                    "isRequired": False,
-                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
-                },
-                {
-                    "name": "https://data.gov.dk/model/core/eid/professional/orgName",
-                    "isRequired": False,
-                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
-                },
-                {
-                    "name": "https://data.gov.dk/model/core/eid/cprNumber",
-                    "isRequired": False,
-                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
-                },
-                {
-                    "name": "https://data.gov.dk/model/core/eid/fullName",
-                    "isRequired": False,
-                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
-                },
-            ],
-        },
-        "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
-        "NameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
-        "x509cert": read_file(os.environ.get("SAML_SP_CERTIFICATE"))
-        or read_file("/ssl/sp/selfsigned.crt"),
-        "privateKey": read_file(os.environ.get("SAML_SP_KEY"))
-        or read_file("/ssl/sp/selfsigned.key"),
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "default_cache",
     },
-    "idp": {
-        "entityId": os.environ.get("SAML_IDP_ENTITY_ID"),
-        "singleSignOnService": {
-            "url": os.environ.get("SAML_IDP_LOGIN_URI"),
-            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
-        },
-        "singleLogoutService": {
-            "url": os.environ.get("SAML_IDP_LOGOUT_URI"),
-            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
-        },
-        "x509cert": read_file(os.environ.get("SAML_IDP_CERTIFICATE"))
-        or read_file("/ssl/idp/selfsigned.crt"),
-    },
-    "security": {
-        "authnRequestsSigned": True,
-        "wantAssertionsEncrypted": True,
-        "requestedAuthnContext": False,
-    },
-    "contactPerson": {
-        "technical": {
-            "givenName": os.environ["SAML_CONTACT_TECHNICAL_NAME"],
-            "emailAddress": os.environ["SAML_CONTACT_TECHNICAL_EMAIL"],
-        },
-        "support": {
-            "givenName": os.environ["SAML_CONTACT_SUPPORT_NAME"],
-            "emailAddress": os.environ["SAML_CONTACT_SUPPORT_EMAIL"],
-        },
+    "saml": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "saml_cache",
     },
 }
 
+SAML = {
+    "enabled": bool(strtobool(os.environ.get("SAML_ENABLED", "False"))),
+    "debug": 1,
+    "entityid": os.environ.get("SAML_SP_ENTITY_ID"),
+    "idp_entity_id": os.environ.get("SAML_IDP_ENTITY_ID"),
+    "name": "AKAP Test",
+    "description": "AKAP Test",
+    "verify_ssl_cert": False,
+    "metadata": {  # IdP Metadata
+        "remote": [{"url": os.environ.get("SAML_IDP_METADATA")}]
+    },
+    "attribute_map_dir": "/backend/saml/attribute_maps",
+    "service": {
+        "sp": {
+            "name": "AKAP Test",
+            "hide_assertion_consumer_service": False,
+            "endpoints": {
+                "assertion_consumer_service": [
+                    (
+                        os.environ.get("SAML_SP_LOGIN_CALLBACK_URI"),
+                        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+                    )
+                ],
+                "single_logout_service": [
+                    (
+                        os.environ.get("SAML_SP_LOGOUT_CALLBACK_URI"),
+                        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+                    ),
+                ],
+            },
+            "authn_requests_signed": True,
+            "want_assertions_signed": False,
+            "want_response_signed": False,
+            "required_attributes": [
+                "https://data.gov.dk/model/core/specVersion",
+                "https://data.gov.dk/concept/core/nsis/loa",
+                "https://data.gov.dk/model/core/eid/professional/orgName",
+                "https://data.gov.dk/model/core/eid/cprNumber",
+                "https://data.gov.dk/model/core/eid/fullName",
+            ],
+            "optional_attributes": [
+                "https://data.gov.dk/model/core/eid/professional/cvr",
+            ],
+            "name_id_format": [
+                "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+            ],
+            "allow_unsolicited": True,  # TODO: maybe False?
+            "signing_algorithm": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+        }
+    },
+    "key_file": os.environ.get("SAML_SP_KEY"),
+    "cert_file": os.environ.get("SAML_SP_CERTIFICATE"),
+    "encryption_keypairs": [
+        {
+            "key_file": os.environ.get("SAML_SP_KEY"),
+            "cert_file": os.environ.get("SAML_SP_CERTIFICATE"),
+        },
+    ],
+    "xmlsec_binary": "/usr/bin/xmlsec1",
+    "delete_tmpfiles": True,
+    "organization": {
+        "name": [("AKAP Test", "da")],
+        "display_name": ["AKAP Test"],
+        "url": [("https://magenta.dk", "da")],
+    },
+    "contact_person": [
+        {
+            "given_name": os.environ["SAML_CONTACT_TECHNICAL_NAME"],
+            "email_address": os.environ["SAML_CONTACT_TECHNICAL_EMAIL"],
+            "type": "technical",
+        },
+        {
+            "given_name": os.environ["SAML_CONTACT_SUPPORT_NAME"],
+            "email_address": os.environ["SAML_CONTACT_SUPPORT_EMAIL"],
+            "type": "support",
+        },
+    ],
+    "preferred_binding": {
+        "attribute_consuming_service": [
+            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+        ],
+        "single_logout_service": [
+            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+        ],
+    },
+}
 
 LOGIN_PROVIDER_CLASS = os.environ.get("LOGIN_PROVIDER_CLASS") or None
 LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"  # Where to go after logout
 LOGIN_URL = "/login/"
 LOGIN_NAMESPACE = (
     "login"  # Must match namespace given to django_mitid_auth.urls in project/urls.py
