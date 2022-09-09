@@ -111,6 +111,11 @@ Selvbetjening Unittest:
     SAML_IDP_LOGIN_URI: http://localhost:8888/simplesaml/saml2/idp/SSOService.php
     SAML_IDP_LOGOUT_URI: http://localhost:8888/simplesaml/saml2/idp/SingleLogoutService.php
     SAML_IDP_CERTIFICATE: /ssl/idp/selfsigned.crt
+    SAML_IDP_METADATA: http://localhost:8888/simplesaml/saml2/idp/metadata.php
+    SAML_CONTACT_TECHNICAL_NAME: Tester
+    SAML_CONTACT_TECHNICAL_EMAIL: test@example.com
+    SAML_CONTACT_SUPPORT_NAME: Tester
+    SAML_CONTACT_SUPPORT_EMAIL: test@example.com
 
   before_script:
     - pip3 install -r backend/requirements.txt
