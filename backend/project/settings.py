@@ -371,16 +371,12 @@ SAML = {
     },
     "contactPerson": {
         "technical": {
-            "givenName": os.environ.get("SAML_CONTACT_TECHNICAL_NAME")
-            or "Lars Peter Thomsen",
-            "emailAddress": os.environ.get("SAML_CONTACT_TECHNICAL_EMAIL")
-            or "larsp@magenta.dk",
+            "givenName": os.environ["SAML_CONTACT_TECHNICAL_NAME"],
+            "emailAddress": os.environ["SAML_CONTACT_TECHNICAL_EMAIL"],
         },
         "support": {
-            "givenName": os.environ.get("SAML_CONTACT_SUPPORT_NAME")
-            or "Lars Peter Thomsen",
-            "emailAddress": os.environ.get("SAML_CONTACT_SUPPORT_EMAIL")
-            or "larsp@magenta.dk",
+            "givenName": os.environ["SAML_CONTACT_SUPPORT_NAME"],
+            "emailAddress": os.environ["SAML_CONTACT_SUPPORT_EMAIL"],
         },
     },
 }
