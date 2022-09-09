@@ -11,7 +11,7 @@ RUN curl -fsSLO https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.1
 # hadolint ignore=DL3008
 RUN mkdir /backend && mkdir -p /var/log/aka \
  && apt-get update && apt-get install -y --no-install-recommends \
-    gettext libxmlsec1-dev gpg nano \
+    gettext libxmlsec1-dev xmlsec1 gpg nano \
  && apt-get clean && rm -rf /var/lib/apt/lists/* \
  && curl -fsSLO "$SUPERCRONIC_URL" \
  && echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC}" | sha1sum -c - \

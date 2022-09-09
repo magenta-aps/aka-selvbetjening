@@ -147,6 +147,7 @@ Release dev image:
   only:
     refs:
       - master
+      - 50806_mitid
   script:
     - skopeo copy
       --src-creds=${CI_REGISTRY_USER}:${CI_BUILD_TOKEN}
@@ -199,6 +200,7 @@ Deploy test:
   only:
     refs:
       - master
+      - 50806_mitid
   extends:
     - .saltbert
   variables:
