@@ -130,7 +130,7 @@ Selvbetjening Unittest:
       coverage_report:
         coverage_format: cobertura
         path: /backend/coverage.xml
-  allow_failure: true
+  allow_failure: false
 
 # Release stage
 ###############
