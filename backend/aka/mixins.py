@@ -104,7 +104,6 @@ class HasUserMixin(object):
                 pass
 
     def obtain_cvr(self, request):
-
         if (
             self.cpr
             and not self.cvr
