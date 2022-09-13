@@ -323,7 +323,7 @@ SAML = {
                 ],
             },
             "authn_requests_signed": True,
-            "want_assertions_signed": False,
+            "want_assertions_signed": True,
             "want_response_signed": False,
             "required_attributes": [
                 "https://data.gov.dk/model/core/specVersion",
