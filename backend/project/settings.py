@@ -305,9 +305,8 @@ SAML = {
     "name": "AKAP Test",
     "description": "AKAP Test",
     "verify_ssl_cert": False,
-    "metadata": {  # IdP Metadata
-        "remote": [{"url": os.environ.get("SAML_IDP_METADATA")}]
-    },
+    "metadata_remote": os.environ.get("SAML_IDP_METADATA"),
+    "metadata": {"local": ["/var/cache/aka/idp_metadata.xml"]},  # IdP Metadata
     "service": {
         "sp": {
             "name": "AKAP Test",

@@ -9,7 +9,7 @@ RUN curl -fsSLO https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.1
   mv wkhtmltox/bin/wkhtmlto* /usr/bin
     
 # hadolint ignore=DL3008
-RUN mkdir /backend && mkdir -p /var/log/aka \
+RUN mkdir /backend && mkdir -p /var/log/aka && mkdir -p /var/cache/aka \
  && apt-get update && apt-get install -y --no-install-recommends \
     gettext libxmlsec1-dev xmlsec1 gpg nano \
  && apt-get clean && rm -rf /var/lib/apt/lists/* \
@@ -22,6 +22,8 @@ RUN mkdir /backend && mkdir -p /var/log/aka \
  && groupadd -g 75100 -r certificate_exporter \
  && useradd -m -u 75080 --no-log-init -r -g aka -G certificate_exporter aka \
  && chown aka:aka /var/log/aka \
+ && chown aka:aka /var/cache/aka \
+ && chmod a+w /var/cache/aka \
  && mkdir -p /ssl/sp \
  && mkdir -p /ssl/idp
 
@@ -35,6 +37,7 @@ COPY dev-environment/cert/sp/selfsigned.* /ssl/sp/
 COPY dev-environment/cert/idp/selfsigned.crt /ssl/idp/selfsigned.crt
 USER aka
 WORKDIR /backend
+VOLUME  /var/cache/aka
 EXPOSE 8000
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["gunicorn","-b","0.0.0.0:8000","project.wsgi:application","-w 4","--timeout", "240", "--error-logfile", "-","--capture-output"]
