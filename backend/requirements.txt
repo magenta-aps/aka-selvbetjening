@@ -25,5 +25,5 @@ WeasyPrint>=54.1
 python-dateutil
 coverage
 python3-saml
-django_mitid_auth @ git+https://github.com/magenta-aps/gl-django-login.git@1.0.0-rc6
+django_mitid_auth @ git+https://github.com/magenta-aps/gl-django-login.git@1.0.0-rc7
 pysaml2
