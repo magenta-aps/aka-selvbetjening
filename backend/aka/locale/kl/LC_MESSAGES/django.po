@@ -59,6 +59,12 @@ msgstr "Skabelon aajuk"
 msgid "common.logout"
 msgstr "Aniffissaq"
 
+msgid "common.logout_confirm"
+msgstr "Er du sikker på at du vil logge ud?"
+
+msgid "common.login"
+msgstr "Log ind"
+
 msgid "common.logged_in_as"
 msgstr "{navn} isersimavoq"
 

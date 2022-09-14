@@ -2,6 +2,7 @@ import json
 
 from django.contrib.sessions.models import Session
 from django.http.response import HttpResponse
+from django.template.response import TemplateResponse
 from django.views.generic import TemplateView
 from django.views.generic.base import View
 from django_mitid_auth.saml.mixins import MitIdLOAMixin
@@ -23,6 +24,9 @@ class PrivilegeView(TemplateView):
     def get_context_data(self, **kwargs):
         return super().get_context_data(**{**kwargs, "description": self.description})
 
+    def permission_denied(self, request, *args, **kwargs):
+        return TemplateResponse(request, "mitid_test/permission_denied.html")
+
 
 class Privilege0View(PrivilegeView):
     # SP-åben-side-1
@@ -34,11 +38,17 @@ class Privilege1View(MitIdLOAMixin, PrivilegeView):
     required_level_of_assurance = MitIdLOAMixin.LEVEL_SUBSTANTIAL
     description = "Side der kræver Betydelige privilegier"
 
+    def permission_denied(self, request, *args, **kwargs):
+        return TemplateResponse(request, "mitid_test/permission_denied.html")
+
 
 class Privilege3View(MitIdLOAMixin, PrivilegeView):
     # SP-beskyttet-side-3
     required_level_of_assurance = MitIdLOAMixin.LEVEL_HIGH
     description = "Side der kræver Høje privilegier"
+
+    def permission_denied(self, request, *args, **kwargs):
+        return TemplateResponse(request, "mitid_test/permission_denied.html")
 
 
 class ForceAuthView(View):
