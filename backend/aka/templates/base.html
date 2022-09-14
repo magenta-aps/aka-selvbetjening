@@ -20,6 +20,7 @@
             <script type="text/javascript" src="{% static 'js/cookies.js' %}"></script>
             <script type="text/javascript" src="{% static 'js/locale.js' %}"></script>
             <script type="text/javascript">
+                django.language = "{{ LANGUAGE_CODE|split:'-'|first }}";
                 $(function() {
                     $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
                         if (!options.headers) options.headers = {};
@@ -38,8 +39,11 @@
                     $('input[type="submit"]').click(function(){
                         $(this).parents("form").addClass('submitted');
                     });
+                    $("#logout-link").on('click', function () {
+                        return confirm(django.catalog[django.language]["common.logout_confirm"]);
+                    });
                 });
-                django.language = "{{ LANGUAGE_CODE|split:'-'|first }}";
+
             </script>
         {% endif %}
         {% block extra_headers %}{% endblock %}
@@ -79,7 +83,7 @@
                             <span data-trans="common.logged_in_as" data-trans-params="{{ logged_in|json }}">{{ 'common.logged_in_as'|format:logged_in }}</span>
                         {% endif %}
                         {% if cpr or cvr %}
-                            <a href="{% url 'login:logout' %}" data-trans="common.logout">{% trans 'common.logout' %}</a>
+                            <a href="{% url 'login:logout' %}" data-trans="common.logout" id="logout-link">{% trans 'common.logout' %}</a>
                             {% else %}
                             <a href="{% url 'login:login' %}" data-trans="common.login">{% trans 'Log ind' %}</a>
                         {% endif %}

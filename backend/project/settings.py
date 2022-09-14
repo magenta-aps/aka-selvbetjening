@@ -149,6 +149,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django_mitid_auth.middleware.LoginManager",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_session_timeout.middleware.SessionTimeoutMiddleware",
 ]
 
 ROOT_URLCONF = "project.urls"
@@ -399,6 +400,8 @@ LOGIN_WHITELISTED_URLS = [
     LOGIN_URL,
 ]
 MITID_TEST_ENABLED = bool(strtobool(os.environ.get("MITID_TEST_ENABLED", "False")))
+SESSION_EXPIRE_SECONDS = int(os.environ.get("SESSION_EXPIRE_SECONDS") or 3600)
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 
 MOUNTS = {
     "claimant_account_statements": {  # 6.5

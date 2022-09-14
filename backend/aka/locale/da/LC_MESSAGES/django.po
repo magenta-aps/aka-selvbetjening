@@ -60,6 +60,12 @@ msgstr "Download skabelon"
 msgid "common.logout"
 msgstr "Log ud"
 
+msgid "common.login"
+msgstr "Log ind"
+
+msgid "common.logout_confirm"
+msgstr "Er du sikker på at du vil logge ud?"
+
 msgid "common.logged_in_as"
 msgstr "Logget ind som: {navn}"
 
