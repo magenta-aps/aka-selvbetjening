@@ -5,5 +5,5 @@
 # │ │ │ │ ┌─ day of the week (0 - 6) (Sunday to Saturday)
 # │ │ │ │ │
 # * * * * * command to execute
-#clear sessions monthly
-17 21 3 * * python manage.py clearsessions
+0 0 * * * python manage.py clearsessions
+0 0 * * * python manage.py update_mitid_idp_metadata
