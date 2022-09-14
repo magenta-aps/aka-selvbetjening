@@ -104,12 +104,17 @@ LOGGING = {
         "aka": {
             "level": "DEBUG",
             "handlers": ["console", "file"],
-            "propagate": True,
+            "propagate": False,
         },
         "oic": {
             "handlers": ["console"],
             "level": "DEBUG",
-            "propagate": True,
+            "propagate": False,
+        },
+        "django_mitid_auth": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
         },
     },
     "root": {
