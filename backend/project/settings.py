@@ -299,6 +299,7 @@ CACHES = {
     "saml": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
         "LOCATION": "saml_cache",
+        "TIMEOUT": 7200,
     },
 }
 
@@ -403,7 +404,9 @@ LOGIN_WHITELISTED_URLS = [
     reverse_lazy("status"),
     LOGIN_URL,
 ]
-LOGIN_NO_CPRCVR_TEMPLATE = "aka/no_cprcvr.html"
+LOGIN_NO_CPRCVR_TEMPLATE = "aka/error/no_cprcvr.html"
+LOGIN_LIFETIME_EXCEEDED_TEMPLATE = "aka/error/login_timeout.html"
+LOGIN_REPEATED_TEMPLATE = "aka/error/login_repeat.html"
 MITID_TEST_ENABLED = bool(strtobool(os.environ.get("MITID_TEST_ENABLED", "False")))
 SESSION_EXPIRE_SECONDS = int(os.environ.get("SESSION_EXPIRE_SECONDS") or 3600)
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
