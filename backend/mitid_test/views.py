@@ -5,8 +5,8 @@ from django.http.response import HttpResponse
 from django.template.response import TemplateResponse
 from django.views.generic import TemplateView
 from django.views.generic.base import View
-from django_mitid_auth.saml.mixins import MitIdLOAMixin
 from django_mitid_auth import login_provider_class
+from django_mitid_auth.saml.mixins import MitIdLOAMixin
 
 
 class ClearSessionView(View):
@@ -57,7 +57,7 @@ class ForceAuthView(View):
         request.session["backpage"] = request.GET.get("back")
         provider = login_provider_class()
         request.session["login_method"] = provider.__class__.__name__
-        return provider.login(request, login_params={"force_authn": True})
+        return provider.login(request, auth_params={"force_authn": True})
 
 
 class ShowSession(View):

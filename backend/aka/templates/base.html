@@ -79,14 +79,16 @@
                         {% endif %}
                     </div>
                     <div class="userinfo">
+                        {% block userinfo %}
                         {% if logged_in.navn %}
                             <span data-trans="common.logged_in_as" data-trans-params="{{ logged_in|json }}">{{ 'common.logged_in_as'|format:logged_in }}</span>
                         {% endif %}
                         {% if cpr or cvr %}
                             <a href="{% url 'login:logout' %}" data-trans="common.logout" id="logout-link">{% trans 'common.logout' %}</a>
-                            {% else %}
+                        {% else %}
                             <a href="{% url 'login:login' %}" data-trans="common.login">{% trans 'Log ind' %}</a>
                         {% endif %}
+                        {% endblock %}
                     </div>
                     </nav>
                     {% endlocalize %}

@@ -49,8 +49,10 @@
         {% url 'aka:loentraek-upload' as loentraek_upload_url %}
         {% include 'toc-item.html' with url=loentraek_upload_url text='index.løntræk-upload' icon='briefcase' %}
     {% endif %}
-    {% url 'aka:konto' as konto_url %}
-    {% include 'toc-item.html' with url=konto_url text='index.konto' subtext='index.konto.sub' icon='tax' %}
+    {% if cpr or cvr %}
+        {% url 'aka:konto' as konto_url %}
+        {% include 'toc-item.html' with url=konto_url text='index.konto' subtext='index.konto.sub' icon='tax' %}
+    {% endif %}
 </nav>
 
 {% endblock %}
