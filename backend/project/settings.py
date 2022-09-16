@@ -404,9 +404,9 @@ LOGIN_WHITELISTED_URLS = [
     reverse_lazy("status"),
     LOGIN_URL,
 ]
-LOGIN_NO_CPRCVR_TEMPLATE = "aka/error/no_cprcvr.html"
-LOGIN_LIFETIME_EXCEEDED_TEMPLATE = "aka/error/login_timeout.html"
-LOGIN_REPEATED_TEMPLATE = "aka/error/login_repeat.html"
+LOGIN_TIMEOUT_URL = reverse_lazy("aka:login-timeout")
+LOGIN_REPEATED_URL = reverse_lazy("aka:login-repeat")
+LOGIN_NO_CPRCVR_URL = reverse_lazy("aka:login-no-cprcvr")
 MITID_TEST_ENABLED = bool(strtobool(os.environ.get("MITID_TEST_ENABLED", "False")))
 SESSION_EXPIRE_SECONDS = int(os.environ.get("SESSION_EXPIRE_SECONDS") or 3600)
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True

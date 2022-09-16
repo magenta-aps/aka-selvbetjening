@@ -9,7 +9,7 @@ from aka.views import LoentraekView, LoentraekUploadView
 from aka.views import NedskrivningView, NedskrivningUploadView
 from aka.views import RenteNotaView
 from django.urls import path
-
+from django_mitid_auth.saml.views import AccessDeniedView
 
 app_name = "aka"
 
@@ -62,4 +62,20 @@ urlpatterns = [
         NedskrivningReceiptView.as_view(),
         name="nedskrivning-kvittering",
     ),
+    path(
+        "error/login-timeout/",
+        AccessDeniedView.as_view(template_name="aka/error/login_timeout.html"),
+        name="login-timeout",
+    ),
+    path(
+        "error/login-repeat/",
+        AccessDeniedView.as_view(template_name="aka/error/login_repeat.html"),
+        name="login-repeat",
+    ),
+    path(
+        "error/login-nocprcvr/",
+        AccessDeniedView.as_view(template_name="aka/error/login_no_cprcvr.html"),
+        name="login-no-cprcvr",
+    ),
+
 ]
