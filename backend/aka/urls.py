@@ -77,5 +77,4 @@ urlpatterns = [
         AccessDeniedView.as_view(template_name="aka/error/login_no_cprcvr.html"),
         name="login-no-cprcvr",
     ),
-
 ]
