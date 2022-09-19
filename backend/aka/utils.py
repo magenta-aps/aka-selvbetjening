@@ -3,16 +3,19 @@ import datetime
 import json
 import logging
 import os
+from dataclasses import dataclass, field
 from decimal import Decimal
 from math import floor
-from dataclasses import dataclass, field
 from typing import Any, List
 
 from dateutil import parser as datetimeparser
 from django.conf import settings
+from django.contrib.auth.views import redirect_to_login
 from django.core.signing import JSONSerializer
+from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
+from django_mitid_auth.middleware import LoginManager
 from weasyprint import HTML
 from weasyprint.text.fonts import FontConfiguration
 
@@ -255,3 +258,16 @@ class Table:
     rows: List[Row] = field(default_factory=list)
     name: str = None
     total: dict = None
+
+
+def session_timed_out(request):
+    # What to do when session has timed out
+    # See https://github.com/Lapeth/django-session-timeout
+    whitelist = LoginManager.get_whitelisted_urls()
+    if request.path in whitelist:
+        return None
+    redirect_url = getattr(settings, "SESSION_TIMEOUT_REDIRECT", None)
+    if redirect_url:
+        return redirect(redirect_url)
+    else:
+        return redirect_to_login(next=request.path)
