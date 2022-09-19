@@ -331,9 +331,6 @@ SAML = {
                     ),
                 ],
             },
-            "authn_requests_signed": True,
-            "want_assertions_signed": True,
-            "want_response_signed": False,
             "required_attributes": [
                 "https://data.gov.dk/model/core/specVersion",
                 "https://data.gov.dk/concept/core/nsis/loa",
@@ -347,8 +344,11 @@ SAML = {
             "name_id_format": [
                 "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
             ],
-            "allow_unsolicited": False,
             "signing_algorithm": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+            "authn_requests_signed": True,
+            "want_assertions_signed": True,
+            "want_response_signed": False,
+            "allow_unsolicited": True,
             "logout_responses_signed": True,
         }
     },
@@ -409,8 +409,9 @@ LOGIN_TIMEOUT_URL = reverse_lazy("aka:login-timeout")
 LOGIN_REPEATED_URL = reverse_lazy("aka:login-repeat")
 LOGIN_NO_CPRCVR_URL = reverse_lazy("aka:login-no-cprcvr")
 MITID_TEST_ENABLED = bool(strtobool(os.environ.get("MITID_TEST_ENABLED", "False")))
-SESSION_EXPIRE_SECONDS = int(os.environ.get("SESSION_EXPIRE_SECONDS") or 3600)
+SESSION_EXPIRE_SECONDS = int(os.environ.get("SESSION_EXPIRE_SECONDS") or 1800)
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+SESSION_EXPIRE_CALLABLE = "aka.utils.session_timed_out"
 
 MOUNTS = {
     "claimant_account_statements": {  # 6.5
