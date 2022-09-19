@@ -347,8 +347,9 @@ SAML = {
             "name_id_format": [
                 "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
             ],
-            "allow_unsolicited": True,  # TODO: maybe False?
+            "allow_unsolicited": False,
             "signing_algorithm": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+            "logout_responses_signed": True,
         }
     },
     "key_file": os.environ.get("SAML_SP_KEY"),
