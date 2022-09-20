@@ -403,6 +403,7 @@ LOGIN_WHITELISTED_URLS = [
     reverse_lazy("aka:javascript-language-catalog", kwargs={"locale": "kl"}),
     reverse_lazy("aka:set-language"),
     reverse_lazy("status"),
+    reverse_lazy("aka:downtime"),
     LOGIN_URL,
 ]
 LOGIN_TIMEOUT_URL = reverse_lazy("aka:login-timeout")
@@ -430,3 +431,4 @@ LOGIN_BYPASS_ENABLED = bool(strtobool(os.environ.get("LOGIN_BYPASS_ENABLED", "Fa
 
 # Skip health_check for cache layer and storage since we are not using it
 WATCHMAN_CHECKS = ("watchman.checks.databases",)
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

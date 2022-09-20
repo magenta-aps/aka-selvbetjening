@@ -168,7 +168,7 @@ class ChooseCvrView(AkaMixin, TemplateView):
         cvr = request.GET.get("cvr")
         if cvr and cvr in self.request.session.get("cvrs"):
             back = self.request.GET.get("back")
-            request.session["user_info"]["CVR"] = cvr
+            request.session["user_info"]["cvr"] = cvr
             request.session["has_checked_cvr"] = True
             request.session.save()
             return redirect(back)

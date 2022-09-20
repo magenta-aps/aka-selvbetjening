@@ -15,7 +15,7 @@ class BasicTestCase(TestMixin, TestCase):
         logging.disable(logging.CRITICAL)
         self.url = "/nedskrivning/upload/"
         session = self.client.session
-        session["user_info"] = {"CVR": "12479182"}  # 12479182
+        session["user_info"] = {"cvr": "12479182"}  # 12479182
         session.save()
         self.prisme_return = {
             "PrismeImpairmentRequest": PrismeImpairmentResponse(

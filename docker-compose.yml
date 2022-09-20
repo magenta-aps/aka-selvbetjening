@@ -21,6 +21,8 @@ services:
       - ./dev-environment/selvbetjening.env
     environment:
       - TEST=true
+      - MAKE_MIGRATIONS=true
+      - RUN_MIGRATIONS=true
     volumes:
       - ./backend/:/backend
       - ./logs:/var/log/aka
@@ -33,7 +35,8 @@ services:
       dockerfile: docker/Dockerfile
     entrypoint: [ ]
     environment:
-      - SKIP_MIGRATIONS=true
+      - MAKE_MIGRATIONS=false
+      - RUN_MIGRATIONS=false
     volumes:
       - ./backend/:/backend
       - ./logs:/var/log/aka

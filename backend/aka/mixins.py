@@ -8,6 +8,7 @@ from aka.clients.prisme import Prisme
 from aka.clients.prisme import PrismeCvrCheckRequest
 from aka.clients.prisme import PrismeNotFoundException
 from aka.exceptions import AkaException
+from aka.models import PrismeDown
 from aka.utils import flatten, render_pdf
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
@@ -19,6 +20,7 @@ from django.urls import reverse
 from django.utils.translation import gettext
 from django.views.generic.edit import FormMixin
 from requests import ReadTimeout
+from requests.exceptions import SSLError
 
 
 class ErrorHandlerMixin(object):
@@ -122,17 +124,17 @@ class HasUserMixin(object):
                             + request.get_full_path()
                         )
                     if len(cvrs) == 1:
-                        self.cvr = request.session["user_info"]["CVR"] = cvrs[0]
+                        self.cvr = request.session["user_info"]["cvr"] = cvrs[0]
                 request.session["has_checked_cvr"] = True
                 request.session.save()
             except ReadTimeout:
                 pass
 
         try:
-            self.cvr = request.session["user_info"].get("CVR")
+            self.cvr = request.session["user_info"].get("cvr")
             self.claimant_ids = self.get_claimants(request)
             self.company = self.get_company(request)
-        except (KeyError, TypeError, AttributeError):
+        except (KeyError, TypeError, AttributeError, ValueError):
             pass
 
         if not self.cvr and settings.DEFAULT_CVR:
@@ -140,7 +142,7 @@ class HasUserMixin(object):
 
     def dispatch(self, request, *args, **kwargs):
         try:
-            self.cpr = request.session["user_info"]["CPR"]
+            self.cpr = request.session["user_info"]["cpr"]
             p = self.get_person(request)
             p["navn"] = " ".join([x for x in [p["fornavn"], p["efternavn"]] if x])
             self.person = p
@@ -150,9 +152,22 @@ class HasUserMixin(object):
         if not self.cpr and settings.DEFAULT_CPR:
             self.cpr = settings.DEFAULT_CPR
 
-        self.obtain_cvr(request)
-
-        return super().dispatch(request, *args, **kwargs)
+        print(dict(request.session["user_info"]))
+        has_cvr = (
+            "user_info" in request.session and "cvr" in request.session["user_info"]
+        )
+        try:
+            self.obtain_cvr(request)
+            if not has_cvr and "cvrs" in request.session:
+                has_cvr = True
+        except SSLError:
+            return TemplateResponse(request, "aka/downtime.html", {"has_cvr": has_cvr})
+        if PrismeDown.get():
+            return TemplateResponse(request, "aka/downtime.html", {"has_cvr": has_cvr})
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except SSLError:
+            return TemplateResponse(request, "aka/downtime.html", {"has_cvr": has_cvr})
 
     def get_context_data(self, **kwargs):
         context = {
@@ -178,7 +193,7 @@ class HasUserMixin(object):
 class RequireCprMixin(HasUserMixin):
     def dispatch(self, request, *args, **kwargs):
         try:
-            self.cpr = request.session["user_info"]["CPR"]
+            self.cpr = request.session["user_info"]["cpr"]
         except (KeyError, TypeError):
             if settings.DEFAULT_CPR:
                 self.cvr = settings.DEFAULT_CPR
