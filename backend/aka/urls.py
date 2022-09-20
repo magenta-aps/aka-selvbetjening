@@ -10,6 +10,7 @@ from aka.views import NedskrivningView, NedskrivningUploadView
 from aka.views import RenteNotaView
 from django.urls import path
 from django_mitid_auth.saml.views import AccessDeniedView
+from django.views.generic import TemplateView
 
 app_name = "aka"
 
@@ -23,6 +24,11 @@ urlpatterns = [
     path("language/", SetLanguageView.as_view(), name="set-language"),
     path("", IndexTemplateView.as_view(), name="index"),
     path("choose_cvr/", ChooseCvrView.as_view(), name="choose_cvr"),
+    path(
+        "prisme-down/",
+        TemplateView.as_view(template_name="aka/downtime.html"),
+        name="downtime",
+    ),
     path("inkassosag/", InkassoSagView.as_view(), name="inkassosag"),
     path(
         "inkassosag/upload/", InkassoSagUploadView.as_view(), name="inkassosag-upload"
@@ -76,5 +82,8 @@ urlpatterns = [
         "error/login-nocprcvr/",
         AccessDeniedView.as_view(template_name="aka/error/login_no_cprcvr.html"),
         name="login-no-cprcvr",
+    ),
+    path(
+        "downtime", TemplateView.as_view(template_name="downtime.html"), name="downtime"
     ),
 ]

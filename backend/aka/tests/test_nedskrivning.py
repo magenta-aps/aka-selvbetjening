@@ -18,7 +18,7 @@ class RemoteTestCase(BasicTestCase):
     pass
     # def test_impairment_success(self):
     #     session = self.client.session
-    #     session['user_info'] = {'CVR': '19785289'}
+    #     session['user_info'] = {"cvr": '19785289'}
     #     session.save()
     #     try:
     #         formData = {
@@ -39,7 +39,7 @@ class RemoteTestCase(BasicTestCase):
     #
     # def test_invalid_cvr(self):
     #     session = self.client.session
-    #     session['user_info'] = {'CVR': '12345678'}
+    #     session['user_info'] = {"cvr": '12345678'}
     #     session.save()
     #     try:
     #         formData = {
@@ -62,7 +62,7 @@ class LocalTestCase(BasicTestCase):
     def setUp(self):
         super(LocalTestCase, self).setUp()
         session = self.client.session
-        session["user_info"] = {"CVR": "12479182"}
+        session["user_info"] = {"cvr": "12479182"}
         session.save()
         self.prisme_return = {
             "PrismeImpairmentRequest": PrismeImpairmentResponse(

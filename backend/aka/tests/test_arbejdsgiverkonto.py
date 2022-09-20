@@ -25,7 +25,7 @@ class BasicTestCase(TestMixin, TestCase):
         }
 
         session = self.client.session
-        session["user_info"] = {"CVR": "12345678"}
+        session["user_info"] = {"cvr": "12345678"}
         session.save()
 
         self.prisme_return = {

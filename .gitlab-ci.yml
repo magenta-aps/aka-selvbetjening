@@ -38,7 +38,7 @@ Lint python:
     - pip3 install black
   script:
     - flake8 --ignore E501,E226,E203,W503 backend/
-    - black --check --diff backend/
+    - black --check --diff --exclude=migrations backend/
 
 Lint Dockerfiles:
   <<: *lint-default
@@ -98,7 +98,7 @@ Selvbetjening Unittest:
     POSTGRES_HOST: db
     DJANGO_TIMEZONE: Europe/Copenhagen
     DJANGO_SECRET_KEY: zuvd9h*iw+hhefxld(bqq*^7_ksk0(jy^1*fe=b_7(9p*=hn5$
-    SKIP_MIGRATIONS: "true"
+    RUN_MIGRATIONS: "true"
     DJANGO_LANGUAGE_COOKIE_DOMAIN: "localhost"
 
     SAML_ENABLED: "true"

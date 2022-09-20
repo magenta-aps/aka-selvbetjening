@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
-SKIP_MIGRATIONS=${SKIP_MIGRATIONS:=false}
+MAKE_MIGRATIONS=${MAKE_MIGRATIONS:=false}
+RUN_MIGRATIONS=${RUN_MIGRATIONS:=true}
 SKIP_IDP_METADATA=${SKIP_IDP_METADATA:=false}
 TEST=${TEST:=false}
 PGP_KEY=${PGP_KEY:=false}
@@ -10,7 +11,11 @@ python manage.py createcachetable
 if [ "$SKIP_IDP_METADATA" = false ]; then
   python manage.py update_mitid_idp_metadata
 fi
-if [ "$SKIP_MIGRATIONS" = false ]; then
+if [ "$MAKE_MIGRATIONS" = true ]; then
+  echo 'generating migrations'
+  python manage.py makemigrations
+fi
+if [ "$RUN_MIGRATIONS" = true ]; then
   echo 'running migrations'
   python manage.py migrate
 fi

@@ -17,7 +17,7 @@ class BasicTestCase(TestMixin, TestCase):
     def setUp(self):
         logging.disable(logging.CRITICAL)
         session = self.client.session
-        session["user_info"] = {"CVR": "12479182"}
+        session["user_info"] = {"cvr": "12479182"}
         session.save()
         super(BasicTestCase, self).setUp()
         self.prisme_return = {
