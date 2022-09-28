@@ -152,7 +152,6 @@ class HasUserMixin(object):
         if not self.cpr and settings.DEFAULT_CPR:
             self.cpr = settings.DEFAULT_CPR
 
-        print(dict(request.session["user_info"]))
         has_cvr = (
             "user_info" in request.session and "cvr" in request.session["user_info"]
         )
