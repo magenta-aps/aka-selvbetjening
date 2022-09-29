@@ -405,6 +405,8 @@ LOGIN_WHITELISTED_URLS = [
     reverse_lazy("status"),
     reverse_lazy("aka:downtime"),
     LOGIN_URL,
+    # "/_ht/",
+    # "/oid/callback/",
 ]
 LOGIN_TIMEOUT_URL = reverse_lazy("aka:login-timeout")
 LOGIN_REPEATED_URL = reverse_lazy("aka:login-repeat")
