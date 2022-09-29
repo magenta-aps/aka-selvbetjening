@@ -131,7 +131,9 @@ class HasUserMixin(object):
                 pass
 
         try:
-            self.cvr = request.session["user_info"].get("cvr")
+            self.cvr = request.session["user_info"].get("cvr", None)
+            if self.cvr is None:
+                self.cvr = request.session["user_info"].get("CVR", None)
             self.claimant_ids = self.get_claimants(request)
             self.company = self.get_company(request)
         except (KeyError, TypeError, AttributeError, ValueError):
@@ -142,7 +144,9 @@ class HasUserMixin(object):
 
     def dispatch(self, request, *args, **kwargs):
         try:
-            self.cpr = request.session["user_info"]["cpr"]
+            self.cpr = request.session["user_info"].get("cpr", None)
+            if self.cpr is None:
+                self.cpr = request.session["user_info"]["CPR"]
             p = self.get_person(request)
             p["navn"] = " ".join([x for x in [p["fornavn"], p["efternavn"]] if x])
             self.person = p
@@ -152,8 +156,9 @@ class HasUserMixin(object):
         if not self.cpr and settings.DEFAULT_CPR:
             self.cpr = settings.DEFAULT_CPR
 
-        has_cvr = (
-            "user_info" in request.session and "cvr" in request.session["user_info"]
+        has_cvr = "user_info" in request.session and (
+            "cvr" in request.session["user_info"]
+            or "CVR" in request.session["user_info"]
         )
         try:
             self.obtain_cvr(request)
