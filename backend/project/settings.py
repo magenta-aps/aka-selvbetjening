@@ -396,6 +396,9 @@ LOGIN_URL = "/login/"
 LOGIN_NAMESPACE = (
     "login"  # Must match namespace given to django_mitid_auth.urls in project/urls.py
 )
+LOGIN_TIMEOUT_URL = reverse_lazy("aka:login-timeout")
+LOGIN_REPEATED_URL = reverse_lazy("aka:login-repeat")
+LOGIN_NO_CPRCVR_URL = reverse_lazy("aka:login-no-cvr")
 LOGIN_WHITELISTED_URLS = [
     # reverse('aka:index'),
     "/favicon.ico",
@@ -405,10 +408,10 @@ LOGIN_WHITELISTED_URLS = [
     reverse_lazy("status"),
     reverse_lazy("aka:downtime"),
     LOGIN_URL,
+    LOGIN_TIMEOUT_URL,
+    LOGIN_REPEATED_URL,
+    LOGIN_NO_CPRCVR_URL,
 ]
-LOGIN_TIMEOUT_URL = reverse_lazy("aka:login-timeout")
-LOGIN_REPEATED_URL = reverse_lazy("aka:login-repeat")
-LOGIN_NO_CPRCVR_URL = reverse_lazy("aka:login-no-cprcvr")
 MITID_TEST_ENABLED = bool(strtobool(os.environ.get("MITID_TEST_ENABLED", "False")))
 SESSION_EXPIRE_SECONDS = int(os.environ.get("SESSION_EXPIRE_SECONDS") or 1800)
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
