@@ -308,14 +308,14 @@ SAML = {
     "debug": 1,
     "entityid": os.environ.get("SAML_SP_ENTITY_ID"),
     "idp_entity_id": os.environ.get("SAML_IDP_ENTITY_ID"),
-    "name": "AKAP Test",
-    "description": "AKAP Test",
+    "name": os.environ.get("SAML_NAME") or "AKAP",
+    "description": os.environ.get("SAML_DESCRIPTION") or "AKA Selvbetjening",
     "verify_ssl_cert": False,
     "metadata_remote": os.environ.get("SAML_IDP_METADATA"),
     "metadata": {"local": ["/var/cache/aka/idp_metadata.xml"]},  # IdP Metadata
     "service": {
         "sp": {
-            "name": "AKAP Test",
+            "name": os.environ.get("SAML_NAME") or "AKAP",
             "hide_assertion_consumer_service": False,
             "endpoints": {
                 "assertion_consumer_service": [
@@ -398,7 +398,7 @@ LOGIN_NAMESPACE = (
 )
 LOGIN_TIMEOUT_URL = reverse_lazy("aka:login-timeout")
 LOGIN_REPEATED_URL = reverse_lazy("aka:login-repeat")
-LOGIN_NO_CPRCVR_URL = reverse_lazy("aka:login-no-cvr")
+LOGIN_NO_CPRCVR_URL = reverse_lazy("aka:login-no-cprcvr")
 LOGIN_WHITELISTED_URLS = [
     # reverse('aka:index'),
     "/favicon.ico",
