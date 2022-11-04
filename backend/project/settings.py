@@ -363,9 +363,9 @@ SAML = {
     "xmlsec_binary": "/usr/bin/xmlsec1",
     "delete_tmpfiles": True,
     "organization": {
-        "name": [("AKAP Test", "da")],
-        "display_name": ["AKAP Test"],
-        "url": [("https://magenta.dk", "da")],
+        "name": [("Skattestyrelsen", "da")],
+        "display_name": ["Skattestyrelsen"],
+        "url": [("https://nanoq.gl", "da")],
     },
     "contact_person": [
         {
