@@ -45,18 +45,15 @@ services:
     command: [ "supercronic", "/crontab" ]
 
 
-  test-idp:
+  selvbetjening-test-idp:
     user: "1000:1000"
     image: kenchan0130/simplesamlphp
-    container_name: idp
+    container_name: selvbetjening-test-idp
     network_mode: "host"
     environment:
       SIMPLESAMLPHP_SP_ENTITY_ID: http://localhost:8000/saml/metadata/
-      # SIMPLESAMLPHP_SP_ENTITY_ID: http://aalisakkat.aka.nanoq.gl
       SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost:8000/login/callback/
       SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost:8000/logout/callback/
-      #SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost:8888/simplesaml/module.php/saml/sp/saml2-acs.php/example-userpass
-      #SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost:8888/simplesaml/module.php/saml/sp/saml2-logout.php/example-userpass
       SIMPLESAMLPHP_IDP_CERTIFICATE: /var/www/simplesamlphp/cert/selfsigned.crt
       SIMPLESAMLPHP_IDP_PRIVATEKEY: /var/www/simplesamlphp/cert/selfsigned.key
 
