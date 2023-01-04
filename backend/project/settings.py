@@ -127,13 +127,6 @@ ENCRYPTED_LOG_KEY_UID = "AKA Selvbetjening"
 
 ALLOWED_HOSTS = ["*"]
 
-AUTHENTICATION_BACKENDS = ["login.nemid.authentication.CookieAuthBackend"]
-
-# See local_settings_example.py
-SULLISSIVIK_FEDERATION_SERVICE = None
-
-# Application definition
-
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -248,48 +241,6 @@ DAFO_CONNECT = {
         "cprcvr": "PITU/GOV/DIA/magenta_services/DAFO-CVR-OWNED-BY/v1",
     },
 }
-
-OPENID_CONNECT = {
-    "enabled": bool(strtobool(os.environ.get("OPENID_ENABLED", "False"))),
-    "issuer": os.environ.get(
-        "OPENID_ISSUER", ""
-    ),  # top level url to the issuer, used for autodiscovery
-    "scope": os.environ.get(
-        "OPENID_SCOPE", ""
-    ),  # openid is mandatory to indicated is is a openid OP, we need to use digitalimik to get the cpr/cvr number.
-    "client_id": os.environ.get(
-        "OPENID_CLIENT_ID", ""
-    ),  # id of the system (ouath), registered at headnet
-    "client_certificate": os.environ.get(
-        "OPENID_CERTIFICATE", ""
-    ),  # path to client certificate used to secure the communication between the system and OP
-    "private_key": os.environ.get(
-        "OPENID_KEY", ""
-    ),  # used for signing messages passed to the OP
-    "redirect_uri": os.environ.get(
-        "OPENID_REDIRECT_URI", ""
-    ),  # url registered at headnet to redirect the user to after a successfull login at OP
-    "logout_uri": os.environ.get(
-        "OPENID_LOGOUT_URI", ""
-    ),  # url registered at headnet to call when logging out, removing session data there
-    "front_channel_logout_uri": os.environ.get(
-        "OPENID_FRONT_LOGOUT_URI", ""
-    ),  # url registered at headnet to call when logging out, should clear our cookies etc.
-    "post_logout_redirect_uri": os.environ.get(
-        "OPENID_POST_REDIRECT_URI", ""
-    ),  # url registered at headnet to redirect to when logout is complete
-}
-
-
-def read_file(filename):
-    if filename is not None:
-        try:
-            with open(filename, "r") as file:
-                return file.read()
-        except FileNotFoundError:
-            pass
-    return None
-
 
 CACHES = {
     "default": {
@@ -416,14 +367,6 @@ MITID_TEST_ENABLED = bool(strtobool(os.environ.get("MITID_TEST_ENABLED", "False"
 SESSION_EXPIRE_SECONDS = int(os.environ.get("SESSION_EXPIRE_SECONDS") or 1800)
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 SESSION_EXPIRE_CALLABLE = "aka.utils.session_timed_out"
-
-MOUNTS = {
-    "claimant_account_statements": {  # 6.5
-        "maindir": "/tmp",
-        "subdir": "{cvr}.*",
-        "files": ".*",
-    }
-}
 
 # Max 2 MB - can be lower if we want
 MAX_UPLOAD_FILESIZE = 22097152

@@ -7,12 +7,11 @@ from aka.tests.mixins import TestMixin
 from aka.utils import dummy_management_form
 from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import override_settings, TestCase
+from django.test import TestCase
 from lxml import etree
 from xmltodict import parse as xml_to_dict
 
 
-@override_settings(OPENID_CONNECT={"enabled": False}, NEMID_CONNECT={"enabled": False})
 class BasicTestCase(TestMixin, TestCase):
     def setUp(self):
         logging.disable(logging.CRITICAL)

@@ -4,7 +4,6 @@ requests
 requests[socks]
 pysocks
 requests_ntlm
-oic>=1.2.0
 httpretty
 lxml>=4.2.5
 zeep>=3.4.0
