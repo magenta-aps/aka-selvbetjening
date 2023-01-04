@@ -3,13 +3,12 @@ from datetime import date
 
 from aka.clients.prisme import PrismeAccountRequest, PrismeAccountResponse
 from aka.tests.mixins import TestMixin
-from django.test import TestCase, override_settings
+from django.test import TestCase
 from xmltodict import parse as xml_to_dict
 
 from aka.clients.prisme import PrismeSELAccountResponse
 
 
-@override_settings(OPENID_CONNECT={"enabled": False})
 class BasicTestCase(TestMixin, TestCase):
     def setUp(self):
         super(BasicTestCase, self).setUp()
