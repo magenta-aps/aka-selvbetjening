@@ -28,8 +28,6 @@ variables:
   stage: lint
   needs: []
   image: python:3.6
-  tags:
-    - docker
 
 Lint python:
   <<: *lint-default
@@ -66,8 +64,6 @@ Build selvbetjening:
   image:
     name: gcr.io/kaniko-project/executor:debug-v0.16.0
     entrypoint: [""]
-  tags:
-    - docker
   script:
     # Login to GitLab registry
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
@@ -81,8 +77,6 @@ Build selvbetjening:
 .test-default: &test-default
   stage: test
   dependencies: []
-  tags:
-    - docker
 
 Selvbetjening Unittest:
   <<: *test-default
@@ -141,8 +135,6 @@ Selvbetjening Unittest:
   image: alpine
   needs: ["Selvbetjening Unittest"]
   dependencies: []
-  tags:
-    - docker
   before_script:
     # install skopeo
     - apk add skopeo
