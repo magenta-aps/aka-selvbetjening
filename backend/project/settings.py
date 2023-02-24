@@ -230,10 +230,10 @@ PRISME_CONNECT = {
 
 DAFO_CONNECT = {
     "enabled": bool(strtobool(os.environ.get("DAFO_ENABLED", "True"))),
-    "pitu-server": "10.240.76.4",
-    "client-certificate": os.environ.get("DAFO_CERTIFICATE", ""),
-    "private-key": os.environ.get("DAFO_KEY", ""),
-    "pitu-certificate": os.environ.get("DAFO_CA_CERTIFICATE", ""),
+    "pitu-server": os.environ.get("PITU_SERVER", ""),
+    "client-certificate": os.environ.get("PITU_CERTIFICATE", ""),
+    "private-key": os.environ.get("PITU_KEY", ""),
+    "pitu-certificate": os.environ.get("PITU_CA_CERTIFICATE", ""),
     "pitu-client": "PITU/GOV/AKA/AKA_Selvbetjening",
     "pitu-service": {
         "cpr": "PITU/GOV/DIA/magenta_services/DAFO-PRISME-CPR-COMBINED/v1",
