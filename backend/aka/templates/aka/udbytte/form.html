@@ -81,31 +81,31 @@
                         {% include 'aka/util/field.html' with field=form.u1_udfyldt key='udbytte.u1_udfyldt' %}
                     </div>
                 </div>
-                <div id="collapse-udfyldt">
-                    <div class="row">
-                        <div class="col-12-sm">
-                            {% include 'aka/util/field.html' with field=form.kommune key='udbytte.kommune' %}
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-12-sm">
-                            {% include 'aka/util/field.html' with field=form.udbetalingsdato key='udbytte.udbetalingsdato' %}
-                            {% include 'aka/util/field.html' with field=form.indbetalingsdato key='udbytte.indbetalingsdato' %}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-12-sm">
-                            {% include 'aka/util/field.html' with field=form.udbytte key='udbytte.udbytte' %}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12-sm">
-                            {% include 'aka/util/field.html' with field=form.udbytteskat key='udbytte.udbytteskat' %}
-                        </div>
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.kommune key='udbytte.kommune' %}
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.udbetalingsdato key='udbytte.udbetalingsdato' %}
+                        {% include 'aka/util/field.html' with field=form.indbetalingsdato key='udbytte.indbetalingsdato' %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.udbytte key='udbytte.udbytte' %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.udbytteskat key='udbytte.udbytteskat' %}
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-1-sm" data-trans="udbytte.cpr_cvr_tin">{% translate 'udbytte.cpr_cvr_tin' %}</div>
                     <div class="col-1-sm" data-trans="udbytte.navn">{% translate 'udbytte.navn' %}</div>
@@ -157,20 +157,6 @@
     </article>
     {{ tax_percentages|json_script:"tax_percentages" }}
     <script>
-    $(function(){
-        const collapse_udfyldt = $("#collapse-udfyldt");
-        const udfyldt_radio = $("[name={{ form.u1_udfyldt.name }}]");
-        const toggle_collapse_udfyldt = function(){
-            const udfyldt = $("[name={{ form.u1_udfyldt.name }}]:checked");
-            if (udfyldt.val() === "0") {
-                collapse_udfyldt.slideDown()
-            } else {
-                collapse_udfyldt.slideUp();
-            }
-        };
-        toggle_collapse_udfyldt();
-        udfyldt_radio.change(toggle_collapse_udfyldt);
-    });
 
     const replace_repeat = function (subject, re, replacement) {
         let old = null;
