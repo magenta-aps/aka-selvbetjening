@@ -1138,7 +1138,7 @@ class RenteNotaView(
         return super().get_context_data(**context)
 
 
-class UdbytteView(IsContentMixin, FormSetView, FormView):
+class UdbytteView(HasUserMixin, IsContentMixin, FormSetView, FormView):
     form_class = UdbytteForm
     template_name = "aka/udbytte/form.html"
     factory_kwargs = {

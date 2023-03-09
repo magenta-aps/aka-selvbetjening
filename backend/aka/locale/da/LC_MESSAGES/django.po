@@ -42,6 +42,9 @@ msgstr "Tilføj"
 msgid "common.slet"
 msgstr "Slet"
 
+msgid "common.kopier"
+msgstr "Kopier"
+
 msgid "common.print"
 msgstr "Print"
 
@@ -768,8 +771,17 @@ msgstr "Skjul vejledning"
 msgid "udbytte.vejledning_vis"
 msgstr "Vis vejledning"
 
+msgid "udbytte.revisionsfirma"
+msgstr "Oplysninger om revisionsfirma"
+
+msgid "udbytte.revisionsfirmanavn"
+msgstr "Revisionsfirma"
+
 msgid "udbytte.udfylder"
 msgstr "Navn på udfylder"
+
+msgid "udbytte.virksomhed"
+msgstr "Oplysninger om virksomheden"
 
 msgid "udbytte.virksomhedsnavn"
 msgstr "Virksomhedsnavn"
