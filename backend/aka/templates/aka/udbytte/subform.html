@@ -18,10 +18,11 @@
     <div class="col-1-sm">
         {% include 'aka/util/field.html' with field=subform.land %}
     </div>
-    <div class="col-5-sm">
+    <div class="col-3-sm">
         {% include 'aka/util/field.html' with field=subform.udbytte %}
     </div>
-    <div class="col-1-sm">
+    <div class="col-3-sm">
+        <button type="button" class="btn btn-primary clone-row" data-trans="common.kopier">{% translate 'common.kopier' %}</button>
         <button type="button" class="btn btn-danger remove-row" data-trans="common.slet">{% translate 'common.slet' %}</button>
     </div>
 </div>

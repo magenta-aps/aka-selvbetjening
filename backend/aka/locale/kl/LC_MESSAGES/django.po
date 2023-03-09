@@ -41,6 +41,9 @@ msgstr "Ilaqqiguk"
 msgid "common.slet"
 msgstr "Peeruk"
 
+msgid "common.kopier"
+msgstr "Kopier"
+
 msgid "common.print"
 msgstr "Naqitaq anillatsiguk"
 
@@ -838,8 +841,17 @@ msgstr ""
 msgid "udbytte.title"
 msgstr "U1 SKAT"
 
+msgid "udbytte.revisionsfirma"
+msgstr "Paasissutissat revionsfirmamut tunngasut"
+
+msgid "udbytte.revisionsfirmanavn"
+msgstr "Revisionsfirma"
+
 msgid "udbytte.udfylder"
 msgstr "Immersuisup aqqa"
+
+msgid "udbytte.virksomhed"
+msgstr "Paasissutissat suliffeqarfimmut tunngasut"
 
 msgid "udbytte.virksomhedsnavn"
 msgstr "Suliffeqarfiup aqqa"

@@ -23,8 +23,20 @@ $(function(){
         }
         const removeButton = form.find(".remove-row");
         removeButton.click(removeForm);
+        return form;
     };
-    addRow.click(addForm);
+    addRow.on("click", addForm);
+
+    const cloneRow = $('.clone-row');
+    const cloneForm = function() {
+        const row = $(this).parents(".row");
+        const form = addForm(true);
+        row.find("input, select, textarea").each(function () {
+            const name = this.name.replace(/.+-\d+-(\w+)$/, "$1");
+            form.find("[name$='"+name+"']").val(this.value);
+        });
+    }
+    cloneRow.on("click", cloneForm);
 
     const removeForm = function(updateTotal) {
         const row = $(this).parents(".row");

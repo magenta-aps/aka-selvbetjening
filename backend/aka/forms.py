@@ -670,6 +670,11 @@ class UdbytteForm(forms.Form):
         required=True,
         error_messages={"required": "error.required"},
     )
+    revisionsfirma = forms.CharField(
+        label=_("Revisionsfirma"),
+        required=True,
+        error_messages={"required": "error.required"},
+    )
     virksomhedsnavn = forms.CharField(
         label=_("Virksomhedsnavn"),
         error_messages={"required": "error.required"},
