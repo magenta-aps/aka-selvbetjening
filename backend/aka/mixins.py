@@ -289,7 +289,6 @@ class RendererMixin(object):
 
 
 class PdfRendererMixin(RendererMixin):
-
     pdf_template_name = ""
 
     def get_filename(self):

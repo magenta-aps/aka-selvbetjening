@@ -75,7 +75,7 @@
                     <nav class="top-navigation printhide">
                     <div class="indexlink">
                         {% if is_content %}
-                        <a href="{% url 'aka:index' %}" data-trans="common.forside">{% trans 'common.forside' %}</a>
+                        <a href="{% url 'aka:index' %}" data-trans="common.forside">{% translate 'common.forside' %}</a>
                         {% endif %}
                     </div>
                     <div class="userinfo">
@@ -84,9 +84,9 @@
                             <span data-trans="common.logged_in_as" data-trans-params="{{ logged_in|json }}">{{ 'common.logged_in_as'|format:logged_in }}</span>
                         {% endif %}
                         {% if cpr or cvr %}
-                            <a href="{% url 'login:logout' %}" data-trans="common.logout" id="logout-link">{% trans 'common.logout' %}</a>
+                            <a href="{% url 'login:logout' %}" data-trans="common.logout" id="logout-link">{% translate 'common.logout' %}</a>
                         {% else %}
-                            <a href="{% url 'login:login' %}" data-trans="common.login">{% trans 'Log ind' %}</a>
+                            <a href="{% url 'login:login' %}" data-trans="common.login">{% translate 'Log ind' %}</a>
                         {% endif %}
                         {% endblock %}
                     </div>

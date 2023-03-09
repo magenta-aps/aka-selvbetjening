@@ -3,12 +3,12 @@
 {% load l10n %}
 {% block content %}
 
-<h1>{% trans 'fordring.receipt_headline' %}</h1>
+<h1>{% translate 'fordring.receipt_headline' %}</h1>
 
 {% localize off %}
 <table class="overview">
     <tr>
-        <th>{% trans 'fordring.report_date' %}</th>
+        <th>{% translate 'fordring.report_date' %}</th>
         <td>{{received_date|date:'j. F Y'}}</td>
     </tr>
 </table>
@@ -18,25 +18,25 @@
     <thead>
         <tr>
             <th>
-                {% trans 'fordring.debitor' %}
+                {% translate 'fordring.debitor' %}
             </th>
             <th>
-                {% trans 'fordring.fordringsgruppe' %}
+                {% translate 'fordring.fordringsgruppe' %}
             </th>
             <th>
-                {% trans 'fordring.fordringstype' %}
+                {% translate 'fordring.fordringstype' %}
             </th>
             <th>
-                {% trans 'fordring.ekstern_sagsnummer' %}
+                {% translate 'fordring.ekstern_sagsnummer' %}
             </th>
             <th>
-                {% trans 'fordring.hovedstol' %}
+                {% translate 'fordring.hovedstol' %}
             </th>
             <th>
-                {% trans 'fordring.forfaldsdato' %}
+                {% translate 'fordring.forfaldsdato' %}
             </th>
             <th>
-                {% trans 'fordring.record_id' %}
+                {% translate 'fordring.record_id' %}
             </th>
         </tr>
     </thead>

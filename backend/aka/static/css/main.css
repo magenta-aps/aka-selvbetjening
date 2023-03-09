@@ -60,6 +60,11 @@ address {
     float: right;
 }
 
+.has-collapsed .collapsed-hidden,
+.has-expanded .expanded-hidden {
+    display: none;
+}
+
 /* Links */
 
 a,
@@ -242,7 +247,7 @@ table {
 }
 @media only screen and (min-width:45rem) {
     .col-1 {
-        width: 4.33%
+        width: 6.33%
     }
     .col-2 {
         width: 12.66%

@@ -1,10 +1,10 @@
+import datetime
+from typing import List
+
 import json
 import logging
 import re
 import uuid
-from io import BytesIO
-from typing import List
-
 from aka.clients.prisme import Prisme, PrismeException
 from aka.clients.prisme import PrismeAKIRequest
 from aka.clients.prisme import PrismeAKITotalRequest
@@ -25,6 +25,8 @@ from aka.forms import LoentraekFormItem
 from aka.forms import LoentraekUploadForm
 from aka.forms import NedskrivningForm
 from aka.forms import NedskrivningUploadForm
+from aka.forms import UdbytteForm
+from aka.forms import UdbytteFormItem
 from aka.mixins import AkaMixin
 from aka.mixins import ErrorHandlerMixin
 from aka.mixins import HasUserMixin
@@ -60,10 +62,10 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
+from io import BytesIO
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
-
     js_catalog_template = r"""
     {% autoescape off %}
     (function(globals) {
@@ -153,7 +155,6 @@ class IndexTemplateView(HasUserMixin, AkaMixin, TemplateView):
 
 
 class ChooseCvrView(AkaMixin, TemplateView):
-
     template_name = "choose_cvr.html"
 
     def get_context_data(self, **kwargs):
@@ -185,7 +186,6 @@ class KontoView(
     IsContentMixin,
     TemplateView,
 ):
-
     form_class = KontoForm
     template_name = "aka/account/account.html"
     pdf_template_name = "aka/account/account_pdf.html"
@@ -477,7 +477,6 @@ class KontoView(
 class InkassoSagView(
     RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSetView, FormView
 ):
-
     form_class = InkassoForm
     template_name = "aka/claim/form.html"
 
@@ -692,7 +691,6 @@ class InkassoGroupDataView(View):
 
 
 class LoentraekView(RequireCvrMixin, IsContentMixin, FormSetView, FormView):
-
     form_class = LoentraekForm
     template_name = "aka/payroll/form.html"
 
@@ -861,7 +859,6 @@ class LoentraekUploadView(LoentraekView):
 
 
 class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormView):
-
     form_class = NedskrivningForm
     template_name = "aka/impairment/form.html"
 
@@ -1139,3 +1136,67 @@ class RenteNotaView(
         }
         context.update(kwargs)
         return super().get_context_data(**context)
+
+
+class UdbytteView(IsContentMixin, FormSetView, FormView):
+    form_class = UdbytteForm
+    template_name = "aka/udbytte/form.html"
+    factory_kwargs = {
+        "extra": 1,
+        "max_num": None,
+        "can_order": False,
+        "can_delete": True,
+    }
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if "initial" not in kwargs:
+            kwargs["initial"] = {}
+        kwargs["initial"] = {
+            "u1_udfyldt": "0",
+            "dato": datetime.date.today().strftime("%d/%m/%Y"),
+        }
+        return kwargs
+
+    def get_formset(self):
+        return formset_factory(UdbytteFormItem, **self.get_factory_kwargs())
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            **{**kwargs, "tax_percentages": self.get_tax_percentages()}
+        )
+
+    @staticmethod
+    def get_tax_percentages():
+        return {m["code"]: m["tax_percent"] for m in settings.MUNICIPALITIES}
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        formset = self.construct_formset()
+        # Trigger form cleaning of both form and formset
+        # This ensures that:
+        # * we have cleaned_data for the cross-check in clean_with_formset, which validates data across both forms,
+        # * all errors are collected for display in form_invalid, not just from the first form that fails
+        form.full_clean()
+        formset.full_clean()
+        # compares data between form and formset, and adds any errors to form
+        form.clean_with_formset(formset)
+        if form.is_valid() and formset.is_valid():
+            return self.form_valid(form, formset)
+        return self.form_invalid(form, formset)
+
+    def form_valid(self, form, formset):
+        # TODO: Send stuff from form
+        print(form.cleaned_data)
+        print(formset.cleaned_data)
+        return TemplateResponse(
+            request=self.request,
+            template="aka/udbytte/success.html",
+            context={},
+            using=self.template_engine,
+        )
+
+    def form_invalid(self, form, formset):
+        return self.render_to_response(
+            self.get_context_data(form=form, formset=formset)
+        )

@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load l10n %}
+
+{% block extra_headers %}
+    {% include 'aka/util/calendar_headers.html' %}
+    <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/udbytte.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <article class="indberet_udbytte">
+        <form method="post" id="mainform">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <h1 data-trans="udbytte.title">{% translate 'udbytte.title' %}</h1>
+            <div class="container-fluid">
+
+                {% if form.errors or formset.errors %}
+
+                    <button type="button" class="has-collapsed" data-collapse="#vejledning">
+                        <span class="collapsed-hidden" data-trans="udbytte.vejledning_skjul">{% translate 'udbytte.vejledning_skjul' %}</span>
+                        <span class="expanded-hidden" data-trans="udbytte.vejledning_vis">{% translate 'udbytte.vejledning_vis' %}</span>
+                    </button>
+                    <div id="vejledning" class="row collapse collapsed" style="display: none">
+                        <div class="col-12-sm" data-trans="udbytte.vejledning">
+                            {% translate "udbytte.vejledning" %}
+                        </div>
+                    </div>
+
+                    <p class="err-msg">{% translate 'common.errors_present' %}</p>
+                    {% include "aka/util/nonfield_errors.html" with form=form %}
+
+                {% else %}
+
+                    <button type="button" class="has-expanded" data-collapse="#vejledning">
+                        <span class="collapsed-hidden" data-trans="udbytte.vejledning_skjul">{% translate 'udbytte.vejledning_skjul' %}</span>
+                        <span class="expanded-hidden" data-trans="udbytte.vejledning_vis">{% translate 'udbytte.vejledning_vis' %}</span>
+                    </button>
+                    <div id="vejledning" class="row collapse">
+                        <div class="col-12-sm" data-trans="udbytte.vejledning">
+                            {% translate "udbytte.vejledning" %}
+                        </div>
+                    </div>
+
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.navn key='udbytte.udfylder' %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.virksomhedsnavn key='udbytte.virksomhedsnavn' %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.cvr key='udbytte.cvr' %}
+                        {% include 'aka/util/field.html' with field=form.email key='udbytte.email' %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.regnskabsår key='udbytte.regnskabsår' %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.u1_udfyldt key='udbytte.u1_udfyldt' %}
+                    </div>
+                </div>
+                <div id="collapse-udfyldt">
+                    <div class="row">
+                        <div class="col-12-sm">
+                            {% include 'aka/util/field.html' with field=form.kommune key='udbytte.kommune' %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12-sm">
+                            {% include 'aka/util/field.html' with field=form.udbetalingsdato key='udbytte.udbetalingsdato' %}
+                            {% include 'aka/util/field.html' with field=form.indbetalingsdato key='udbytte.indbetalingsdato' %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12-sm">
+                            {% include 'aka/util/field.html' with field=form.udbytte key='udbytte.udbytte' %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12-sm">
+                            {% include 'aka/util/field.html' with field=form.udbytteskat key='udbytte.udbytteskat' %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-1-sm" data-trans="udbytte.cpr_cvr_tin">{% translate 'udbytte.cpr_cvr_tin' %}</div>
+                    <div class="col-1-sm" data-trans="udbytte.navn">{% translate 'udbytte.navn' %}</div>
+                    <div class="col-1-sm" data-trans="udbytte.adresse">{% translate 'udbytte.adresse' %}</div>
+                    <div class="col-1-sm" data-trans="udbytte.postnummer">{% translate 'udbytte.postnummer' %}</div>
+                    <div class="col-1-sm" data-trans="udbytte.by">{% translate 'udbytte.by' %}</div>
+                    <div class="col-1-sm" data-trans="udbytte.land">{% translate 'udbytte.land' %}</div>
+                    <div class="col-6-sm" data-trans="udbytte.udbytte">{% translate 'udbytte.udbytte' %}</div>
+                </div>
+                <div id="formsetContainer">
+                    {% for subform in formset %}
+                        {% include 'aka/udbytte/subform.html' with subform=subform %}
+                    {% endfor %}
+                </div>
+                <button type="button" id="add-row" class="button" data-trans="common.add">{% translate 'common.add' %}</button>
+
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.noter key='udbytte.noter' %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-8-sm">
+                        {% include 'aka/util/field.html' with field=form.by key='udbytte.by' %}
+                    </div>
+                    <div class="col-4-sm">
+                        {% include 'aka/util/field.html' with field=form.dato key='udbytte.dato' %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.underskriftsberettiget key='udbytte.underskriftsberettiget' %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2-sm">
+                        <button type="submit" data-trans="common.gem">{% translate 'common.gem' %}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div id="formsetPrototype" style="display: none">
+            {% include 'aka/udbytte/subform.html' with subform=formset.empty_form %}
+        </div>
+    </article>
+    {{ tax_percentages|json_script:"tax_percentages" }}
+    <script>
+    $(function(){
+        const collapse_udfyldt = $("#collapse-udfyldt");
+        const udfyldt_radio = $("[name={{ form.u1_udfyldt.name }}]");
+        const toggle_collapse_udfyldt = function(){
+            const udfyldt = $("[name={{ form.u1_udfyldt.name }}]:checked");
+            if (udfyldt.val() === "0") {
+                collapse_udfyldt.slideDown()
+            } else {
+                collapse_udfyldt.slideUp();
+            }
+        };
+        toggle_collapse_udfyldt();
+        udfyldt_radio.change(toggle_collapse_udfyldt);
+    });
+
+    const replace_repeat = function (subject, re, replacement) {
+        let old = null;
+        while (old !== subject) {
+            old = subject;
+            subject = subject.replace(re, replacement);
+        }
+        return subject;
+    };
+
+    const tsep = function(value) {
+        if (typeof(value) === "number") {
+            value = formatDecimal(value);
+        }
+        value = replace_repeat(value, /(.)-/g, '$1');
+        value = value.replace(/--+/g, '-'); // Squash negative signs
+        value = value.replace(/[^\d,\-]/g, '');  // Strip away all non-digits and non-commas (including dots)
+        value = replace_repeat(value, /^(-?)0([0-9])/, '$1$2'); // Strip away leading zeroes
+        value = replace_repeat(value, /^(-?\d+)(\d\d\d)(\.|,|$)/, '$1.$2$3'); // Apply thousand-separator
+        value = replace_repeat(value, /,([^,]*),/, ',$1'); // Squash commas
+        value = replace_repeat(value, /,(\d\d).+/, ',$1'); // Trim to two digits after comma
+        return value
+    };
+
+    const parseDecimal = function(value) {
+        value = replace_repeat(value, /(.)-/g, '$1');
+        value = value.replace(/--+/g, '-');
+        value = value.replace(/[^\d,\-]/g, '');  // Strip away all non-digits and non-commas (including dots)
+        return parseFloat(value.replace(",", "."));
+    }
+    const formatDecimal = function(decimal) {
+        return Math.trunc(decimal) + "," + Math.round(100 * (decimal % 1.0));
+    }
+    const countChars = function(haystack, needle) {
+        let count = 0;
+        for (let i=0; i<haystack.length; i++) {
+            if (haystack[i] === needle) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    $(function(){
+        const tax_percentages = JSON.parse($("#tax_percentages").text());
+        const kommune_field = $("[name={{ form.kommune.name }}]");
+        const udbytte_field = $("[name={{ form.udbytte.name }}]");
+        const udbytteskat_field = $("[name={{ form.udbytteskat.name }}]");
+
+        // Performs tax calculation
+        const update_tax_amount = function(){
+            const kommunekode = kommune_field.val();
+            const udbytte = parseDecimal(udbytte_field.val());
+            let value = tsep(udbytte * 0.01 * parseFloat(tax_percentages[kommunekode]));
+            if (value === ",") {
+                value = "";
+            }
+            udbytteskat_field.val(value);
+        }
+
+        udbytte_field.on("change keyup", update_tax_amount);
+        kommune_field.on("change", update_tax_amount);
+
+        // Performs proper number formatting, keeping the cursor where it's supposed to be
+        udbytte_field.bindFirst("change keyup", function() {
+            let cursorIndex = this.selectionStart;
+            let value = tsep(this.value);
+            if (value !== this.value) {
+                cursorIndex += countChars(value, ".") - countChars(this.value, ".");
+                this.value = value;
+                this.setSelectionRange(cursorIndex, cursorIndex);
+            }
+        });
+    });
+    </script>
+{% endblock %}

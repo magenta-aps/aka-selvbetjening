@@ -5,7 +5,6 @@ from xmltodict import parse as xml_to_dict
 
 
 class BasicTestCase(TestMixin, SimpleTestCase):
-
     # PRISME INTERFACE TESTS ###
 
     def test_check_cvr_request_parse(self):

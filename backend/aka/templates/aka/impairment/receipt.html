@@ -3,12 +3,12 @@
 {% load l10n %}
 {% block content %}
 
-<h1>{% trans 'nedskrivning.receipt_headline' %}</h1>
+<h1>{% translate 'nedskrivning.receipt_headline' %}</h1>
 
 {% localize off %}
 <table class="overview">
     <tr>
-        <th>{% trans 'nedskrivning.report_date' %}</th>
+        <th>{% translate 'nedskrivning.report_date' %}</th>
         <td>{{received_date|date:'j. F Y'}}</td>
     </tr>
 </table>
@@ -18,19 +18,19 @@
     <thead>
         <tr>
             <th>
-                {% trans 'nedskrivning.debitor' %}
+                {% translate 'nedskrivning.debitor' %}
             </th>
             <th>
-                {% trans 'nedskrivning.ekstern_sagsnummer' %}
+                {% translate 'nedskrivning.ekstern_sagsnummer' %}
             </th>
             <th>
-                {% trans 'nedskrivning.beloeb' %}
+                {% translate 'nedskrivning.beloeb' %}
             </th>
             <th>
-                {% trans 'nedskrivning.sekvensnummer' %}
+                {% translate 'nedskrivning.sekvensnummer' %}
             </th>
             <th>
-                {% trans 'nedskrivning.record_id' %}
+                {% translate 'nedskrivning.record_id' %}
             </th>
         </tr>
     </thead>

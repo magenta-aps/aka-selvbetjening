@@ -3,7 +3,6 @@ from django.utils.translation import gettext_lazy as _
 
 
 class AkaException(Exception):
-
     title = "common.error.generic"
 
     def __init__(self, error_code, **params):
@@ -23,5 +22,4 @@ class AkaException(Exception):
 
 
 class AccessDeniedException(AkaException):
-
     title = "common.error.access_denied"

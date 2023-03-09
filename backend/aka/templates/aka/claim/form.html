@@ -15,9 +15,12 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ formset.management_form }}
-        {{ form.non_field_errors }}
-        <h1 class="page-header" data-trans="fordring.title">{% trans 'fordring.title' %}</h1>
+        <h1 class="page-header" data-trans="fordring.title">{% translate 'fordring.title' %}</h1>
         <div class="container-fluid">
+            {% if form.errors or formset.errors %}
+                <p class="err-msg">{% translate 'common.errors_present' %}</p>
+                {% include "aka/util/nonfield_errors.html" with form=form %}
+            {% endif %}
             <div class="row">
                 <div class="col-4">
                     {% include 'aka/util/field.html' with field=form.fordringshaver2 key='fordring.anden_fordringshaver' %}
@@ -30,9 +33,9 @@
             </div>
 
             <div class="row">
-                <label data-trans="fordring.codebitorer">{% trans 'fordring.codebitorer' %}</label>
-                <div class="col-3"><label data-trans="fordring.cpr">{% trans 'fordring.cpr' %}</label></div>
-                <div class="col-3"><label data-trans="fordring.cvr">{% trans 'fordring.cvr' %}</label></div>
+                <label data-trans="fordring.codebitorer">{% translate 'fordring.codebitorer' %}</label>
+                <div class="col-3"><label data-trans="fordring.cpr">{% translate 'fordring.cpr' %}</label></div>
+                <div class="col-3"><label data-trans="fordring.cvr">{% translate 'fordring.cvr' %}</label></div>
             </div>
             <div id="codebitorContainer">
                 {% for subform in formset %}
@@ -41,7 +44,7 @@
             </div>
 
             <div class="row">
-                <label data-trans="fordring.dokumentation">{% trans 'fordring.dokumentation' %}</label>
+                <label data-trans="fordring.dokumentation">{% translate 'fordring.dokumentation' %}</label>
                 <div class="col-4" id="documentationContainer">
                     <input type="file" name="documentation0"/>
                 </div>
@@ -111,7 +114,7 @@
 
             <div class="row">
                 <div class="col-2">
-                    <button type="submit" data-trans="common.gem">{% trans 'common.gem' %}</button>
+                    <button type="submit" data-trans="common.gem">{% translate 'common.gem' %}</button>
                 </div>
             </div>
 

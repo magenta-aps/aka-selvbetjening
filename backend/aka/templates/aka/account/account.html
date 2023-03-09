@@ -26,27 +26,14 @@
 {% block content %}
 <article>
 
-    <h1 class="account-title printhide" data-trans="account.title">{% trans 'account.title' %} </h1>
+    <h1 class="account-title printhide" data-trans="account.title">{% translate 'account.title' %} </h1>
 
     <div class="account-main">
 
         <form method="get" id="mainform">
             <div class="printhide">
-            {% if form.non_field_errors %}
-                <ul class="errorlist">
-                    {% for error in form.non_field_errors.as_data %}
-                        <li {% if error.code %}data-trans="{{ error.code }}"{% endif %} {% if error.params %}data-trans-params="{{ error.params|json }}"{% endif %}>
-                            {% if error.code %}
-                                {% trans error.code as error_message %}
-                                {{ error_message|format:error.params }}
-                            {% else %}
-                                {{ error }}
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-            <p data-trans="account.description">{{ account.description }}</p>
+                {% include "aka/util/nonfield_errors.html" with form=form %}
+                <p data-trans="account.description">{{ account.description }}</p>
             <div class="account-actions row">
                 {% if cpr and cvr %}
                 <div class="col-4-sm">
@@ -69,7 +56,7 @@
 
             <div class="row">
                 <div class="col-12-sm">
-                    <button type="submit" data-trans="common.send">{% trans 'common.send' %}</button>
+                    <button type="submit" data-trans="common.send">{% translate 'common.send' %}</button>
                 </div>
             </div>
             {{ form.hidden }}
@@ -84,7 +71,7 @@
                     <div class="page" style="page-break-after: always">
                         <h2 class="can-collapse printhide" data-collapse="#content-{{ key }}">
                             <img src="{% static 'img/sullisivk_arrow_right.svg' %}" width="20" height="20"/>
-                            <span data-trans="{{ item.title }}">{% trans section.title %}</span>
+                            <span data-trans="{{ item.title }}">{% translate section.title %}</span>
                         </h2>
                         <div id="content-{{ key }}" data-key="{{ key }}" class="page-content collapsed" style="display:none">
 
@@ -98,7 +85,7 @@
                                     <select class="columnselect" multiple="multiple" data-key="{{ key }}">
                                         {% for field in section.fields %}
                                             {% with "account."|add:field.name as transkey %}
-                                                <option value="{{ field.name }}" {% if not field in form.hidden.value %}selected="selected"{% endif %}>{% trans transkey %}</option>
+                                                <option value="{{ field.name }}" {% if not field in form.hidden.value %}selected="selected"{% endif %}>{% translate transkey %}</option>
                                             {% endwith %}
                                         {% endfor %}
                                     </select>
@@ -108,7 +95,7 @@
                                 <thead>
                                 <tr>
                                     {% for field in section.fields %}
-                                        <th data-field="{{ field.name }}" data-trans="{{ field.transkey }}">{% trans field.transkey|safe %}</th>
+                                        <th data-field="{{ field.name }}" data-trans="{{ field.transkey }}">{% translate field.transkey|safe %}</th>
                                     {% endfor %}
                                 </tr>
                                 </thead>
@@ -135,25 +122,25 @@
                                 </tbody>
                                 </table>
                             {% else %}
-                                <p data-trans="account.ingenposter">{% trans 'account.ingenposter' %}</p>
+                                <p data-trans="account.ingenposter">{% translate 'account.ingenposter' %}</p>
                             {% endif %}
 
                             {% if total %}
                                 <div class="row account-total no-copy">
                                     <div class="col-3-sm">
-                                        <span class="total-label" data-trans="account.total_claim">{% trans 'account.total_claim' %}</span>
+                                        <span class="total-label" data-trans="account.total_claim">{% translate 'account.total_claim' %}</span>
                                         <span class="total-data">{{ total.total_claim }}</span>
                                     </div>
                                     <div class="col-3-sm">
-                                        <span class="total-label" data-trans="account.total_payment">{% trans 'account.total_payment' %}</span>
+                                        <span class="total-label" data-trans="account.total_payment">{% translate 'account.total_payment' %}</span>
                                         <span class="total-data">{{ total.total_payment }}</span>
                                     </div>
                                     <div class="col-3-sm">
-                                        <span class="total-label" data-trans="account.total_sum">{% trans 'account.total_sum' %}</span>
+                                        <span class="total-label" data-trans="account.total_sum">{% translate 'account.total_sum' %}</span>
                                         <span class="total-data">{{ total.total_sum }}</span>
                                     </div>
                                     <div class="col-3-sm">
-                                        <span class="total-label" data-trans="account.total_restance">{% trans 'account.total_restance' %}</span>
+                                        <span class="total-label" data-trans="account.total_restance">{% translate 'account.total_restance' %}</span>
                                         <span class="total-data">{{ total.total_restance }}</span>
                                     </div>
                                 </div>

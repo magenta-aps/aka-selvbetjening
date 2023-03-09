@@ -11,14 +11,14 @@
 {% block content %}
     <article class="fordringshaverkonto_liste">
         {% if parent is not None %}
-            <a class="folder-up" href="{% url 'aka:fordringshaverkonto-path' path=parent %}" data-trans="filliste.op">{% trans 'filliste.op' %}</a>
+            <a class="folder-up" href="{% url 'aka:fordringshaverkonto-path' path=parent %}" data-trans="filliste.op">{% translate 'filliste.op' %}</a>
         {% endif %}
         <table class="folder-table">
             <thead>
             <tr>
-                <th class="sortable" data-trans="filliste.filnavn">{% trans 'filliste.filnavn' %}</th>
-                <th class="sortable" data-trans="filliste.filtype">{% trans 'filliste.filtype' %}</th>
-                <th class="sortable" data-trans="filliste.filstoerrelse">{% trans 'filliste.filstoerrelse' %}</th>
+                <th class="sortable" data-trans="filliste.filnavn">{% translate 'filliste.filnavn' %}</th>
+                <th class="sortable" data-trans="filliste.filtype">{% translate 'filliste.filtype' %}</th>
+                <th class="sortable" data-trans="filliste.filstoerrelse">{% translate 'filliste.filstoerrelse' %}</th>
             </tr>
             </thead>
             <tbody>
@@ -29,7 +29,7 @@
                     </td>
                     {% if entry.folder %}
                         <td data-trans="filliste.mappe">
-                            {% trans 'filliste.mappe' %}
+                            {% translate 'filliste.mappe' %}
                         </td>
                         <td data-raw="d {{ entry.size }}" data-trans="filliste.mappeindhold" data-trans-params="{{ entry|json }}">
                             {{ 'filliste.mappeindhold'|format:entry }}

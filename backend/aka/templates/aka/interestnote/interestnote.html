@@ -22,7 +22,7 @@
 {% block content %}
 <article>
 
-    <h1 class="rentenota-title printhide">{% trans 'rentenota.title' %}</h1>
+    <h1 class="rentenota-title printhide">{% translate 'rentenota.title' %}</h1>
 
     <div class="rentenota-main">
         <form method="get" id="mainform">
@@ -30,14 +30,16 @@
         {% localize off %}
         <div class="printhide">
             <div class="rentenota-actions row">
-                <div class="col-4-sm">
+                <div class="col-3-sm">
                     {% include 'aka/util/field.html' with field=form.month key='rentenota.month' %}
+                </div>
+                <div class="col-3-sm">
                     {% include 'aka/util/field.html' with field=form.year key='rentenota.year' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-4-sm">
-                    <button type="submit">{% trans 'common.send' %}</button>
+                    <button type="submit">{% translate 'common.send' %}</button>
                 </div>
             </div>
         </div>
@@ -55,19 +57,19 @@
                     <div class="col-5-sm output-actions printhide">
                         <select id="download">
                             {% if pdflink %}
-                                <option value=".pdf" data-trans="common.pdf">{% trans 'common.pdf' %}</option>
+                                <option value=".pdf" data-trans="common.pdf">{% translate 'common.pdf' %}</option>
                             {% endif %}
                             {% if xlsxlink %}
-                                <option value=".xlsx" data-trans="common.xlsx">{% trans 'common.xlsx' %}</option>
+                                <option value=".xlsx" data-trans="common.xlsx">{% translate 'common.xlsx' %}</option>
                             {% endif %}
                             {% if odslink %}
-                                <option value=".ods" data-trans="common.ods">{% trans 'common.ods' %}</option>
+                                <option value=".ods" data-trans="common.ods">{% translate 'common.ods' %}</option>
                             {% endif %}
                             {% if csvlink %}
-                                <option value=".csv" data-trans="common.csv">{% trans 'common.csv' %}</option>
+                                <option value=".csv" data-trans="common.csv">{% translate 'common.csv' %}</option>
                             {% endif %}
                         </select>
-                        <button class="btn-print" data-trans="common.print">{% trans 'common.print' %}</button>
+                        <button class="btn-print" data-trans="common.print">{% translate 'common.print' %}</button>
                     </div>
                 </div>
             </div>
@@ -78,19 +80,19 @@
                     <span class="line">{{ company.navn }}</span>
                     <span class="line">{{ company.adresse }}</span>
                     <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
-                    <span class="line" data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
+                    <span class="line" data-trans="{{ company.landekode }}">{% translate company.landekode %}</span>
                     <span class="line">CVR: {{ cvr }}</span>
                 </div>
 
                 <div class="col-4-sm">
-                    <h3 data-trans="rentenota.rentenota">{% trans 'rentenota.rentenota' %}</h3>
+                    <h3 data-trans="rentenota.rentenota">{% translate 'rentenota.rentenota' %}</h3>
                     <table class="dl-table">
                         <tr>
-                            <th data-trans="common.konto">{% trans 'common.konto' %}</th>
+                            <th data-trans="common.konto">{% translate 'common.konto' %}</th>
                             <td>{{ cvr }}</td>
                         </tr>
                         <tr>
-                            <th data-trans="common.dato">{% trans 'common.dato' %}</th>
+                            <th data-trans="common.dato">{% translate 'common.dato' %}</th>
                             <td>{{ date }}</td>
                         </tr>
                         <tr>
@@ -103,19 +105,19 @@
                             <th colspan="2">3900 Nuuk</th>
                         </tr>
                         <tr>
-                            <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
+                            <th data-trans="common.telefon">{% translate 'common.telefon' %}</th>
                             <td>346500</td>
                         </tr>
                         <tr>
-                            <th data-trans="common.fax">{% trans 'common.fax' %}</th>
+                            <th data-trans="common.fax">{% translate 'common.fax' %}</th>
                             <td>346577</td>
                         </tr>
                         <tr>
-                            <th data-trans="common.email">{% trans 'common.email' %}</th>
+                            <th data-trans="common.email">{% translate 'common.email' %}</th>
                             <td>sulinal@nanoq.gl</td>
                         </tr>
                         <tr>
-                            <th data-trans="common.webadresse">{% trans 'common.webadresse' %}</th>
+                            <th data-trans="common.webadresse">{% translate 'common.webadresse' %}</th>
                             <td>www.aka.gl</td>
                         </tr>
                     </table>
@@ -140,7 +142,7 @@
                     <tr>
                         {% for field in fields %}
                             {% with "rentenota."|add:field.name as transkey %}
-                                <th data-field="{{ field.name }}" data-trans="{{ transkey }}">{% trans transkey|safe %}</th>
+                                <th data-field="{{ field.name }}" data-trans="{{ transkey }}">{% translate transkey|safe %}</th>
                             {% endwith %}
                         {% endfor %}
                     </tr>
@@ -149,7 +151,7 @@
                         {% if items|length == 0 %}
                             <tr>
                                 <td colspan="14" style="text-align: center">
-                                    {% trans 'rentenota.ingenposter' %}
+                                    {% translate 'rentenota.ingenposter' %}
                                 </td>
                             </tr>
                         {% else %}

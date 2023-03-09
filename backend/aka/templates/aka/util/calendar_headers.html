@@ -9,9 +9,9 @@
             $(function(){
                 $.datetimepicker.addLocale(
                     'kl',
-                    ['{% trans 'January'|capfirst %}','{% trans 'February'|capfirst %}','{% trans 'March'|capfirst %}','{% trans 'April'|capfirst %}','{% trans 'May'|capfirst %}','{% trans 'June'|capfirst %}','{% trans 'July'|capfirst %}','{% trans 'August'|capfirst %}','{% trans 'September'|capfirst %}','{% trans 'October'|capfirst %}','{% trans 'November'|capfirst %}','{% trans 'December'|capfirst %}'],
-                    ['{% trans 'Mon'|capfirst %}','{% trans 'Tue'|capfirst %}','{% trans 'Wed'|capfirst %}','{% trans 'Thu'|capfirst %}','{% trans 'Fri'|capfirst %}','{% trans 'Sat'|capfirst %}','{% trans 'Sun'|capfirst %}'],
-                    ['{% trans 'Monday'|capfirst %}','{% trans 'Tuesday'|capfirst %}','{% trans 'Wednesday'|capfirst %}','{% trans 'Thursday'|capfirst %}','{% trans 'Friday'|capfirst %}','{% trans 'Saturday'|capfirst %}','{% trans 'Sunday'|capfirst %}'],
+                    ['{% translate 'January'|capfirst %}','{% translate 'February'|capfirst %}','{% translate 'March'|capfirst %}','{% translate 'April'|capfirst %}','{% translate 'May'|capfirst %}','{% translate 'June'|capfirst %}','{% translate 'July'|capfirst %}','{% translate 'August'|capfirst %}','{% translate 'September'|capfirst %}','{% translate 'October'|capfirst %}','{% translate 'November'|capfirst %}','{% translate 'December'|capfirst %}'],
+                    ['{% translate 'Mon'|capfirst %}','{% translate 'Tue'|capfirst %}','{% translate 'Wed'|capfirst %}','{% translate 'Thu'|capfirst %}','{% translate 'Fri'|capfirst %}','{% translate 'Sat'|capfirst %}','{% translate 'Sun'|capfirst %}'],
+                    ['{% translate 'Monday'|capfirst %}','{% translate 'Tuesday'|capfirst %}','{% translate 'Wednesday'|capfirst %}','{% translate 'Thursday'|capfirst %}','{% translate 'Friday'|capfirst %}','{% translate 'Saturday'|capfirst %}','{% translate 'Sunday'|capfirst %}'],
                 );
                 $(".datepicker").datetimepicker({timepicker:false, format:'d/m/Y', dayOfWeekStart: 1});
                 $(document).on('language-change', function(event, language) {

@@ -1,6 +1,19 @@
+// https://stackoverflow.com/questions/2360655/jquery-event-handlers-always-execute-in-order-they-were-bound-any-way-around-t
+$.fn.bindFirst = function(name, fn) {
+    this.on(name, fn);
+    this.each(function() {
+        const eventtypes = name.split(" ");
+        for (let i=0; i<eventtypes.length; i++) {
+            const handlers = $._data(this, 'events')[eventtypes[i].split('.')[0]];
+            const handler = handlers.pop();
+            handlers.splice(0, 0, handler);
+        }
+    });
+};
+
 $(function(){
-    $("form input[required]").attr("data-required", "true").removeAttr("required");
-    $("form input[type=number]").attr({"data-number": "true", "type": "text"});
+    $("input[required]").attr("data-required", "true").removeAttr("required");
+    $("input[type=number]").attr({"data-number": "true", "type": "text"});
 
     const addError = function(id, errorkey) {
         const errorContainer = $(".err-msg[for='"+id+"']");
@@ -12,11 +25,8 @@ $(function(){
         ul.append("<li data-trans=\""+errorkey+"\">"+django.format(errorkey, null, django.language)+"</li>");
     };
 
-    $("form input, form select").on("keyup change", function(){
-        validate.call(this);
-    });
 
-    const numberRegex = /^\d+([,\.]\d+)?$/;
+    const numberRegex = /^(((\d{1,3})(\.\d{3})*)|\d+)([,]\d+)?$/;
     const cprRegex = /^\d{10}$/;
     const validate = function() {
         $(".err-msg[for='"+this.id+"'] ul.errorlist").empty();
@@ -58,6 +68,10 @@ $(function(){
 
         return error;
     };
+
+    $("form input, form select").on("keyup change", function(){
+        validate.call(this);
+    });
 
     $("form").submit(function(){
         var error = false;

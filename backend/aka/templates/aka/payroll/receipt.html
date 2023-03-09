@@ -3,26 +3,26 @@
 {% load l10n %}
 {% block content %}
 
-<h1>{% trans 'loentraek.receipt_headline' %}</h1>
+<h1>{% translate 'loentraek.receipt_headline' %}</h1>
 
 {% localize off %}
 <table class="overview">
     <tr>
-        <th>{% trans 'loentraek.report_date' %}</th>
+        <th>{% translate 'loentraek.report_date' %}</th>
         <td>{{received_date|date:'j. F Y'}}</td>
     </tr>
     <tr>
-        <th>{% trans 'loentraek.effective' %}</th>
+        <th>{% translate 'loentraek.effective' %}</th>
         <td>{{date.month|month_name|capfirst}} {{date.year}}</td>
     </tr>
     <tr>
-        <th>{% trans 'loentraek.total_amount' %}</th>
+        <th>{% translate 'loentraek.total_amount' %}</th>
         <td>{{total_amount}}</td>
     </tr>
     {% for rec_id in rec_ids %}
     <tr>
         {% if forloop.first %}
-        <th rowspan="{{rec_ids|length}}">{% trans 'loentraek.record_id' %}</th>
+        <th rowspan="{{rec_ids|length}}">{% translate 'loentraek.record_id' %}</th>
         {% endif %}
         <td>{{rec_id}}</td>
     </tr>
@@ -34,16 +34,16 @@
     <thead>
         <tr>
             <th>
-                {% trans 'loentraek.cpr' %}
+                {% translate 'loentraek.cpr' %}
             </th>
             <th>
-                {% trans 'loentraek.agreement_number' %}
+                {% translate 'loentraek.agreement_number' %}
             </th>
             <th>
-                {% trans 'loentraek.amount' %}
+                {% translate 'loentraek.amount' %}
             </th>
             <th>
-                {% trans 'loentraek.net_salary' %}
+                {% translate 'loentraek.net_salary' %}
             </th>
         </tr>
     </thead>
