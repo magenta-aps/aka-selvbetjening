@@ -20,7 +20,6 @@ logger = logging.getLogger(__name__)
 
 
 class PrismeException(AkaException):
-
     title = "prisme.error"
     error_parse = {
         "250": {
@@ -158,7 +157,6 @@ class PrismeRequestObject(object):
 
 
 class PrismeAccountRequest(PrismeRequestObject):
-
     wrap = "CustTable"
 
     # See also choices in KontoForm
@@ -212,7 +210,6 @@ class PrismeAKIRequest(PrismeAccountRequest):
 
 
 class PrismeAccountTotalRequest(PrismeRequestObject):
-
     wrap = "CustTable"
 
     def __init__(self, customer_id_number):
@@ -249,7 +246,6 @@ class PrismeAKITotalRequest(PrismeAccountTotalRequest):
 
 
 class PrismeClaimRequest(PrismeRequestObject):
-
     wrap = "CustCollClaimTableFuj"
 
     def __init__(self, **kwargs):
@@ -328,7 +324,6 @@ class PrismeClaimRequest(PrismeRequestObject):
 
 
 class PrismeImpairmentRequest(PrismeRequestObject):
-
     wrap = "CustCollClaimTableFuj"
 
     def __init__(
@@ -365,7 +360,6 @@ class PrismeImpairmentRequest(PrismeRequestObject):
 
 
 class PrismeCvrCheckRequest(PrismeRequestObject):
-
     wrap = "FujClaimant"
 
     def __init__(self, cvr):
@@ -385,7 +379,6 @@ class PrismeCvrCheckRequest(PrismeRequestObject):
 
 
 class PrismeInterestNoteRequest(PrismeRequestObject):
-
     wrap = "custInterestJour"
 
     def __init__(self, customer_id_number, year, month):
@@ -413,7 +406,6 @@ class PrismeInterestNoteRequest(PrismeRequestObject):
 
 
 class PrismePayrollRequest(PrismeRequestObject):
-
     wrap = "custPayRollFromEmployerHeader"
 
     def __init__(self, cvr, date, received_date, amount, lines):
@@ -450,7 +442,6 @@ class PrismePayrollRequest(PrismeRequestObject):
 
 
 class PrismePayrollRequestLine(PrismeRequestObject):
-
     wrap = "custPayRollFromEmployerLine"
 
     def __init__(self, cpr_cvr, agreement_number, amount, net_salary):
@@ -507,7 +498,6 @@ class PrismeAccountResponseTransaction(object):
 
 
 class PrismeAccountResponse(PrismeResponseObject):
-
     itemclass = PrismeAccountResponseTransaction
 
     def __init__(self, request, xml):
@@ -561,7 +551,6 @@ class PrismeAccountTotalResponse(PrismeResponseObject):
 
 
 class PrismeRecIdResponse(PrismeResponseObject):
-
     response_tag = ""
 
     def __init__(self, request, xml):
@@ -642,7 +631,6 @@ class PrismeInterestNoteResponseTransaction(object):
 
 
 class Prisme(object):
-
     _client = None
 
     def __init__(self):

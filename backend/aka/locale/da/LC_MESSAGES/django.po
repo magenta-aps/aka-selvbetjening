@@ -36,6 +36,12 @@ msgstr "Send"
 msgid "common.repeat"
 msgstr "Gentag"
 
+msgid "common.add"
+msgstr "Tilføj"
+
+msgid "common.slet"
+msgstr "Slet"
+
 msgid "common.print"
 msgstr "Print"
 
@@ -117,6 +123,9 @@ msgstr "Skattestyrelsen"
 msgid "common.showcolumns"
 msgstr "Vis/skjul kolonner"
 
+msgid "common.errors_present"
+msgstr "Der er fejl i nogle formularfelter. Ret venligst fejlene og indsend formularen igen."
+
 
 # Errors
 
@@ -177,6 +186,12 @@ msgstr "Ugyldigt CVR-nummer"
 msgid "error.invalid_cpr_cvr"
 msgstr "Ugyldigt CPR- eller CVR-nummer"
 
+msgid "error.invalid_email"
+msgstr "Ugyldig email-adresse"
+
+msgid "error.udbytte_sum_exceed"
+msgstr "Summen af udbytter i tabellen må ikke overstige det samlede/godskrevne udbytte."
+
 
 # Index
 
@@ -218,6 +233,12 @@ msgstr "Kontobevægelser for fordringshaver op og nedskrivninger"
 
 msgid "index.fordringshaverkonto.sub"
 msgstr "For at se kontobevægelser, op og nedskrivninger som fordringshaver - klik her"
+
+msgid "index.udbytte"
+msgstr "Udbytteskat"
+
+msgid "index.udbytte.sub"
+msgstr "For at indberette U1-skat - klik her"
 
 msgid "index.konto"
 msgstr "Vis konto"
@@ -737,3 +758,117 @@ msgstr ""
 "    </ul>"
 "    Vi beklager de gener dette måtte medføre, men vi arbejder på at få oprettet forbindelsen snarest."
 "</p>"
+
+msgid "udbytte.title"
+msgstr "U1 SKAT"
+
+msgid "udbytte.vejledning_skjul"
+msgstr "Skjul vejledning"
+
+msgid "udbytte.vejledning_vis"
+msgstr "Vis vejledning"
+
+msgid "udbytte.udfylder"
+msgstr "Navn på udfylder"
+
+msgid "udbytte.virksomhedsnavn"
+msgstr "Virksomhedsnavn"
+
+msgid "udbytte.cvr"
+msgstr "CVR"
+
+msgid "udbytte.email"
+msgstr "Email-adresse"
+
+msgid "udbytte.regnskabsår"
+msgstr "Udbyttet vedrører regnskabsåret"
+
+msgid "udbytte.u1_udfyldt"
+msgstr "Har du allerede udfyldt U1?"
+
+msgid "udbytte.kommune"
+msgstr "Selskabets skattekommune"
+
+msgid "udbytte.udenfor_kommunal_inddeling"
+msgstr "Udenfor kommunal inddeling"
+
+msgid "udbytte.udbetalingsdato"
+msgstr "Dato for vedtagelse af udbytteudbetaling"
+
+msgid "udbytte.indbetalingsdato"
+msgstr "Indbetalingsdato"
+
+msgid "udbytte.udbytte"
+msgstr "Udbetalt/godskrevet udbytte i DKK, før skat"
+
+msgid "udbytte.udbytteskat"
+msgstr "Indeholdt udbytteskat i DKK til indbetaling"
+
+msgid "udbytte.cpr_cvr_tin"
+msgstr "CPR-nr, CVR-nr. / TIN"
+
+msgid "udbytte.navn"
+msgstr "Navn"
+
+msgid "udbytte.adresse"
+msgstr "Adresse"
+
+msgid "udbytte.postnummer"
+msgstr "Postnummer"
+
+msgid "udbytte.by"
+msgstr "By"
+
+msgid "udbytte.land"
+msgstr "Land"
+
+msgid "udbytte.noter"
+msgstr "Særlige oplysninger"
+
+msgid "udbytte.dato"
+msgstr "Dato"
+
+msgid "udbytte.underskriftsberettiget"
+msgstr "Navn på underskriftsberettiget for selskabet"
+
+msgid "udbytte.vejledning"
+msgstr ""
+"<h3>Kort om udbytteskat</h3>"
+"<p>Efter bestemmelserne i Landstingslov om indkomstskat (kapitel 8) har alle aktie- og anpartsselskaber, der er re&shy;gistreret som hjemmehørende i Grønland, pligt til at indeholde udbytteskat i udbetalt eller godskrevet ud&shy;byt&shy;te, herunder a conto udbytte udbetalt i årets løb. <br/>"
+"Som udbytte anses alt, hvad et selskab udlodder til aktionærerne, med undtagelse af friaktier og likvidations-pro&shy;venu. Det samme gør sig gældende for udbytte til anpartshavere.</p>"
+""
+"<p>Indeholdelse skal foretages uden hensyn til de enkelte aktionærers / anpartshaveres forhold, dvs. uden hensyn til om aktionærerne / anpartshaverne er personer, selskaber, foreninger eller andet.</p>"
+""
+"<h3>Indbetaling af udbytteskat</h3>"
+"<p>Indbetaling af udbytteskatten skal ske til Skattestyrelsen og skal foretages senest den første dag i måneden ef&shy;ter den måned, hvori vedtagelsen om udbetaling eller godskrivning finder sted. Falder sidste rettidige be&shy;ta&shy;lings&shy;dag på en søn- eller helligdag eller en lørdag, forlænges fristen til den følgende hverdag.</p>"
+""
+"<p>Indbetaling af udbytteskat sker på kontonr. 6471-1002608. Ved indbetaling oplyses følgende tekst ”selskabets CVR nr. \\ skatteår \\ UDBYTTE”. Som skatteår oplyses selskabets regnskabsår, som udbyttet vedrører.</p>"
+""
+"<h3>Eksempel</h3>"
+"<p>Et selskab anvender kalenderåret som regnskabsår og træffer beslutning om udbytte for regnskabsåret 2021 i april 2022. På udbytteerklæringen (pkt. 2) og ved indbetalingen anføres ”2021”.<br/>"
+"Indbetaling af udbytteskatten skal ske senest 1. maj 2022 og udbytteerklæringen indsendes senest den 9. maj 2022</p>"
+""
+"<p>Ved for sen indbetaling skal der betales renter, som udgør 1% pr. påbegyndt måned regnet fra forfaldsdagen. Det bemærkes, at renter af for sent betalte skatter ikke kan fratrækkes ved opgørelsen af den skattepligtige ind&shy;komst.</p>"
+""
+"<h3>Indsendelse af udbytteerklæring</h3>"
+"<p>Selskabet skal senest den 10. i måneden efter datoen for vedtagelsen om udbetaling eller godskrivning af ud&shy;bytte indsende en udbytteerklæring til Skattestyrelsen. Selskaber, der vedtager ikke at udbetale udbytte, skal ligeledes indsende en udbytteerklæring inden den 10. i måneden efter vedtagelsen. Falder sidste frist for af&shy;givelse af oplysninger på en søn- eller helligdag eller en lørdag, forlænges fristen til den følgende hverdag.</p>"
+""
+"<p>På udbytteerklæringen oplyses selskabets navn, CVR-nr., skattekommune, dato for vedtagelse af ud&shy;byt&shy;te&shy;ud&shy;be&shy;&shy;taling, selskabets regnskabsår som udbyttet vedrører, indbetalingsdato og eventuelle særlige oplysninger.</p>"
+""
+"<p>Følgende beløb angives: Udbetalt / godskrevet udbytte, eventuelle renter ved for sen betaling og et samlet be&shy;løb (i alt at indbetale).</p>"
+""
+"<p>Ved vedtagelser om udbytte, der er sket fra og med 1. januar 2020, skal der indsendes oplysninger om modtagere af udbytte. Tilsvarende gælder for de vedtagelser, der er sket tidligere, men hvor oplysninger om modtagere skal indsendes efter den 1. januar 2020.<br/>"
+"Kra&shy;vet følger af § 88, stk. 1, 1.pkt. i Landtingslov nr. 12 af 2. november 2006 om indkomstskat med senere æn&shy;dringer.</p>"
+""
+"<p>Ved indberetning af udbyttemodtagerne oplyses modtagerens CPR / CVR / TIN nummer, Navn, Adresse og Land. Dvs. det land, hvor udbyttemodtageren har bopæl. For hver udbyttemodtager oplyses udbetalt / god&shy;skre&shy;vet udbytte (bruttobeløb før udbytteskat).</p>"
+""
+"<p>Indberetning af udbyttemodtagere sker på samme webform som udbytteerklæringen.</p>"
+""
+"<p>Udbytteerklæring – U1 – hentes på Skattestyrelsens hjemmeside www.aka.gl<br/>"
+"På webformen sendes udbytteerklæringen - U1 – automatisk til Skattestyrelsen.</p>"
+""
+"<h3>Angivelse af udbytteattest</h3>"
+"<p>Enhver, der hæver eller får godskrevet udbytte, kan, når vedkommende på fyldestgørende vis godtgør sin iden&shy;titet, forlange, at den der foretager udbetalingen eller godskrivningen, attesterer den stedfundne udbe&shy;ta&shy;ling eller godskrivning til den pågældende modtager. En sådan attestation skal ske på en såkaldt »ud&shy;byt&shy;te&shy;at&shy;test«.</p>"
+""
+"<h2>Iluanaarutisiaqartitsinermik nalunaarut / Udbytteerklæring - U1</h2>"
+"<p>I henhold til Landstingslov om indkomstskat § 86 og § 88, afgives følgende oplysninger:</p>"

@@ -12,23 +12,13 @@
     <article class="indberet_loentraek">
         <form method="post" id="mainform">
             {% csrf_token %}
-            {% if form.non_field_errors %}
-                <ul class="errorlist">
-                    {% for error in form.non_field_errors.as_data %}
-                        <li {% if error.code %}data-trans="{{ error.code }}"{% endif %} {% if error.params %}data-trans-params="{{ error.params|json }}"{% endif %}>
-                            {% if error.code %}
-                                {% trans error.code as error_message %}
-                                {{ error_message|format:error.params }}
-                            {% else %}
-                                {{ error }}
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
             {{ formset.management_form }}
-            <h1 data-trans="loentraek.title">{% trans 'loentraek.title' %}</h1>
+            <h1 data-trans="loentraek.title">{% translate 'loentraek.title' %}</h1>
             <div class="container-fluid">
+                {% if form.errors or formset.errors %}
+                    <p class="err-msg">{% translate 'common.errors_present' %}</p>
+                    {% include "aka/util/nonfield_errors.html" with form=form %}
+                {% endif %}
                 {% localize off %}
                 <div class="row">
                     <div class="col-12">
@@ -44,10 +34,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-3" data-trans="loentraek.cpr">{% trans 'loentraek.cpr' %}</div>
-                    <div class="col-3" data-trans="loentraek.agreement_number">{% trans 'loentraek.agreement_number' %}</div>
-                    <div class="col-3" data-trans="loentraek.amount">{% trans 'loentraek.amount' %}</div>
-                    <div class="col-3" data-trans="loentraek.net_salary">{% trans 'loentraek.net_salary' %}</div>
+                    <div class="col-3" data-trans="loentraek.cpr">{% translate 'loentraek.cpr' %}</div>
+                    <div class="col-3" data-trans="loentraek.agreement_number">{% translate 'loentraek.agreement_number' %}</div>
+                    <div class="col-3" data-trans="loentraek.amount">{% translate 'loentraek.amount' %}</div>
+                    <div class="col-3" data-trans="loentraek.net_salary">{% translate 'loentraek.net_salary' %}</div>
                 </div>
                 <div id="formsetContainer">
                     {% for subform in formset %}
@@ -58,7 +48,7 @@
 
                 <div class="row">
                     <div class="col-2">
-                        <button type="submit" data-trans="common.gem">{% trans 'common.gem' %}</button>
+                        <button type="submit" data-trans="common.gem">{% translate 'common.gem' %}</button>
                     </div>
                 </div>
             </div>

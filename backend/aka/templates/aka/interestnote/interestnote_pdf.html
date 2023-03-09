@@ -22,7 +22,7 @@
 {% block content %}
 <article>
 
-    <h1 class="rentenota-title printhide">{% trans 'rentenota.title' %}</h1>
+    <h1 class="rentenota-title printhide">{% translate 'rentenota.title' %}</h1>
 
     <div class="rentenota-main">
         <div class="output rentenota-data">
@@ -43,19 +43,19 @@
                     <span class="line">{{ company.navn }}</span>
                     <span class="line">{{ company.adresse }}</span>
                     <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
-                    <span class="line" data-trans="{{ company.landekode }}">{% trans company.landekode %}</span>
+                    <span class="line" data-trans="{{ company.landekode }}">{% translate company.landekode %}</span>
                     <span class="line">CVR: {{ cvr }}</span>
                 </div>
 
                 <div class="col-4-sm">
-                    <h3 data-trans="rentenota.rentenota">{% trans 'rentenota.rentenota' %}</h3>
+                    <h3 data-trans="rentenota.rentenota">{% translate 'rentenota.rentenota' %}</h3>
                     <table class="dl-table">
                         <tr>
-                            <th data-trans="common.konto">{% trans 'common.konto' %}</th>
+                            <th data-trans="common.konto">{% translate 'common.konto' %}</th>
                             <td>{{ cvr }}</td>
                         </tr>
                         <tr>
-                            <th data-trans="common.dato">{% trans 'common.dato' %}</th>
+                            <th data-trans="common.dato">{% translate 'common.dato' %}</th>
                             <td>{{ date }}</td>
                         </tr>
                         <tr>
@@ -68,19 +68,19 @@
                             <th colspan="2">3900 Nuuk</th>
                         </tr>
                         <tr>
-                            <th data-trans="common.telefon">{% trans 'common.telefon' %}</th>
+                            <th data-trans="common.telefon">{% translate 'common.telefon' %}</th>
                             <td>346500</td>
                         </tr>
                         <tr>
-                            <th data-trans="common.fax">{% trans 'common.fax' %}</th>
+                            <th data-trans="common.fax">{% translate 'common.fax' %}</th>
                             <td>346577</td>
                         </tr>
                         <tr>
-                            <th data-trans="common.email">{% trans 'common.email' %}</th>
+                            <th data-trans="common.email">{% translate 'common.email' %}</th>
                             <td>sulinal@nanoq.gl</td>
                         </tr>
                         <tr>
-                            <th data-trans="common.webadresse">{% trans 'common.webadresse' %}</th>
+                            <th data-trans="common.webadresse">{% translate 'common.webadresse' %}</th>
                             <td>www.aka.gl</td>
                         </tr>
                     </table>
@@ -105,7 +105,7 @@
                     <tr>
                         {% for field in fields %}
                             {% with "rentenota."|add:field.name as transkey %}
-                                <th data-field="{{ field.name }}" data-trans="{{ transkey }}">{% trans transkey|safe %}</th>
+                                <th data-field="{{ field.name }}" data-trans="{{ transkey }}">{% translate transkey|safe %}</th>
                             {% endwith %}
                         {% endfor %}
                     </tr>
@@ -114,7 +114,7 @@
                         {% if items|length == 0 %}
                             <tr>
                                 <td colspan="14" style="text-align: center">
-                                    {% trans 'rentenota.ingenposter' %}
+                                    {% translate 'rentenota.ingenposter' %}
                                 </td>
                             </tr>
                         {% else %}

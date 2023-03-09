@@ -25,7 +25,7 @@
                                 <thead>
                                     <tr>
                                         {% for field in page.fields %}
-                                            <th data-field="{{ field.name }}" data-trans="{{ field.transkey }}">{% trans field.transkey|safe %}</th>
+                                            <th data-field="{{ field.name }}" data-trans="{{ field.transkey }}">{% translate field.transkey|safe %}</th>
                                         {% endfor %}
                                     </tr>
                                 </thead>
@@ -52,25 +52,25 @@
                                 </tbody>
                             </table>
                         {% else %}
-                            <p data-trans="account.ingenposter">{% trans 'account.ingenposter' %}</p>
+                            <p data-trans="account.ingenposter">{% translate 'account.ingenposter' %}</p>
                         {% endif %}
 
                         {% if total %}
                             <div class="row account-total no-copy">
                                 <div class="col-3-sm">
-                                    <span class="total-label" data-trans="account.total_claim">{% trans 'account.total_claim' %}</span>
+                                    <span class="total-label" data-trans="account.total_claim">{% translate 'account.total_claim' %}</span>
                                     <span class="total-data">{{ total.total_claim }}</span>
                                 </div>
                                 <div class="col-3-sm">
-                                    <span class="total-label" data-trans="account.total_payment">{% trans 'account.total_payment' %}</span>
+                                    <span class="total-label" data-trans="account.total_payment">{% translate 'account.total_payment' %}</span>
                                     <span class="total-data">{{ total.total_payment }}</span>
                                 </div>
                                 <div class="col-3-sm">
-                                    <span class="total-label" data-trans="account.total_sum">{% trans 'account.total_sum' %}</span>
+                                    <span class="total-label" data-trans="account.total_sum">{% translate 'account.total_sum' %}</span>
                                     <span class="total-data">{{ total.total_sum }}</span>
                                 </div>
                                 <div class="col-3-sm">
-                                    <span class="total-label" data-trans="account.total_restance">{% trans 'account.total_restance' %}</span>
+                                    <span class="total-label" data-trans="account.total_restance">{% translate 'account.total_restance' %}</span>
                                     <span class="total-data">{{ total.total_restance }}</span>
                                 </div>
                             </div>

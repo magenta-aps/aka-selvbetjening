@@ -2,7 +2,6 @@ from django.db import models
 
 
 class PrismeDown(models.Model):
-
     down = models.BooleanField(default=False)
 
     @classmethod

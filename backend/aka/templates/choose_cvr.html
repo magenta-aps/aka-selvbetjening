@@ -13,7 +13,7 @@
 </svg>
 
     <nav class="toc row">
-        <p data-trans="login.multiple_cvr">{% trans 'login.multiple_cvr' %}</p>
+        <p data-trans="login.multiple_cvr">{% translate 'login.multiple_cvr' %}</p>
         {% for cvr in cvrs %}
             {% url 'aka:choose_cvr' as choose_url %}
             {% with cvrparam='cvr='|addstr:cvr backparam='back='|addstr:back %}

@@ -1,2 +1,2 @@
 {% load i18n %}
-<option value="{{ widget.value|stringformat:'s' }}"{% include "django/forms/widgets/attrs.html" %} data-trans="{{ widget.label }}">{% trans widget.label %}</option>
+<option value="{{ widget.value|stringformat:'s' }}"{% include "django/forms/widgets/attrs.html" %} data-trans="{{ widget.label }}">{% translate widget.label %}</option>

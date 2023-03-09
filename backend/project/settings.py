@@ -1,6 +1,8 @@
+import json
 import os
 import sys
 from distutils.util import strtobool
+from decimal import Decimal
 
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -378,3 +380,15 @@ LOGIN_BYPASS_ENABLED = bool(strtobool(os.environ.get("LOGIN_BYPASS_ENABLED", "Fa
 # Skip health_check for cache layer and storage since we are not using it
 WATCHMAN_CHECKS = ("watchman.checks.databases",)
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+
+MUNICIPALITIES = json.loads(os.environ.get("MUNICIPALITIES", "[]"))
+
+# A basic fail-fast check
+for municipality in MUNICIPALITIES:
+    for expected in ("name", "code", "tax_percent"):
+        if expected not in municipality:
+            raise KeyError(expected)
+    # Make it int or die trying
+    municipality["code"] = int(municipality["code"])
+    municipality["tax_percent"] = Decimal(municipality["tax_percent"])

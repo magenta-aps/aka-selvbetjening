@@ -12,24 +12,24 @@
     <form>
         {% localize off %}
         {% if rec_ids %}
-        <h1 class="page-header" data-trans="loentraek.success">{% trans 'loentraek.success' %}</h1>
+        <h1 class="page-header" data-trans="loentraek.success">{% translate 'loentraek.success' %}</h1>
         {% else %}
-        <h1 class="page-header" data-trans="loentraek.failed">{% trans 'loentraek.failed' %}</h1>
+        <h1 class="page-header" data-trans="loentraek.failed">{% translate 'loentraek.failed' %}</h1>
         {% endif %}
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <span data-trans="loentraek.results">{% trans 'loentraek.results' %}</span>
+                    <span data-trans="loentraek.results">{% translate 'loentraek.results' %}</span>
                     <ul class="success-list">
                         {% for rec_id in rec_ids %}
                             <li>{{ rec_id }}</li>
                         {% endfor %}
                     </ul>
                     {% if errors %}
-                        <span data-trans="loentraek.errors">{% trans 'loentraek.errors' %}</span>
+                        <span data-trans="loentraek.errors">{% translate 'loentraek.errors' %}</span>
                         <ul class="error-list">
                         {% for error in errors %}
-                            {% trans error.key as error_message %}
+                            {% translate error.key as error_message %}
                             <li data-trans="{{ error.key }}" data-trans-params="{{ error.params|json }}">{{ error_message|format:error.params }}</li>
                         {% endfor %}
                         </ul>
@@ -39,10 +39,10 @@
             <div class="row">
                 <div class="col-12">
                     {% if pdf_id %}
-                    <a href="{% url 'aka:loentraek-kvittering' pdf_id=pdf_id %}" class="button" data-trans="loentraek.get_receipt" target="_blank">{% trans 'loentraek.get_receipt' %}</a>
+                    <a href="{% url 'aka:loentraek-kvittering' pdf_id=pdf_id %}" class="button" data-trans="loentraek.get_receipt" target="_blank">{% translate 'loentraek.get_receipt' %}</a>
                     {% endif %}
-                    <a href="{% url 'aka:loentraek-upload' %}" class="button"  data-trans="common.repeat">{% trans 'common.repeat' %}</a>
-                    <a href="{% url 'aka:index' %}" class="button" data-trans="common.forside">{% trans 'common.forside' %}</a>
+                    <a href="{% url 'aka:loentraek-upload' %}" class="button"  data-trans="common.repeat">{% translate 'common.repeat' %}</a>
+                    <a href="{% url 'aka:index' %}" class="button" data-trans="common.forside">{% translate 'common.forside' %}</a>
                 </div>
             </div>
         </div>

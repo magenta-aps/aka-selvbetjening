@@ -48,6 +48,9 @@
         {% include 'toc-item.html' with url=loentraek_url text='index.løntræk' subtext='index.løntræk.sub' icon='briefcase' %}
         {% url 'aka:loentraek-upload' as loentraek_upload_url %}
         {% include 'toc-item.html' with url=loentraek_upload_url text='index.løntræk-upload' icon='briefcase' %}
+
+        {% url 'aka:udbytte' as udbytte_url %}
+        {% include 'toc-item.html' with url=udbytte_url text='index.udbytte' subtext='index.udbytte.sub' icon='business' %}
     {% endif %}
     {% if cpr or cvr %}
         {% url 'aka:konto' as konto_url %}

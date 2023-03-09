@@ -8,7 +8,7 @@
 {% block content %}
 <article class="access-denied">
     <form>
-        <h1 class="page-header" data-trans="{{ header }}">{% trans header %}</h1>
+        <h1 class="page-header" data-trans="{{ header }}">{% translate header %}</h1>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12" data-trans="{{ error_code }}" data-trans-params="{{ error_params }}">
@@ -17,7 +17,7 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <a href="{% url 'aka:index' %}" class="button">{% trans 'common.forside' %}</a>
+                    <a href="{% url 'aka:index' %}" class="button">{% translate 'common.forside' %}</a>
                 </div>
             </div>
         </div>

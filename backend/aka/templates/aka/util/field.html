@@ -2,17 +2,13 @@
 {% load aka_tags %}
 <div class="input{% if field.errors %} has-error{% endif %}" data-field="{{ field.id_for_label }}">
     {% if key %}
-        <label for="{{ field.id_for_label }}" data-trans="{{ key }}">{% trans key %}</label>
+        <label for="{{ field.id_for_label }}" data-trans="{{ key }}">{% translate key %}</label>
     {% endif %}
-    {% if field.type == 'radio' %}
-        {{ field }}
-    {% else %}
-        {{ field }}
-    {% endif %}
+    {{ field }}
     <span class="err-msg" for="{{ field.id_for_label }}">
         {% if field.errors %}
             {% if upload %}
-                <span data-trans="error.upload_validation">{% trans 'error.upload_validation' %}</span>
+                <span data-trans="error.upload_validation">{% translate 'error.upload_validation' %}</span>
             {% endif %}
             <ul class="errorlist">
                 {% for error in field.errors.as_data %}

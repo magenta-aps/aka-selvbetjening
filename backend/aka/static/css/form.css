@@ -12,12 +12,6 @@ fieldset {
     margin: 1.5rem 0;
 }
 
-/* Input field container */
-
-div.input {
-    display: inline-block;
-}
-
 /* Buttons and button-like links */
 
 button,
@@ -108,7 +102,6 @@ form.submitted input:invalid:not([type=checkbox],[type=radio]),
 form.submitted select:invalid,
 .has-error input:not([type=checkbox],[type=radio]), .has-error select {
     border: 2px solid #d7404d;
-    width: 221px;
 }
 input[disabled] {
     background-color: #f5f5f5

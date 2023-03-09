@@ -35,6 +35,12 @@ msgstr "Nassiuguk"
 msgid "common.repeat"
 msgstr "Uteqqiguk"
 
+msgid "common.add"
+msgstr "Ilaqqiguk"
+
+msgid "common.slet"
+msgstr "Peeruk"
+
 msgid "common.print"
 msgstr "Naqitaq anillatsiguk"
 
@@ -116,6 +122,9 @@ msgstr "Akileraartarnermut Aqutsisoqarfik"
 msgid "common.showcolumns"
 msgstr "Kolonnit nuisikkit/tarrisikkit"
 
+msgid "common.errors_present"
+msgstr "Der er fejl i nogle formularfelter. Ret venligst fejlene og indsend formularen igen."
+
 
 # Errors
 
@@ -176,6 +185,11 @@ msgstr "CVR-normu atorsinnaanngilaq"
 msgid "error.invalid_cpr_cvr"
 msgstr "CPR- imaluunniit CVR-normu artorsinnaanngilaq"
 
+msgid "error.invalid_email"
+msgstr "Email atorsinnaanngilaq"
+
+msgid "error.udbytte_sum_exceed"
+msgstr "Summen af udbytter i tabellen må ikke overstige det samlede/godskrevne udbytte"
 
 # Index
 
@@ -787,6 +801,12 @@ msgstr "Arfininngorneq"
 msgid "Sunday"
 msgstr "Sapaat"
 
+msgid "Yes"
+msgstr "Jep"
+
+msgid "No"
+msgstr "Niks"
+
 msgid "common.downtime.cpr"
 msgstr ""
 "<p>"
@@ -812,3 +832,102 @@ msgstr ""
 "    </ul>"
 "    Pisarissersuutaasinnaanera ajuusaarutigaarput. Attaviit piaartumik iluarsineqarnissaat sulissutigaarput."
 "</p>"
+
+
+
+msgid "udbytte.title"
+msgstr "U1 SKAT"
+
+msgid "udbytte.udfylder"
+msgstr "Immersuisup aqqa"
+
+msgid "udbytte.virksomhedsnavn"
+msgstr "Suliffeqarfiup aqqa"
+
+msgid "udbytte.cvr"
+msgstr "CVR"
+
+msgid "udbytte.email"
+msgstr "Email-adresse"
+
+msgid "udbytte.regnskabsår"
+msgstr "Ukioq selskabip naatsorsuusiorfittut ukiua iluanaarutisiaqartitsiffiusoq"
+
+msgid "udbytte.u1_udfyldt"
+msgstr "U1-mik immersuereernikuuit?"
+
+msgid "udbytte.kommune"
+msgstr "Selskabip kommuni akileraarfia"
+
+msgid "udbytte.udenfor_kommunal_inddeling"
+msgstr "Kommunit akileraarfiusut avataani"
+
+msgid "udbytte.udbetalingsdato"
+msgstr "Ulloq iluanaarutisiaqartitsinissamik aalajangerfik"
+
+msgid "udbytte.indbetalingsdato"
+msgstr "Ulloq akiliiffik"
+
+msgid "udbytte.udbytte"
+msgstr "Iluanaarutsiat tunniunneqartut/pisassanngortinneqartut, akileraarutit sioqqullugit"
+
+msgid "udbytte.udbytteskat"
+msgstr "Iluanaarutisianit akileraarutit unerartitat akiligassat"
+
+msgid "udbytte.cpr_cvr_tin"
+msgstr "CPR-nr, CVR-nr. / TIN"
+
+msgid "udbytte.navn"
+msgstr "Ateq"
+
+msgid "udbytte.adresse"
+msgstr "Najugaq"
+
+msgid "udbytte.postnummer"
+msgstr "Postnormu"
+
+msgid "udbytte.by"
+msgstr "Illoqarfik"
+
+msgid "udbytte.land"
+msgstr "Nuna"
+
+msgid "udbytte.noter"
+msgstr "Paasissutissat immikkut ittut"
+
+msgid "udbytte.dato"
+msgstr "Ulloq"
+
+msgid "udbytte.underskriftsberettiget"
+msgstr "Selskabemi pisussaasup atsiornera"
+
+msgid "udbytte.vejledning"
+msgstr ""
+"<h3>Iluanaarutisianit akileraarutit naatsumik oqaatigalugit</h3>"
+"<p>Aktieselskabit anpartsselskabillu Kalaallit Nunaanniittutut nalunaarsorneqarsimasut tamarmik iluanaarutisianik tunniussaqarnerminni pisassanngortitsinerminniluunniit, matumani aamma iluanaarutisiatut siumoorutinik ukiup ingerlanerani tun&shy;niussaqarnerminni, iluanaarutisianit akileraarutinik unerartitsinissamut, Aningaasarsianit akileraarutit pillugit Inatsisartut inatsisaanni aalajangersakkat (kapitali 8) malillugit pisussaapput.</p>"
+"<p>Iluanaarutisiatut isigineqarput suulluunniit aktiaatilinnut pisassaritinneqartut tamarmik, taamaallaat aktiat akilersinnagit aktiaatilinnut tunniunneqartut aamma akiliisinnaajunnaarnermi pigisat aningaasanngortitaaneranni ilu&shy;anaarutit pinnagit. Tamanna aamma atuuppoq anpartinik piginnittut iluanaarutisiaqartinneqarneranni.</p>"
+"<p>Aktiaatillit / anpartiutillit suuneri apeqqutaatinnagit unerartitsisoqassaaq, tassa imaappoq apeqqutaanngilaq aktiaatillit / anpartiutillit inuunersut, selskabiunersut, peqatigiiffiunersut allaanersulluunniit.</p>"
+""
+"<h3>Iluanaarutisianit akileraarutip akilernissaa</h3>"
+"<p>Iluanaarutisianit akileraarut Akileraartarnermut Aqutsisoqarfimmut akilerneqassaaq, tamannalu kingusinnerpaamik pissaaq qaammatip iluanaarutisianik tunniussinissamik pisassanngortitsinissamilluunniit aalajangerfiusup kingorna qaammatip tulliuttup ulluisa aallaqqaataanni. Piffissaagallartillugu akiliiffissaq kingulleq sapaataappat nalliuttuuppalluunniit imaluunniit arfininngorneruppat, taava akiliiffissaq ulluinnarmut tullermut sivitsorneqassaaq.</p>"
+"<p>Iluanaarutisianit akileraarut kontonr. 6471-1002608-mut akilerneqassaaq. Akiliinermi ima oqaasertaliisoqassaaq ”selskabip CVR nr.-a \\ ukioq akileraarfik \\ ILUANAARUTISIAT”. Ukioq akileraarfik tassaassaaq ukioq selskabip naatsorsuusiorfia iluanaarutisiaqartitsiffiusoq.</p>"
+""
+"<h3>Assersuut</h3>"
+"<p>Selskabip naatsorsuusiorfigaa qaammatisiutit malillugit ukioq, ukiumilu naatsorsuusiorfiusumi 2021-imi ilu&shy;a&shy;naa&shy;rutisiaqartitsinissamik april 2022-mi aalajangiilluni. Iluanaarutisiaqartitsinermik nalunaarummi (imm. 2) aam&shy;ma akiliinermi allanneqassaaq ”2021”.</p>"
+"<p>Iluanaarutisianit akileraarutinik akiliineq kingusinnerpaamik pissaaq ulloq 1. maj 2022, iluanaarutisia&shy;qartitsinermillu nalunaarut kingusinnerpaamik nassiunneqassalluni ulloq 9. maj 2022.</p>"
+"<p>Kingusinaarluni akiliinermi erniat qaammatit aallartinneri tamaasa 1%-iu&shy;sut, aningaasat akilerneqartussanngorfianniit naatsorsukkat akilerneqassapput. Oqaatigineqassaaq akileraarutinik kingusinaarluni akiliinermi erniat, aningaasarsiat akileraaruteqaataasussat naatsorsorneranni ilanngaatigineqarsinnaanngimmata.</p>"
+""
+"<h3>Iluanaarutisiaqartitsinermik nalunaarutip nassiunnissaa</h3>"
+"<p>Selskabi iluanaarutisiaqartitsinermik nalunaarummik Akileraartarnermut Aqutsisoqarfimmut nassiussissaq kingu&shy;sinnerpaamik, qaammatip iluanaarutisianik tunniussinissamik pisassanngortitsinissamilluunniit aalajangerfiusup kingorna qaammatip tulliuttup ulluisa 10-anni. Taamatuttaaq selskabit iluanaarutisiaqartitsiniaratik aalajangertut iluanaarutisiaqartitsinermik nalunaarummik, qaammatip aalajangerfiusup kingorna qaammatip tulliuttup ulluisa 10-at nallertinnagu nas&shy;siussissapput. Paasissutissanik piffissaagallartillugu nalunaaruteqarfissaq kingulleq sapaataappat nalliuttuuppalluunniit imaluunniit arfininngorneruppat, taava nalunaaruteqarfissaq ulluinnarmut tullermut sivitsorneqassaaq.</p>"
+"<p>Iluanaarutisiaqartitsinermik nalunaarummi nalunaarneqassapput selskabip aqqa, CVR-normua, kommune akileraarfia, ulloq iluanaarutisianik tunniussinissamik aalajangerfik, ukioq selskabip naatsorsuusiorfia iluanaarutisiaqartitsiffiusoq, ulloq akiliiffik paasissutissaajunnartullu allat.</p>"
+"<p>Makku aningaasartaat nalunaarneqassapput: Iluanaarutisiat tunniunneqartut / pisassanngortinneqartut, kingusinaarluni akiliisimagaanni erniat aamma kisitsit tamarmiusoq (akilerneqartussat katinnerat).</p>"
+"<p>Iluanaarutisiaqartitsinissamik ulloq 1. januar 2020 aallarnerfigalugu aalajangiinerni iluanaarutisiaqartinneqartut pillugit paasissutissat nassiunneqassapput. Tamannattaaq atuuppoq aalajangiinernut ulloq taanna sioqqullugu pisunut, iluanaarutisiaqartinneqartulli pillugit paasissutissat 1. januar 2020-p kingorna aatsaat nassiunneqarpata. Piumasaqaat taanna Aningaasarsianit akileraarutit pillugit Inatsisartut inatsisaanni nr. 12, 2. november 2006-imeersumi, kingusinnerusukkullu allanngortinneqartartumi § 88, imm. 1, oqaaseqatigiinni siullerni allaqqavoq.</p>"
+"<p>Iluanaarutisiaqartinneqartut pillugit nalunaaruteqarnermi nalunaarneqassapput pissarsisup CPR- / CVR- / TIN-normua, Atia, Najugaa aamma Nuna. Tassa imaappoq nuna iluanaarutisiaqartinneqartup angerlarsimaffia. Iluanaarutisiaqartinneqartunut tamanut tunngatillugu nalunaarneqassapput iluanaarutisiat tunniunneqartut / pisassanngortinneqartut (aningaasat iluanaarutisianit akileraarutit ilanngaatigineqartinnagit amerlassusiat).</p>"
+"<p>Iluanaarutisiaqartinneqartut pillugit nalunaaruteqarneq iluanaarutisiaqartitsinermik nalunaarutip attaveqaatiti&shy;goor&shy;tumik immersorneqarfiani pissaaq.</p>"
+"<p>Iluanaarutisiaqartitsinermik nalunaarut – U1 – Akileraartarnermut Aqutsisoqarfiup nittartagaani www.aka.gl -imi aaneqassaaq</p>"
+"<p>Iluanaarutisiaqartitsinermik nalunaarut – U1 – attaveqaatitigoortumik immersuiffissakkut Akileraartarnermut Aqut&shy;sisoqarfimmut ingerlaannaq nassiunneqassaaq.</p>"
+"<h3>Iluanaarutisiaqartitsinermik uppernarsaat</h3>"
+"<p>Kialuunniit iluanaarutisianik tigusisup pisassaqartitaasulluunniit, kinaassutsini naammaginartumik uppernarsarlugu piumasarisinnaavaa, tunniussisoq pisassaqartitsisorluunniit tunniussineq pisassaqartitsinerluunniit pillugu pissarsisumut tassunga uppernarsaassasoq. Taamatut uppernarsaaneq ”iIuanaarutisiaqartitsinermik uppernarsaat” atorlugu pissaq.</p>"
+""
+"<h2>Iluanaarutisiaqartitsinermik nalunaarut - U1</h2>"
+"<p>Aningaasarsianit akileraarutit pillugit Inatsisartut inatsisaanni § 86 & § 88 malillugit imatut paasissutissiisoqarpoq:</p>"

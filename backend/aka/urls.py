@@ -8,6 +8,7 @@ from aka.views import LoentraekReceiptView, FordringReceiptView, NedskrivningRec
 from aka.views import LoentraekView, LoentraekUploadView
 from aka.views import NedskrivningView, NedskrivningUploadView
 from aka.views import RenteNotaView
+from aka.views import UdbytteView
 from django.urls import path
 from django_mitid_auth.saml.views import AccessDeniedView
 from django.views.generic import TemplateView
@@ -67,6 +68,11 @@ urlpatterns = [
         "nedskrivning/kvittering/<str:pdf_id>/",
         NedskrivningReceiptView.as_view(),
         name="nedskrivning-kvittering",
+    ),
+    path(
+        "udbytte/",
+        UdbytteView.as_view(),
+        name="udbytte",
     ),
     path(
         "error/login-timeout/",

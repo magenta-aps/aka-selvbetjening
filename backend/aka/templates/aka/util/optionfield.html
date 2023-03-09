@@ -4,6 +4,6 @@
 {% endif %}
 {% include "django/forms/widgets/input.html" %}
 {% if widget.wrap_label %}
-    <span data-trans="{{ widget.label }}">{% trans widget.label %}</span>
+    <span data-trans="{{ widget.label }}">{% translate widget.label %}</span>
 </label>
 {% endif %}
