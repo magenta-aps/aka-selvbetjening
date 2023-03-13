@@ -8,3 +8,4 @@ class TranslatedSelect(Select):
 
 class TranslatedRadioSelect(RadioSelect):
     option_template_name = "widgets/radio_option.html"
+    template_name = "widgets/radio.html"

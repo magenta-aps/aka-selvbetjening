@@ -1,0 +1,24 @@
+{% load i18n %}
+<div class="row">
+    <div class="col-1-sm">
+        {% include 'aka/util/field.html' with field=subform.cpr_cvr_tin %}
+    </div>
+    <div class="col-2-sm">
+        {% include 'aka/util/field.html' with field=subform.navn %}
+    </div>
+    <div class="col-2-sm">
+        {% include 'aka/util/field.html' with field=subform.adresse %}
+    </div>
+    <div class="col-1-sm">
+        {% include 'aka/util/field.html' with field=subform.postnummer %}
+    </div>
+    <div class="col-2-sm">
+        {% include 'aka/util/field.html' with field=subform.by %}
+    </div>
+    <div class="col-2-sm">
+        {% include 'aka/util/field.html' with field=subform.land %}
+    </div>
+    <div class="col-2-sm">
+        {% include 'aka/util/field.html' with field=subform.udbytte %}
+    </div>
+</div>

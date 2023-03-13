@@ -291,6 +291,8 @@ class RendererMixin(object):
 class PdfRendererMixin(RendererMixin):
     pdf_template_name = ""
 
+    pdf_css_files = ["css/output.css", "css/print.css", "css/pdf.css"]
+
     def get_filename(self):
         raise NotImplementedError
 
@@ -302,12 +304,12 @@ class PdfRendererMixin(RendererMixin):
     def is_pdf(self):
         return self.format == "pdf"
 
-    def render(self):
+    def render(self, context=None, wrap_in_response=True):
         if self.is_pdf:
-            context = self.get_context_data()
-
+            if context is None:
+                context = self.get_context_data()
             css_data = []
-            for css_file in ["css/output.css", "css/print.css", "css/pdf.css"]:
+            for css_file in self.pdf_css_files:
                 css_static_path = css_file.split("/")
                 css_path = os.path.join(
                     os.path.dirname(os.path.abspath(__file__)),
@@ -322,11 +324,10 @@ class PdfRendererMixin(RendererMixin):
 
             html = False
             if html:
-                return HttpResponse(
-                    get_template(self.pdf_template_name).render(context)
-                )
+                html_data = get_template(self.pdf_template_name).render(context)
+                return HttpResponse(html_data) if wrap_in_response else html_data
             else:
-                pdf = render_pdf(
+                pdf_data = render_pdf(
                     self.pdf_template_name,
                     context,
                     lambda html: html.replace(
@@ -334,11 +335,14 @@ class PdfRendererMixin(RendererMixin):
                         '"file://%s/' % os.path.abspath(settings.STATIC_ROOT),
                     ),
                 )
-                response = HttpResponse(pdf, content_type="application/pdf")
-                response[
-                    "Content-Disposition"
-                ] = f'attachment; filename="{self.get_filename()}.pdf"'
-                return response
+                if wrap_in_response:
+                    response = HttpResponse(pdf_data, content_type="application/pdf")
+                    response[
+                        "Content-Disposition"
+                    ] = f'attachment; filename="{self.get_filename()}.pdf"'
+                    return response
+                else:
+                    return pdf_data
 
         return super().render()
 

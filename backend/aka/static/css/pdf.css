@@ -8,9 +8,7 @@ html {
 }
 body {
     margin: 0;
-}
-.printhide {
-    display: none;
+    background-color: #fff;
 }
 main,
 article {
@@ -23,7 +21,8 @@ article {
     padding: 0;
 }
 
-.printhide {
+.printhide,
+button {
     display: none;
 }
 .page {
@@ -171,6 +170,12 @@ table {
     width: 100%
 }
 
+.pdf input,
+.pdf textarea,
+.pdf select {
+    border: none;
+}
+
 .offset-1-sm {
     margin-left: 8.33% !important;
 }
@@ -216,4 +221,19 @@ table {
 }
 .hidden-sm {
     display: none
+}
+
+
+/* Form */
+label {
+    display: block;
+}
+select {
+    background-color: transparent;
+}
+input[type=radio] {
+    display: none;
+}
+li.unchecked {
+    display: none;
 }

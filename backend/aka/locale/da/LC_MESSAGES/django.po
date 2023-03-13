@@ -826,7 +826,7 @@ msgid "udbytte.adresse"
 msgstr "Adresse"
 
 msgid "udbytte.postnummer"
-msgstr "Postnummer"
+msgstr "Post&shy;nummer"
 
 msgid "udbytte.by"
 msgstr "By"
