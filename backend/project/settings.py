@@ -392,3 +392,13 @@ for municipality in MUNICIPALITIES:
     # Make it int or die trying
     municipality["code"] = int(municipality["code"])
     municipality["tax_percent"] = Decimal(municipality["tax_percent"])
+
+
+# https://docs.djangoproject.com/en/4.1/topics/email/
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.environ.get("EMAIL_HOST", None)
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 25))
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", None)
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", None)
+EMAIL_USE_TLS = bool(strtobool(os.environ.get("EMAIL_USE_TLS", "False")))
+EMAIL_USE_SSL = bool(strtobool(os.environ.get("EMAIL_USE_SSL", "False")))

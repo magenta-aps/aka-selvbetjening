@@ -7,6 +7,11 @@
     {% include 'aka/util/calendar_headers.html' %}
     <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/udbytte.js' %}"></script>
+    {% if css %}
+    <style>
+        {{ css|safe }}
+    </style>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -16,7 +21,7 @@
             {{ formset.management_form }}
             <h1 data-trans="udbytte.title">{% translate 'udbytte.title' %}</h1>
             <div class="container-fluid">
-
+                {% if not pdf %}
                 {% if form.errors or formset.errors %}
 
                     <button type="button" class="has-collapsed" data-collapse="#vejledning">
@@ -44,6 +49,7 @@
                         </div>
                     </div>
 
+                {% endif %}
                 {% endif %}
 
                 <h3 data-trans="udbytte.revisionsfirma">{% translate "udbytte.revisionsfirma" %}</h3>
@@ -107,18 +113,34 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-1-sm" data-trans="udbytte.cpr_cvr_tin">{% translate 'udbytte.cpr_cvr_tin' %}</div>
-                    <div class="col-1-sm" data-trans="udbytte.navn">{% translate 'udbytte.navn' %}</div>
-                    <div class="col-1-sm" data-trans="udbytte.adresse">{% translate 'udbytte.adresse' %}</div>
-                    <div class="col-1-sm" data-trans="udbytte.postnummer">{% translate 'udbytte.postnummer' %}</div>
-                    <div class="col-1-sm" data-trans="udbytte.by">{% translate 'udbytte.by' %}</div>
-                    <div class="col-1-sm" data-trans="udbytte.land">{% translate 'udbytte.land' %}</div>
-                    <div class="col-6-sm" data-trans="udbytte.udbytte">{% translate 'udbytte.udbytte' %}</div>
+                    {% if pdf %}
+                        <div class="col-1-sm" data-trans="udbytte.cpr_cvr_tin">{% translate 'udbytte.cpr_cvr_tin' %}</div>
+                        <div class="col-2-sm" data-trans="udbytte.navn">{% translate 'udbytte.navn' %}</div>
+                        <div class="col-2-sm" data-trans="udbytte.adresse">{% translate 'udbytte.adresse' %}</div>
+                        <div class="col-1-sm" data-trans="udbytte.postnummer">{% translate 'udbytte.postnummer' %}</div>
+                        <div class="col-2-sm" data-trans="udbytte.by">{% translate 'udbytte.by' %}</div>
+                        <div class="col-2-sm" data-trans="udbytte.land">{% translate 'udbytte.land' %}</div>
+                        <div class="col-2-sm" data-trans="udbytte.udbytte">{% translate 'udbytte.udbytte' %}</div>
+                    {% else %}
+                        <div class="col-1-sm" data-trans="udbytte.cpr_cvr_tin">{% translate 'udbytte.cpr_cvr_tin' %}</div>
+                        <div class="col-1-sm" data-trans="udbytte.navn">{% translate 'udbytte.navn' %}</div>
+                        <div class="col-1-sm" data-trans="udbytte.adresse">{% translate 'udbytte.adresse' %}</div>
+                        <div class="col-1-sm" data-trans="udbytte.postnummer">{% translate 'udbytte.postnummer' %}</div>
+                        <div class="col-1-sm" data-trans="udbytte.by">{% translate 'udbytte.by' %}</div>
+                        <div class="col-1-sm" data-trans="udbytte.land">{% translate 'udbytte.land' %}</div>
+                        <div class="col-6-sm" data-trans="udbytte.udbytte">{% translate 'udbytte.udbytte' %}</div>
+                    {% endif %}
                 </div>
                 <div id="formsetContainer">
-                    {% for subform in formset %}
-                        {% include 'aka/udbytte/subform.html' with subform=subform %}
-                    {% endfor %}
+                    {% if pdf %}
+                        {% for subform in formset %}
+                            {% include 'aka/udbytte/subform_pdf.html' with subform=subform %}
+                        {% endfor %}
+                    {% else %}
+                        {% for subform in formset %}
+                            {% include 'aka/udbytte/subform.html' with subform=subform %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
                 <button type="button" id="add-row" class="button" data-trans="common.add">{% translate 'common.add' %}</button>
 

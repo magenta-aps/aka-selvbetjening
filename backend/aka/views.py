@@ -1138,9 +1138,12 @@ class RenteNotaView(
         return super().get_context_data(**context)
 
 
-class UdbytteView(IsContentMixin, FormSetView, FormView):
+class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
     form_class = UdbytteForm
     template_name = "aka/udbytte/form.html"
+    pdf_template_name = "aka/udbytte/form.html"
+    pdf_css_files = ["css/pdf.css"]
+
     factory_kwargs = {
         "extra": 1,
         "max_num": None,
@@ -1189,11 +1192,28 @@ class UdbytteView(IsContentMixin, FormSetView, FormView):
         # TODO: Send stuff from form
         print(form.cleaned_data)
         print(formset.cleaned_data)
-        return TemplateResponse(
-            request=self.request,
-            template="aka/udbytte/success.html",
-            context={},
-            using=self.template_engine,
+
+        pdf_data = self.render_filled_form(form, formset)
+
+        return FileResponse(
+            BytesIO(pdf_data),
+            filename="output.pdf",
+            as_attachment=True,
+        )
+
+        #
+        # return TemplateResponse(
+        #     request=self.request,
+        #     template="aka/udbytte/success.html",
+        #     context={},
+        #     using=self.template_engine,
+        # )
+
+    def render_filled_form(self, form, formset):
+        self.is_pdf = True
+        return self.render(
+            context=self.get_context_data(form=form, formset=formset, pdf=True),
+            wrap_in_response=False,
         )
 
     def form_invalid(self, form, formset):

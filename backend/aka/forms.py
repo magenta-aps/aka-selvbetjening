@@ -5,6 +5,7 @@ import re
 from aka.data.fordringsgruppe import groups, groups_by_id, subgroups_by_id
 from aka.utils import get_ordereddict_key_index
 from aka.utils import spreadsheet_col_letter
+from aka.widgets import TranslatedRadioSelect
 from aka.widgets import TranslatedSelect
 from django import forms
 from django.conf import settings
@@ -697,7 +698,7 @@ class UdbytteForm(forms.Form):
     u1_udfyldt = forms.BooleanField(
         label=_("Har du allerede udfyldt U1?"),
         required=False,
-        widget=RadioSelect(choices=(("0", "No"), ("1", "Yes"))),
+        widget=TranslatedRadioSelect(choices=(("0", "No"), ("1", "Yes"))),
     )
     kommune = forms.ChoiceField(
         label=_("Selskabets skattekommune"),
@@ -724,6 +725,7 @@ class UdbytteForm(forms.Form):
     udbytte = forms.DecimalField(
         label=_("Udbetalt/godskrevet udbytte i DKK, før skat"),
         required=False,
+        localize=True,
         error_messages={
             "required": "error.required",
             "invalid": "error.number_required",
@@ -732,6 +734,7 @@ class UdbytteForm(forms.Form):
     udbytteskat = forms.DecimalField(
         label=_("Indeholdt udbytteskat i DKK til indbetaling"),
         required=False,
+        localize=True,
         help_text=_(
             "I henhold til den på deklarationstidspunktet samlede skatteprocent for selskabets skattekommune"
         ),
