@@ -1,3 +1,5 @@
+import csv
+
 import datetime
 import json
 import logging
@@ -62,7 +64,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
-from io import BytesIO
+from io import BytesIO, StringIO
 from typing import List
 
 
@@ -1190,13 +1192,11 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
         return self.form_invalid(form, formset)
 
     def form_valid(self, form, formset):
-        # TODO: Send stuff from form
-        print(form.cleaned_data)
-        print(formset.cleaned_data)
+        pdf_data = self.render_filled_form(form, formset)
+        self.send_mail_to_submitter(form.cleaned_data["email"], pdf_data)
 
-        self.send_mail_to_submitter(
-            form.cleaned_data["email"], self.render_filled_form(form, formset)
-        )
+        csv_data = self.get_csv(form, formset)
+        self.send_mail_to_office(settings.EMAIL_OFFICE_RECIPIENT, csv_data, pdf_data)
 
         return TemplateResponse(
             request=self.request,
@@ -1212,12 +1212,28 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
             wrap_in_response=False,
         )
 
+    def get_csv(self, form, formset):
+        # Payment Year;"Payer CVR (udbetaler)";"Recipient CPR (modtager)"; Amount
+        csv_io = StringIO()
+        writer = csv.writer(csv_io, delimiter=";")
+        for subform in formset:
+            writer.writerow(
+                [
+                    form.cleaned_data["regnskabsår"],
+                    form.cleaned_data["cvr"],
+                    subform.cleaned_data["cpr_cvr_tin"],
+                    subform.cleaned_data["udbytte"],
+                ]
+            )
+        return csv_io.getvalue()
+
     def form_invalid(self, form, formset):
         return self.render_to_response(
             self.get_context_data(form=form, formset=formset)
         )
 
-    def send_mail_to_submitter(self, recipient, pdf_data):
+    @staticmethod
+    def send_mail_to_submitter(recipient, pdf_data):
         subject = " / ".join(
             [
                 gettext_lang("kl", "udbytte.mail1.subject"),
@@ -1245,5 +1261,30 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
             subject=subject,
             textbody=textbody,
             htmlbody=htmlbody,
+            attachments=(("formulardata.pdf", pdf_data, "application/pdf"),),
+        )
+
+    @staticmethod
+    def send_mail_to_office(recipient, csv_data, pdf_data):
+        subject = " / ".join(
+            [
+                gettext_lang("kl", "udbytte.mail2.subject"),
+                gettext_lang("da", "udbytte.mail2.subject"),
+            ]
+        )
+        textbody = (
+            "\n".join(
+                [
+                    gettext_lang("kl", "udbytte.mail2.textbody"),
+                    gettext_lang("da", "udbytte.mail2.textbody"),
+                ]
+            )
+            + "\n"
+            + csv_data
+        )
+        send_mail(
+            recipient=recipient,
+            subject=subject,
+            textbody=textbody,
             attachments=(("formulardata.pdf", pdf_data, "application/pdf"),),
         )

@@ -955,3 +955,9 @@ msgstr "Se vedhæftede fil"
 
 msgid "udbytte.mail1.htmlbody"
 msgstr "<p>Se vedhæftede fil</p>"
+
+msgid "udbytte.mail2.subject"
+msgstr "Udfyldt formular"
+
+msgid "udbytte.mail2.textbody"
+msgstr "Se vedhæftede fil"
