@@ -1,6 +1,4 @@
 import datetime
-from typing import List
-
 import json
 import logging
 import re
@@ -40,7 +38,9 @@ from aka.utils import Field, Cell, Row, Table
 from aka.utils import chunks
 from aka.utils import flatten
 from aka.utils import get_ordereddict_key_index
+from aka.utils import gettext_lang
 from aka.utils import render_pdf
+from aka.utils import send_mail
 from aka.utils import spreadsheet_col_letter
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -63,6 +63,7 @@ from django.views.generic.edit import FormView
 from django.views.i18n import JavaScriptCatalog
 from extra_views import FormSetView
 from io import BytesIO
+from typing import List
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -1193,21 +1194,16 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
         print(form.cleaned_data)
         print(formset.cleaned_data)
 
-        pdf_data = self.render_filled_form(form, formset)
-
-        return FileResponse(
-            BytesIO(pdf_data),
-            filename="output.pdf",
-            as_attachment=True,
+        self.send_mail_to_submitter(
+            form.cleaned_data["email"], self.render_filled_form(form, formset)
         )
 
-        #
-        # return TemplateResponse(
-        #     request=self.request,
-        #     template="aka/udbytte/success.html",
-        #     context={},
-        #     using=self.template_engine,
-        # )
+        return TemplateResponse(
+            request=self.request,
+            template="aka/udbytte/success.html",
+            context={},
+            using=self.template_engine,
+        )
 
     def render_filled_form(self, form, formset):
         self.is_pdf = True
@@ -1219,4 +1215,35 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
     def form_invalid(self, form, formset):
         return self.render_to_response(
             self.get_context_data(form=form, formset=formset)
+        )
+
+    def send_mail_to_submitter(self, recipient, pdf_data):
+        subject = " / ".join(
+            [
+                gettext_lang("kl", "udbytte.mail1.subject"),
+                gettext_lang("da", "udbytte.mail1.subject"),
+            ]
+        )
+        textbody = "\n".join(
+            [
+                gettext_lang("kl", "udbytte.mail1.textbody"),
+                gettext_lang("da", "udbytte.mail1.textbody"),
+            ]
+        )
+        htmlbody = (
+            "<html><body>"
+            + "\n".join(
+                [
+                    gettext_lang("kl", "udbytte.mail1.htmlbody"),
+                    gettext_lang("da", "udbytte.mail1.htmlbody"),
+                ]
+            )
+            + "</body></html>"
+        )
+        send_mail(
+            recipient=recipient,
+            subject=subject,
+            textbody=textbody,
+            htmlbody=htmlbody,
+            attachments=(("formulardata.pdf", pdf_data, "application/pdf"),),
         )

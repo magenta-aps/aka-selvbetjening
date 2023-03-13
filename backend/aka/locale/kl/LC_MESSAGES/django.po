@@ -943,3 +943,15 @@ msgstr ""
 ""
 "<h2>Iluanaarutisiaqartitsinermik nalunaarut - U1</h2>"
 "<p>Aningaasarsianit akileraarutit pillugit Inatsisartut inatsisaanni § 86 & § 88 malillugit imatut paasissutissiisoqarpoq:</p>"
+
+msgid "udbytte.success"
+msgstr "Indberettet"
+
+msgid "udbytte.mail1.subject"
+msgstr "Udfyldt formular"
+
+msgid "udbytte.mail1.textbody"
+msgstr "Se vedhæftede fil"
+
+msgid "udbytte.mail1.htmlbody"
+msgstr "<p>Se vedhæftede fil</p>"

@@ -884,3 +884,15 @@ msgstr ""
 ""
 "<h2>Iluanaarutisiaqartitsinermik nalunaarut / Udbytteerklæring - U1</h2>"
 "<p>I henhold til Landstingslov om indkomstskat § 86 og § 88, afgives følgende oplysninger:</p>"
+
+msgid "udbytte.success"
+msgstr "Indberettet"
+
+msgid "udbytte.mail1.subject"
+msgstr "Udfyldt formular"
+
+msgid "udbytte.mail1.textbody"
+msgstr "Se vedhæftede fil"
+
+msgid "udbytte.mail1.htmlbody"
+msgstr "<p>Se vedhæftede fil</p>"
