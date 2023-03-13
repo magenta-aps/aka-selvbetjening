@@ -704,7 +704,7 @@ class UdbytteForm(forms.Form):
         label=_("Selskabets skattekommune"),
         choices=[("", "---------")]
         + [(m["code"], m["name"]) for m in settings.MUNICIPALITIES],
-        required=False,
+        required=True,
         widget=TranslatedSelect,
         error_messages={"required": "error.required"},
     )
@@ -713,18 +713,18 @@ class UdbytteForm(forms.Form):
         widget=forms.DateInput(attrs={"class": "datepicker"}),
         error_messages={"required": "error.required", "invalid": "error.invalid_date"},
         input_formats=valid_date_formats,
-        required=False,
+        required=True,
     )
     indbetalingsdato = forms.DateField(
         label=_("Indbetalingsdato"),
         widget=forms.DateInput(attrs={"class": "datepicker"}),
         error_messages={"required": "error.required", "invalid": "error.invalid_date"},
         input_formats=valid_date_formats,
-        required=False,
+        required=True,
     )
     udbytte = forms.DecimalField(
         label=_("Udbetalt/godskrevet udbytte i DKK, før skat"),
-        required=False,
+        required=True,
         localize=True,
         error_messages={
             "required": "error.required",
@@ -733,7 +733,7 @@ class UdbytteForm(forms.Form):
     )
     udbytteskat = forms.DecimalField(
         label=_("Indeholdt udbytteskat i DKK til indbetaling"),
-        required=False,
+        required=True,
         localize=True,
         help_text=_(
             "I henhold til den på deklarationstidspunktet samlede skatteprocent for selskabets skattekommune"
@@ -793,7 +793,7 @@ class UdbytteForm(forms.Form):
         return self.clean_u1_dependent_field("udbytteskat")
 
     def clean_with_formset(self, formset):
-        formset_sum = sum([item.cleaned_data["udbytte"] for item in formset])
+        formset_sum = sum([item.cleaned_data.get("udbytte", 0) for item in formset])
         form_udbytte = self.cleaned_data["udbytte"]
         if form_udbytte < formset_sum:
             self.add_error("udbytte", ValidationError("error.udbytte_sum_exceed"))

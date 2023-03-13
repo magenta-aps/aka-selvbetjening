@@ -4,18 +4,19 @@ import json
 import logging
 import os
 from dataclasses import dataclass, field
-from decimal import Decimal
-from math import floor
-from typing import Any, List
-
 from dateutil import parser as datetimeparser
+from decimal import Decimal
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
+from django.core.mail import EmailMultiAlternatives
 from django.core.signing import JSONSerializer
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
+from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 from django_mitid_auth.middleware import LoginManager
+from math import floor
+from typing import Any, List, Tuple
 from weasyprint import HTML
 from weasyprint.text.fonts import FontConfiguration
 
@@ -271,3 +272,28 @@ def session_timed_out(request):
         return redirect(redirect_url)
     else:
         return redirect_to_login(next=request.path)
+
+
+def send_mail(
+    recipient,
+    subject,
+    textbody,
+    htmlbody=None,
+    attachments: List[Tuple[str, bytes, str]] = None,
+):
+    if type(recipient) not in (list, tuple):
+        recipient = (recipient,)
+    message = EmailMultiAlternatives(
+        subject=subject, body=textbody, from_email=settings.EMAIL_SENDER, to=recipient
+    )
+    if htmlbody:
+        message.attach_alternative(htmlbody, "text/html")
+    if attachments:
+        for attachment in attachments:
+            message.attach(*attachment)
+    message.send()
+
+
+def gettext_lang(language, string):
+    with translation.override(language):
+        return translation.gettext(string)
