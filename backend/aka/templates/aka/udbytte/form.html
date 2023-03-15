@@ -52,7 +52,6 @@
                 {% endif %}
                 {% endif %}
 
-                <h3 data-trans="udbytte.revisionsfirma">{% translate "udbytte.revisionsfirma" %}</h3>
                 <div class="row">
                     <div class="col-12-sm">
                         {% include 'aka/util/field.html' with field=form.navn key='udbytte.udfylder' %}
@@ -109,6 +108,7 @@
                 <div class="row">
                     <div class="col-12-sm">
                         {% include 'aka/util/field.html' with field=form.udbytteskat key='udbytte.udbytteskat' %}
+                        <p data-trans="udbytte.udbytteskat_hjælp" style="background-color: #eee">{% translate 'udbytte.udbytteskat_hjælp' %}</p>
                     </div>
                 </div>
 
