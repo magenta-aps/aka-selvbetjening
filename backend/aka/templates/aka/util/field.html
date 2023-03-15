@@ -2,7 +2,7 @@
 {% load aka_tags %}
 <div class="input{% if field.errors %} has-error{% endif %}" data-field="{{ field.id_for_label }}">
     {% if key %}
-        <label for="{{ field.id_for_label }}" data-trans="{{ key }}">{% translate key %}</label>
+        <label for="{{ field.id_for_label }}" data-trans="{{ key }}">{% translate key %}</label>{% if field.field.required %} *{% endif %}
     {% endif %}
     {{ field }}
     <span class="err-msg" for="{{ field.id_for_label }}">

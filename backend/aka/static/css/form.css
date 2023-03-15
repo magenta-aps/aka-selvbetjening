@@ -69,7 +69,7 @@ div.SumoSelect > .optWrapper label {
 /* Input fields */
 
 label {
-    display: block;
+    display: inline-block;
     margin: 20px 0 10px
 }
 input:not(input[type="file"],input[type="checkbox"],input[type="radio"]) {

@@ -886,6 +886,11 @@ msgstr "Iluanaarutsiat tunniunneqartut/pisassanngortinneqartut, akileraarutit si
 msgid "udbytte.udbytteskat"
 msgstr "Iluanaarutisianit akileraarutit unerartitat akiligassat"
 
+msgid "udbytte.udbytteskat_hjælp"
+msgstr ""
+"Kommunemi selskabip akileraarfiani akileraarusiissutip, piffissami iluanaarutisiaqartitsinissamik "
+"aalajangerfiusumi procentia tamarmuisoq tunngavigalugu"
+
 msgid "udbytte.cpr_cvr_tin"
 msgstr "CPR-nr, CVR-nr. / TIN"
 

@@ -816,6 +816,9 @@ msgstr "Udbetalt/godskrevet udbytte i DKK, før skat"
 msgid "udbytte.udbytteskat"
 msgstr "Indeholdt udbytteskat i DKK til indbetaling"
 
+msgid "udbytte.udbytteskat_hjælp"
+msgstr "I henhold til den på deklarationstidspunktet samlede skatteprocent for selskabets skattekommune"
+
 msgid "udbytte.cpr_cvr_tin"
 msgstr "CPR-nr, CVR-nr. / TIN"
 
