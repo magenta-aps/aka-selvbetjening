@@ -221,7 +221,15 @@
         }
         return count;
     }
-
+    const formatNumberField = function() {
+        let cursorIndex = this.selectionStart;
+        let value = tsep(this.value);
+        if (value !== this.value) {
+            cursorIndex += countChars(value, ".") - countChars(this.value, ".");
+            this.value = value;
+            this.setSelectionRange(cursorIndex, cursorIndex);
+        }
+    };
     $(function(){
         const tax_percentages = JSON.parse($("#tax_percentages").text());
         const kommune_field = $("[name={{ form.kommune.name }}]");
@@ -243,15 +251,10 @@
         kommune_field.on("change", update_tax_amount);
 
         // Performs proper number formatting, keeping the cursor where it's supposed to be
-        udbytte_field.bindFirst("change keyup", function() {
-            let cursorIndex = this.selectionStart;
-            let value = tsep(this.value);
-            if (value !== this.value) {
-                cursorIndex += countChars(value, ".") - countChars(this.value, ".");
-                this.value = value;
-                this.setSelectionRange(cursorIndex, cursorIndex);
-            }
-        });
+        udbytte_field.bindFirst("change keyup", formatNumberField);
+
+        $("#formsetContainer input[name$='udbytte']").bindFirst("change keyup", formatNumberField);
     });
+
     </script>
 {% endblock %}
