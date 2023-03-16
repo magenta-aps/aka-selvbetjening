@@ -23,6 +23,10 @@ $(function(){
         }
         const removeButton = form.find(".remove-row");
         removeButton.click(removeForm);
+
+        form.find("[name$='udbytte']").bindFirst("change keyup", formatNumberField);
+
+
         return form;
     };
     addRow.on("click", addForm);

@@ -1217,14 +1217,15 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
         csv_io = StringIO()
         writer = csv.writer(csv_io, delimiter=";")
         for subform in formset:
-            writer.writerow(
-                [
-                    form.cleaned_data["regnskabsår"],
-                    form.cleaned_data["cvr"],
-                    subform.cleaned_data["cpr_cvr_tin"],
-                    subform.cleaned_data["udbytte"],
-                ]
-            )
+            if subform.cleaned_data:
+                writer.writerow(
+                    [
+                        form.cleaned_data["regnskabsår"],
+                        form.cleaned_data["cvr"],
+                        subform.cleaned_data["cpr_cvr_tin"],
+                        subform.cleaned_data["udbytte"],
+                    ]
+                )
         return csv_io.getvalue()
 
     def form_invalid(self, form, formset):
