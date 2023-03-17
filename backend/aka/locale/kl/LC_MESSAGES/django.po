@@ -191,7 +191,7 @@ msgstr "CPR- imaluunniit CVR-normu artorsinnaanngilaq"
 msgid "error.invalid_email"
 msgstr "Email atorsinnaanngilaq"
 
-msgid "error.udbytte_sum_exceed"
+msgid "error.udbytte_sum_mismatch"
 msgstr "Summen af udbytter i tabellen må ikke overstige det samlede/godskrevne udbytte"
 
 # Index

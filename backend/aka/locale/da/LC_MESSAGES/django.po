@@ -192,8 +192,8 @@ msgstr "Ugyldigt CPR- eller CVR-nummer"
 msgid "error.invalid_email"
 msgstr "Ugyldig email-adresse"
 
-msgid "error.udbytte_sum_exceed"
-msgstr "Summen af udbytter i tabellen må ikke overstige det samlede/godskrevne udbytte."
+msgid "error.udbytte_sum_mismatch"
+msgstr "Summen af udbytter i tabellen skal passe med det samlede/godskrevne udbytte."
 
 
 # Index
@@ -901,7 +901,16 @@ msgid "udbytte.mail1.htmlbody"
 msgstr "<p>Se vedhæftede fil</p>"
 
 msgid "udbytte.mail2.subject"
-msgstr "Udfyldt formular"
+msgstr "Ny U1A indberetning - {company_name}"
 
 msgid "udbytte.mail2.textbody"
-msgstr "Se vedhæftede fil"
+msgstr ""
+"Hej,\n\n"
+""
+"{company_name} har indberettet en ny U1A blanket.\n\n"
+""
+"Blankettet er vedhæftet mail.\n\n"
+""
+"CSV datastreng: {csv}\n\n"
+""
+"Med venlig hilsen,"
