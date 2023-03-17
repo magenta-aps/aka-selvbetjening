@@ -200,6 +200,7 @@
         value = replace_repeat(value, /^(-?\d+)(\d\d\d)(\.|,|$)/, '$1.$2$3'); // Apply thousand-separator
         value = replace_repeat(value, /,([^,]*),/, ',$1'); // Squash commas
         value = replace_repeat(value, /,(\d\d).+/, ',$1'); // Trim to two digits after comma
+        value = value.replace(/,(\d)$/, ',$10');
         return value
     };
 
