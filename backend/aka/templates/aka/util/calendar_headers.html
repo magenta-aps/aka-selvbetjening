@@ -13,7 +13,14 @@
                     ['{% translate 'Mon'|capfirst %}','{% translate 'Tue'|capfirst %}','{% translate 'Wed'|capfirst %}','{% translate 'Thu'|capfirst %}','{% translate 'Fri'|capfirst %}','{% translate 'Sat'|capfirst %}','{% translate 'Sun'|capfirst %}'],
                     ['{% translate 'Monday'|capfirst %}','{% translate 'Tuesday'|capfirst %}','{% translate 'Wednesday'|capfirst %}','{% translate 'Thursday'|capfirst %}','{% translate 'Friday'|capfirst %}','{% translate 'Saturday'|capfirst %}','{% translate 'Sunday'|capfirst %}'],
                 );
-                $(".datepicker").datetimepicker({timepicker:false, format:'d/m/Y', dayOfWeekStart: 1});
+                $(".datepicker").datetimepicker({
+                    timepicker: false,
+                    format: 'd/m/Y',
+                    dayOfWeekStart: 1,
+                    scrollMonth: false,
+                    scrollTime: false,
+                    scrollInput: false
+                });
                 $(document).on('language-change', function(event, language) {
                     $.datetimepicker.setLocale(language);
                 });

@@ -691,36 +691,18 @@ class UdbytteForm(forms.Form):
         required=True,
         error_messages={"required": "error.required", "invalid": "error.invalid_email"},
     )
-    regnskabsår = forms.IntegerField(
+    regnskabsår = forms.ChoiceField(
         label=_("Udbyttet vedrører regnskabsåret"),
         required=True,
+        choices=lambda: (
+            (year, str(year))
+            for year in range(date.today().year, date.today().year - 6, -1)
+        ),
     )
     u1_udfyldt = forms.BooleanField(
         label=_("Har du allerede udfyldt U1?"),
         required=False,
         widget=TranslatedRadioSelect(choices=(("0", "No"), ("1", "Yes"))),
-    )
-    kommune = forms.ChoiceField(
-        label=_("Selskabets skattekommune"),
-        choices=[("", "---------")]
-        + [(m["code"], m["name"]) for m in settings.MUNICIPALITIES],
-        required=True,
-        widget=TranslatedSelect,
-        error_messages={"required": "error.required"},
-    )
-    udbetalingsdato = forms.DateField(
-        label=_("Dato for vedtagelse af udbytteudbetaling"),
-        widget=forms.DateInput(attrs={"class": "datepicker"}),
-        error_messages={"required": "error.required", "invalid": "error.invalid_date"},
-        input_formats=valid_date_formats,
-        required=True,
-    )
-    indbetalingsdato = forms.DateField(
-        label=_("Indbetalingsdato"),
-        widget=forms.DateInput(attrs={"class": "datepicker"}),
-        error_messages={"required": "error.required", "invalid": "error.invalid_date"},
-        input_formats=valid_date_formats,
-        required=True,
     )
     udbytte = forms.DecimalField(
         label=_("Udbetalt/godskrevet udbytte i DKK, før skat"),
@@ -730,19 +712,6 @@ class UdbytteForm(forms.Form):
             "required": "error.required",
             "invalid": "error.number_required",
         },
-    )
-    udbytteskat = forms.DecimalField(
-        label=_("Indeholdt udbytteskat i DKK til indbetaling"),
-        required=True,
-        localize=True,
-        help_text=_(
-            "I henhold til den på deklarationstidspunktet samlede skatteprocent for selskabets skattekommune"
-        ),
-        error_messages={
-            "required": "error.required",
-            "invalid": "error.number_required",
-        },
-        widget=TextInput(attrs={"readonly": "readonly"}),
     )
 
     noter = forms.CharField(
@@ -768,35 +737,11 @@ class UdbytteForm(forms.Form):
         error_messages={"required": "error.required"},
     )
 
-    def clean_u1_dependent_field(self, field_name):
-        value = self.cleaned_data[field_name]
-        if not self.cleaned_data.get("u1_udfyldt"):
-            if not value:
-                raise ValidationError(
-                    self.fields[field_name].error_messages["required"], code="required"
-                )
-        return value
-
-    def clean_kommune(self):
-        return self.clean_u1_dependent_field("kommune")
-
-    def clean_udbetalingsdato(self):
-        return self.clean_u1_dependent_field("udbetalingsdato")
-
-    def clean_indbetalingsdato(self):
-        return self.clean_u1_dependent_field("indbetalingsdato")
-
-    def clean_udbytte(self):
-        return self.clean_u1_dependent_field("udbytte")
-
-    def clean_udbytteskat(self):
-        return self.clean_u1_dependent_field("udbytteskat")
-
     def clean_with_formset(self, formset):
         formset_sum = sum([item.cleaned_data.get("udbytte", 0) for item in formset])
         form_udbytte = self.cleaned_data["udbytte"]
-        if form_udbytte < formset_sum:
-            self.add_error("udbytte", ValidationError("error.udbytte_sum_exceed"))
+        if form_udbytte != formset_sum:
+            self.add_error("udbytte", ValidationError("error.udbytte_sum_mismatch"))
 
 
 class UdbytteFormItem(forms.Form):
@@ -837,6 +782,7 @@ class UdbytteFormItem(forms.Form):
     udbytte = forms.DecimalField(
         label=_("Udbetalt/godskrevet udbytte i DKK, før skat"),
         required=True,
+        localize=True,
         error_messages={
             "required": "error.required",
             "invalid": "error.number_required",

@@ -60,6 +60,9 @@ button {
     word-wrap: break-word;
     word-break: break-all;
 }
+label {
+    font-weight: bold;
+}
 
 
 

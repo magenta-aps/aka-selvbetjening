@@ -89,26 +89,7 @@
 
                 <div class="row">
                     <div class="col-12-sm">
-                        {% include 'aka/util/field.html' with field=form.kommune key='udbytte.kommune' %}
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12-sm">
-                        {% include 'aka/util/field.html' with field=form.udbetalingsdato key='udbytte.udbetalingsdato' %}
-                        {% include 'aka/util/field.html' with field=form.indbetalingsdato key='udbytte.indbetalingsdato' %}
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12-sm">
                         {% include 'aka/util/field.html' with field=form.udbytte key='udbytte.udbytte' %}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12-sm">
-                        {% include 'aka/util/field.html' with field=form.udbytteskat key='udbytte.udbytteskat' %}
-                        <p data-trans="udbytte.udbytteskat_hjælp" style="background-color: #eee">{% translate 'udbytte.udbytteskat_hjælp' %}</p>
                     </div>
                 </div>
 
@@ -177,7 +158,6 @@
             {% include 'aka/udbytte/subform.html' with subform=formset.empty_form %}
         </div>
     </article>
-    {{ tax_percentages|json_script:"tax_percentages" }}
     <script>
 
     const replace_repeat = function (subject, re, replacement) {
@@ -232,28 +212,9 @@
         }
     };
     $(function(){
-        const tax_percentages = JSON.parse($("#tax_percentages").text());
-        const kommune_field = $("[name={{ form.kommune.name }}]");
         const udbytte_field = $("[name={{ form.udbytte.name }}]");
-        const udbytteskat_field = $("[name={{ form.udbytteskat.name }}]");
-
-        // Performs tax calculation
-        const update_tax_amount = function(){
-            const kommunekode = kommune_field.val();
-            const udbytte = parseDecimal(udbytte_field.val());
-            let value = tsep(udbytte * 0.01 * parseFloat(tax_percentages[kommunekode]));
-            if (value === ",") {
-                value = "";
-            }
-            udbytteskat_field.val(value);
-        }
-
-        udbytte_field.on("change keyup", update_tax_amount);
-        kommune_field.on("change", update_tax_amount);
-
         // Performs proper number formatting, keeping the cursor where it's supposed to be
         udbytte_field.bindFirst("change keyup", formatNumberField);
-
         $("#formsetContainer input[name$='udbytte']").bindFirst("change keyup", formatNumberField);
     });
 
