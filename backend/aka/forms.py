@@ -5,7 +5,6 @@ import re
 from aka.data.fordringsgruppe import groups, groups_by_id, subgroups_by_id
 from aka.utils import get_ordereddict_key_index
 from aka.utils import spreadsheet_col_letter
-from aka.widgets import TranslatedRadioSelect
 from aka.widgets import TranslatedSelect
 from django import forms
 from django.conf import settings
@@ -702,7 +701,9 @@ class UdbytteForm(forms.Form):
     u1_udfyldt = forms.BooleanField(
         label=_("Har du allerede udfyldt U1?"),
         required=False,
-        widget=TranslatedRadioSelect(choices=(("0", "No"), ("1", "Yes"))),
+        widget=TranslatedSelect(
+            choices=((None, "---------"), ("0", "No"), ("1", "Yes"))
+        ),
     )
     udbytte = forms.DecimalField(
         label=_("Udbetalt/godskrevet udbytte i DKK, før skat"),

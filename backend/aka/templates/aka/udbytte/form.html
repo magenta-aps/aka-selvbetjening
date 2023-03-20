@@ -85,6 +85,9 @@
                     <div class="col-12-sm">
                         {% include 'aka/util/field.html' with field=form.u1_udfyldt key='udbytte.u1_udfyldt' %}
                     </div>
+                    <div id="u1_warning" class="col-12-sm" style="display:none">
+                        <p data-trans="udbytte.u1_advarsel">{% translate 'udbytte.u1_advarsel' %}</p>
+                    </div>
                 </div>
 
                 <div class="row">
@@ -217,6 +220,13 @@
         udbytte_field.bindFirst("change keyup", formatNumberField);
         $("#formsetContainer input[name$='udbytte']").bindFirst("change keyup", formatNumberField);
     });
+
+    const u1UdfyldtField = $("[name='{{ form.u1_udfyldt.name }}']");
+    const toggleU1Warning = function () {
+        $("#u1_warning").toggle(u1UdfyldtField.val() === "0");
+    }
+    toggleU1Warning();
+    u1UdfyldtField.change(toggleU1Warning);
 
     </script>
 {% endblock %}
