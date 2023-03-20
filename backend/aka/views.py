@@ -1159,7 +1159,6 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
         if "initial" not in kwargs:
             kwargs["initial"] = {}
         kwargs["initial"] = {
-            "u1_udfyldt": "0",
             "dato": datetime.date.today().strftime("%d/%m/%Y"),
         }
         return kwargs

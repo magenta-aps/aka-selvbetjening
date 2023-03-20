@@ -868,6 +868,9 @@ msgstr "Ukioq selskabip naatsorsuusiorfittut ukiua iluanaarutisiaqartitsiffiusoq
 msgid "udbytte.u1_udfyldt"
 msgstr "U1-mik immersuereernikuuit?"
 
+msgid "udbytte.u1_advarsel"
+msgstr "Hvis du ikke har udfyldt U1-formularen, skal du huske at gøre det her"
+
 msgid "udbytte.kommune"
 msgstr "Selskabip kommuni akileraarfia"
 
