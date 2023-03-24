@@ -799,7 +799,9 @@ msgid "udbytte.u1_udfyldt"
 msgstr "Har du allerede udfyldt U1?"
 
 msgid "udbytte.u1_advarsel"
-msgstr "Hvis du ikke har udfyldt U1-formularen, skal du huske at gøre det her"
+msgstr ""
+"Hvis du ikke har udfyldt U1-formularen, skal du huske at gøre det her: "
+"<a href=\"{url}\" target=\"_blank\">{url}</a>"
 
 msgid "udbytte.kommune"
 msgstr "Selskabets skattekommune"

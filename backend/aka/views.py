@@ -1154,6 +1154,11 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
         "can_delete": True,
     }
 
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            **{**kwargs, "u1_url_wrapped": json.dumps({"url": settings.TAX_FORM_U1})}
+        )
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         if "initial" not in kwargs:

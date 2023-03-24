@@ -86,7 +86,9 @@
                         {% include 'aka/util/field.html' with field=form.u1_udfyldt key='udbytte.u1_udfyldt' %}
                     </div>
                     <div id="u1_warning" class="col-12-sm" style="display:none">
-                        <p data-trans="udbytte.u1_advarsel">{% translate 'udbytte.u1_advarsel' %}</p>
+                        <p data-trans="udbytte.u1_advarsel" data-trans-params="{{u1_url_wrapped}}">
+                            {{ 'udbytte.u1_advarsel'|format:u1_url_wrapped|safe }}
+                        </p>
                     </div>
                 </div>
 

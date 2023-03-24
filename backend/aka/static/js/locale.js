@@ -64,7 +64,15 @@ $(function() {
                         } else {
                             value = format(value, null, language);
                         }
-                        text = text.replace("{" + key + "}", value);
+                        if (text.replaceAll) {
+                            text = text.replaceAll("{" + key + "}", value);
+                        } else {
+                            let t = null;
+                            while (t !== text) {
+                                t = text;
+                                text = text.replace("{" + key + "}", value);
+                            }
+                        }
                     }
                 }
             }
