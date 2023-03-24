@@ -126,7 +126,7 @@ msgid "common.showcolumns"
 msgstr "Kolonnit nuisikkit/tarrisikkit"
 
 msgid "common.errors_present"
-msgstr "Der er fejl i nogle formularfelter. Ret venligst fejlene og indsend formularen igen."
+msgstr "Immersukkami nalunaarneqartut ilaat kukkuneqarput. Kukkunerit aaqqeriarlugit immersugaq nassiuteqqilaaruk."
 
 
 # Errors
@@ -192,7 +192,7 @@ msgid "error.invalid_email"
 msgstr "Email atorsinnaanngilaq"
 
 msgid "error.udbytte_sum_mismatch"
-msgstr "Summen af udbytter i tabellen må ikke overstige det samlede/godskrevne udbytte"
+msgstr "Iluanaarutisiat nalunaarsorneqartut katinnerisa angeqqatigissavaat iluanaarutisiarititat/pisassanngortinneqartut tamarmiusut katinnerat."
 
 # Index
 
@@ -805,10 +805,10 @@ msgid "Sunday"
 msgstr "Sapaat"
 
 msgid "Yes"
-msgstr "Jep"
+msgstr "Aap"
 
 msgid "No"
-msgstr "Niks"
+msgstr "Naamik"
 
 msgid "common.downtime.cpr"
 msgstr ""
@@ -845,7 +845,7 @@ msgid "udbytte.revisionsfirma"
 msgstr "Paasissutissat revionsfirmamut tunngasut"
 
 msgid "udbytte.revisionsfirmanavn"
-msgstr "Revisionsfirma"
+msgstr "Kukkunersiuisoq"
 
 msgid "udbytte.udfylder"
 msgstr "Immersuisup aqqa"
@@ -860,7 +860,7 @@ msgid "udbytte.cvr"
 msgstr "CVR"
 
 msgid "udbytte.email"
-msgstr "Email-adresse"
+msgstr "E-maili"
 
 msgid "udbytte.regnskabsår"
 msgstr "Ukioq selskabip naatsorsuusiorfittut ukiua iluanaarutisiaqartitsiffiusoq"
@@ -870,7 +870,7 @@ msgstr "U1-mik immersuereernikuuit?"
 
 msgid "udbytte.u1_advarsel"
 msgstr ""
-"Hvis du ikke har udfyldt U1-formularen, skal du huske at gøre det her: "
+"Immersugassaq U1 immersorsimanngikkukku ugguuna taamaaliornissat eqqaamajuk: "
 "<a href=\"{url}\" target=\"_blank\">{url}</a>"
 
 msgid "udbytte.kommune"
@@ -955,19 +955,28 @@ msgstr ""
 "<p>Aningaasarsianit akileraarutit pillugit Inatsisartut inatsisaanni § 86 & § 88 malillugit imatut paasissutissiisoqarpoq:</p>"
 
 msgid "udbytte.success"
-msgstr "Indberettet"
+msgstr "Qujanaq,<br/>iluanaarutisiaqartitsinermut nalunaarutit toqqorparput, assilineqarneralu e-mailinnut nalunaarsorneqartumut nassiunneqassaaq."
 
 msgid "udbytte.mail1.subject"
-msgstr "Udfyldt formular"
+msgstr "Immersugassaq U1 - {company_name} - {year}"
 
 msgid "udbytte.mail1.textbody"
-msgstr "Se vedhæftede fil"
+msgstr "Iluanaarutisiaqartitsinermut nalunaarutit tiguarput, assilineqarneralu e-mailimut uunga ilanngullugu nassiunneqarpoq."
 
 msgid "udbytte.mail1.htmlbody"
-msgstr "<p>Se vedhæftede fil</p>"
+msgstr "<p>Iluanaarutisiaqartitsinermut nalunaarutit tiguarput, assilineqarneralu e-mailimut uunga ilanngullugu nassiunneqarpoq.</p>"
+
+msgid "udbytte.mail1.textreminder"
+msgstr "Selskabinut nammineerluni nalunaarutip immersornissaa eqqaamalaariuk: {url}"
+
+msgid "udbytte.mail1.htmlreminder"
+msgstr "<p>Selskabinut nammineerluni nalunaarutip immersornissaa eqqaamalaariuk: <a href=\"{url}\">{url}</a></p>"
 
 msgid "udbytte.mail2.subject"
-msgstr "Udfyldt formular"
+msgstr "Immersugassaq U1 - {company_name} - {year}"
 
 msgid "udbytte.mail2.textbody"
-msgstr "Se vedhæftede fil"
+msgstr ""
+"{company_name}-ip iluanaarutisiaqartitsinermut nalunaarut U1 immersorpaa, taannalu e-mailimut uunga ilanngullugu nassiunneqarpoq.\n\n"
+""
+"CSV-p paasissutissartai: {csv}"

@@ -1188,7 +1188,9 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
 
     def form_valid(self, form, formset):
         pdf_data = self.render_filled_form(form, formset)
-        self.send_mail_to_submitter(form.cleaned_data["email"], pdf_data)
+        self.send_mail_to_submitter(
+            form.cleaned_data["email"], pdf_data, form.cleaned_data
+        )
 
         csv_data = self.get_csv(form, formset)
         self.send_mail_to_office(
@@ -1231,34 +1233,55 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
         )
 
     @staticmethod
-    def send_mail_to_submitter(recipient, pdf_data):
+    def send_mail_to_submitter(recipient, pdf_data, formdata):
         subject = " / ".join(
             [
-                gettext_lang("kl", "udbytte.mail1.subject"),
-                gettext_lang("da", "udbytte.mail1.subject"),
+                gettext_lang("kl", "udbytte.mail1.subject").format(
+                    company_name=formdata["virksomhedsnavn"],
+                    year=formdata["regnskabsår"],
+                ),
+                gettext_lang("da", "udbytte.mail1.subject").format(
+                    company_name=formdata["virksomhedsnavn"],
+                    year=formdata["regnskabsår"],
+                ),
             ]
         )
-        textbody = "\n".join(
-            [
-                gettext_lang("kl", "udbytte.mail1.textbody"),
-                gettext_lang("da", "udbytte.mail1.textbody"),
-            ]
-        )
-        htmlbody = (
-            "<html><body>"
-            + "\n".join(
-                [
-                    gettext_lang("kl", "udbytte.mail1.htmlbody"),
-                    gettext_lang("da", "udbytte.mail1.htmlbody"),
-                ]
+        textbody = [gettext_lang("kl", "udbytte.mail1.textbody")]
+        if not formdata["u1_udfyldt"]:
+            textbody.append(
+                gettext_lang("kl", "udbytte.mail1.textreminder").format(
+                    url=settings.TAX_FORM_U1
+                )
             )
-            + "</body></html>"
-        )
+        textbody.append(gettext_lang("da", "udbytte.mail1.textbody"))
+        if not formdata["u1_udfyldt"]:
+            textbody.append(
+                gettext_lang("da", "udbytte.mail1.textreminder").format(
+                    url=settings.TAX_FORM_U1
+                )
+            )
+
+        htmlbody = ["<html><body>", gettext_lang("kl", "udbytte.mail1.htmlbody")]
+        if not formdata["u1_udfyldt"]:
+            htmlbody.append(
+                gettext_lang("kl", "udbytte.mail1.htmlreminder").format(
+                    url=settings.TAX_FORM_U1
+                )
+            )
+        htmlbody.append(gettext_lang("da", "udbytte.mail1.htmlbody"))
+        if not formdata["u1_udfyldt"]:
+            htmlbody.append(
+                gettext_lang("da", "udbytte.mail1.htmlreminder").format(
+                    url=settings.TAX_FORM_U1
+                )
+            )
+        htmlbody.append("</body></html>")
+
         send_mail(
             recipient=recipient,
             subject=subject,
-            textbody=textbody,
-            htmlbody=htmlbody,
+            textbody="\n".join(textbody),
+            htmlbody="\n".join(htmlbody),
             attachments=(("formulardata.pdf", pdf_data, "application/pdf"),),
         )
 
@@ -1267,20 +1290,24 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
         subject = " / ".join(
             [
                 gettext_lang("kl", "udbytte.mail2.subject").format(
-                    company_name=formdata["virksomhedsnavn"]
+                    company_name=formdata["virksomhedsnavn"],
+                    year=formdata["regnskabsår"],
                 ),
                 gettext_lang("da", "udbytte.mail2.subject").format(
-                    company_name=formdata["virksomhedsnavn"]
+                    company_name=formdata["virksomhedsnavn"],
+                    year=formdata["regnskabsår"],
                 ),
             ]
         )
         textbody = "\n\n".join(
             [
                 gettext_lang("kl", "udbytte.mail2.textbody").format(
-                    company_name=formdata["virksomhedsnavn"], csv=csv_data
+                    company_name=formdata["virksomhedsnavn"],
+                    csv=csv_data,
                 ),
                 gettext_lang("da", "udbytte.mail2.textbody").format(
-                    company_name=formdata["virksomhedsnavn"], csv=csv_data
+                    company_name=formdata["virksomhedsnavn"],
+                    csv=csv_data,
                 ),
             ]
         )
