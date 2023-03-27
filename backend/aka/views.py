@@ -1,8 +1,8 @@
 import csv
-
 import datetime
 import json
 import logging
+import os
 import re
 import uuid
 from aka.clients.prisme import Prisme, PrismeException
@@ -36,6 +36,7 @@ from aka.mixins import PdfRendererMixin
 from aka.mixins import RequireCvrMixin
 from aka.mixins import SimpleGetFormMixin
 from aka.mixins import SpreadsheetRendererMixin
+from aka.utils import AKAJSONEncoder
 from aka.utils import Field, Cell, Row, Table
 from aka.utils import chunks
 from aka.utils import flatten
@@ -1193,6 +1194,9 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
         )
 
         csv_data = self.get_csv(form, formset)
+
+        self.save_data(form, formset, csv_data, pdf_data)
+
         self.send_mail_to_office(
             settings.EMAIL_OFFICE_RECIPIENT, csv_data, pdf_data, form.cleaned_data
         )
@@ -1317,3 +1321,20 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
             textbody=textbody,
             attachments=(("formulardata.pdf", pdf_data, "application/pdf"),),
         )
+
+    @staticmethod
+    def save_data(form, formset, csv_data, pdf_data):
+        folder = f"{settings.TAX_FORM_STORAGE}/{form.cleaned_data['regnskabsår']}/{form.cleaned_data['dato']}/{form.cleaned_data['cvr']}"
+        os.makedirs(folder, exist_ok=True)
+        file_base_name = f"{datetime.datetime.now().isoformat()}"
+
+        with open(f"{folder}/{file_base_name}.pdf", "wb") as file:
+            file.write(pdf_data)
+
+        data = {
+            "form": form.cleaned_data,
+            "formset": [subform.cleaned_data for subform in formset],
+            "csv": csv_data,
+        }
+        with open(f"{folder}/{file_base_name}.json", "w") as file:
+            file.write(json.dumps(data, indent=2, cls=AKAJSONEncoder))

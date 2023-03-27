@@ -396,6 +396,7 @@ for municipality in MUNICIPALITIES:
 TAX_FORM_U1 = os.environ.get(
     "TAX_FORM_U1", "http://etaxgps1/eTaxWebCitz1/Suliffinnut/Login.aspx"
 )
+TAX_FORM_STORAGE = "/u1_data"
 
 # https://docs.djangoproject.com/en/4.1/topics/email/
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
