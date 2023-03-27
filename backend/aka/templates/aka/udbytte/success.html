@@ -8,8 +8,11 @@
 {% block content %}
 <article class="success">
     <form>
-        <h1 class="page-header" data-trans="udbytte.success">{% translate 'udbytte.success' %}</h1>
+        <h1 class="page-header" data-trans="udbytte.success_title">{% translate 'udbytte.success_title' %}</h1>
         <div class="container-fluid">
+            <div class="row">
+                <p class="page-header" data-trans="udbytte.success_body">{% translate 'udbytte.success_body' %}</p>
+            </div>
             <div class="row">
                 <div class="col-12">
                     <a href="{% url 'aka:index' %}" class="button" data-trans="common.forside">{% translate 'common.forside' %}</a>

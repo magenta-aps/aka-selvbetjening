@@ -954,11 +954,14 @@ msgstr ""
 "<h2>Iluanaarutisiaqartitsinermik nalunaarut - U1</h2>"
 "<p>Aningaasarsianit akileraarutit pillugit Inatsisartut inatsisaanni § 86 & § 88 malillugit imatut paasissutissiisoqarpoq:</p>"
 
-msgid "udbytte.success"
-msgstr "Qujanaq,<br/>iluanaarutisiaqartitsinermut nalunaarutit toqqorparput, assilineqarneralu e-mailinnut nalunaarsorneqartumut nassiunneqassaaq."
+msgid "udbytte.success_title"
+msgstr "Qujanaq,"
+
+msgid "udbytte.success_body"
+msgstr "Iluanaarutisiaqartitsinermut nalunaarutit toqqorparput, assilineqarneralu e-mailinnut nalunaarsorneqartumut nassiunneqassaaq."
 
 msgid "udbytte.mail1.subject"
-msgstr "Immersugassaq U1 - {company_name} - {year}"
+msgstr "Immersugaq U1 - {company_name} - {year}"
 
 msgid "udbytte.mail1.textbody"
 msgstr "Iluanaarutisiaqartitsinermut nalunaarutit tiguarput, assilineqarneralu e-mailimut uunga ilanngullugu nassiunneqarpoq."
