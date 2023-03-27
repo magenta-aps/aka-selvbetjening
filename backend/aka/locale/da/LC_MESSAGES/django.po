@@ -893,8 +893,11 @@ msgstr ""
 "<h2>Iluanaarutisiaqartitsinermik nalunaarut / Udbytteerklæring - U1</h2>"
 "<p>I henhold til Landstingslov om indkomstskat § 86 og § 88, afgives følgende oplysninger:</p>"
 
-msgid "udbytte.success"
-msgstr "Tak,<br/>din udbytteerklæring er blevet gemt, og vi sender en kopi til din registrerede e-mailadresse."
+msgid "udbytte.success_title"
+msgstr "Tak"
+
+msgid "udbytte.success_body"
+msgstr "Din udbytteerklæring er blevet gemt, og vi sender en kopi til din registrerede e-mailadresse."
 
 msgid "udbytte.mail1.subject"
 msgstr "Udfyldt U1 - {company_name} - {year}"
@@ -906,10 +909,10 @@ msgid "udbytte.mail1.htmlbody"
 msgstr "<p>Vi har modtaget din udbytteerklæring. En kopi er vedhæftet denne e-mail</p>"
 
 msgid "udbytte.mail1.textreminder"
-msgstr "Husk venligst at udfylde selvangivelse for selskaber: {url}"
+msgstr "Du kan udfylde U1 blanket her: {url}"
 
 msgid "udbytte.mail1.htmlreminder"
-msgstr "<p>Husk venligst at udfylde selvangivelse for selskaber: <a href=\"{url}\">{url}</a></p>"
+msgstr "<p>Du kan udfylde U1 blanket her: <a href=\"{url}\">{url}</a></p>"
 
 msgid "udbytte.mail2.subject"
 msgstr "Udfyldt U1 - {company_name} - {year}"
