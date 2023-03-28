@@ -955,7 +955,7 @@ msgstr ""
 "<p>Aningaasarsianit akileraarutit pillugit Inatsisartut inatsisaanni § 86 & § 88 malillugit imatut paasissutissiisoqarpoq:</p>"
 
 msgid "udbytte.success_title"
-msgstr "Qujanaq,"
+msgstr "Qujanaq"
 
 msgid "udbytte.success_body"
 msgstr "Iluanaarutisiaqartitsinermut nalunaarutit toqqorparput, assilineqarneralu e-mailinnut nalunaarsorneqartumut nassiunneqassaaq."
@@ -976,7 +976,7 @@ msgid "udbytte.mail1.htmlreminder"
 msgstr "<p>Selskabinut nammineerluni nalunaarutip immersornissaa eqqaamalaariuk: <a href=\"{url}\">{url}</a></p>"
 
 msgid "udbytte.mail2.subject"
-msgstr "Immersugassaq U1 - {company_name} - {year}"
+msgstr "Immersugaq U1 - {company_name} - {year}"
 
 msgid "udbytte.mail2.textbody"
 msgstr ""
