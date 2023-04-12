@@ -1315,10 +1315,14 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
                 ),
             ]
         )
+        htmlbody = (
+            "<html><body><p>" + textbody.replace("\n", "<br/>") + "</body></html>"
+        )
         send_mail(
             recipient=recipient,
             subject=subject,
             textbody=textbody,
+            htmlbody=htmlbody,
             attachments=(("formulardata.pdf", pdf_data, "application/pdf"),),
         )
 
