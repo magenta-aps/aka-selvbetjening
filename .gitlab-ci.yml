@@ -14,9 +14,7 @@ include:
       - '/gitlab-ci-templates/common/config-updater-meta.v1.yml'
 
 variables:
-  # Project variables
   RELEASE_REGISTRY: docker.io
-  #RELEASE_REGISTRY_IMAGE: index.docker.io/magentaaps/kas
   IMAGE_SHA: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
   IMAGE_DEV: ${CI_REGISTRY_IMAGE}:dev
   IMAGE_TAG: magentaaps/aka-selvbetjening:${CI_COMMIT_TAG}
@@ -139,18 +137,16 @@ Selvbetjening Unittest:
     # install skopeo
     - apk add skopeo
 
-Release dev image:
+Release test image:
   extends:
+    - .rules:semver-all
     - .release-default
-  only:
-    refs:
-      - master
   script:
     - skopeo copy
       --src-creds=${CI_REGISTRY_USER}:${CI_BUILD_TOKEN}
       --dest-creds=${CI_REGISTRY_USER}:${CI_BUILD_TOKEN}
       "docker://${IMAGE_SHA}"
-      "docker://${IMAGE_DEV}"
+      "docker://${IMAGE_TAG}"
 
 Release production image:
   extends:
@@ -167,15 +163,15 @@ Release production image:
 #################
 
 # We roll master out to test, so no need to update config
-#Configure test:
-#  stage: configure
-#  extends:
-#    - .rules:semver-all
-#    - .config:endpoint-with-tag
-#  needs: ["Release test image"]
-#  variables:
-#    # Matches routing in config-updater/config_updater/akap/main.py in salt repo
-#    ENDPOINT: akap/salt/update-test
+Configure test:
+  stage: configure
+  extends:
+    - .rules:semver-all
+    - .config:endpoint-with-tag
+  needs: ["Release test image"]
+  variables:
+    # Matches routing in config-updater/config_updater/akap/main.py in salt repo
+    ENDPOINT: akap/salt/update-test
 
 Configure production:
   stage: configure
@@ -194,11 +190,10 @@ Configure production:
 Deploy test:
   stage: deploy
   when: manual
-  only:
-    refs:
-      - master
   extends:
+    - .rules:semver-all
     - .saltbert
+  needs: ["Release test image", "Configure test"]
   variables:
     SALTBERT_ORCHESTRATION: aka_selvbetjening.service-test
     SALTBERT_URL: https://ctrldev1.magenta-aps.dk
