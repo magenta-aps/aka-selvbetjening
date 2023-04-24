@@ -15,8 +15,8 @@ include:
 
 variables:
   RELEASE_REGISTRY: docker.io
+  RELEASE_REGISTRY_IMAGE: index.docker.io/magentaaps/aka-selvbetjening
   IMAGE_SHA: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
-  IMAGE_DEV: ${CI_REGISTRY_IMAGE}:dev
   IMAGE_TAG: magentaaps/aka-selvbetjening:${CI_COMMIT_TAG}
 
 
@@ -137,18 +137,7 @@ Selvbetjening Unittest:
     # install skopeo
     - apk add skopeo
 
-Release test image:
-  extends:
-    - .rules:semver-all
-    - .release-default
-  script:
-    - skopeo copy
-      --src-creds=${CI_REGISTRY_USER}:${CI_BUILD_TOKEN}
-      --dest-creds=${RELEASE_REGISTRY_USER}:${RELEASE_REGISTRY_PASSWORD}
-      "docker://${IMAGE_SHA}"
-      "docker://${IMAGE_TAG}"
-
-Release production image:
+Release image:
   extends:
     - .rules:semver-all
     - .release-default
@@ -168,7 +157,7 @@ Configure test:
   extends:
     - .rules:semver-all
     - .config:endpoint-with-tag
-  needs: ["Release test image"]
+  needs: ["Release image"]
   variables:
     # Matches routing in config-updater/config_updater/akap/main.py in salt repo
     ENDPOINT: akap/salt/update-test
@@ -178,7 +167,7 @@ Configure production:
   extends:
     - .rules:semver-core
     - .config:endpoint-with-tag
-  needs: ["Release production image"]
+  needs: ["Release image"]
   variables:
     # Matches routing in config-updater/config_updater/akap/main.py in salt repo
     ENDPOINT: akap/salt/update-production
@@ -193,7 +182,7 @@ Deploy test:
   extends:
     - .rules:semver-all
     - .saltbert
-  needs: ["Release test image", "Configure test"]
+  needs: ["Release image", "Configure test"]
   variables:
     SALTBERT_ORCHESTRATION: aka_selvbetjening.service-test
     SALTBERT_URL: https://ctrldev1.magenta-aps.dk
@@ -207,7 +196,7 @@ Deploy production:
   extends:
     - .rules:semver-core
     - .saltbert
-  needs: ["Release production image", "Configure production"]
+  needs: ["Release image", "Configure production"]
   variables:
     SALTBERT_ORCHESTRATION: aka_selvbetjening.service-prod
     SALTBERT_URL: https://ctrl1.magenta-aps.dk
