@@ -27,16 +27,15 @@ from aka.forms import NedskrivningForm
 from aka.forms import NedskrivningUploadForm
 from aka.forms import UdbytteForm
 from aka.forms import UdbytteFormItem
-from aka.forms import ObligatoriskPensionForm
-from aka.mixins import AkaMixin
-from aka.mixins import ErrorHandlerMixin
-from aka.mixins import HasUserMixin
-from aka.mixins import IsContentMixin
-from aka.mixins import JsonRendererMixin
-from aka.mixins import PdfRendererMixin
-from aka.mixins import RequireCvrMixin
-from aka.mixins import SimpleGetFormMixin
-from aka.mixins import SpreadsheetRendererMixin
+from project.view_mixins import AkaMixin
+from project.view_mixins import ErrorHandlerMixin
+from project.view_mixins import HasUserMixin
+from project.view_mixins import IsContentMixin
+from project.view_mixins import JsonRendererMixin
+from project.view_mixins import PdfRendererMixin
+from project.view_mixins import RequireCvrMixin
+from project.view_mixins import SimpleGetFormMixin
+from project.view_mixins import SpreadsheetRendererMixin
 from aka.utils import AKAJSONEncoder
 from aka.utils import Field, Cell, Row, Table
 from aka.utils import chunks
@@ -1343,8 +1342,3 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
         }
         with open(f"{folder}/{file_base_name}.json", "w") as file:
             file.write(json.dumps(data, indent=2, cls=AKAJSONEncoder))
-
-
-class ObligatoriskPensionView(IsContentMixin, FormView):
-    form_class = ObligatoriskPensionForm
-    template_name = "aka/pension/form.html"
