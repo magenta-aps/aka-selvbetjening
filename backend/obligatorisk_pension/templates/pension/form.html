@@ -18,7 +18,7 @@
         <form method="post" id="mainform">
             {% csrf_token %}
             {{ formset.management_form }}
-            <h1 data-trans="pension.title">{% translate 'pension.title' %}</h1>
+            <h1 data-trans="obligatorisk_pension.title">{% translate 'obligatorisk_pension.title' %}</h1>
             <div class="container-fluid">
                 {% if form.errors or formset.errors %}
                     <p class="err-msg">{% translate 'common.errors_present' %}</p>
@@ -27,46 +27,46 @@
 
                 <div class="row">
                     <div class="col-12-sm">
-                        {% include 'aka/util/field.html' with field=form.navn key='pension.navn' %}
+                        {% include 'aka/util/field.html' with field=form.navn key='obligatorisk_pension.navn' %}
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-12-sm">
-                        {% include 'aka/util/field.html' with field=form.adresse key='pension.adresse' %}
+                        {% include 'aka/util/field.html' with field=form.adresse key='obligatorisk_pension.adresse' %}
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-12-sm">
-                        {% include 'aka/util/field.html' with field=form.kommune key='pension.kommune' %}
+                        {% include 'aka/util/field.html' with field=form.kommune key='obligatorisk_pension.kommune' %}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12-sm">
-                        {% include 'aka/util/field.html' with field=form.email key='pension.email' %}
+                        {% include 'aka/util/field.html' with field=form.email key='obligatorisk_pension.email' %}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12-sm">
-                        {% include 'aka/util/field.html' with field=form.grønlandsk key='pension.grønlandsk' %}
+                        {% include 'aka/util/field.html' with field=form.grønlandsk key='obligatorisk_pension.grønlandsk' %}
                     </div>
                 </div>
                 <div class="row" id="land">
                     <div class="col-12-sm">
-                        {% include 'aka/util/field.html' with field=form.land key='pension.land' %}
+                        {% include 'aka/util/field.html' with field=form.land key='obligatorisk_pension.land' %}
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-12-sm">
-                        {% include 'aka/util/field.html' with field=form.pensionsselskab key='pension.pensionsselskab' %}
+                        {% include 'aka/util/field.html' with field=form.pensionsselskab key='obligatorisk_pension.pensionsselskab' %}
                     </div>
                 </div>
 
                 <div id="formsetContainer">
                     {% for subform in formset %}
-                        {% include 'aka/util/field.html' with field=subform.file key='pension.file' %}
+                        {% include 'aka/util/field.html' with field=subform.file key='obligatorisk_pension.file' %}
                     {% endfor %}
                 </div>
 
@@ -78,7 +78,7 @@
             </div>
         </form>
         <div id="formsetPrototype" style="display: none">
-            {% include 'aka/util/field.html' with field=empty_form.file key='pension.file' %}
+            {% include 'aka/util/field.html' with field=empty_form.file key='obligatorisk_pension.file' %}
         </div>
     </article>
     <script>
