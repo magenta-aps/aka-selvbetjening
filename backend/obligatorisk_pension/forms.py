@@ -28,7 +28,10 @@ class ObligatoriskPensionForm(forms.Form):
     )
     grønlandsk = forms.ChoiceField(
         label=_("Grønlandsk pensionsordning"),
-        choices=((True, _("Ja")), (False, _("Nej")),),
+        choices=(
+            (True, _("Ja")),
+            (False, _("Nej")),
+        ),
         widget=widgets.RadioSelect,
         required=True,
         error_messages={"required": "error.required"},

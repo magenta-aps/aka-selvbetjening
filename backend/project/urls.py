@@ -4,7 +4,10 @@ from django.urls import include, path
 
 urlpatterns = [
     path("", include("aka.urls", namespace="aka")),
-    path("obligatorisk_pension", include("obligatorisk_pension.urls", namespace="obligatorisk_pension")),
+    path(
+        "obligatorisk_pension",
+        include("obligatorisk_pension.urls", namespace="obligatorisk_pension"),
+    ),
     path("", include("django_mitid_auth.urls", namespace="login")),
     path("_ht/", include("watchman.urls")),
 ]
