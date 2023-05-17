@@ -27,6 +27,7 @@ from aka.forms import NedskrivningForm
 from aka.forms import NedskrivningUploadForm
 from aka.forms import UdbytteForm
 from aka.forms import UdbytteFormItem
+from aka.forms import ObligatoriskPensionForm
 from aka.mixins import AkaMixin
 from aka.mixins import ErrorHandlerMixin
 from aka.mixins import HasUserMixin
@@ -1342,3 +1343,8 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
         }
         with open(f"{folder}/{file_base_name}.json", "w") as file:
             file.write(json.dumps(data, indent=2, cls=AKAJSONEncoder))
+
+
+class ObligatoriskPensionView(IsContentMixin, FormView):
+    form_class = ObligatoriskPensionForm
+    template_name = "aka/pension/form.html"

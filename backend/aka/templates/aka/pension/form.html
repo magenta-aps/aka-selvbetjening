@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load l10n %}
+
+{% block extra_headers %}
+    {% include 'aka/util/calendar_headers.html' %}
+    <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
+    {% if css %}
+    <style>
+        {{ css|safe }}
+    </style>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <article class="indberet_pension">
+        <form method="post" id="mainform">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <h1 data-trans="pension.title">{% translate 'pension.title' %}</h1>
+            <div class="container-fluid">
+                {% if form.errors or formset.errors %}
+                    <p class="err-msg">{% translate 'common.errors_present' %}</p>
+                    {% include "aka/util/nonfield_errors.html" with form=form %}
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.navn key='pension.navn' %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.adresse key='pension.adresse' %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.kommune key='pension.kommune' %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.email key='pension.email' %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.grønlandsk key='pension.grønlandsk' %}
+                    </div>
+                </div>
+                <div class="row" id="land">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.land key='pension.land' %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.pensionsselskab key='pension.pensionsselskab' %}
+                    </div>
+                </div>
+
+                <div id="formsetContainer">
+                    {% for subform in formset %}
+                        {% include 'aka/util/field.html' with field=subform.file key='pension.file' %}
+                    {% endfor %}
+                </div>
+
+                <div class="row">
+                    <div class="col-2-sm">
+                        <button type="submit" data-trans="common.gem">{% translate 'common.gem' %}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div id="formsetPrototype" style="display: none">
+            {% include 'aka/pension/subform.html' with subform=formset.empty_form %}
+        </div>
+    </article>
+    <script>
+
+
+    const glLandField = $("[name='{{ form.grønlandsk.name }}']");
+    const toggleLand = function () {
+        $("#land").toggle(glLandField.filter(":checked").val() === "False");
+    }
+    toggleLand();
+    glLandField.change(toggleLand);
+
+    </script>
+{% endblock %}
