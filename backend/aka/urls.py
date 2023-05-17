@@ -9,6 +9,7 @@ from aka.views import LoentraekView, LoentraekUploadView
 from aka.views import NedskrivningView, NedskrivningUploadView
 from aka.views import RenteNotaView
 from aka.views import UdbytteView
+from aka.views import ObligatoriskPensionView
 from django.urls import path
 from django_mitid_auth.saml.views import AccessDeniedView
 from django.views.generic import TemplateView
@@ -73,6 +74,11 @@ urlpatterns = [
         "udbytte/",
         UdbytteView.as_view(),
         name="udbytte",
+    ),
+    path(
+        "obligatorisk_pension/",
+        ObligatoriskPensionView.as_view(),
+        name="obligatorisk_pension",
     ),
     path(
         "error/login-timeout/",
