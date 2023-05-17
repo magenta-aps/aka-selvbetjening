@@ -185,7 +185,7 @@ Deploy test:
   needs: ["Release image", "Configure test"]
   variables:
     SALTBERT_ORCHESTRATION: aka_selvbetjening.service-test
-    SALTBERT_URL: https://ctrldev1.magenta-aps.dk
+    SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
   environment:
     name: test
     url: "https://test.akap.sullissivik.gl"
@@ -199,7 +199,7 @@ Deploy production:
   needs: ["Release image", "Configure production"]
   variables:
     SALTBERT_ORCHESTRATION: aka_selvbetjening.service-prod
-    SALTBERT_URL: https://ctrl1.magenta-aps.dk
+    SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
   environment:
     name: production
     url: "https://akap.sullissivik.gl"
