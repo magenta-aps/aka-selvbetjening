@@ -78,7 +78,7 @@
             </div>
         </form>
         <div id="formsetPrototype" style="display: none">
-            {% include 'aka/pension/subform.html' with subform=formset.empty_form %}
+            {% include 'aka/util/field.html' with field=empty_form.file key='pension.file' %}
         </div>
     </article>
     <script>
