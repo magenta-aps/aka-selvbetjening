@@ -41,3 +41,9 @@ msgstr "Land"
 
 msgid "obligatorisk_pension.pensionsselskab"
 msgstr "Pensionsselskab"
+
+msgid "obligatorisk_pension.filer"
+msgstr "Filer"
+
+msgid "obligatorisk_pension.filbeskrivelse"
+msgstr "Beskrivelse"
