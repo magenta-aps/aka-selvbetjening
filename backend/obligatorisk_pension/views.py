@@ -12,7 +12,7 @@ class ObligatoriskPensionView(IsContentMixin, FormView):
     template_name = "pension/form.html"
 
     def form_valid(self, form):
-        self.send_mail_to_submitter(form.cleaned_data['email'], form.cleaned_data)
+        self.send_mail_to_submitter(form.cleaned_data["email"], form.cleaned_data)
 
         return TemplateResponse(
             request=self.request,
@@ -30,13 +30,13 @@ class ObligatoriskPensionView(IsContentMixin, FormView):
         )
         textbody = [
             gettext_lang("kl", "obligatorisk_pension.mail1.textbody"),
-            gettext_lang("da", "obligatorisk_pension.mail1.textbody")
+            gettext_lang("da", "obligatorisk_pension.mail1.textbody"),
         ]
         htmlbody = [
             "<html><body>",
             gettext_lang("kl", "obligatorisk_pension.mail1.htmlbody"),
             gettext_lang("da", "obligatorisk_pension.mail1.htmlbody"),
-            "</body></html>"
+            "</body></html>",
         ]
         send_mail(
             recipient=recipient,
