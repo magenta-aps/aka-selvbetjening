@@ -4,6 +4,9 @@ from django import forms
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 
+from obligatorisk_pension.models import ObligatoriskPension
+from obligatorisk_pension.models import ObligatoriskPensionFile
+
 
 class FileSetMixin:
     def __init__(self, *args, **kwargs):
@@ -28,7 +31,7 @@ class FileSetMixin:
     def get_filled_files(self):
         # Returns a list of tuples (file, description)
         if self.is_bound:
-            r = re.compile(self.prefix + r"-file_data_(\d+)")
+            r = re.compile(r"form-\d+-file_data_(\d+)")
             files = []
             for name, file in self.files.items():
                 m = r.match(name)
@@ -55,8 +58,29 @@ class FileSetMixin:
     def filefields(self):
         return (field for field in self if field.name.startswith("file_"))
 
+    def _save_m2m(self):
+        super()._save_m2m()
+        for file, description in self.get_filled_files():
+            ObligatoriskPensionFile.objects.create(
+                fil=file,
+                beskrivelse=description,
+                obligatoriskpension=self.instance,
+            )
 
-class ObligatoriskPensionForm(FileSetMixin, forms.Form):
+
+class ObligatoriskPensionForm(FileSetMixin, forms.ModelForm):
+    class Meta:
+        model = ObligatoriskPension
+        fields = [
+            "navn",
+            "adresse",
+            "kommune",
+            "email",
+            "grønlandsk",
+            "land",
+            "pensionsselskab",
+        ]
+
     navn = forms.CharField(
         label=_("Navn"),
         required=True,

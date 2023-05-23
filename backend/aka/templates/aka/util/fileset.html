@@ -13,17 +13,4 @@
             <button type="button" class="close" data-trans="common.slet">{% translate 'common.slet' %}</button>
         </div>
     </div>
-    {% for field in form.filefields %}
-        {% if field.name|startswith:'file_data' and field.value is not None %}
-            <div class="doc_file">
-                {{ field }}
-                <button type="button" class="close" style="display:none"></button>
-                {% with field.name|after:'file_data_' as id %}
-                    {% with 'file_description_'|addstr:id as desc_id %}
-                        {{ policyform|get:desc_id }}
-                    {% endwith %}
-                {% endwith %}
-            </div>
-        {% endif %}
-    {% endfor %}
 </div>

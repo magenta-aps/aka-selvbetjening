@@ -6,7 +6,7 @@ app_name = "obligatorisk_pension"
 urlpatterns = [
     # Use 'django' domain instead of 'djangojs', so we get serverside translations
     path(
-        "/",
+        "",
         ObligatoriskPensionView.as_view(),
         name="obligatorisk_pension",
     ),
