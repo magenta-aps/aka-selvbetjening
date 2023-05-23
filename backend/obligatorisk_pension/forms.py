@@ -14,7 +14,8 @@ class FileSetMixin:
 
         for i in range(0, 10):
             self.fields[f"file_data_{i}"] = forms.FileField(
-                allow_empty_file=True, required=False
+                allow_empty_file=True,
+                required=False,
             )
             self.fields[f"file_description_{i}"] = forms.CharField(
                 max_length=255,

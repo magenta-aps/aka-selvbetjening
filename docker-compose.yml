@@ -28,6 +28,7 @@ services:
       - ./logs:/var/log/aka
       - ./dev-environment/cert:/ssl:ro
       - ./u1_data:/u1_data
+      - ./upload:/upload  # Matcher MEDIA_ROOT i django settings
     command: gunicorn -b 0.0.0.0:8000 project.wsgi:application --reload -w 1 --access-logfile - --error-logfile - --capture-output # reload on code changes
 
   selvbetjening-cron:
@@ -77,3 +78,4 @@ services:
 
 volumes:
   selvbetjening-postgres-data:
+  selvbetjening-upload-data:

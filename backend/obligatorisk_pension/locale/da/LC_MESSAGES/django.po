@@ -57,3 +57,12 @@ msgstr ""
 
 msgid "obligatorisk_pension.mail1.htmlbody"
 msgstr ""
+
+msgid "obligatorisk_pension.mail2.subject"
+msgstr ""
+
+msgid "obligatorisk_pension.mail2.textbody"
+msgstr ""
+
+msgid "obligatorisk_pension.mail2.htmlbody"
+msgstr ""
