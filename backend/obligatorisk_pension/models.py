@@ -4,6 +4,11 @@ from django.utils.translation import gettext_lazy as _
 
 
 class ObligatoriskPension(models.Model):
+    cpr = models.CharField(
+        max_length=10,
+        null=False,
+        blank=False,
+    )
     navn = models.CharField(
         verbose_name=_("obligatorisk_pension.navn"),
         null=False,
