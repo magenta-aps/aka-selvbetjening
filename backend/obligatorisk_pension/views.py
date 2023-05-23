@@ -13,11 +13,11 @@ class ObligatoriskPensionView(IsContentMixin, HasUserMixin, FormView):
     template_name = "pension/form.html"
 
     def form_valid(self, form):
-        object = form.save(commit=False)
-        object.cpr = self.cpr
-        object.save()
-        self.send_mail_to_submitter(object.email, object)
-        self.send_mail_to_office(settings.EMAIL_OFFICE_RECIPIENT, object)
+        pension_object = form.save(commit=False)
+        pension_object.cpr = self.cpr
+        pension_object.save()
+        self.send_mail_to_submitter(pension_object.email, pension_object)
+        self.send_mail_to_office(settings.EMAIL_OFFICE_RECIPIENT, pension_object)
         return TemplateResponse(
             request=self.request,
             template="pension/success.html",
