@@ -12,7 +12,8 @@ class ObligatoriskPensionView(IsContentMixin, FormView):
     template_name = "pension/form.html"
 
     def form_valid(self, form):
-        self.send_mail_to_submitter(form.cleaned_data["email"], form.cleaned_data)
+        object = form.save()
+        self.send_mail_to_submitter(object.email, object)
 
         return TemplateResponse(
             request=self.request,
@@ -21,7 +22,7 @@ class ObligatoriskPensionView(IsContentMixin, FormView):
             using=self.template_engine,
         )
 
-    def send_mail_to_submitter(self, recipient, formdata):
+    def send_mail_to_submitter(self, recipient, object):
         subject = " / ".join(
             [
                 gettext_lang("kl", "obligatorisk_pension.mail1.subject"),

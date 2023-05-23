@@ -16,7 +16,7 @@
 
 {% block content %}
     <article class="indberet_pension">
-        <form method="post" id="mainform">
+        <form method="post" id="mainform" enctype="multipart/form-data">
             {% csrf_token %}
             {{ formset.management_form }}
             <h1 data-trans="obligatorisk_pension.title">{% translate 'obligatorisk_pension.title' %}</h1>
