@@ -18,7 +18,7 @@ class FileSetMixin:
                 required=False,
             )
             self.fields[f"file_description_{i}"] = forms.CharField(
-                max_length=255,
+                max_length=1000,
                 widget=widgets.TextInput(
                     attrs={
                         "placeholder": _("obligatorisk_pension.filbeskrivelse"),
