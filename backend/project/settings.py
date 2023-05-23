@@ -29,8 +29,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SERIALIZER = "aka.utils.AKAJSONSerializer"
 
-
-MEDIA_URL = BASE_DIR + "/upload/"
+MEDIA_ROOT = "/upload/"  # Filesystem path to upload folder
 
 DATABASES = {
     "default": {

@@ -50,10 +50,12 @@ class ObligatoriskPension(models.Model):
 
 
 class ObligatoriskPensionFile(models.Model):
-    fil = models.FileField()
+    fil = models.FileField(upload_to="obligatorisk_pension/%Y/%Y-%m-%d/")
     beskrivelse = models.CharField(
         max_length=1000,
     )
     obligatoriskpension = models.ForeignKey(
-        ObligatoriskPension, on_delete=models.CASCADE
+        ObligatoriskPension,
+        on_delete=models.CASCADE,
+        related_name="files",
     )

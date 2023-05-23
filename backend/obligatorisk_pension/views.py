@@ -1,10 +1,10 @@
+import magic
+from aka.utils import gettext_lang, send_mail
+from django.conf import settings
 from django.template.response import TemplateResponse
 from django.views.generic import FormView
-
-from project.view_mixins import IsContentMixin
 from obligatorisk_pension.forms import ObligatoriskPensionForm
-
-from aka.utils import gettext_lang, send_mail
+from project.view_mixins import IsContentMixin
 
 
 class ObligatoriskPensionView(IsContentMixin, FormView):
@@ -14,7 +14,7 @@ class ObligatoriskPensionView(IsContentMixin, FormView):
     def form_valid(self, form):
         object = form.save()
         self.send_mail_to_submitter(object.email, object)
-
+        self.send_mail_to_office(settings.EMAIL_OFFICE_RECIPIENT, object)
         return TemplateResponse(
             request=self.request,
             template="pension/success.html",
@@ -44,4 +44,37 @@ class ObligatoriskPensionView(IsContentMixin, FormView):
             subject=subject,
             textbody="\n".join(textbody),
             htmlbody="\n".join(htmlbody),
+        )
+
+    def send_mail_to_office(self, recipient, object):
+        subject = " / ".join(
+            [
+                gettext_lang("kl", "obligatorisk_pension.mail2.subject"),
+                gettext_lang("da", "obligatorisk_pension.mail2.subject"),
+            ]
+        )
+        textbody = [
+            gettext_lang("kl", "obligatorisk_pension.mail2.textbody"),
+            gettext_lang("da", "obligatorisk_pension.mail2.textbody"),
+        ]
+        htmlbody = [
+            "<html><body>",
+            gettext_lang("kl", "obligatorisk_pension.mail2.htmlbody"),
+            gettext_lang("da", "obligatorisk_pension.mail2.htmlbody"),
+            "</body></html>",
+        ]
+
+        attachments = []
+        for fileobject in object.files.all():
+            name = fileobject.fil.name
+            data = fileobject.fil.read()
+            mimetype = magic.from_buffer(data, mime=True)
+            attachments.append((name, data, mimetype))
+
+        send_mail(
+            recipient=recipient,
+            subject=subject,
+            textbody="\n".join(textbody),
+            htmlbody="\n".join(htmlbody),
+            attachments=attachments,
         )
