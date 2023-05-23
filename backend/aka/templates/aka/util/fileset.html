@@ -1,0 +1,29 @@
+{% load i18n %}
+{% load aka_tags %}
+<div class="row file_container">
+    <label data-trans="{{ label }}">{% translate label %}</label>
+    <div class="doc_file prototype" style="display:none">
+        <div style="width: 40%; display: inline-block">
+            {{ form.file_data_0 }}
+        </div>
+        <div style="width: 40%; display: inline-block">
+            {{ form.file_description_0 }}
+        </div>
+        <div style="width: 19%; display: inline-block; vertical-align: top">
+            <button type="button" class="close" data-trans="common.slet">{% translate 'common.slet' %}</button>
+        </div>
+    </div>
+    {% for field in form.filefields %}
+        {% if field.name|startswith:'file_data' and field.value is not None %}
+            <div class="doc_file">
+                {{ field }}
+                <button type="button" class="close" style="display:none"></button>
+                {% with field.name|after:'file_data_' as id %}
+                    {% with 'file_description_'|addstr:id as desc_id %}
+                        {{ policyform|get:desc_id }}
+                    {% endwith %}
+                {% endwith %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
