@@ -5,14 +5,17 @@ from django.template.response import TemplateResponse
 from django.views.generic import FormView
 from obligatorisk_pension.forms import ObligatoriskPensionForm
 from project.view_mixins import IsContentMixin
+from project.view_mixins import HasUserMixin
 
 
-class ObligatoriskPensionView(IsContentMixin, FormView):
+class ObligatoriskPensionView(IsContentMixin, HasUserMixin, FormView):
     form_class = ObligatoriskPensionForm
     template_name = "pension/form.html"
 
     def form_valid(self, form):
-        object = form.save()
+        object = form.save(commit=False)
+        object.cpr = self.cpr
+        object.save()
         self.send_mail_to_submitter(object.email, object)
         self.send_mail_to_office(settings.EMAIL_OFFICE_RECIPIENT, object)
         return TemplateResponse(
