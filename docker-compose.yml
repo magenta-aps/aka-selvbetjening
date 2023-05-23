@@ -78,4 +78,3 @@ services:
 
 volumes:
   selvbetjening-postgres-data:
-  selvbetjening-upload-data:
