@@ -5,13 +5,13 @@ from django.utils.translation import gettext_lazy as _
 
 class ObligatoriskPension(models.Model):
     navn = models.CharField(
-        verbose_name=_("Navn"),
+        verbose_name=_("obligatorisk_pension.navn"),
         null=False,
         blank=False,
         max_length=1000,
     )
     adresse = models.CharField(
-        verbose_name=_("Adresse"),
+        verbose_name=_("obligatorisk_pension.adresse"),
         null=False,
         blank=False,
         max_length=1000,
@@ -21,13 +21,13 @@ class ObligatoriskPension(models.Model):
         null=False,
     )
     email = models.EmailField(
-        verbose_name=_("Email-adresse"),
+        verbose_name=_("obligatorisk_pension.email"),
         null=False,
         blank=False,
         max_length=256,
     )
     grønlandsk = models.BooleanField(
-        verbose_name=_("Grønlandsk pensionsordning"),
+        verbose_name=_("obligatorisk_pension.grønlandsk"),
         choices=(
             (True, _("Ja")),
             (False, _("Nej")),
@@ -36,13 +36,13 @@ class ObligatoriskPension(models.Model):
         blank=False,
     )
     land = models.CharField(
-        verbose_name=_("Land"),
+        verbose_name=_("obligatorisk_pension.land"),
         null=True,
         blank=True,
         max_length=50,
     )
     pensionsselskab = models.CharField(
-        verbose_name=_("Pensionsselskab"),
+        verbose_name=_("obligatorisk_pension.pensionsselskab"),
         null=False,
         blank=False,
         max_length=100,
