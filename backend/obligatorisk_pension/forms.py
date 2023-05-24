@@ -1,6 +1,7 @@
 import re
 from django.conf import settings
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 
@@ -100,12 +101,13 @@ class ObligatoriskPensionForm(FileSetMixin, forms.ModelForm):
         required=True,
         error_messages={"required": "error.required"},
     )
-    grønlandsk = forms.ChoiceField(
-        choices=(
-            (True, _("Ja")),
-            (False, _("Nej")),
+    grønlandsk = forms.BooleanField(
+        widget=widgets.RadioSelect(
+            choices=(
+                (True, _("Ja")),
+                (False, _("Nej")),
+            ),
         ),
-        widget=widgets.RadioSelect,
         required=True,
         error_messages={"required": "error.required"},
     )
@@ -116,3 +118,8 @@ class ObligatoriskPensionForm(FileSetMixin, forms.ModelForm):
         required=True,
         error_messages={"required": "error.required"},
     )
+
+    def clean_land(self):
+        if not self.cleaned_data.get("grønlandsk") and not self.cleaned_data.get("land"):
+            raise ValidationError(self.fields["land"].error_messages['required'], code='error.required')
+        return self.cleaned_data.get("land")
