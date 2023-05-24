@@ -1,12 +1,10 @@
-from datetime import date
-
 import re
-from django.conf import settings
+from datetime import date
 from django import forms
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
-
 from obligatorisk_pension.models import ObligatoriskPension
 from obligatorisk_pension.models import ObligatoriskPensionFile
 
@@ -31,6 +29,36 @@ class FileSetMixin:
                 ),
                 required=False,
             )
+
+        if self.instance:
+            self.existing_files = []
+            for i, file in enumerate(self.instance.filer.all()):
+                id_key = key = f"file_existing_id_{i}"
+                self.fields[key] = forms.ChoiceField(
+                    widget=widgets.HiddenInput(),
+                    disabled=True,
+                    choices=((file.pk, file.pk),),
+                )
+                self.existing_files.append(self[key])
+                self.initial[key] = file.pk
+
+                key = f"file_existing_delete_{i}"
+                self.fields[key] = forms.BooleanField(
+                    widget=widgets.CheckboxInput(attrs={"title": _("Behold fil")}),
+                    label=file.fil.name,
+                    required=False,
+                )
+                self.initial[key] = True
+                self[id_key].keep_field = self[key]
+
+                key = f"file_existing_description_{i}"
+                self.fields[key] = forms.CharField(
+                    max_length=255,
+                    widget=widgets.TextInput(attrs={"placeholder": _("Beskrivelse")}),
+                    required=False,
+                )
+                self.initial[key] = file.beskrivelse
+                self[id_key].description_field = self[key]
 
     def get_filled_files(self):
         # Returns a list of tuples (file, description)
@@ -62,6 +90,16 @@ class FileSetMixin:
     def filefields(self):
         return (field for field in self if field.name.startswith("file_"))
 
+    def get_existing_files(self):
+        if self.is_bound:
+            data = {}
+            for id_field in self.existing_files:
+                data[id_field.value()] = {
+                    "keep": id_field.keep_field.value(),
+                    "description": id_field.description_field.value(),
+                }
+            return data
+
     def _save_m2m(self):
         super()._save_m2m()
         for file, description in self.get_filled_files():
@@ -70,13 +108,34 @@ class FileSetMixin:
                 beskrivelse=description,
                 obligatoriskpension=self.instance,
             )
+        for pk, data in self.get_existing_files().items():
+            file_object_qs = ObligatoriskPensionFile.objects.filter(pk=pk)
+            if data["keep"] == False:
+                file_object_qs.delete()
+            else:
+                file_object_qs.update(beskrivelse=data["description"])
+
+
+class SkatteårForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        current_year = date.today().year
+        kwargs["initial"]["skatteår"] = current_year
+        super().__init__(*args, **kwargs)
+        self.fields["skatteår"].choices = (
+            (x, str(x)) for x in range(current_year - 5, current_year + 1)
+        )
+        self.initial["skatteår"] = current_year
+
+    skatteår = forms.ChoiceField(
+        required=True,
+        error_messages={"required": "error.required"},
+    )
 
 
 class ObligatoriskPensionForm(FileSetMixin, forms.ModelForm):
     class Meta:
         model = ObligatoriskPension
         fields = [
-            "skatteår",
             "navn",
             "adresse",
             "kommune",
@@ -84,20 +143,9 @@ class ObligatoriskPensionForm(FileSetMixin, forms.ModelForm):
             "grønlandsk",
             "land",
             "pensionsselskab",
-            "beløb"
+            "beløb",
         ]
 
-    def __init__(self, *args, **kwargs):
-        current_year = date.today().year
-        kwargs["initial"]["skatteår"] = current_year
-        super().__init__(*args, **kwargs)
-        self.fields["skatteår"].choices = ((x, str(x)) for x in range(current_year-5, current_year+1))
-        self.initial["skatteår"] = current_year
-
-    skatteår = forms.ChoiceField(
-        required=True,
-        error_messages={"required": "error.required"},
-    )
     navn = forms.CharField(
         required=True,
         error_messages={"required": "error.required"},
