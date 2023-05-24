@@ -110,7 +110,7 @@ class FileSetMixin:
             )
         for pk, data in self.get_existing_files().items():
             file_object_qs = ObligatoriskPensionFile.objects.filter(pk=pk)
-            if data["keep"] == False:
+            if data["keep"] is False:
                 file_object_qs.delete()
             else:
                 file_object_qs.update(beskrivelse=data["description"])
