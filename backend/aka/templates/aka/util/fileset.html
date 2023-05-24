@@ -2,6 +2,17 @@
 {% load aka_tags %}
 <div class="row file_container">
     <label data-trans="{{ label }}">{% translate label %}</label>
+    {% for field in form %}
+        {% if field.name|startswith:'file_existing_id' %}
+            <div class="doc_file_existing">
+                {{ field }}
+                {% with field.keep_field as keep_field %}
+                    <label for="{{ keep_field.id_for_label }}">{{ keep_field }}{{ keep_field.label }}</label>
+                {% endwith %}
+                {{ field.description_field }}
+            </div>
+        {% endif %}
+    {% endfor %}
     <div class="doc_file prototype" style="display:none">
         <div style="width: 40%; display: inline-block">
             {{ form.file_data_0 }}

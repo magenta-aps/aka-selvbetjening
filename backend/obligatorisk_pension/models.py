@@ -4,6 +4,12 @@ from django.utils.translation import gettext_lazy as _
 
 
 class ObligatoriskPension(models.Model):
+    oprettet = models.DateTimeField(
+        auto_now_add=True,
+    )
+    ændret = models.DateTimeField(
+        auto_now=True,
+    )
     cpr = models.CharField(
         max_length=10,
         null=False,
@@ -51,10 +57,7 @@ class ObligatoriskPension(models.Model):
         max_length=100,
     )
     beløb = models.DecimalField(
-        null=False,
-        blank=False,
-        decimal_places=2,
-        max_digits=10
+        null=False, blank=False, decimal_places=2, max_digits=10
     )
 
 
@@ -66,5 +69,5 @@ class ObligatoriskPensionFile(models.Model):
     obligatoriskpension = models.ForeignKey(
         ObligatoriskPension,
         on_delete=models.CASCADE,
-        related_name="files",
+        related_name="filer",
     )
