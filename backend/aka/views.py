@@ -1329,7 +1329,6 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
     @staticmethod
     def save_data(form, formset, csv_data, pdf_data):
         folder = f"{settings.TAX_FORM_STORAGE}/{form.cleaned_data['regnskabsår']}/{form.cleaned_data['dato']}/{form.cleaned_data['cvr']}"
-        print("saving to "+folder)
         os.makedirs(folder, exist_ok=True)
         file_base_name = f"{datetime.datetime.now().isoformat()}"
 
