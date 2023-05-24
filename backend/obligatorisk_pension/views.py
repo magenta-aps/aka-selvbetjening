@@ -35,6 +35,12 @@ class ObligatoriskPensionCreateView(IsContentMixin, HasUserMixin, UpdateView):
         except self.model.DoesNotExist:
             return None
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if self.person and not self.object:
+            kwargs["initial"]["navn"] = self.person["navn"]
+        return kwargs
+
     def form_valid(self, form):
         pension_object = form.save(commit=False)
         pension_object.cpr = self.cpr
