@@ -2,15 +2,17 @@ import magic
 from aka.utils import gettext_lang, send_mail
 from django.conf import settings
 from django.template.response import TemplateResponse
-from django.views.generic import FormView
+from django.views.generic import CreateView
 from obligatorisk_pension.forms import ObligatoriskPensionForm
 from project.view_mixins import IsContentMixin
 from project.view_mixins import HasUserMixin
+from obligatorisk_pension.models import ObligatoriskPension
 
 
-class ObligatoriskPensionView(IsContentMixin, HasUserMixin, FormView):
+class ObligatoriskPensionCreateView(IsContentMixin, HasUserMixin, CreateView):
     form_class = ObligatoriskPensionForm
     template_name = "pension/form.html"
+    model = ObligatoriskPension
 
     def form_valid(self, form):
         pension_object = form.save(commit=False)
