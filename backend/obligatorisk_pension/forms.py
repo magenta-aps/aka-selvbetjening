@@ -1,3 +1,5 @@
+from datetime import date
+
 import re
 from django.conf import settings
 from django import forms
@@ -74,6 +76,7 @@ class ObligatoriskPensionForm(FileSetMixin, forms.ModelForm):
     class Meta:
         model = ObligatoriskPension
         fields = [
+            "skatteår",
             "navn",
             "adresse",
             "kommune",
@@ -84,6 +87,17 @@ class ObligatoriskPensionForm(FileSetMixin, forms.ModelForm):
             "beløb"
         ]
 
+    def __init__(self, *args, **kwargs):
+        current_year = date.today().year
+        kwargs["initial"]["skatteår"] = current_year
+        super().__init__(*args, **kwargs)
+        self.fields["skatteår"].choices = ((x, str(x)) for x in range(current_year-5, current_year+1))
+        self.initial["skatteår"] = current_year
+
+    skatteår = forms.ChoiceField(
+        required=True,
+        error_messages={"required": "error.required"},
+    )
     navn = forms.CharField(
         required=True,
         error_messages={"required": "error.required"},

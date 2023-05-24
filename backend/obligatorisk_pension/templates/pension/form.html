@@ -26,6 +26,14 @@
                     {% include "aka/util/nonfield_errors.html" with form=form %}
                 {% endif %}
 
+                {% localize off %}
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.skatteår key='obligatorisk_pension.skatteår' %}
+                    </div>
+                </div>
+                {% endlocalize %}
+
                 <div class="row">
                     <div class="col-12-sm">
                         {% include 'aka/util/field.html' with field=form.navn key='obligatorisk_pension.navn' %}
