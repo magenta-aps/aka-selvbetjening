@@ -120,6 +120,10 @@ class ObligatoriskPensionForm(FileSetMixin, forms.ModelForm):
     )
 
     def clean_land(self):
-        if not self.cleaned_data.get("grønlandsk") and not self.cleaned_data.get("land"):
-            raise ValidationError(self.fields["land"].error_messages['required'], code='error.required')
+        if not self.cleaned_data.get("grønlandsk") and not self.cleaned_data.get(
+            "land"
+        ):
+            raise ValidationError(
+                self.fields["land"].error_messages["required"], code="error.required"
+            )
         return self.cleaned_data.get("land")
