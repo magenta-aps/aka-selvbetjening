@@ -9,6 +9,10 @@ class ObligatoriskPension(models.Model):
         null=False,
         blank=False,
     )
+    skatteår = models.PositiveSmallIntegerField(
+        null=False,
+        blank=False,
+    )
     navn = models.CharField(
         null=False,
         blank=False,
