@@ -46,6 +46,12 @@ class ObligatoriskPension(models.Model):
         blank=False,
         max_length=100,
     )
+    beløb = models.DecimalField(
+        null=False,
+        blank=False,
+        decimal_places=2,
+        max_digits=10
+    )
 
 
 class ObligatoriskPensionFile(models.Model):

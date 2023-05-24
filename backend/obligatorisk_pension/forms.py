@@ -81,6 +81,7 @@ class ObligatoriskPensionForm(FileSetMixin, forms.ModelForm):
             "grønlandsk",
             "land",
             "pensionsselskab",
+            "beløb"
         ]
 
     navn = forms.CharField(
@@ -117,6 +118,12 @@ class ObligatoriskPensionForm(FileSetMixin, forms.ModelForm):
     pensionsselskab = forms.CharField(
         required=True,
         error_messages={"required": "error.required"},
+    )
+    beløb = forms.DecimalField(
+        decimal_places=2,
+        required=True,
+        error_messages={"required": "error.required"},
+        localize=True,
     )
 
     def clean_land(self):

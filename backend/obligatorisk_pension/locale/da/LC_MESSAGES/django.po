@@ -42,12 +42,14 @@ msgstr "Land"
 msgid "obligatorisk_pension.pensionsselskab"
 msgstr "Pensionsselskab"
 
+msgid "obligatorisk_pension.beløb"
+msgstr "Beløb"
+
 msgid "obligatorisk_pension.filer"
 msgstr "Filer"
 
 msgid "obligatorisk_pension.filbeskrivelse"
 msgstr "Beskrivelse"
-
 
 msgid "obligatorisk_pension.mail1.subject"
 msgstr ""
