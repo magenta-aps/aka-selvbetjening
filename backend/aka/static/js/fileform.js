@@ -61,7 +61,6 @@ $(function(){
     }
 
     const removeRow = function() {
-        console.log(this);
         const row = $(this).parents(".doc_file");
         row.slideUp(400, function(){
             row.remove();
