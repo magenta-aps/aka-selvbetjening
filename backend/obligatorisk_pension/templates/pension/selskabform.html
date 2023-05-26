@@ -4,7 +4,7 @@
         {{ form.id }}
         {{ form.DELETE }}
     </div>
-    <div class="col-3-sm">
+    <div class="col-3-sm" data-controls="#{{ form.land.id_for_label }}" data-controls-values="True" data-controls-action="disabled">
         {% include 'aka/util/field.html' with field=form.grønlandsk key='obligatorisk_pension.grønlandsk' %}
     </div>
     <div class="col-3-sm">

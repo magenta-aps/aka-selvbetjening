@@ -54,16 +54,6 @@ class ObligatoriskPensionSelskabForm(forms.ModelForm):
         required=True,
         error_messages={"required": "error.required"},
     )
-    beløb = forms.DecimalField(
-        decimal_places=2,
-        required=True,
-        error_messages={
-            "required": "error.required",
-            "invalid": "error.number_required",
-        },
-        localize=True,
-        min_value=0.00,
-    )
 
 
 ObligatoriskPensionSelskabFormSet = inlineformset_factory(
