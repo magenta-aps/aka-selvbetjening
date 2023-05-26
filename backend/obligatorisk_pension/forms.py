@@ -33,7 +33,6 @@ class ObligatoriskPensionSelskabForm(forms.ModelForm):
             "grønlandsk",
             "land",
             "pensionsselskab",
-            "beløb",
         )
 
     grønlandsk = forms.BooleanField(
@@ -44,7 +43,7 @@ class ObligatoriskPensionSelskabForm(forms.ModelForm):
                 (False, _("Nej")),
             ),
         ),
-        required=True,
+        required=False,
         error_messages={"required": "error.required"},
     )
     land = forms.CharField(
