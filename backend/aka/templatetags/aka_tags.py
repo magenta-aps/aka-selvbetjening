@@ -101,9 +101,19 @@ def month_name(month_number):
 
 @register.filter
 def after(text, prefix):
-    if type(text) == str:
-        try:
-            return text[text.index(prefix) + len(prefix) :]
-        except ValueError:
-            pass
+    text = str(text)
+    try:
+        return text[text.index(prefix) + len(prefix) :]
+    except ValueError:
+        pass
+    return text
+
+
+@register.filter
+def after_last(text, prefix):
+    text = str(text)
+    try:
+        return text[text.rindex(prefix) + len(prefix) :]
+    except ValueError:
+        pass
     return text

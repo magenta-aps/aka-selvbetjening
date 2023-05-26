@@ -1,0 +1,18 @@
+{% load i18n %}
+<div class="row {{ classes }}">
+    <div style="display:none">
+        {{ form.id }}
+        {{ form.DELETE }}
+    </div>
+    <div class="col-5-sm" data-formset-update="true">
+        {% include 'aka/util/field.html' with field=form.fil key='obligatorisk_pension.fil' %}
+    </div>
+    <div class="col-6-sm" data-formset-update="true">
+        {% include 'aka/util/field.html' with field=form.beskrivelse key='obligatorisk_pension.beskrivelse' %}
+    </div>
+
+    <div class="col-1-sm">
+        <label>&nbsp;</label>
+        <button type="button" data-formset-button="deleterow" data-trans="common.slet">{% translate 'common.slet' %}</button>
+    </div>
+</div>
