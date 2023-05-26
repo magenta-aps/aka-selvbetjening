@@ -62,6 +62,13 @@ $(function(){
             const updateRemoveButtons = function() {
                 const rows = formContainer.find("."+rowclass).not(formPrototype).filter(":visible");
                 rows.find("[data-formset-button=deleterow]").toggle(rows.length > 1);
+                rows.each(function (){
+                    const row = $(this);
+                    if (!rowFilled(row)) {
+                        row.find("[data-formset-button=deleterow]").hide();
+                        return false;
+                    }
+                });
             }
 
             const rowFilled = function(row) {
@@ -120,18 +127,6 @@ $(function(){
     });
 
     $(function () {
-
-        const getRowIndexes = function(container) {
-            const indexes = {};
-            container.find(".doc_file").not(".prototype").each(function(){
-                const id = $(this).find("input[type=file]").attr("id");
-                const s = id.lastIndexOf("_");
-                if (s !== -1) {
-                    indexes[id.substring(s+1)] = $(this);
-                }
-            });
-            return indexes;
-        };
 
         $("[data-formset]").each(function() {
             const container = $(this);
