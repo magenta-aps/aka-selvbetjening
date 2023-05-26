@@ -3,10 +3,11 @@ from datetime import date
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.forms import widgets
+from django.forms import widgets, inlineformset_factory
 from django.utils.translation import gettext_lazy as _
 from obligatorisk_pension.models import ObligatoriskPension
 from obligatorisk_pension.models import ObligatoriskPensionFile
+from obligatorisk_pension.models import ObligatoriskPensionSelskab
 
 
 class FileSetMixin:
@@ -132,40 +133,20 @@ class SkatteårForm(forms.Form):
     )
 
 
-class ObligatoriskPensionForm(FileSetMixin, forms.ModelForm):
+class ObligatoriskPensionSelskabForm(forms.ModelForm):
     class Meta:
-        model = ObligatoriskPension
+        model = ObligatoriskPensionSelskab
         fields = [
-            "navn",
-            "adresse",
-            "kommune",
-            "email",
+            "id",
             "grønlandsk",
             "land",
             "pensionsselskab",
             "beløb",
         ]
 
-    navn = forms.CharField(
-        required=True,
-        error_messages={"required": "error.required"},
-    )
-    adresse = forms.CharField(
-        required=True,
-        error_messages={"required": "error.required"},
-        widget=widgets.Textarea,
-    )
-    kommune = forms.ChoiceField(
-        choices=((m["code"], m["name"]) for m in settings.MUNICIPALITIES),
-        required=True,
-        error_messages={"required": "error.required"},
-    )
-    email = forms.EmailField(
-        required=True,
-        error_messages={"required": "error.required"},
-    )
     grønlandsk = forms.BooleanField(
-        widget=widgets.RadioSelect(
+        initial=True,
+        widget=widgets.Select(
             choices=(
                 (True, _("Ja")),
                 (False, _("Nej")),
@@ -184,8 +165,62 @@ class ObligatoriskPensionForm(FileSetMixin, forms.ModelForm):
     beløb = forms.DecimalField(
         decimal_places=2,
         required=True,
-        error_messages={"required": "error.required"},
+        error_messages={"required": "error.required", "invalid": "error.number_required"},
         localize=True,
+        min_value=0.00,
+    )
+
+
+ObligatoriskPensionSelskabFormSet = inlineformset_factory(
+    parent_model=ObligatoriskPension,
+    model=ObligatoriskPensionSelskab,
+    form=ObligatoriskPensionSelskabForm,
+    extra=1,
+)
+
+
+class ObligatoriskPensionForm(FileSetMixin, forms.ModelForm):
+    class Meta:
+        model = ObligatoriskPension
+        fields = [
+            "navn",
+            "adresse",
+            "kommune",
+            "email",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        self.selskabformset = ObligatoriskPensionSelskabFormSet(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+
+    def is_valid(self):
+        return super().is_valid() and self.selskabformset.is_valid()
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        self.selskabformset.instance = instance
+        if self.selskabformset.is_valid():
+            instance.save()
+            self.selskabformset.save()
+        return instance
+
+    navn = forms.CharField(
+        required=True,
+        error_messages={"required": "error.required"},
+    )
+    adresse = forms.CharField(
+        required=True,
+        error_messages={"required": "error.required"},
+        widget=widgets.Textarea,
+    )
+    kommune = forms.ChoiceField(
+        choices=((m["code"], m["name"]) for m in settings.MUNICIPALITIES),
+        required=True,
+        error_messages={"required": "error.required"},
+    )
+    email = forms.EmailField(
+        required=True,
+        error_messages={"required": "error.required"},
     )
 
     def clean_land(self):

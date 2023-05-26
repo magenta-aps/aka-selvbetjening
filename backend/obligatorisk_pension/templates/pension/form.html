@@ -6,6 +6,7 @@
 {% block extra_headers %}
     {% include 'aka/util/calendar_headers.html' %}
     <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/formset.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/fileform.js' %}"></script>
     {% if css %}
     <style>
@@ -48,29 +49,17 @@
                         {% include 'aka/util/field.html' with field=form.email key='obligatorisk_pension.email' %}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12-sm">
-                        {% include 'aka/util/field.html' with field=form.grønlandsk key='obligatorisk_pension.grønlandsk' %}
-                    </div>
-                </div>
-                <div class="row" id="land">
-                    <div class="col-12-sm">
-                        {% include 'aka/util/field.html' with field=form.land key='obligatorisk_pension.land' %}
-                    </div>
+
+            {{ form.selskabformset.management_form }}
+            <div class="formset" data-formset="selskaber" data-formset-rowclass="row" data-auto-add="true">
+                <div class="prototype">
+                {% include 'pension/selskabform.html' with form=form.selskabformset.empty_form %}
                 </div>
 
-                <div class="row">
-                    <div class="col-12-sm">
-                        {% include 'aka/util/field.html' with field=form.pensionsselskab key='obligatorisk_pension.pensionsselskab' %}
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12-sm">
-                        {% include 'aka/util/field.html' with field=form.beløb key='obligatorisk_pension.beløb' %}
-                    </div>
-                </div>
-
+            {%  for subform in form.selskabformset %}
+                {% include 'pension/selskabform.html' with form=subform %}
+            {% endfor %}
+            </div>
                 {% include 'aka/util/fileset.html' with label='obligatorisk_pension.filer' %}
 
 
@@ -87,13 +76,13 @@
     </article>
     <script>
 
-
+/*
     const glLandField = $("[name='{{ form.grønlandsk.name }}']");
     const toggleLand = function () {
         $("#land").toggle(glLandField.filter(":checked").val() === "False");
     }
     toggleLand();
     glLandField.change(toggleLand);
-
+*/
     </script>
 {% endblock %}

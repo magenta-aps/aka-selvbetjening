@@ -226,3 +226,6 @@ select {
         transform: rotate(90deg);
     }
 }
+.formset .prototype {
+    display: none;
+}
