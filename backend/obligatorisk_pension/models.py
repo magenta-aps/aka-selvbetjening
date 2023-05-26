@@ -1,5 +1,7 @@
+import posixpath
 from django.conf import settings
 from django.db import models
+from django.utils.datetime_safe import datetime
 from django.utils.translation import gettext_lazy as _
 
 
@@ -69,8 +71,17 @@ class ObligatoriskPensionSelskab(models.Model):
     )
 
 
+def obligatoriskpensionfile_upload_to(instance, filename):
+    dirname = (
+        datetime.now().strftime("obligatorisk_pension/%Y/%Y-%m-%d/")
+        + instance.obligatoriskpension.cpr
+    )
+    filename = posixpath.join(dirname, filename)
+    return filename
+
+
 class ObligatoriskPensionFile(models.Model):
-    fil = models.FileField(upload_to="obligatorisk_pension/%Y/%Y-%m-%d/")
+    fil = models.FileField(upload_to=obligatoriskpensionfile_upload_to)
     beskrivelse = models.CharField(
         max_length=1000,
     )

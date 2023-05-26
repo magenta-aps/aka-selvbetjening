@@ -58,7 +58,10 @@ class ObligatoriskPensionSelskabForm(forms.ModelForm):
     beløb = forms.DecimalField(
         decimal_places=2,
         required=True,
-        error_messages={"required": "error.required", "invalid": "error.number_required"},
+        error_messages={
+            "required": "error.required",
+            "invalid": "error.number_required",
+        },
         localize=True,
         min_value=0.00,
     )
@@ -76,7 +79,10 @@ ObligatoriskPensionSelskabFormSet = inlineformset_factory(
 class ObligatoriskPensionFilForm(forms.ModelForm):
     class Meta:
         model = ObligatoriskPensionFile
-        fields = ("fil","beskrivelse",)
+        fields = (
+            "fil",
+            "beskrivelse",
+        )
 
 
 ObligatoriskPensionFilFormSet = inlineformset_factory(
@@ -104,13 +110,20 @@ class ObligatoriskPensionForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
     def is_valid(self):
-        return super().is_valid() and self.selskabformset.is_valid() and self.filformset.is_valid()
+        return (
+            super().is_valid()
+            and self.selskabformset.is_valid()
+            and self.filformset.is_valid()
+        )
 
     def save(self, commit=True, **kwargs):
         instance = super().save(commit=False)
+        for key, value in kwargs.items():
+            setattr(instance, key, value)
+        self.selskabformset.instance = instance
+        self.filformset.instance = instance
         if self.selskabformset.is_valid() and self.filformset.is_valid():
-            if commit:
-                instance.save()
+            instance.save()
             self.selskabformset.save(commit)
             self.filformset.save(commit)
         return instance

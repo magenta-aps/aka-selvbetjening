@@ -42,7 +42,9 @@ class ObligatoriskPensionCreateView(IsContentMixin, HasUserMixin, UpdateView):
         return kwargs
 
     def form_valid(self, form):
-        pension_object = form.save(commit=True, cpr=self.cpr, skatteår = self.kwargs["skatteår"])
+        pension_object = form.save(
+            commit=True, cpr=self.cpr, skatteår=self.kwargs["skatteår"]
+        )
         self.send_mail_to_submitter(pension_object.email, pension_object)
         self.send_mail_to_office(settings.EMAIL_OFFICE_RECIPIENT, pension_object)
         return TemplateResponse(
