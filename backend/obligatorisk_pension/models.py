@@ -81,6 +81,8 @@ class ObligatoriskPensionFile(models.Model):
     fil = models.FileField(upload_to=obligatoriskpensionfile_upload_to)
     beskrivelse = models.CharField(
         max_length=1000,
+        null=True,
+        blank=True
     )
     obligatoriskpension = models.ForeignKey(
         ObligatoriskPension,
