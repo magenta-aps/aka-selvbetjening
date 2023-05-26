@@ -7,7 +7,6 @@
     {% include 'aka/util/calendar_headers.html' %}
     <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/formset.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/fileform.js' %}"></script>
     {% if css %}
     <style>
         {{ css|safe }}
@@ -69,8 +68,6 @@
                         {% include 'pension/filform.html' with form=subform %}
                     {% endfor %}
                 </div>
-                {# {% include 'aka/util/fileset.html' with label='obligatorisk_pension.filer' %} #}
-
 
                 <div class="row">
                     <div class="col-2-sm">
@@ -85,13 +82,5 @@
     </article>
     <script>
 
-/*
-    const glLandField = $("[name='{{ form.grønlandsk.name }}']");
-    const toggleLand = function () {
-        $("#land").toggle(glLandField.filter(":checked").val() === "False");
-    }
-    toggleLand();
-    glLandField.change(toggleLand);
-*/
     </script>
 {% endblock %}
