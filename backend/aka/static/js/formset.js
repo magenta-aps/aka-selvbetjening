@@ -28,6 +28,7 @@ $(function(){
                 if (update !== false) {
                     updateTotal();
                 }
+                formPrototype.trigger("clone", form);
                 if (animate) {
                     form.slideDown();
                 } else {
