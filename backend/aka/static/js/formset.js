@@ -42,12 +42,14 @@ $(function(){
                     form = $(this).parents("."+rowclass);
                 }
                 if (form.parent().first().is(formContainer)) {
+                    let name = form.find("input").attr("name").replace(/(-\d+-).*/, "$1");
                     const next = function () {
-                        form.remove();
+                        form.hide();
                         if (update !== false) {
                             updateTotal();
                         }
                         updateRemoveButtons();
+                        $("[name="+name+"DELETE]").prop("checked", true);
                     };
                     if (animate) {
                         form.slideUp({"complete": next});
@@ -58,7 +60,7 @@ $(function(){
             };
 
             const updateRemoveButtons = function() {
-                const rows = formContainer.find("."+rowclass).not(formPrototype);
+                const rows = formContainer.find("."+rowclass).not(formPrototype).filter(":visible");
                 rows.find("[data-formset-button=deleterow]").toggle(rows.length > 1);
             }
 
