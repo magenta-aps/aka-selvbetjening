@@ -59,8 +59,10 @@ ObligatoriskPensionSelskabFormSet = inlineformset_factory(
     parent_model=ObligatoriskPension,
     model=ObligatoriskPensionSelskab,
     form=ObligatoriskPensionSelskabForm,
-    extra=1,
+    min_num=1,
+    extra=0,
     can_delete=True,
+    validate_min=True,
 )
 
 
@@ -77,8 +79,10 @@ ObligatoriskPensionFilFormSet = inlineformset_factory(
     parent_model=ObligatoriskPension,
     model=ObligatoriskPensionFile,
     form=ObligatoriskPensionFilForm,
-    extra=1,
+    min_num=1,
+    extra=0,
     can_delete=True,
+    validate_min=True,
 )
 
 

@@ -34,7 +34,16 @@ $(function(){
                 } else {
                     form.show();
                 }
-                updateRemoveButtons();
+                updateButtons();
+                if (formContainer.data("auto-add")) {
+                    form.find("input,select").change(updateRows);
+                }
+                form.find("[data-formset-button=addrow]").click(function (){
+                    addForm(true, true);
+                });
+                form.find("[data-formset-button=deleterow]").click(function () {
+                    removeForm.call(this, null, true, true);  // Do not pass event to method
+                });
                 return form;
             };
 
@@ -49,7 +58,7 @@ $(function(){
                         if (update !== false) {
                             updateTotal();
                         }
-                        updateRemoveButtons();
+                        updateButtons();
                         $("[name="+name+"DELETE]").prop("checked", true);
                     };
                     if (animate) {
@@ -60,17 +69,13 @@ $(function(){
                 }
             };
 
-            const updateRemoveButtons = function() {
+            const updateButtons = function() {
                 const rows = formContainer.find("."+rowclass).not(formPrototype).filter(":visible");
                 rows.find("[data-formset-button=deleterow]").toggle(rows.length > 1);
-                rows.each(function (){
-                    const row = $(this);
-                    if (!rowFilled(row)) {
-                        row.find("[data-formset-button=deleterow]").hide();
-                        return false;
-                    }
-                });
-            }
+                const addButtons = rows.find("[data-formset-button=addrow]");
+                addButtons.hide();
+                addButtons.last().show();
+            };
 
             const rowFilled = function(row) {
                 const significantFields = row.find(
@@ -104,21 +109,21 @@ $(function(){
                     }
                 });
                 if (allRowsFilled) {
-                    const newform = addForm(true, animate);
-                    newform.find("input,select").change(updateRows);
-                    newform.find("[data-formset-button=deleterow]").click(function () {
-                        removeForm.call(this, null, true, true);  // Do not pass event to method
-                    });
+                    addForm(true, animate);
                 }
             }
 
             if (formContainer.data("auto-add")) {
                 this.find("input,select").change(updateRows);
             }
+            formContainer.find("[data-formset-button=addrow]").click(function (){
+                addForm(true, true);
+            });
             formContainer.find("[data-formset-button=deleterow]").click(function () {
                 removeForm.call(this, null, true, true);  // Do not pass event to method
             });
-            updateRemoveButtons();
+            updateButtons();
+            updateTotal();
 
             return {
                 'addForm': addForm,
