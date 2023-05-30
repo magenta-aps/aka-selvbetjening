@@ -50,7 +50,7 @@
                 </div>
 
                 {{ form.selskabformset.management_form }}
-                <div class="formset" data-formset="selskaber" data-formset-rowclass="row" data-auto-add="true">
+                <div class="formset" data-formset="selskaber" data-formset-rowclass="row">
                     <div class="prototype">
                     {% include 'pension/selskabform.html' with form=form.selskabformset.empty_form %}
                     </div>
