@@ -52,14 +52,13 @@ $(function(){
                     form = $(this).parents("."+rowclass);
                 }
                 if (form.parent().first().is(formContainer)) {
-                    let name = form.find("input").attr("name").replace(/(-\d+-).*/, "$1");
                     const next = function () {
                         form.hide();
                         if (update !== false) {
                             updateTotal();
                         }
                         updateButtons();
-                        $("[name="+name+"DELETE]").prop("checked", true);
+                        updateDelete();
                     };
                     if (animate) {
                         form.slideUp({"complete": next});
@@ -75,6 +74,10 @@ $(function(){
                 const addButtons = rows.find("[data-formset-button=addrow]");
                 addButtons.hide();
                 addButtons.last().show();
+            };
+            const updateDelete = function() {
+                formContainer.find("."+rowclass+":visible [name$=DELETE]").prop("checked", false);
+                formContainer.find("."+rowclass+":hidden [name$=DELETE]").prop("checked", true);
             };
 
             const rowFilled = function(row) {
@@ -124,6 +127,7 @@ $(function(){
             });
             updateButtons();
             updateTotal();
+            updateDelete();
 
             return {
                 'addForm': addForm,

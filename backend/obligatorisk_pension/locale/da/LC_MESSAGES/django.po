@@ -44,6 +44,9 @@ msgstr "Beløb"
 msgid "obligatorisk_pension.filer"
 msgstr "Filer"
 
+msgid "obligatorisk_pension.fil"
+msgstr "Fil"
+
 msgid "obligatorisk_pension.filbeskrivelse"
 msgstr "Beskrivelse"
 
@@ -63,4 +66,10 @@ msgid "obligatorisk_pension.mail2.textbody"
 msgstr ""
 
 msgid "obligatorisk_pension.mail2.htmlbody"
+msgstr ""
+
+msgid "obligatorisk_pension.success_title"
+msgstr ""
+
+msgid "obligatorisk_pension.success_body"
 msgstr ""

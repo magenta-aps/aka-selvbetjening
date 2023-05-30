@@ -18,7 +18,6 @@
     <article class="indberet_pension">
         <form method="post" id="mainform" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ formset.management_form }}
             <h1 data-trans="obligatorisk_pension.title">{% translate 'obligatorisk_pension.title' %}</h1>
             <div class="container-fluid">
                 {% if form.errors or formset.errors %}
@@ -60,7 +59,7 @@
                 </div>
 
                 {{ form.filformset.management_form }}
-                <div class="formset" data-formset="filer" data-formset-rowclass="row" data-auto-add="true">
+                <div class="formset" data-formset="filer" data-formset-rowclass="row">
                     <div class="prototype">
                         {% include 'pension/filform.html' with form=form.filformset.empty_form %}
                     </div>
