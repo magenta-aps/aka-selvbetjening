@@ -74,6 +74,10 @@ class ObligatoriskPensionFilForm(forms.ModelForm):
             "beskrivelse",
         )
 
+    fil = forms.FileField(
+        error_messages={"required": "error.required"},
+    )
+
 
 ObligatoriskPensionFilFormSet = inlineformset_factory(
     parent_model=ObligatoriskPension,
