@@ -184,7 +184,7 @@ Deploy test:
     - .saltbert
   needs: ["Release image", "Configure test"]
   variables:
-    SALTBERT_ORCHESTRATION: aka_selvbetjening.service-test
+    SALTBERT_ORCHESTRATION: groenland.aka_selvbetjening.service-test
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
   environment:
     name: test
@@ -198,7 +198,7 @@ Deploy production:
     - .saltbert
   needs: ["Release image", "Configure production"]
   variables:
-    SALTBERT_ORCHESTRATION: aka_selvbetjening.service-prod
+    SALTBERT_ORCHESTRATION: groenland.aka_selvbetjening.service-prod
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
   environment:
     name: production
