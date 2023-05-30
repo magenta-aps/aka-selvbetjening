@@ -2,6 +2,7 @@ import magic
 from aka.utils import gettext_lang, send_mail
 from django.conf import settings
 from django.shortcuts import redirect
+from django.template import Engine, Context
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.views.generic import FormView, UpdateView
@@ -61,20 +62,30 @@ class ObligatoriskPensionCreateView(IsContentMixin, HasUserMixin, UpdateView):
                 gettext_lang("da", "obligatorisk_pension.mail1.subject"),
             ]
         )
+        engine = Engine.get_default()
+        context = Context({"object": object})
         textbody = [
-            gettext_lang("kl", "obligatorisk_pension.mail1.textbody"),
-            gettext_lang("da", "obligatorisk_pension.mail1.textbody"),
+            engine.from_string(
+                gettext_lang(lang, "obligatorisk_pension.mail1.textbody")
+            ).render(context)
+            for lang in ("kl", "da")
         ]
-        htmlbody = [
-            "<html><body>",
-            gettext_lang("kl", "obligatorisk_pension.mail1.htmlbody"),
-            gettext_lang("da", "obligatorisk_pension.mail1.htmlbody"),
-            "</body></html>",
-        ]
+        htmlbody = (
+            "<html><body>"
+            + "<hr/>".join(
+                [
+                    engine.from_string(
+                        gettext_lang(lang, "obligatorisk_pension.mail1.htmlbody")
+                    ).render(context)
+                    for lang in ("kl", "da")
+                ]
+            )
+            + "</body></html>",
+        )
         send_mail(
             recipient=recipient,
             subject=subject,
-            textbody="\n".join(textbody),
+            textbody="\n\n----\n\n".join(textbody),
             htmlbody="\n".join(htmlbody),
         )
 
@@ -85,16 +96,26 @@ class ObligatoriskPensionCreateView(IsContentMixin, HasUserMixin, UpdateView):
                 gettext_lang("da", "obligatorisk_pension.mail2.subject"),
             ]
         )
+        engine = Engine.get_default()
+        context = Context({"object": object})
         textbody = [
-            gettext_lang("kl", "obligatorisk_pension.mail2.textbody"),
-            gettext_lang("da", "obligatorisk_pension.mail2.textbody"),
+            engine.from_string(
+                gettext_lang(lang, "obligatorisk_pension.mail2.textbody")
+            ).render(context)
+            for lang in ("kl", "da")
         ]
-        htmlbody = [
-            "<html><body>",
-            gettext_lang("kl", "obligatorisk_pension.mail2.htmlbody"),
-            gettext_lang("da", "obligatorisk_pension.mail2.htmlbody"),
-            "</body></html>",
-        ]
+        htmlbody = (
+            "<html><body>"
+            + "<hr/>".join(
+                [
+                    engine.from_string(
+                        gettext_lang(lang, "obligatorisk_pension.mail2.htmlbody")
+                    ).render(context)
+                    for lang in ("kl", "da")
+                ]
+            )
+            + "</body></html>",
+        )
 
         attachments = []
         for fileobject in object.filer.all():
@@ -106,7 +127,7 @@ class ObligatoriskPensionCreateView(IsContentMixin, HasUserMixin, UpdateView):
         send_mail(
             recipient=recipient,
             subject=subject,
-            textbody="\n".join(textbody),
+            textbody="\n\n----\n\n".join(textbody),
             htmlbody="\n".join(htmlbody),
             attachments=attachments,
         )
