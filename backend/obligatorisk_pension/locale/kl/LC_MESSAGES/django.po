@@ -21,25 +21,25 @@ msgid "obligatorisk_pension.title"
 msgstr "Obligatorisk pension"
 
 msgid "obligatorisk_pension.navn"
-msgstr "Navn"
+msgstr "Ateq"
 
 msgid "obligatorisk_pension.adresse"
-msgstr "Adresse"
+msgstr "Najugaq"
 
 msgid "obligatorisk_pension.kommune"
 msgstr "Kommune"
 
 msgid "obligatorisk_pension.email"
-msgstr "Email-adresse"
+msgstr "E-maili"
 
 msgid "obligatorisk_pension.grønlandsk"
-msgstr "Grønlandsk pensionsordning"
+msgstr "Soraarnerussutisiaqarnissamut Kalaallit Nunaanni aaqqissuussineq?"
 
 msgid "obligatorisk_pension.land"
-msgstr "Land"
+msgstr "Nuna"
 
 msgid "obligatorisk_pension.pensionsselskab"
-msgstr "Pensionsselskab"
+msgstr "Soraarnerussutisiaqarnissamut aaqqissuussivik"
 
 msgid "obligatorisk_pension.beløb"
 msgstr "Beløb"
@@ -51,7 +51,7 @@ msgid "obligatorisk_pension.fil"
 msgstr "Fil"
 
 msgid "obligatorisk_pension.filbeskrivelse"
-msgstr "Beskrivelse"
+msgstr "Nassuiaat"
 
 msgid "obligatorisk_pension.mail1.subject"
 msgstr ""
