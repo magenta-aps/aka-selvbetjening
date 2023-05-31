@@ -14,6 +14,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "obligatorisk_pension.skatteår"
+msgstr "Skatteår"
+
 msgid "obligatorisk_pension.title"
 msgstr "Obligatorisk pension"
 
