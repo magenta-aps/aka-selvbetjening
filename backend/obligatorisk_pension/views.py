@@ -90,7 +90,7 @@ class ObligatoriskPensionCreateView(IsContentMixin, HasUserMixin, UpdateView):
         )
 
     def send_mail_to_office(self, recipient, object):
-        subject = gettext_lang("da", "obligatorisk_pension.mail2.subject"),
+        subject = gettext_lang("da", "obligatorisk_pension.mail2.subject")
         engine = Engine.get_default()
         context = Context({"object": object})
         textbody = [
