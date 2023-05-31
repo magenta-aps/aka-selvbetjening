@@ -41,9 +41,6 @@ msgstr "Land"
 msgid "obligatorisk_pension.pensionsselskab"
 msgstr "Pensionsselskab"
 
-msgid "obligatorisk_pension.beløb"
-msgstr "Beløb"
-
 msgid "obligatorisk_pension.filer"
 msgstr "Filer"
 
@@ -54,7 +51,7 @@ msgid "obligatorisk_pension.filbeskrivelse"
 msgstr "Beskrivelse"
 
 msgid "obligatorisk_pension.mail1.subject"
-msgstr ""
+msgstr "Tak for registreringen af din pension"
 
 msgid "obligatorisk_pension.mail1.textbody"
 msgstr ""
@@ -78,7 +75,7 @@ msgstr ""
 "Skattestyrelsen</p>"
 
 msgid "obligatorisk_pension.mail2.subject"
-msgstr ""
+msgstr "Ny indberetning til Obligatorisk Pension."
 
 msgid "obligatorisk_pension.mail2.textbody"
 msgstr ""
