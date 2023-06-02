@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load l10n %}
+
+{% block extra_headers %}
+    {% include 'aka/util/calendar_headers.html' %}
+    <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/formset.js' %}"></script>
+    {% if css %}
+    <style>
+        {{ css|safe }}
+    </style>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <article class="indberet_pension">
+        <form method="post" id="mainform" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h1 data-trans="obligatorisk_pension.title">{% translate 'obligatorisk_pension.title' %}</h1>
+            <div class="container-fluid">
+                {% if form.errors or formset.errors %}
+                    <p class="err-msg">{% translate 'common.errors_present' %}</p>
+                    {% include "aka/util/nonfield_errors.html" with form=form %}
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.navn key='obligatorisk_pension.navn' %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.adresse key='obligatorisk_pension.adresse' %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.kommune key='obligatorisk_pension.kommune' %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.email key='obligatorisk_pension.email' %}
+                    </div>
+                </div>
+
+                {{ form.selskabformset.management_form }}
+                <div class="formset" data-formset="selskaber" data-formset-rowclass="row">
+                    <div class="prototype">
+                    {% include 'pension/selskabform.html' with form=form.selskabformset.empty_form %}
+                    </div>
+                    {%  for subform in form.selskabformset %}
+                        {% include 'pension/selskabform.html' with form=subform %}
+                    {% endfor %}
+                </div>
+
+                {{ form.filformset.management_form }}
+                <div class="formset" data-formset="filer" data-formset-rowclass="row">
+                    <div class="prototype">
+                        {% include 'pension/filform.html' with form=form.filformset.empty_form %}
+                    </div>
+                    {%  for subform in form.filformset %}
+                        {% include 'pension/filform.html' with form=subform %}
+                    {% endfor %}
+                </div>
+
+                <div class="row">
+                    <div class="col-2-sm">
+                        <button type="submit" data-trans="common.gem">{% translate 'common.gem' %}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div id="formsetPrototype" style="display: none">
+            {% include 'aka/util/field.html' with field=empty_form.file key='obligatorisk_pension.file' %}
+        </div>
+    </article>
+{% endblock %}

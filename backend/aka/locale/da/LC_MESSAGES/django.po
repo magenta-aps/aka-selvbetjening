@@ -30,6 +30,9 @@ msgstr "Forside"
 msgid "common.gem"
 msgstr "Gem"
 
+msgid "common.næste"
+msgstr "Næste"
+
 msgid "common.send"
 msgstr "Send"
 

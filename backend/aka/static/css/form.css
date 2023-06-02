@@ -72,7 +72,7 @@ label {
     display: inline-block;
     margin: 20px 0 10px
 }
-input:not(input[type="file"],input[type="checkbox"],input[type="radio"]) {
+input:not(input[type="checkbox"],input[type="radio"]) {
     width: 100%;
     height: 46px
 }
@@ -225,4 +225,7 @@ select {
     100% {
         transform: rotate(90deg);
     }
+}
+.formset .prototype {
+    display: none;
 }
