@@ -1,0 +1,5 @@
+{% if pdf %}
+    <label>{{ field.label }}</label>{{ field.value }}
+{%  else %}
+    {% include 'aka/util/field.html' with field=field key=key %}
+{% endif %}

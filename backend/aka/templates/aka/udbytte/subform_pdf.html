@@ -1,24 +1,24 @@
 {% load i18n %}
 <div class="row">
-    <div class="col-1-sm">
-        {% include 'aka/util/field.html' with field=subform.cpr_cvr_tin %}
+    <div class="col-1-sm" style="word-break: break-all">
+        {{ subform.cpr_cvr_tin.value|default_if_none:"" }}
     </div>
-    <div class="col-2-sm">
-        {% include 'aka/util/field.html' with field=subform.navn %}
+    <div class="col-2-sm" style="word-break: break-all">
+        {{ subform.navn.value|default_if_none:"" }}
     </div>
-    <div class="col-2-sm">
-        {% include 'aka/util/field.html' with field=subform.adresse %}
+    <div class="col-2-sm" style="word-break: break-all">
+        {{ subform.adresse.value|default_if_none:"" }}
     </div>
-    <div class="col-1-sm">
-        {% include 'aka/util/field.html' with field=subform.postnummer %}
+    <div class="col-1-sm" style="word-break: break-all">
+        {{ subform.postnummer.value|default_if_none:"" }}
     </div>
-    <div class="col-2-sm">
-        {% include 'aka/util/field.html' with field=subform.by %}
+    <div class="col-2-sm" style="word-break: break-all">
+        {{ subform.by.value|default_if_none:"" }}
     </div>
-    <div class="col-2-sm">
-        {% include 'aka/util/field.html' with field=subform.land %}
+    <div class="col-2-sm" style="word-break: break-all">
+        {{ subform.land.value|default_if_none:"" }}
     </div>
-    <div class="col-2-sm">
-        {% include 'aka/util/field.html' with field=subform.udbytte %}
+    <div class="col-2-sm" style="word-break: break-all">
+        {{ subform.udbytte.value|default_if_none:"" }}
     </div>
 </div>
