@@ -763,7 +763,7 @@ msgstr ""
 "</p>"
 
 msgid "udbytte.title"
-msgstr "U1 SKAT"
+msgstr "U1a SKAT"
 
 msgid "udbytte.vejledning_skjul"
 msgstr "Skjul vejledning"
@@ -900,7 +900,7 @@ msgid "udbytte.success_body"
 msgstr "Din udbytteerklæring er blevet gemt, og vi sender en kopi til din registrerede e-mailadresse."
 
 msgid "udbytte.mail1.subject"
-msgstr "Udfyldt U1 - {company_name} - {year}"
+msgstr "Udfyldt U1a - {company_name} - {year}"
 
 msgid "udbytte.mail1.textbody"
 msgstr "Vi har modtaget din udbytteerklæring. En kopi er vedhæftet denne e-mail"
@@ -915,12 +915,12 @@ msgid "udbytte.mail1.htmlreminder"
 msgstr "<p>Du kan udfylde U1 blanket her: <a href=\"{url}\">{url}</a></p>"
 
 msgid "udbytte.mail2.subject"
-msgstr "Udfyldt U1 - {company_name} - {year}"
+msgstr "Udfyldt U1a - {company_name} - {year}"
 
 msgid "udbytte.mail2.textbody"
 msgstr ""
 "Hej,\n\n"
 ""
-"{company_name} har udfyldt U1 udbytteerklæring, den er vedhæftet denne e-mail.\n\n"
+"{company_name} har udfyldt U1a udbytteerklæring, den er vedhæftet denne e-mail.\n\n"
 ""
 "CSV datastring: {csv}"

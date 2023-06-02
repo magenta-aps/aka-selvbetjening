@@ -839,7 +839,7 @@ msgstr ""
 
 
 msgid "udbytte.title"
-msgstr "U1 SKAT"
+msgstr "U1a SKAT"
 
 msgid "udbytte.revisionsfirma"
 msgstr "Paasissutissat revionsfirmamut tunngasut"
@@ -961,7 +961,7 @@ msgid "udbytte.success_body"
 msgstr "Iluanaarutisiaqartitsinermut nalunaarutit toqqorparput, assilineqarneralu e-mailinnut nalunaarsorneqartumut nassiunneqassaaq."
 
 msgid "udbytte.mail1.subject"
-msgstr "Immersugaq U1 - {company_name} - {year}"
+msgstr "Immersugaq U1a - {company_name} - {year}"
 
 msgid "udbytte.mail1.textbody"
 msgstr "Iluanaarutisiaqartitsinermut nalunaarutit tiguarput, assilineqarneralu e-mailimut uunga ilanngullugu nassiunneqarpoq."
@@ -976,10 +976,10 @@ msgid "udbytte.mail1.htmlreminder"
 msgstr "<p>Selskabinut nammineerluni nalunaarutip immersornissaa eqqaamalaariuk: <a href=\"{url}\">{url}</a></p>"
 
 msgid "udbytte.mail2.subject"
-msgstr "Immersugaq U1 - {company_name} - {year}"
+msgstr "Immersugaq U1a - {company_name} - {year}"
 
 msgid "udbytte.mail2.textbody"
 msgstr ""
-"{company_name}-ip iluanaarutisiaqartitsinermut nalunaarut U1 immersorpaa, taannalu e-mailimut uunga ilanngullugu nassiunneqarpoq.\n\n"
+"{company_name}-ip iluanaarutisiaqartitsinermut nalunaarut U1a immersorpaa, taannalu e-mailimut uunga ilanngullugu nassiunneqarpoq.\n\n"
 ""
 "CSV-p paasissutissartai: {csv}"
