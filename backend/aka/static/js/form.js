@@ -100,7 +100,7 @@ $(function(){
             $(this).addClass("has-collapsed");
             $(this).removeClass("has-expanded");
             target.slideUp({complete: function () {
-                target.trigger("collapsed");
+                    target.trigger("collapsed");
             }});
         } else {
             $(this).removeClass("has-collapsed");
@@ -109,5 +109,28 @@ $(function(){
                 target.trigger("expanded");
             }});
         }
-    })
+    });
+})
+
+const data_controls = function () {
+    const $this = $(this);
+    const definer = $this.attr("controls") ? $this : $this.parents("[data-controls]");
+    const target = $(definer.data("controls"));
+    const values = definer.data("controls-values").split(definer.data("controls-value-separator") || " ");
+    const action = definer.data("controls-action");
+    const found = (values.indexOf($this.val()) !== -1);
+    if (action === "disabled") {
+        target.prop("disabled", found);
+    }
+};
+$(function () {
+    const selector = "input[data-controls], select[data-controls], [data-controls] input, [data-controls] select";
+    const controllers = $(selector);
+    controllers.change(data_controls);
+    controllers.each(data_controls);
+    $(".prototype").on("clone", function(event, clone) {
+        const controllers = $(clone).find(selector);
+        controllers.change(data_controls);
+        controllers.each(data_controls);
+    });
 });

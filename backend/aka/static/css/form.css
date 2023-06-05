@@ -72,7 +72,7 @@ label {
     display: inline-block;
     margin: 20px 0 10px
 }
-input:not(input[type="file"],input[type="checkbox"],input[type="radio"]) {
+input:not(input[type="checkbox"],input[type="radio"]) {
     width: 100%;
     height: 46px
 }
@@ -92,6 +92,9 @@ input[type=date]:focus, input[type=email]:focus,
 input[type=number]:focus, input[type=password]:focus,
 input[type=text]:focus, textarea:focus, select:focus {
     border-color: #83929d
+}
+input:disabled, textarea:disabled {
+    border-color: #eaedee !important;
 }
 
 form.submitted input:invalid:not([type=checkbox],[type=radio]),
@@ -225,4 +228,7 @@ select {
     100% {
         transform: rotate(90deg);
     }
+}
+.formset .prototype {
+    display: none;
 }
