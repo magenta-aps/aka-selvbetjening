@@ -26,25 +26,25 @@
 {% block content %}
 <article>
 
-    <h1 class="account-title printhide" data-trans="account.title">{% translate 'account.title' %} </h1>
+    <h1 class="account-title printhide" data-trans="konto.title">{% translate 'konto.title' %} </h1>
 
     <div class="account-main">
 
         <form method="get" id="mainform">
             <div class="printhide">
                 {% include "aka/util/nonfield_errors.html" with form=form %}
-                <p data-trans="account.description">{{ account.description }}</p>
+                <p data-trans="konto.description">{{ konto.description }}</p>
             <div class="account-actions row">
                 {% if cpr and cvr %}
                 <div class="col-4-sm">
-                    {% include 'aka/util/field.html' with field=form.cprcvr key='account.cprcvr' %}
+                    {% include 'aka/util/field.html' with field=form.cprcvr key='konto.cprcvr' %}
                 </div>
                 {% endif %}
                 <div class="col-4-sm">
-                    {% include 'aka/util/field.html' with field=form.from_date key='account.from_date' %}
+                    {% include 'aka/util/field.html' with field=form.from_date key='konto.from_date' %}
                 </div>
                 <div class="col-4-sm">
-                    {% include 'aka/util/field.html' with field=form.to_date key='account.to_date' %}
+                    {% include 'aka/util/field.html' with field=form.to_date key='konto.to_date' %}
                 </div>
             </div>
 
@@ -75,7 +75,7 @@
                         </h2>
                         <div id="content-{{ key }}" data-key="{{ key }}" class="page-content collapsed" style="display:none">
 
-                            {% include 'aka/account/account_pageheader.html' with key=key %}
+                            {% include 'konto/pageheader.html' with key=key %}
 
                             <div class="page-data account-data">
 
@@ -84,7 +84,7 @@
                                 <div class="printhide">
                                     <select class="columnselect" multiple="multiple" data-key="{{ key }}">
                                         {% for field in section.fields %}
-                                            {% with "account."|add:field.name as transkey %}
+                                            {% with "konto."|add:field.name as transkey %}
                                                 <option value="{{ field.name }}" {% if not field in form.hidden.value %}selected="selected"{% endif %}>{% translate transkey %}</option>
                                             {% endwith %}
                                         {% endfor %}
@@ -122,25 +122,25 @@
                                 </tbody>
                                 </table>
                             {% else %}
-                                <p data-trans="account.ingenposter">{% translate 'account.ingenposter' %}</p>
+                                <p data-trans="konto.ingenposter">{% translate 'konto.ingenposter' %}</p>
                             {% endif %}
 
                             {% if total %}
                                 <div class="row account-total no-copy">
                                     <div class="col-3-sm">
-                                        <span class="total-label" data-trans="account.total_claim">{% translate 'account.total_claim' %}</span>
+                                        <span class="total-label" data-trans="konto.total_claim">{% translate 'konto.total_claim' %}</span>
                                         <span class="total-data">{{ total.total_claim }}</span>
                                     </div>
                                     <div class="col-3-sm">
-                                        <span class="total-label" data-trans="account.total_payment">{% translate 'account.total_payment' %}</span>
+                                        <span class="total-label" data-trans="konto.total_payment">{% translate 'konto.total_payment' %}</span>
                                         <span class="total-data">{{ total.total_payment }}</span>
                                     </div>
                                     <div class="col-3-sm">
-                                        <span class="total-label" data-trans="account.total_sum">{% translate 'account.total_sum' %}</span>
+                                        <span class="total-label" data-trans="konto.total_sum">{% translate 'konto.total_sum' %}</span>
                                         <span class="total-data">{{ total.total_sum }}</span>
                                     </div>
                                     <div class="col-3-sm">
-                                        <span class="total-label" data-trans="account.total_restance">{% translate 'account.total_restance' %}</span>
+                                        <span class="total-label" data-trans="konto.total_restance">{% translate 'konto.total_restance' %}</span>
                                         <span class="total-data">{{ total.total_restance }}</span>
                                     </div>
                                 </div>

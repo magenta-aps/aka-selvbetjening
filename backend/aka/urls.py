@@ -3,7 +3,6 @@ from aka.views import CustomJavaScriptCatalog, SetLanguageView
 from aka.views import IndexTemplateView
 from aka.views import InkassoGroupDataView
 from aka.views import InkassoSagView, InkassoSagUploadView
-from aka.views import KontoView
 from aka.views import LoentraekReceiptView, FordringReceiptView, NedskrivningReceiptView
 from aka.views import LoentraekView, LoentraekUploadView
 from aka.views import NedskrivningView, NedskrivningUploadView
@@ -53,7 +52,6 @@ urlpatterns = [
         NedskrivningUploadView.as_view(),
         name="nedskrivning-upload",
     ),
-    path("konto/", KontoView.as_view(), name="konto"),
     path(
         "loentraek/kvittering/<str:pdf_id>/",
         LoentraekReceiptView.as_view(),

@@ -8,6 +8,7 @@ urlpatterns = [
         "obligatorisk_pension/",
         include("obligatorisk_pension.urls", namespace="obligatorisk_pension"),
     ),
+    path("konto/", include("konto.urls", namespace="konto")),
     path("", include("django_mitid_auth.urls", namespace="login")),
     path("_ht/", include("watchman.urls")),
 ]

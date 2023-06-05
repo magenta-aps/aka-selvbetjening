@@ -53,7 +53,7 @@
         {% include 'toc-item.html' with url=udbytte_url text='index.udbytte' subtext='index.udbytte.sub' icon='business' %}
     {% endif %}
     {% if cpr or cvr %}
-        {% url 'aka:konto' as konto_url %}
+        {% url 'konto:konto' as konto_url %}
         {% include 'toc-item.html' with url=konto_url text='index.konto' subtext='index.konto.sub' icon='tax' %}
     {% endif %}
 </nav>
