@@ -29,6 +29,9 @@ msgstr "Saqqaa"
 msgid "common.gem"
 msgstr "Toqqoruk"
 
+msgid "common.næste"
+msgstr "Næste"
+
 msgid "common.send"
 msgstr "Nassiuguk"
 

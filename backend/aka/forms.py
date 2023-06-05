@@ -13,6 +13,7 @@ from django.core.validators import MaxLengthValidator
 from django.core.validators import MinLengthValidator
 from django.core.validators import RegexValidator
 from django.forms import ValidationError, MultipleHiddenInput, TextInput
+from django.forms.widgets import Textarea
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 from io import StringIO
@@ -788,4 +789,47 @@ class UdbytteFormItem(forms.Form):
             "required": "error.required",
             "invalid": "error.number_required",
         },
+    )
+
+
+class ObligatoriskPensionForm(forms.Form):
+    navn = forms.CharField(
+        label=_("Navn"),
+        required=True,
+        error_messages={"required": "error.required"},
+    )
+    adresse = forms.CharField(
+        label=_("Adresse"),
+        required=True,
+        error_messages={"required": "error.required"},
+        widget=Textarea,
+    )
+    kommune = forms.ChoiceField(
+        choices=((m["code"], m["name"]) for m in settings.MUNICIPALITIES),
+        required=True,
+        error_messages={"required": "error.required"},
+    )
+    email = forms.EmailField(
+        label=_("Email-adresse"),
+        required=True,
+        error_messages={"required": "error.required"},
+    )
+    grønlandsk = forms.ChoiceField(
+        label=_("Grønlandsk pensionsordning"),
+        choices=(
+            (True, _("Ja")),
+            (False, _("Nej")),
+        ),
+        widget=RadioSelect,
+        required=True,
+        error_messages={"required": "error.required"},
+    )
+    land = forms.CharField(
+        label=_("Land"),
+        required=False,
+    )
+    pensionsselskab = forms.CharField(
+        label=_("Pensionsselskab"),
+        required=True,
+        error_messages={"required": "error.required"},
     )

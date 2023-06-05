@@ -97,3 +97,23 @@ def cpr(item):
 @register.filter
 def month_name(month_number):
     return util_month_name(month_number)
+
+
+@register.filter
+def after(text, prefix):
+    text = str(text)
+    try:
+        return text[text.index(prefix) + len(prefix) :]
+    except ValueError:
+        pass
+    return text
+
+
+@register.filter
+def after_last(text, prefix):
+    text = str(text)
+    try:
+        return text[text.rindex(prefix) + len(prefix) :]
+    except ValueError:
+        pass
+    return text

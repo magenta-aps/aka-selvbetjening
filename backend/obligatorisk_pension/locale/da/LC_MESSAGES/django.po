@@ -1,0 +1,116 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-07 12:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "obligatorisk_pension.skatteår"
+msgstr "Skatteår"
+
+msgid "obligatorisk_pension.title"
+msgstr "Obligatorisk pension"
+
+msgid "obligatorisk_pension.navn"
+msgstr "Navn"
+
+msgid "obligatorisk_pension.adresse"
+msgstr "Adresse"
+
+msgid "obligatorisk_pension.kommune"
+msgstr "Kommune"
+
+msgid "obligatorisk_pension.email"
+msgstr "Email-adresse"
+
+msgid "obligatorisk_pension.grønlandsk"
+msgstr "Grønlandsk pensionsordning"
+
+msgid "obligatorisk_pension.land"
+msgstr "Land"
+
+msgid "obligatorisk_pension.pensionsselskab"
+msgstr "Pensionsselskab"
+
+msgid "obligatorisk_pension.filer"
+msgstr "Filer"
+
+msgid "obligatorisk_pension.fil"
+msgstr "Fil"
+
+msgid "obligatorisk_pension.filbeskrivelse"
+msgstr "Beskrivelse"
+
+msgid "obligatorisk_pension.mail1.subject"
+msgstr "Tak for registreringen af din pension"
+
+msgid "obligatorisk_pension.mail1.textbody"
+msgstr ""
+"Tak for registreringen af din pension.\n"
+"Vi kontakter dig kun, hvis indberetningen er ufuldstændig, "
+"eller hvis vi har opdaget en fejl.\n"
+"Hvis du ønsker at ændre eller supplere din indberetning, bedes du gøre det "
+"i vores digitale formular: https://akap.sullissivik.gl/obligatorisk_pension\n\n"
+"Med venlig hilsen, \n"
+"Skattestyrelsen"
+
+msgid "obligatorisk_pension.mail1.htmlbody"
+msgstr ""
+"<p>Tak for registreringen af din pension.</p>"
+"<p>Vi kontakter dig kun, hvis indberetningen er ufuldstændig, "
+"eller hvis vi har opdaget en fejl.</p>"
+"<p>Hvis du ønsker at ændre eller supplere din indberetning, bedes du gøre det "
+"i vores digitale formular: "
+"<a href=\"https://akap.sullissivik.gl/obligatorisk_pension\">https://akap.sullissivik.gl/obligatorisk_pension</a></p>"
+"<p>Med venlig hilsen,<br/>"
+"Skattestyrelsen</p>"
+
+msgid "obligatorisk_pension.mail2.subject"
+msgstr "Ny indberetning til Obligatorisk Pension."
+
+msgid "obligatorisk_pension.mail2.textbody"
+msgstr ""
+"Ny Obligatorisk Pension indberettelse fra: {{object.email}}\n"
+"Blanket data:\n"
+"Navn: {{object.navn}}\n"
+"CPR-nummer: {{object.cpr}}\n"
+"Adresse: {{object.adresse}}\n"
+"Kommune: {{object.get_kommune_display}}\n"
+"Pensionsordninger:\n"
+"{% for selskab in object.selskaber.all %}"
+"    Land: {% if selskab.grønlandsk %}Grønland{% else %}{{ selskab.land }}{% endif %} - "
+"    Navn: {{ selskab.pensionsselskab }}\n"
+"{% endfor %}"
+"Hav en god dag,"
+
+msgid "obligatorisk_pension.mail2.htmlbody"
+msgstr ""
+"<p>Ny Obligatorisk Pension indberettelse fra: {{object.email}}</p>"
+"<p>Blanket data:</p>"
+"<p>Navn: {{object.navn}}</p>"
+"<p>CPR-nummer: {{object.cpr}}</p>"
+"<p>Adresse: {{object.adresse}}</p>"
+"<p>Kommune: {{object.get_kommune_display}}</p>"
+"<p>Pensionsordninger:</p>"
+"<ul>"
+"{% for selskab in object.selskaber.all %}"
+"<li>Land: {% if selskab.grønlandsk %}Grønland{% else %}{{ selskab.land }}{% endif %} - "
+"    Navn: {{ selskab.pensionsselskab }}</li>"
+"{% endfor %}"
+"</ul>"
+"<p>Hav en god dag,</p>"
+
+msgid "obligatorisk_pension.success_title"
+msgstr "Tak for din indberetning."
+
+msgid "obligatorisk_pension.success_body"
+msgstr "Vi har sendt dig en bekræftelse til din e-mail."

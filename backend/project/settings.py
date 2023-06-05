@@ -29,8 +29,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SERIALIZER = "aka.utils.AKAJSONSerializer"
 
-
-MEDIA_URL = BASE_DIR + "/upload/"
+MEDIA_ROOT = "/upload/"  # Filesystem path to upload folder
 
 DATABASES = {
     "default": {
@@ -136,6 +135,7 @@ INSTALLED_APPS = [
     "django.contrib.auth",
     "django_mitid_auth",
     "aka",
+    "obligatorisk_pension",
     "mitid_test",
     "watchman",
 ]
@@ -396,7 +396,7 @@ for municipality in MUNICIPALITIES:
 TAX_FORM_U1 = os.environ.get(
     "TAX_FORM_U1", "http://etaxgps1/eTaxWebCitz1/Suliffinnut/Login.aspx"
 )
-TAX_FORM_STORAGE = "/u1_data"
+TAX_FORM_STORAGE = os.path.join(MEDIA_ROOT, "u1")
 
 # https://docs.djangoproject.com/en/4.1/topics/email/
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

@@ -108,7 +108,12 @@ $(function() {
                 let text = $this.attr('data-trans');
                 const params = $this.attr('data-trans-params');
                 text = format(text, params && JSON.parse(params), language);
-                this.innerHTML = text;
+                const attr = $this.attr('data-trans-attr');
+                if (attr) {
+                    $this.attr(attr, text);
+                } else {
+                    this.innerHTML = text;
+                }
             });
         });
         const localeMap = {

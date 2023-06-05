@@ -1,0 +1,114 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-07 12:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "obligatorisk_pension.skatteår"
+msgstr "Ukioq akileraarfik"
+
+msgid "obligatorisk_pension.title"
+msgstr "Soraarnerussutisiaqarnissamut aaqqissuussinermut peqataasussaatitaaneq"
+
+msgid "obligatorisk_pension.navn"
+msgstr "Ateq"
+
+msgid "obligatorisk_pension.adresse"
+msgstr "Najugaq"
+
+msgid "obligatorisk_pension.kommune"
+msgstr "Kommune"
+
+msgid "obligatorisk_pension.email"
+msgstr "E-maili"
+
+msgid "obligatorisk_pension.grønlandsk"
+msgstr "Soraarnerussutisiaqarnissamut Kalaallit Nunaanni aaqqissuussineq?"
+
+msgid "obligatorisk_pension.land"
+msgstr "Nuna"
+
+msgid "obligatorisk_pension.pensionsselskab"
+msgstr "Soraarnerussutisiaqarnissamut aaqqissuussivik"
+
+msgid "obligatorisk_pension.filer"
+msgstr "Filer"
+
+msgid "obligatorisk_pension.fil"
+msgstr "Fil"
+
+msgid "obligatorisk_pension.filbeskrivelse"
+msgstr "Nassuiaat"
+
+msgid "obligatorisk_pension.mail1.subject"
+msgstr "Qujanaq soraarnerussutisiaqarnissamut aaqqissuussinerit nalunaarutigigakku."
+
+msgid "obligatorisk_pension.mail1.textbody"
+msgstr ""
+"Qujanaq soraarnerussutisiaqarnissamut aaqqissuussinerit nalunaarutigigakku.\n"
+"Nalunaarut amigaateqarpat kukkunermilluunniit paasisaqarutta aatsaat attavigissavatsigit.\n"
+"Nalunaarutit allanngortinniarukku ilassuteqarfiginiarukkuluunniit qinnuigaatsigit "
+"digitaliusumik immersugassaaterput una atoqqullugu: https://akap.sullissivik.gl/obligatorisk_pension\n\n"
+"Inussiarnersumik inuulluaqqusilluta,\n"
+"Akileraartarnermut Aqutsisoqarfik"
+
+msgid "obligatorisk_pension.mail1.htmlbody"
+msgstr ""
+"<p>Qujanaq soraarnerussutisiaqarnissamut aaqqissuussinerit nalunaarutigigakku.</p>"
+"<p>Nalunaarut amigaateqarpat kukkunermilluunniit paasisaqarutta aatsaat attavigissavatsigit.</p>"
+"<p>Nalunaarutit allanngortinniarukku ilassuteqarfiginiarukkuluunniit qinnuigaatsigit "
+"digitaliusumik immersugassaaterput una atoqqullugu: "
+"<a href=\"https://akap.sullissivik.gl/obligatorisk_pension\">https://akap.sullissivik.gl/obligatorisk_pension</a></p>"
+"<p>Inussiarnersumik inuulluaqqusilluta,<br/>"
+"Akileraartarnermut Aqutsisoqarfik</p>"
+
+msgid "obligatorisk_pension.mail2.subject"
+msgstr ""
+
+msgid "obligatorisk_pension.mail2.textbody"
+msgstr ""
+"Soraarnerussutisiaqarnissamut aaqqissuussineq pillugu nalunaarut nutaaq uanngaaniit: {{object.email}}\n"
+"Immersugassami paasissutissat:\n"
+"Ateq: {{object.navn}}\n"
+"CPR-normu: {{object.cpr}}\n"
+"Najugaq: {{object.adresse}}\n"
+"Kommune: {{object.get_kommune_display}}\n"
+"{% for selskab in object.selskaber.all %}"
+"    Nuna: {% if selskab.grønlandsk %}Kalaallit Nunaat{% else %}{{ selskab.land }}{% endif %} - "
+"    Ateq: {{ selskab.pensionsselskab }}\n"
+"{% endfor %}"
+"\n"
+"Ullugissaarina,"
+
+msgid "obligatorisk_pension.mail2.htmlbody"
+msgstr ""
+"<p>Soraarnerussutisiaqarnissamut aaqqissuussineq pillugu nalunaarut nutaaq uanngaaniit: {{object.email}}</p>"
+"<p>Immersugassami paasissutissat:</p>"
+"<p>Ateq: {{object.navn}}</p>"
+"<p>CPR-normu: {{object.cpr}}</p>"
+"<p>Najugaq: {{object.adresse}}</p>"
+"<p>Kommune: {{object.get_kommune_display}}</p>"
+"<ul>"
+"{% for selskab in object.selskaber.all %}"
+"<li>Nuna: {% if selskab.grønlandsk %}Kalaallit Nunaat{% else %}{{ selskab.land }}{% endif %} - "
+"    Ateq: {{ selskab.pensionsselskab }}</li>"
+"{% endfor %}"
+"</ul>"
+"<p>Ullugissaarina,</p>"
+
+
+msgid "obligatorisk_pension.success_title"
+msgstr "Qujanaq nalunaarutinnut."
+
+msgid "obligatorisk_pension.success_body"
+msgstr "Tiguneranut uppernarsaat illit e-mailinnut nassiupparput."
