@@ -6,20 +6,15 @@ import os
 import re
 import uuid
 from aka.clients.prisme import Prisme, PrismeException
-from aka.clients.prisme import PrismeAKIRequest
-from aka.clients.prisme import PrismeAKITotalRequest
 from aka.clients.prisme import PrismeClaimRequest
 from aka.clients.prisme import PrismeImpairmentRequest
 from aka.clients.prisme import PrismeInterestNoteRequest
 from aka.clients.prisme import PrismePayrollRequest
 from aka.clients.prisme import PrismePayrollRequestLine
-from aka.clients.prisme import PrismeSELRequest
-from aka.clients.prisme import PrismeSELTotalRequest
 from aka.data.fordringsgruppe import groups
 from aka.forms import InkassoCoDebitorFormItem
 from aka.forms import InkassoForm, InkassoUploadForm
 from aka.forms import InterestNoteForm
-from aka.forms import KontoForm
 from aka.forms import LoentraekForm
 from aka.forms import LoentraekFormItem
 from aka.forms import LoentraekUploadForm
@@ -37,8 +32,7 @@ from project.view_mixins import RequireCvrMixin
 from project.view_mixins import SimpleGetFormMixin
 from project.view_mixins import SpreadsheetRendererMixin
 from aka.utils import AKAJSONEncoder
-from aka.utils import Field, Cell, Row, Table
-from aka.utils import chunks
+from aka.utils import Field, Cell, Row
 from aka.utils import flatten
 from aka.utils import get_ordereddict_key_index
 from aka.utils import gettext_lang
@@ -57,7 +51,7 @@ from django.utils import timezone
 from django.utils import translation
 from django.utils.datetime_safe import date
 from django.utils.decorators import method_decorator
-from django.utils.translation import gettext_lazy as _, gettext
+from django.utils.translation import gettext_lazy as _
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
@@ -178,304 +172,6 @@ class ChooseCvrView(AkaMixin, TemplateView):
             request.session.save()
             return redirect(back)
         return super().get(request, *args, **kwargs)
-
-
-@method_decorator(csrf_exempt, name="dispatch")
-class KontoView(
-    HasUserMixin,
-    SimpleGetFormMixin,
-    PdfRendererMixin,
-    JsonRendererMixin,
-    SpreadsheetRendererMixin,
-    IsContentMixin,
-    TemplateView,
-):
-    form_class = KontoForm
-    template_name = "aka/account/account.html"
-    pdf_template_name = "aka/account/account_pdf.html"
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.sections = None
-        self._data = {}
-        self._total = {}
-        self._prisme = None
-
-    def form_valid(self, form):
-        self.form = form
-        try:
-            self.load_sections(form)
-        except PrismeException as e:
-            form.add_error(None, e.as_validationerror)
-            return self.form_invalid(form)
-        if "format" in self.request.GET:
-            response = self.render()
-            if response is not None:
-                return response
-        return super(KontoView, self).form_valid(form)
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["cprcvr_choices"] = [
-            (getattr(self, key), "%s: %s" % (key.upper(), getattr(self, key)))
-            for key in ("cpr", "cvr")
-            if getattr(self, key)
-        ]
-        return kwargs
-
-    def get_context_data(self, **kwargs):
-        context = {}
-        if self.form.is_bound:
-            formdata = self.form.cleaned_data
-            context.update(
-                {
-                    "sections": self.sections,
-                    "date": date.today().strftime("%d/%m/%Y"),
-                    "period": {
-                        "from_date": formdata["from_date"].strftime("%d-%m-%Y")
-                        if formdata.get("from_date") is not None
-                        else None,
-                        "to_date": formdata["to_date"].strftime("%d-%m-%Y")
-                        if formdata.get("to_date") is not None
-                        else None,
-                    },
-                    "cprcvr": self.cprcvr_choice,
-                }
-            )
-            if self.is_pdf:
-                context["pages"] = self.get_pages()
-
-        context.update(kwargs)
-        return super().get_context_data(**context)
-
-    def get_filename(self):
-        try:
-            from_date = self.form.cleaned_data["from_date"].strftime("%Y-%m-%d")
-        except (KeyError, ValueError, AttributeError):
-            from_date = ""
-        try:
-            to_date = self.form.cleaned_data["to_date"].strftime("%Y-%m-%d")
-        except (KeyError, ValueError, AttributeError):
-            to_date = ""
-        return _("account.filename").format(from_date=from_date, to_date=to_date)
-
-    def get_sheetname(self):
-        return "Kontoudtog"
-
-    def hide_fields(self, form, fields):
-        return [
-            field for field in fields if field.name not in form.cleaned_data["hidden"]
-        ]
-
-    @property
-    def prisme(self):
-        if not self._prisme:
-            self._prisme = Prisme()
-        return self._prisme
-
-    def get_lookup_class(self, key):
-        if key == "sel":
-            return PrismeSELRequest
-        if key == "aki":
-            return PrismeAKIRequest
-
-    def get_total_lookup_class(self, key):
-        if key == "sel":
-            return PrismeSELTotalRequest
-        if key == "aki":
-            return PrismeAKITotalRequest
-
-    @property
-    def cprcvr_choice(self):
-        cprcvr = str(self.form.cleaned_data.get("cprcvr") or self.cpr or self.cvr)
-        if cprcvr == str(self.cpr):
-            return (cprcvr, "cpr")
-        elif cprcvr == str(self.cvr):
-            return (cprcvr, "cvr")
-        else:
-            logger.info(
-                "cprcvr_choice got: "
-                + str({"cprcvr": cprcvr, "cpr": self.cpr, "cvr": self.cvr})
-            )
-
-    def get_rows_by_key(self, key) -> List[Row]:
-        if key not in self._data:
-            try:
-                (cprcvr, c) = self.cprcvr_choice
-                lookup_class = self.get_lookup_class(key)
-                prisme_reply = self.prisme.process_service(
-                    lookup_class(
-                        cprcvr,
-                        self.form.cleaned_data["from_date"],
-                        self.form.cleaned_data["to_date"],
-                        self.form.cleaned_data["open_closed"],
-                    ),
-                    "account",
-                    self.cpr,
-                    self.cvr,
-                )
-                self._data[key] = []
-                if len(prisme_reply) == 0:
-                    return []
-                for entry in prisme_reply[0]:
-                    row = Row()
-                    for field in self.get_fields_by_key(key):
-                        value = getattr(entry, field.name)
-                        if field.modifier:
-                            value = field.modifier(value)
-                        row.cells.append(
-                            Cell(
-                                field=field,
-                                value=value,
-                            )
-                        )
-                    self._data[key].append(row)
-            except PrismeException:
-                pass
-        return self._data.get(key, [])
-
-    def get_total_data(self, key) -> dict:
-        if key not in self._total:
-            try:
-                (cprcvr, c) = self.cprcvr_choice
-                lookup_class = self.get_total_lookup_class(key)
-                prisme_reply = self.prisme.process_service(
-                    lookup_class(cprcvr), "account", self.cpr, self.cvr
-                )
-                if len(prisme_reply) == 0:
-                    return None
-                reply = prisme_reply[0]
-                self._total[key] = {
-                    key: getattr(reply, key)
-                    for key in [
-                        "total_claim",
-                        "total_payment",
-                        "total_sum",
-                        "total_restance",
-                    ]
-                }
-            except PrismeException:
-                pass
-        return self._total.get(key)
-
-    def load_sections(self, form):
-        self.sections = []
-        key = self.request.GET.get("key")
-        keys = [key] if key else ["sel", "aki"]
-        for key in keys:
-            rows = self.get_rows_by_key(key)
-            total = self.get_total_data(key)
-            self.sections.append(
-                {
-                    "key": key,
-                    "title": "account.title_" + key,
-                    "fields": self.hide_fields(form, self.get_fields_by_key(key)),
-                    "rows": rows,
-                    "total": total,
-                }
-            )
-
-    def get_pages(self, key=None):
-        if key is None:
-            key = self.request.GET.get("key")
-        if key:
-            pages = []
-            max_columns_per_page = (
-                8  # if there are more columns than this number, we do a split
-            )
-            line_field = Field(
-                name="index", klass="nb", transkey="account.linje", title="Linje"
-            )
-            for section in self.sections:
-                total = section["total"]
-                if len(section["rows"]):
-                    # item_collection is a dict of all items for a key (key = 'aki' or 'sel')
-                    # it contains title, fields, total, and a list of rows
-                    # Read fields in chunks, creating a new page for each chunk
-                    for page_fields, startcol in chunks(
-                        section["fields"], max_columns_per_page
-                    ):
-                        pages.append(
-                            Table(
-                                name=section["key"],
-                                fields=[line_field] + page_fields,
-                                rows=[
-                                    Row(
-                                        cells=[Cell(field=line_field, value=rownumber)]
-                                        + row.cells[
-                                            startcol : startcol + max_columns_per_page
-                                        ]
-                                    )
-                                    for rownumber, row in enumerate(section["rows"], 1)
-                                ],
-                                total=total,
-                            )
-                        )
-
-                        # Only show totals in first page of the section
-                        total = None
-                else:
-                    pages.append(
-                        Table(
-                            name=section["key"], fields=[line_field] + section["fields"]
-                        )
-                    )
-            return pages
-        return []
-
-    def get_rows(self) -> List[Row]:
-        return self.get_rows_by_key(self.key)
-
-    def get_extra(self) -> dict:
-        total = self.get_total_data(self.key)
-        if total:
-            return {
-                gettext("account.%s" % x): total[x]
-                for x in ["total_claim", "total_payment", "total_sum", "total_restance"]
-            }
-
-    def get_fields(self) -> List[Field]:
-        return self.get_fields_by_key(self.key)
-
-    def get_fields_by_key(self, key="sel") -> List[Field]:
-        fields = [
-            Field(name="account_number", klass="nb"),
-            Field(name="transaction_date", klass="nb"),
-            Field(name="accounting_date", klass="nb"),
-            Field(name="debitor_group_id", klass="nb"),
-            Field(name="debitor_group_name", klass="nb"),
-            Field(name="voucher", klass="nb"),
-            Field(name="text", klass=""),
-            Field(name="payment_code", klass="nb"),
-            Field(name="payment_code_name", klass="nb"),
-            Field(name="amount", klass="nb numbercell", number=True),
-            Field(name="remaining_amount", klass="nb numbercell", number=True),
-            Field(name="due_date", klass="nb"),
-            Field(name="closed_date", klass="nb"),
-            Field(name="last_settlement_voucher", klass="nb"),
-            Field(name="collection_letter_date", klass="nb"),
-            Field(name="collection_letter_code", klass="nb"),
-            Field(name="claim_type_code", klass="nb"),
-            Field(name="invoice_number", klass="nb"),
-            Field(name="transaction_type", klass="nb"),
-        ]
-        if key == "sel":
-            fields += [
-                Field(name="rate_number", klass="nb"),
-                Field(
-                    name="claim_type_code",
-                    labelkey="submitted_to_claims",
-                    klass="nb",
-                    modifier=lambda d: (d == "INDR"),
-                    boolean=True,
-                ),
-            ]
-        if key == "aki":
-            fields += [Field(name="child_claimant", klass="nb")]
-        for field in fields:
-            field.transkey = "account.%s" % (field.labelkey or field.name)
-            field.title = _(field.transkey).replace("&shy;", "")
-        return fields
 
 
 class InkassoSagView(

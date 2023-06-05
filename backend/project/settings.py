@@ -136,6 +136,7 @@ INSTALLED_APPS = [
     "django_mitid_auth",
     "aka",
     "obligatorisk_pension",
+    "konto",
     "mitid_test",
     "watchman",
 ]

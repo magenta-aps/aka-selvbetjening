@@ -9,15 +9,25 @@
         <div class="row">
             {% if pdf %}
             <div class="col-12-sm">
-                <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
-                <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
-                <strong>Skattestyrelsen</strong>
+                <h2>{{ authority.title }}</h2>
+                {% for line in authority.lines %}
+                    <strong>{{ line }}</strong>
+                    {% if not forloop.last %}<br/>{% endif %}
+                {% endfor %}
             </div>
             {% else %}
             <div class="col-7-sm">
-                <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
-                <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
-                <strong>Skattestyrelsen</strong>
+                <h2>{{ authority.title }}</h2>
+                {% for line in authority.lines %}
+                    <strong>{{ line }}</strong>
+                    {% if not forloop.last %}<br/>{% endif %}
+                {% endfor %}
+                {% if regnskabskontor_note %}
+                    {% translate 'konto.regnskabskontor_note' as note %}
+                    <p data-trans="konto.regnskabskontor_note" data-trans-params='{{ konto_href_obj|json }}'>
+                    {{ note|format:konto_href_obj|safe }}
+                    </p>
+                {% endif %}
             </div>
             <div class="col-5-sm output-actions printhide">
 
@@ -62,19 +72,19 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <th data-trans="account.swift">{% translate 'account.swift' %}</th>
+                        <th data-trans="konto.swift">{% translate 'konto.swift' %}</th>
                         <td></td>
                     </tr>
                     <tr>
-                        <th data-trans="account.iban">{% translate 'account.iban' %}</th>
+                        <th data-trans="konto.iban">{% translate 'konto.iban' %}</th>
                         <td></td>
                     </tr>
                     <tr>
-                        <th data-trans="account.cvrse">{% translate 'account.cvrse' %}</th>
+                        <th data-trans="konto.cvrse">{% translate 'konto.cvrse' %}</th>
                         <td></td>
                     </tr>
                     <tr>
-                        <th data-trans="account.bankaccount">{% translate 'account.bankaccount' %}</th>
+                        <th data-trans="konto.bankaccount">{% translate 'konto.bankaccount' %}</th>
                         <td></td>
                     </tr>
                 </table>
@@ -87,15 +97,15 @@
 
     <div class="output-details row">
         <div class="col-6-sm offset-6-sm">
-            <h3 data-trans="account.account">{% translate 'account.account' %}</h3>
+            <h3 data-trans="konto.account">{% translate 'konto.account' %}</h3>
             {% if period.from_date and period.to_date %}
-                <h4 data-trans="account.period" data-trans-params="{{ period|json }}">{{ 'account.period'|format:period }}</h4>
+                <h4 data-trans="konto.period" data-trans-params="{{ period|json }}">{{ 'konto.period'|format:period }}</h4>
             {% elif period.from_date and not period.to_date %}
-                <h4 data-trans="account.period_from" data-trans-params="{{ period|json }}">{{ 'account.period_from'|format:period }}</h4>
+                <h4 data-trans="konto.period_from" data-trans-params="{{ period|json }}">{{ 'konto.period_from'|format:period }}</h4>
             {% elif not period.from_date and period.to_date %}
-                <h4 data-trans="account.period_to" data-trans-params="{{ period|json }}">{{ 'account.period_to'|format:period }}</h4>
+                <h4 data-trans="konto.period_to" data-trans-params="{{ period|json }}">{{ 'konto.period_to'|format:period }}</h4>
             {% else %}
-                <h4 data-trans="account.period_all">{% translate 'account.period_all' %}</h4>
+                <h4 data-trans="konto.period_all">{% translate 'konto.period_all' %}</h4>
             {% endif %}
         </div>
 
@@ -104,7 +114,7 @@
                 <div class="col-6-sm offset-6-sm">
                     <table class="dl-table">
                         <tr>
-                            <th data-trans="account.number">{% translate 'account.number' %}</th>
+                            <th data-trans="konto.number">{% translate 'konto.number' %}</th>
                             <td>{{ number }}</td>
                         </tr>
                         <tr>
@@ -114,9 +124,9 @@
 
                         <tr>
                             {% if cprcvr|get:'1' == 'cpr' %}
-                                <th data-trans="account.cpr">{% translate 'account.cpr' %}</th>
+                                <th data-trans="konto.cpr">{% translate 'konto.cpr' %}</th>
                             {% elif cprcvr|get:'1' == 'cvr' %}
-                                <th data-trans="account.cvr">{% translate 'account.cvr' %}</th>
+                                <th data-trans="konto.cvr">{% translate 'konto.cvr' %}</th>
                             {% else %}
                                 <th></th>
                             {% endif %}
@@ -124,23 +134,23 @@
                         </tr>
 
                         <tr>
-                            <th data-trans="account.yourref">{% translate 'account.yourref' %}</th>
+                            <th data-trans="konto.yourref">{% translate 'konto.yourref' %}</th>
                             <td>{{ yourref }}</td>
                         </tr>
                         <tr>
-                            <th data-trans="account.contact">{% translate 'account.contact' %}</th>
+                            <th data-trans="konto.contact">{% translate 'konto.contact' %}</th>
                             <td>{{ contact }}</td>
                         </tr>
                         <tr>
-                            <th data-trans="account.localnumber">{% translate 'account.localnumber' %}</th>
+                            <th data-trans="konto.localnumber">{% translate 'konto.localnumber' %}</th>
                             <td>{{ localnumber }}</td>
                         </tr>
                         <tr>
-                            <th data-trans="account.payment1">{% translate 'account.payment1' %}</th>
+                            <th data-trans="konto.payment1">{% translate 'konto.payment1' %}</th>
                             <td>{{ payment1 }}</td>
                         </tr>
                         <tr>
-                            <th data-trans="account.invoiceaccount">{% translate 'account.invoiceaccount' %}</th>
+                            <th data-trans="konto.invoiceaccount">{% translate 'konto.invoiceaccount' %}</th>
                             <td>{{ account }}</td>
                         </tr>
                     </table>

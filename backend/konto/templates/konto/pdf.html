@@ -18,7 +18,7 @@
         {% for page in pages %}
             {% with rows=page.rows total=page.total %}
                 <div class="page" style="page-break-after: always">
-                        {% include 'aka/account/account_pageheader.html' %}
+                        {% include 'konto/pageheader.html' %}
                         <div class="page-data account-data">
                         {% if rows and rows|length > 0 %}
                             <table class="output-table" data-key="{{ page.key }}" style="font-size:0.9em">
@@ -52,25 +52,25 @@
                                 </tbody>
                             </table>
                         {% else %}
-                            <p data-trans="account.ingenposter">{% translate 'account.ingenposter' %}</p>
+                            <p data-trans="konto.ingenposter">{% translate 'konto.ingenposter' %}</p>
                         {% endif %}
 
                         {% if total %}
                             <div class="row account-total no-copy">
                                 <div class="col-3-sm">
-                                    <span class="total-label" data-trans="account.total_claim">{% translate 'account.total_claim' %}</span>
+                                    <span class="total-label" data-trans="konto.total_claim">{% translate 'konto.total_claim' %}</span>
                                     <span class="total-data">{{ total.total_claim }}</span>
                                 </div>
                                 <div class="col-3-sm">
-                                    <span class="total-label" data-trans="account.total_payment">{% translate 'account.total_payment' %}</span>
+                                    <span class="total-label" data-trans="konto.total_payment">{% translate 'konto.total_payment' %}</span>
                                     <span class="total-data">{{ total.total_payment }}</span>
                                 </div>
                                 <div class="col-3-sm">
-                                    <span class="total-label" data-trans="account.total_sum">{% translate 'account.total_sum' %}</span>
+                                    <span class="total-label" data-trans="konto.total_sum">{% translate 'konto.total_sum' %}</span>
                                     <span class="total-data">{{ total.total_sum }}</span>
                                 </div>
                                 <div class="col-3-sm">
-                                    <span class="total-label" data-trans="account.total_restance">{% translate 'account.total_restance' %}</span>
+                                    <span class="total-label" data-trans="konto.total_restance">{% translate 'konto.total_restance' %}</span>
                                     <span class="total-data">{{ total.total_restance }}</span>
                                 </div>
                             </div>

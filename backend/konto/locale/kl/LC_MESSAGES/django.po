@@ -1,0 +1,217 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-07 12:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# NY16
+
+msgid "konto.error_250.1"
+msgstr "CPR/CVR system-imi takuneqarsinnaanngilaq"
+
+msgid "konto.entries_open"
+msgstr "Akiligassat/akiliutit ammasut"
+
+msgid "konto.entries_closed"
+msgstr "Akiligassat/akiliutit matoqqasut"
+
+msgid "konto.entries_all"
+msgstr "Akiligassat/akiliutit tamarmik"
+
+msgid "konto.description"
+msgstr "Ullormit ullormut immersoruk piffissamut pineqartumut akiligassat/akiliutinik pissarsiniarlutit. Akiligassat/akiliutit tamaasa pissarsiariniarukkit immersugassat imaqartissanngilat"
+
+msgid "konto.swift"
+msgstr "SWIFT"
+
+msgid "konto.iban"
+msgstr "IBAN"
+
+msgid "konto.cvrse"
+msgstr "CVR/SE:"
+
+msgid "konto.title"
+msgstr "Kontup assilinera"
+
+msgid "konto.from_date"
+msgstr "Ullormit"
+
+msgid "konto.to_date"
+msgstr "Ullormut"
+
+msgid "konto.filename"
+msgstr "Kontup assilinera {from_date} -> {to_date}"
+
+msgid "konto.footer"
+msgstr "Qupperneq {index} quppernernit {count}"
+
+msgid "konto.bankaccount"
+msgstr "Aningaaserivimmi konto"
+
+msgid "konto.account"
+msgstr "Kontup assilinera"
+
+msgid "konto.period"
+msgstr "Piffissamut {from_date} - {to_date} atuuppoq"
+
+msgid "konto.period_to"
+msgstr "Ulloq killiffissaa {to_date}"
+
+msgid "konto.period_from"
+msgstr "Ulloq aallartiffia {from_date}"
+
+msgid "konto.period_all"
+msgstr "Akiligassat akiliutit tamarmik"
+
+msgid "konto.number"
+msgstr "Normu"
+
+msgid "konto.date"
+msgstr "Ulloq"
+
+msgid "konto.cvr"
+msgstr "CVR"
+
+msgid "konto.cpr"
+msgstr "CPR"
+
+msgid "konto.cprcvr"
+msgstr "CPR/CVR"
+
+msgid "konto.yourref"
+msgstr "Saaffissat"
+
+msgid "konto.contact"
+msgstr "Suliamik sullissisoq"
+
+msgid "konto.localnumber"
+msgstr "Normu toqqaannartoq"
+
+msgid "konto.payment1"
+msgstr "Akiliineq"
+
+msgid "konto.invoiceaccount"
+msgstr "Akileeqqussutip kontoa"
+
+msgid "konto.ingenposter"
+msgstr "Piffissami pineqartumi Akiligassaqanngilaq/akiliuteqanngilaq"
+
+msgid "konto.paymentdate"
+msgstr "Ulloq akiliiffissaq kingulleq"
+
+msgid "konto.account_number"
+msgstr "Akiligassallip kontoa"
+
+msgid "konto.transaction_date"
+msgstr "Akiligassat/akiliutit ullua"
+
+msgid "konto.accounting_date"
+msgstr "Naatsorsuutinik nalunaarsuinerup ullua"
+
+msgid "konto.debitor_group_id"
+msgstr "Akiligassat immikkoortut suussusiat"
+
+msgid "konto.debitor_group_name"
+msgstr "Debitorgruppe-p aqqa"
+
+msgid "konto.voucher"
+msgstr "Ilanngussaq"
+
+msgid "konto.text"
+msgstr "Oqaasertaliussaq"
+
+msgid "konto.payment_code"
+msgstr "Akiliinissamut kode"
+
+msgid "konto.payment_code_name"
+msgstr "Akiliinissamut kodep aqqa"
+
+msgid "konto.amount"
+msgstr "Aningaasat amerlassusaat"
+
+msgid "konto.remaining_amount"
+msgstr "Akiligassat sinneruttut"
+
+msgid "konto.due_date"
+msgstr "Ulloq akiliiffissaq kingulleq"
+
+msgid "konto.closed_date"
+msgstr "Matunissaata ullua"
+
+msgid "konto.last_settlement_voucher"
+msgstr "Nalimmassaanermut ilanngussaq kingulleq"
+
+msgid "konto.collection_letter_date"
+msgstr "Nukingisaarinerup ullua"
+
+msgid "konto.collection_letter_code"
+msgstr "Nukingisaarinermut kode"
+
+msgid "konto.claim_type_code"
+msgstr "Akiligassap suussusiata ilisarnaataa"
+
+msgid "konto.invoice_number"
+msgstr "Akileeqqussutip normua"
+
+msgid "konto.transaction_type"
+msgstr "Akilgassap/akiliutip suussusaa"
+
+msgid "konto.claimant_name"
+msgstr "Fordringshaver-ip aqqa"
+
+msgid "konto.claimant_id"
+msgstr "Fordringshaver-ip ID-a"
+
+msgid "konto.rate_number"
+msgstr "Naafferaartup normua"
+
+msgid "konto.submitted_to_claims"
+msgstr "Akiliisitsiniartarfimmiippoq"
+
+msgid "konto.child_claimant"
+msgstr "Meeqqap cpr.nr."
+
+msgid "konto.total_claim"
+msgstr "Akiligassat (katillugit):"
+
+msgid "konto.total_payment"
+msgstr "Akiliutit (katillugit):"
+
+msgid "konto.total_sum"
+msgstr "Inernera:"
+
+msgid "konto.total_restance"
+msgstr "Akiitsut sinneruttut (katillugit):"
+
+msgid "konto.error_250.0"
+msgstr "CPR/CVR system-imi takuneqarsinnaanngilaq"
+
+msgid "konto.title_sel"
+msgstr "SEL- Akileraartarnermi Aqutsisoqarfiup kontoudtog-ia"
+
+msgid "konto.title_aki"
+msgstr "AKI- Akiliisitsiniartarfiup kontoudtog-ia"
+
+msgid "konto.title_sel_dcr"
+msgstr "AKI - Den centrale regnskabsafdelings kontoudtog"
+
+msgid "konto.linje"
+msgstr "Linje"
+
+msgid "konto.regnskabskontor_note"
+msgstr ""
+"Dette udtræk indeholder ikke poster fra Skattestyrelsen. "
+"Poster fra Skattestyrelsen findes i stedet <a href=\"{href}\">her</a>."

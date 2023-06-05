@@ -12,8 +12,7 @@ from django.core.validators import FileExtensionValidator
 from django.core.validators import MaxLengthValidator
 from django.core.validators import MinLengthValidator
 from django.core.validators import RegexValidator
-from django.forms import ValidationError, MultipleHiddenInput, TextInput
-from django.forms.widgets import Textarea
+from django.forms import ValidationError, TextInput
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 from io import StringIO
@@ -157,56 +156,6 @@ class PrependCharField(forms.CharField):
             while len(value) < self.total_length:
                 value = self.prepend_char + value
         return value
-
-
-class KontoForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        cprcvr_choices = kwargs.pop("cprcvr_choices", ())
-        super(KontoForm, self).__init__(*args, **kwargs)
-        self.initial["open_closed"] = 2
-        self.fields["cprcvr"].choices = cprcvr_choices
-
-    from_date = forms.DateField(
-        widget=forms.DateInput(attrs={"class": "datepicker"}),
-        required=False,
-        error_messages={"required": "error.required", "invalid": "error.invalid_date"},
-        input_formats=valid_date_formats,
-    )
-    to_date = forms.DateField(
-        widget=forms.DateInput(
-            attrs={
-                "class": "datepicker",
-                "data-validate-after": "#id_from_date",
-                "data-validate-after-errormessage": "error.from_date_before_to_date",
-            }
-        ),
-        required=False,
-        error_messages={"required": "error.required", "invalid": "error.invalid_date"},
-        input_formats=valid_date_formats,
-    )
-    open_closed = forms.IntegerField(
-        widget=RadioSelect(
-            choices=[
-                (0, "account.entries_open"),
-                (1, "account.entries_closed"),
-                (2, "account.entries_all"),
-            ],
-        ),
-        error_messages={"required": "error.required"},
-    )
-    hidden = AcceptingMultipleChoiceField(widget=MultipleHiddenInput, required=False)
-    cprcvr = forms.ChoiceField(required=False, choices=[])
-
-    def clean(self):
-        if (
-            self.cleaned_data.get("from_date") is not None
-            and self.cleaned_data.get("to_date") is not None
-        ):
-            if self.cleaned_data["from_date"] > self.cleaned_data["to_date"]:
-                raise ValidationError(
-                    _("error.from_date_before_to_date"),
-                    code="error.from_date_before_to_date",
-                )
 
 
 class InkassoForm(forms.Form):
@@ -789,47 +738,4 @@ class UdbytteFormItem(forms.Form):
             "required": "error.required",
             "invalid": "error.number_required",
         },
-    )
-
-
-class ObligatoriskPensionForm(forms.Form):
-    navn = forms.CharField(
-        label=_("Navn"),
-        required=True,
-        error_messages={"required": "error.required"},
-    )
-    adresse = forms.CharField(
-        label=_("Adresse"),
-        required=True,
-        error_messages={"required": "error.required"},
-        widget=Textarea,
-    )
-    kommune = forms.ChoiceField(
-        choices=((m["code"], m["name"]) for m in settings.MUNICIPALITIES),
-        required=True,
-        error_messages={"required": "error.required"},
-    )
-    email = forms.EmailField(
-        label=_("Email-adresse"),
-        required=True,
-        error_messages={"required": "error.required"},
-    )
-    grønlandsk = forms.ChoiceField(
-        label=_("Grønlandsk pensionsordning"),
-        choices=(
-            (True, _("Ja")),
-            (False, _("Nej")),
-        ),
-        widget=RadioSelect,
-        required=True,
-        error_messages={"required": "error.required"},
-    )
-    land = forms.CharField(
-        label=_("Land"),
-        required=False,
-    )
-    pensionsselskab = forms.CharField(
-        label=_("Pensionsselskab"),
-        required=True,
-        error_messages={"required": "error.required"},
     )
