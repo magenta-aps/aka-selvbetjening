@@ -207,7 +207,7 @@ msgid "konto.title_aki"
 msgstr "AKI - Inddrivelsens kontoudtog"
 
 msgid "konto.title_sel_dcr"
-msgstr "AKI - Den centrale regnskabsafdelings kontoudtog"
+msgstr "SEL - Den centrale regnskabsafdelings kontoudtog"
 
 msgid "konto.linje"
 msgstr "Linje"

@@ -206,12 +206,13 @@ msgid "konto.title_aki"
 msgstr "AKI- Akiliisitsiniartarfiup kontoudtog-ia"
 
 msgid "konto.title_sel_dcr"
-msgstr "AKI - Den centrale regnskabsafdelings kontoudtog"
+msgstr "SEL - Qitiusumik Naatsorsuuseriffik"
 
 msgid "konto.linje"
-msgstr "Linje"
+msgstr "Titarniup normua"
 
 msgid "konto.regnskabskontor_note"
 msgstr ""
-"Dette udtræk indeholder ikke poster fra Skattestyrelsen. "
-"Poster fra Skattestyrelsen findes i stedet <a href=\"{href}\">her</a>."
+"Una anillatsitaq Akileraartarnermut Aqutsisoqarfiup nalunaarsugaanik "
+"imaqangilaq. Akileraartarnermut Aqutsisoqarfiup nalunaarsugaai "
+"<a href=\"{href}\">ugguuna</a> aasinnaavatit."
