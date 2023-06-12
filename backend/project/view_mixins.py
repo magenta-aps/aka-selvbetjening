@@ -143,29 +143,47 @@ class HasUserMixin(object):
             self.cvr = settings.DEFAULT_CVR
 
     def dispatch(self, request, *args, **kwargs):
-        try:
-            self.cpr = request.session["user_info"].get("cpr", None)
-            if self.cpr is None:
-                self.cpr = request.session["user_info"]["CPR"]
-            p = self.get_person(request)
-            p["navn"] = " ".join([x for x in [p["fornavn"], p["efternavn"]] if x])
-            self.person = p
-        except (KeyError, TypeError):
-            pass
+        if (
+            settings.PRISME_CONNECT["mock"]
+            or "test.erp.gl" in settings.PRISME_CONNECT["wsdl_file"]
+            and "cpr" in request.GET
+        ):
+            self.cpr = request.GET["cpr"]
+        else:
+            try:
+                self.cpr = request.session["user_info"].get("cpr", None)
+                if self.cpr is None:
+                    self.cpr = request.session["user_info"]["CPR"]
+                p = self.get_person(request)
+                p["navn"] = " ".join([x for x in [p["fornavn"], p["efternavn"]] if x])
+                self.person = p
+            except (KeyError, TypeError):
+                pass
 
-        if not self.cpr and settings.DEFAULT_CPR:
-            self.cpr = settings.DEFAULT_CPR
+            if not self.cpr and settings.DEFAULT_CPR:
+                self.cpr = settings.DEFAULT_CPR
 
-        has_cvr = "user_info" in request.session and (
-            "cvr" in request.session["user_info"]
-            or "CVR" in request.session["user_info"]
-        )
-        try:
-            self.obtain_cvr(request)
-            if not has_cvr and "cvrs" in request.session:
-                has_cvr = True
-        except SSLError:
-            return TemplateResponse(request, "aka/downtime.html", {"has_cvr": has_cvr})
+        if (
+            settings.PRISME_CONNECT["mock"]
+            or "test.erp.gl" in settings.PRISME_CONNECT["wsdl_file"]
+            and "cvr" in request.GET
+        ):
+            self.cvr = request.GET["cvr"]
+            has_cvr = True
+        else:
+            has_cvr = "user_info" in request.session and (
+                "cvr" in request.session["user_info"]
+                or "CVR" in request.session["user_info"]
+            )
+            try:
+                self.obtain_cvr(request)
+                if not has_cvr and "cvrs" in request.session:
+                    has_cvr = True
+            except SSLError:
+                return TemplateResponse(
+                    request, "aka/downtime.html", {"has_cvr": has_cvr}
+                )
+
         if PrismeDown.get():
             return TemplateResponse(request, "aka/downtime.html", {"has_cvr": has_cvr})
         try:
