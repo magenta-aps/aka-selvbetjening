@@ -31,6 +31,15 @@
     <div class="account-main">
 
         <form method="get" id="mainform">
+
+            {% for key, values in request.GET.lists %}
+                {% if key != form.cprcvr.name and key != form.from_date.name and key != form.to_date.name and key != form.open_closed.name %}
+                    {% for value in values %}
+                        <input type="hidden" name="{{ key }}" value="{{ value }}"/>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+
             <div class="printhide">
                 {% include "aka/util/nonfield_errors.html" with form=form %}
                 <p data-trans="konto.description">{{ konto.description }}</p>

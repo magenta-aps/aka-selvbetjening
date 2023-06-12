@@ -27,6 +27,14 @@
     <div class="rentenota-main">
         <form method="get" id="mainform">
 
+        {% for key, values in request.GET.lists %}
+            {% if key != "month" and key != "year" %}
+                {% for value in values %}
+                    <input type="hidden" name="{{ key }}" value="{{ value }}"/>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+
         {% localize off %}
         <div class="printhide">
             <div class="rentenota-actions row">
