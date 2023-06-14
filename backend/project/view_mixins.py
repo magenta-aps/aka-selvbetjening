@@ -146,8 +146,7 @@ class HasUserMixin(object):
         if (
             settings.PRISME_CONNECT["mock"]
             or "test.erp.gl" in settings.PRISME_CONNECT["wsdl_file"]
-            and "cpr" in request.GET
-        ):
+        ) and "cpr" in request.GET:
             self.cpr = request.GET["cpr"]
         else:
             try:
@@ -166,8 +165,7 @@ class HasUserMixin(object):
         if (
             settings.PRISME_CONNECT["mock"]
             or "test.erp.gl" in settings.PRISME_CONNECT["wsdl_file"]
-            and "cvr" in request.GET
-        ):
+        ) and "cvr" in request.GET:
             self.cvr = request.GET["cvr"]
             has_cvr = True
         else:

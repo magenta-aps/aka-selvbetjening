@@ -363,7 +363,15 @@ class DebitorKontoRangeRestricted:
         return False
 
 
-class SELKontoView(DebitorKontoRangeRestricted, KontoView):
+class AKAKontoView(DebitorKontoRangeRestricted, KontoView):
+    available_keys = (
+        "aki",
+        "sel",
+    )
+    debitor_group_id_range = (200000, 999999)
+
+
+class DCRKontoView(DebitorKontoRangeRestricted, KontoView):
     available_keys = ("sel",)
     debitor_group_id_range = (1000, 199999)
     authority = {
