@@ -47,7 +47,7 @@ class ObligatoriskPensionCreateView(IsContentMixin, HasUserMixin, UpdateView):
             commit=True, cpr=self.cpr, skatteår=self.kwargs["skatteår"]
         )
         self.send_mail_to_submitter(pension_object.email, pension_object)
-        self.send_mail_to_office(settings.EMAIL_OFFICE_RECIPIENT, pension_object)
+        self.send_mail_to_office(settings.EMAIL_OP_RECIPIENT, pension_object)
         return TemplateResponse(
             request=self.request,
             template="pension/success.html",
