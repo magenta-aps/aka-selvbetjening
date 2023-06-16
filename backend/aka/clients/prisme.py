@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 import logging
 import os
 import re
@@ -483,10 +485,14 @@ class PrismeAccountResponseTransaction(object):
         self.payment_code_name = data["CustPaymDescription"]
         amount = data["AmountCur"]
         try:
-            self.amount = float(amount)
+            self.amount = Decimal(amount)
         except ValueError:
             self.amount = 0
         self.remaining_amount = data["RemainAmountCur"]
+        try:
+            self.remaining_amount = Decimal(self.remaining_amount)
+        except ValueError:
+            self.remaining_amount = 0
         self.due_date = data["DueDate"]
         self.closed_date = data["Closed"]
         self.last_settlement_voucher = data["LastSettleVoucher"]

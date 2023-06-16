@@ -1,7 +1,11 @@
+
+
 $(function(){
 
     const tables = $(".output-table");
     const datatables = {};
+
+    const columnIndexes = {};
     tables.each(function () {
         const thistable = $(this),
             key = thistable.attr("data-key");
@@ -13,10 +17,10 @@ $(function(){
             info: false,
             fixedHeader: true,
         });
-    });
-
-    $("[data-action='display-column']").each(function(index, element){
-        $(element).attr("data-column-index", index);
+        columnIndexes[key] = {};
+        $(".dataTables_scrollHeadInner .output-table[data-key='"+key+"'] th").each(function (index, el) {
+            columnIndexes[key][$(el).data("field")] = index;
+        });
     });
 
     var columnSelect = $(".columnselect");
@@ -34,18 +38,16 @@ $(function(){
     const updateColumns = function() {
         const $this = $(this),
             key = $this.attr("data-key"),
-            thistable = $(".dataTables_scrollHeadInner .output-table[data-key='"+key+"']"),
-            headers = thistable.find("th"),
             showColumns = $this.val(),
             hash = {};
 
+        console.log("showColumns",showColumns);
         for (var i=0; i<showColumns.length; i++) {
             hash[showColumns[i]] = true;
         }
-
-        headers.each(function(index, el) {
-            let field = $(this).attr("data-field");
+        for (let field in columnIndexes[key]) {
             const show = hash[field] || false;
+            const index = columnIndexes[key][field];
             datatables[key].column(index).visible(show);
             field = key + "." + field;
             if (show) {
@@ -53,7 +55,7 @@ $(function(){
             } else if (!($("input[name='hidden'][value='"+field+"']").length)) {
                 $("form").append('<input type="hidden" name="hidden" value="' + field + '"/>');
             }
-        });
+        }
     };
 
     columnSelect.change(updateColumns);
@@ -66,7 +68,8 @@ $(function(){
             field = value[1],
             headers = $(".output-table[data-key='"+key+"']").find("th"),
             header = headers.filter("th[data-field='"+field+"']").first(),
-            index = headers.index(header),
+            //index = headers.index(header),
+            index = columnIndexes[key][field],
             column = datatables[key].column(index);
         column.visible(false);
         //columnSelect.filter("[data-key='"+key+"']").find("option[value='"+field+"']").prop("selected", false);
@@ -91,3 +94,4 @@ $(function(){
         }
     });
 });
+

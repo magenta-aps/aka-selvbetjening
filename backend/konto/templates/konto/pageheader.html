@@ -63,30 +63,48 @@
             </div>
             <div class="col-3-sm">
                 <table class="dl-table">
+                    {% if organization.phone %}
                     <tr>
                         <th data-trans="common.telefon">{% translate 'common.telefon' %}</th>
-                        <td></td>
+                        <td>{{ organization.phone }}</td>
                     </tr>
-                    <tr>
-                        <th data-trans="common.fax">{% translate 'common.fax' %}</th>
-                        <td></td>
-                    </tr>
+                    {% endif %}
+                    {% if organization.fax %}
+                        <tr>
+                            <th data-trans="common.fax">{% translate 'common.fax' %}</th>
+                            <td>{{ organization.fax }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if organization.email %}
+                        <tr>
+                            <th data-trans="common.email">{% translate 'common.email' %}</th>
+                            <td>{{ organization.email }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if organization.swift %}
                     <tr>
                         <th data-trans="konto.swift">{% translate 'konto.swift' %}</th>
-                        <td></td>
+                        <td>{{ organization.swift }}</td>
                     </tr>
+                    {% endif %}
+                    {% if organization.iban %}
                     <tr>
                         <th data-trans="konto.iban">{% translate 'konto.iban' %}</th>
-                        <td></td>
+                        <td>{{ organization.iban }}</td>
                     </tr>
+                    {% endif %}
+                    {% if organization.cvrse %}
                     <tr>
                         <th data-trans="konto.cvrse">{% translate 'konto.cvrse' %}</th>
-                        <td></td>
+                        <td>{{ organization.cvrse }}</td>
                     </tr>
+                    {% endif %}
+                    {% if organization.account %}
                     <tr>
                         <th data-trans="konto.bankaccount">{% translate 'konto.bankaccount' %}</th>
-                        <td></td>
+                        <td>{{ organization.account }}</td>
                     </tr>
+                    {% endif %}
                 </table>
             </div>
             <div class="col-3-sm">

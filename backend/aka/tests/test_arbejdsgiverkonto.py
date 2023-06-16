@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 import logging
 from datetime import date
 
@@ -68,8 +70,8 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(None, transaction0.text)
         self.assertEqual(None, transaction0.payment_code)
         self.assertEqual(None, transaction0.payment_code_name)
-        self.assertEqual(200.0, transaction0.amount)
-        self.assertEqual("37.05", transaction0.remaining_amount)
+        self.assertEqual(Decimal(200.0), transaction0.amount)
+        self.assertEqual(Decimal("37.05"), transaction0.remaining_amount)
         self.assertEqual("2018-01-03", transaction0.due_date)
         self.assertEqual(None, transaction0.closed_date)
         self.assertEqual("KMO-000000001", transaction0.last_settlement_voucher)

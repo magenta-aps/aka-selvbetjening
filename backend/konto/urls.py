@@ -5,5 +5,5 @@ app_name = "konto"
 
 urlpatterns = [
     path("", AKAKontoView.as_view(), name="konto"),
-    path("sel/", DCRKontoView.as_view(), name="dcrkonto"),
+    path("dcr/", DCRKontoView.as_view(), name="dcrkonto"),
 ]
