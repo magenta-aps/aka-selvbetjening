@@ -241,6 +241,10 @@ class Field:
     number: bool = False
     boolean: bool = False
 
+    @property
+    def label(self):
+        return self.labelkey or self.name
+
 
 @dataclass
 class Cell:

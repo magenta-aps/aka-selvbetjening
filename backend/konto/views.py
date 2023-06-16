@@ -55,6 +55,9 @@ class KontoView(
         },
     }
 
+    def get_organization_data(self):
+        return {}
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.sections = None
@@ -103,6 +106,7 @@ class KontoView(
                     },
                     "cprcvr": self.cprcvr_choice,
                     "authority": self.authority,
+                    "organization": self.get_organization_data(),
                 }
             )
             if self.is_pdf:
@@ -237,7 +241,7 @@ class KontoView(
                 {
                     "key": key,
                     "title": "konto." + self.authority["pane_titles"][key],
-                    "fields": self.hide_fields(form, self.get_fields_by_key(key)),
+                    "fields": self.get_fields_by_key(key),
                     "rows": rows,
                     "total": total,
                 }
@@ -329,7 +333,6 @@ class KontoView(
         ]
         if key == "sel":
             fields += [
-                Field(name="rate_number", klass="nb"),
                 Field(
                     name="claim_type_code",
                     labelkey="submitted_to_claims",
@@ -337,6 +340,7 @@ class KontoView(
                     modifier=lambda d: (d == "INDR"),
                     boolean=True,
                 ),
+                Field(name="rate_number", klass="nb"),
             ]
         if key == "aki":
             fields += [Field(name="child_claimant", klass="nb")]
@@ -370,6 +374,16 @@ class AKAKontoView(DebitorKontoRangeRestricted, KontoView):
     )
     debitor_group_id_range = (200000, 999999)
 
+    def get_organization_data(self):
+        return {
+            "phone",
+            "fax",
+            "swift",
+            "iban",
+            "cvrse",
+            "account",
+        }
+
 
 class DCRKontoView(DebitorKontoRangeRestricted, KontoView):
     available_keys = ("sel",)
@@ -394,3 +408,38 @@ class DCRKontoView(DebitorKontoRangeRestricted, KontoView):
                 "konto_href_obj": {"href": reverse("konto:konto")},
             }
         )
+
+    def get_extra(self) -> dict:
+        return {}
+
+    def get_organization_data(self):
+        return {
+            "phone": "+299 34 55 68",
+            "email": "Debitor@nanoq.gl",
+            "swift": "GRENGLGX",
+            "iban": "GL5864710001023850",
+            "cvrse": "19785289",
+            "account": "6471-1023850",
+        }
+
+    def get_total_data(self, key: str):
+        return {}
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["initial"] = {
+            "hidden": [
+                "sel.transaction_date",
+                "sel.accounting_date",
+                "sel.voucher",
+                "sel.payment_code",
+                "sel.payment_code_name",
+                "sel.closed_date",
+                "sel.last_settlement_voucher",
+                "sel.collection_letter_date",
+                "sel.collection_letter_code",
+                "sel.claim_type_code",
+                "sel.transaction_type",
+            ]
+        }
+        return kwargs

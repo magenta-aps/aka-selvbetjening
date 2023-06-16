@@ -33,7 +33,7 @@
         <form method="get" id="mainform">
 
             {% for key, values in request.GET.lists %}
-                {% if key != form.cprcvr.name and key != form.from_date.name and key != form.to_date.name and key != form.open_closed.name %}
+                {% if key != form.cprcvr.name and key != form.from_date.name and key != form.to_date.name and key != form.open_closed.name and key != form.hidden.name %}
                     {% for value in values %}
                         <input type="hidden" name="{{ key }}" value="{{ value }}"/>
                     {% endfor %}
@@ -84,17 +84,17 @@
                         </h2>
                         <div id="content-{{ key }}" data-key="{{ key }}" class="page-content collapsed" style="display:none">
 
-                            {% include 'konto/pageheader.html' with key=key %}
+                            {% include 'konto/pageheader.html' with key=key company=company %}
 
                             <div class="page-data account-data">
-
                             {% if rows and rows|length > 0 %}
-
                                 <div class="printhide">
                                     <select class="columnselect" multiple="multiple" data-key="{{ key }}">
                                         {% for field in section.fields %}
-                                            {% with "konto."|add:field.name as transkey %}
-                                                <option value="{{ field.name }}" {% if not field in form.hidden.value %}selected="selected"{% endif %}>{% translate transkey %}</option>
+                                            {% with "konto."|add:field.label as transkey %}
+                                            {% with key|add:"."|add:field.label as fullfield %}
+                                                <option value="{{ field.label }}" {% if fullfield not in form.hidden.value %}selected="selected"{% endif %}>{% translate transkey %}</option>
+                                            {% endwith %}
                                             {% endwith %}
                                         {% endfor %}
                                     </select>
@@ -104,7 +104,7 @@
                                 <thead>
                                 <tr>
                                     {% for field in section.fields %}
-                                        <th data-field="{{ field.name }}" data-trans="{{ field.transkey }}">{% translate field.transkey|safe %}</th>
+                                        <th data-field="{{ field.label }}" data-trans="{{ field.transkey }}">{% translate field.transkey|safe %}</th>
                                     {% endfor %}
                                 </tr>
                                 </thead>
