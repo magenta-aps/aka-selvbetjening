@@ -101,8 +101,9 @@ class ObligatoriskPensionForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-        self.selskabformset = ObligatoriskPensionSelskabFormSet(*args, **kwargs)
-        self.filformset = ObligatoriskPensionFilFormSet(*args, **kwargs)
+        instance = kwargs.get("instance")
+        self.selskabformset = ObligatoriskPensionSelskabFormSet(instance=instance)
+        self.filformset = ObligatoriskPensionFilFormSet(instance=instance)
         super().__init__(*args, **kwargs)
 
     def is_valid(self):
