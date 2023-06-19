@@ -1,9 +1,9 @@
+from aka.widgets import TranslatedSelect
 from datetime import date
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.forms import widgets, inlineformset_factory
-from django.utils.translation import gettext_lazy as _
 from obligatorisk_pension.models import ObligatoriskPension
 from obligatorisk_pension.models import ObligatoriskPensionFile
 from obligatorisk_pension.models import ObligatoriskPensionSelskab
@@ -37,10 +37,10 @@ class ObligatoriskPensionSelskabForm(forms.ModelForm):
 
     grønlandsk = forms.BooleanField(
         initial=True,
-        widget=widgets.Select(
+        widget=TranslatedSelect(
             choices=(
-                (True, _("Ja")),
-                (False, _("Nej")),
+                (True, "common.ja"),
+                (False, "common.nej"),
             ),
         ),
         required=False,
@@ -101,8 +101,9 @@ class ObligatoriskPensionForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-        self.selskabformset = ObligatoriskPensionSelskabFormSet(*args, **kwargs)
-        self.filformset = ObligatoriskPensionFilFormSet(*args, **kwargs)
+        instance = kwargs.get("instance")
+        self.selskabformset = ObligatoriskPensionSelskabFormSet(instance=instance)
+        self.filformset = ObligatoriskPensionFilFormSet(instance=instance)
         super().__init__(*args, **kwargs)
 
     def is_valid(self):

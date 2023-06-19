@@ -50,6 +50,11 @@ msgstr "Fil"
 msgid "obligatorisk_pension.filbeskrivelse"
 msgstr "Nassuiaat"
 
+msgid "obligatorisk_pension.fil_hjælpetekst"
+msgstr ""
+"Vedlæg dokumenter, der dokumenterer de indbetalinger, "
+"du har foretaget til din pensionsopsparing i denne periode."
+
 msgid "obligatorisk_pension.mail1.subject"
 msgstr "Qujanaq soraarnerussutisiaqarnissamut aaqqissuussinerit nalunaarutigigakku."
 

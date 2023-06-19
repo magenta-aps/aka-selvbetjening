@@ -68,6 +68,12 @@ msgstr "CSV-fil downloaderuk"
 msgid "common.download_template"
 msgstr "Skabelon aajuk"
 
+msgid "common.ja"
+msgstr "Aap"
+
+msgid "common.nej"
+msgstr "Naamik"
+
 msgid "common.logout"
 msgstr "Aniffissaq"
 
