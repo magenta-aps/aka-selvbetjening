@@ -32,6 +32,9 @@ msgstr "Kommune"
 msgid "obligatorisk_pension.email"
 msgstr "E-maili"
 
+msgid "obligatorisk_pension.beløb"
+msgstr "Beløb"
+
 msgid "obligatorisk_pension.grønlandsk"
 msgstr "Soraarnerussutisiaqarnissamut Kalaallit Nunaanni aaqqissuussineq?"
 

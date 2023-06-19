@@ -40,6 +40,11 @@ class ObligatoriskPension(models.Model):
         blank=False,
         max_length=256,
     )
+    beløb = models.PositiveIntegerField(
+        null=False,
+        blank=False,
+        default=0,
+    )
 
 
 class ObligatoriskPensionSelskab(models.Model):

@@ -98,6 +98,7 @@ class ObligatoriskPensionForm(forms.ModelForm):
             "adresse",
             "kommune",
             "email",
+            "beløb",
         ]
 
     def __init__(self, *args, **kwargs):
@@ -142,6 +143,11 @@ class ObligatoriskPensionForm(forms.ModelForm):
     email = forms.EmailField(
         required=True,
         error_messages={"required": "error.required"},
+    )
+    beløb = forms.IntegerField(
+        required=True,
+        error_messages={"required": "error.required"},
+        min_value=0,
     )
 
     def clean_land(self):
