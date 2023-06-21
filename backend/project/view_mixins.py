@@ -405,12 +405,21 @@ class SpreadsheetRendererMixin(RendererMixin):
     def accepted_formats(self):
         return super().accepted_formats + ["xlsx", "ods", "csv"]
 
+    def get_spreadsheet_fields(self):
+        return self.get_fields()
+
+    def get_spreadsheet_rows(self):
+        return self.get_rows()
+
+    def get_spreadsheet_extra(self):
+        return self.get_extra()
+
     def render(self):
         format = self.format
         if format in self.accepted_formats:
-            fields = self.get_fields()  # List of Fields
-            rows = self.get_rows()  # List of Rows
-            extra = self.get_extra()  # List of Rows
+            fields = self.get_spreadsheet_fields()  # List of Fields
+            rows = self.get_spreadsheet_rows()  # List of Rows
+            extra = self.get_spreadsheet_extra()  # List of Rows
             data = []
             data.append([field.title or field.name for field in fields])
             for row in rows:

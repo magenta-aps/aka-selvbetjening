@@ -443,3 +443,29 @@ class DCRKontoView(DebitorKontoRangeRestricted, KontoView):
             ]
         }
         return kwargs
+
+    # Begrænser regneark-output (feltnavne) til de valgte kolonner
+    # Skal muligvis flyttes til KontoView
+    def get_spreadsheet_fields(self):
+        hidden = self.form.cleaned_data["hidden"]
+        return filter(
+            lambda field: f"{self.key}.{field.name}" not in hidden, self.get_fields()
+        )
+
+    # Begrænser regneark-output (rækkeindhold) til de valgte kolonner
+    # Skal muligvis flyttes til KontoView
+    def get_spreadsheet_rows(self):
+        hidden = self.form.cleaned_data["hidden"]
+        rows = []
+        for row in self.get_rows():
+            rows.append(
+                Row(
+                    cells=list(
+                        filter(
+                            lambda cell: f"{self.key}.{cell.field.name}" not in hidden,
+                            row.cells,
+                        )
+                    )
+                )
+            )
+        return rows
