@@ -449,7 +449,7 @@ class DCRKontoView(DebitorKontoRangeRestricted, KontoView):
     def get_spreadsheet_fields(self):
         hidden = self.form.cleaned_data["hidden"]
         return filter(
-            lambda field: f"{self.key}.{field.name}" not in hidden, self.get_fields()
+            lambda field: f"{self.key}.{field.label}" not in hidden, self.get_fields()
         )
 
     # Begrænser regneark-output (rækkeindhold) til de valgte kolonner
@@ -462,7 +462,7 @@ class DCRKontoView(DebitorKontoRangeRestricted, KontoView):
                 Row(
                     cells=list(
                         filter(
-                            lambda cell: f"{self.key}.{cell.field.name}" not in hidden,
+                            lambda cell: f"{self.key}.{cell.field.label}" not in hidden,
                             row.cells,
                         )
                     )
