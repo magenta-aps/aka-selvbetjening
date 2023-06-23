@@ -58,7 +58,7 @@ Lint REUSE compliance:
 Build selvbetjening:
   stage: build
   needs: []
-  dependencies: []
+  dependencies: ["Lint python", "Lint Dockerfiles", "Lint REUSE compliance"]
   image:
     name: gcr.io/kaniko-project/executor:debug-v0.16.0
     entrypoint: [""]
