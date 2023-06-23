@@ -102,10 +102,10 @@ class ObligatoriskPensionForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-        instance = kwargs.get("instance")
-        self.selskabformset = ObligatoriskPensionSelskabFormSet(instance=instance)
-        self.filformset = ObligatoriskPensionFilFormSet(instance=instance)
-        super().__init__(*args, **kwargs)
+        initial = kwargs.pop("initial", None)
+        self.selskabformset = ObligatoriskPensionSelskabFormSet(*args, **kwargs)
+        self.filformset = ObligatoriskPensionFilFormSet(*args, **kwargs)
+        super().__init__(*args, initial=initial, **kwargs)
 
     def is_valid(self):
         return (
@@ -139,15 +139,18 @@ class ObligatoriskPensionForm(forms.ModelForm):
         choices=((m["code"], m["name"]) for m in settings.MUNICIPALITIES),
         required=True,
         error_messages={"required": "error.required"},
+        widget=TranslatedSelect(attrs={"class": "dropdown"}),
     )
     email = forms.EmailField(
         required=True,
         error_messages={"required": "error.required"},
     )
-    beløb = forms.IntegerField(
+    beløb = forms.DecimalField(
+        decimal_places=2,
         required=True,
         error_messages={"required": "error.required"},
-        min_value=0,
+        min_value=0.01,
+        localize=True,
     )
 
     def clean_land(self):

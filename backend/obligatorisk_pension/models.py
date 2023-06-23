@@ -1,5 +1,6 @@
 import posixpath
 from django.conf import settings
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.datetime_safe import datetime
 from django.utils.translation import gettext_lazy as _
@@ -40,10 +41,13 @@ class ObligatoriskPension(models.Model):
         blank=False,
         max_length=256,
     )
-    beløb = models.PositiveIntegerField(
+    beløb = models.DecimalField(
         null=False,
         blank=False,
         default=0,
+        decimal_places=2,
+        max_digits=12,
+        validators=[MinValueValidator(0)]
     )
 
 
