@@ -47,7 +47,7 @@ class ObligatoriskPension(models.Model):
         default=0,
         decimal_places=2,
         max_digits=12,
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(0)],
     )
 
 
