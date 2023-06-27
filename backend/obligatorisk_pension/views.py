@@ -41,7 +41,9 @@ class ObligatoriskPensionCreateView(IsContentMixin, HasUserMixin, UpdateView):
         if self.person and not self.object:
             kwargs["initial"]["navn"] = self.person["navn"]
         kommunekode = (
-            self.request.session.get("user_info", {}).get("person", {}).get("myndighedskode")
+            self.request.session.get("user_info", {})
+            .get("person", {})
+            .get("myndighedskode")
         )
         if kommunekode:
             kwargs["initial"]["kommune"] = kommunekode
