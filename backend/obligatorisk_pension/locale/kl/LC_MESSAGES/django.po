@@ -18,7 +18,9 @@ msgid "obligatorisk_pension.skatteår"
 msgstr "Ukioq akileraarfik"
 
 msgid "obligatorisk_pension.title"
-msgstr "Soraarnerussutisiaqarnissamut aaqqissuussinermut peqataasussaatitaaneq"
+msgstr ""
+"Soraarnerussutisiaqarnissamut aaqqissuussinermut akiliutit "
+"uppernarsaataannik nalunaarutiginninneq"
 
 msgid "obligatorisk_pension.navn"
 msgstr "Ateq"
@@ -55,8 +57,8 @@ msgstr "Nassuiaat"
 
 msgid "obligatorisk_pension.fil_hjælpetekst"
 msgstr ""
-"Vedlæg dokumenter, der dokumenterer de indbetalinger, "
-"du har foretaget til din pensionsopsparing i denne periode."
+"Soraarnerussutisiaqarnissamut aaqqissuussininnut piffissami tassani "
+"akiliutigisimasavit uppernarsaataat ilanngullugit nassiutikkit."
 
 msgid "obligatorisk_pension.mail1.subject"
 msgstr "Qujanaq soraarnerussutisiaqarnissamut aaqqissuussinerit nalunaarutigigakku."
