@@ -4,16 +4,16 @@
         {{ form.id }}
         {{ form.DELETE }}
     </div>
-    <div class="col-3-sm" data-controls="#{{ form.land.id_for_label }}" data-controls-values="True" data-controls-action="disabled">
+    <div class="col-3-sm px-2" data-controls="#{{ form.land.id_for_label }}" data-controls-values="True" data-controls-action="disabled">
         {% include 'aka/util/field.html' with field=form.grønlandsk key='obligatorisk_pension.grønlandsk' %}
     </div>
-    <div class="col-3-sm">
+    <div class="col-3-sm px-2">
         {% include 'aka/util/field.html' with field=form.land key='obligatorisk_pension.land' %}
     </div>
-    <div class="col-5-sm" data-formset-update="true">
+    <div class="col-5-sm px-2" data-formset-update="true">
         {% include 'aka/util/field.html' with field=form.pensionsselskab key='obligatorisk_pension.pensionsselskab' %}
     </div>
-    <div class="col-1-sm">
+    <div class="col-1-sm px-2">
         <label>&nbsp;</label>
         <button type="button" data-formset-button="deleterow" data-trans="common.slet">{% translate 'common.slet' %}</button>
         <button type="button" data-formset-button="addrow" data-trans="common.add">{% translate 'common.add' %}</button>

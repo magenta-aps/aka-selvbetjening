@@ -69,6 +69,12 @@ msgstr "Download CSV-fil"
 msgid "common.download_template"
 msgstr "Download skabelon"
 
+msgid "common.ja"
+msgstr "Ja"
+
+msgid "common.nej"
+msgstr "Nej"
+
 msgid "common.logout"
 msgstr "Log ud"
 

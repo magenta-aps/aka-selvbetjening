@@ -47,6 +47,11 @@
                         {% include 'aka/util/field.html' with field=form.email key='obligatorisk_pension.email' %}
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'aka/util/field.html' with field=form.beløb key='obligatorisk_pension.beløb' %}
+                    </div>
+                </div>
 
                 {{ form.selskabformset.management_form }}
                 <div class="formset" data-formset="selskaber" data-formset-rowclass="row">
@@ -67,6 +72,7 @@
                         {% include 'pension/filform.html' with form=subform %}
                     {% endfor %}
                 </div>
+                <p data-trans="obligatorisk_pension.fil_hjælpetekst">{% translate 'obligatorisk_pension.fil_hjælpetekst' %}</p>
 
                 <div class="row">
                     <div class="col-2-sm">
