@@ -1,9 +1,9 @@
+from aka.widgets import TranslatedSelect
 from datetime import date
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.forms import widgets, inlineformset_factory
-from django.utils.translation import gettext_lazy as _
 from obligatorisk_pension.models import ObligatoriskPension
 from obligatorisk_pension.models import ObligatoriskPensionFile
 from obligatorisk_pension.models import ObligatoriskPensionSelskab
@@ -37,10 +37,10 @@ class ObligatoriskPensionSelskabForm(forms.ModelForm):
 
     grønlandsk = forms.BooleanField(
         initial=True,
-        widget=widgets.Select(
+        widget=TranslatedSelect(
             choices=(
-                (True, _("Ja")),
-                (False, _("Nej")),
+                (True, "common.ja"),
+                (False, "common.nej"),
             ),
         ),
         required=False,
@@ -98,12 +98,14 @@ class ObligatoriskPensionForm(forms.ModelForm):
             "adresse",
             "kommune",
             "email",
+            "beløb",
         ]
 
     def __init__(self, *args, **kwargs):
+        initial = kwargs.pop("initial", None)
         self.selskabformset = ObligatoriskPensionSelskabFormSet(*args, **kwargs)
         self.filformset = ObligatoriskPensionFilFormSet(*args, **kwargs)
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, initial=initial, **kwargs)
 
     def is_valid(self):
         return (
@@ -137,10 +139,18 @@ class ObligatoriskPensionForm(forms.ModelForm):
         choices=((m["code"], m["name"]) for m in settings.MUNICIPALITIES),
         required=True,
         error_messages={"required": "error.required"},
+        widget=TranslatedSelect(attrs={"class": "dropdown"}),
     )
     email = forms.EmailField(
         required=True,
         error_messages={"required": "error.required"},
+    )
+    beløb = forms.DecimalField(
+        decimal_places=2,
+        required=True,
+        error_messages={"required": "error.required"},
+        min_value=0.01,
+        localize=True,
     )
 
     def clean_land(self):

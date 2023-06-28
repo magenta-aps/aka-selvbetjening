@@ -18,7 +18,7 @@ msgid "obligatorisk_pension.skatteår"
 msgstr "Skatteår"
 
 msgid "obligatorisk_pension.title"
-msgstr "Obligatorisk pension"
+msgstr "Indberetning af dokumentation for indbetaling til obligatorisk pension"
 
 msgid "obligatorisk_pension.navn"
 msgstr "Navn"
@@ -31,6 +31,9 @@ msgstr "Kommune"
 
 msgid "obligatorisk_pension.email"
 msgstr "Email-adresse"
+
+msgid "obligatorisk_pension.beløb"
+msgstr "Beløb"
 
 msgid "obligatorisk_pension.grønlandsk"
 msgstr "Grønlandsk pensionsordning"
@@ -49,6 +52,11 @@ msgstr "Fil"
 
 msgid "obligatorisk_pension.filbeskrivelse"
 msgstr "Beskrivelse"
+
+msgid "obligatorisk_pension.fil_hjælpetekst"
+msgstr ""
+"Vedlæg dokumenter, der dokumenterer de indbetalinger, "
+"du har foretaget til din pensionsopsparing i denne periode."
 
 msgid "obligatorisk_pension.mail1.subject"
 msgstr "Tak for registreringen af din pension"
