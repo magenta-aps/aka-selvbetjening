@@ -40,13 +40,9 @@ class ObligatoriskPensionCreateView(IsContentMixin, HasUserMixin, UpdateView):
         kwargs = super().get_form_kwargs()
         if self.person and not self.object:
             kwargs["initial"]["navn"] = self.person["navn"]
-        kommunekode = (
-            self.request.session.get("user_info", {})
-            .get("person", {})
-            .get("myndighedskode", None)
-        )
-        if kommunekode:
-            kwargs["initial"]["kommune"] = kommunekode
+            kommunekode = self.person.get("myndighedskode", None)
+            if kommunekode:
+                kwargs["initial"]["kommune"] = kommunekode
         return kwargs
 
     def form_valid(self, form):
