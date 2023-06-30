@@ -115,7 +115,7 @@ Selvbetjening Unittest:
   script:
     - cd backend
     - coverage run --source='.' --omit=manage.py,project/wsgi.py,*/admin.py manage.py test
-    - coverage report
+    - coverage report --show-missing --fail-under=74
     - coverage xml
   coverage: '/^TOTAL.+?(\d+\%)$/'
   artifacts:
