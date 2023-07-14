@@ -96,12 +96,14 @@ class ObligatoriskPensionCreateView(IsContentMixin, HasUserMixin, UpdateView):
         subject = gettext_lang("da", "obligatorisk_pension.mail2.subject")
         engine = Engine.get_default()
         context = Context({"object": object})
-        textbody = [
-            engine.from_string(
-                gettext_lang(lang, "obligatorisk_pension.mail2.textbody")
-            ).render(context)
-            for lang in ("kl", "da")
-        ]
+        textbody = "\n\n----\n\n".join(
+            [
+                engine.from_string(
+                    gettext_lang(lang, "obligatorisk_pension.mail2.textbody")
+                ).render(context)
+                for lang in ("kl", "da")
+            ]
+        )
         htmlbody = (
             "<html><body>"
             + "<hr/>".join(
@@ -112,10 +114,11 @@ class ObligatoriskPensionCreateView(IsContentMixin, HasUserMixin, UpdateView):
                     for lang in ("kl", "da")
                 ]
             )
-            + "</body></html>",
+            + "</body></html>"
         )
 
-        attachments = []
+        attachments = [("data.txt", textbody, magic.from_buffer(textbody, mime=True))]
+
         for fileobject in object.filer.all():
             name = fileobject.fil.name
             data = fileobject.fil.read()
@@ -125,7 +128,7 @@ class ObligatoriskPensionCreateView(IsContentMixin, HasUserMixin, UpdateView):
         send_mail(
             recipient=recipient,
             subject=subject,
-            textbody="\n\n----\n\n".join(textbody),
-            htmlbody="\n".join(htmlbody),
+            textbody=textbody,
+            htmlbody=htmlbody,
             attachments=attachments,
         )
