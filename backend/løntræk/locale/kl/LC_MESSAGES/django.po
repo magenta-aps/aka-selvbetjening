@@ -1,0 +1,77 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-07 12:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 6.2
+
+msgid "loentraek.title"
+msgstr "Akissarsianik ilanngaaneq nalunaarutigiuk"
+
+msgid "loentraek.year"
+msgstr "Ukioq"
+
+msgid "loentraek.month"
+msgstr "Qaammat"
+
+msgid "loentraek.total_amount"
+msgstr "Katinneri"
+
+msgid "loentraek.cpr"
+msgstr "CPR"
+
+msgid "loentraek.agreement_number"
+msgstr "Isumaqatigiissutip normua"
+
+msgid "loentraek.amount"
+msgstr "Akissarsianik ilanngaasarneq"
+
+msgid "loentraek.net_salary"
+msgstr "Akissarsiat ilanngareerlugit"
+
+msgid "loentraek.sum_mismatch"
+msgstr "Katinnerata tamarmiusup akit rækkeniittut tamarmik katinneri amerlaqatigissavai"
+
+msgid "loentraek.success"
+msgstr "Akissarsianit ilanngaataasimasumik nalunaartoqarpoq"
+
+msgid "loentraek.failed"
+msgstr "Nalunaaruteqarnermi ajortoqarpoq"
+
+msgid "loentraek.results"
+msgstr "Nalunaarsukkat ikkutat"
+
+msgid "loentraek.error_250.0"
+msgstr "Isumaqatigiissutip normua {nr} kukkuvoq"
+
+msgid "loentraek.error_250.1"
+msgstr "Inuup normua {cpr} ataasiaannarluni nalunaarsuinermi ilaasinnaavoq"
+
+msgid "loentraek.report_date"
+msgstr "Ulloq nalunaaruteqarfik"
+
+msgid "loentraek.effective"
+msgstr "Uunga tunngasoq"
+
+msgid "loentraek.receipt_headline"
+msgstr "Akissarsianit ilanngaataasimasunik nalunaaruteqarnermut uppernarsaat"
+
+msgid "loentraek.get_receipt"
+msgstr "Uppernarsaammik aallerfik"
+
+msgid "loentraek.record_id"
+msgstr "Nalunaarsuinermi normu"

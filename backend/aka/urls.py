@@ -1,16 +1,9 @@
 from aka.views import ChooseCvrView
 from aka.views import CustomJavaScriptCatalog, SetLanguageView
 from aka.views import IndexTemplateView
-from aka.views import InkassoGroupDataView
-from aka.views import InkassoSagView, InkassoSagUploadView
-from aka.views import LoentraekReceiptView, FordringReceiptView, NedskrivningReceiptView
-from aka.views import LoentraekView, LoentraekUploadView
-from aka.views import NedskrivningView, NedskrivningUploadView
-from aka.views import RenteNotaView
-from aka.views import UdbytteView
 from django.urls import path
-from django_mitid_auth.saml.views import AccessDeniedView
 from django.views.generic import TemplateView
+from django_mitid_auth.saml.views import AccessDeniedView
 
 app_name = "aka"
 
@@ -28,49 +21,6 @@ urlpatterns = [
         "prisme-down/",
         TemplateView.as_view(template_name="aka/downtime.html"),
         name="downtime",
-    ),
-    path("inkassosag/", InkassoSagView.as_view(), name="inkassosag"),
-    path(
-        "inkassosag/upload/", InkassoSagUploadView.as_view(), name="inkassosag-upload"
-    ),
-    path(
-        "fordringsgrupper/<str:var>/",
-        InkassoGroupDataView.as_view(),
-        name="fordringsgrupper-var",
-    ),
-    path(
-        "fordringsgrupper/",
-        InkassoGroupDataView.as_view(),
-        name="fordringsgrupper",
-    ),
-    path("loentraek/", LoentraekView.as_view(), name="loentraek"),
-    path("loentraek/upload/", LoentraekUploadView.as_view(), name="loentraek-upload"),
-    path("rentenota/", RenteNotaView.as_view(), name="rentenota"),
-    path("nedskrivning/", NedskrivningView.as_view(), name="nedskrivning"),
-    path(
-        "nedskrivning/upload/",
-        NedskrivningUploadView.as_view(),
-        name="nedskrivning-upload",
-    ),
-    path(
-        "loentraek/kvittering/<str:pdf_id>/",
-        LoentraekReceiptView.as_view(),
-        name="loentraek-kvittering",
-    ),
-    path(
-        "inkassosag/kvittering/<str:pdf_id>/",
-        FordringReceiptView.as_view(),
-        name="inkassosag-kvittering",
-    ),
-    path(
-        "nedskrivning/kvittering/<str:pdf_id>/",
-        NedskrivningReceiptView.as_view(),
-        name="nedskrivning-kvittering",
-    ),
-    path(
-        "udbytte/",
-        UdbytteView.as_view(),
-        name="udbytte",
     ),
     path(
         "error/login-timeout/",

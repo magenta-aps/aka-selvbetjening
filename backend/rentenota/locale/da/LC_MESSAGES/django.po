@@ -1,0 +1,85 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-07 12:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+# NY18
+msgid "rentenota.title"
+msgstr "Rentenota"
+
+msgid "rentenota.rentenota"
+msgstr "Rentenota"
+
+msgid "rentenota.transaction_date"
+msgstr "Postdato"
+
+msgid "rentenota.updated"
+msgstr "Dato"
+
+msgid "rentenota.account_number"
+msgstr "Debitor&shy;konto"
+
+msgid "rentenota.billing_classification"
+msgstr "Fakturerings&shy;klassifikation"
+
+msgid "rentenota.interest_note"
+msgstr "Rentenota&shy;nummer"
+
+msgid "rentenota.voucher"
+msgstr "Bilag"
+
+msgid "rentenota.invoice"
+msgstr "Faktura"
+
+msgid "rentenota.text"
+msgstr "Tekst"
+
+msgid "rentenota.calculate_from_date"
+msgstr "Fradato"
+
+msgid "rentenota.calculate_to_date"
+msgstr "Tildato"
+
+msgid "rentenota.interest_days"
+msgstr "Dage"
+
+msgid "rentenota.invoice_amount"
+msgstr "Grundlag"
+
+msgid "rentenota.due_date"
+msgstr "Forfalds&shy;dato"
+
+msgid "rentenota.interest_amount"
+msgstr "Beløb"
+
+msgid "rentenota.ingenposter"
+msgstr "Ingen poster"
+
+msgid "rentenota.filename"
+msgstr "Rentenota {month}/{year}"
+
+msgid "rentenota.year"
+msgstr "År"
+
+msgid "rentenota.month"
+msgstr "Måned"
+
+msgid "rentenota.error_250.0"
+msgstr "Der findes ingen renter for dette CPR/CVR {cvr} eller for den angivne periode {start} {end}"
+

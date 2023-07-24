@@ -137,6 +137,11 @@ INSTALLED_APPS = [
     "aka",
     "obligatorisk_pension",
     "konto",
+    "fordring",
+    "løntræk",
+    "nedskrivning",
+    "rentenota",
+    "udbytte",
     "mitid_test",
     "watchman",
 ]

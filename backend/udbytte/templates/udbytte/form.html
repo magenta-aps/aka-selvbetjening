@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load l10n %}
+
+{% block extra_headers %}
+    {% if not pdf %}
+    {% include 'aka/util/calendar_headers.html' %}
+    <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/udbytte.js' %}"></script>
+    {% endif %}
+    {% if css %}
+    <style>
+        {{ css|safe }}
+    </style>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <article class="indberet_udbytte">
+        <form method="post" id="mainform">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <h1 data-trans="udbytte.title">{% translate 'udbytte.title' %}</h1>
+            <div class="container-fluid">
+                {% if not pdf %}
+                {% if form.errors or formset.errors %}
+
+                    <button type="button" class="has-collapsed" data-collapse="#vejledning">
+                        <span class="collapsed-hidden" data-trans="udbytte.vejledning_skjul">{% translate 'udbytte.vejledning_skjul' %}</span>
+                        <span class="expanded-hidden" data-trans="udbytte.vejledning_vis">{% translate 'udbytte.vejledning_vis' %}</span>
+                    </button>
+                    <div id="vejledning" class="row collapse collapsed" style="display: none">
+                        <div class="col-12-sm" data-trans="udbytte.vejledning">
+                            {% translate "udbytte.vejledning" %}
+                        </div>
+                    </div>
+
+                    <p class="err-msg">{% translate 'common.errors_present' %}</p>
+                    {% include "aka/util/nonfield_errors.html" with form=form %}
+
+                {% else %}
+
+                    <button type="button" class="has-expanded" data-collapse="#vejledning">
+                        <span class="collapsed-hidden" data-trans="udbytte.vejledning_skjul">{% translate 'udbytte.vejledning_skjul' %}</span>
+                        <span class="expanded-hidden" data-trans="udbytte.vejledning_vis">{% translate 'udbytte.vejledning_vis' %}</span>
+                    </button>
+                    <div id="vejledning" class="row collapse">
+                        <div class="col-12-sm" data-trans="udbytte.vejledning">
+                            {% translate "udbytte.vejledning" %}
+                        </div>
+                    </div>
+
+                {% endif %}
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'udbytte/field.html' with field=form.navn key='udbytte.udfylder' %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'udbytte/field.html' with field=form.revisionsfirma key='udbytte.revisionsfirmanavn' %}
+                    </div>
+                </div>
+
+                <h3 data-trans="udbytte.virksomhed">{% translate "udbytte.virksomhed" %}</h3>
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'udbytte/field.html' with field=form.virksomhedsnavn key='udbytte.virksomhedsnavn' %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'udbytte/field.html' with field=form.cvr key='udbytte.cvr' %}
+                        {% include 'udbytte/field.html' with field=form.email key='udbytte.email' %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'udbytte/field.html' with field=form.regnskabsår key='udbytte.regnskabsår' %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'udbytte/field.html' with field=form.u1_udfyldt key='udbytte.u1_udfyldt' %}
+                    </div>
+                    <div id="u1_warning" class="col-12-sm" style="display:none">
+                        <p data-trans="udbytte.u1_advarsel" data-trans-params="{{u1_url_wrapped}}">
+                            {{ 'udbytte.u1_advarsel'|format:u1_url_wrapped|safe }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'udbytte/field.html' with field=form.udbytte key='udbytte.udbytte' %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    {% if pdf %}
+                        <div class="col-1-sm" data-trans="udbytte.cpr_cvr_tin"><label>{% translate 'udbytte.cpr_cvr_tin' %}</label></div>
+                        <div class="col-2-sm" data-trans="udbytte.navn"><label>{% translate 'udbytte.navn' %}</label></div>
+                        <div class="col-2-sm" data-trans="udbytte.adresse"><label>{% translate 'udbytte.adresse' %}</label></div>
+                        <div class="col-1-sm" data-trans="udbytte.postnummer"><label>{% translate 'udbytte.postnummer' %}</label></div>
+                        <div class="col-2-sm" data-trans="udbytte.by"><label>{% translate 'udbytte.by' %}</label></div>
+                        <div class="col-2-sm" data-trans="udbytte.land"><label>{% translate 'udbytte.land' %}</label></div>
+                        <div class="col-2-sm" data-trans="udbytte.udbytte"><label>{% translate 'udbytte.udbytte' %}</label></div>
+                    {% else %}
+                        <div class="col-1-sm" data-trans="udbytte.cpr_cvr_tin"><label>{% translate 'udbytte.cpr_cvr_tin' %}</label></div>
+                        <div class="col-1-sm" data-trans="udbytte.navn"><label>{% translate 'udbytte.navn' %}</label></div>
+                        <div class="col-1-sm" data-trans="udbytte.adresse"><label>{% translate 'udbytte.adresse' %}</label></div>
+                        <div class="col-1-sm" data-trans="udbytte.postnummer"><label>{% translate 'udbytte.postnummer' %}</label></div>
+                        <div class="col-1-sm" data-trans="udbytte.by"><label>{% translate 'udbytte.by' %}</label></div>
+                        <div class="col-1-sm" data-trans="udbytte.land"><label>{% translate 'udbytte.land' %}</label></div>
+                        <div class="col-6-sm" data-trans="udbytte.udbytte"><label>{% translate 'udbytte.udbytte' %}</label></div>
+                    {% endif %}
+                </div>
+                <div id="formsetContainer">
+                    {% if pdf %}
+                        {% for subform in formset %}
+                            {% include 'udbytte/subform_pdf.html' with subform=subform %}
+                        {% endfor %}
+                    {% else %}
+                        {% for subform in formset %}
+                            {% include 'udbytte/subform.html' with subform=subform %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <button type="button" id="add-row" class="button" data-trans="common.add">{% translate 'common.add' %}</button>
+
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'udbytte/field.html' with field=form.noter key='udbytte.noter' %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-8-sm">
+                        {% include 'udbytte/field.html' with field=form.by key='udbytte.by' %}
+                    </div>
+                    <div class="col-4-sm">
+                        {% include 'udbytte/field.html' with field=form.dato key='udbytte.dato' %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12-sm">
+                        {% include 'udbytte/field.html' with field=form.underskriftsberettiget key='udbytte.underskriftsberettiget' %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2-sm">
+                        <button type="submit" data-trans="common.gem">{% translate 'common.gem' %}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div id="formsetPrototype" style="display: none">
+            {% include 'udbytte/subform.html' with subform=formset.empty_form %}
+        </div>
+    </article>
+    {% if not pdf %}
+    <script>
+
+    const replace_repeat = function (subject, re, replacement) {
+        let old = null;
+        while (old !== subject) {
+            old = subject;
+            subject = subject.replace(re, replacement);
+        }
+        return subject;
+    };
+
+    const tsep = function(value) {
+        if (typeof(value) === "number") {
+            value = formatDecimal(value);
+        }
+        value = replace_repeat(value, /(.)-/g, '$1');
+        value = value.replace(/--+/g, '-'); // Squash negative signs
+        value = value.replace(/[^\d,\-]/g, '');  // Strip away all non-digits and non-commas (including dots)
+        value = replace_repeat(value, /^(-?)0([0-9])/, '$1$2'); // Strip away leading zeroes
+        value = replace_repeat(value, /^(-?\d+)(\d\d\d)(\.|,|$)/, '$1.$2$3'); // Apply thousand-separator
+        value = replace_repeat(value, /,([^,]*),/, ',$1'); // Squash commas
+        value = replace_repeat(value, /,(\d\d).+/, ',$1'); // Trim to two digits after comma
+        value = value.replace(/,(\d)$/, ',$10');
+        return value
+    };
+
+    const parseDecimal = function(value) {
+        value = replace_repeat(value, /(.)-/g, '$1');
+        value = value.replace(/--+/g, '-');
+        value = value.replace(/[^\d,\-]/g, '');  // Strip away all non-digits and non-commas (including dots)
+        return parseFloat(value.replace(",", "."));
+    }
+    const formatDecimal = function(decimal) {
+        return Math.trunc(decimal) + "," + Math.round(100 * (decimal % 1.0));
+    }
+    const countChars = function(haystack, needle) {
+        let count = 0;
+        for (let i=0; i<haystack.length; i++) {
+            if (haystack[i] === needle) {
+                count++;
+            }
+        }
+        return count;
+    }
+    const formatNumberField = function() {
+        let cursorIndex = this.selectionStart;
+        let value = tsep(this.value);
+        if (value !== this.value) {
+            cursorIndex += countChars(value, ".") - countChars(this.value, ".");
+            this.value = value;
+            this.setSelectionRange(cursorIndex, cursorIndex);
+        }
+    };
+    $(function(){
+        const udbytte_field = $("[name={{ form.udbytte.name }}]");
+        // Performs proper number formatting, keeping the cursor where it's supposed to be
+        udbytte_field.bindFirst("change keyup", formatNumberField);
+        $("#formsetContainer input[name$='udbytte']").bindFirst("change keyup", formatNumberField);
+    });
+
+    const u1UdfyldtField = $("[name='{{ form.u1_udfyldt.name }}']");
+    const toggleU1Warning = function () {
+        $("#u1_warning").toggle(u1UdfyldtField.val() === "0");
+    }
+    toggleU1Warning();
+    u1UdfyldtField.change(toggleU1Warning);
+
+    </script>
+    {% endif %}
+{% endblock %}
