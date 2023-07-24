@@ -1,0 +1,128 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-07 12:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 6.1
+
+msgid "fordring.title"
+msgstr "Fordring-it nalunaarutigikkit"
+
+msgid "fordring.title-upload"
+msgstr "Fordring-it uploadikkit"
+
+msgid "fordring.debitor"
+msgstr "Akiligassalik"
+
+msgid "fordring.codebitorer"
+msgstr "Akiligassaqaqataasut"
+
+msgid "fordring.cpr"
+msgstr "cpr"
+
+msgid "fordring.cvr"
+msgstr "cvr"
+
+msgid "fordring.fordringshaver"
+msgstr "Pissarsisussaq"
+
+msgid "fordring.anden_fordringshaver"
+msgstr "Pissarsisussaq alla"
+
+msgid "fordring.dokumentation"
+msgstr "Uppernarsaat"
+
+msgid "fordring.fordringsgruppe"
+msgstr "Akiligassiissutigineqartut immikkoortui"
+
+msgid "fordring.fordringstype"
+msgstr "Akiligassiissutigineqartut suussusiisa immikkortui"
+
+msgid "fordring.barns_cpr"
+msgstr "Meeqqap CPR-normua"
+
+msgid "fordring.ekstern_sagsnummer"
+msgstr "Suliap avataaneersup normua"
+
+msgid "fordring.fakturanr"
+msgstr "Akiligassap nr."
+
+msgid "fordring.bnr"
+msgstr "B-nr."
+
+msgid "fordring.hovedstol"
+msgstr "Akiligassaq tamakkiisoq"
+
+msgid "fordring.posteringstekst"
+msgstr "Oqaasertaliussaq"
+
+msgid "fordring.periodestart"
+msgstr "Piffissap aallartiffia"
+
+msgid "fordring.periodeslut"
+msgstr "Piffissap naaffia"
+
+msgid "fordring.forfaldsdato"
+msgstr "Ulloq akiliiffissaq kingulleq"
+
+msgid "fordring.betalingsdato"
+msgstr "Ulloq akiliiffissaq"
+
+msgid "fordring.foraeldelsesdato"
+msgstr "Ulloq pisoqaliffissaq"
+
+msgid "fordring.kontaktperson"
+msgstr "Attavissaq"
+
+msgid "fordring.noter"
+msgstr "Nalunaarsukkat"
+
+msgid "fordring.meddebitor"
+msgstr "Akiligassaqaqataasoq"
+
+msgid "fordring.errors"
+msgstr "Ukuninnga kukkuneqarpoq:"
+
+msgid "fordring.success"
+msgstr "Akiligassamik ikaartitsinermik nalunaartoqarpoq"
+
+msgid "fordring.failed"
+msgstr "Nalunaaruteqarnermi ajortoqarpoq"
+
+msgid "fordring.result"
+msgstr "Fodrings normut ikkupput"
+
+msgid "fordring.bill_date_before_due_date"
+msgstr "Ulloq akiliiffissaq ullormit akiliiffissamit kingulermit siusinnerussaaq"
+
+msgid "fordring.error_250.0"
+msgstr "Ref.nr.-mut {refnumber} tassunga akiligassaqanngilaq"
+
+msgid "fordring.report_date"
+msgstr "Ulloq nalunaaruteqarfik"
+
+msgid "fordring.effective"
+msgstr "Uunga tunngasoq"
+
+msgid "fordring.receipt_headline"
+msgstr "Akiligassamik nalunaaruteqarnermut uppernarsaat"
+
+msgid "fordring.get_receipt"
+msgstr "Uppernarsaammik aallerfik"
+
+msgid "fordring.record_id"
+msgstr "Nalunaarsuinermi normu"

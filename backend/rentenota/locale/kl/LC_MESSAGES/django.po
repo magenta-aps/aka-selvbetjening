@@ -1,0 +1,84 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-07 12:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+
+# NY18
+msgid "rentenota.title"
+msgstr "Erniat pillugit allakkiaq"
+
+msgid "rentenota.rentenota"
+msgstr "Erniat pillugit allakkiaq"
+
+msgid "rentenota.transaction_date"
+msgstr "Akiligassat/akiliutit ullua"
+
+msgid "rentenota.updated"
+msgstr "Ulloq"
+
+msgid "rentenota.account_number"
+msgstr "Akiligassallip kontoa"
+
+msgid "rentenota.billing_classification"
+msgstr "Akileqqussutip suussusaa"
+
+msgid "rentenota.interest_note"
+msgstr "Erniat pillugit allakkianut normu"
+
+msgid "rentenota.voucher"
+msgstr "Ilanngussaq"
+
+msgid "rentenota.invoice"
+msgstr "Akileeqqussut"
+
+msgid "rentenota.text"
+msgstr "Oqaasertaa"
+
+msgid "rentenota.calculate_from_date"
+msgstr "Ullormit"
+
+msgid "rentenota.calculate_to_date"
+msgstr "Ullormut"
+
+msgid "rentenota.interest_days"
+msgstr "Ullut"
+
+msgid "rentenota.invoice_amount"
+msgstr "Tunngavigineqartoq"
+
+msgid "rentenota.due_date"
+msgstr "Ulloq akiliiffissaq kingulleq"
+
+msgid "rentenota.interest_amount"
+msgstr "Erniat annertussusaat"
+
+msgid "rentenota.ingenposter"
+msgstr "Akiligassaqanngilaq/akiliuteqanngilaq"
+
+msgid "rentenota.filename"
+msgstr "Erniat pillugit allakkiaq {month}/{year}"
+
+msgid "rentenota.year"
+msgstr "Ukioq"
+
+msgid "rentenota.month"
+msgstr "Qaammat"
+
+msgid "rentenota.error_250.0"
+msgstr "Uunga CPR/CVR {cvr} imaluunniit piffissamut pineqartumut {start} {end} erniaqanngilaq"
+

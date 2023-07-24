@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load l10n %}
+{% load aka_tags %}
+
+{% block extra_headers %}
+{% endblock %}
+
+{% block content %}
+<article class="success">
+    <form>
+        {% localize off %}
+        {% if rec_ids %}
+        <h1 class="page-header" data-trans="loentraek.success">{% translate 'loentraek.success' %}</h1>
+        {% else %}
+        <h1 class="page-header" data-trans="loentraek.failed">{% translate 'loentraek.failed' %}</h1>
+        {% endif %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <span data-trans="loentraek.results">{% translate 'loentraek.results' %}</span>
+                    <ul class="success-list">
+                        {% for rec_id in rec_ids %}
+                            <li>{{ rec_id }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% if errors %}
+                        <span data-trans="loentraek.errors">{% translate 'loentraek.errors' %}</span>
+                        <ul class="error-list">
+                        {% for error in errors %}
+                            {% translate error.key as error_message %}
+                            <li data-trans="{{ error.key }}" data-trans-params="{{ error.params|json }}">{{ error_message|format:error.params }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {% if pdf_id %}
+                    <a href="{% url 'løntræk:kvittering' pdf_id=pdf_id %}" class="button" data-trans="loentraek.get_receipt" target="_blank">{% translate 'loentraek.get_receipt' %}</a>
+                    {% endif %}
+                    <a href="{% url 'løntræk:upload' %}" class="button"  data-trans="common.repeat">{% translate 'common.repeat' %}</a>
+                    <a href="{% url 'aka:index' %}" class="button" data-trans="common.forside">{% translate 'common.forside' %}</a>
+                </div>
+            </div>
+        </div>
+        {% endlocalize %}
+    </form>
+</article>
+{% endblock %}

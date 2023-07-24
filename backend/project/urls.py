@@ -9,6 +9,11 @@ urlpatterns = [
         include("obligatorisk_pension.urls", namespace="obligatorisk_pension"),
     ),
     path("konto/", include("konto.urls", namespace="konto")),
+    path("inkassosag/", include("fordring.urls", namespace="fordring")),
+    path("loentraek/", include("løntræk.urls", namespace="løntræk")),
+    path("nedskrivning/", include("nedskrivning.urls", namespace="nedskrivning")),
+    path("rentenota/", include("rentenota.urls", namespace="rentenota")),
+    path("udbytte/", include("udbytte.urls", namespace="udbytte")),
     path("", include("django_mitid_auth.urls", namespace="login")),
     path("_ht/", include("watchman.urls")),
 ]
