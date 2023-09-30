@@ -171,10 +171,15 @@ class KontoView(
         return True
 
     def get_rows_by_key(self, key: str) -> List[Row]:
+        if self.debug_active:
+            print("================")
+            print(key)
         if key not in self._data:
             try:
                 (cprcvr, c) = self.cprcvr_choice
                 lookup_class = self.get_lookup_class(key)
+                if self.debug_active:
+                    print(f"lookup_class: {lookup_class}")
                 prisme_reply = self.prisme.process_service(
                     lookup_class(
                         cprcvr,
@@ -210,11 +215,15 @@ class KontoView(
                 else:
                     if self.debug_active:
                         print("NO REPLIES FROM PRISME")
+                        print(prisme_reply)
             except PrismeException as e:
                 print(e)
                 pass
         if self.debug_active:
-            print(f"self._data[{key}]: {self._data[key]}")
+            if key in self._data:
+                print(f"self._data[{key}]: {self._data[key]}")
+            else:
+                print(f"{key} not in self._data")
         return self._data.get(key, [])
 
     def get_total_data(self, key: str) -> dict:
