@@ -236,6 +236,8 @@ PRISME_CONNECT = {
     },
 }
 
+DEBUG_KEY = os.environ.get("DEBUG_KEY", None)
+
 DAFO_CONNECT = {
     "enabled": bool(strtobool(os.environ.get("DAFO_ENABLED", "True"))),
     "pitu-server": os.environ.get("PITU_SERVER", ""),

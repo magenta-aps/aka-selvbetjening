@@ -58,6 +58,12 @@ class HasUserMixin(object):
         self.person = None
         super().__init__(*args, **kwargs)
 
+    @property
+    def debug_active(self):
+        return settings.DEBUG_KEY and (self.request.GET.get("debug") == settings.DEBUG_KEY)
+
+    debug_pnr = "1810862684"
+
     def get_claimants(self, request):
         if "claimantIds" in request.session:
             return request.session["claimantIds"]

@@ -159,6 +159,8 @@ class KontoView(
             return (cprcvr, "cpr")
         elif cprcvr == str(self.cvr):
             return (cprcvr, "cvr")
+        elif self.debug_active:
+            return (self.debug_pnr, "cpr")
         else:
             logger.info(
                 "cprcvr_choice got: "
@@ -193,6 +195,7 @@ class KontoView(
                         row = Row()
                         for field in self.get_fields_by_key(key):
                             value = getattr(entry, field.name)
+                            print(f"{field.name} = {value}")
                             if field.modifier:
                                 value = field.modifier(value)
                             row.cells.append(
@@ -202,8 +205,16 @@ class KontoView(
                                 )
                             )
                         self._data[key].append(row)
-            except PrismeException:
+                    elif self.debug_active:
+                        print(f"NOT accept_debitor_group_id({entry.debitor_group_id})")
+                else:
+                    if self.debug_active:
+                        print("NO REPLIES FROM PRISME")
+            except PrismeException as e:
+                print(e)
                 pass
+        if self.debug_active:
+            print(f"self._data[{key}]: {self._data[key]}")
         return self._data.get(key, [])
 
     def get_total_data(self, key: str) -> dict:
@@ -246,6 +257,8 @@ class KontoView(
                     "total": total,
                 }
             )
+            if self.debug_active:
+                print(f"sections: {self.sections}")
 
     def get_pages(self, key: str = None):
         if key is None:
