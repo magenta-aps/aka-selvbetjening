@@ -180,6 +180,7 @@ class KontoView(
                 lookup_class = self.get_lookup_class(key)
                 if self.debug_active:
                     print(f"lookup_class: {lookup_class}")
+                    print(f"cprcvr: {cprcvr}")
                 prisme_reply = self.prisme.process_service(
                     lookup_class(
                         cprcvr,
