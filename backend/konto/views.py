@@ -212,10 +212,10 @@ class KontoView(
                         self._data[key].append(row)
                     elif self.debug_active:
                         print(f"NOT accept_debitor_group_id({entry.debitor_group_id})")
-                else:
+                if len(prisme_reply[0]) == 0:
                     if self.debug_active:
                         print("NO REPLIES FROM PRISME")
-                        print(prisme_reply)
+                        print(prisme_reply.xml)
             except PrismeException as e:
                 print(e)
                 pass
@@ -266,8 +266,6 @@ class KontoView(
                     "total": total,
                 }
             )
-            if self.debug_active:
-                print(f"sections: {self.sections}")
 
     def get_pages(self, key: str = None):
         if key is None:
