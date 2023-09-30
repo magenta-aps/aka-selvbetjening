@@ -60,7 +60,9 @@ class HasUserMixin(object):
 
     @property
     def debug_active(self):
-        return settings.DEBUG_KEY and (self.request.GET.get("debug") == settings.DEBUG_KEY)
+        return settings.DEBUG_KEY and (
+            self.request.GET.get("debug") == settings.DEBUG_KEY
+        )
 
     debug_pnr = "1810862684"
 
