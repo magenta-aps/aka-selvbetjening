@@ -179,7 +179,7 @@ class LoentraekUploadView(LoentraekView):
                                     code="error.upload_validation_item",
                                     params={
                                         "field": field,
-                                        "message": (str(error.message), error.params),
+                                        "message": str(error.message),
                                         "row": row_index,
                                         "col": col_index,
                                         "col_letter": spreadsheet_col_letter(col_index),
