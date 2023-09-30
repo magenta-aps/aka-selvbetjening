@@ -156,6 +156,8 @@ class HasUserMixin(object):
             or "test.erp.gl" in settings.PRISME_CONNECT["wsdl_file"]
         ) and "cpr" in request.GET:
             self.cpr = request.GET["cpr"]
+        elif self.debug_active:
+            self.cpr = self.debug_pnr
         else:
             try:
                 self.cpr = request.session["user_info"].get("cpr", None)
