@@ -1,13 +1,13 @@
+from html import unescape
+
 import json as jsonlib
 import locale
 import re
-from html import unescape
-
+from aka.utils import LenientJsonSerializer
 from aka.utils import month_name as util_month_name
 from django.template.defaultfilters import register
 from django.utils.http import urlquote
 from django.utils.translation import gettext
-from django.core.serializers.json import DjangoJSONEncoder
 
 trans_re = re.compile("_\\((.*)\\)")
 format_re = re.compile("{(.*)}")
@@ -22,7 +22,7 @@ def split(text, filter):
 
 @register.filter
 def json(data):
-    return jsonlib.dumps(data, cls=DjangoJSONEncoder)
+    return jsonlib.dumps(data, cls=LenientJsonSerializer)
 
 
 @register.filter

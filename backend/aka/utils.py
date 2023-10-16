@@ -8,7 +8,9 @@ from dateutil import parser as datetimeparser
 from decimal import Decimal
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
+from django.core.files import File
 from django.core.mail import EmailMultiAlternatives
+from django.core.serializers.json import DjangoJSONEncoder
 from django.core.signing import JSONSerializer
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
@@ -148,6 +150,13 @@ def flatten(lst):
                 combined.append(x)
         return combined
     return [lst]
+
+
+class LenientJsonSerializer(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (File,)):
+            return {"__type__": obj.__class__.__name__}
+        return super().default(obj)
 
 
 # Solves the issue where a datetime object and a string with an iso-encoded datetime will be serialized to the same json string,
