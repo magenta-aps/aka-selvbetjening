@@ -8,6 +8,8 @@ from django.core.validators import MinLengthValidator
 from django.core.validators import RegexValidator
 from django.forms import ValidationError, TextInput
 from django.utils.datetime_safe import date
+from dynamic_forms import DynamicField
+from dynamic_forms import DynamicFormMixin
 
 logger = logging.getLogger(__name__)
 
@@ -16,9 +18,10 @@ cprvalidator = RegexValidator(r"^\d{10}$", "error.invalid_cpr")
 cvrvalidator = RegexValidator(r"^\d{8}$", "error.invalid_cvr")
 
 
-class LoentraekForm(forms.Form):
-    year = forms.ChoiceField(
-        choices=[
+class LoentraekForm(DynamicFormMixin, forms.Form):
+    year = DynamicField(
+        forms.ChoiceField,
+        choices=lambda form: [
             (x, str(x)) for x in range(date.today().year - 10, date.today().year + 1)
         ],
         required=True,
@@ -26,7 +29,8 @@ class LoentraekForm(forms.Form):
         widget=forms.Select(attrs={"class": "dropdown"}),
         initial=date.today().year,
     )
-    month = forms.ChoiceField(
+    month = DynamicField(
+        forms.ChoiceField,
         choices=[
             (1, "January"),
             (2, "February"),
@@ -44,7 +48,7 @@ class LoentraekForm(forms.Form):
         required=True,
         error_messages={"required": "error.required"},
         widget=TranslatedSelect(attrs={"class": "dropdown"}),
-        initial=date.today().month,
+        initial=lambda form: date.today().month,
     )
     total_amount = forms.DecimalField(
         decimal_places=2,

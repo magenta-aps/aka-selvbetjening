@@ -1,5 +1,4 @@
 import sys
-
 from aka.clients.prisme import (
     PrismeSELRequest,
     PrismeAKIRequest,
@@ -7,14 +6,6 @@ from aka.clients.prisme import (
     PrismeAKITotalRequest,
     PrismeException,
     Prisme,
-)
-from project.view_mixins import (
-    HasUserMixin,
-    SimpleGetFormMixin,
-    PdfRendererMixin,
-    JsonRendererMixin,
-    SpreadsheetRendererMixin,
-    IsContentMixin,
 )
 from aka.utils import Field, Cell, Row
 from aka.utils import Table, chunks
@@ -26,6 +17,14 @@ from django.utils.translation import gettext_lazy as _, gettext
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from konto.forms import KontoForm
+from project.view_mixins import (
+    HasUserMixin,
+    SimpleGetFormMixin,
+    PdfRendererMixin,
+    JsonRendererMixin,
+    SpreadsheetRendererMixin,
+    IsContentMixin,
+)
 from typing import List
 
 

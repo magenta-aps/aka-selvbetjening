@@ -4,24 +4,22 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.forms import widgets, inlineformset_factory
+from dynamic_forms import DynamicField
+from dynamic_forms import DynamicFormMixin
 from obligatorisk_pension.models import ObligatoriskPension
 from obligatorisk_pension.models import ObligatoriskPensionFile
 from obligatorisk_pension.models import ObligatoriskPensionSelskab
 
 
-class SkatteårForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        current_year = date.today().year
-        kwargs["initial"]["skatteår"] = current_year
-        super().__init__(*args, **kwargs)
-        self.fields["skatteår"].choices = (
-            (x, str(x)) for x in range(current_year - 5, current_year + 1)
-        )
-        self.initial["skatteår"] = current_year
-
-    skatteår = forms.ChoiceField(
+class SkatteårForm(DynamicFormMixin, forms.Form):
+    skatteår = DynamicField(
+        forms.ChoiceField,
         required=True,
         error_messages={"required": "error.required"},
+        choices=lambda form: (
+            (x, str(x)) for x in range(date.today().year - 5, date.today().year + 1)
+        ),
+        initial=lambda form: date.today().year,
     )
 
 
