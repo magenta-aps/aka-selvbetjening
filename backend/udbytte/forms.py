@@ -1,10 +1,12 @@
 import logging
 from aka.widgets import TranslatedSelect
 from django import forms
+from django.core.validators import RegexValidator
 from django.forms import ValidationError
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
-from django.core.validators import RegexValidator
+from dynamic_forms import DynamicField
+from dynamic_forms import DynamicFormMixin
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +16,7 @@ cvrvalidator = RegexValidator(r"^\d{8}$", "error.invalid_cvr")
 cprcvrvalidator = RegexValidator(r"^\d{8}(\d{2})?$", "error.invalid_cpr_cvr")
 
 
-class UdbytteForm(forms.Form):
+class UdbytteForm(DynamicFormMixin, forms.Form):
     navn = forms.CharField(
         label=_("Navn på udfylder"),
         required=True,
@@ -40,10 +42,11 @@ class UdbytteForm(forms.Form):
         required=True,
         error_messages={"required": "error.required", "invalid": "error.invalid_email"},
     )
-    regnskabsår = forms.ChoiceField(
+    regnskabsår = DynamicField(
+        forms.ChoiceField,
         label=_("Udbyttet vedrører regnskabsåret"),
         required=True,
-        choices=lambda: (
+        choices=lambda form: (
             (year, str(year))
             for year in range(date.today().year, date.today().year - 6, -1)
         ),

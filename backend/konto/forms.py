@@ -1,17 +1,16 @@
+from aka.forms import valid_date_formats, RadioSelect, AcceptingMultipleChoiceField
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import MultipleHiddenInput
 from django.utils.translation import gettext_lazy as _
+from dynamic_forms import DynamicField
+from dynamic_forms import DynamicFormMixin
 
-from aka.forms import valid_date_formats, RadioSelect, AcceptingMultipleChoiceField
 
-
-class KontoForm(forms.Form):
+class KontoForm(DynamicFormMixin, forms.Form):
     def __init__(self, *args, **kwargs):
-        cprcvr_choices = kwargs.pop("cprcvr_choices", ())
+        self.cprcvr_choices = kwargs.pop("cprcvr_choices", ())
         super(KontoForm, self).__init__(*args, **kwargs)
-        self.initial["open_closed"] = 2
-        self.fields["cprcvr"].choices = cprcvr_choices
 
     from_date = forms.DateField(
         widget=forms.DateInput(attrs={"class": "datepicker"}),
@@ -40,9 +39,12 @@ class KontoForm(forms.Form):
             ],
         ),
         error_messages={"required": "error.required"},
+        initial=2,
     )
     hidden = AcceptingMultipleChoiceField(widget=MultipleHiddenInput, required=False)
-    cprcvr = forms.ChoiceField(required=False, choices=[])
+    cprcvr = DynamicField(
+        forms.ChoiceField, required=False, choices=lambda form: form.cprcvr_choices
+    )
 
     def clean(self):
         if (
