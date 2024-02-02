@@ -9,7 +9,7 @@ RUN curl -fsSLO https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.1
   mv wkhtmltox/bin/wkhtmlto* /usr/bin
     
 # hadolint ignore=DL3008
-RUN mkdir /backend && mkdir -p /var/log/aka && mkdir -p /var/cache/aka \
+RUN mkdir /backend && mkdir -p /log && mkdir -p /var/cache/aka \
  && apt-get update && apt-get install -y --no-install-recommends \
     gettext libxmlsec1-dev xmlsec1 gpg libmagic1 nano \
  && apt-get clean && rm -rf /var/lib/apt/lists/* \
@@ -21,7 +21,7 @@ RUN mkdir /backend && mkdir -p /var/log/aka && mkdir -p /var/cache/aka \
  && groupadd -g 75080 -r aka  \
  && groupadd -g 75100 -r certificate_exporter \
  && useradd -m -u 75080 --no-log-init -r -g aka -G certificate_exporter aka \
- && chown aka:aka /var/log/aka \
+ && chown aka:aka /log \
  && chown aka:aka /var/cache/aka \
  && chmod a+w /var/cache/aka \
  && mkdir -p /ssl/sp \

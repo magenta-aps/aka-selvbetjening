@@ -25,7 +25,7 @@ services:
       - RUN_MIGRATIONS=true
     volumes:
       - ./backend/:/backend
-      - ./logs:/var/log/aka
+      - ./log:/log:rw
       - ./dev-environment/cert:/ssl:ro
       - ./upload:/upload  # Matcher MEDIA_ROOT i django settings
     command: gunicorn -b 0.0.0.0:8000 project.wsgi:application --reload -w 1 --access-logfile - --error-logfile - --capture-output # reload on code changes
