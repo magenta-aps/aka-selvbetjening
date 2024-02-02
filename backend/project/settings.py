@@ -1,6 +1,5 @@
 import json
 import os
-import sys
 from distutils.util import strtobool
 from decimal import Decimal
 
@@ -43,84 +42,55 @@ DATABASES = {
 
 LOGGING = {
     "version": 1,
-    "disable_existing_loggers": False,
-    "filters": {
-        "require_debug_false": {  # A flag to only log specified in production
-            "()": "django.utils.log.RequireDebugFalse"
-        },
-        "require_debug_true": {  # A flag used for DEBUGGING only logs
-            "()": "django.utils.log.RequireDebugTrue",
-        },
-    },
+    "disable_existing_loggers": True,
     "formatters": {
-        "verbose": {
-            "format": "{name} {levelname} {asctime} {module} {funcName} {message}",
-            "style": "{",
-        },
         "simple": {
             "format": "{levelname} {message}",
             "style": "{",
         },
-        "encrypted": {
-            "format": "\n%(asctime)s %(levelname)s %(name)s %(pathname)s:%(lineno)s    %(message)s",
-            "()": "aka.encrypted_logging.EncryptedLogFormatterFactory",
-        },
-        "unencrypted": {
-            "format": "\n%(asctime)s %(levelname)s %(name)s %(pathname)s:%(lineno)s    %(message)s",
-        },
     },
     "handlers": {
-        "console": {
-            "level": "DEBUG",
+        "gunicorn": {
             "class": "logging.StreamHandler",
-            "formatter": "verbose",
-            "stream": sys.stdout,
+            "formatter": "simple",
         },
         "file": {
-            "level": "DEBUG",
             "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": "/var/log/aka/aka.log.asc",
+            "filename": "/log/aka.log",
             "when": "D",  # Roll log each day
-            "formatter": "encrypted",
+            "formatter": "simple",
         },
-        "unencrypted_file": {
-            "level": "DEBUG",
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": "/var/log/aka/aka.log",
-            "when": "D",  # Roll log each day
-            "formatter": "unencrypted",
-        },
+    },
+    "root": {
+        "level": "INFO",
+        "handlers": ["gunicorn", "file"],
     },
     "loggers": {
         "zeep.transports": {
             "level": "DEBUG",
+            "handlers": ["gunicorn", "file"],
             "propagate": False,
-            "handlers": ["file"],
         },
         "aka.clients.prisme": {
             "level": "DEBUG",
+            "handlers": ["gunicorn", "file"],
             "propagate": False,
-            "handlers": ["file"],
         },
         "aka": {
             "level": "DEBUG",
-            "handlers": ["console", "file"],
+            "handlers": ["gunicorn", "file"],
             "propagate": False,
         },
         "oic": {
-            "handlers": ["console"],
             "level": "DEBUG",
+            "handlers": ["gunicorn", "file"],
             "propagate": False,
         },
         "django_mitid_auth": {
-            "handlers": ["console"],
-            "level": "INFO",
+            "level": "DEBUG",
+            "handlers": ["gunicorn", "file"],
             "propagate": False,
         },
-    },
-    "root": {
-        "handlers": ["console"],
-        "level": "WARNING",
     },
 }
 

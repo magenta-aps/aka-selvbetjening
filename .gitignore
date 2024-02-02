@@ -131,7 +131,7 @@ src/venv/
 ## Komodo edit ##
 *.komodoproject
 .idea
-logs/*
-!logs/.gitkeep
+log/*
+!log/.gitkeep
 
 docker-compose.override.yml
