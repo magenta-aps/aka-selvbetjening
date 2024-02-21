@@ -385,3 +385,5 @@ EMAIL_USE_SSL = bool(strtobool(os.environ.get("EMAIL_USE_SSL", "False")))
 EMAIL_SENDER = os.environ.get("EMAIL_SENDER", "noreply@nanoq.gl")
 EMAIL_OFFICE_RECIPIENT = os.environ.get("EMAIL_OFFICE_RECIPIENT", "test@nanoq.gl")
 EMAIL_OP_RECIPIENT = os.environ.get("EMAIL_OP_RECIPIENT", "pension@nanoq.gl")
+
+POPULATE_DUMMY_SESSION = False
