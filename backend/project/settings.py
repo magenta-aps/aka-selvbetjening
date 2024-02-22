@@ -1,5 +1,3 @@
-import base64
-
 import json
 import os
 from distutils.util import strtobool
@@ -239,16 +237,14 @@ SAML = {
     "debug": 1,
     "entityid": os.environ.get("SAML_SP_ENTITY_ID"),
     "idp_entity_id": os.environ.get("SAML_IDP_ENTITY_ID"),
-    "name": base64.b64encode((os.environ.get("SAML_NAME") or "AKAP").encode("utf-8")),
-    "description": base64.b64encode(
-        (os.environ.get("SAML_DESCRIPTION") or "AKA Selvbetjening").encode("utf-8")
-    ),
+    "name": os.environ.get("SAML_NAME") or "AKAP",
+    "description": os.environ.get("SAML_DESCRIPTION") or "AKA Selvbetjening",
     "verify_ssl_cert": False,
     "metadata_remote": os.environ.get("SAML_IDP_METADATA"),
     "metadata": {"local": ["/var/cache/aka/idp_metadata.xml"]},  # IdP Metadata
     "service": {
         "sp": {
-            "name": base64.b64encode((os.environ.get("SAML_NAME") or "AKAP").encode("utf-8")),
+            "name": os.environ.get("SAML_NAME") or "AKAP",
             "hide_assertion_consumer_service": False,
             "endpoints": {
                 "assertion_consumer_service": [
