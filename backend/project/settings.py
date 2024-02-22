@@ -248,7 +248,7 @@ SAML = {
     "metadata": {"local": ["/var/cache/aka/idp_metadata.xml"]},  # IdP Metadata
     "service": {
         "sp": {
-            "name": os.environ.get("SAML_NAME") or "AKAP",
+            "name": base64.b64encode((os.environ.get("SAML_NAME") or "AKAP").encode("utf-8")),
             "hide_assertion_consumer_service": False,
             "endpoints": {
                 "assertion_consumer_service": [
