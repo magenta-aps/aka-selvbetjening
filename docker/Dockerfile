@@ -25,7 +25,8 @@ RUN mkdir /backend && mkdir -p /log && mkdir -p /var/cache/aka \
  && chown aka:aka /var/cache/aka \
  && chmod a+w /var/cache/aka \
  && mkdir -p /ssl/sp \
- && mkdir -p /ssl/idp
+ && mkdir -p /ssl/idp \
+ && chmod -R a+w /home
 
 COPY docker/crontab /crontab
 COPY backend/requirements.txt /backend/requirements.txt
@@ -37,6 +38,7 @@ COPY dev-environment/cert/sp/selfsigned.* /ssl/sp/
 COPY dev-environment/cert/idp/selfsigned.crt /ssl/idp/selfsigned.crt
 USER aka
 WORKDIR /backend
+ENV HOME=/home
 VOLUME  /var/cache/aka
 EXPOSE 8000
 ENTRYPOINT ["/entrypoint.sh"]
