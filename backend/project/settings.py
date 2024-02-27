@@ -6,17 +6,71 @@ from decimal import Decimal
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
+# Folders, debug, django secret
 SITE_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SITE_DIR)
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 AKA_DIR = os.path.join(BASE_DIR, "aka")
 SHARED_DIR = os.path.join(PROJECT_DIR, "shared")
-
 DEBUG = bool(strtobool(os.environ.get("DJANGO_DEBUG", "False")))
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
-TIME_ZONE = os.environ.get("DJANGO_TIMEZONE", "America/Godthab")
+# Skip health_check for cache layer and storage since we are not using it
+WATCHMAN_CHECKS = ("watchman.checks.databases",)
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
+# Django apps, middleware, templates etc.
+INSTALLED_APPS = [
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.staticfiles",
+    "django.contrib.auth",
+    "django_mitid_auth",
+    "aka",
+    "obligatorisk_pension",
+    "konto",
+    "fordring",
+    "løntræk",
+    "nedskrivning",
+    "rentenota",
+    "udbytte",
+    "mitid_test",
+    "watchman",
+]
+
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django_mitid_auth.middleware.LoginManager",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_session_timeout.middleware.SessionTimeoutMiddleware",
+]
+
+ROOT_URLCONF = "project.urls"
+
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = "project.wsgi.application"
+
+
+# Sessions & cookies
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 if not DEBUG:
@@ -27,9 +81,13 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SERIALIZER = "aka.utils.AKAJSONSerializer"
+SESSION_EXPIRE_SECONDS = int(os.environ.get("SESSION_EXPIRE_SECONDS") or 1800)
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+SESSION_EXPIRE_CALLABLE = "aka.utils.session_timed_out"
+ALLOWED_HOSTS = ["*"]
 
-MEDIA_ROOT = "/upload/"  # Filesystem path to upload folder
 
+# Database
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -40,6 +98,8 @@ DATABASES = {
     }
 }
 
+
+# Logging
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
@@ -93,60 +153,10 @@ LOGGING = {
         },
     },
 }
-
 ENCRYPTED_LOG_KEY_UID = "AKA Selvbetjening"
 
-ALLOWED_HOSTS = ["*"]
 
-INSTALLED_APPS = [
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.staticfiles",
-    "django.contrib.auth",
-    "django_mitid_auth",
-    "aka",
-    "obligatorisk_pension",
-    "konto",
-    "fordring",
-    "løntræk",
-    "nedskrivning",
-    "rentenota",
-    "udbytte",
-    "mitid_test",
-    "watchman",
-]
-
-MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django_mitid_auth.middleware.LoginManager",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django_session_timeout.middleware.SessionTimeoutMiddleware",
-]
-
-ROOT_URLCONF = "project.urls"
-
-TEMPLATES = [
-    {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.messages.context_processors.messages",
-            ],
-        },
-    },
-]
-
-WSGI_APPLICATION = "project.wsgi.application"
-
+# Locale & time
 LANGUAGE_CODE = "da-dk"
 USE_I18N = True
 USE_L10N = True
@@ -158,27 +168,25 @@ LANGUAGES = [
     ("da", _("Danish")),
     ("kl", _("Greenlandic")),
 ]
-
-
+TIME_ZONE = os.environ.get("DJANGO_TIMEZONE", "America/Godthab")
 LOCALE_MAP = {"da": "da-DK", "kl": "kl-GL"}
-
 DEFAULT_CHARSET = "utf-8"
-
 USE_THOUSAND_SEPARATOR = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
-
+# Static & uploaded files
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(AKA_DIR, "static")
 STATICFILES_DIRS = []
+MEDIA_ROOT = "/upload/"  # Filesystem path to upload folder
+# Max 2 MB - can be lower if we want
+MAX_UPLOAD_FILESIZE = 22097152
 
 
+# Prisme
 def get_file_contents(filename):
     with open(filename, "r") as f:
         return f.read()
-
 
 PRISME_CONNECT = {
     "mock": bool(strtobool(os.environ.get("PRISME_MOCK", "False"))),
@@ -206,6 +214,8 @@ PRISME_CONNECT = {
     },
 }
 
+
+# Dafo
 DAFO_CONNECT = {
     "enabled": bool(strtobool(os.environ.get("DAFO_ENABLED", "True"))),
     "pitu-server": os.environ.get("PITU_SERVER", ""),
@@ -220,6 +230,8 @@ DAFO_CONNECT = {
     },
 }
 
+
+# Caching
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
@@ -232,6 +244,8 @@ CACHES = {
     },
 }
 
+
+# Login
 SAML = {
     "enabled": bool(strtobool(os.environ.get("SAML_ENABLED", "False"))),
     "debug": 1,
@@ -317,7 +331,6 @@ SAML = {
         ],
     },
 }
-
 LOGIN_PROVIDER_CLASS = os.environ.get("LOGIN_PROVIDER_CLASS") or None
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"  # Where to go after logout
@@ -342,24 +355,28 @@ LOGIN_WHITELISTED_URLS = [
     LOGIN_NO_CPRCVR_URL,
 ]
 MITID_TEST_ENABLED = bool(strtobool(os.environ.get("MITID_TEST_ENABLED", "False")))
-SESSION_EXPIRE_SECONDS = int(os.environ.get("SESSION_EXPIRE_SECONDS") or 1800)
-SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
-SESSION_EXPIRE_CALLABLE = "aka.utils.session_timed_out"
-
-# Max 2 MB - can be lower if we want
-MAX_UPLOAD_FILESIZE = 22097152
-
 DEFAULT_CPR = os.environ.get("DEFAULT_CPR", None)
 DEFAULT_CVR = os.environ.get("DEFAULT_CVR", None)
 LOGIN_BYPASS_ENABLED = bool(strtobool(os.environ.get("LOGIN_BYPASS_ENABLED", "False")))
-
-# Skip health_check for cache layer and storage since we are not using it
-WATCHMAN_CHECKS = ("watchman.checks.databases",)
-DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+POPULATE_DUMMY_SESSION = False
 
 
+# Email
+# https://docs.djangoproject.com/en/4.1/topics/email/
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.environ.get("EMAIL_HOST", None)
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 25))
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", None)
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", None)
+EMAIL_USE_TLS = bool(strtobool(os.environ.get("EMAIL_USE_TLS", "False")))
+EMAIL_USE_SSL = bool(strtobool(os.environ.get("EMAIL_USE_SSL", "False")))
+EMAIL_SENDER = os.environ.get("EMAIL_SENDER", "noreply@nanoq.gl")
+EMAIL_OFFICE_RECIPIENT = os.environ.get("EMAIL_OFFICE_RECIPIENT", "test@nanoq.gl")
+EMAIL_OP_RECIPIENT = os.environ.get("EMAIL_OP_RECIPIENT", "pension@nanoq.gl")
+
+
+# Fixtures
 MUNICIPALITIES = json.loads(os.environ.get("MUNICIPALITIES", "[]"))
-
 # A basic fail-fast check
 for municipality in MUNICIPALITIES:
     for expected in ("name", "code", "tax_percent"):
@@ -373,17 +390,3 @@ TAX_FORM_U1 = os.environ.get(
     "TAX_FORM_U1", "http://etaxgps1/eTaxWebCitz1/Suliffinnut/Login.aspx"
 )
 TAX_FORM_STORAGE = os.path.join(MEDIA_ROOT, "u1")
-
-# https://docs.djangoproject.com/en/4.1/topics/email/
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = os.environ.get("EMAIL_HOST", None)
-EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 25))
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", None)
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", None)
-EMAIL_USE_TLS = bool(strtobool(os.environ.get("EMAIL_USE_TLS", "False")))
-EMAIL_USE_SSL = bool(strtobool(os.environ.get("EMAIL_USE_SSL", "False")))
-EMAIL_SENDER = os.environ.get("EMAIL_SENDER", "noreply@nanoq.gl")
-EMAIL_OFFICE_RECIPIENT = os.environ.get("EMAIL_OFFICE_RECIPIENT", "test@nanoq.gl")
-EMAIL_OP_RECIPIENT = os.environ.get("EMAIL_OP_RECIPIENT", "pension@nanoq.gl")
-
-POPULATE_DUMMY_SESSION = False
