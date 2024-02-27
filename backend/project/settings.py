@@ -19,6 +19,7 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 WATCHMAN_CHECKS = ("watchman.checks.databases",)
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
+
 # Django apps, middleware, templates etc.
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
