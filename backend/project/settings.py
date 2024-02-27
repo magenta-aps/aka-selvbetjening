@@ -188,6 +188,7 @@ def get_file_contents(filename):
     with open(filename, "r") as f:
         return f.read()
 
+
 PRISME_CONNECT = {
     "mock": bool(strtobool(os.environ.get("PRISME_MOCK", "False"))),
     "wsdl_file": os.environ.get("PRISME_WSDL", ""),
