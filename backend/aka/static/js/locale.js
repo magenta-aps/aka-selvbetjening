@@ -85,6 +85,7 @@ $(function() {
             const language = $this.attr("data-language");
             const otherLanguage = (language === 'da') ? 'kl' : 'da';
             $this.removeClass().addClass("option-" + otherLanguage).attr("data-language", otherLanguage);
+            $this.find("#lang-text").text(otherLanguage === "da" ? "Dansk" : "Kalaallissut");
             django.language = language;
             $(document).trigger('language-change', language);
         });

@@ -20,6 +20,8 @@ logger = logging.getLogger(__name__)
 # 6.4
 
 
+
+
 class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormView):
     form_class = NedskrivningForm
     template_name = "nedskrivning/form.html"

@@ -1,5 +1,82 @@
+html {
+    --navbar-toggler-icon-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='#ffffff' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
+}
+body {
+    line-height: 1.3125rem;
+}
+
+.navbar {
+    background-color: #4e6b7e;
+    padding: 0;
+}
+.navbar-brand img {
+    max-width: 100%;
+    height: auto
+}
+.menu-icon {
+    text-align: center;
+    margin-bottom: 13px;
+}
+#locale_flag_change .menu-icon {
+    height: 18px;
+}
+#locale_flag_change.option-da .menu-icon div {
+    background-image: url("/static/img/flag_da.svg");
+    width: 20px;
+    height: 15px;
+    display: inline-block;
+}
+#locale_flag_change.option-kl .menu-icon div {
+    background-image: url("/static/img/flag_gl.svg");
+    width: 20px;
+    height: 15px;
+    display: inline-block;
+}
+
+.svg-login {
+     width: 18px;
+     height: 15px;
+ }
+.navbar .navbar-collapse.show ul li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+.navbar .navbar-collapse.show ul li:first-child {
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+.navbar ul li a {
+    display: block;
+    color: white;
+    font-size: 12px;
+    text-decoration: none;
+    padding: 19px 10px 10px;
+    text-align: center;
+    font-family: Helvetica, Arial, sans-serif;
+}
+.navbar ul li a:hover {
+    text-decoration: underline;
+    color: white;
+    opacity: 1;
+}
+.navbar-toggler {
+    border: 0 none;
+    padding: 15px;
+    margin: 0;
+}
+.navbar-toggler:hover,
+.navbar-toggler:active,
+.navbar-toggler:focus {
+    background-color: unset;
+    border: 0 none;
+    box-shadow: unset;
+}
+
+
+
+
+
+
 .globalheader {
-    background-color: #63389b;
+    background-color: #4e6b7e;
     -webkit-box-shadow: 0 .5rem rgba(0,0,0,.1);
     box-shadow: 0 .5rem rgba(0,0,0,.1);
     position: fixed;
@@ -32,7 +109,6 @@
     margin: 0
 }
 .globalheader-logo {
-    width: 8rem;
     max-width: 100%;
     height: auto
 }
@@ -52,18 +128,6 @@
     }
 }
 
-.locale-changer .option-kl {
-    background: url(../img/flag_gl.svg) no-repeat 0 transparent;
-    background-size: 1rem auto;
-    padding: 0 0 0 1.5rem;
-    cursor: pointer;
-}
-.locale-changer .option-da {
-    background: url(../img/flag_da.svg) no-repeat 0 transparent;
-    background-size: 1rem auto;
-    padding: 0 0 0 1.5rem;
-    cursor: pointer;
-}
 
 footer {
     background-color: #fff;
