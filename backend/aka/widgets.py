@@ -1,5 +1,4 @@
-from django.forms import Select
-from django.forms import RadioSelect
+from django.forms import RadioSelect, Select
 
 
 class TranslatedSelect(Select):

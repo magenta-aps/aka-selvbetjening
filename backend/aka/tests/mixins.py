@@ -1,7 +1,6 @@
 from unittest.mock import patch
 
-from aka.clients.prisme import PrismeCvrCheckRequest
-from aka.clients.prisme import PrismeCvrCheckResponse
+from aka.clients.prisme import PrismeCvrCheckRequest, PrismeCvrCheckResponse
 
 
 class TestMixin(object):

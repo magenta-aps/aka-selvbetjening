@@ -1,7 +1,8 @@
-from django.test import TestCase
-import gnupg
 import logging
 import shutil
+
+import gnupg
+from django.test import TestCase
 
 
 class BasicTestCase(TestCase):

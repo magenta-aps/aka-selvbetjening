@@ -1,14 +1,16 @@
-from aka.widgets import TranslatedSelect
 from datetime import date
+
+from aka.widgets import TranslatedSelect
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.forms import widgets, inlineformset_factory
-from dynamic_forms import DynamicField
-from dynamic_forms import DynamicFormMixin
-from obligatorisk_pension.models import ObligatoriskPension
-from obligatorisk_pension.models import ObligatoriskPensionFile
-from obligatorisk_pension.models import ObligatoriskPensionSelskab
+from django.forms import inlineformset_factory, widgets
+from dynamic_forms import DynamicField, DynamicFormMixin
+from obligatorisk_pension.models import (
+    ObligatoriskPension,
+    ObligatoriskPensionFile,
+    ObligatoriskPensionSelskab,
+)
 
 
 class SkatteårForm(DynamicFormMixin, forms.Form):

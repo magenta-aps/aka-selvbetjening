@@ -1,14 +1,12 @@
-from decimal import Decimal
-
 import logging
 import os
 import re
 from datetime import date, datetime, time
+from decimal import Decimal
 
 import zeep
 from aka.exceptions import AkaException
-from aka.utils import flatten
-from aka.utils import get_file_contents_base64
+from aka.utils import flatten, get_file_contents_base64
 from dict2xml import dict2xml as dict_to_xml
 from django.conf import settings
 from requests import Session

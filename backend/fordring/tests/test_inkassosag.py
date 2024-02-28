@@ -1,8 +1,7 @@
 import logging
 from datetime import date
 
-from aka.clients.prisme import PrismeClaimRequest
-from aka.clients.prisme import PrismeClaimResponse
+from aka.clients.prisme import PrismeClaimRequest, PrismeClaimResponse
 from aka.tests.mixins import TestMixin
 from aka.utils import dummy_management_form
 from django.core.files import File

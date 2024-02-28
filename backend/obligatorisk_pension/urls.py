@@ -1,7 +1,8 @@
 from django.urls import path
-from obligatorisk_pension.views import ObligatoriskPensionCreateView
-
-from obligatorisk_pension.views import ObligatoriskPensionSkatteårView
+from obligatorisk_pension.views import (
+    ObligatoriskPensionCreateView,
+    ObligatoriskPensionSkatteårView,
+)
 
 app_name = "obligatorisk_pension"
 

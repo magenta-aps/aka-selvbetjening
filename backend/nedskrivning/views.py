@@ -1,7 +1,7 @@
 import logging
 import uuid
-from aka.clients.prisme import Prisme, PrismeException
-from aka.clients.prisme import PrismeImpairmentRequest
+
+from aka.clients.prisme import Prisme, PrismeException, PrismeImpairmentRequest
 from aka.views import GetReceiptView
 from django.core.exceptions import ValidationError
 from django.template.response import TemplateResponse
@@ -9,12 +9,8 @@ from django.utils import timezone
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import FormView
-from nedskrivning.forms import NedskrivningForm
-from nedskrivning.forms import NedskrivningUploadForm
-from project.view_mixins import ErrorHandlerMixin
-from project.view_mixins import IsContentMixin
-from project.view_mixins import RequireCvrMixin
-
+from nedskrivning.forms import NedskrivningForm, NedskrivningUploadForm
+from project.view_mixins import ErrorHandlerMixin, IsContentMixin, RequireCvrMixin
 
 logger = logging.getLogger(__name__)
 # 6.4

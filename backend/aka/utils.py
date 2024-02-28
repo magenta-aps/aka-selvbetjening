@@ -4,8 +4,11 @@ import json
 import logging
 import os
 from dataclasses import dataclass, field
-from dateutil import parser as datetimeparser
 from decimal import Decimal
+from math import floor
+from typing import Any, List, Tuple
+
+from dateutil import parser as datetimeparser
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 from django.core.files import File
@@ -17,8 +20,6 @@ from django.template.loader import render_to_string
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 from django_mitid_auth.middleware import LoginManager
-from math import floor
-from typing import Any, List, Tuple
 from weasyprint import HTML
 from weasyprint.text.fonts import FontConfiguration
 

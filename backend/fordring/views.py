@@ -2,8 +2,8 @@ import json
 import logging
 import re
 import uuid
-from aka.clients.prisme import Prisme, PrismeException
-from aka.clients.prisme import PrismeClaimRequest
+
+from aka.clients.prisme import Prisme, PrismeClaimRequest, PrismeException
 from aka.data.fordringsgruppe import groups
 from aka.utils import flatten
 from aka.views import GetReceiptView
@@ -18,9 +18,7 @@ from django.views import View
 from django.views.generic.edit import FormView
 from extra_views import FormSetView
 from fordring.forms import InkassoCoDebitorFormItem, InkassoForm, InkassoUploadForm
-from project.view_mixins import ErrorHandlerMixin
-from project.view_mixins import IsContentMixin
-from project.view_mixins import RequireCvrMixin
+from project.view_mixins import ErrorHandlerMixin, IsContentMixin, RequireCvrMixin
 
 logger = logging.getLogger(__name__)
 

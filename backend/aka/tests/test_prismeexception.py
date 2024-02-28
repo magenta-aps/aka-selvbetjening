@@ -1,6 +1,5 @@
-from django.test import SimpleTestCase
-
 from aka.clients.prisme import PrismeException
+from django.test import SimpleTestCase
 
 
 class BasicTestCase(SimpleTestCase):

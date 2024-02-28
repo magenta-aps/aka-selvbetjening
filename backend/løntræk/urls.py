@@ -1,6 +1,5 @@
-from løntræk.views import LoentraekReceiptView
-from løntræk.views import LoentraekView, LoentraekUploadView
 from django.urls import path
+from løntræk.views import LoentraekReceiptView, LoentraekUploadView, LoentraekView
 
 app_name = "løntræk"
 

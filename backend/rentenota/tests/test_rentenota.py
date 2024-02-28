@@ -1,11 +1,9 @@
 import logging
 
-from aka.clients.prisme import PrismeInterestNoteRequest
-from aka.clients.prisme import PrismeInterestNoteResponse
+from aka.clients.prisme import PrismeInterestNoteRequest, PrismeInterestNoteResponse
 from aka.tests.mixins import TestMixin
 from django.conf import settings
-from django.test import TestCase
-from django.test import override_settings
+from django.test import TestCase, override_settings
 from django.utils.translation import gettext as _
 from lxml import etree
 from xmltodict import parse as xml_to_dict
