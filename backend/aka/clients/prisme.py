@@ -415,7 +415,7 @@ class PrismePayrollRequest(PrismeRequestObject):
         self.date = date
         self.received_date = received_date
         self.amount = amount
-        if type(lines) != list:
+        if type(lines) is not list:
             lines = [lines]
         self.lines = lines
 
@@ -513,7 +513,7 @@ class PrismeAccountResponse(PrismeResponseObject):
         else:
             data = xml_to_dict(xml)
             transactions = data["CustTable"]["CustTrans"]
-            if type(transactions) != list:
+            if type(transactions) is not list:
                 transactions = [transactions]
             self.transactions = [self.itemclass(x) for x in transactions]
 
@@ -597,7 +597,7 @@ class PrismeInterestNoteResponse(PrismeResponseObject):
         super(PrismeInterestNoteResponse, self).__init__(request, xml)
         data = xml_to_dict(xml)
         journals = data["CustTable"]["CustInterestJour"]
-        if type(journals) != list:
+        if type(journals) is not list:
             journals = [journals]
         self.interest_journal = [PrismeInterestResponseJournal(x) for x in journals]
 
@@ -612,7 +612,7 @@ class PrismeInterestResponseJournal(object):
         self.interest_transactions = []
         for k, v in data["CustInterestTransactions"].items():
             if k == "CustInterestTrans":
-                if type(v) != list:
+                if type(v) is not list:
                     v = [v]
                 for transaction in v:
                     self.interest_transactions.append(

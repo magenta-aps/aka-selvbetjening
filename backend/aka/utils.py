@@ -141,10 +141,10 @@ def dummy_management_form(
 
 
 def flatten(lst):
-    if type(lst) == list:
+    if type(lst) is list:
         combined = []
         for x in lst:
-            if type(x) == list:
+            if type(x) is list:
                 combined.extend(flatten(x))
             else:
                 combined.append(x)

@@ -28,7 +28,7 @@ class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormV
         prisme = Prisme()
         if prisme.mock:
             return ["1234"]
-        data = form if type(form) == dict else form.cleaned_data
+        data = form if type(form) is dict else form.cleaned_data
         claimant = data["fordringshaver"] or self.claimant_ids[0]
         impairment = PrismeImpairmentRequest(
             # claimant_id=self.get_claimant_id(self.request),

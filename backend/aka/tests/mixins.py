@@ -14,7 +14,7 @@ class TestMixin(object):
             ]
         for classname, response in self.prisme_return.items():
             if prisme_request.__class__.__name__ == classname:
-                if type(response) != list:
+                if type(response) is not list:
                     response = [response]
                 return response
 
