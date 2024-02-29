@@ -1,17 +1,36 @@
 {% load static %}
 {% load i18n %}
-<div class="medium-4 columns">
-    {% if url %}
-    <a href="{{ url }}" class="box--selfservice" data-equalizer-watch="">
-    {% endif %}
-        <div class="box__content">
-            <svg class="box__icon">
-                <use xlink:href="#{{ icon }}"></use>
-            </svg>
-            <p data-trans="{{ text }}">{% translate text %}</p>
-            <p class="sub" data-trans="{{ subtext }}">{% translate subtext %}</p>
+
+
+
+
+
+<div class="col-sm-12 col-md-6 col-xl-3 g-3">
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-3">
+                <svg class="box__icon">
+                    <use xlink:href="#{{ icon }}"></use>
+                </svg>
+            </div>
+            <div class="col-9 d-flex align-items-center">
+                <h5 class="card-title" data-trans="{{ text }}">
+                    {% translate text %}
+                </h5>
+            </div>
         </div>
-    {% if url %}
+    </div>
+    <div class="card-body">
+        <p class="card-text" data-trans="{{ subtext }}">{% translate subtext %}</p>
+    </div>
+    <a class="card-footer text-center" href="{{ url }}">
+        {% if linktext %}
+        {% translate linktext %}
+        {% else %}
+        Klik her
+        {% endif %}
     </a>
-    {% endif %}
+</div>
+
 </div>
