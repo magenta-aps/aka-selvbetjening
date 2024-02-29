@@ -1,7 +1,59 @@
 * {
     -webkit-box-sizing: border-box;
-    box-sizing: border-box
+    box-sizing: border-box;
 }
+
+body {
+    color: #31495b;
+}
+
+.card {
+    font-size: 18px;
+    height: 16em;
+}
+
+.card h5 {
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 700;
+    color: #31495b;
+}
+.card .card-body {
+    color: #31495b;
+}
+.card a.card-footer {
+    font-weight: 700;
+    background-color: #f6c443;
+    border-top: 0;
+    transition: all .2s ease-in-out;
+    padding: 20px 28px;
+}
+
+.card a:link,
+.card a:visited {
+    text-decoration: none;
+}
+.card a.card-footer:hover,
+.card a.card-footer:active {
+    text-decoration: underline;
+    opacity: 1;
+    color: white;
+}
+
+.card a.card-footer:hover,
+.card a.card-footer:active {
+    background-color: #31495b;
+}
+
+
+
+
+
+
+
+
+
+
 
 /* Wrappers and stuff */
 
