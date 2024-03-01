@@ -1,10 +1,13 @@
 import logging
 import uuid
-from aka.clients.prisme import Prisme, PrismeException
-from aka.clients.prisme import PrismePayrollRequest
-from aka.clients.prisme import PrismePayrollRequestLine
-from aka.utils import get_ordereddict_key_index
-from aka.utils import spreadsheet_col_letter
+
+from aka.clients.prisme import (
+    Prisme,
+    PrismeException,
+    PrismePayrollRequest,
+    PrismePayrollRequestLine,
+)
+from aka.utils import get_ordereddict_key_index, spreadsheet_col_letter
 from aka.views import GetReceiptView
 from django.core.exceptions import ValidationError
 from django.forms import formset_factory
@@ -13,12 +16,8 @@ from django.utils import timezone
 from django.utils.datetime_safe import date
 from django.views.generic.edit import FormView
 from extra_views import FormSetView
-from løntræk.forms import LoentraekForm
-from løntræk.forms import LoentraekFormItem
-from løntræk.forms import LoentraekUploadForm
-from project.view_mixins import IsContentMixin
-from project.view_mixins import RequireCvrMixin
-
+from løntræk.forms import LoentraekForm, LoentraekFormItem, LoentraekUploadForm
+from project.view_mixins import IsContentMixin, RequireCvrMixin
 
 logger = logging.getLogger(__name__)
 

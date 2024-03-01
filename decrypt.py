@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
-import os
-import sys
 import argparse
+import os
 import subprocess
+import sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--pass")

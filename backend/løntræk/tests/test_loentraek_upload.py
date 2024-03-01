@@ -1,9 +1,11 @@
 import logging
 from datetime import date
 
-from aka.clients.prisme import PrismePayrollRequest
-from aka.clients.prisme import PrismePayrollRequestLine
-from aka.clients.prisme import PrismePayrollResponse
+from aka.clients.prisme import (
+    PrismePayrollRequest,
+    PrismePayrollRequestLine,
+    PrismePayrollResponse,
+)
 from aka.tests.mixins import TestMixin
 from django.core.files import File
 from django.test import TestCase

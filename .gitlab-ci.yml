@@ -25,16 +25,18 @@ variables:
 .lint-default: &lint-default
   stage: lint
   needs: []
-  image: python:3.6
+  image: python:3.11
 
 Lint python:
   <<: *lint-default
   before_script:
     - pip3 install flake8
-    - pip3 install black
+    - pip3 install black==23.1.0
+    - pip3 install isort==5.12.0
   script:
-    - flake8 --ignore E501,E226,E203,W503 backend/
+    - flake8 --ignore E501,E226,E203,W503 --exclude=migrations backend/
     - black --check --diff --exclude=migrations backend/
+    - isort -c --profile black --diff --skip migrations backend/
 
 Lint Dockerfiles:
   <<: *lint-default

@@ -1,12 +1,12 @@
 import logging
+
 from aka.widgets import TranslatedSelect
 from django import forms
 from django.core.validators import RegexValidator
 from django.forms import ValidationError
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
-from dynamic_forms import DynamicField
-from dynamic_forms import DynamicFormMixin
+from dynamic_forms import DynamicField, DynamicFormMixin
 
 logger = logging.getLogger(__name__)
 

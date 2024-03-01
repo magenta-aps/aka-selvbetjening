@@ -1,10 +1,9 @@
-from aka.forms import valid_date_formats, RadioSelect, AcceptingMultipleChoiceField
+from aka.forms import AcceptingMultipleChoiceField, RadioSelect, valid_date_formats
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import MultipleHiddenInput
 from django.utils.translation import gettext_lazy as _
-from dynamic_forms import DynamicField
-from dynamic_forms import DynamicFormMixin
+from dynamic_forms import DynamicField, DynamicFormMixin
 
 
 class KontoForm(DynamicFormMixin, forms.Form):

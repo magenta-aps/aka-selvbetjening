@@ -1,7 +1,6 @@
 import datetime
 
-from aka.utils import datefromstring, datetostring
-from aka.utils import format_filesize
+from aka.utils import datefromstring, datetostring, format_filesize
 from django.test import SimpleTestCase
 
 

@@ -1,14 +1,14 @@
-import chardet
 import csv
 import logging
 import re
-from aka.utils import get_ordereddict_key_index
-from aka.utils import spreadsheet_col_letter
+from io import StringIO
+
+import chardet
+from aka.utils import get_ordereddict_key_index, spreadsheet_col_letter
 from django import forms
 from django.conf import settings
 from django.core.validators import RegexValidator
 from django.forms import ValidationError
-from io import StringIO
 
 logger = logging.getLogger(__name__)
 
