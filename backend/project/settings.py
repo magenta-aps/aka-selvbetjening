@@ -17,6 +17,7 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # Skip health_check for cache layer and storage since we are not using it
 WATCHMAN_CHECKS = ("watchman.checks.databases",)
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
 
 
 # Django apps, middleware, templates etc.
@@ -84,7 +85,7 @@ SESSION_SERIALIZER = "aka.utils.AKAJSONSerializer"
 SESSION_EXPIRE_SECONDS = int(os.environ.get("SESSION_EXPIRE_SECONDS") or 1800)
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 SESSION_EXPIRE_CALLABLE = "aka.utils.session_timed_out"
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = json.loads(os.environ.get("ALLOWED_HOSTS", '["*"]'))
 
 
 # Database
@@ -114,46 +115,62 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "formatter": "simple",
         },
-        "file": {
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": "/log/aka.log",
-            "when": "D",  # Roll log each day
-            "formatter": "simple",
-        },
     },
     "root": {
         "level": "INFO",
-        "handlers": ["gunicorn", "file"],
+        "handlers": ["gunicorn"],
     },
     "loggers": {
         "zeep.transports": {
             "level": "DEBUG",
-            "handlers": ["gunicorn", "file"],
+            "handlers": ["gunicorn"],
             "propagate": False,
         },
         "aka.clients.prisme": {
             "level": "DEBUG",
-            "handlers": ["gunicorn", "file"],
+            "handlers": ["gunicorn"],
             "propagate": False,
         },
         "aka": {
             "level": "DEBUG",
-            "handlers": ["gunicorn", "file"],
+            "handlers": ["gunicorn"],
             "propagate": False,
         },
         "oic": {
             "level": "DEBUG",
-            "handlers": ["gunicorn", "file"],
+            "handlers": ["gunicorn"],
             "propagate": False,
         },
         "django_mitid_auth": {
             "level": "DEBUG",
-            "handlers": ["gunicorn", "file"],
+            "handlers": ["gunicorn"],
+            "propagate": False,
+        },
+        "weasyprint": {
+            "handlers": ["gunicorn"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        "fontTools": {
+            "handlers": ["gunicorn"],
+            "level": "ERROR",
             "propagate": False,
         },
     },
 }
-ENCRYPTED_LOG_KEY_UID = "AKA Selvbetjening"
+log_filename = "/log/akap.log"
+if os.path.isfile(log_filename) and ENVIRONMENT != "development":
+    LOGGING["handlers"]["file"] = {
+        "class": "logging.FileHandler",  # eller WatchedFileHandler
+        "filename": log_filename,
+        "formatter": "simple",
+    }
+    LOGGING["root"] = {
+        "handlers": ["gunicorn", "file"],
+        "level": "INFO",
+    }
+    for name, config in LOGGING["loggers"].items():
+        config["handlers"].append("file")
 
 
 # Locale & time
@@ -168,7 +185,9 @@ LANGUAGES = [
     ("da", _("Danish")),
     ("kl", _("Greenlandic")),
 ]
-TIME_ZONE = os.environ.get("DJANGO_TIMEZONE", "America/Godthab")
+TIME_ZONE = os.environ.get("DJANGO_TIMEZONE", None) or os.environ.get(
+    "TZ", "America/Godthab"
+)
 LOCALE_MAP = {"da": "da-DK", "kl": "kl-GL"}
 DEFAULT_CHARSET = "utf-8"
 USE_THOUSAND_SEPARATOR = True
