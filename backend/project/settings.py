@@ -185,7 +185,9 @@ LANGUAGES = [
     ("da", _("Danish")),
     ("kl", _("Greenlandic")),
 ]
-TIME_ZONE = os.environ.get("DJANGO_TIMEZONE", None) or os.environ.get("TZ", "America/Godthab")
+TIME_ZONE = os.environ.get("DJANGO_TIMEZONE", None) or os.environ.get(
+    "TZ", "America/Godthab"
+)
 LOCALE_MAP = {"da": "da-DK", "kl": "kl-GL"}
 DEFAULT_CHARSET = "utf-8"
 USE_THOUSAND_SEPARATOR = True
