@@ -1,8 +1,10 @@
-from fordring.views import InkassoGroupDataView
-from fordring.views import InkassoSagView, InkassoSagUploadView
 from django.urls import path
-
-from fordring.views import FordringReceiptView
+from fordring.views import (
+    FordringReceiptView,
+    InkassoGroupDataView,
+    InkassoSagUploadView,
+    InkassoSagView,
+)
 
 app_name = "fordring"
 

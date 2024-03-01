@@ -1,10 +1,12 @@
-from decimal import Decimal
-
 import logging
 from datetime import date
+from decimal import Decimal
 
-from aka.clients.prisme import PrismeAKIAccountResponse
-from aka.clients.prisme import PrismeAccountRequest, PrismeAccountResponse
+from aka.clients.prisme import (
+    PrismeAccountRequest,
+    PrismeAccountResponse,
+    PrismeAKIAccountResponse,
+)
 from aka.tests.mixins import TestMixin
 from django.test import TestCase
 from xmltodict import parse as xml_to_dict

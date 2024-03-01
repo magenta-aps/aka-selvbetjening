@@ -1,19 +1,21 @@
-from aka.clients.prisme import Prisme, PrismeException
-from aka.clients.prisme import PrismeInterestNoteRequest
-from rentenota.forms import InterestNoteForm
-from aka.utils import Field, Cell, Row
+from typing import List
+
+from aka.clients.prisme import Prisme, PrismeException, PrismeInterestNoteRequest
+from aka.utils import Cell, Field, Row
 from django.utils.datetime_safe import date
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
-from project.view_mixins import IsContentMixin
-from project.view_mixins import JsonRendererMixin
-from project.view_mixins import PdfRendererMixin
-from project.view_mixins import RequireCvrMixin
-from project.view_mixins import SimpleGetFormMixin
-from project.view_mixins import SpreadsheetRendererMixin
-from typing import List
+from project.view_mixins import (
+    IsContentMixin,
+    JsonRendererMixin,
+    PdfRendererMixin,
+    RequireCvrMixin,
+    SimpleGetFormMixin,
+    SpreadsheetRendererMixin,
+)
+from rentenota.forms import InterestNoteForm
 
 
 # NY18

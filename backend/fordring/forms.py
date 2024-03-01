@@ -1,12 +1,15 @@
 import logging
+
 from aka.data.fordringsgruppe import groups, groups_by_id, subgroups_by_id
 from aka.forms import CsvUploadMixin, PrependCharField
 from django import forms
-from django.core.validators import FileExtensionValidator
-from django.core.validators import MaxLengthValidator
-from django.core.validators import MinLengthValidator
-from django.core.validators import RegexValidator
-from django.forms import ValidationError, TextInput
+from django.core.validators import (
+    FileExtensionValidator,
+    MaxLengthValidator,
+    MinLengthValidator,
+    RegexValidator,
+)
+from django.forms import TextInput, ValidationError
 from django.utils.datetime_safe import date
 
 logger = logging.getLogger(__name__)

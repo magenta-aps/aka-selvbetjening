@@ -3,19 +3,16 @@ import datetime
 import json
 import logging
 import os
-from aka.utils import AKAJSONEncoder
-from aka.utils import gettext_lang
-from aka.utils import send_mail
+from io import StringIO
+
+from aka.utils import AKAJSONEncoder, gettext_lang, send_mail
 from django.conf import settings
 from django.forms import formset_factory
 from django.template.response import TemplateResponse
 from django.views.generic.edit import FormView
 from extra_views import FormSetView
-from io import StringIO
-from project.view_mixins import IsContentMixin
-from project.view_mixins import PdfRendererMixin
-from udbytte.forms import UdbytteForm
-from udbytte.forms import UdbytteFormItem
+from project.view_mixins import IsContentMixin, PdfRendererMixin
+from udbytte.forms import UdbytteForm, UdbytteFormItem
 
 logger = logging.getLogger(__name__)
 

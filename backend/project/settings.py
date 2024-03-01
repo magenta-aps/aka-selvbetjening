@@ -1,11 +1,10 @@
 import json
 import os
-from distutils.util import strtobool
 from decimal import Decimal
+from distutils.util import strtobool
 
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-
 
 # Folders, debug, django secret
 SITE_DIR = os.path.dirname(os.path.abspath(__file__))

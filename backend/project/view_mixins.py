@@ -4,9 +4,7 @@ from functools import cached_property
 
 import django_excel as excel
 from aka.clients.dafo import Dafo
-from aka.clients.prisme import Prisme
-from aka.clients.prisme import PrismeCvrCheckRequest
-from aka.clients.prisme import PrismeNotFoundException
+from aka.clients.prisme import Prisme, PrismeCvrCheckRequest, PrismeNotFoundException
 from aka.exceptions import AkaException
 from aka.models import PrismeDown
 from aka.utils import flatten, render_pdf

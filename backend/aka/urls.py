@@ -1,6 +1,9 @@
-from aka.views import ChooseCvrView
-from aka.views import CustomJavaScriptCatalog, SetLanguageView
-from aka.views import IndexTemplateView
+from aka.views import (
+    ChooseCvrView,
+    CustomJavaScriptCatalog,
+    IndexTemplateView,
+    SetLanguageView,
+)
 from django.urls import path
 from django.views.generic import TemplateView
 from django_mitid_auth.saml.views import AccessDeniedView

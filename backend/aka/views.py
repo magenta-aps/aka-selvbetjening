@@ -1,11 +1,12 @@
 import json
 import logging
+from io import BytesIO
+
 from aka.utils import render_pdf
 from django.conf import settings
-from django.http import Http404
-from django.http import JsonResponse, HttpResponse, FileResponse
+from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect
-from django.template import Engine, Context
+from django.template import Context, Engine
 from django.utils import translation
 from django.utils.decorators import method_decorator
 from django.utils.translation.trans_real import DjangoTranslation
@@ -13,10 +14,7 @@ from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import TemplateView
 from django.views.i18n import JavaScriptCatalog
-from io import BytesIO
-from project.view_mixins import AkaMixin
-from project.view_mixins import HasUserMixin
-from project.view_mixins import RequireCvrMixin
+from project.view_mixins import AkaMixin, HasUserMixin, RequireCvrMixin
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):

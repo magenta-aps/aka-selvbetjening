@@ -1,8 +1,8 @@
-from html import unescape
-
 import json as jsonlib
 import locale
 import re
+from html import unescape
+
 from aka.utils import LenientJsonSerializer
 from aka.utils import month_name as util_month_name
 from django.template.defaultfilters import register
@@ -33,7 +33,7 @@ def format(text, params):
             params = jsonlib.loads(params)
         for key in params:
             value = params[key]
-            if type(value) == tuple:
+            if type(value) is tuple:
                 # If a value is a tuple, it must be (message:string, params:dict,)
                 value = format(value[0], value[1])
             else:
@@ -56,7 +56,7 @@ def analyze(data):
 
 @register.filter
 def startswith(text, prefix):
-    return type(text) == str and text.startswith(prefix)
+    return type(text) is str and text.startswith(prefix)
 
 
 @register.filter

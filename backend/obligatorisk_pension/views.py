@@ -2,15 +2,13 @@ import magic
 from aka.utils import gettext_lang, send_mail
 from django.conf import settings
 from django.shortcuts import redirect
-from django.template import Engine, Context
+from django.template import Context, Engine
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.views.generic import FormView, UpdateView
-from obligatorisk_pension.forms import ObligatoriskPensionForm
-from obligatorisk_pension.forms import SkatteårForm
+from obligatorisk_pension.forms import ObligatoriskPensionForm, SkatteårForm
 from obligatorisk_pension.models import ObligatoriskPension
-from project.view_mixins import HasUserMixin
-from project.view_mixins import IsContentMixin
+from project.view_mixins import HasUserMixin, IsContentMixin
 
 
 class ObligatoriskPensionSkatteårView(IsContentMixin, HasUserMixin, FormView):

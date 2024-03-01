@@ -1,31 +1,32 @@
 import sys
+from typing import List
+
 from aka.clients.prisme import (
-    PrismeSELRequest,
+    Prisme,
     PrismeAKIRequest,
-    PrismeSELTotalRequest,
     PrismeAKITotalRequest,
     PrismeException,
-    Prisme,
+    PrismeSELRequest,
+    PrismeSELTotalRequest,
 )
-from aka.utils import Field, Cell, Row
-from aka.utils import Table, chunks
+from aka.utils import Cell, Field, Row, Table, chunks
 from aka.views import logger
 from django.urls import reverse
 from django.utils.datetime_safe import date
 from django.utils.decorators import method_decorator
-from django.utils.translation import gettext_lazy as _, gettext
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from konto.forms import KontoForm
 from project.view_mixins import (
     HasUserMixin,
-    SimpleGetFormMixin,
-    PdfRendererMixin,
-    JsonRendererMixin,
-    SpreadsheetRendererMixin,
     IsContentMixin,
+    JsonRendererMixin,
+    PdfRendererMixin,
+    SimpleGetFormMixin,
+    SpreadsheetRendererMixin,
 )
-from typing import List
 
 
 @method_decorator(csrf_exempt, name="dispatch")
