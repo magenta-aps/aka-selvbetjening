@@ -80,6 +80,10 @@ form > .row.header h1 {
     font-size: 24px;
 }
 
+.row.footer {
+    margin-top: 10px;
+}
+
 
 
 
@@ -207,105 +211,6 @@ table {
         max-width: 60rem
     }
 }
-.container-fluid,
-.row {
-    width: 100%
-}
-.row [class^=col] {
-    float: left;
-    min-height: .125rem
-}
-.row [class^=col]:not[class^=offset] {
-     margin: .5rem 2%;
- }
-.col-1,
-.col-2,
-.col-3,
-.col-4,
-.col-5,
-.col-6,
-.col-7,
-.col-8,
-.col-9,
-.col-10,
-.col-11,
-.col-12 {
-    width: 100%
-}
-.col-1-sm {
-    width: 8.33%
-}
-.col-2-sm {
-    width: 16.66%
-}
-.col-3-sm {
-    width: 25%
-}
-.col-4-sm {
-    width: 33.33%
-}
-.col-5-sm {
-    width: 41.66%
-}
-.col-6-sm {
-    width: 50%
-}
-.col-7-sm {
-    width: 58.33%
-}
-.col-8-sm {
-    width: 66.66%
-}
-.col-9-sm {
-    width: 75%
-}
-.col-10-sm {
-    width: 83.33%
-}
-.col-11-sm {
-    width: 91.66%
-}
-.col-12-sm {
-    width: 100%
-}
-
-.offset-1-sm {
-    margin-left: 8.33%
-}
-.offset-2-sm {
-    margin-left: 16.66%
-}
-.offset-3-sm {
-    margin-left: 25%
-}
-.offset-4-sm {
-    margin-left: 33.33%
-}
-.offset-5-sm {
-    margin-left: 41.66%
-}
-.offset-6-sm {
-    margin-left: 50%
-}
-.offset-7-sm {
-    margin-left: 58.33%
-}
-.offset-8-sm {
-    margin-left: 66.66%
-}
-.offset-9-sm {
-    margin-left: 75%
-}
-.offset-10-sm {
-    margin-left: 83.33%
-}
-.offset-11-sm {
-    margin-left: 91.66%
-}
-.offset-12-sm {
-    margin-left: 100%
-}
-
 
 .row:after {
     content: "";
@@ -315,53 +220,3 @@ table {
 .hidden-sm {
     display: none
 }
-@media only screen and (min-width:45rem) {
-    .col-1 {
-        width: 6.33%
-    }
-    .col-2 {
-        width: 12.66%
-    }
-    .col-3 {
-        width: 21%
-    }
-    .col-4 {
-        width: 29.33%
-    }
-    .col-5 {
-        width: 37.66%
-    }
-    .col-6 {
-        width: 46%
-    }
-    .col-7 {
-        width: 54.33%
-    }
-    .col-8 {
-        width: 62.66%
-    }
-    .col-9 {
-        width: 71%
-    }
-    .col-10 {
-        width: 79.33%
-    }
-    .col-11 {
-        width: 87.66%
-    }
-    .col-12 {
-        width: 96%
-    }
-    .hidden-sm {
-        display: block
-    }
-}
-.px-1 {
-    padding-left: 1px !important;
-    padding-right: 1px !important;
-}
-.px-2 {
-    padding-left: 2px !important;
-    padding-right: 2px !important;
-}
-
