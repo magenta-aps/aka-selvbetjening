@@ -5,6 +5,9 @@
 
 body {
     color: #31495b;
+    background-color: #e5e5e5;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 1.125rem;
 }
 
 .card {
@@ -21,14 +24,26 @@ body {
 .card .card-body {
     color: #31495b;
 }
-.card a.card-footer {
-    font-weight: 700;
-    background-color: #f6c443;
+.card a.card-footer,
+.btn {
     border-top: 0;
     transition: all .2s ease-in-out;
+    font-size: 1.125rem;
+}
+
+.card a.card-footer {
+    font-weight: 700;
+    color: #31495b;
+    background-color: #f6c443;
     padding: 20px 28px;
 }
 
+.btn-primary {
+    color: #31495b;
+    background-color: #f6c443;
+    padding: 15px;
+    border: 0;
+}
 .card a:link,
 .card a:visited {
     text-decoration: none;
@@ -36,17 +51,34 @@ body {
 .card a.card-footer:hover,
 .card a.card-footer:active {
     text-decoration: underline;
-    opacity: 1;
-    color: white;
 }
 
 .card a.card-footer:hover,
-.card a.card-footer:active {
+.card a.card-footer:active,
+.btn:hover,
+.btn:active {
+     opacity: 1;
+     color: white;
+ }
+
+.card a.card-footer:hover,
+.card a.card-footer:active,
+.btn-primary:hover,
+.btn-primary:active {
     background-color: #31495b;
 }
 
+form > .row {
+    padding: 30px;
+}
 
+form > .row.header .col-12 {
+    padding: 0;
+}
 
+form > .row.header h1 {
+    font-size: 24px;
+}
 
 
 
@@ -58,7 +90,6 @@ body {
 /* Wrappers and stuff */
 
 body {
-    font: 1em/1.5 Arial,sans-serif;
     background-color: #eaecee;
     color: #31495b;
     text-rendering: optimizeLegibility;
@@ -179,10 +210,6 @@ table {
 .container-fluid,
 .row {
     width: 100%
-}
-.row {
-    position: relative;
-    padding: 0.5em 0;
 }
 .row [class^=col] {
     float: left;

@@ -34,13 +34,6 @@ a.button:active, a.button:hover {
     background-color: #83929d
 }
 
-button[type=submit] {
-    background-color: #fbb03b;
-}
-button[type=submit]:active, button[type=submit]:hover {
-    background-color: #fbb84f;
-}
-
 div.SumoSelect > .CaptionCont {
     border-radius: 0;
 }
@@ -74,7 +67,7 @@ label {
 }
 input:not(input[type="checkbox"],input[type="radio"]) {
     width: 100%;
-    height: 46px
+    height: 51px
 }
 textarea {
     height: 92px;
@@ -82,9 +75,9 @@ textarea {
     resize: none;
 }
 input:not(input[type="file"]), textarea {
-    border: 1px solid #d6dbde;
-    border-radius: .175rem;
-    padding: .75rem .75rem;
+    border: 2px solid #718997;
+    border-radius: 0;
+    padding: 13px;
     font-size: 1rem;
     background-color: #fff;
 }
@@ -107,10 +100,12 @@ input[disabled] {
 }
 
 select {
-    padding: .75rem 1.5rem;
+    padding: 13px;
     padding-right: 3em;
     /*background-color: #fff;*/
-    border: none;
+    border: 2px solid #718997;
+    border-radius: 0;
+    height: 51px;
     color: #31495b;
     font-size: 1em;
     font-weight: 700;
@@ -127,10 +122,10 @@ select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    background: url(../img/sullisivk_arrow.svg) no-repeat #ddd;
-    background-position-x: right 10px;
+    background: url(https://www.sullissivik.gl/build/images/downArrow.svg) no-repeat #ddd;
+    background-position-x: right 12px;
     background-position-y: 50%;
-    background-size: 1.5em
+    background-size: 9px;
 }
 .dropdown:active,
 .dropdown:focus,
@@ -145,7 +140,7 @@ select {
 
 .input ul li {
     display: inline-block;
-    margin: 0 3em;
+    margin: 0 2em;
 }
 
 .input ul.errorlist li {
