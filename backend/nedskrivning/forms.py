@@ -3,6 +3,8 @@ from aka.forms import CsvUploadMixin
 from django import forms
 from django.core.validators import FileExtensionValidator
 
+from aka.forms import FileField
+
 logger = logging.getLogger(__name__)
 
 
@@ -29,7 +31,7 @@ class NedskrivningForm(forms.Form):
 
 
 class NedskrivningUploadForm(CsvUploadMixin, forms.Form):
-    file = forms.FileField(
+    file = FileField(
         required=True,
         validators=[
             FileExtensionValidator(["csv", "txt"], code="error.invalid_extension")

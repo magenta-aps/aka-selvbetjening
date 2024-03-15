@@ -7,41 +7,50 @@
 {% endblock %}
 
 {% block content %}
-<article class="indberet_nedskrivning">
+<div class="col-xs-12 col-md-7 offset-3 col-fluid">
     <form method="post">
         {% csrf_token %}
-        <h1 class="page-header" data-trans="nedskrivning.title">{% translate 'nedskrivning.title' %}</h1>
-        <div class="container-fluid">
-            {% if form.errors %}
-                <p class="err-msg">{% translate 'common.errors_present' %}</p>
-                {% include "aka/util/nonfield_errors.html" with form=form %}
-            {% endif %}
-            <div class="row">
-                <div class="col-4">
-                    {% include 'aka/util/field.html' with field=form.debitor key='nedskrivning.debitor' %}
-                </div>
+
+        <div class="row header">
+            <div class="col-12">
+                <h1 class="page-header" data-trans="nedskrivning.title">{% translate 'nedskrivning.title' %}</h1>
             </div>
-            <div class="row">
-                <div class="col-4">
-                    {% include 'aka/util/field.html' with field=form.ekstern_sagsnummer key='nedskrivning.ekstern_sagsnummer' %}
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                {% if form.errors %}
+                    <p class="err-msg">{% translate 'common.errors_present' %}</p>
+                    {% include "aka/util/nonfield_errors.html" with form=form %}
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-12">
+                        {% include 'aka/util/field.html' with field=form.debitor key='nedskrivning.debitor' %}
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-4">
-                    {% include 'aka/util/field.html' with field=form.beloeb key='nedskrivning.beloeb' %}
+                <div class="row">
+                    <div class="col-12">
+                        {% include 'aka/util/field.html' with field=form.ekstern_sagsnummer key='nedskrivning.ekstern_sagsnummer' %}
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-4">
-                    {% include 'aka/util/field.html' with field=form.sekvensnummer key='nedskrivning.sekvensnummer' %}
+                <div class="row">
+                    <div class="col-12">
+                        {% include 'aka/util/field.html' with field=form.beloeb key='nedskrivning.beloeb' %}
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-2">
-                    <button type="submit" data-trans="common.gem">{% translate 'common.gem' %}</button>
+                <div class="row">
+                    <div class="col-12">
+                        {% include 'aka/util/field.html' with field=form.sekvensnummer key='nedskrivning.sekvensnummer' %}
+                    </div>
+                </div>
+                <div class="row footer">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary" data-trans="common.gem">{% translate 'common.gem' %}</button>
+                    </div>
                 </div>
             </div>
         </div>
     </form>
-</article>
+</div>
 {% endblock %}
