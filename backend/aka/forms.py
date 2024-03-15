@@ -155,9 +155,7 @@ class FileInput(forms.FileInput):
     template_name = "widgets/file.html"
 
     class Media:
-        css = {
-            "all": ["css/formfile.css"]
-        }
+        css = {"all": ["css/formfile.css"]}
         js = ["js/formfile.js"]
 
 
