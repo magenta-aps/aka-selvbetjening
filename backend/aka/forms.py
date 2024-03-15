@@ -23,7 +23,6 @@ csepcprcvrvalidator = RegexValidator(
 )
 
 
-
 class CsvUploadMixin(object):
     akadialect = csv.register_dialect("aka", "excel", delimiter=";")
 
@@ -150,3 +149,14 @@ class PrependCharField(forms.CharField):
             while len(value) < self.total_length:
                 value = self.prepend_char + value
         return value
+
+class FileInput(forms.FileInput):
+    template_name = "widgets/file.html"
+    class Media:
+        css = {
+            "all": ["css/formfile.css"]
+        }
+        js = ["js/formfile.js"]
+
+class FileField(forms.FileField):
+    widget = FileInput

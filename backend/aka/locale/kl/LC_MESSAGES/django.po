@@ -137,6 +137,12 @@ msgstr "Kolonnit nuisikkit/tarrisikkit"
 msgid "common.errors_present"
 msgstr "Immersukkami nalunaarneqartut ilaat kukkuneqarput. Kukkunerit aaqqeriarlugit immersugaq nassiuteqqilaaruk."
 
+msgid "common.gennemse"
+msgstr "Misissoruk..."
+
+msgid "common.ingenfil"
+msgstr "Fili toqqarneqanngilaq"
+
 
 # Errors
 

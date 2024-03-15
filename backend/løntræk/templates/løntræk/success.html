@@ -8,15 +8,24 @@
 {% endblock %}
 
 {% block content %}
-<article class="success">
-    <form>
-        {% localize off %}
-        {% if rec_ids %}
-        <h1 class="page-header" data-trans="loentraek.success">{% translate 'loentraek.success' %}</h1>
-        {% else %}
-        <h1 class="page-header" data-trans="loentraek.failed">{% translate 'loentraek.failed' %}</h1>
-        {% endif %}
-        <div class="container-fluid">
+{% localize off %}
+    <div class="col-xs-12 col-md-7 offset-3 col-fluid">
+
+
+        <div class="row header">
+            <div class="col-12">
+                {% if rec_ids %}
+                    <h1 class="page-header" data-trans="loentraek.success">{% translate 'loentraek.success' %}</h1>
+                {% else %}
+                    <h1 class="page-header" data-trans="loentraek.failed">{% translate 'loentraek.failed' %}</h1>
+                {% endif %}
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-12">
             <div class="row">
                 <div class="col-12">
                     <span data-trans="loentraek.results">{% translate 'loentraek.results' %}</span>
@@ -46,7 +55,7 @@
                 </div>
             </div>
         </div>
-        {% endlocalize %}
-    </form>
-</article>
+        </div>
+    </div>
+{% endlocalize %}
 {% endblock %}
