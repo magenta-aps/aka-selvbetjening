@@ -150,13 +150,16 @@ class PrependCharField(forms.CharField):
                 value = self.prepend_char + value
         return value
 
+
 class FileInput(forms.FileInput):
     template_name = "widgets/file.html"
+
     class Media:
         css = {
             "all": ["css/formfile.css"]
         }
         js = ["js/formfile.js"]
+
 
 class FileField(forms.FileField):
     widget = FileInput
