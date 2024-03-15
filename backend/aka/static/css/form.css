@@ -14,24 +14,26 @@ fieldset {
 
 /* Buttons and button-like links */
 
-button,
-a.button,
-a.button:link,
-a.button:visited,
+div.SumoSelect {
+    top: 8px;
+}
+
 div.SumoSelect > .CaptionCont {
-    color: #fff;
     border: none;
-    padding: .75rem 2.25rem;
-    font-size: .875rem;
+    padding: 15px;
     cursor: pointer;
-    margin: 0 .75rem .75rem 0;
-    background-color: #31495b;
+    margin: 0;
+    background-color: var(--bs-tertiary-bg);
     text-decoration: none;
     vertical-align: top;
+    transition: all .2s ease-in-out;
+    font-size: 1.125rem;
+    height: 57px;
 }
-button:active, button:hover,
-a.button:active, a.button:hover {
-    background-color: #83929d
+
+div.SumoSelect > .CaptionCont:hover {
+    background-color: var(--bs-secondary-bg);
+    color: white;
 }
 
 div.SumoSelect > .CaptionCont {
@@ -44,7 +46,7 @@ div.SumoSelect > .CaptionCont > label {
 
 div.SumoSelect > .CaptionCont > span {
     padding-right: 0;
-    line-height: 1.214em;
+    height: 100%;
 }
 
 div.SumoSelect > .optWrapper {

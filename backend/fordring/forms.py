@@ -12,6 +12,8 @@ from django.core.validators import (
 from django.forms import TextInput, ValidationError
 from django.utils.datetime_safe import date
 
+from aka.forms import FileField
+
 logger = logging.getLogger(__name__)
 
 valid_date_formats = ["%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%Y-%m-%d", "%d-%m-%y"]
@@ -31,6 +33,9 @@ class InkassoForm(forms.Form):
         error_messages={"required": "error.required"},
     )
     fordringshaver2 = forms.CharField(required=False)
+
+    dokumentation = FileField(required=False)
+
     fordringsgruppe = forms.ChoiceField(
         required=True,
         choices=[(item["id"], item["name"]) for item in groups],
@@ -274,7 +279,7 @@ class InkassoUploadForm(CsvUploadMixin, forms.Form):
         "meddebitorer",
     ]
 
-    file = forms.FileField(
+    file = FileField(
         required=True,
         validators=[
             FileExtensionValidator(["csv", "txt"], code="error.invalid_extension")
