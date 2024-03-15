@@ -7,14 +7,21 @@
 {% endblock %}
 
 {% block content %}
-<article class="success">
-    <form>
-        {% if rec_ids %}
-        <h1 class="page-header" data-trans="nedskrivning.success">{% translate 'nedskrivning.success' %}</h1>
-        {% else %}
-        <h1 class="page-header" data-trans="nedskrivning.failed">{% translate 'nedskrivning.failed' %}</h1>
-        {% endif %}
-        <div class="container-fluid">
+<div class="col-xs-12 col-md-7 offset-3 col-fluid">
+<form>
+
+    <div class="row header">
+        <div class="col-12">
+            {% if rec_ids %}
+                <h1 class="page-header" data-trans="nedskrivning.success">{% translate 'nedskrivning.success' %}</h1>
+            {% else %}
+                <h1 class="page-header" data-trans="nedskrivning.failed">{% translate 'nedskrivning.failed' %}</h1>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
             <div class="row">
                 <div class="col-12">
                     {% if rec_ids %}
@@ -39,17 +46,18 @@
             <div class="row">
                 <div class="col-12">
                     {% if pdf_id %}
-                    <a href="{% url 'nedskrivning:kvittering' pdf_id=pdf_id %}" class="button" data-trans="nedskrivning.get_receipt" target="_blank">{% translate 'nedskrivning.get_receipt' %}</a>
+                    <a href="{% url 'nedskrivning:kvittering' pdf_id=pdf_id %}" class="btn btn-primary" data-trans="nedskrivning.get_receipt" target="_blank">{% translate 'nedskrivning.get_receipt' %}</a>
                     {% endif %}
+
                     {% if upload %}
-                        <a href="{% url 'nedskrivning:upload' %}" class="button"  data-trans="common.repeat">{% translate 'common.repeat' %}</a>
+                        <a href="{% url 'nedskrivning:upload' %}" class="btn btn-primary"  data-trans="common.repeat">{% translate 'common.repeat' %}</a>
                     {% else %}
-                        <a href="{% url 'nedskrivning:form' %}" class="button"  data-trans="common.repeat">{% translate 'common.repeat' %}</a>
+                        <a href="{% url 'nedskrivning:form' %}" class="btn btn-primary"  data-trans="common.repeat">{% translate 'common.repeat' %}</a>
                     {% endif %}
-                    <a href="{% url 'aka:index' %}" class="button" data-trans="common.forside">{% translate 'common.forside' %}</a>
+                    <a href="{% url 'aka:index' %}" class="btn btn-primary" data-trans="common.forside">{% translate 'common.forside' %}</a>
                 </div>
             </div>
         </div>
-    </form>
-</article>
+    </div></form>
+</div>
 {% endblock %}
