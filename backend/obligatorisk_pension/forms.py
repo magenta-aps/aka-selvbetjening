@@ -10,6 +10,8 @@ from obligatorisk_pension.models import ObligatoriskPension
 from obligatorisk_pension.models import ObligatoriskPensionFile
 from obligatorisk_pension.models import ObligatoriskPensionSelskab
 
+from aka.forms import FileField
+
 
 class SkatteårForm(DynamicFormMixin, forms.Form):
     skatteår = DynamicField(
@@ -72,7 +74,7 @@ class ObligatoriskPensionFilForm(forms.ModelForm):
             "beskrivelse",
         )
 
-    fil = forms.FileField(
+    fil = FileField(
         error_messages={"required": "error.required"},
     )
 
