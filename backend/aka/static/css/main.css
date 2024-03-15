@@ -47,12 +47,15 @@ body {
     padding: 20px 28px;
 }
 
+.btn {
+    padding: 15px;
+    border: 0;
+}
+
 .btn-primary {
     color: #31495b;
     --bs-btn-bg: #f6c443;
     --bs-btn-active-bg: #31495b;
-    padding: 15px;
-    border: 0;
 }
 .card a:link,
 .card a:visited {
@@ -98,6 +101,13 @@ div.dropdown {
     display: inline-block;
 }
 
+.btn:not(.collapsed) .expanded-hidden {
+    display: none;
+}
+
+.btn.collapsed .collapsed-hidden {
+    display: none;
+}
 
 
 

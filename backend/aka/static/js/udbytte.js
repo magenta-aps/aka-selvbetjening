@@ -43,7 +43,8 @@ $(function(){
     cloneRow.on("click", cloneForm);
 
     const removeForm = function(updateTotal) {
-        const row = $(this).parents(".row");
+        const row = $(this).parents(".formset-row");
+        console.log(row);
         row.remove();
         if (updateTotal !== false) {
             const nextId = parseInt(management.total.val());
