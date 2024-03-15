@@ -75,3 +75,6 @@ msgstr "Uppernarsaammik aallerfik"
 
 msgid "loentraek.record_id"
 msgstr "Nalunaarsuinermi normu"
+
+msgid "loentraek.fil"
+msgstr "Fil"

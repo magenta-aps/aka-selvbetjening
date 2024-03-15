@@ -13,6 +13,8 @@ from django.forms import TextInput, ValidationError
 from django.utils.datetime_safe import date
 from dynamic_forms import DynamicField, DynamicFormMixin
 
+from aka.forms import FileField
+
 logger = logging.getLogger(__name__)
 
 
@@ -119,7 +121,7 @@ class LoentraekFormItem(forms.Form):
 
 
 class LoentraekUploadForm(CsvUploadMixin, LoentraekForm):
-    file = forms.FileField(
+    file = FileField(
         required=True,
         validators=[
             FileExtensionValidator(["csv", "txt"], code="error.invalid_extension")

@@ -138,6 +138,11 @@ msgstr "Vis/skjul kolonner"
 msgid "common.errors_present"
 msgstr "Der er fejl i nogle formularfelter. Ret venligst fejlene og indsend formularen igen."
 
+msgid "common.gennemse"
+msgstr "Gennemse..."
+
+msgid "common.ingenfil"
+msgstr "Ingen fil valgt"
 
 # Errors
 

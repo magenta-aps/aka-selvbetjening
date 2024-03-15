@@ -76,3 +76,6 @@ msgstr "Download kvittering"
 
 msgid "loentraek.record_id"
 msgstr "Registrerings&shy;nummer"
+
+msgid "loentraek.fil"
+msgstr "Fil"

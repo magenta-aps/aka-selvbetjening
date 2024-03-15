@@ -74,7 +74,7 @@ textarea {
     width: 100%;
     resize: none;
 }
-input:not(input[type="file"]), textarea {
+input, textarea {
     border: 2px solid #718997;
     border-radius: 0;
     padding: 13px;
@@ -89,6 +89,12 @@ input[type=text]:focus, textarea:focus, select:focus {
 input:disabled, textarea:disabled {
     border-color: #eaedee !important;
 }
+
+
+
+
+
+
 
 form.submitted input:invalid:not([type=checkbox],[type=radio]),
 form.submitted select:invalid,
