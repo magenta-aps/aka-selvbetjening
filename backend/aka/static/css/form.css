@@ -1,11 +1,5 @@
 /* Form */
 
-form > div {
-    background-color: #fff;
-    padding: 1.875rem;
-    margin: 1.5rem 0;
-}
-
 fieldset {
     border: none;
     padding: 0;

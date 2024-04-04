@@ -7,57 +7,52 @@
 {% endblock %}
 
 {% block content %}
-<div class="col-xs-12 col-md-7 offset-3 col-fluid">
-<form>
+    <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
 
-    <div class="row header">
-        <div class="col-12">
-            {% if rec_ids %}
-                <h1 class="page-header" data-trans="nedskrivning.success">{% translate 'nedskrivning.success' %}</h1>
-            {% else %}
-                <h1 class="page-header" data-trans="nedskrivning.failed">{% translate 'nedskrivning.failed' %}</h1>
-            {% endif %}
+        {% if rec_ids %}
+            {% include "aka/util/header.html" with key="nedskrivning.success" %}
+        {% else %}
+            {% include "aka/util/header.html" with key="nedskrivning.failed" %}
+        {% endif %}
+
+        <div class="row block">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        {% if rec_ids %}
+                            <span data-trans="nedskrivning.result">{% translate 'nedskrivning.result' %}</span>
+                            <ul class="success-list">
+                                {% for rec_id in rec_ids %}
+                                    <li>{{ rec_id }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if errors %}
+                            <span data-trans="nedskrivning.errors">{% translate 'nedskrivning.errors' %}</span>
+                            <ul class="error-list">
+                            {% for error in errors %}
+                                {% translate error.key as error_message %}
+                                <li data-trans="{{ error.key }}" data-trans-params="{{ error.params|json }}">{{ error_message|format:error.params }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        {% if pdf_id %}
+                        <a href="{% url 'nedskrivning:kvittering' pdf_id=pdf_id %}" class="btn btn-primary" data-trans="nedskrivning.get_receipt" target="_blank">{% translate 'nedskrivning.get_receipt' %}</a>
+                        {% endif %}
+
+                        {% if upload %}
+                            <a href="{% url 'nedskrivning:upload' %}" class="btn btn-primary"  data-trans="common.repeat">{% translate 'common.repeat' %}</a>
+                        {% else %}
+                            <a href="{% url 'nedskrivning:form' %}" class="btn btn-primary"  data-trans="common.repeat">{% translate 'common.repeat' %}</a>
+                        {% endif %}
+                        <a href="{% url 'aka:index' %}" class="btn btn-primary" data-trans="common.forside">{% translate 'common.forside' %}</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-12">
-            <div class="row">
-                <div class="col-12">
-                    {% if rec_ids %}
-                        <span data-trans="nedskrivning.result">{% translate 'nedskrivning.result' %}</span>
-                        <ul class="success-list">
-                            {% for rec_id in rec_ids %}
-                                <li>{{ rec_id }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                    {% if errors %}
-                        <span data-trans="nedskrivning.errors">{% translate 'nedskrivning.errors' %}</span>
-                        <ul class="error-list">
-                        {% for error in errors %}
-                            {% translate error.key as error_message %}
-                            <li data-trans="{{ error.key }}" data-trans-params="{{ error.params|json }}">{{ error_message|format:error.params }}</li>
-                        {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    {% if pdf_id %}
-                    <a href="{% url 'nedskrivning:kvittering' pdf_id=pdf_id %}" class="btn btn-primary" data-trans="nedskrivning.get_receipt" target="_blank">{% translate 'nedskrivning.get_receipt' %}</a>
-                    {% endif %}
-
-                    {% if upload %}
-                        <a href="{% url 'nedskrivning:upload' %}" class="btn btn-primary"  data-trans="common.repeat">{% translate 'common.repeat' %}</a>
-                    {% else %}
-                        <a href="{% url 'nedskrivning:form' %}" class="btn btn-primary"  data-trans="common.repeat">{% translate 'common.repeat' %}</a>
-                    {% endif %}
-                    <a href="{% url 'aka:index' %}" class="btn btn-primary" data-trans="common.forside">{% translate 'common.forside' %}</a>
-                </div>
-            </div>
-        </div>
-    </div></form>
-</div>
 {% endblock %}

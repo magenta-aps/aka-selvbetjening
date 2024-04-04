@@ -50,6 +50,7 @@ body {
 .btn {
     padding: 15px;
     border: 0;
+    border-radius: 5px;
 }
 
 .btn-primary {
@@ -81,15 +82,22 @@ body {
     background-color: #31495b;
 }
 
-form > .row {
+div.block {
+    background-color: #fff;
+    padding: 1.875rem;
+    margin: 1.5rem 0;
+}
+
+form > .row,
+.container-fluid > .row {
     padding: 30px;
 }
 
-form > .row.header .col-12 {
+.row.header .col-12 {
     padding: 0;
 }
 
-form > .row.header h1 {
+.row.header h1 {
     font-size: 24px;
 }
 

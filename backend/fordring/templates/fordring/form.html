@@ -12,17 +12,14 @@
 {% endblock %}
 
 {% block content %}
-<div class="col-xs-12 col-md-7 offset-3 col-fluid">
+    <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ formset.management_form }}
-        <div class="row header">
-            <div class="col-12">
-                <h1 data-trans="fordring.title">{% translate 'fordring.title' %}</h1>
-            </div>
-        </div>
 
-        <div class="row">
+        {% include "aka/util/header.html" with key="fordring.title" %}
+
+        <div class="row block">
             <div class="col-12">
             {% if form.errors or formset.errors %}
                 <p class="err-msg">{% translate 'common.errors_present' %}</p>
