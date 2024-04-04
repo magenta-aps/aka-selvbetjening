@@ -16,5 +16,4 @@ urlpatterns = [
         NedskrivningReceiptView.as_view(),
         name="kvittering",
     ),
-
 ]
