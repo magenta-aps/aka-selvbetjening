@@ -1,5 +1,4 @@
 from django.urls import path
-from django.views.generic import TemplateView
 from obligatorisk_pension.views import ObligatoriskPensionCreateView
 
 from obligatorisk_pension.views import ObligatoriskPensionSkatteårView
