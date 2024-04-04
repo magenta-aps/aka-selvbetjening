@@ -1,3 +1,4 @@
+from django.views.generic import TemplateView
 from fordring.views import InkassoGroupDataView
 from fordring.views import InkassoSagView, InkassoSagUploadView
 from django.urls import path
@@ -24,4 +25,10 @@ urlpatterns = [
         FordringReceiptView.as_view(),
         name="kvittering",
     ),
+
+
+    path(
+        "success",
+        TemplateView.as_view(template_name="fordring/success.html")
+    )
 ]

@@ -6,62 +6,73 @@
 <div class="page-header">
 
     <div class="output-header">
-        <div class="row">
-            {% if pdf %}
-            <div class="col-12-sm">
-                <h2>{{ authority.title }}</h2>
-                {% for line in authority.lines %}
-                    <strong>{{ line }}</strong>
-                    {% if not forloop.last %}<br/>{% endif %}
-                {% endfor %}
-            </div>
-            {% else %}
-            <div class="col-7-sm">
-                <h2>{{ authority.title }}</h2>
-                {% for line in authority.lines %}
-                    <strong>{{ line }}</strong>
-                    {% if not forloop.last %}<br/>{% endif %}
-                {% endfor %}
-                {% if regnskabskontor_note %}
-                    {% translate 'konto.regnskabskontor_note' as note %}
-                    <p data-trans="konto.regnskabskontor_note" data-trans-params='{{ konto_href_obj|json }}'>
-                    {{ note|format:konto_href_obj|safe }}
-                    </p>
-                {% endif %}
-            </div>
-            <div class="col-5-sm output-actions printhide">
 
-                <select id="download">
-                    {% if pdflink %}
-                        <option value="{{ key }}.pdf" data-trans="common.pdf">{% translate 'common.pdf' %}</option>
-                    {% endif %}
-                    {% if xlsxlink %}
-                        <option value="{{ key }}.xlsx" data-trans="common.xlsx">{% translate 'common.xlsx' %}</option>
-                    {% endif %}
-                    {% if odslink %}
-                        <option value="{{ key }}.ods" data-trans="common.ods">{% translate 'common.ods' %}</option>
-                    {% endif %}
-                    {% if csvlink %}
-                        <option value="{{ key }}.csv" data-trans="common.csv">{% translate 'common.csv' %}</option>
-                    {% endif %}
-                </select>
+        {% if pdf %}
 
-                <button type="button" class="btn-print" data-trans="common.print" data-printhide=".output:not(#output-{{ key }})">{% translate 'common.print' %}</button>
+            <div class="row">
+                <div class="col-12-sm">
+                    <h2>{{ authority.title }}</h2>
+                    {% for line in authority.lines %}
+                        <strong>{{ line }}</strong>
+                        {% if not forloop.last %}<br/>{% endif %}
+                    {% endfor %}
+                </div>
             </div>
-            {% endif %}
-        </div>
+
+        {% else %}
+
+            <div class="row d-flex">
+                <div class="col-sm-7 flex-grow-1">
+                    <h2>{{ authority.title }}</h2>
+                    {% for line in authority.lines %}
+                        <strong>{{ line }}</strong>
+                        {% if not forloop.last %}<br/>{% endif %}
+                    {% endfor %}
+                    {% if regnskabskontor_note %}
+                        {% translate 'konto.regnskabskontor_note' as note %}
+                        <p data-trans="konto.regnskabskontor_note" data-trans-params='{{ konto_href_obj|json }}'>
+                        {{ note|format:konto_href_obj|safe }}
+                        </p>
+                    {% endif %}
+                </div>
+
+                <div class="col-sm-5 output-actions printhide">
+                    <div class="dropdown download">
+                    <button class="btn btn-primary dropdown-toggle" id="download" data-bs-toggle="dropdown" aria-expanded="false">
+                        {% translate "common.download" %}
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% if pdflink %}
+                            <li><a class="dropdown-item" href="#" data-format="{{ key }}.pdf" data-trans="common.pdf">{% translate 'common.pdf' %}</a></li>
+                        {% endif %}
+                        {% if xlsxlink %}
+                            <li><a class="dropdown-item" href="#" data-format="{{ key }}.xlsx" data-trans="common.xlsx">{% translate 'common.xlsx' %}</a></li>
+                        {% endif %}
+                        {% if odslink %}
+                            <li><a class="dropdown-item" href="#" data-format="{{ key }}.ods" data-trans="common.ods">{% translate 'common.ods' %}</a></li>
+                        {% endif %}
+                        {% if csvlink %}
+                            <li><a class="dropdown-item" href="#" data-format="{{ key }}.csv" data-trans="common.csv">{% translate 'common.csv' %}</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <button type="button" class="btn btn-primary btn-print" data-trans="common.print" data-printhide=".output:not(#output-{{ key }})">{% translate 'common.print' %}</button>
+                </div>
+            </div>
+        {% endif %}
+
     </div>
 
     <hr/>
     <div class="output-details row">
         {% localize off %}
-            <div class="col-5-sm">
+            <div class="col-sm-5">
                 <span class="line">{{ company.navn }}</span>
                 <span class="line">{{ company.adresse }}</span>
                 <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
                 <span class="line" data-trans="{{ company.landekode }}">{% translate company.landekode %}</span>
             </div>
-            <div class="col-4-sm">
+            <div class="col-sm-4">
                 <table class="dl-table">
                     {% if organization.phone %}
                     <tr>
@@ -107,14 +118,14 @@
                     {% endif %}
                 </table>
             </div>
-            <div class="col-3-sm">
+            <div class="col-sm-3">
                 <img src="{% static 'img/naalakkersuisut.png' %}" style="width:100%"/>
             </div>
         {% endlocalize %}
     </div>
 
     <div class="output-details row">
-        <div class="col-5-sm offset-5-sm">
+        <div class="col-sm-5 offset-sm-5">
             <h3 data-trans="konto.account">{% translate 'konto.account' %}</h3>
             {% if period.from_date and period.to_date %}
                 <h4 data-trans="konto.period" data-trans-params="{{ period|json }}">{{ 'konto.period'|format:period }}</h4>
@@ -129,7 +140,7 @@
 
         <div class="output-details row">
             {% localize off %}
-                <div class="col-7-sm offset-5-sm">
+                <div class="col-sm-7 offset-sm-5">
                     <table class="dl-table">
                         <tr>
                             <th data-trans="konto.number">{% translate 'konto.number' %}</th>

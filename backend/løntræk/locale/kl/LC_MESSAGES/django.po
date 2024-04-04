@@ -22,6 +22,9 @@ msgstr ""
 msgid "loentraek.title"
 msgstr "Akissarsianik ilanngaaneq nalunaarutigiuk"
 
+msgid "loentraek.title-upload"
+msgstr "Akissarsianik ilanngaaneq nalunaarutigiuk"
+
 msgid "loentraek.year"
 msgstr "Ukioq"
 

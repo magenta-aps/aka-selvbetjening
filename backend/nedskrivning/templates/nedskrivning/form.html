@@ -7,17 +7,13 @@
 {% endblock %}
 
 {% block content %}
-<div class="col-xs-12 col-md-7 offset-3 col-fluid">
+    <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
     <form method="post">
         {% csrf_token %}
 
-        <div class="row header">
-            <div class="col-12">
-                <h1 class="page-header" data-trans="nedskrivning.title">{% translate 'nedskrivning.title' %}</h1>
-            </div>
-        </div>
+        {% include "aka/util/header.html" with key="nedskrivning.title" %}
 
-        <div class="row">
+        <div class="row block">
             <div class="col-12">
                 {% if form.errors %}
                     <p class="err-msg">{% translate 'common.errors_present' %}</p>

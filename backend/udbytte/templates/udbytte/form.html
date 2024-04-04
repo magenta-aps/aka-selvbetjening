@@ -17,16 +17,14 @@
 {% endblock %}
 
 {% block content %}
-<div class="col-xs-12 col-md-7 offset-3 col-fluid">
+    <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
     <form method="post" id="mainform">
         {% csrf_token %}
         {{ formset.management_form }}
-        <div class="row header">
-            <div class="col-12">
-                <h1 data-trans="udbytte.title">{% translate 'udbytte.title' %}</h1>
-            </div>
-        </div>
-        <div class="row">
+
+        {% include "aka/util/header.html" with key="udbytte.title" %}
+
+        <div class="row block">
             <div class="col-12">
                 {% if not pdf %}
 

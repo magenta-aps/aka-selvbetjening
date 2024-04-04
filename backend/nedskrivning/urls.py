@@ -1,6 +1,6 @@
+from django.urls import path
 from nedskrivning.views import NedskrivningReceiptView
 from nedskrivning.views import NedskrivningView, NedskrivningUploadView
-from django.urls import path
 
 app_name = "nedskrivning"
 
@@ -16,4 +16,5 @@ urlpatterns = [
         NedskrivningReceiptView.as_view(),
         name="kvittering",
     ),
+
 ]

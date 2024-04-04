@@ -108,31 +108,25 @@
                         </div>
                     </div>
                 </nav>
-
-
             {% endif %}
-            <main>
-                {% if not pdf %}
-                    {% localize off %}
-                    <nav class="top-navigation printhide">
-                    <div class="indexlink">
-                        {% if is_content %}
-                        <a href="{% url 'aka:index' %}" data-trans="common.forside">{% translate 'common.forside' %}</a>
-                        {% endif %}
-                    </div>
-                    </nav>
-                    {% endlocalize %}
-                {% endif %}
-                {% block content %}
-                {% endblock %}
-            </main>
-{#            {% if not pdf %}#}
-{#            <footer class="printhide">#}
-{#                <div class="footer-wrapper">#}
-{#                    Footer#}
-{#                </div>#}
-{#            </footer>#}
-{#            {% endif %}#}
+
+            {% if not pdf %}
+                {% localize off %}
+                <!--
+                <nav class="top-navigation printhide">
+                <div class="indexlink">
+                    {% if is_content %}
+                    <a href="{% url 'aka:index' %}" data-trans="common.forside">{% translate 'common.forside' %}</a>
+                    {% endif %}
+                </div>
+                </nav>
+                -->
+                {% endlocalize %}
+            {% endif %}
+
+            {% block content %}
+            {% endblock %}
+
         </div>
     </body>
 </html>

@@ -8,51 +8,52 @@
 {% endblock %}
 
 {% block content %}
-<article class="success">
-    {% localize off %}
-    <form>
+{% localize off %}
+    <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
+
         {% if rec_ids %}
-        <h1 class="page-header" data-trans="fordring.success">{% translate 'fordring.success' %}</h1>
+            {% include "aka/util/header.html" with key="fordring.success" %}
         {% else %}
-        <h1 class="page-header" data-trans="fordring.failed">{% translate 'fordring.failed' %}</h1>
+            {% include "aka/util/header.html" with key="fordring.failed" %}
         {% endif %}
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    {% if rec_ids %}
-                        <span data-trans="fordring.result">{% translate 'fordring.result' %}</span>
-                        <ul class="success-list">
-                            {% for rec_id in rec_ids %}
-                                <li>{{ rec_id }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                    {% if errors %}
-                        <span data-trans="fordring.errors">{% translate 'fordring.errors' %}</span>
-                        <ul class="error-list">
-                        {% for error in errors %}
-                            {% translate error.key as error_message %}
-                            <li data-trans="{{ error.key }}" data-trans-params="{{ error.params|json }}">{{ error_message|format:error.params }}</li>
+
+        {% if rec_ids or errors %}
+        <div class="row block">
+            <div class="col-12">
+                {% if rec_ids %}
+                    <span data-trans="fordring.result">{% translate 'fordring.result' %}</span>
+                    <ul class="success-list">
+                        {% for rec_id in rec_ids %}
+                            <li>{{ rec_id }}</li>
                         {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    {% if pdf_id %}
-                        <a href="{% url 'fordring:kvittering' pdf_id=pdf_id %}" class="button" data-trans="fordring.get_receipt" target="_blank">{% translate 'fordring.get_receipt' %}</a>
-                    {% endif %}
-                    {% if upload %}
-                        <a href="{% url 'fordring:upload' %}" class="button"  data-trans="common.repeat">{% translate 'common.repeat' %}</a>
-                    {% else %}
-                        <a href="{% url 'fordring:form' %}" class="button"  data-trans="common.repeat">{% translate 'common.repeat' %}</a>
-                    {% endif %}
-                    <a href="{% url 'aka:index' %}" class="button" data-trans="common.forside">{% translate 'common.forside' %}</a>
-                </div>
+                    </ul>
+                {% endif %}
+                {% if errors %}
+                    <span data-trans="fordring.errors">{% translate 'fordring.errors' %}</span>
+                    <ul class="error-list">
+                    {% for error in errors %}
+                        {% translate error.key as error_message %}
+                        <li data-trans="{{ error.key }}" data-trans-params="{{ error.params|json }}">{{ error_message|format:error.params }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
         </div>
-    </form>
-    {% endlocalize %}
-</article>
+        {% endif %}
+
+        <div class="row block">
+            <div class="col-12">
+                {% if pdf_id %}
+                    <a href="{% url 'fordring:kvittering' pdf_id=pdf_id %}" class="button" data-trans="fordring.get_receipt" target="_blank">{% translate 'fordring.get_receipt' %}</a>
+                {% endif %}
+                {% if upload %}
+                    <a href="{% url 'fordring:upload' %}" class="btn btn-primary"  data-trans="common.repeat">{% translate 'common.repeat' %}</a>
+                {% else %}
+                    <a href="{% url 'fordring:form' %}" class="btn btn-primary"  data-trans="common.repeat">{% translate 'common.repeat' %}</a>
+                {% endif %}
+                <a href="{% url 'aka:index' %}" class="btn btn-primary" data-trans="common.forside">{% translate 'common.forside' %}</a>
+            </div>
+        </div>
+</div>
+{% endlocalize %}
 {% endblock %}
