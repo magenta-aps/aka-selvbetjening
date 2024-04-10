@@ -25,7 +25,7 @@
 
 {% block content %}
 
-    <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
+    <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid printhide">
     <form method="get" id="mainform">
 
         {% include "aka/util/header.html" with key="konto.title" %}
@@ -81,89 +81,86 @@
 
     <div class="col-xs-12 col-md-12 col-fluid">
         {% if form.is_bound %}
-
             {% for section in sections %}
-                <div class="row block">
+                <div class="row block output" id="output-{{ key }}">
                 {% with rows=section.rows total=section.total key=section.key %}
-                <div id="output-{{ key }}" class="output">
-                    <div class="page" style="page-break-after: always">
-                        <h2 class="can-collapse printhide" data-collapse="#content-{{ key }}">
-                            <img src="{% static 'img/sullisivk_arrow_right.svg' %}" width="20" height="20"/>
-                            <span data-trans="{{ section.title }}">{% translate section.title %}</span>
-                        </h2>
-                        <div id="content-{{ key }}" data-key="{{ key }}" class="page-content collapsed" style="display:none">
+                <div class="page" style="page-break-after: always">
+                    <h2 class="can-collapse printhide" data-collapse="#content-{{ key }}">
+                        <img src="{% static 'img/sullisivk_arrow_right.svg' %}" width="20" height="20"/>
+                        <span data-trans="{{ section.title }}">{% translate section.title %}</span>
+                    </h2>
+                    <div id="content-{{ key }}" data-key="{{ key }}" class="page-content collapsed" style="display:none">
 
-                            {% include 'konto/pageheader.html' with key=key company=company %}
+                        {% include 'konto/pageheader.html' with key=key company=company %}
 
-                            <div class="page-data account-data">
-                            {% if rows and rows|length > 0 %}
-                                <div class="printhide">
-                                    <select class="columnselect" multiple="multiple" data-key="{{ key }}">
-                                        {% for field in section.fields %}
-                                            {% with "konto."|add:field.label as transkey %}
-                                            {% with key|add:"."|add:field.label as fullfield %}
-                                                <option value="{{ field.label }}" {% if fullfield not in form.hidden.value %}selected="selected"{% endif %}>{% translate transkey %}</option>
-                                            {% endwith %}
-                                            {% endwith %}
-                                        {% endfor %}
-                                    </select>
-                                </div>
-
-                                <table class="output-table" data-key="{{ key }}">
-                                <thead>
-                                <tr>
+                        <div class="page-data account-data">
+                        {% if rows and rows|length > 0 %}
+                            <div class="printhide">
+                                <select class="columnselect" multiple="multiple" data-key="{{ key }}">
                                     {% for field in section.fields %}
-                                        <th data-field="{{ field.label }}" data-trans="{{ field.transkey }}">{% translate field.transkey|safe %}</th>
+                                        {% with "konto."|add:field.label as transkey %}
+                                        {% with key|add:"."|add:field.label as fullfield %}
+                                            <option value="{{ field.label }}" {% if fullfield not in form.hidden.value %}selected="selected"{% endif %}>{% translate transkey %}</option>
+                                        {% endwith %}
+                                        {% endwith %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <table class="output-table" data-key="{{ key }}">
+                            <thead>
+                            <tr>
+                                {% for field in section.fields %}
+                                    <th data-field="{{ field.label }}" data-trans="{{ field.transkey }}">{% translate field.transkey|safe %}</th>
+                                {% endfor %}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in rows %}
+                                <tr>
+                                    {% for cell in row.cells %}
+                                        {% with field=cell.field %}
+                                        <td class="{{ field.klass }}" data-original="{{ cell.value }}">
+                                            {% if field.number %}
+                                                {{ cell.value }}
+                                            {% elif field.boolean %}
+                                                {{ cell.value|yesno }}
+                                            {% else %}
+                                                {% localize off %}
+                                                {{ cell.value|default_if_none:'' }}
+                                                {% endlocalize %}
+                                            {% endif %}
+                                        </td>
+                                        {% endwith %}
                                     {% endfor %}
                                 </tr>
-                                </thead>
-                                <tbody>
-                                {% for row in rows %}
-                                    <tr>
-                                        {% for cell in row.cells %}
-                                            {% with field=cell.field %}
-                                            <td class="{{ field.klass }}" data-original="{{ cell.value }}">
-                                                {% if field.number %}
-                                                    {{ cell.value }}
-                                                {% elif field.boolean %}
-                                                    {{ cell.value|yesno }}
-                                                {% else %}
-                                                    {% localize off %}
-                                                    {{ cell.value|default_if_none:'' }}
-                                                    {% endlocalize %}
-                                                {% endif %}
-                                            </td>
-                                            {% endwith %}
-                                        {% endfor %}
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                                </table>
-                            {% else %}
-                                <p data-trans="konto.ingenposter">{% translate 'konto.ingenposter' %}</p>
-                            {% endif %}
+                            {% endfor %}
+                            </tbody>
+                            </table>
+                        {% else %}
+                            <p data-trans="konto.ingenposter">{% translate 'konto.ingenposter' %}</p>
+                        {% endif %}
 
-                                {% if total %}
-                                    <div class="row account-total no-copy">
-                                        <div class="col-3-sm">
-                                            <span class="total-label" data-trans="konto.total_claim">{% translate 'konto.total_claim' %}</span>
-                                            <span class="total-data">{{ total.total_claim }}</span>
-                                        </div>
-                                        <div class="col-3-sm">
-                                            <span class="total-label" data-trans="konto.total_payment">{% translate 'konto.total_payment' %}</span>
-                                            <span class="total-data">{{ total.total_payment }}</span>
-                                        </div>
-                                        <div class="col-3-sm">
-                                            <span class="total-label" data-trans="konto.total_sum">{% translate 'konto.total_sum' %}</span>
-                                            <span class="total-data">{{ total.total_sum }}</span>
-                                        </div>
-                                        <div class="col-3-sm">
-                                            <span class="total-label" data-trans="konto.total_restance">{% translate 'konto.total_restance' %}</span>
-                                            <span class="total-data">{{ total.total_restance }}</span>
-                                        </div>
+                            {% if total %}
+                                <div class="row account-total no-copy">
+                                    <div class="col-3-sm">
+                                        <span class="total-label" data-trans="konto.total_claim">{% translate 'konto.total_claim' %}</span>
+                                        <span class="total-data">{{ total.total_claim }}</span>
                                     </div>
-                                {% endif %}
-                            </div>
+                                    <div class="col-3-sm">
+                                        <span class="total-label" data-trans="konto.total_payment">{% translate 'konto.total_payment' %}</span>
+                                        <span class="total-data">{{ total.total_payment }}</span>
+                                    </div>
+                                    <div class="col-3-sm">
+                                        <span class="total-label" data-trans="konto.total_sum">{% translate 'konto.total_sum' %}</span>
+                                        <span class="total-data">{{ total.total_sum }}</span>
+                                    </div>
+                                    <div class="col-3-sm">
+                                        <span class="total-label" data-trans="konto.total_restance">{% translate 'konto.total_restance' %}</span>
+                                        <span class="total-data">{{ total.total_restance }}</span>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
