@@ -1,10 +1,8 @@
 import logging
 
-from aka.forms import CsvUploadMixin
+from aka.forms import CsvUploadMixin, FileField
 from django import forms
 from django.core.validators import FileExtensionValidator
-
-from aka.forms import FileField
 
 logger = logging.getLogger(__name__)
 

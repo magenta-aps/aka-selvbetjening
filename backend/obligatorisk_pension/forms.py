@@ -1,5 +1,6 @@
 from datetime import date
 
+from aka.forms import FileField
 from aka.widgets import TranslatedSelect
 from django import forms
 from django.conf import settings
@@ -11,8 +12,6 @@ from obligatorisk_pension.models import (
     ObligatoriskPensionFile,
     ObligatoriskPensionSelskab,
 )
-
-from aka.forms import FileField
 
 
 class SkatteårForm(DynamicFormMixin, forms.Form):
