@@ -31,30 +31,30 @@
 <div class="row">
     {% if cvr %}
         {% url 'rentenota:form' as rentenota_url %}
-        {% include 'toc-item.html' with url=rentenota_url text='index.rentenota' subtext='index.rentenota.sub' linktext='' icon='tax' %}
+        {% include 'toc-item.html' with url=rentenota_url text='index.rentenota' subtext='index.rentenota.sub' icon='tax' linktext='index.rentenota.linktext' %}
 
 {#        {% if claimant_ids %}#}
         {% url 'fordring:form' as inkassosag_url %}
-        {% include 'toc-item.html' with url=inkassosag_url text='index.fordring' subtext='index.fordring.sub' icon='business' %}
+        {% include 'toc-item.html' with url=inkassosag_url text='index.fordring' subtext='index.fordring.sub' icon='business' linktext='index.fordring.linktext' %}
         {% url 'fordring:upload' as inkassosag_upload_url %}
-        {% include 'toc-item.html' with url=inkassosag_upload_url text='index.fordring-upload' icon='business' %}
+        {% include 'toc-item.html' with url=inkassosag_upload_url text='index.fordring-upload' icon='business' linktext='index.fordring.linktext' %}
         {% url 'nedskrivning:form' as nedskrivning_url %}
-        {% include 'toc-item.html' with url=nedskrivning_url text='index.nedskrivning' subtext='index.nedskrivning.sub' icon='tax' %}
+        {% include 'toc-item.html' with url=nedskrivning_url text='index.nedskrivning' subtext='index.nedskrivning.sub' icon='tax' linktext='index.nedskrivning.linktext' %}
         {% url 'nedskrivning:upload' as nedskrivning_upload_url %}
-        {% include 'toc-item.html' with url=nedskrivning_upload_url text='index.nedskrivning-upload' icon='tax' %}
+        {% include 'toc-item.html' with url=nedskrivning_upload_url text='index.nedskrivning-upload' icon='tax' linktext='index.nedskrivning.linktext' %}
 {#        {% endif %}#}
 
         {% url 'løntræk:form' as loentraek_url %}
-        {% include 'toc-item.html' with url=loentraek_url text='index.løntræk' subtext='index.løntræk.sub' icon='briefcase' %}
+        {% include 'toc-item.html' with url=loentraek_url text='index.løntræk' subtext='index.løntræk.sub' icon='briefcase' linktext='index.løntræk.linktext' %}
         {% url 'løntræk:upload' as loentraek_upload_url %}
-        {% include 'toc-item.html' with url=loentraek_upload_url text='index.løntræk-upload' icon='briefcase' %}
+        {% include 'toc-item.html' with url=loentraek_upload_url text='index.løntræk-upload' icon='briefcase' linktext='index.løntræk.linktext' %}
 
         {% url 'udbytte:form' as udbytte_url %}
-        {% include 'toc-item.html' with url=udbytte_url text='index.udbytte' subtext='index.udbytte.sub' icon='business' %}
+        {% include 'toc-item.html' with url=udbytte_url text='index.udbytte' subtext='index.udbytte.sub' icon='business' linktext='index.udbytte.linktext' %}
     {% endif %}
     {% if cpr or cvr %}
         {% url 'konto:konto' as konto_url %}
-        {% include 'toc-item.html' with url=konto_url text='index.konto' subtext='index.konto.sub' icon='tax' %}
+        {% include 'toc-item.html' with url=konto_url text='index.konto' subtext='index.konto.sub' icon='tax' linktext='index.konto.linktext' %}
     {% endif %}
 </div>
 

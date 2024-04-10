@@ -218,14 +218,20 @@ msgstr "Rentenota for udvalgte perioder"
 msgid "index.rentenota.sub"
 msgstr "For at hente rentenota for udvalgte perioder - klik her"
 
+msgid "index.rentenota.linktext"
+msgstr "Hent her"
+
 msgid "index.fordring"
 msgstr "Indberetning af fordringer"
 
 msgid "index.fordring.sub"
-msgstr "For at indberette offentlig fordringer til Inddrivelsen - klik her"
+msgstr "For at indberette offentlig fordringer til Inddrivelsen"
 
 msgid "index.fordring-upload"
 msgstr "Upload fordring"
+
+msgid "index.fordring.linktext"
+msgstr "Indberet her"
 
 msgid "index.nedskrivning"
 msgstr "Indberetning af nedskrivninger"
@@ -236,32 +242,47 @@ msgstr "For at indberette nedskrivninger til Inddrivelsen - Klik her"
 msgid "index.nedskrivning-upload"
 msgstr "Upload nedskrivning"
 
+msgid "index.nedskrivning.linktext"
+msgstr "Indberet her"
+
 msgid "index.løntræk"
 msgstr "Indberetning af løntræk"
 
 msgid "index.løntræk.sub"
-msgstr "For at indberette de pålagte løntræk til Inddrivelsen - klik her"
+msgstr "For at indberette de pålagte løntræk til Inddrivelsen"
 
 msgid "index.løntræk-upload"
 msgstr "Upload løntræk"
+
+msgid "index.løntræk.linktext"
+msgstr "Indberet her"
 
 msgid "index.fordringshaverkonto"
 msgstr "Kontobevægelser for fordringshaver op og nedskrivninger"
 
 msgid "index.fordringshaverkonto.sub"
-msgstr "For at se kontobevægelser, op og nedskrivninger som fordringshaver - klik her"
+msgstr "For at se kontobevægelser, op og nedskrivninger som fordringshaver"
+
+msgid "index.fordringshaverkonto.linktext"
+msgstr "Hent her"
 
 msgid "index.udbytte"
 msgstr "Udbytteskat"
 
 msgid "index.udbytte.sub"
-msgstr "For at indberette U1-skat - klik her"
+msgstr "For at indberette U1-skat"
+
+msgid "index.udbytte.linktext"
+msgstr "Indberet her"
 
 msgid "index.konto"
 msgstr "Vis konto"
 
 msgid "index.konto.sub"
 msgstr "Her kan du se dine offentlige restancer, klik her for specificeret opgørelser"
+
+msgid "index.konto.linktext"
+msgstr "Hent her"
 
 
 msgid "DK"
