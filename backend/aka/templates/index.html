@@ -8,7 +8,7 @@
 
 {% block content %}
 
-<div class="row">
+<div class="row" style="max-width: 1920px; margin:auto;">
     {% if cvr %}
         {% url 'rentenota:form' as rentenota_url %}
         {% include 'toc-item.html' with url=rentenota_url text='index.rentenota' subtext='index.rentenota.sub' linktext='index.rentenota.linktext' %}
