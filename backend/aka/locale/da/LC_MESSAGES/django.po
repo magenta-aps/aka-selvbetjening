@@ -216,7 +216,7 @@ msgid "index.rentenota"
 msgstr "Rentenota for udvalgte perioder"
 
 msgid "index.rentenota.sub"
-msgstr "For at hente rentenota for udvalgte perioder - klik her"
+msgstr "For at hente rentenota for udvalgte perioder"
 
 msgid "index.rentenota.linktext"
 msgstr "Hent her"
@@ -230,6 +230,9 @@ msgstr "For at indberette offentlig fordringer til Inddrivelsen"
 msgid "index.fordring-upload"
 msgstr "Upload fordring"
 
+msgid "index.fordring-upload.sub"
+msgstr "Upload fording som en CSV-fil"
+
 msgid "index.fordring.linktext"
 msgstr "Indberet her"
 
@@ -237,10 +240,13 @@ msgid "index.nedskrivning"
 msgstr "Indberetning af nedskrivninger"
 
 msgid "index.nedskrivning.sub"
-msgstr "For at indberette nedskrivninger til Inddrivelsen - Klik her"
+msgstr "For at indberette nedskrivninger til Inddrivelsen"
 
 msgid "index.nedskrivning-upload"
 msgstr "Upload nedskrivning"
+
+msgid "index.nedskrivning-upload.sub"
+msgstr "Upload nedskrivning som en CSV-fil"
 
 msgid "index.nedskrivning.linktext"
 msgstr "Indberet her"
@@ -253,6 +259,9 @@ msgstr "For at indberette de pålagte løntræk til Inddrivelsen"
 
 msgid "index.løntræk-upload"
 msgstr "Upload løntræk"
+
+msgid "index.løntræk-upload.sub"
+msgstr "Upload løntræk som en CSV-fil"
 
 msgid "index.løntræk.linktext"
 msgstr "Indberet her"
@@ -279,7 +288,7 @@ msgid "index.konto"
 msgstr "Vis konto"
 
 msgid "index.konto.sub"
-msgstr "Her kan du se dine offentlige restancer, klik her for specificeret opgørelser"
+msgstr "Her kan du se dine offentlige restancer"
 
 msgid "index.konto.linktext"
 msgstr "Hent her"

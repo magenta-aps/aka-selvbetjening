@@ -17,17 +17,17 @@
         {% url 'fordring:form' as inkassosag_url %}
         {% include 'toc-item.html' with url=inkassosag_url text='index.fordring' subtext='index.fordring.sub' linktext='index.fordring.linktext' %}
         {% url 'fordring:upload' as inkassosag_upload_url %}
-        {% include 'toc-item.html' with url=inkassosag_upload_url text='index.fordring-upload' linktext='index.fordring.linktext' %}
+        {% include 'toc-item.html' with url=inkassosag_upload_url text='index.fordring-upload' subtext='index.fordring-upload.sub' linktext='index.fordring.linktext' %}
         {% url 'nedskrivning:form' as nedskrivning_url %}
         {% include 'toc-item.html' with url=nedskrivning_url text='index.nedskrivning' subtext='index.nedskrivning.sub' linktext='index.nedskrivning.linktext' %}
         {% url 'nedskrivning:upload' as nedskrivning_upload_url %}
-        {% include 'toc-item.html' with url=nedskrivning_upload_url text='index.nedskrivning-upload' linktext='index.nedskrivning.linktext' %}
+        {% include 'toc-item.html' with url=nedskrivning_upload_url text='index.nedskrivning-upload' subtext='index.nedskrivning-upload.sub' linktext='index.nedskrivning.linktext' %}
 {#        {% endif %}#}
 
         {% url 'løntræk:form' as loentraek_url %}
         {% include 'toc-item.html' with url=loentraek_url text='index.løntræk' subtext='index.løntræk.sub' linktext='index.løntræk.linktext' %}
         {% url 'løntræk:upload' as loentraek_upload_url %}
-        {% include 'toc-item.html' with url=loentraek_upload_url text='index.løntræk-upload' linktext='index.løntræk.linktext' %}
+        {% include 'toc-item.html' with url=loentraek_upload_url text='index.løntræk-upload' subtext='index.løntræk-upload.sub' linktext='index.løntræk.linktext' %}
 
         {% url 'udbytte:form' as udbytte_url %}
         {% include 'toc-item.html' with url=udbytte_url text='index.udbytte' subtext='index.udbytte.sub' linktext='index.udbytte.linktext' %}

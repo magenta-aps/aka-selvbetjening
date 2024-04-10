@@ -1,31 +1,24 @@
 {% load static %}
 {% load i18n %}
 
-
-
-
-
 <div class="col-sm-12 col-md-6 col-xl-3 g-3">
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-12 d-flex align-items-center">
-                <h5 class="card-title" data-trans="{{ text }}">
-                    {% translate text %}
-                </h5>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 d-flex align-items-center">
+                    <h5 class="card-title" data-trans="{{ text }}">
+                        {% translate text %}
+                    </h5>
+                </div>
             </div>
+            <p class="card-text" data-trans="{{ subtext }}">{% translate subtext %}</p>
         </div>
+        <a class="card-footer text-center" href="{{ url }}">
+            {% if linktext %}
+            {% translate linktext %}
+            {% else %}
+            Klik her
+            {% endif %}
+        </a>
     </div>
-    <div class="card-body">
-        <p class="card-text" data-trans="{{ subtext }}">{% translate subtext %}</p>
-    </div>
-    <a class="card-footer text-center" href="{{ url }}">
-        {% if linktext %}
-        {% translate linktext %}
-        {% else %}
-        Klik her
-        {% endif %}
-    </a>
-</div>
-
 </div>

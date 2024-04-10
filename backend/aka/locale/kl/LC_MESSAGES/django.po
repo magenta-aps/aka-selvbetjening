@@ -229,6 +229,9 @@ msgstr "Uani pisortanut akiligassat Akiliisitsiniartarfimmut nalunaarutigikkit"
 msgid "index.fordring-upload"
 msgstr "Fordring-it uploadikkit"
 
+msgid "index.fordring-upload.sub"
+msgstr "Upload fording som en CSV-fil"
+
 msgid "index.fordring.linktext"
 msgstr "Indberet her"
 
@@ -241,6 +244,9 @@ msgstr "Uani milliliinerit akiliisitsiniartarfimmut nalunaarutigikkit"
 msgid "index.nedskrivning-upload"
 msgstr "Milliliineq uploaderuk"
 
+msgid "index.nedskrivning-upload.sub"
+msgstr "Upload nedskrivning som en CSV-fil"
+
 msgid "index.nedskrivning.linktext"
 msgstr "Indberet her"
 
@@ -252,6 +258,9 @@ msgstr "Uani Aningaasarsianiit  ilanngatuinerit nalunaarutigikkit"
 
 msgid "index.løntræk-upload"
 msgstr "Akissarsianik ilanngaaneq uploaderuk"
+
+msgid "index.løntræk-upload.sub"
+msgstr "Upload løntræk som en CSV-fil"
 
 msgid "index.løntræk.linktext"
 msgstr "Indberet her"
