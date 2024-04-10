@@ -82,8 +82,8 @@
     <div class="col-xs-12 col-md-12 col-fluid">
         {% if form.is_bound %}
             {% for section in sections %}
-                <div class="row block output" id="output-{{ key }}">
                 {% with rows=section.rows total=section.total key=section.key %}
+                <div class="row block output" id="output-{{ key }}">
                 <div class="page" style="page-break-after: always">
                     <h2 class="can-collapse printhide" data-collapse="#content-{{ key }}">
                         <img src="{% static 'img/sullisivk_arrow_right.svg' %}" width="20" height="20"/>
@@ -164,8 +164,8 @@
                         </div>
                     </div>
                 </div>
-                {% endwith %}
                 </div>
+                {% endwith %}
             {% endfor %}
         {% endif %}
     </div>
