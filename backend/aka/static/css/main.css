@@ -24,6 +24,7 @@ body {
 
 .card-body {
     --bs-card-color: #31495b;
+    padding: 29px 28px 0;
 }
 
 .card-footer {
