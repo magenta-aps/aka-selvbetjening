@@ -30,7 +30,7 @@ RUN mkdir /backend && mkdir -p /log && mkdir -p /var/cache/aka \
 
 COPY docker/crontab /crontab
 COPY backend/requirements.txt /backend/requirements.txt
-RUN pip install --no-cache-dir -r /backend/requirements.txt
+RUN pip3 install --no-cache-dir -r /backend/requirements.txt
 COPY ./docker/entrypoint.sh /entrypoint.sh
 COPY --chown=aka:aka ./backend /backend
 # Include self-signed certificates for testing in pipeline

@@ -85,6 +85,8 @@ Build:
   stage: test
   dependencies: []
   needs: ["Build"]
+  before_script:
+    - pip3 install -r backend/requirements.txt
 
 Unittest:
   <<: *test-default
@@ -119,8 +121,6 @@ Unittest:
     SAML_CONTACT_SUPPORT_EMAIL: test@example.com
     SKIP_IDP_METADATA: "true"
 
-  before_script:
-    - pip3 install -r backend/requirements.txt
   script:
     - cd backend
     - coverage run --source='.' --omit=manage.py,project/wsgi.py,*/admin.py manage.py test
@@ -144,7 +144,7 @@ Django check:
   <<: *test-default
   script:
     - cd backend
-    - python manage.py check aka fordring konto løntræk nedskrivning obligatorisk_pension rentenota udbytte
+    - python3 manage.py check aka fordring konto løntræk nedskrivning obligatorisk_pension rentenota udbytte
 
 # Release stage
 ###############
