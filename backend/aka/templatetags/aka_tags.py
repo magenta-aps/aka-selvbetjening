@@ -1,9 +1,8 @@
-from urllib.parse import quote
-
 import json as jsonlib
 import locale
 import re
 from html import unescape
+from urllib.parse import quote
 
 from aka.utils import LenientJsonSerializer
 from aka.utils import month_name as util_month_name

@@ -1,7 +1,6 @@
-from typing import Optional, Any
-
 import logging
 import uuid
+from typing import Any, Optional
 
 from aka.clients.prisme import Prisme, PrismeException, PrismeImpairmentRequest
 from aka.views import GetReceiptView

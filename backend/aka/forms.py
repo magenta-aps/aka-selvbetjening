@@ -1,9 +1,8 @@
-from typing import List, Optional
-
 import csv
 import logging
 import re
 from io import StringIO
+from typing import List, Optional
 
 import chardet
 from aka.utils import get_ordereddict_key_index, spreadsheet_col_letter

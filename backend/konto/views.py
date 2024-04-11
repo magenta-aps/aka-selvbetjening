@@ -1,5 +1,5 @@
 import sys
-from typing import List, Optional, Iterable
+from typing import Iterable, List, Optional
 
 from aka.clients.prisme import (
     Prisme,

@@ -6,7 +6,7 @@ import os
 from dataclasses import dataclass, field
 from decimal import Decimal
 from math import floor
-from typing import Any, List, Tuple, Callable, Optional
+from typing import Any, Callable, List, Optional, Tuple
 
 from dateutil import parser as datetimeparser
 from django.conf import settings

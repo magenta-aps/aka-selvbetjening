@@ -1,9 +1,8 @@
-from typing import Dict, List
-
 import json
 import os
 from decimal import Decimal
 from distutils.util import strtobool
+from typing import Dict, List
 
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
