@@ -62,6 +62,7 @@ Lint REUSE compliance:
   script:
     - reuse lint
 
+
 # Build stage
 #############
 Build:
@@ -80,16 +81,13 @@ Build:
       --dockerfile=$CI_PROJECT_DIR/docker/Dockerfile
       --destination=${IMAGE_SHA}
 
+
 # Test stage
+#############
 .test-default: &test-default
   stage: test
-  dependencies: []
   needs: ["Build"]
-  before_script:
-    - pip3 install -r backend/requirements.txt
-
-Unittest:
-  <<: *test-default
+  dependencies: []
   image: ${IMAGE_SHA}
   services:
     - name: postgres:13
@@ -103,7 +101,6 @@ Unittest:
     DJANGO_SECRET_KEY: zuvd9h*iw+hhefxld(bqq*^7_ksk0(jy^1*fe=b_7(9p*=hn5$
     RUN_MIGRATIONS: "true"
     DJANGO_LANGUAGE_COOKIE_DOMAIN: "localhost"
-
     SAML_ENABLED: "true"
     SAML_SP_ENTITY_ID: http://localhost:8000/saml/metadata/
     SAML_SP_LOGIN_CALLBACK_URI: http://localhost:8000/login/callback
@@ -120,7 +117,11 @@ Unittest:
     SAML_CONTACT_SUPPORT_NAME: Tester
     SAML_CONTACT_SUPPORT_EMAIL: test@example.com
     SKIP_IDP_METADATA: "true"
+  before_script:
+    - pip3 install -r backend/requirements.txt
 
+Unittest:
+  <<: *test-default
   script:
     - cd backend
     - coverage run --source='.' --omit=manage.py,project/wsgi.py,*/admin.py manage.py test
@@ -145,6 +146,7 @@ Django check:
   script:
     - cd backend
     - python3 manage.py check aka fordring konto løntræk nedskrivning obligatorisk_pension rentenota udbytte
+
 
 # Release stage
 ###############
