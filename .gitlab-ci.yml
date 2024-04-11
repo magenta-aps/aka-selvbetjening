@@ -12,6 +12,8 @@ include:
       - '/gitlab-ci-templates/common/rules.v1.yml'
       - '/gitlab-ci-templates/common/saltbert.v1.yml'
       - '/gitlab-ci-templates/common/config-updater-meta.v1.yml'
+      - '/gitlab-ci-templates/common/conventional-commits-meta.v1.yml'
+      - '/gitlab-ci-templates/common/conventional-commits-changelog-meta.v1.yml'
 
 variables:
   RELEASE_REGISTRY: docker.io
@@ -28,7 +30,7 @@ variables:
   image: python:3.11
 
 Lint Commits:
-  extends: .lint:commits
+  extends: .lint-default
   variables:
     CONFIG: '{ extends: [''@commitlint/config-conventional''], ignores: [(message) => message.includes(''suggestion(s)'')], }'
 
