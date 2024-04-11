@@ -24,6 +24,9 @@ body {
     font-size: 18px;
     height: 16em;
     --bs-card-cap-bg: #f6c443;
+    border-radius: 5px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.05);
+    border-width: 0;
 }
 
 .card-body {
