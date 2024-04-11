@@ -3,7 +3,6 @@ from typing import List, Optional
 import csv
 import logging
 import re
-from csv import Dialect
 from io import StringIO
 
 import chardet

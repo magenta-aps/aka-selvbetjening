@@ -6,7 +6,6 @@ import uuid
 from aka.clients.prisme import Prisme, PrismeException, PrismeImpairmentRequest
 from aka.views import GetReceiptView
 from django.core.exceptions import ValidationError
-from django.forms import Form
 from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.datetime_safe import date
