@@ -137,13 +137,13 @@ Unittest:
 Mypy:
   <<: *test-default
   script:
-    - cd /backend
+    - cd backend
     - mypy --config mypy.ini ./
 
 Django check:
   <<: *test-default
   script:
-    - cd /backend
+    - cd backend
     - python manage.py check aka fordring konto løntræk nedskrivning obligatorisk_pension rentenota udbytte
 
 # Release stage

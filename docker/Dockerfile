@@ -39,7 +39,7 @@ COPY dev-environment/cert/idp/selfsigned.crt /ssl/idp/selfsigned.crt
 USER aka
 WORKDIR /backend
 ENV HOME=/home
-VOLUME  /var/cache/aka
+VOLUME /var/cache/aka
 EXPOSE 8000
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["gunicorn","-b","0.0.0.0:8000","project.wsgi:application","-w 4","--timeout", "240", "--error-logfile", "-","--capture-output"]
