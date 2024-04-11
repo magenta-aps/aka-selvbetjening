@@ -137,7 +137,7 @@ Mypy:
   <<: *test-default
   script:
     - cd backend
-    - mypy --config mypy.ini ./mypy --config mypy.ini ./
+    - mypy --config mypy.ini ./
 
 Django check:
   <<: *test-default
