@@ -27,14 +27,19 @@ variables:
   needs: []
   image: python:3.11
 
-Lint python:
+Lint Commits:
+  extends: .lint:commits
+  variables:
+    CONFIG: '{ extends: [''@commitlint/config-conventional''], ignores: [(message) => message.includes(''suggestion(s)'')], }'
+
+Lint Python:
   <<: *lint-default
   before_script:
     - pip3 install flake8
     - pip3 install black==23.1.0
     - pip3 install isort==5.12.0
   script:
-    - flake8 --ignore E501,E226,E203,W503 --exclude=migrations backend/
+    - flake8 --max-line-length 88 --ignore E501,E226,E203,W503 --exclude=migrations backend/
     - black --check --diff --exclude=migrations backend/
     - isort -c --profile black --diff --skip migrations backend/
 
@@ -57,7 +62,7 @@ Lint REUSE compliance:
 
 # Build stage
 #############
-Build selvbetjening:
+Build:
   stage: build
   needs: []
   dependencies: ["Lint python", "Lint Dockerfiles", "Lint REUSE compliance"]
@@ -78,7 +83,7 @@ Build selvbetjening:
   stage: test
   dependencies: []
 
-Selvbetjening Unittest:
+Unittest:
   <<: *test-default
   needs: ["Build selvbetjening"]
   image: ${IMAGE_SHA}
@@ -126,6 +131,18 @@ Selvbetjening Unittest:
         coverage_format: cobertura
         path: /backend/coverage.xml
   allow_failure: false
+
+Mypy:
+  <<: *test-default
+  script:
+    - cd /backend
+    - mypy --config mypy.ini ./
+
+Django check:
+  <<: *test-default
+  script:
+    - cd /backend
+    - python manage.py check aka fordring konto løntræk nedskrivning obligatorisk_pension rentenota udbytte
 
 # Release stage
 ###############
