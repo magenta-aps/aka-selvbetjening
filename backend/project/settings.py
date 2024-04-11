@@ -2,6 +2,7 @@ import json
 import os
 from decimal import Decimal
 from distutils.util import strtobool
+from typing import Dict, List
 
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -101,7 +102,7 @@ DATABASES = {
 
 
 # Logging
-LOGGING = {
+LOGGING: Dict = {
     "version": 1,
     "disable_existing_loggers": True,
     "formatters": {
@@ -196,7 +197,7 @@ USE_THOUSAND_SEPARATOR = True
 # Static & uploaded files
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(AKA_DIR, "static")
-STATICFILES_DIRS = []
+STATICFILES_DIRS: List[str] = []
 MEDIA_ROOT = "/upload/"  # Filesystem path to upload folder
 # Max 2 MB - can be lower if we want
 MAX_UPLOAD_FILESIZE = 22097152

@@ -1,5 +1,6 @@
 import logging
 import uuid
+from typing import Any, Optional
 
 from aka.clients.prisme import Prisme, PrismeException, PrismeImpairmentRequest
 from aka.views import GetReceiptView
@@ -17,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormView):
-    form_class = NedskrivningForm
+    form_class: Optional[type[Any]] = NedskrivningForm
     template_name = "nedskrivning/form.html"
 
     def send_impairment(self, form):
