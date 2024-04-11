@@ -16,6 +16,10 @@ body {
     --bs-tertiary-bg: #f6c443;
 }
 
+.navbar-brand {
+    padding-left: 20px;
+}
+
 .card {
     font-size: 18px;
     height: 16em;
