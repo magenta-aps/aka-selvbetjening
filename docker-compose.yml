@@ -2,6 +2,7 @@ version: "3.4"
 
 services:
   selvbetjening-db:
+    container_name: selvbetjening-db
     image: postgres:13
 
     network_mode: "host"
@@ -10,7 +11,8 @@ services:
     volumes:
       - selvbetjening-postgres-data:/var/lib/postgresql/data
 
-  selvbetjening:
+  selvbetjening-web:
+    container_name: selvbetjening-web
     build:
       context: .
       dockerfile: docker/Dockerfile
@@ -31,6 +33,7 @@ services:
     command: gunicorn -b 0.0.0.0:8000 project.wsgi:application --reload -w 1 --access-logfile - --error-logfile - --capture-output # reload on code changes
 
   selvbetjening-cron:
+    container_name: selvbetjening-cron
     build:
       context: .
       dockerfile: docker/Dockerfile
@@ -47,9 +50,9 @@ services:
 
 
   selvbetjening-test-idp:
+    container_name: selvbetjening-test-idp
     user: "1000:1000"
     image: kenchan0130/simplesamlphp
-    container_name: selvbetjening-test-idp
     network_mode: "host"
     environment:
       SIMPLESAMLPHP_SP_ENTITY_ID: http://localhost:8000/saml/metadata/
@@ -65,11 +68,11 @@ services:
       - ./dev-idp/saml20-sp-remote.php:/var/www/simplesamlphp/metadata/saml20-sp-remote.php:ro
 
   selvbetjening-mailhog:
+    container_name: selvbetjening-mailhog
     image: mailhog/mailhog
     network_mode: "host"
     # UI will be available at http://localhost:8025
     hostname: mailhog
-    container_name: mailhog
     # environment config doc: https://github.com/mailhog/MailHog/blob/master/docs/CONFIG.md
     logging:
       # Disabled because it spams the log. Remove this to get mailhog logs.

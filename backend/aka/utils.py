@@ -6,7 +6,7 @@ import os
 from dataclasses import dataclass, field
 from decimal import Decimal
 from math import floor
-from typing import Any, List, Tuple
+from typing import Any, Callable, List, Optional, Tuple
 
 from dateutil import parser as datetimeparser
 from django.conf import settings
@@ -244,10 +244,10 @@ def chunks(lst, size):
 class Field:
     name: str
     klass: str = "nb"
-    title: str = None
-    transkey: str = None
-    labelkey: str = None
-    modifier: callable = None
+    title: Optional[str] = None
+    transkey: Optional[str] = None
+    labelkey: Optional[str] = None
+    modifier: Optional[Callable] = None
     number: bool = False
     boolean: bool = False
 
@@ -271,8 +271,8 @@ class Row:
 class Table:
     fields: List[Field] = field(default_factory=list)
     rows: List[Row] = field(default_factory=list)
-    name: str = None
-    total: dict = None
+    name: Optional[str] = None
+    total: Optional[dict] = None
 
 
 def session_timed_out(request):
@@ -293,7 +293,7 @@ def send_mail(
     subject,
     textbody,
     htmlbody=None,
-    attachments: List[Tuple[str, bytes, str]] = None,
+    attachments: Optional[List[Tuple[str, bytes, str]]] = None,
 ):
     if type(recipient) not in (list, tuple):
         recipient = (recipient,)

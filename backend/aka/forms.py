@@ -2,6 +2,7 @@ import csv
 import logging
 import re
 from io import StringIO
+from typing import List, Optional
 
 import chardet
 from aka.utils import get_ordereddict_key_index, spreadsheet_col_letter
@@ -24,9 +25,9 @@ csepcprcvrvalidator = RegexValidator(
 
 
 class CsvUploadMixin(object):
-    akadialect = csv.register_dialect("aka", "excel", delimiter=";")
+    csv.register_dialect("aka", csv.excel, delimiter=";")
 
-    field_order = None
+    field_order: Optional[List[str]] = None
 
     def clean_file(self):
         file = self.cleaned_data["file"]
