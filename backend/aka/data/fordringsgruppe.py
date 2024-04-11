@@ -1,4 +1,6 @@
-groups = [
+from typing import Dict, List, Union
+
+groups: List = [
     {
         "name": "01UBIDRAG",
         "id": 1,
@@ -311,7 +313,7 @@ groups = [
     },
 ]
 groups_by_id = {}
-subgroups_by_id = {}
+subgroups_by_id: Dict[int, Dict[int, Dict[str, Union[str, int]]]] = {}
 for group in groups:
     groups_by_id[group["id"]] = group
     for sub_group in group["sub_groups"]:

@@ -1,8 +1,10 @@
+from typing import Union, List
+
 from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.urls import include, path
+from django.urls import include, path, URLResolver, URLPattern
 
-urlpatterns = [
+urlpatterns: List[Union[URLResolver, URLPattern]] = [
     path("", include("aka.urls", namespace="aka")),
     path(
         "obligatorisk_pension/",

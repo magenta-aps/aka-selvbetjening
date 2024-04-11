@@ -1,9 +1,12 @@
+from typing import Optional, Any
+
 import logging
 import uuid
 
 from aka.clients.prisme import Prisme, PrismeException, PrismeImpairmentRequest
 from aka.views import GetReceiptView
 from django.core.exceptions import ValidationError
+from django.forms import Form
 from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.datetime_safe import date
@@ -17,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class NedskrivningView(RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormView):
-    form_class = NedskrivningForm
+    form_class: Optional[type[Any]] = NedskrivningForm
     template_name = "nedskrivning/form.html"
 
     def send_impairment(self, form):

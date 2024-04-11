@@ -1,6 +1,9 @@
+from typing import List, Optional
+
 import csv
 import logging
 import re
+from csv import Dialect
 from io import StringIO
 
 import chardet
@@ -24,9 +27,9 @@ csepcprcvrvalidator = RegexValidator(
 
 
 class CsvUploadMixin(object):
-    akadialect = csv.register_dialect("aka", "excel", delimiter=";")
+    csv.register_dialect("aka", csv.excel, delimiter=";")
 
-    field_order = None
+    field_order: Optional[List[str]] = None
 
     def clean_file(self):
         file = self.cleaned_data["file"]

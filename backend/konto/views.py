@@ -1,5 +1,5 @@
 import sys
-from typing import List
+from typing import List, Optional, Iterable
 
 from aka.clients.prisme import (
     Prisme,
@@ -42,7 +42,7 @@ class KontoView(
     form_class = KontoForm
     template_name = "konto/konto.html"
     pdf_template_name = "konto/pdf.html"
-    available_keys = (
+    available_keys: Iterable[str] = (
         "sel",
         "aki",
     )
@@ -206,7 +206,7 @@ class KontoView(
                 pass
         return self._data.get(key, [])
 
-    def get_total_data(self, key: str) -> dict:
+    def get_total_data(self, key: str) -> Optional[dict]:
         if key not in self._total:
             try:
                 (cprcvr, c) = self.cprcvr_choice
@@ -247,7 +247,7 @@ class KontoView(
                 }
             )
 
-    def get_pages(self, key: str = None):
+    def get_pages(self, key: Optional[str] = None):
         if key is None:
             key = self.request.GET.get("key")
         if key and key in self.available_keys:
@@ -298,13 +298,14 @@ class KontoView(
     def get_rows(self) -> List[Row]:
         return self.get_rows_by_key(self.key)
 
-    def get_extra(self) -> dict:
+    def get_extra(self) -> Optional[dict]:
         total = self.get_total_data(self.key)
         if total:
             return {
                 gettext("konto.%s" % x): total[x]
                 for x in ["total_claim", "total_payment", "total_sum", "total_restance"]
             }
+        return None
 
     def get_fields(self) -> List[Field]:
         return self.get_fields_by_key(self.key)
@@ -368,7 +369,7 @@ class DebitorKontoRangeRestricted:
 
 
 class AKAKontoView(DebitorKontoRangeRestricted, KontoView):
-    available_keys = (
+    available_keys: Iterable[str] = (
         "aki",
         "sel",
     )
@@ -386,7 +387,7 @@ class AKAKontoView(DebitorKontoRangeRestricted, KontoView):
 
 
 class DCRKontoView(DebitorKontoRangeRestricted, KontoView):
-    available_keys = ("sel",)
+    available_keys: Iterable[str] = ("sel",)
     debitor_group_id_range = (1000, 199999)
     authority = {
         "title": "Namminersorlutik Oqartussat - Grønlands Selvstyre",
