@@ -67,7 +67,7 @@ Lint REUSE compliance:
 Build:
   stage: build
   needs: []
-  dependencies: ["Lint python", "Lint Dockerfiles", "Lint REUSE compliance"]
+  dependencies: ["Lint Commits", "Lint Python", "Lint Dockerfiles", "Lint REUSE compliance"]
   image:
     name: gcr.io/kaniko-project/executor:debug-v0.16.0
     entrypoint: [""]
@@ -84,10 +84,10 @@ Build:
 .test-default: &test-default
   stage: test
   dependencies: []
+  needs: ["Build"]
 
 Unittest:
   <<: *test-default
-  needs: ["Build selvbetjening"]
   image: ${IMAGE_SHA}
   services:
     - name: postgres:13
@@ -152,7 +152,7 @@ Django check:
 .release-default:
   stage: release
   image: alpine
-  needs: ["Selvbetjening Unittest"]
+  needs: ["Unittest", "Mypy", "Django check"]
   dependencies: []
   before_script:
     # install skopeo
