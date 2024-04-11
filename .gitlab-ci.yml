@@ -30,7 +30,7 @@ variables:
   image: python:3.11
 
 Lint Commits:
-  extends: .lint-default
+  extends: .lint:commits
   variables:
     CONFIG: '{ extends: [''@commitlint/config-conventional''], ignores: [(message) => message.includes(''suggestion(s)'')], }'
 
