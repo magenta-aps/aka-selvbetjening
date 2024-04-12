@@ -1,6 +1,6 @@
 import logging
 
-from aka.forms import CsvUploadMixin, PrependCharField
+from aka.forms import CsvUploadMixin, FileField, PrependCharField
 from aka.widgets import TranslatedSelect
 from django import forms
 from django.core.validators import (
@@ -119,7 +119,7 @@ class LoentraekFormItem(forms.Form):
 
 
 class LoentraekUploadForm(CsvUploadMixin, LoentraekForm):
-    file = forms.FileField(
+    file = FileField(
         required=True,
         validators=[
             FileExtensionValidator(["csv", "txt"], code="error.invalid_extension")

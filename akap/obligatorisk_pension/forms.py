@@ -1,5 +1,6 @@
 from datetime import date
 
+from aka.forms import FileField
 from aka.widgets import TranslatedSelect
 from django import forms
 from django.conf import settings
@@ -74,7 +75,7 @@ class ObligatoriskPensionFilForm(forms.ModelForm):
             "beskrivelse",
         )
 
-    fil = forms.FileField(
+    fil = FileField(
         error_messages={"required": "error.required"},
     )
 

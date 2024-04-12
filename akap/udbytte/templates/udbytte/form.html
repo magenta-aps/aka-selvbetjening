@@ -17,41 +17,33 @@
 {% endblock %}
 
 {% block content %}
-    <article class="indberet_udbytte">
-        <form method="post" id="mainform">
-            {% csrf_token %}
-            {{ formset.management_form }}
-            <h1 data-trans="udbytte.title">{% translate 'udbytte.title' %}</h1>
-            <div class="container-fluid">
+    <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
+    <form method="post" id="mainform">
+        {% csrf_token %}
+        {{ formset.management_form }}
+
+        {% include "aka/util/header.html" with key="udbytte.title" %}
+
+        <div class="row block">
+            <div class="col-12">
                 {% if not pdf %}
-                {% if form.errors or formset.errors %}
 
-                    <button type="button" class="has-collapsed" data-collapse="#vejledning">
+                    <button type="button" class="btn btn-primary collapsed" data-bs-toggle="collapse" data-bs-target="#vejledning">
                         <span class="collapsed-hidden" data-trans="udbytte.vejledning_skjul">{% translate 'udbytte.vejledning_skjul' %}</span>
                         <span class="expanded-hidden" data-trans="udbytte.vejledning_vis">{% translate 'udbytte.vejledning_vis' %}</span>
                     </button>
-                    <div id="vejledning" class="row collapse collapsed" style="display: none">
+
+                    <div id="vejledning" class="row collapse collapsed">
                         <div class="col-12-sm" data-trans="udbytte.vejledning">
                             {% translate "udbytte.vejledning" %}
                         </div>
                     </div>
 
-                    <p class="err-msg">{% translate 'common.errors_present' %}</p>
-                    {% include "aka/util/nonfield_errors.html" with form=form %}
+                    {% if form.errors or formset.errors %}
+                        <p class="err-msg">{% translate 'common.errors_present' %}</p>
+                        {% include "aka/util/nonfield_errors.html" with form=form %}
+                    {% endif %}
 
-                {% else %}
-
-                    <button type="button" class="has-expanded" data-collapse="#vejledning">
-                        <span class="collapsed-hidden" data-trans="udbytte.vejledning_skjul">{% translate 'udbytte.vejledning_skjul' %}</span>
-                        <span class="expanded-hidden" data-trans="udbytte.vejledning_vis">{% translate 'udbytte.vejledning_vis' %}</span>
-                    </button>
-                    <div id="vejledning" class="row collapse">
-                        <div class="col-12-sm" data-trans="udbytte.vejledning">
-                            {% translate "udbytte.vejledning" %}
-                        </div>
-                    </div>
-
-                {% endif %}
                 {% endif %}
 
                 <div class="row">
@@ -102,21 +94,21 @@
 
                 <div class="row">
                     {% if pdf %}
-                        <div class="col-1-sm" data-trans="udbytte.cpr_cvr_tin"><label>{% translate 'udbytte.cpr_cvr_tin' %}</label></div>
-                        <div class="col-2-sm" data-trans="udbytte.navn"><label>{% translate 'udbytte.navn' %}</label></div>
-                        <div class="col-2-sm" data-trans="udbytte.adresse"><label>{% translate 'udbytte.adresse' %}</label></div>
-                        <div class="col-1-sm" data-trans="udbytte.postnummer"><label>{% translate 'udbytte.postnummer' %}</label></div>
-                        <div class="col-2-sm" data-trans="udbytte.by"><label>{% translate 'udbytte.by' %}</label></div>
-                        <div class="col-2-sm" data-trans="udbytte.land"><label>{% translate 'udbytte.land' %}</label></div>
-                        <div class="col-2-sm" data-trans="udbytte.udbytte"><label>{% translate 'udbytte.udbytte' %}</label></div>
+                        <div class="col-1" data-trans="udbytte.cpr_cvr_tin"><label>{% translate 'udbytte.cpr_cvr_tin' %}</label></div>
+                        <div class="col-2" data-trans="udbytte.navn"><label>{% translate 'udbytte.navn' %}</label></div>
+                        <div class="col-2" data-trans="udbytte.adresse"><label>{% translate 'udbytte.adresse' %}</label></div>
+                        <div class="col-1" data-trans="udbytte.postnummer"><label>{% translate 'udbytte.postnummer' %}</label></div>
+                        <div class="col-2" data-trans="udbytte.by"><label>{% translate 'udbytte.by' %}</label></div>
+                        <div class="col-2" data-trans="udbytte.land"><label>{% translate 'udbytte.land' %}</label></div>
+                        <div class="col-2" data-trans="udbytte.udbytte"><label>{% translate 'udbytte.udbytte' %}</label></div>
                     {% else %}
-                        <div class="col-1-sm" data-trans="udbytte.cpr_cvr_tin"><label>{% translate 'udbytte.cpr_cvr_tin' %}</label></div>
-                        <div class="col-1-sm" data-trans="udbytte.navn"><label>{% translate 'udbytte.navn' %}</label></div>
-                        <div class="col-1-sm" data-trans="udbytte.adresse"><label>{% translate 'udbytte.adresse' %}</label></div>
-                        <div class="col-1-sm" data-trans="udbytte.postnummer"><label>{% translate 'udbytte.postnummer' %}</label></div>
-                        <div class="col-1-sm" data-trans="udbytte.by"><label>{% translate 'udbytte.by' %}</label></div>
-                        <div class="col-1-sm" data-trans="udbytte.land"><label>{% translate 'udbytte.land' %}</label></div>
-                        <div class="col-6-sm" data-trans="udbytte.udbytte"><label>{% translate 'udbytte.udbytte' %}</label></div>
+                        <div class="col-1" data-trans="udbytte.cpr_cvr_tin"><label>{% translate 'udbytte.cpr_cvr_tin' %}</label></div>
+                        <div class="col-1" data-trans="udbytte.navn"><label>{% translate 'udbytte.navn' %}</label></div>
+                        <div class="col-1" data-trans="udbytte.adresse"><label>{% translate 'udbytte.adresse' %}</label></div>
+                        <div class="col-1" data-trans="udbytte.postnummer"><label>{% translate 'udbytte.postnummer' %}</label></div>
+                        <div class="col-1" data-trans="udbytte.by"><label>{% translate 'udbytte.by' %}</label></div>
+                        <div class="col-1" data-trans="udbytte.land"><label>{% translate 'udbytte.land' %}</label></div>
+                        <div class="col-6" data-trans="udbytte.udbytte"><label>{% translate 'udbytte.udbytte' %}</label></div>
                     {% endif %}
                 </div>
                 <div id="formsetContainer">
@@ -130,7 +122,7 @@
                         {% endfor %}
                     {% endif %}
                 </div>
-                <button type="button" id="add-row" class="button" data-trans="common.add">{% translate 'common.add' %}</button>
+                <button type="button" id="add-row" class="btn btn-primary" data-trans="common.add">{% translate 'common.add' %}</button>
 
 
                 <div class="row">
@@ -154,19 +146,22 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row footer">
                     <div class="col-2-sm">
-                        <button type="submit" data-trans="common.gem">{% translate 'common.gem' %}</button>
+                        <button type="submit" class="btn btn-primary" data-trans="common.gem">{% translate 'common.gem' %}</button>
                     </div>
                 </div>
             </div>
-        </form>
-        <div id="formsetPrototype" style="display: none">
-            {% include 'udbytte/subform.html' with subform=formset.empty_form %}
         </div>
-    </article>
-    {% if not pdf %}
-    <script>
+    </form>
+    <div id="formsetPrototype" style="display: none">
+        {% include 'udbytte/subform.html' with subform=formset.empty_form %}
+    </div>
+</div>
+
+
+{% if not pdf %}
+<script>
 
     const replace_repeat = function (subject, re, replacement) {
         let old = null;
@@ -233,6 +228,6 @@
     toggleU1Warning();
     u1UdfyldtField.change(toggleU1Warning);
 
-    </script>
-    {% endif %}
+</script>
+{% endif %}
 {% endblock %}

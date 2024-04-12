@@ -12,11 +12,14 @@
 {% endblock %}
 
 {% block content %}
-    <article class="indberet_pension">
-        <form method="post" id="mainform" enctype="multipart/form-data">
-            {% csrf_token %}
-            <h1 data-trans="obligatorisk_pension.title">{% translate 'obligatorisk_pension.title' %}</h1>
-            <div class="container-fluid">
+    <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
+    <form method="post" id="mainform" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% include "aka/util/header.html" with key="obligatorisk_pension.title" %}
+
+        <div class="row block">
+            <div class="col-12">
                 {% if form.errors or formset.errors %}
                     <p class="err-msg">{% translate 'common.errors_present' %}</p>
                     {% include "aka/util/nonfield_errors.html" with form=form %}
@@ -24,18 +27,19 @@
 
                 {% localize off %}
                 <div class="row">
-                    <div class="col-12-sm">
+                    <div class="col-12">
                         {% include 'aka/util/field.html' with field=form.skatteår key='obligatorisk_pension.skatteår' %}
                     </div>
                 </div>
                 {% endlocalize %}
 
-                <div class="row">
-                    <div class="col-2-sm">
-                        <button type="submit" data-trans="common.næste">{% translate 'common.næste' %}</button>
+                <div class="row footer">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary" data-trans="common.næste">{% translate 'common.næste' %}</button>
                     </div>
                 </div>
             </div>
-        </form>
-    </article>
+        </div>
+    </form>
+</div>
 {% endblock %}

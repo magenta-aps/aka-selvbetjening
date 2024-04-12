@@ -23,6 +23,9 @@ msgstr ""
 msgid "loentraek.title"
 msgstr "Indberet løntræk"
 
+msgid "loentraek.title-upload"
+msgstr "Indberet løntræk"
+
 msgid "loentraek.year"
 msgstr "År"
 
@@ -76,3 +79,6 @@ msgstr "Download kvittering"
 
 msgid "loentraek.record_id"
 msgstr "Registrerings&shy;nummer"
+
+msgid "loentraek.fil"
+msgstr "Fil"

@@ -20,142 +20,161 @@
 {% endblock %}
 
 {% block content %}
-<article>
 
-    <h1 class="rentenota-title printhide">{% translate 'rentenota.title' %}</h1>
+    <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
 
-    <div class="rentenota-main">
         <form method="get" id="mainform">
 
-        {% for key, values in request.GET.lists %}
-            {% if key != "month" and key != "year" %}
-                {% for value in values %}
-                    <input type="hidden" name="{{ key }}" value="{{ value }}"/>
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
+            {% include "aka/util/header.html" with key="rentenota.title" %}
 
-        {% localize off %}
-        <div class="printhide">
-            <div class="rentenota-actions row">
-                <div class="col-3-sm">
-                    {% include 'aka/util/field.html' with field=form.month key='rentenota.month' %}
-                </div>
-                <div class="col-3-sm">
-                    {% include 'aka/util/field.html' with field=form.year key='rentenota.year' %}
+            <div class="row block">
+                <div class="col-12">
+
+                    {% for key, values in request.GET.lists %}
+                        {% if key != "month" and key != "year" %}
+                            {% for value in values %}
+                                <input type="hidden" name="{{ key }}" value="{{ value }}"/>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% localize off %}
+                        <div class="printhide">
+                            <div class="rentenota-actions row">
+                                <div class="col-12-sm">
+                                    {% include 'aka/util/field.html' with field=form.month key='rentenota.month' %}
+                                </div>
+                                <div class="col-12-sm">
+                                    {% include 'aka/util/field.html' with field=form.year key='rentenota.year' %}
+                                </div>
+                            </div>
+                            <div class="row footer">
+                                <div class="col-12-sm">
+                                    <button class="btn btn-primary" type="submit">{% translate 'common.send' %}</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endlocalize %}
                 </div>
             </div>
-            <div class="row">
-                <div class="col-4-sm">
-                    <button type="submit">{% translate 'common.send' %}</button>
-                </div>
-            </div>
-        </div>
-        {% endlocalize %}
 
-        <div class="output rentenota-data">
+        </form>
+    </div>
 
-            <div class="output-header">
-                <div class="row">
-                    <div class="col-7-sm">
-                        <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
-                        <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
-                        <strong>Skattestyrelsen</strong>
+    <div class="col-xs-12 col-md-12 col-fluid">
+        <div class="row output block rentenota-data">
+            <div class="col-12">
+
+                <div class="output-header">
+                    <div class="row">
+                        <div class="col-7-sm">
+                            <h2>Namminersorlutik Oqartussat - Grønlands Selvstyre</h2>
+                            <strong>Akileraartarnermut Aqutsisoqarfik</strong><br/>
+                            <strong>Skattestyrelsen</strong>
+                        </div>
+                        <div class="col-5-sm output-actions printhide">
+                            <div class="dropdown download">
+                                <button id="download" type="button" data-trans="common.download" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                                    {% translate "common.download" %}
+                                </button>
+                                <ul class="dropdown-menu">
+                                    {% if pdflink %}
+                                        <li><a class="dropdown-item" href="#" data-format=".pdf" data-trans="common.pdf">{% translate 'common.pdf' %}</a></li>
+                                    {% endif %}
+                                    {% if xlsxlink %}
+                                        <li><a class="dropdown-item" href="#" data-format=".xlsx" data-trans="common.xlsx">{% translate 'common.xlsx' %}</a></li>
+                                    {% endif %}
+                                    {% if odslink %}
+                                        <li><a class="dropdown-item" href="#" data-format=".ods" data-trans="common.ods">{% translate 'common.ods' %}</a></li>
+                                    {% endif %}
+                                    {% if csvlink %}
+                                        <li><a class="dropdown-item" href="#" data-format=".csv" data-trans="common.csv">{% translate 'common.csv' %}</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            <button class="btn btn-print btn-primary" data-trans="common.print">{% translate 'common.print' %}</button>
+                        </div>
                     </div>
-                    <div class="col-5-sm output-actions printhide">
-                        <select id="download">
-                            {% if pdflink %}
-                                <option value=".pdf" data-trans="common.pdf">{% translate 'common.pdf' %}</option>
-                            {% endif %}
-                            {% if xlsxlink %}
-                                <option value=".xlsx" data-trans="common.xlsx">{% translate 'common.xlsx' %}</option>
-                            {% endif %}
-                            {% if odslink %}
-                                <option value=".ods" data-trans="common.ods">{% translate 'common.ods' %}</option>
-                            {% endif %}
-                            {% if csvlink %}
-                                <option value=".csv" data-trans="common.csv">{% translate 'common.csv' %}</option>
-                            {% endif %}
-                        </select>
-                        <button class="btn-print" data-trans="common.print">{% translate 'common.print' %}</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="output-details row">
-                {% localize off %}
-                <div class="col-8-sm">
-                    <span class="line">{{ company.navn }}</span>
-                    <span class="line">{{ company.adresse }}</span>
-                    <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
-                    <span class="line" data-trans="{{ company.landekode }}">{% translate company.landekode %}</span>
-                    <span class="line">CVR: {{ cvr }}</span>
                 </div>
 
-                <div class="col-4-sm">
-                    <h3 data-trans="rentenota.rentenota">{% translate 'rentenota.rentenota' %}</h3>
-                    <table class="dl-table">
-                        <tr>
-                            <th data-trans="common.konto">{% translate 'common.konto' %}</th>
-                            <td>{{ cvr }}</td>
-                        </tr>
-                        <tr>
-                            <th data-trans="common.dato">{% translate 'common.dato' %}</th>
-                            <td>{{ date }}</td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <th colspan="2" data-trans="common.postboks" data-trans-params="{&quot;box&quot;:1605}">{{ 'common.postboks'|format:'{"box":1605}' }}</th>
-                        </tr>
-                        <tr>
-                            <th colspan="2">3900 Nuuk</th>
-                        </tr>
-                        <tr>
-                            <th data-trans="common.telefon">{% translate 'common.telefon' %}</th>
-                            <td>346500</td>
-                        </tr>
-                        <tr>
-                            <th data-trans="common.fax">{% translate 'common.fax' %}</th>
-                            <td>346577</td>
-                        </tr>
-                        <tr>
-                            <th data-trans="common.email">{% translate 'common.email' %}</th>
-                            <td>sulinal@nanoq.gl</td>
-                        </tr>
-                        <tr>
-                            <th data-trans="common.webadresse">{% translate 'common.webadresse' %}</th>
-                            <td>www.aka.gl</td>
-                        </tr>
-                    </table>
-                </div>
-                {% endlocalize %}
-            </div>
+                <div class="output-details row">
+                    {% localize off %}
+                        <div class="col-8-sm">
+                            <span class="line">{{ company.navn }}</span>
+                            <span class="line">{{ company.adresse }}</span>
+                            <span class="line">{{ company.postnummer }} {{ rentenota_data.bynavn }}</span>
+                            <span class="line"
+                                  data-trans="{{ company.landekode }}">{% translate company.landekode %}</span>
+                            <span class="line">CVR: {{ cvr }}</span>
+                        </div>
 
-            {% if errors %}
-                <div class="errors">
-                {% for error in errors %}
-                    <div class="error err-msg" data-trans="{{ error.key }}" data-trans-params="{{ error.params|json }}">
-                        {{ error.key|format:error.params }}
-                    </div>
-                {% endfor %}
+                        <div class="col-4-sm">
+                            <h3 data-trans="rentenota.rentenota">{% translate 'rentenota.rentenota' %}</h3>
+                            <table class="dl-table">
+                                <tr>
+                                    <th data-trans="common.konto">{% translate 'common.konto' %}</th>
+                                    <td>{{ cvr }}</td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="common.dato">{% translate 'common.dato' %}</th>
+                                    <td>{{ date }}</td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2" data-trans="common.postboks"
+                                        data-trans-params="{&quot;box&quot;:1605}">{{ 'common.postboks'|format:'{"box":1605}' }}</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="2">3900 Nuuk</th>
+                                </tr>
+                                <tr>
+                                    <th data-trans="common.telefon">{% translate 'common.telefon' %}</th>
+                                    <td>346500</td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="common.fax">{% translate 'common.fax' %}</th>
+                                    <td>346577</td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="common.email">{% translate 'common.email' %}</th>
+                                    <td>sulinal@nanoq.gl</td>
+                                </tr>
+                                <tr>
+                                    <th data-trans="common.webadresse">{% translate 'common.webadresse' %}</th>
+                                    <td>www.aka.gl</td>
+                                </tr>
+                            </table>
+                        </div>
+                    {% endlocalize %}
                 </div>
-            {% endif %}
 
-            {% if items is not None %}
-                <div class="output-data">
-                <table class="output-table" style="font-size: 0.8em">
-                    <thead>
-                    <tr>
-                        {% for field in fields %}
-                            {% with "rentenota."|add:field.name as transkey %}
-                                <th data-field="{{ field.name }}" data-trans="{{ transkey }}">{% translate transkey|safe %}</th>
-                            {% endwith %}
+                {% if errors %}
+                    <div class="errors">
+                        {% for error in errors %}
+                            <div class="error err-msg" data-trans="{{ error.key }}"
+                                 data-trans-params="{{ error.params|json }}">
+                                {{ error.key|format:error.params }}
+                            </div>
                         {% endfor %}
-                    </tr>
-                    </thead>
-                    <tbody>
+                    </div>
+                {% endif %}
+
+                {% if items is not None %}
+                    <div class="output-data">
+                    <table class="output-table" style="font-size: 0.8em">
+                        <thead>
+                        <tr>
+                            {% for field in fields %}
+                                {% with "rentenota."|add:field.name as transkey %}
+                                    <th data-field="{{ field.name }}"
+                                        data-trans="{{ transkey }}">{% translate transkey|safe %}</th>
+                                {% endwith %}
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody>
                         {% if items|length == 0 %}
                             <tr>
                                 <td colspan="14" style="text-align: center">
@@ -165,33 +184,32 @@
                         {% else %}
                             {% for item in items %}
                                 <tr class="rentenota-post-table-datarow">
-                                {% for field in fields %}
-                                    {% with value=item|get:field.name|default:'' %}
-                                        <td class="{{ field.class }}" data-original="{{ value }}">
-                                            {% if field.number %}
-                                                {{ value }}
-                                            {% else %}
-                                                {% localize off %}
-                                                {{ value }}
-                                                {% endlocalize %}
-                                            {% endif %}
-                                        </td>
-                                    {% endwith %}
-                                {% endfor %}
+                                    {% for field in fields %}
+                                        {% with value=item|get:field.name|default:'' %}
+                                            <td class="{{ field.class }}" data-original="{{ value }}">
+                                                {% if field.number %}
+                                                    {{ value }}
+                                                {% else %}
+                                                    {% localize off %}
+                                                        {{ value }}
+                                                    {% endlocalize %}
+                                                {% endif %}
+                                            </td>
+                                        {% endwith %}
+                                    {% endfor %}
                                 </tr>
                             {% endfor %}
-                        <tr class="rentenota-post-table-sumrow">
-                            <td colspan="8"></td>
-                            <td class="numbercell rentenota-total sum">{{ total }}</td>
-                            <td colspan="6">kr</td>
-                        </tr>
+                            <tr class="rentenota-post-table-sumrow">
+                                <td colspan="8"></td>
+                                <td class="numbercell rentenota-total sum">{{ total }}</td>
+                                <td colspan="6">kr</td>
+                            </tr>
                         {% endif %}
-                    </tbody>
-                </table>
-            {% endif %}
+                        </tbody>
+                    </table>
+                {% endif %}
+                </div>
             </div>
         </div>
-        </form>
     </div>
-</article>
 {% endblock %}

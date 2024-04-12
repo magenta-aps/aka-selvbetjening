@@ -1,11 +1,5 @@
 /* Form */
 
-form > div {
-    background-color: #fff;
-    padding: 1.875rem;
-    margin: 1.5rem 0;
-}
-
 fieldset {
     border: none;
     padding: 0;
@@ -14,31 +8,26 @@ fieldset {
 
 /* Buttons and button-like links */
 
-button,
-a.button,
-a.button:link,
-a.button:visited,
-div.SumoSelect > .CaptionCont {
-    color: #fff;
-    border: none;
-    padding: .75rem 2.25rem;
-    font-size: .875rem;
-    cursor: pointer;
-    margin: 0 .75rem .75rem 0;
-    background-color: #31495b;
-    text-decoration: none;
-    vertical-align: top;
-}
-button:active, button:hover,
-a.button:active, a.button:hover {
-    background-color: #83929d
+div.SumoSelect {
+    top: 8px;
 }
 
-button[type=submit] {
-    background-color: #fbb03b;
+div.SumoSelect > .CaptionCont {
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    margin: 0;
+    background-color: var(--bs-tertiary-bg);
+    text-decoration: none;
+    vertical-align: top;
+    transition: all .2s ease-in-out;
+    font-size: 1.125rem;
+    height: 57px;
 }
-button[type=submit]:active, button[type=submit]:hover {
-    background-color: #fbb84f;
+
+div.SumoSelect > .CaptionCont:hover {
+    background-color: var(--bs-secondary-bg);
+    color: white;
 }
 
 div.SumoSelect > .CaptionCont {
@@ -51,7 +40,7 @@ div.SumoSelect > .CaptionCont > label {
 
 div.SumoSelect > .CaptionCont > span {
     padding-right: 0;
-    line-height: 1.214em;
+    height: 100%;
 }
 
 div.SumoSelect > .optWrapper {
@@ -74,20 +63,25 @@ label {
 }
 input:not(input[type="checkbox"],input[type="radio"]) {
     width: 100%;
-    height: 46px
+    height: 51px
 }
 textarea {
     height: 92px;
     width: 100%;
     resize: none;
 }
-input:not(input[type="file"]), textarea {
-    border: 1px solid #d6dbde;
-    border-radius: .175rem;
-    padding: .75rem .75rem;
-    font-size: 1rem;
-    background-color: #fff;
+input:not(input[type="checkbox"],input[type="radio"]),
+textarea,
+select {
+    margin-bottom: 0;
+    padding: 13px;
+    height: auto;
+    font-size: 18px;
+    border: 2px solid #718997;
+    color: #31495b;
+    width: 100%;
 }
+
 input[type=date]:focus, input[type=email]:focus,
 input[type=number]:focus, input[type=password]:focus,
 input[type=text]:focus, textarea:focus, select:focus {
@@ -100,17 +94,19 @@ input:disabled, textarea:disabled {
 form.submitted input:invalid:not([type=checkbox],[type=radio]),
 form.submitted select:invalid,
 .has-error input:not([type=checkbox],[type=radio]), .has-error select {
-    border: 2px solid #d7404d;
+    border-color: #d7404d;
 }
 input[disabled] {
     background-color: #f5f5f5
 }
 
 select {
-    padding: .75rem 1.5rem;
+    padding: 13px;
     padding-right: 3em;
-    /*background-color: #fff;*/
-    border: none;
+    background-color: #fff;
+    border: 2px solid #718997;
+    border-radius: 0;
+    height: 51px;
     color: #31495b;
     font-size: 1em;
     font-weight: 700;
@@ -127,10 +123,10 @@ select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    background: url(../img/sullisivk_arrow.svg) no-repeat #ddd;
-    background-position-x: right 10px;
+    background: url(https://www.sullissivik.gl/build/images/downArrow.svg) no-repeat;
+    background-position-x: right 12px;
     background-position-y: 50%;
-    background-size: 1.5em
+    background-size: 9px;
 }
 .dropdown:active,
 .dropdown:focus,
@@ -145,7 +141,7 @@ select {
 
 .input ul li {
     display: inline-block;
-    margin: 0 3em;
+    margin: 0 2em;
 }
 
 .input ul.errorlist li {
