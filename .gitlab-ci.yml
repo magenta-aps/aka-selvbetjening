@@ -136,13 +136,13 @@ Unittest:
 Mypy:
   <<: *test-default
   script:
-    - cd app
+    - cd akap
     - mypy --config mypy.ini ./
 
 Django check:
   <<: *test-default
   script:
-    - cd app
+    - cd akap
     - python3 manage.py check aka fordring konto løntræk nedskrivning obligatorisk_pension rentenota udbytte
 
 
