@@ -1,27 +1,28 @@
 {% load i18n %}
 <div class="row formset-row">
-    <div class="col-1 pe-0">
+    <div class="col-xxl-1 col-sm-1 pe-0">
         {% include 'aka/util/field.html' with field=subform.cpr_cvr_tin %}
     </div>
-    <div class="col-1 px-0">
+    <div class="col-xxl-2 col-sm-2 px-0">
         {% include 'aka/util/field.html' with field=subform.navn %}
     </div>
-    <div class="col-1 px-0">
+    <div class="col-xxl-1 col-sm-2 px-0">
         {% include 'aka/util/field.html' with field=subform.adresse %}
     </div>
-    <div class="col-1 px-0">
+    <div class="col-xxl-1 col-sm-1 px-0">
         {% include 'aka/util/field.html' with field=subform.postnummer %}
     </div>
-    <div class="col-1 px-0">
+    <div class="col-xxl-1 col-sm-2 px-0">
         {% include 'aka/util/field.html' with field=subform.by %}
     </div>
-    <div class="col-1 px-0">
+    <div class="col-xxl-1 col-sm-1 px-0">
         {% include 'aka/util/field.html' with field=subform.land %}
     </div>
-    <div class="col-3 px-0">
+    <div class="col-xxl-3 col-sm-3 ps-0">
         {% include 'aka/util/field.html' with field=subform.udbytte %}
     </div>
-    <div class="col-3 ps-0">
+    <div class="col-xxl-2 col-sm-12">
         <button type="button" class="btn btn-primary clone-row" data-trans="common.kopier">{% translate 'common.kopier' %}</button><button type="button" class="btn btn-danger remove-row" data-trans="common.slet">{% translate 'common.slet' %}</button>
     </div>
 </div>
+<hr/>
