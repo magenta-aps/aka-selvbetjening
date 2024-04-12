@@ -9,7 +9,7 @@ RUN curl -fsSLO https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.1
   mv wkhtmltox/bin/wkhtmlto* /usr/bin
     
 # hadolint ignore=DL3008
-RUN mkdir /backend && mkdir -p /log && mkdir -p /var/cache/aka \
+RUN mkdir /app && mkdir -p /log && mkdir -p /var/cache/aka \
  && apt-get update && apt-get install -y --no-install-recommends \
     gettext libxmlsec1-dev xmlsec1 gpg libmagic1 nano \
  && apt-get clean && rm -rf /var/lib/apt/lists/* \
@@ -29,15 +29,15 @@ RUN mkdir /backend && mkdir -p /log && mkdir -p /var/cache/aka \
  && chmod -R a+w /home
 
 COPY docker/crontab /crontab
-COPY backend/requirements.txt /backend/requirements.txt
-RUN pip3 install --no-cache-dir -r /backend/requirements.txt
+COPY akap/requirements.txt /app/requirements.txt
+RUN pip3 install --no-cache-dir -r /app/requirements.txt
 COPY ./docker/entrypoint.sh /entrypoint.sh
-COPY --chown=aka:aka ./backend /backend
+COPY --chown=aka:aka ./akap /app
 # Include self-signed certificates for testing in pipeline
 COPY dev-environment/cert/sp/selfsigned.* /ssl/sp/
 COPY dev-environment/cert/idp/selfsigned.crt /ssl/idp/selfsigned.crt
 USER aka
-WORKDIR /backend
+WORKDIR /app
 ENV HOME=/home
 VOLUME /var/cache/aka
 EXPOSE 8000
