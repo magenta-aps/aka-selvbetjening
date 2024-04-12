@@ -50,8 +50,9 @@ $(function(){
     const documentationContainer = $("#documentationContainer");
     let documentationCounter = 0;
     $("#addDocumentationRow").click(function(){
-        const field = $("<input>");
-        field.attr({"type": "file", "name": "documentation"+(++documentationCounter)});
+        const field = documentationContainer.find(".file-input").first().clone();
+        const new_name = "documentation"+(++documentationCounter);
+        field.find("[name]").attr("name", new_name);
         documentationContainer.append(field);
     });
 
@@ -60,11 +61,13 @@ $(function(){
             return !this.value;
         });
         if (emptyFields.length === 0) {
-            const field = $("<input>");
-            field.attr({"type": "file", "name": "documentation"+(++documentationCounter)});
+            const field = documentationContainer.find(".file-input").first().clone(true);
+            const new_name = "documentation"+(++documentationCounter);
+            field.find("[name]").attr("name", new_name);
+            field.find("input").val("");
             documentationContainer.append(field);
         } else if (emptyFields.length > 1) {
-            emptyFields.last().delete();
+            emptyFields.last().parents(".file-input").delete();
         }
     };
 

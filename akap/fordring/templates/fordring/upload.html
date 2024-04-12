@@ -4,22 +4,29 @@
 {% load l10n %}
 
 {% block extra_headers %}
+    {{ form.media }}
 {% endblock %}
 
 {% block content %}
-    {% localize off %}
-    <article class="indberet_fordring">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <h1 class="page-header" data-trans="fordring.title-upload">{% translate 'fordring.title-upload' %}</h1>
-            <div class="container-fluid">
+{% localize off %}
+    <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+
+        {% include "aka/util/header.html" with key="fordring.title-upload" %}
+
+        <div class="row block">
+
+            <div class="col-12">
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-12">
                         <a href="{% static '/csv/Fordring.csv' %}" data-trans="common.download_template">{% translate 'common.download_template' %}</a>
                     </div>
                 </div>
+
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-12">
                         {% include 'aka/util/field.html' with field=form.file %}
                     </div>
                 </div>
@@ -41,13 +48,15 @@
                         </ul>
                     </div>
                 {% endif %}
-                <div class="row">
+
+                <div class="row footer">
                     <div class="col-2">
-                        <button type="submit" data-trans="common.gem">{% translate 'common.gem' %}</button>
+                        <button type="submit" class="btn btn-primary" data-trans="common.gem">{% translate 'common.gem' %}</button>
                     </div>
                 </div>
             </div>
-        </form>
-    </article>
-    {% endlocalize %}
+        </div>
+    </form>
+</div>
+{% endlocalize %}
 {% endblock %}

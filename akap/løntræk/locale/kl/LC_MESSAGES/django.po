@@ -22,6 +22,9 @@ msgstr ""
 msgid "loentraek.title"
 msgstr "Akissarsianik ilanngaaneq nalunaarutigiuk"
 
+msgid "loentraek.title-upload"
+msgstr "Akissarsianik ilanngaaneq nalunaarutigiuk"
+
 msgid "loentraek.year"
 msgstr "Ukioq"
 
@@ -75,3 +78,6 @@ msgstr "Uppernarsaammik aallerfik"
 
 msgid "loentraek.record_id"
 msgstr "Nalunaarsuinermi normu"
+
+msgid "loentraek.fil"
+msgstr "Fil"

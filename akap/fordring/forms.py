@@ -1,7 +1,7 @@
 import logging
 
 from aka.data.fordringsgruppe import groups, groups_by_id, subgroups_by_id
-from aka.forms import CsvUploadMixin, PrependCharField
+from aka.forms import CsvUploadMixin, FileField, PrependCharField
 from django import forms
 from django.core.validators import (
     FileExtensionValidator,
@@ -31,6 +31,9 @@ class InkassoForm(forms.Form):
         error_messages={"required": "error.required"},
     )
     fordringshaver2 = forms.CharField(required=False)
+
+    dokumentation = FileField(required=False)
+
     fordringsgruppe = forms.ChoiceField(
         required=True,
         choices=[(item["id"], item["name"]) for item in groups],
@@ -274,7 +277,7 @@ class InkassoUploadForm(CsvUploadMixin, forms.Form):
         "meddebitorer",
     ]
 
-    file = forms.FileField(
+    file = FileField(
         required=True,
         validators=[
             FileExtensionValidator(["csv", "txt"], code="error.invalid_extension")

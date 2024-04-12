@@ -9,46 +9,55 @@
 {% endblock %}
 
 {% block content %}
-    <article class="indberet_loentraek">
+    <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
         <form method="post" id="mainform">
             {% csrf_token %}
             {{ formset.management_form }}
-            <h1 data-trans="loentraek.title">{% translate 'loentraek.title' %}</h1>
-            <div class="container-fluid">
-                {% if form.errors or formset.errors %}
-                    <p class="err-msg">{% translate 'common.errors_present' %}</p>
-                    {% include "aka/util/nonfield_errors.html" with form=form %}
-                {% endif %}
-                {% localize off %}
-                <div class="row">
-                    <div class="col-12">
-                        {% include 'aka/util/field.html' with field=form.year key='loentraek.year' %}
-                        {% include 'aka/util/field.html' with field=form.month key='loentraek.month' %}
-                    </div>
-                </div>
-                {% endlocalize %}
-                <div class="row">
-                    <div class="col-12">
-                        {% include 'aka/util/field.html' with field=form.total_amount key='loentraek.total_amount' %}
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-3" data-trans="loentraek.cpr">{% translate 'loentraek.cpr' %}</div>
-                    <div class="col-3" data-trans="loentraek.agreement_number">{% translate 'loentraek.agreement_number' %}</div>
-                    <div class="col-3" data-trans="loentraek.amount">{% translate 'loentraek.amount' %}</div>
-                    <div class="col-3" data-trans="loentraek.net_salary">{% translate 'loentraek.net_salary' %}</div>
-                </div>
-                <div id="formsetContainer">
-                    {% for subform in formset %}
-                        {% include 'løntræk/subform.html' with subform=subform %}
-                    {% endfor %}
-                </div>
-                <button type="button" id="add-row" class="button">+</button>
 
-                <div class="row">
-                    <div class="col-2">
-                        <button type="submit" data-trans="common.gem">{% translate 'common.gem' %}</button>
+            {% include "aka/util/header.html" with key="loentraek.title" %}
+
+            <div class="row block">
+                <div class="col-12">
+
+                    {% if form.errors or formset.errors %}
+                        <p class="err-msg">{% translate 'common.errors_present' %}</p>
+                        {% include "aka/util/nonfield_errors.html" with form=form %}
+                    {% endif %}
+
+                    {% localize off %}
+                    <div class="row">
+                        <div class="col-12">
+                            {% include 'aka/util/field.html' with field=form.year key='loentraek.year' %}
+                            {% include 'aka/util/field.html' with field=form.month key='loentraek.month' %}
+                        </div>
+                    </div>
+                    {% endlocalize %}
+
+                    <div class="row">
+                        <div class="col-12">
+                            {% include 'aka/util/field.html' with field=form.total_amount key='loentraek.total_amount' %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3"><label data-trans="loentraek.cpr">{% translate 'loentraek.cpr' %}</label></div>
+                        <div class="col-3"><label data-trans="loentraek.agreement_number">{% translate 'loentraek.agreement_number' %}</label></div>
+                        <div class="col-3"><label data-trans="loentraek.amount">{% translate 'loentraek.amount' %}</label></div>
+                        <div class="col-3"><label data-trans="loentraek.net_salary">{% translate 'loentraek.net_salary' %}</label></div>
+                    </div>
+
+                    <div id="formsetContainer">
+                        {% for subform in formset %}
+                            {% include 'løntræk/subform.html' with subform=subform %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="row footer">
+                        <div class="col-12">
+                        <button type="button" id="add-row" class="btn btn-primary">+</button>
+                            <button type="submit" class="btn btn-primary" data-trans="common.gem">{% translate 'common.gem' %}</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -56,5 +65,5 @@
         <div id="formsetPrototype" style="display: none">
             {% include 'løntræk/subform.html' with subform=formset.empty_form %}
         </div>
-    </article>
+    </div>
 {% endblock %}

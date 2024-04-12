@@ -1,0 +1,8 @@
+{% load i18n %}
+<div class="file-input">
+    <input type="file" name="{{widget.name}}" tabindex="-1" {% include "django/forms/widgets/attrs.html" %}/>
+    <div class="input-group">
+        <span class="input-group-text file-input-button" data-fileinput="{{widget.name}}">{% translate "common.gennemse" %}</span>
+        <input type="text" class="form-control" data-fileinput="{{widget.name}}" readonly placeholder="{% translate 'common.ingenfil' %}" autocomplete="off" {% include "django/forms/widgets/attrs.html" %}/>
+    </div>
+</div>

@@ -1,19 +1,33 @@
 {% load i18n %}
-<div class="row {{ classes }}">
+<div class="formset-row {{ classes }}">
     <div style="display:none">
         {{ form.id }}
         {{ form.DELETE }}
     </div>
-    <div class="col-5-sm" data-formset-update="true">
-        {% include 'aka/util/field.html' with field=form.fil key='obligatorisk_pension.fil' %}
+    <div class="row">
+        <div class="col-5" data-formset-update="true">
+            <label data-trans="obligatorisk_pension.fil">{% translate "obligatorisk_pension.fil" %}</label>
+        </div>
+        <div class="col-4 pe-0">
+            <label data-trans="obligatorisk_pension.filbeskrivelse">{% translate "obligatorisk_pension.filbeskrivelse" %}</label>
+        </div>
     </div>
-    <div class="col-6-sm">
-        {% include 'aka/util/field.html' with field=form.beskrivelse key='obligatorisk_pension.filbeskrivelse' %}
-    </div>
+    <div class="row">
+        <div style="display:none">
+            {{ form.id }}
+            {{ form.DELETE }}
+        </div>
+        <div class="col-5" data-formset-update="true">
+            {% include 'aka/util/field.html' with field=form.fil %}
+        </div>
+        <div class="col-4 pe-0">
+            {% include 'aka/util/field.html' with field=form.beskrivelse %}
+        </div>
 
-    <div class="col-1-sm">
-        <label>&nbsp;</label>
-        <button type="button" data-formset-button="deleterow" data-trans="common.slet">{% translate 'common.slet' %}</button>
-        <button type="button" data-formset-button="addrow" data-trans="common.add">{% translate 'common.add' %}</button>
+        <div class="col-3 pe-0">
+            <label>&nbsp;</label>
+            <button type="button" class="btn btn-danger" data-formset-button="deleterow" data-trans="common.slet">{% translate 'common.slet' %}</button>
+            <button type="button" class="btn btn-primary" data-formset-button="addrow" data-trans="common.add">{% translate 'common.add' %}</button>
+        </div>
     </div>
 </div>

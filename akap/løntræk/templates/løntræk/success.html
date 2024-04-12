@@ -8,15 +8,17 @@
 {% endblock %}
 
 {% block content %}
-<article class="success">
-    <form>
-        {% localize off %}
+{% localize off %}
+    <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
+
         {% if rec_ids %}
-        <h1 class="page-header" data-trans="loentraek.success">{% translate 'loentraek.success' %}</h1>
+            {% include "aka/util/header.html" with key="loentraek.success" %}
         {% else %}
-        <h1 class="page-header" data-trans="loentraek.failed">{% translate 'loentraek.failed' %}</h1>
+            {% include "aka/util/header.html" with key="loentraek.failed" %}
         {% endif %}
-        <div class="container-fluid">
+
+        <div class="row block">
+            <div class="col-12">
             <div class="row">
                 <div class="col-12">
                     <span data-trans="loentraek.results">{% translate 'loentraek.results' %}</span>
@@ -46,7 +48,7 @@
                 </div>
             </div>
         </div>
-        {% endlocalize %}
-    </form>
-</article>
+        </div>
+    </div>
+{% endlocalize %}
 {% endblock %}

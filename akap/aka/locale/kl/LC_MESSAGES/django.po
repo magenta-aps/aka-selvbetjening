@@ -137,6 +137,12 @@ msgstr "Kolonnit nuisikkit/tarrisikkit"
 msgid "common.errors_present"
 msgstr "Immersukkami nalunaarneqartut ilaat kukkuneqarput. Kukkunerit aaqqeriarlugit immersugaq nassiuteqqilaaruk."
 
+msgid "common.gennemse"
+msgstr "Misissoruk..."
+
+msgid "common.ingenfil"
+msgstr "Fili toqqarneqanngilaq"
+
 
 # Errors
 
@@ -211,6 +217,9 @@ msgstr "Piffisami aalajangersimasumi Ernianut nalunaarut"
 msgid "index.rentenota.sub"
 msgstr "Piffissami nammineq aalajangikkami ernianut nalunaarut uani aasinnaavat"
 
+msgid "index.rentenota.linktext"
+msgstr "Indberet her"
+
 msgid "index.fordring"
 msgstr "Akiligassanik nalunaarsuineq"
 
@@ -219,6 +228,12 @@ msgstr "Uani pisortanut akiligassat Akiliisitsiniartarfimmut nalunaarutigikkit"
 
 msgid "index.fordring-upload"
 msgstr "Fordring-it uploadikkit"
+
+msgid "index.fordring-upload.sub"
+msgstr "Upload fording som en CSV-fil"
+
+msgid "index.fordring.linktext"
+msgstr "Indberet her"
 
 msgid "index.nedskrivning"
 msgstr "Milliliinerit nalunaarutigikkit"
@@ -229,6 +244,12 @@ msgstr "Uani milliliinerit akiliisitsiniartarfimmut nalunaarutigikkit"
 msgid "index.nedskrivning-upload"
 msgstr "Milliliineq uploaderuk"
 
+msgid "index.nedskrivning-upload.sub"
+msgstr "Upload nedskrivning som en CSV-fil"
+
+msgid "index.nedskrivning.linktext"
+msgstr "Indberet her"
+
 msgid "index.løntræk"
 msgstr "Aningaasarsianiit ilanngartuinerit nalunaarutigikkit"
 
@@ -238,11 +259,29 @@ msgstr "Uani Aningaasarsianiit  ilanngatuinerit nalunaarutigikkit"
 msgid "index.løntræk-upload"
 msgstr "Akissarsianik ilanngaaneq uploaderuk"
 
+msgid "index.løntræk-upload.sub"
+msgstr "Upload løntræk som en CSV-fil"
+
+msgid "index.løntræk.linktext"
+msgstr "Indberet her"
+
 msgid "index.fordringshaverkonto"
 msgstr "Konto-mi nikerartut Akiligassaqartitsisutut"
 
 msgid "index.fordringshaverkonto.sub"
 msgstr "Akilisassaqartitsisutut kontomi nikerartut, alliliinerit milliliinerit uani takuneqarsinnaapput"
+
+msgid "index.fordringshaverkonto.linktext"
+msgstr "Hent her"
+
+msgid "index.udbytte"
+msgstr "Udbytteskat"
+
+msgid "index.udbytte.sub"
+msgstr "For at indberette U1-skat"
+
+msgid "index.udbytte.linktext"
+msgstr "Indberet her"
 
 msgid "index.konto"
 msgstr "Kontoa takuuk"
@@ -250,6 +289,8 @@ msgstr "Kontoa takuuk"
 msgid "index.konto.sub"
 msgstr "Pisortanut akiligassatit uani takuneqarsinnaapput, sukumiinerusumik takuniarukkit uunga iserit"
 
+msgid "index.konto.linktext"
+msgstr "Hent her"
 
 msgid "DK"
 msgstr "Danmarki"
