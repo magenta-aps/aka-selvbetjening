@@ -26,7 +26,7 @@ services:
       - MAKE_MIGRATIONS=true
       - RUN_MIGRATIONS=true
     volumes:
-      - ./backend/:/backend
+      - ./akap/:/akap
       - ./log:/log:rw
       - ./dev-environment/cert:/ssl:ro
       - ./upload:/upload  # Matcher MEDIA_ROOT i django settings
@@ -42,7 +42,7 @@ services:
       - MAKE_MIGRATIONS=false
       - RUN_MIGRATIONS=false
     volumes:
-      - ./backend/:/backend
+      - ./akap/:/akap
       - ./logs:/var/log/aka
     depends_on:
       - selvbetjening-db
