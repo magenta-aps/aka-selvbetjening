@@ -1,6 +1,6 @@
 import logging
-import shutil
 import os
+import shutil
 
 import gnupg
 from django.test import TestCase
