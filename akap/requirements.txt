@@ -6,19 +6,19 @@ pysocks
 requests_ntlm
 httpretty
 lxml>=4.2.5
-zeep>=3.4.0
-zeep[xmlsec]>=1.3.3
-xmltodict>=0.12.0
-dict2xml>=1.6.1
+zeep>=4.2.1
+zeep[xmlsec]>=1.3.13
+xmltodict>=0.13.0
+dict2xml>=1.7.5
 django-excel
 pyexcel-xlsx
 pyexcel-ods3
 python-gnupg==0.4.3
 gunicorn==22.0.0
 whitenoise==5.2.0
-psycopg2==2.9.3
+psycopg2==2.9.9
 pytest-django
-WeasyPrint>=54.1
+WeasyPrint>=61.2
 python-dateutil
 coverage
 django_mitid_auth @ git+https://github.com/magenta-aps/gl-django-login.git@1.4.0
