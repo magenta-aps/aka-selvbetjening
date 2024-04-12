@@ -121,7 +121,7 @@ Build:
 Unittest:
   <<: *test-default
   script:
-    - cd akap
+    - cd app
     - coverage run --source='.' --omit=manage.py,project/wsgi.py,*/admin.py manage.py test
     - coverage report --show-missing --fail-under=74
     - coverage xml
@@ -136,13 +136,13 @@ Unittest:
 Mypy:
   <<: *test-default
   script:
-    - cd akap
+    - cd app
     - mypy --config mypy.ini ./
 
 Django check:
   <<: *test-default
   script:
-    - cd akap
+    - cd app
     - python3 manage.py check aka fordring konto løntræk nedskrivning obligatorisk_pension rentenota udbytte
 
 
