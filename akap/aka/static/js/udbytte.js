@@ -6,7 +6,7 @@ $(function(){
         max: $('#id_form-MAX_NUM_FORMS')
     };
     const formContainer = $('#formsetContainer');
-    const formPrototype = $('#formsetPrototype').children().first();
+    const formPrototype = $('#formsetPrototype').children();
     const addRow = $('#add-row');
 
     const addForm = function(updateTotal) {
@@ -45,8 +45,10 @@ $(function(){
 
     const removeForm = function(updateTotal) {
         const row = $(this).parents(".formset-row");
-        console.log(row);
+        const rowIndex = row.index();
+        const hr = row.siblings().slice(rowIndex, rowIndex+1).filter("hr");
         row.remove();
+        hr.remove();
         if (updateTotal !== false) {
             const nextId = parseInt(management.total.val());
             management.total.val(nextId - 1);
