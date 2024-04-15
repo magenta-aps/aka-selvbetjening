@@ -17,13 +17,16 @@
 {% endblock %}
 
 {% block content %}
+<form method="post" id="mainform">
+    {% csrf_token %}
+    {{ formset.management_form }}
+
     <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
-    <form method="post" id="mainform">
-        {% csrf_token %}
-        {{ formset.management_form }}
+    {% include "aka/util/header.html" with key="udbytte.title" %}
+    </div>
 
-        {% include "aka/util/header.html" with key="udbytte.title" %}
 
+    <div class="col-xs-12 col-md-12 col-xl-10 offset-xl-1 col-fluid">
         <div class="row block">
             <div class="col-12">
                 {% if not pdf %}
@@ -94,21 +97,21 @@
 
                 <div class="row">
                     {% if pdf %}
-                        <div class="col-1" data-trans="udbytte.cpr_cvr_tin"><label>{% translate 'udbytte.cpr_cvr_tin' %}</label></div>
-                        <div class="col-2" data-trans="udbytte.navn"><label>{% translate 'udbytte.navn' %}</label></div>
-                        <div class="col-2" data-trans="udbytte.adresse"><label>{% translate 'udbytte.adresse' %}</label></div>
-                        <div class="col-1" data-trans="udbytte.postnummer"><label>{% translate 'udbytte.postnummer' %}</label></div>
-                        <div class="col-2" data-trans="udbytte.by"><label>{% translate 'udbytte.by' %}</label></div>
-                        <div class="col-2" data-trans="udbytte.land"><label>{% translate 'udbytte.land' %}</label></div>
-                        <div class="col-2" data-trans="udbytte.udbytte"><label>{% translate 'udbytte.udbytte' %}</label></div>
+                        <div class="col-xxl-1 col-sm-1 pe-0" data-trans="udbytte.cpr_cvr_tin"><label>{% translate 'udbytte.cpr_cvr_tin' %}</label></div>
+                        <div class="col-xxl-2 col-sm-2 px-0" data-trans="udbytte.navn"><label>{% translate 'udbytte.navn' %}</label></div>
+                        <div class="col-xxl-1 col-sm-2 px-0" data-trans="udbytte.adresse"><label>{% translate 'udbytte.adresse' %}</label></div>
+                        <div class="col-xxl-1 col-sm-1 px-0" data-trans="udbytte.postnummer"><label>{% translate 'udbytte.postnummer' %}</label></div>
+                        <div class="col-xxl-1 col-sm-2 px-0" data-trans="udbytte.by"><label>{% translate 'udbytte.by' %}</label></div>
+                        <div class="col-xxl-1 col-sm-1 px-0" data-trans="udbytte.land"><label>{% translate 'udbytte.land' %}</label></div>
+                        <div class="col-xxl-3 col-sm-3 ps-0" data-trans="udbytte.udbytte"><label>{% translate 'udbytte.udbytte' %}</label></div>
                     {% else %}
-                        <div class="col-1" data-trans="udbytte.cpr_cvr_tin"><label>{% translate 'udbytte.cpr_cvr_tin' %}</label></div>
-                        <div class="col-1" data-trans="udbytte.navn"><label>{% translate 'udbytte.navn' %}</label></div>
-                        <div class="col-1" data-trans="udbytte.adresse"><label>{% translate 'udbytte.adresse' %}</label></div>
-                        <div class="col-1" data-trans="udbytte.postnummer"><label>{% translate 'udbytte.postnummer' %}</label></div>
-                        <div class="col-1" data-trans="udbytte.by"><label>{% translate 'udbytte.by' %}</label></div>
-                        <div class="col-1" data-trans="udbytte.land"><label>{% translate 'udbytte.land' %}</label></div>
-                        <div class="col-6" data-trans="udbytte.udbytte"><label>{% translate 'udbytte.udbytte' %}</label></div>
+                        <div class="col-xxl-1 col-sm-1 pe-0" data-trans="udbytte.cpr_cvr_tin"><label>{% translate 'udbytte.cpr_cvr_tin' %}</label></div>
+                        <div class="col-xxl-2 col-sm-2 px-0" data-trans="udbytte.navn"><label>{% translate 'udbytte.navn' %}</label></div>
+                        <div class="col-xxl-1 col-sm-2 px-0" data-trans="udbytte.adresse"><label>{% translate 'udbytte.adresse' %}</label></div>
+                        <div class="col-xxl-1 col-sm-1 px-0" data-trans="udbytte.postnummer"><label>{% translate 'udbytte.postnummer' %}</label></div>
+                        <div class="col-xxl-1 col-sm-2 px-0" data-trans="udbytte.by"><label>{% translate 'udbytte.by' %}</label></div>
+                        <div class="col-xxl-1 col-sm-1" data-trans="udbytte.land"><label>{% translate 'udbytte.land' %}</label></div>
+                        <div class="col-xxl-3 col-sm-3 ps-0" data-trans="udbytte.udbytte"><label>{% translate 'udbytte.udbytte' %}</label></div>
                     {% endif %}
                 </div>
                 <div id="formsetContainer">
@@ -153,11 +156,11 @@
                 </div>
             </div>
         </div>
+        </div>
     </form>
     <div id="formsetPrototype" style="display: none">
         {% include 'udbytte/subform.html' with subform=formset.empty_form %}
     </div>
-</div>
 
 
 {% if not pdf %}
