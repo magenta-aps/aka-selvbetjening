@@ -10,7 +10,7 @@ services:
     volumes:
       - selvbetjening-postgres-data:/var/lib/postgresql/data
 
-  selvbetjening:
+  selvbetjening-web:
     build:
       context: .
       dockerfile: docker/Dockerfile
