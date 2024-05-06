@@ -84,3 +84,4 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual("AKI-000001", transaction0.invoice_number)
         self.assertEqual("Debitor", transaction0.transaction_type)
         self.assertEqual("2", transaction0.rate_number)
+        self.assertEqual("1234567890", transaction0.child_claimant)
