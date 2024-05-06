@@ -20,7 +20,7 @@
         <Invoice>AKI-000001</Invoice>
         <TransType>Debitor</TransType>
         <RateNmb>2</RateNmb>
-        <ChildClaimant>1234567890</ChildClaimant>
+        <ChildClaimantFuj>1234567890</ChildClaimantFuj>
     </CustTrans>
     <CustTrans>
         <AccountNum>00000001</AccountNum>
@@ -43,6 +43,6 @@
         <Invoice>AKI-000001</Invoice>
         <TransType>Debitor</TransType>
         <RateNmb>2</RateNmb>
-        <ChildClaimant>1234567890</ChildClaimant>
+        <ChildClaimantFuj>1234567890</ChildClaimantFuj>
     </CustTrans>
 </CustTable>
