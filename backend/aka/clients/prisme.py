@@ -501,7 +501,6 @@ class PrismeAccountResponseTransaction(object):
         self.claim_type_code = data["ClaimTypeCode"]
         self.invoice_number = data["Invoice"]
         self.transaction_type = data["TransType"]
-        self.child_claimant = data["ChildClaimant"]
 
 
 class PrismeAccountResponse(PrismeResponseObject):
@@ -529,6 +528,7 @@ class PrismeEmployerAccountResponseTransaction(PrismeAccountResponseTransaction)
     def __init__(self, data):
         super().__init__(data)
         self.rate_number = data.get("RateNmb")
+        self.child_claimant = data["ChildClaimantFuj"]
 
 
 class PrismeSELAccountResponse(PrismeAccountResponse):
@@ -540,6 +540,7 @@ class PrismeCitizenAccountResponseTransaction(PrismeAccountResponseTransaction):
         super().__init__(data)
         self.claimant_name = data["ClaimantName"]
         self.claimant_id = data["ClaimantId"]
+        self.child_claimant = data["ChildClaimant"]
 
 
 class PrismeAKIAccountResponse(PrismeAccountResponse):
