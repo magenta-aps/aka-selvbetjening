@@ -329,6 +329,7 @@ class KontoView(
             Field(name="claim_type_code", klass="nb"),
             Field(name="invoice_number", klass="nb"),
             Field(name="transaction_type", klass="nb"),
+            Field(name="child_claimant", klass="nb"),
         ]
         if key == "sel":
             fields += [
@@ -341,8 +342,6 @@ class KontoView(
                 ),
                 Field(name="rate_number", klass="nb"),
             ]
-        if key == "aki":
-            fields += [Field(name="child_claimant", klass="nb")]
         for field in fields:
             field.transkey = "konto.%s" % (field.labelkey or field.name)
             field.title = _(field.transkey).replace("&shy;", "")
