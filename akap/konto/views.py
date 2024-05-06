@@ -91,7 +91,6 @@ class KontoView(
     def get_context_data(self, **kwargs):
         context = {}
         if self.form.is_bound:
-            print(self.sections)
             formdata = self.form.cleaned_data
             context.update(
                 {
@@ -239,11 +238,9 @@ class KontoView(
         self.sections = []
         key = self.request.GET.get("key")
         keys = [key] if key and key in self.available_keys else self.available_keys
-        print(f"keys: {keys}")
         for key in keys:
             rows = self.get_rows_by_key(key)
             total = self.get_total_data(key)
-            print(f"self.get_fields_by_key({key}): {self.get_fields_by_key(key)}")
             self.sections.append(
                 {
                     "key": key,
