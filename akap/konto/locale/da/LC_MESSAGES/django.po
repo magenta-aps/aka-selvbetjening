@@ -183,7 +183,7 @@ msgid "konto.submitted_to_claims"
 msgstr "Indberettet til inddrivelsen"
 
 msgid "konto.child_claimant"
-msgstr "Fordringshavers barns CPR"
+msgstr "Barns CPR"
 
 msgid "konto.total_claim"
 msgstr "Krav (total):"
