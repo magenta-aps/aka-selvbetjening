@@ -14,7 +14,7 @@ django-excel==0.0.10
 pyexcel-xlsx==0.6.0
 pyexcel-ods3==0.6.0
 python-gnupg==0.5.2
-gunicorn==21.2.0
+gunicorn==22.0.0
 whitenoise==6.6.0
 psycopg2==2.9.9
 pytest-django==4.8.0
