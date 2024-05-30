@@ -6,11 +6,11 @@
 {% block extra_headers %}
     {% if not pdf %}
     {% include 'aka/util/calendar_headers.html' %}
-    <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/udbytte.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/form.js' %}" nonce="{{request.csp_nonce}}"></script>
+    <script type="text/javascript" src="{% static 'js/udbytte.js' %}" nonce="{{request.csp_nonce}}"></script>
     {% endif %}
     {% if css %}
-    <style>
+    <style nonce="{{request.csp_nonce}}">
         {{ css|safe }}
     </style>
     {% endif %}
@@ -82,7 +82,7 @@
                     <div class="col-12-sm">
                         {% include 'udbytte/field.html' with field=form.u1_udfyldt key='udbytte.u1_udfyldt' %}
                     </div>
-                    <div id="u1_warning" class="col-12-sm" style="display:none">
+                    <div id="u1_warning" class="col-12-sm" class="hidden">
                         <p data-trans="udbytte.u1_advarsel" data-trans-params="{{u1_url_wrapped}}">
                             {{ 'udbytte.u1_advarsel'|format:u1_url_wrapped|safe }}
                         </p>
@@ -158,13 +158,13 @@
         </div>
         </div>
     </form>
-    <div id="formsetPrototype" style="display: none">
+    <div id="formsetPrototype" class="hidden">
         {% include 'udbytte/subform.html' with subform=formset.empty_form %}
     </div>
 
 
 {% if not pdf %}
-<script>
+<script nonce="{{request.csp_nonce}}">
 
     const replace_repeat = function (subject, re, replacement) {
         let old = null;

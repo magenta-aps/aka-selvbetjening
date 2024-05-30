@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load csp %}
 
 {% block extra_headers %}
-    <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/form.js' %}" nonce="{{request.csp_nonce}}"></script>
     {{ form.media }}
 {% endblock %}
 

@@ -31,3 +31,7 @@ mypy==1.7.0
 django-stubs[compatible-mypy]==4.2.7
 types-requests==2.31.0.20240218
 types-python-dateutil==2.9.0.20240316
+
+django-csp==3.8
+django-csp[jinja2]
+django-csp-helpers==0.7.1
