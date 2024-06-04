@@ -12,9 +12,9 @@
     {% else %}
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/sumoselect.min.css">
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/jquery.sumoselect.min.js"></script>
-        <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
-        <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}"/>
-        <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}"/>
+        <script type="text/javascript" src="{% static 'js/form.js' %}" nonce="{{request.csp_nonce}}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}" nonce="{{request.csp_nonce}}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}" nonce="{{request.csp_nonce}}"/>
         <script src="{% static 'js/download.js' %}"></script>
     {% endif %}
 {% endblock %}

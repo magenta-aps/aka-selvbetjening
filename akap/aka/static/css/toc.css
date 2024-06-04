@@ -54,3 +54,7 @@ a.box--selfservice {
     text-decoration: none;
     font-weight: normal;
 }
+.indexrow {
+    max-width: 1920px;
+    margin: auto;
+}

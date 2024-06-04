@@ -5,8 +5,8 @@
 
 {% block extra_headers %}
     {% include 'aka/util/calendar_headers.html' %}
-    <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/formset.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/form.js' %}" nonce="{{request.csp_nonce}}"></script>
+    <script type="text/javascript" src="{% static 'js/formset.js' %}" nonce="{{request.csp_nonce}}"></script>
     {% if css %}
     <style>
         {{ css|safe }}
@@ -86,7 +86,7 @@
             </div>
         </div>
         </form>
-        <div id="formsetPrototype" style="display: none">
+        <div id="formsetPrototype" class="hidden">
             {% include 'aka/util/field.html' with field=empty_form.file key='obligatorisk_pension.file' %}
         </div>
     </div>

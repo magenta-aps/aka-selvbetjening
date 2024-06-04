@@ -214,3 +214,15 @@ table {
     display: table;
     clear: both
 }
+
+.hidden {
+    display: none;
+}
+
+.interestnote .output-table {
+    font-size: 0.8em;
+}
+
+.table-row-empty {
+    text-align: center;
+}

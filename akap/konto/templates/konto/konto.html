@@ -7,8 +7,8 @@
 {% block extra_headers %}
 
     {% include 'aka/util/calendar_headers.html' %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}" nonce="{{request.csp_nonce}}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}" nonce="{{request.csp_nonce}}"/>
     <script src="{% static 'js/form.js' %}"></script>
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/sumoselect.min.css">
@@ -17,10 +17,10 @@
     {% if sections %}
         <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>
         <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
-        <script src="{% static 'js/datatable.js' %}"></script>
+        <script src="{% static 'js/datatable.js' %}" nonce="{{request.csp_nonce}}"></script>
     {% endif %}
 
-    <script src="{% static 'js/download.js' %}"></script>
+    <script src="{% static 'js/download.js' %}" nonce="{{request.csp_nonce}}"></script>
 {% endblock %}
 
 {% block content %}
