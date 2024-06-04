@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     "udbytte",
     "mitid_test",
     "watchman",
-    "csp_helpers",
 ]
 
 MIDDLEWARE = [
