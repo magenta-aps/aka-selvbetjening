@@ -138,9 +138,11 @@ class RenteNotaView(
             "items": self.items,
             "rows": self.get_rows(),
             "fields": self.get_fields(),
-            "total": sum([float(item["interest_amount"]) for item in self.items])
-            if self.items is not None
-            else None,
+            "total": (
+                sum([float(item["interest_amount"]) for item in self.items])
+                if self.items is not None
+                else None
+            ),
             "errors": self.errors,
         }
         context.update(kwargs)
