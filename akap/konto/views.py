@@ -97,12 +97,16 @@ class KontoView(
                     "sections": self.sections,
                     "date": date.today().strftime("%d/%m/%Y"),
                     "period": {
-                        "from_date": formdata["from_date"].strftime("%d-%m-%Y")
-                        if formdata.get("from_date") is not None
-                        else None,
-                        "to_date": formdata["to_date"].strftime("%d-%m-%Y")
-                        if formdata.get("to_date") is not None
-                        else None,
+                        "from_date": (
+                            formdata["from_date"].strftime("%d-%m-%Y")
+                            if formdata.get("from_date") is not None
+                            else None
+                        ),
+                        "to_date": (
+                            formdata["to_date"].strftime("%d-%m-%Y")
+                            if formdata.get("to_date") is not None
+                            else None
+                        ),
                     },
                     "cprcvr": self.cprcvr_choice,
                     "authority": self.authority,
