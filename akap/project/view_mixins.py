@@ -351,9 +351,9 @@ class PdfRendererMixin(RendererMixin):
                 )
                 if wrap_in_response:
                     response = HttpResponse(pdf_data, content_type="application/pdf")
-                    response[
-                        "Content-Disposition"
-                    ] = f'attachment; filename="{self.get_filename()}.pdf"'
+                    response["Content-Disposition"] = (
+                        f'attachment; filename="{self.get_filename()}.pdf"'
+                    )
                     return response
                 else:
                     return pdf_data

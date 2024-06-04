@@ -417,7 +417,6 @@ TAX_FORM_U1 = os.environ.get(
 TAX_FORM_STORAGE = os.path.join(MEDIA_ROOT, "u1")
 
 
-
 # django-csp
 CSP_DEFAULT_SRC = (
     "'self'",
