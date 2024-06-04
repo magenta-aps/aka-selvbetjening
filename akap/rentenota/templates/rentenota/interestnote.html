@@ -6,22 +6,22 @@
 
 {% block extra_headers %}
     {% if pdf %}
-        <style>
+        <style nonce="{{request.csp_nonce}}">
             {{ css|safe }}
         </style>
     {% else %}
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/sumoselect.min.css">
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/jquery.sumoselect.min.js"></script>
-        <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
-        <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}"/>
-        <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}"/>
+        <script type="text/javascript" src="{% static 'js/form.js' %}" nonce="{{request.csp_nonce}}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}" nonce="{{request.csp_nonce}}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}" nonce="{{request.csp_nonce}}"/>
         <script src="{% static 'js/download.js' %}"></script>
     {% endif %}
 {% endblock %}
 
 {% block content %}
 
-    <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
+    <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid interestnote">
 
         <form method="get" id="mainform">
 
@@ -61,7 +61,7 @@
         </form>
     </div>
 
-    <div class="col-xs-12 col-md-12 col-fluid">
+    <div class="col-xs-12 col-md-12 col-fluid interestnote">
         <div class="row output block rentenota-data">
             <div class="col-12">
 
@@ -163,7 +163,7 @@
 
                 {% if items is not None %}
                     <div class="output-data">
-                    <table class="output-table" style="font-size: 0.8em">
+                    <table class="output-table">
                         <thead>
                         <tr>
                             {% for field in fields %}
@@ -177,7 +177,7 @@
                         <tbody>
                         {% if items|length == 0 %}
                             <tr>
-                                <td colspan="14" style="text-align: center">
+                                <td colspan="14" class="table-row-empty">
                                     {% translate 'rentenota.ingenposter' %}
                                 </td>
                             </tr>

@@ -49,6 +49,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django_mitid_auth.middleware.LoginManager",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "csp.middleware.CSPMiddleware",
     "django_session_timeout.middleware.SessionTimeoutMiddleware",
 ]
 
@@ -65,6 +66,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.messages.context_processors.messages",
             ],
+            "libraries": {
+                "csp": "csp.templatetags.csp",
+            },
         },
     },
 ]
@@ -411,3 +415,26 @@ TAX_FORM_U1 = os.environ.get(
     "TAX_FORM_U1", "http://etaxgps1/eTaxWebCitz1/Suliffinnut/Login.aspx"
 )
 TAX_FORM_STORAGE = os.path.join(MEDIA_ROOT, "u1")
+
+
+
+# django-csp
+CSP_DEFAULT_SRC = (
+    "'self'",
+    "localhost:8000" if DEBUG else "https://akap.sullissivik.gl",
+    "cdnjs.cloudflare.com",
+    "cdn.datatables.net",
+)
+CSP_SCRIPT_SRC_ATTR = (
+    "'self'",
+    "localhost:8000" if DEBUG else "https://akap.sullissivik.gl",
+    "code.jquery.com",
+    "cdnjs.cloudflare.com",
+    "cdn.datatables.net",
+)
+CSP_STYLE_SRC_ATTR = ("'self'",)
+CSP_IMG_SRC = (
+    "'self'",
+    "data:",
+    "www.sullissivik.gl",
+)

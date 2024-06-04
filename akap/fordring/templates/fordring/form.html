@@ -4,10 +4,10 @@
 
 {% block extra_headers %}
     {% include 'aka/util/calendar_headers.html' %}
-    <script type="text/javascript" src="{% static 'js/formset.js' %}"></script>
-    <script type="text/javascript" src="{% url 'fordring:fordringsgrupper-var' var='groups' %}"></script>
-    <script type="text/javascript" src="{% static 'js/claim.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/formset.js' %}" nonce="{{request.csp_nonce}}"></script>
+    <script type="text/javascript" src="{% url 'fordring:fordringsgrupper-var' var='groups' %}" nonce="{{request.csp_nonce}}"></script>
+    <script type="text/javascript" src="{% static 'js/claim.js' %}" nonce="{{request.csp_nonce}}"></script>
+    <script type="text/javascript" src="{% static 'js/form.js' %}" nonce="{{request.csp_nonce}}"></script>
     {{ form.media }}
 {% endblock %}
 
@@ -125,7 +125,7 @@
         </div>
         </div>
     </form>
-    <div id="codebitorFormsetPrototype" style="display: none">
+    <div id="codebitorFormsetPrototype" class="hidden">
         {% include 'fordring/subform.html' with subform=formset.empty_form %}
     </div>
 </div>

@@ -4,8 +4,8 @@
 {% load l10n %}
 
 {% block extra_headers %}
-    <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/payroll.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/form.js' %}" nonce="{{request.csp_nonce}}"></script>
+    <script type="text/javascript" src="{% static 'js/payroll.js' %}" nonce="{{request.csp_nonce}}"></script>
 {% endblock %}
 
 {% block content %}
@@ -62,7 +62,7 @@
                 </div>
             </div>
         </form>
-        <div id="formsetPrototype" style="display: none">
+        <div id="formsetPrototype" class="hidden">
             {% include 'løntræk/subform.html' with subform=formset.empty_form %}
         </div>
     </div>
