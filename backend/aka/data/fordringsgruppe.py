@@ -307,6 +307,7 @@ groups = [
             {"name": "ERSTAT", "group_id": 42, "type_id": 1},
             {"name": "LØN", "group_id": 40, "type_id": 5},
             {"name": "SKORSTEN", "group_id": 27, "type_id": 1},
+            {"name": "POLITIET", "group_id": 27, "type_id": 3},
         ],
     },
 ]
