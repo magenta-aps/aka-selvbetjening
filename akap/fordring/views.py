@@ -143,7 +143,7 @@ class InkassoSagView(
         session["receipts"][pdf_id] = {
             "context": pdf_context,
             "filename": f"kvittering_fordring_{now}.pdf",
-            "template": "aka/claim/receipt.html",
+            "template": "fordring/receipt.html",
         }
         session.modified = True
         return pdf_id

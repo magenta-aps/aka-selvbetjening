@@ -4,7 +4,7 @@ $(function(){
         const groupSelect = $("#id_fordringsgruppe");
         const typeSelect = $("#id_fordringstype");
         const childCpr = $("#id_barns_cpr");
-        const childCprParents = childCpr.parentsUntil(".container-fluid");
+        const childCprParents = childCpr.parentsUntil(".row");
         group_dict = {};
         for (let i = 0; i < groups.length; i++) {
             let group = groups[i];
