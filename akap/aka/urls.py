@@ -41,6 +41,11 @@ urlpatterns = [
         name="login-no-cprcvr",
     ),
     path(
+        "error/login_assurance/",
+        AccessDeniedView.as_view(template_name="aka/error/login_assurance.html"),
+        name="login-assurance-level",
+    ),
+    path(
         "downtime", TemplateView.as_view(template_name="downtime.html"), name="downtime"
     ),
 ]
