@@ -343,6 +343,7 @@ LOGIN_NAMESPACE = (
 LOGIN_TIMEOUT_URL = reverse_lazy("aka:login-timeout")
 LOGIN_REPEATED_URL = reverse_lazy("aka:login-repeat")
 LOGIN_NO_CPRCVR_URL = reverse_lazy("aka:login-no-cprcvr")
+LOGIN_ASSURANCE_LEVEL_URL = reverse_lazy("aka:login-assurance-level")
 LOGIN_WHITELISTED_URLS = [
     # reverse('aka:index'),
     "/favicon.ico",
@@ -355,6 +356,7 @@ LOGIN_WHITELISTED_URLS = [
     LOGIN_TIMEOUT_URL,
     LOGIN_REPEATED_URL,
     LOGIN_NO_CPRCVR_URL,
+    LOGIN_ASSURANCE_LEVEL_URL,
 ]
 MITID_TEST_ENABLED = bool(strtobool(os.environ.get("MITID_TEST_ENABLED", "False")))
 DEFAULT_CPR = os.environ.get("DEFAULT_CPR", None)
