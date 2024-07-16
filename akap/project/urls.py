@@ -18,6 +18,7 @@ urlpatterns: List[Union[URLResolver, URLPattern]] = [
     path("udbytte/", include("udbytte.urls", namespace="udbytte")),
     path("", include("django_mitid_auth.urls", namespace="login")),
     path("_ht/", include("watchman.urls")),
+    path("metrics/", include("metrics.urls", namespace="metrics")),
 ]
 
 if settings.MITID_TEST_ENABLED:

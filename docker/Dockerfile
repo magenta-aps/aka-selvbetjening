@@ -26,7 +26,8 @@ RUN mkdir /app && mkdir -p /log && mkdir -p /var/cache/aka \
  && chmod a+w /var/cache/aka \
  && mkdir -p /ssl/sp \
  && mkdir -p /ssl/idp \
- && chmod -R a+w /home
+ && chmod -R a+w /home \
+ && mkdir -p /upload && chown aka:aka /upload
 
 COPY docker/crontab /crontab
 COPY akap/requirements.txt /app/requirements.txt
