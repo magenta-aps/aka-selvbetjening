@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "udbytte",
     "mitid_test",
     "watchman",
+    "metrics",
 ]
 
 MIDDLEWARE = [
@@ -380,6 +381,8 @@ LOGIN_WHITELISTED_URLS = [
     LOGIN_REPEATED_URL,
     LOGIN_NO_CPRCVR_URL,
     LOGIN_ASSURANCE_LEVEL_URL,
+    reverse_lazy("metrics:health_check_storage"),
+    reverse_lazy("metrics:health_check_database"),
 ]
 MITID_TEST_ENABLED = bool(strtobool(os.environ.get("MITID_TEST_ENABLED", "False")))
 DEFAULT_CPR = os.environ.get("DEFAULT_CPR", None)
