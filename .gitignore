@@ -135,3 +135,5 @@ log/*
 !log/.gitkeep
 
 docker-compose.override.yml
+
+**/.venv-*
