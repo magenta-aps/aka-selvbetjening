@@ -6,5 +6,5 @@
 # │ │ │ │ │
 # * * * * * command to execute
   0 0 * * * python manage.py clearsessions
-  0 0 * * * python manage.py update_mitid_idp_metadata
+  0 0 * * * python manage.py update_mitid_idp_metadata && echo -e "# TYPE groenland_job gauge\ngroenland_job $(date +%s)" | curl --data-binary @- http://pushgateway:9091/metrics/job/update_mitid_idp_metadata/
 0/5 * * * * python manage.py check_downtime
