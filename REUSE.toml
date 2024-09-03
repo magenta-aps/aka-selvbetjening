@@ -3,9 +3,9 @@ SPDX-PackageName = "AKAP"
 SPDX-PackageSupplier = "Magenta ApS <info@magenta.dk>"
 
 [[annotations]]
-path = ["akap/**", "dev-environment/**", "docker/**", "dev-idp/**", "decrypt.py", "docker-compose.yml", ".gitignore", ".gitlab-ci.yml", ".gitlab/**", "README.md"]
+path = ["REUSE.toml", "akap/**", "dev-environment/**", "docker/**", "dev-idp/**", "decrypt.py", "docker-compose.yml", ".gitignore", ".gitlab-ci.yml", ".gitlab/**", "README.md"]
 precedence = "aggregate"
-SPDX-FileCopyrightText = "2021-2022 Magenta ApS <info@magenta.dk>"
+SPDX-FileCopyrightText = "2021-2024 Magenta ApS <info@magenta.dk>"
 SPDX-License-Identifier = "MPL-2.0"
 
 [[annotations]]
