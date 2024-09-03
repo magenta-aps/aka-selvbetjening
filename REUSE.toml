@@ -1,0 +1,27 @@
+version = 1
+SPDX-PackageName = "AKAP"
+SPDX-PackageSupplier = "Magenta ApS <info@magenta.dk>"
+
+[[annotations]]
+path = ["akap/**", "dev-environment/**", "docker/**", "dev-idp/**", "decrypt.py", "docker-compose.yml", ".gitignore", ".gitlab-ci.yml", ".gitlab/**", "README.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2021-2022 Magenta ApS <info@magenta.dk>"
+SPDX-License-Identifier = "MPL-2.0"
+
+[[annotations]]
+path = ["akap/aka/static/css/thirdparty/jquery.datetimepicker.min.css", "akap/aka/static/js/thirdparty/jquery.datetimepicker.min.css"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Copyright (c) 2013 http://xdsoft.net"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "akap/aka/static/js/thirdparty/jquery.sortElements.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "James Padolsey (http://james.padolsey.com)"
+SPDX-License-Identifier = "Unlicense"
+
+[[annotations]]
+path = "akap/aka/static/js/thirdparty/jquery-3.5.0.min.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022 OpenJS Foundation and jQuery contributors"
+SPDX-License-Identifier = "MIT"
