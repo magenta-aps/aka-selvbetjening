@@ -17,7 +17,7 @@ DEBUG = bool(strtobool(os.environ.get("DJANGO_DEBUG", "False")))
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
-VERSION = os.environ.get("COMMIT_TAG", "")
+VERSION = os.environ["COMMIT_TAG"]
 
 
 # Django apps, middleware, templates etc.
