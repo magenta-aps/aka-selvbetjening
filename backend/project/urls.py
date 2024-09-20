@@ -15,7 +15,6 @@ urlpatterns = [
     path("rentenota/", include("rentenota.urls", namespace="rentenota")),
     path("udbytte/", include("udbytte.urls", namespace="udbytte")),
     path("", include("django_mitid_auth.urls", namespace="login")),
-    path("_ht/", include("watchman.urls")),
     path("metrics/", include("metrics.urls", namespace="metrics")),
 ]
 
