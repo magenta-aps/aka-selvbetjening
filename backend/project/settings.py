@@ -15,8 +15,6 @@ AKA_DIR = os.path.join(BASE_DIR, "aka")
 SHARED_DIR = os.path.join(PROJECT_DIR, "shared")
 DEBUG = bool(strtobool(os.environ.get("DJANGO_DEBUG", "False")))
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
-# Skip health_check for cache layer and storage since we are not using it
-WATCHMAN_CHECKS = ("watchman.checks.databases",)
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 
@@ -36,7 +34,6 @@ INSTALLED_APPS = [
     "rentenota",
     "udbytte",
     "mitid_test",
-    "watchman",
     "metrics",
 ]
 
@@ -351,7 +348,6 @@ LOGIN_WHITELISTED_URLS = [
     reverse_lazy("aka:javascript-language-catalog", kwargs={"locale": "da"}),
     reverse_lazy("aka:javascript-language-catalog", kwargs={"locale": "kl"}),
     reverse_lazy("aka:set-language"),
-    reverse_lazy("status"),
     reverse_lazy("aka:downtime"),
     LOGIN_URL,
     LOGIN_TIMEOUT_URL,
