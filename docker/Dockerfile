@@ -9,7 +9,9 @@ RUN curl -fsSLO https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.1
   mv wkhtmltox/bin/wkhtmlto* /usr/bin
     
 # hadolint ignore=DL3008
-RUN mkdir /backend && mkdir -p /log && mkdir -p /var/cache/aka \
+RUN mkdir /backend && mkdir -p /log && mkdir -p /var/cache/aka
+RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && \
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg \
  && apt-get update && apt-get install -y --no-install-recommends \
     gettext libxmlsec1-dev xmlsec1 gpg libmagic1 nano postgresql-client-common postgresql-client-13 \
  && apt-get clean && rm -rf /var/lib/apt/lists/* \
