@@ -27,7 +27,8 @@ RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main"
  && chown aka:aka /var/cache/aka \
  && chmod a+w /var/cache/aka \
  && mkdir -p /ssl/sp \
- && mkdir -p /ssl/idp
+ && mkdir -p /ssl/idp \
+ && mkdir -p /upload && chown aka:aka /upload
 
 COPY docker/crontab /crontab
 COPY backend/requirements.txt /backend/requirements.txt
