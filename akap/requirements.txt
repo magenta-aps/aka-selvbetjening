@@ -18,7 +18,6 @@ gunicorn==22.0.0
 whitenoise==5.2.0
 psycopg2==2.9.3
 pytest-django
-django-watchman==1.2.0
 WeasyPrint>=54.1
 python-dateutil
 coverage
