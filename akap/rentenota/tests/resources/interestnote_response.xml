@@ -8,7 +8,7 @@
         <CustInterestTransactions>
             <CustInterestTrans>
                 <Voucher>FAK-00000040</Voucher>
-                <Txt>Renter af fakturanummer 00000044 </Txt>
+                <Txt>Renter af fakturanummer 00000044</Txt>
                 <DueDate>02-01-2018</DueDate>
                 <InvoiceAmount>4000.00</InvoiceAmount>
                 <InterestAmount>160.00</InterestAmount>
@@ -29,7 +29,7 @@
         <CustInterestTransactions>
             <CustInterestTrans>
                 <Voucher>FAK-00000039</Voucher>
-                <Txt>Renter af fakturanummer 00000043 </Txt>
+                <Txt>Renter af fakturanummer 00000043</Txt>
                 <DueDate>02-01-2018</DueDate>
                 <InvoiceAmount>7000.00</InvoiceAmount>
                 <InterestAmount>280.00</InterestAmount>
