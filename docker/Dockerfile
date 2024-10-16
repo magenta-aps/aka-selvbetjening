@@ -42,14 +42,16 @@ RUN curl -fsSLO "$SUPERCRONIC_URL" && \
 
 COPY docker/crontab /crontab
 COPY akap/requirements.txt /app/requirements.txt
-RUN pip3 install --no-cache-dir -r /app/requirements.txt
+RUN pip3 install --no-cache-dir -r /app/requirements.txt && rm /app/requirements.txt
 COPY ./docker/entrypoint.sh /entrypoint.sh
 COPY --chown=aka:aka ./akap /app
 # Include self-signed certificates for testing in pipeline
 COPY dev-environment/cert/sp/selfsigned.* /ssl/sp/
 COPY dev-environment/cert/idp/selfsigned.crt /ssl/idp/selfsigned.crt
+RUN chown -R aka:aka /entrypoint.sh
 USER aka
 WORKDIR /app
+RUN django-admin compilemessages
 ENV HOME=/home
 VOLUME /var/cache/aka
 EXPOSE 8000

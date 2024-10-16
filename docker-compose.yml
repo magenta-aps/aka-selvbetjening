@@ -1,5 +1,3 @@
-version: "3.4"
-
 services:
   selvbetjening-db:
     container_name: selvbetjening-db
