@@ -227,10 +227,10 @@ msgid "index.fordring.sub"
 msgstr "Uani pisortanut akiligassat Akiliisitsiniartarfimmut nalunaarutigikkit"
 
 msgid "index.fordring-upload"
-msgstr "Fordring-it uploadikkit"
+msgstr "Akiligassanik fil -inngorlugit nalunaarsuineq"
 
 msgid "index.fordring-upload.sub"
-msgstr "Upload fording som en CSV-fil"
+msgstr "Uani pisortanut akiligassat Akiliisitsiniartarfimmut CSV-fil -inngorlugit nalunaarutigikkit"
 
 msgid "index.fordring.linktext"
 msgstr "Indberet her"
@@ -242,10 +242,10 @@ msgid "index.nedskrivning.sub"
 msgstr "Uani milliliinerit akiliisitsiniartarfimmut nalunaarutigikkit"
 
 msgid "index.nedskrivning-upload"
-msgstr "Milliliineq uploaderuk"
+msgstr "Milliliinerit fil -inngorlugit nalunaarutigikkit"
 
 msgid "index.nedskrivning-upload.sub"
-msgstr "Upload nedskrivning som en CSV-fil"
+msgstr "Uani milliliinerit CSV-fil -inngorlugit nalunaarutigikkit"
 
 msgid "index.nedskrivning.linktext"
 msgstr "Indberet her"
@@ -257,10 +257,10 @@ msgid "index.løntræk.sub"
 msgstr "Uani Aningaasarsianiit  ilanngatuinerit nalunaarutigikkit"
 
 msgid "index.løntræk-upload"
-msgstr "Akissarsianik ilanngaaneq uploaderuk"
+msgstr "Aningaasarsianit ilanngartuinerit fil -inngorlugit nalunaarutigikkit"
 
 msgid "index.løntræk-upload.sub"
-msgstr "Upload løntræk som en CSV-fil"
+msgstr "Uani aningaasarsianit ilanngartuinerit CSV-fil -inngorlugit nalunaarutigikkit"
 
 msgid "index.løntræk.linktext"
 msgstr "Indberet her"
@@ -275,10 +275,10 @@ msgid "index.fordringshaverkonto.linktext"
 msgstr "Hent her"
 
 msgid "index.udbytte"
-msgstr "Udbytteskat"
+msgstr "Iluanaarutisiat akileraarutitai"
 
 msgid "index.udbytte.sub"
-msgstr "For at indberette U1-skat"
+msgstr "Uani iluanaarutisiat akileraarutitai nalunaarutigikkit"
 
 msgid "index.udbytte.linktext"
 msgstr "Indberet her"
