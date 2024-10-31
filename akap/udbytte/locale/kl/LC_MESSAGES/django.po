@@ -21,6 +21,12 @@ msgstr ""
 msgid "udbytte.title"
 msgstr "U1a SKAT"
 
+msgid "udbytte.vejledning_skjul"
+msgstr "Ilitsersuut tarrisiguk"
+
+msgid "udbytte.vejledning_vis"
+msgstr "Ilitsersuut nuisiguk"
+
 msgid "udbytte.revisionsfirma"
 msgstr "Paasissutissat revionsfirmamut tunngasut"
 
