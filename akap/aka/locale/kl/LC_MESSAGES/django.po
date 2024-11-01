@@ -78,7 +78,7 @@ msgid "common.logout"
 msgstr "Aniffissaq"
 
 msgid "common.logout_confirm"
-msgstr "Er du sikker på at du vil logge ud?"
+msgstr "Ilumut aniniarpit?"
 
 msgid "common.login"
 msgstr "Log ind"
