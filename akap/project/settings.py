@@ -107,55 +107,60 @@ DATABASES = {
 LOGGING: Dict = {
     "version": 1,
     "disable_existing_loggers": True,
+    "filters": {
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse",
+        },
+    },
     "formatters": {
         "simple": {
-            "format": "{levelname} {message}",
+            "format": "[{asctime}] [{levelname}] {message}",
             "style": "{",
         },
     },
     "handlers": {
-        "gunicorn": {
+        "console": {
             "class": "logging.StreamHandler",
             "formatter": "simple",
         },
     },
     "root": {
         "level": "INFO",
-        "handlers": ["gunicorn"],
+        "handlers": ["console"],
     },
     "loggers": {
         "zeep.transports": {
-            "level": "DEBUG",
-            "handlers": ["gunicorn"],
+            "level": "ERROR",
+            "handlers": ["console"],
             "propagate": False,
         },
         "aka.clients.prisme": {
             "level": "DEBUG",
-            "handlers": ["gunicorn"],
+            "handlers": ["console"],
             "propagate": False,
         },
         "aka": {
             "level": "DEBUG",
-            "handlers": ["gunicorn"],
+            "handlers": ["console"],
             "propagate": False,
         },
         "oic": {
             "level": "DEBUG",
-            "handlers": ["gunicorn"],
+            "handlers": ["console"],
             "propagate": False,
         },
         "django_mitid_auth": {
             "level": "DEBUG",
-            "handlers": ["gunicorn"],
+            "handlers": ["console"],
             "propagate": False,
         },
         "weasyprint": {
-            "handlers": ["gunicorn"],
+            "handlers": ["console"],
             "level": "ERROR",
             "propagate": False,
         },
         "fontTools": {
-            "handlers": ["gunicorn"],
+            "handlers": ["console"],
             "level": "ERROR",
             "propagate": False,
         },
@@ -169,7 +174,7 @@ if os.path.isfile(log_filename) and ENVIRONMENT != "development":
         "formatter": "simple",
     }
     LOGGING["root"] = {
-        "handlers": ["gunicorn", "file"],
+        "handlers": ["console", "file"],
         "level": "INFO",
     }
     for name, config in LOGGING["loggers"].items():
