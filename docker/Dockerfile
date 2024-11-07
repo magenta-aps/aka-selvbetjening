@@ -40,6 +40,9 @@ RUN curl -fsSLO "$SUPERCRONIC_URL" && \
     mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" && \
     ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
 
+ARG COMMIT_TAG
+ENV COMMIT_TAG=${COMMIT_TAG:-HEAD}
+
 COPY docker/crontab /crontab
 COPY akap/requirements.txt /app/requirements.txt
 RUN pip3 install --no-cache-dir -r /app/requirements.txt && rm /app/requirements.txt
