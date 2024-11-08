@@ -1,8 +1,9 @@
 import json
 import os
 from functools import cached_property
+from io import BytesIO
 
-import django_excel as excel
+import pandas as pd
 from aka.clients.dafo import Dafo
 from aka.clients.prisme import Prisme, PrismeCvrCheckRequest, PrismeNotFoundException
 from aka.exceptions import AkaException
@@ -10,7 +11,7 @@ from aka.models import PrismeDown
 from aka.utils import flatten, render_pdf
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse, JsonResponse
+from django.http import FileResponse, HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import get_template
 from django.template.response import TemplateResponse
@@ -390,6 +391,19 @@ class JsonRendererMixin(RendererMixin):
 
 
 class SpreadsheetRendererMixin(RendererMixin):
+
+    type_map = {
+        "xlsx": {
+            "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "engine": "xlsxwriter",
+        },
+        "ods": {
+            "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+            "engine": "odf",
+        },
+        "csv": {"content_type": "text/csv", "engine": "csv"},
+    }
+
     def get_filename(self):
         raise NotImplementedError
 
@@ -415,26 +429,42 @@ class SpreadsheetRendererMixin(RendererMixin):
     def render(self):
         format = self.format
         if format in self.accepted_formats:
+            engine = self.type_map[format]["engine"]
+            content_type = self.type_map[format]["content_type"]
+
             fields = self.get_spreadsheet_fields()  # List of Fields
             rows = self.get_spreadsheet_rows()  # List of Rows
             extra = self.get_spreadsheet_extra()  # List of Rows
+
             data = []
-            data.append([field.title or field.name for field in fields])
+            headers = [field.title or field.name for field in fields]
+
             for row in rows:
                 for cell in row.cells:
                     if cell.field.boolean:
                         cell.value = gettext("ja") if cell.value else gettext("nej")
                 data.append([cell.value for cell in row.cells])
 
-            if extra:
+            if extra is not None:
                 data += [[]] + [[key, value] for key, value in extra.items()]
 
-            sheet = excel.pe.Sheet(
-                data, name=self.get_sheetname(), name_columns_by_row=0
-            )
-            return excel.make_response(
-                sheet,
-                file_type=format,
-                file_name="%s.%s" % (self.get_filename(), format),
+            df = pd.DataFrame(data, columns=headers)
+
+            buffer = BytesIO()
+            if format == "csv":
+                df.to_csv(buffer, mode="wb", sep=";")
+            else:
+                with pd.ExcelWriter(buffer, engine=engine) as writer:
+                    df.to_excel(writer, sheet_name=self.get_sheetname())
+            buffer.seek(0)
+            return FileResponse(
+                streaming_content=buffer,
+                as_attachment=True,
+                headers={
+                    "Content-Type": content_type,
+                    "Content-Disposition": "attachment; filename="
+                    + self.get_filename(),
+                },
+                filename="%s.%s" % (self.get_filename(), format),
             )
         return super().render()
