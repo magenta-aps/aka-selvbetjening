@@ -27,7 +27,7 @@ django-session-timeout @ git+https://github.com/Lapeth/django-session-timeout@ma
 pysaml2==7.5.0
 python-magic==0.4.27
 django-forms-dynamic==1.0.0
-mypy==1.13.0
+mypy==1.7.0
 django-stubs[compatible-mypy]==4.2.7
 types-requests==2.31.0.20240218
 types-python-dateutil==2.9.0.20240316
