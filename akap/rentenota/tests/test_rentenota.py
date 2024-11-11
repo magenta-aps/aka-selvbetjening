@@ -130,8 +130,8 @@ class BasicTestCase(TestMixin, TestCase):
                     _("rentenota.interest_note"): "00000001",
                     _("rentenota.text"): "Renter af fakturanummer 00000044",
                     _("rentenota.due_date"): "02-01-2018",
-                    _("rentenota.invoice_amount"): "4000.00",
-                    _("rentenota.interest_amount"): "160.00",
+                    _("rentenota.invoice_amount"): "4.000,00",
+                    _("rentenota.interest_amount"): "160,00",
                     _("rentenota.transaction_date"): "02-01-2018",
                     _("rentenota.invoice"): "00000044",
                     _("rentenota.calculate_from_date"): "01-01-2019",
@@ -146,8 +146,8 @@ class BasicTestCase(TestMixin, TestCase):
                     _("rentenota.interest_note"): "00000002",
                     _("rentenota.text"): "Renter af fakturanummer 00000043",
                     _("rentenota.due_date"): "02-01-2018",
-                    _("rentenota.invoice_amount"): "7000.00",
-                    _("rentenota.interest_amount"): "280.00",
+                    _("rentenota.invoice_amount"): "7.000,00",
+                    _("rentenota.interest_amount"): "280,00",
                     _("rentenota.transaction_date"): "02-01-2018",
                     _("rentenota.invoice"): "00000043",
                     _("rentenota.calculate_from_date"): "01-01-2019",
@@ -162,7 +162,7 @@ class BasicTestCase(TestMixin, TestCase):
         )
         data = [cell.text for cell in rows[0].iterchildren()]
         self.assertEqual(3, len(data))
-        self.assertEqual([None, "440,0", "kr"], data)
+        self.assertEqual([None, "440,00", "kr"], data)
 
     @override_settings(DEFAULT_CVR=None)
     def test_invalid_cvr(self):
