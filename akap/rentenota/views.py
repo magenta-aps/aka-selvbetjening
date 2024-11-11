@@ -1,3 +1,4 @@
+from decimal import Decimal
 from typing import List
 
 from aka.clients.prisme import Prisme, PrismeException, PrismeInterestNoteRequest
@@ -37,6 +38,8 @@ class RenteNotaView(
         super().__init__(*args, **kwargs)
         self.errors = []
         self.items = []
+        self.fields = self.get_fields()
+        self.fields_by_name = {field.name: field for field in self.fields}
 
     def get_journal_fields(self):
         return ["updated", "account_number", "interest_note", "billing_classification"]
@@ -55,7 +58,8 @@ class RenteNotaView(
             "interest_days",
         ]
 
-    def get_fields(self) -> List[Field]:
+    @staticmethod
+    def get_fields() -> List[Field]:
         fields = [
             Field(name="updated", klass="nb"),
             Field(name="account_number", klass="nb"),
@@ -96,12 +100,15 @@ class RenteNotaView(
                     key: getattr(journal, key) for key in self.get_journal_fields()
                 }
                 for transaction in journal.interest_transactions:
-                    data = {
-                        key: getattr(transaction, key)
-                        for key in self.get_transaction_fields()
-                    }
+                    data = {}
+                    for key in self.get_transaction_fields():
+                        value = getattr(transaction, key)
+                        if self.fields_by_name[key].number:
+                            value = Decimal(value)
+                        data[key] = value
                     data.update(journaldata)
                     posts.append(data)
+
         self.items = posts
 
     def get_pages(self, key):
@@ -114,9 +121,12 @@ class RenteNotaView(
         return "Rentenota"
 
     def get_rows(self):
-        fields = self.get_fields()
         return [
-            Row(cells=[Cell(field=field, value=item[field.name]) for field in fields])
+            Row(
+                cells=[
+                    Cell(field=field, value=item[field.name]) for field in self.fields
+                ]
+            )
             for item in self.items
         ]
 
@@ -137,9 +147,11 @@ class RenteNotaView(
             "date": date.today().strftime("%d/%m/%Y"),
             "items": self.items,
             "rows": self.get_rows(),
-            "fields": self.get_fields(),
+            "fields": self.fields,
             "total": (
-                sum([float(item["interest_amount"]) for item in self.items])
+                Decimal(
+                    sum([float(item["interest_amount"]) for item in self.items])
+                ).quantize(Decimal("0.01"))
                 if self.items is not None
                 else None
             ),
