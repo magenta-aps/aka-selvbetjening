@@ -186,7 +186,7 @@
                                 <tr class="rentenota-post-table-datarow">
                                     {% for field in fields %}
                                         {% with value=item|get:field.name|default:'' %}
-                                            <td class="{{ field.class }}" data-original="{{ value }}">
+                                            <td class="{{ field.klass }}" data-original="{{ value }}">
                                                 {% if field.number %}
                                                     {{ value }}
                                                 {% else %}
