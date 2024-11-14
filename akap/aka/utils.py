@@ -298,7 +298,7 @@ def send_mail(
     if type(recipient) not in (list, tuple):
         recipient = (recipient,)
     message = EmailMultiAlternatives(
-        subject=subject, body=textbody, from_email=settings.EMAIL_SENDER, to=recipient
+        subject=subject, body=textbody, from_email=settings.EMAIL_SENDER, to=recipient  # type: ignore
     )
     if htmlbody:
         message.attach_alternative(htmlbody, "text/html")
