@@ -59,4 +59,15 @@ ENV HOME=/home
 VOLUME /var/cache/aka
 EXPOSE 8000
 ENTRYPOINT ["/entrypoint.sh"]
+
+# Run collectstatic
+COPY --chown=aka:aka ./dev-environment/selvbetjening.env /tmp/selvbetjening.env
+# hadolint ignore=SC1091
+RUN chown aka:aka /tmp/selvbetjening.env && \
+    set -a && \
+    source /tmp/selvbetjening.env && \
+    set +a && \
+    python manage.py collectstatic --no-input --clear && \
+    rm /tmp/selvbetjening.env
+
 CMD ["gunicorn","-b","0.0.0.0:8000","project.wsgi:application","-w 4","--timeout", "240", "--error-logfile", "-","--capture-output"]
