@@ -107,6 +107,7 @@ Lint REUSE compliance:
     DJANGO_SECRET_KEY: zuvd9h*iw+hhefxld(bqq*^7_ksk0(jy^1*fe=b_7(9p*=hn5$
     RUN_MIGRATIONS: "true"
     DJANGO_LANGUAGE_COOKIE_DOMAIN: "localhost"
+    HOST_DOMAIN: "http://localhost"
     SAML_ENABLED: "true"
     SAML_SP_ENTITY_ID: http://localhost:8000/saml/metadata/
     SAML_SP_LOGIN_CALLBACK_URI: http://localhost:8000/login/callback
