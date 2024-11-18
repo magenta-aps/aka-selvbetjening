@@ -125,7 +125,7 @@
     </div>
 
     <div class="output-details row">
-        <div class="col-sm-5 offset-sm-5">
+        <div class="col-sm-6 offset-sm-6">
             <h3 data-trans="konto.account">{% translate 'konto.account' %}</h3>
             {% if period.from_date and period.to_date %}
                 <h4 data-trans="konto.period" data-trans-params="{{ period|json }}">{{ 'konto.period'|format:period }}</h4>
@@ -140,7 +140,7 @@
 
         <div class="output-details row">
             {% localize off %}
-                <div class="col-sm-7 offset-sm-5">
+                <div class="col-sm-6 offset-sm-6">
                     <table class="dl-table">
                         <tr>
                             <th data-trans="konto.number">{% translate 'konto.number' %}</th>
