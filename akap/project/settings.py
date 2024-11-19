@@ -206,7 +206,7 @@ USE_THOUSAND_SEPARATOR = True
 
 # Static & uploaded files
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(AKA_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS: List[str] = []
 MEDIA_ROOT = "/upload/"  # Filesystem path to upload folder
 # Max 2 MB - can be lower if we want
