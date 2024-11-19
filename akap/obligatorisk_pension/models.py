@@ -6,6 +6,8 @@ from django.db import models
 from django.utils.datetime_safe import datetime
 from django.utils.translation import gettext_lazy as _
 
+MUNICIPALITIES = settings.MUNICIPALITIES  # type: ignore
+
 
 class ObligatoriskPension(models.Model):
     oprettet = models.DateTimeField(
@@ -34,7 +36,7 @@ class ObligatoriskPension(models.Model):
         max_length=1000,
     )
     kommune = models.PositiveSmallIntegerField(
-        choices=((m["code"], m["name"]) for m in settings.MUNICIPALITIES),
+        choices=((m["code"], m["name"]) for m in MUNICIPALITIES),
         null=False,
     )
     email = models.EmailField(

@@ -27,6 +27,7 @@ services:
       - ./log:/log:rw
       - ./dev-environment/cert:/ssl:ro
       - ./upload:/upload  # Matcher MEDIA_ROOT i django settings
+      - ./akap/mypy.ini:/mypy.ini:ro
     command: gunicorn -b 0.0.0.0:8000 project.wsgi:application --reload -w 1 --access-logfile - --error-logfile - --capture-output # reload on code changes
 
   selvbetjening-cron:

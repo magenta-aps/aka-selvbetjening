@@ -13,6 +13,8 @@ from obligatorisk_pension.models import (
     ObligatoriskPensionSelskab,
 )
 
+MUNICIPALITIES = settings.MUNICIPALITIES  # type: ignore
+
 
 class SkatteårForm(DynamicFormMixin, forms.Form):
     skatteår = DynamicField(
@@ -137,7 +139,7 @@ class ObligatoriskPensionForm(forms.ModelForm):
         widget=widgets.Textarea,
     )
     kommune = forms.ChoiceField(
-        choices=((m["code"], m["name"]) for m in settings.MUNICIPALITIES),
+        choices=((m["code"], m["name"]) for m in MUNICIPALITIES),
         required=True,
         error_messages={"required": "error.required"},
         widget=TranslatedSelect(attrs={"class": "dropdown"}),
