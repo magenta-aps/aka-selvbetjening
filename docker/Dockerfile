@@ -51,7 +51,8 @@ COPY --chown=aka:aka ./akap /app
 # Include self-signed certificates for testing in pipeline
 COPY dev-environment/cert/sp/selfsigned.* /ssl/sp/
 COPY dev-environment/cert/idp/selfsigned.crt /ssl/idp/selfsigned.crt
-RUN chown -R aka:aka /entrypoint.sh
+RUN mkdir /app/static && \
+    chown -R aka:aka /entrypoint.sh /app/static
 USER aka
 WORKDIR /app
 RUN django-admin compilemessages
