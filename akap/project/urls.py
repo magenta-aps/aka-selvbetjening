@@ -20,7 +20,7 @@ urlpatterns: List[Union[URLResolver, URLPattern]] = [
     path("metrics/", include("metrics.urls", namespace="metrics")),
 ]
 
-if settings.MITID_TEST_ENABLED:
+if settings.MITID_TEST_ENABLED:  # type: ignore
     urlpatterns.append(
         path("mitid_test/", include("mitid_test.urls", namespace="mitid_test"))
     )

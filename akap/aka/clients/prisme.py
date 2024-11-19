@@ -15,7 +15,7 @@ from requests_ntlm import HttpNtlmAuth
 from xmltodict import parse as xml_to_dict
 from zeep.transports import Transport
 
-prisme_settings = settings.PRISME_CONNECT
+prisme_settings = settings.PRISME_CONNECT  # type: ignore
 logger = logging.getLogger(__name__)
 
 
