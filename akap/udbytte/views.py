@@ -64,15 +64,16 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
         return self.form_invalid(form, formset)
 
     def form_valid(self, form, formset):
+        oprettet_af_cpr = self.request.session["user_info"]["cpr"]
+
         # Persist the submittet U1A in the database
-        new_u1a_model = U1A.objects.create(**form.cleaned_data)
-        _ = [
+        new_u1a_model = U1A.objects.create(
+            **{**form.cleaned_data, "oprettet_af_cpr": oprettet_af_cpr}
+        )
+        for subform in filter(lambda sf: sf.cleaned_data, formset):
             U1AItem.objects.create(
-                **{"u1a": new_u1a_model, **omit(subform.cleaned_data, "DELETE")}
+                **{**omit(subform.cleaned_data, "DELETE"), "u1a": new_u1a_model}
             )
-            for subform in formset
-            if subform.cleaned_data
-        ]
 
         # PDF handling
         pdf_data = self.render_filled_form(form, formset)
