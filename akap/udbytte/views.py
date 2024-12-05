@@ -5,7 +5,7 @@ import logging
 import os
 from io import StringIO
 
-from aka.utils import AKAJSONEncoder, gettext_lang, send_mail
+from aka.utils import AKAJSONEncoder, gettext_lang, omit, send_mail
 from django.conf import settings
 from django.forms import formset_factory
 from django.template.response import TemplateResponse
@@ -13,6 +13,7 @@ from django.views.generic.edit import FormView
 from extra_views import FormSetView
 from project.view_mixins import IsContentMixin, PdfRendererMixin
 from udbytte.forms import UdbytteForm, UdbytteFormItem
+from udbytte.models import U1A, U1AItem
 
 logger = logging.getLogger(__name__)
 
@@ -63,15 +64,25 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
         return self.form_invalid(form, formset)
 
     def form_valid(self, form, formset):
+        # Persist the submittet U1A in the database
+        new_u1a_model = U1A.objects.create(**form.cleaned_data)
+        _ = [
+            U1AItem.objects.create(
+                **{"u1a": new_u1a_model, **omit(subform.cleaned_data, "DELETE")}
+            )
+            for subform in formset
+            if subform.cleaned_data
+        ]
+
+        # PDF handling
         pdf_data = self.render_filled_form(form, formset)
         self.send_mail_to_submitter(
             form.cleaned_data["email"], pdf_data, form.cleaned_data
         )
 
+        # CSV handling
         csv_data = self.get_csv(form, formset)
-
         self.save_data(form, formset, csv_data, pdf_data)
-
         self.send_mail_to_office(
             settings.EMAIL_OFFICE_RECIPIENT, csv_data, pdf_data, form.cleaned_data
         )
