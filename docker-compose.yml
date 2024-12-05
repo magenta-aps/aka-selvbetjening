@@ -72,9 +72,6 @@ services:
     # UI will be available at http://localhost:8025
     hostname: mailhog
     # environment config doc: https://github.com/mailhog/MailHog/blob/master/docs/CONFIG.md
-    logging:
-      # Disabled because it spams the log. Remove this to get mailhog logs.
-      driver: none
 
 volumes:
   selvbetjening-postgres-data:
