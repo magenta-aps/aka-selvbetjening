@@ -1,6 +1,7 @@
 from datetime import date
 from typing import List, Optional
 
+from django.shortcuts import get_object_or_404
 from ninja import Field, FilterSchema, ModelSchema, NinjaAPI, Query
 from udbytte.models import U1A, U1AItem
 
@@ -48,13 +49,14 @@ class U1AItemFilterSchema(FilterSchema):
     oprettet_før: Optional[date] = Field(default=None, q="oprettet__lt")
 
 
-@api.get("/u1a", response=List[U1AOut])
+@api.get("/u1a", response=List[U1AOut], url_name="u1a_list")
 def get_u1a_entries(request, filters: U1AFilterSchema = Query(...)):
     return filters.filter(U1A.objects.all())
 
 
-@api.get("/u1a/{u1a_id}/items", response=List[U1AItemOut])
+@api.get("/u1a/{u1a_id}/items", response=List[U1AItemOut], url_name="u1a_item_list")
 def get_u1a_item_entries(
     request, u1a_id: int, filters: U1AItemFilterSchema = Query(...)
 ):
-    return U1AItem.objects.filter(u1a_id=u1a_id)
+    u1a = get_object_or_404(U1A, pk=u1a_id)
+    return U1AItem.objects.filter(u1a_id=u1a.id)
