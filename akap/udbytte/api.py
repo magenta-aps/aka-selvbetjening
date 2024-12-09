@@ -92,4 +92,4 @@ def get_u1a_item_entries(
     request, u1a_id: int, filters: U1AItemFilterSchema = Query(...)
 ):
     u1a = get_object_or_404(U1A, pk=u1a_id)
-    return U1AItem.objects.filter(u1a_id=u1a.id)
+    return filters.filter(U1AItem.objects.filter(u1a_id=u1a.id))
