@@ -1,24 +1,26 @@
 services:
-  selvbetjening-db:
-    container_name: selvbetjening-db
+
+  akap-db:
+    container_name: akap-db
     image: postgres:13
-
-    network_mode: "host"
     env_file:
-      - ./dev-environment/selvbetjening.env
+      - ./dev-environment/akap.env
     volumes:
-      - selvbetjening-postgres-data:/var/lib/postgresql/data
+      - akap-postgres-data:/var/lib/postgresql/data
+    networks:
+      - database
 
-  selvbetjening-web:
-    container_name: selvbetjening-web
+  akap-web:
+    container_name: akap-web
     build:
       context: .
       dockerfile: docker/Dockerfile
     depends_on:
-      - selvbetjening-db
-    network_mode: "host"
+      - akap-db
     env_file:
-      - ./dev-environment/selvbetjening.env
+      - ./dev-environment/akap.env
+    ports:
+      - "8010:8010"
     environment:
       - TEST=true
       - MAKE_MIGRATIONS=true
@@ -28,10 +30,13 @@ services:
       - ./dev-environment/cert:/ssl:ro
       - ./upload:/upload  # Matcher MEDIA_ROOT i django settings
       - ./akap/mypy.ini:/mypy.ini:ro
-    command: gunicorn -b 0.0.0.0:8000 project.wsgi:application --reload -w 1 --access-logfile - --error-logfile - --capture-output # reload on code changes
+    command: gunicorn -b 0.0.0.0:8010 project.wsgi:application --reload -w 1 --access-logfile - --error-logfile - --capture-output   # reload on code changes
+    networks:
+      - default
+      - database
 
-  selvbetjening-cron:
-    container_name: selvbetjening-cron
+  akap-cron:
+    container_name: akap-cron
     build:
       context: .
       dockerfile: docker/Dockerfile
@@ -43,35 +48,57 @@ services:
       - ./akap/:/app
       - ./logs:/var/log/aka
     depends_on:
-      - selvbetjening-db
+      - akap-db
     command: [ "supercronic", "/crontab" ]
+    networks:
+      - database
 
-
-  selvbetjening-test-idp:
-    container_name: selvbetjening-test-idp
+  akap-idp:
+    container_name: akap-idp
     user: "1000:1000"
     image: kenchan0130/simplesamlphp
-    network_mode: "host"
+    ports:
+      - "8011:8011"
     environment:
-      SIMPLESAMLPHP_SP_ENTITY_ID: http://localhost:8000/saml/metadata/
-      SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost:8000/login/callback/
-      SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost:8000/logout/callback/
+      HTTP_PORT: 8011
+      SIMPLESAMLPHP_SP_ENTITY_ID: http://akap-web:8010/saml/metadata/
+      SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://akap-web:8010/login/callback/
+      SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://akap-web:8010/logout/callback/
       SIMPLESAMLPHP_IDP_CERTIFICATE: /var/www/simplesamlphp/cert/selfsigned.crt
       SIMPLESAMLPHP_IDP_PRIVATEKEY: /var/www/simplesamlphp/cert/selfsigned.key
 
     volumes:
+      - ./dev-environment/dev-idp/ports.conf:/etc/apache2/ports.conf:ro
+      - ./dev-environment/dev-idp/site.conf:/etc/apache2/sites-available/simplesamlphp.conf:ro
       - ./dev-environment/cert/idp/selfsigned.crt:/var/www/simplesamlphp/cert/server.crt:ro
       - ./dev-environment/cert/idp/selfsigned.key:/var/www/simplesamlphp/cert/server.pem:ro
-      - ./dev-idp/authsources.php:/var/www/simplesamlphp/config/authsources.php:ro
-      - ./dev-idp/saml20-sp-remote.php:/var/www/simplesamlphp/metadata/saml20-sp-remote.php:ro
+      - ./dev-environment/dev-idp/authsources.php:/var/www/simplesamlphp/config/authsources.php:ro
+      - ./dev-environment/dev-idp/saml20-sp-remote.php:/var/www/simplesamlphp/metadata/saml20-sp-remote.php:ro
+    networks:
+      - default
 
-  selvbetjening-mailhog:
-    container_name: selvbetjening-mailhog
+  akap-mailhog:
+    container_name: akap-mailhog
     image: mailhog/mailhog
-    network_mode: "host"
-    # UI will be available at http://localhost:8025
+    ports:
+      - "8012:8025"
+    # UI will be available at http://localhost:8012
     hostname: mailhog
     # environment config doc: https://github.com/mailhog/MailHog/blob/master/docs/CONFIG.md
+    networks:
+      - default
+
+  akap-hosts-updater:
+    container_name: akap-hosts-updater
+    image: bash
+    volumes:
+      - ./dev-environment/hosts.sh:/hosts.sh:ro
+      - /etc/hosts:/hosts:rw
+    command: [ "bash", "/hosts.sh" ]
 
 volumes:
-  selvbetjening-postgres-data:
+  akap-postgres-data:
+
+networks:
+  default:
+  database:
