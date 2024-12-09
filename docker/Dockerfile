@@ -48,11 +48,14 @@ COPY akap/requirements.txt /app/requirements.txt
 RUN pip3 install --no-cache-dir -r /app/requirements.txt && rm /app/requirements.txt
 COPY ./docker/entrypoint.sh /entrypoint.sh
 COPY --chown=aka:aka ./akap /app
+
 # Include self-signed certificates for testing in pipeline
 COPY dev-environment/cert/sp/selfsigned.* /ssl/sp/
-COPY dev-environment/cert/idp/selfsigned.crt /ssl/idp/selfsigned.crt
+COPY dev-environment/cert/idp/selfsigned.* /ssl/idp/
+
 RUN mkdir /app/static && \
     chown -R aka:aka /entrypoint.sh /app/static
+
 USER aka
 WORKDIR /app
 RUN django-admin compilemessages
@@ -62,13 +65,13 @@ EXPOSE 8000
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Run collectstatic
-COPY --chown=aka:aka ./dev-environment/selvbetjening.env /tmp/selvbetjening.env
+COPY --chown=aka:aka ./dev-environment/akap.env /tmp/akap.env
 # hadolint ignore=SC1091
-RUN chown aka:aka /tmp/selvbetjening.env && \
+RUN chown aka:aka /tmp/akap.env && \
     set -a && \
-    source /tmp/selvbetjening.env && \
+    source /tmp/akap.env && \
     set +a && \
     python manage.py collectstatic --no-input --clear && \
-    rm /tmp/selvbetjening.env
+    rm /tmp/akap.env
 
 CMD ["gunicorn","-b","0.0.0.0:8000","project.wsgi:application","-w 4","--timeout", "240", "--error-logfile", "-","--capture-output"]

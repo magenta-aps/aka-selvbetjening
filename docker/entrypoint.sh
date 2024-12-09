@@ -7,7 +7,9 @@ TEST=${TEST:=false}
 PGP_KEY=${PGP_KEY:=false}
 python manage.py wait_for_db
 python manage.py createcachetable
+
 if [ "$SKIP_IDP_METADATA" = false ]; then
+  echo "Pulling idp metadata"
   python manage.py update_mitid_idp_metadata
 fi
 if [ "$MAKE_MIGRATIONS" = true ]; then
