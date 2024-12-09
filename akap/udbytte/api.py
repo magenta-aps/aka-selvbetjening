@@ -41,8 +41,12 @@ class U1AFilterSchema(FilterSchema):
     by: Optional[str] = None
     dato: Optional[str] = None
     underskriftsberettiget: Optional[str] = None
-    oprettet_efter: Optional[date] = Field(default=None, q="oprettet__gte")
-    oprettet_før: Optional[date] = Field(default=None, q="oprettet__lt")
+    oprettet_efter: Optional[date] = Field(
+        default=None, json_schema_extra={"q": "oprettet__gte"}
+    )
+    oprettet_før: Optional[date] = Field(
+        default=None, json_schema_extra={"q": "oprettet__lt"}
+    )
     oprettet_af_cpr: Optional[str] = None
     oprettet_af_cvr: Optional[str] = None
 
@@ -60,8 +64,12 @@ class U1AItemFilterSchema(FilterSchema):
     postnummer: Optional[str] = None
     by: Optional[str] = None
     land: Optional[str] = None
-    oprettet_efter: Optional[date] = Field(default=None, q="oprettet__gte")
-    oprettet_før: Optional[date] = Field(default=None, q="oprettet__lt")
+    oprettet_efter: Optional[date] = Field(
+        default=None, json_schema_extra={"q": "oprettet__gte"}
+    )
+    oprettet_før: Optional[date] = Field(
+        default=None, json_schema_extra={"q": "oprettet__lt"}
+    )
 
 
 @api.get(
