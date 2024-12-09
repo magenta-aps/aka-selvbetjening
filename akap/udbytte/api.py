@@ -7,11 +7,20 @@ from typing import Optional
 
 from django.shortcuts import get_object_or_404
 from ninja import Field, FilterSchema, ModelSchema, NinjaAPI, Query
+from ninja.security import HttpBearer
 from ninja_extra import paginate
 from ninja_extra.schemas import NinjaPaginationResponseSchema
+from project.settings.api import API_GLOBAL_SECRET
 from udbytte.models import U1A, U1AItem
 
-api = NinjaAPI()
+
+class GlobalStaticAuth(HttpBearer):
+    def authenticate(self, request, token):
+        if token == API_GLOBAL_SECRET:
+            return token
+
+
+api = NinjaAPI(auth=GlobalStaticAuth())
 
 
 class U1AOut(ModelSchema):
