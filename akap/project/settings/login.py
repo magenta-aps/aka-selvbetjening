@@ -17,7 +17,7 @@ SESSION_EXPIRE_CALLABLE = "aka.utils.session_timed_out"
 
 
 # Sessions & cookies
-SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = True
 if not DEBUG:
     CSRF_COOKIE_SAMESITE = "None"
@@ -37,6 +37,7 @@ SAML = {
     "description": os.environ.get("SAML_DESCRIPTION") or "AKA Selvbetjening",
     "verify_ssl_cert": False,
     "metadata_remote": os.environ.get("SAML_IDP_METADATA"),
+    "metadata_remote_container": os.environ.get("SAML_IDP_METADATA_CONTAINER"),
     "metadata": {"local": ["/var/cache/aka/idp_metadata.xml"]},  # IdP Metadata
     "service": {
         "sp": {
