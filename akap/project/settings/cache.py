@@ -12,6 +12,6 @@ CACHES = {
     "saml": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
         "LOCATION": "saml_cache",
-        "TIMEOUT": 7200,
+        "TIMEOUT": 12400,
     },
 }
