@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: MPL-2.0
 import json
 import os
+import re
 
 from django.urls import reverse_lazy
 from project.settings.base import DEBUG
@@ -137,6 +138,11 @@ LOGIN_WHITELISTED_URLS = [
     LOGIN_ASSURANCE_LEVEL_URL,
     reverse_lazy("metrics:health_check_storage"),
     reverse_lazy("metrics:health_check_database"),
+    # Udbytte API
+    reverse_lazy("udbytte:api-1.0.0:u1a_list"),
+    re.compile(
+        r"^/udbytte/api/u1a/\d+/items$"
+    ),  # NOTE: WE use regex due to the dynamic 'u1a_id' argument in the route
 ]
 MITID_TEST_ENABLED = bool(strtobool(os.environ.get("MITID_TEST_ENABLED", "False")))
 DEFAULT_CPR = os.environ.get("DEFAULT_CPR", None)

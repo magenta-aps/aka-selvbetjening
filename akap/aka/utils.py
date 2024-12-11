@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023 Magenta ApS <info@magenta.dk>
+#
+# SPDX-License-Identifier: MPL-2.0
+
 import base64
 import datetime
 import json
@@ -6,7 +10,7 @@ import os
 from dataclasses import dataclass, field
 from decimal import Decimal
 from math import floor
-from typing import Any, Callable, List, Optional, Tuple
+from typing import Any, Callable, Collection, Dict, List, Optional, Tuple
 
 from dateutil import parser as datetimeparser
 from django.conf import settings
@@ -305,9 +309,15 @@ def send_mail(
     if attachments:
         for attachment in attachments:
             message.attach(*attachment)
+
     message.send()
 
 
 def gettext_lang(language, string):
     with translation.override(language):
         return translation.gettext(string)
+
+
+def omit(items: Dict[str, Any], *keys: Collection[str]) -> Dict[str, Any]:
+    k = set(keys)
+    return {key: value for key, value in items.items() if key not in k}
