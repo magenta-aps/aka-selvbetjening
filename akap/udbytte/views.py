@@ -70,7 +70,7 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
     def form_valid(self, form, formset):
         oprettet_af_cpr = self.request.session["user_info"]["cpr"]
 
-        # Persist the submittet U1A in the database
+        # Persist the submitted U1A in the database
         new_u1a_model = U1A.objects.create(
             **{**form.cleaned_data, "oprettet_af_cpr": oprettet_af_cpr}
         )

@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 class U1A(models.Model):
     # Field helpers
     @staticmethod
-    def get_finacial_year_choices():
+    def get_financial_year_choices():
         current_year = date.today().year
         return [(year, str(year)) for year in range(current_year, current_year - 6, -1)]
 
@@ -45,7 +45,7 @@ class U1A(models.Model):
 
     regnskabsår = models.IntegerField(
         verbose_name=_("Udbyttet vedrører regnskabsåret"),
-        choices=get_finacial_year_choices(),
+        choices=get_financial_year_choices(),
     )
 
     u1_udfyldt = models.BooleanField(
