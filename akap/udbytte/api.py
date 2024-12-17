@@ -78,8 +78,14 @@ class U1AItemFilterSchema(FilterSchema):
     url_name="u1a_list",
 )
 @paginate()
-def get_u1a_entries(request, filters: U1AFilterSchema = Query(...)):
-    return filters.filter(U1A.objects.all())
+def get_u1a_entries(
+    request, filters: U1AFilterSchema = Query(...), cpr: Optional[str] = None
+):
+    qs = filters.filter(U1A.objects.all())
+    if cpr:
+        qs = qs.filter(u1aitem__cpr_cvr_tin=cpr).distinct()
+
+    return qs
 
 
 @api.get(

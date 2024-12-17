@@ -122,7 +122,6 @@ class U1AItem(models.Model):
     u1a = models.ForeignKey(
         U1A,
         on_delete=models.CASCADE,
-        related_name="u1a",
     )
 
     cpr_cvr_tin = models.CharField(
