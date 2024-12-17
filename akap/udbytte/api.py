@@ -5,7 +5,6 @@
 from datetime import date
 from typing import Optional
 
-from django.shortcuts import get_object_or_404
 from ninja import Field, FilterSchema, ModelSchema, NinjaAPI, Query
 from ninja.security import HttpBearer
 from ninja_extra import paginate
@@ -58,6 +57,7 @@ class U1AItemOut(ModelSchema):
 
 
 class U1AItemFilterSchema(FilterSchema):
+    u1a: Optional[str] = None
     cpr_cvr_tin: Optional[str] = None
     navn: Optional[str] = None
     adresse: Optional[str] = None
@@ -83,13 +83,10 @@ def get_u1a_entries(request, filters: U1AFilterSchema = Query(...)):
 
 
 @api.get(
-    "/u1a/{u1a_id}/items",
+    "/u1a-items",
     response=NinjaPaginationResponseSchema[U1AItemOut],
     url_name="u1a_item_list",
 )
 @paginate()
-def get_u1a_item_entries(
-    request, u1a_id: int, filters: U1AItemFilterSchema = Query(...)
-):
-    u1a = get_object_or_404(U1A, pk=u1a_id)
-    return filters.filter(U1AItem.objects.filter(u1a_id=u1a.id))
+def get_u1a_item_entries(request, filters: U1AItemFilterSchema = Query(...)):
+    return filters.filter(U1AItem.objects.all())
