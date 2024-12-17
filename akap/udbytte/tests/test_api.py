@@ -119,8 +119,9 @@ class UdbytteAPITest(TestCase):
 
     def test_get_u1a_item_entries(self):
         resp = self.client.get(
-            reverse("udbytte:api-1.0.0:u1a_item_list", args=[self.u1a_1.id]),
+            reverse("udbytte:api-1.0.0:u1a_item_list"),
             HTTP_AUTHORIZATION=f"Bearer {self.api_secret}",
+            data={"u1a": self.u1a_1.id},
         )
 
         self.assertEqual(resp.status_code, 200)
@@ -159,9 +160,9 @@ class UdbytteAPITest(TestCase):
 
         # Test filtering
         resp = self.client.get(
-            reverse("udbytte:api-1.0.0:u1a_item_list", args=[self.u1a_1.id]),
+            reverse("udbytte:api-1.0.0:u1a_item_list"),
             HTTP_AUTHORIZATION=f"Bearer {self.api_secret}",
-            data={"by": "City A"},
+            data={"u1a": self.u1a_1.id, "by": "City A"},
         )
 
         self.assertEqual(resp.status_code, 200)
@@ -188,9 +189,9 @@ class UdbytteAPITest(TestCase):
 
         # Test date filtering (oprettet_efter)
         resp = self.client.get(
-            reverse("udbytte:api-1.0.0:u1a_item_list", args=[self.u1a_1.id]),
+            reverse("udbytte:api-1.0.0:u1a_item_list"),
             HTTP_AUTHORIZATION=f"Bearer {self.api_secret}",
-            data={"oprettet_efter": "2024-02-01"},
+            data={"u1a": self.u1a_1.id, "oprettet_efter": "2024-02-01"},
         )
 
         self.assertEqual(resp.status_code, 200)

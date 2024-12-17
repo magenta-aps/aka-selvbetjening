@@ -80,7 +80,8 @@ services:
     container_name: akap-mailhog
     image: mailhog/mailhog
     ports:
-      - "8012:8025"
+      - "8012:8025" # HTTP
+      - "1025:1025" # SMTP
     # UI will be available at http://localhost:8012
     hostname: mailhog
     # environment config doc: https://github.com/mailhog/MailHog/blob/master/docs/CONFIG.md
