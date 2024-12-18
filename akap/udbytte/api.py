@@ -94,5 +94,11 @@ def get_u1a_entries(
     url_name="u1a_item_list",
 )
 @paginate()
-def get_u1a_item_entries(request, filters: U1AItemFilterSchema = Query(...)):
-    return filters.filter(U1AItem.objects.all())
+def get_u1a_item_entries(
+    request, filters: U1AItemFilterSchema = Query(...), year: Optional[int] = None
+):
+    qs = filters.filter(U1AItem.objects.all())
+    if year:
+        qs = qs.filter(u1a__regnskabsår=year)
+
+    return qs
