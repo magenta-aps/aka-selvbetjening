@@ -141,6 +141,7 @@ LOGIN_WHITELISTED_URLS = [
     # Udbytte API
     reverse_lazy("udbytte:api-1.0.0:u1a_list"),
     reverse_lazy("udbytte:api-1.0.0:u1a_item_list"),
+    reverse_lazy("udbytte:api-1.0.0:u1a_item_unique_cprs"),
 ]
 MITID_TEST_ENABLED = bool(strtobool(os.environ.get("MITID_TEST_ENABLED", "False")))
 DEFAULT_CPR = os.environ.get("DEFAULT_CPR", None)

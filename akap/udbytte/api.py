@@ -102,3 +102,20 @@ def get_u1a_item_entries(
         qs = qs.filter(u1a__regnskabsår=year)
 
     return qs
+
+
+@api.get(
+    "/u1a-items/unique/cprs",
+    response=NinjaPaginationResponseSchema[str],
+    url_name="u1a_item_unique_cprs",
+)
+@paginate()
+def get_u1a_items_unique_cprs(
+    request, filters: U1AItemFilterSchema = Query(...), year: Optional[int] = None
+):
+    qs = filters.filter(U1AItem.objects.all())
+
+    if year:
+        qs = qs.filter(u1a__regnskabsår=year)
+
+    return qs.values_list("cpr_cvr_tin", flat=True).distinct()
