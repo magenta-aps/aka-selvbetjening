@@ -19,4 +19,5 @@ include(
     "prisme.py",
     "dafo.py",
     "email.py",
+    "api.py",
 )

@@ -5,17 +5,17 @@
 from datetime import date
 from typing import Optional
 
+from django.conf import settings
 from ninja import Field, FilterSchema, ModelSchema, NinjaAPI, Query
 from ninja.security import HttpBearer
 from ninja_extra import paginate
 from ninja_extra.schemas import NinjaPaginationResponseSchema
-from project.settings.api import API_GLOBAL_SECRET
 from udbytte.models import U1A, U1AItem
 
 
 class GlobalStaticAuth(HttpBearer):
     def authenticate(self, request, token):
-        if token == API_GLOBAL_SECRET:
+        if token == settings.API_GLOBAL_SECRET:
             return token
 
 
