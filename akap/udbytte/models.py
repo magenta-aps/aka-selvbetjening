@@ -2,21 +2,23 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from datetime import date
-
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 
-class U1A(models.Model):
-    # Field helpers
-    @staticmethod
-    def get_financial_year_choices():
-        current_year = date.today().year
-        return [(year, str(year)) for year in range(current_year, current_year - 6, -1)]
+# Validators
+def validate_year(value):
+    current_year = now().year
+    if value < 1900 or value > current_year:
+        raise ValidationError(
+            f"{value} is not a valid year. It must be between 1900 and {current_year}."
+        )
 
-    # Fields
+
+class U1A(models.Model):
     navn = models.CharField(
         verbose_name=_("Navn på udfylder"),
         max_length=255,
@@ -45,7 +47,7 @@ class U1A(models.Model):
 
     regnskabsår = models.IntegerField(
         verbose_name=_("Udbyttet vedrører regnskabsåret"),
-        choices=get_financial_year_choices(),
+        validators=[validate_year],
     )
 
     u1_udfyldt = models.BooleanField(
