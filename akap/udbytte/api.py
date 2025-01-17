@@ -5,17 +5,17 @@
 from datetime import date
 from typing import Optional
 
+from django.conf import settings
 from ninja import Field, FilterSchema, ModelSchema, NinjaAPI, Query
 from ninja.security import HttpBearer
 from ninja_extra import paginate
 from ninja_extra.schemas import NinjaPaginationResponseSchema
-from project.settings.api import API_GLOBAL_SECRET
 from udbytte.models import U1A, U1AItem
 
 
 class GlobalStaticAuth(HttpBearer):
     def authenticate(self, request, token):
-        if token == API_GLOBAL_SECRET:
+        if token == settings.API_GLOBAL_SECRET:
             return token
 
 
@@ -94,5 +94,28 @@ def get_u1a_entries(
     url_name="u1a_item_list",
 )
 @paginate()
-def get_u1a_item_entries(request, filters: U1AItemFilterSchema = Query(...)):
-    return filters.filter(U1AItem.objects.all())
+def get_u1a_item_entries(
+    request, filters: U1AItemFilterSchema = Query(...), year: Optional[int] = None
+):
+    qs = filters.filter(U1AItem.objects.all())
+    if year:
+        qs = qs.filter(u1a__regnskabsår=year)
+
+    return qs
+
+
+@api.get(
+    "/u1a-items/unique/cprs",
+    response=NinjaPaginationResponseSchema[str],
+    url_name="u1a_item_unique_cprs",
+)
+@paginate()
+def get_u1a_items_unique_cprs(
+    request, filters: U1AItemFilterSchema = Query(...), year: Optional[int] = None
+):
+    qs = filters.filter(U1AItem.objects.all())
+
+    if year:
+        qs = qs.filter(u1a__regnskabsår=year)
+
+    return qs.values_list("cpr_cvr_tin", flat=True).distinct()
