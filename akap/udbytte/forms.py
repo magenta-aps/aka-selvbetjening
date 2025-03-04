@@ -89,6 +89,13 @@ class UdbytteForm(DynamicFormMixin, forms.Form):
         error_messages={"required": "error.required", "invalid": "error.invalid_date"},
         input_formats=valid_date_formats,
     )
+    dato_udbetaling = forms.DateField(
+        label=_("Udbetalings dato"),
+        widget=forms.DateInput(attrs={"class": "datepicker"}),
+        required=True,
+        error_messages={"required": "error.required", "invalid": "error.invalid_date"},
+        input_formats=valid_date_formats,
+    )
     underskriftsberettiget = forms.CharField(
         label=_("Navn på underskriftsberettiget for selskabet"),
         required=True,
