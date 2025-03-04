@@ -51,9 +51,12 @@ class U1AFilterSchema(FilterSchema):
 
 
 class U1AItemOut(ModelSchema):
+    u1a: U1AOut  # Explicitly declare this as nested schema
+
     class Meta:
         model = U1AItem
         fields = "__all__"
+        exclude = ["u1a"]
 
 
 class U1AItemFilterSchema(FilterSchema):
@@ -97,7 +100,7 @@ def get_u1a_entries(
 def get_u1a_item_entries(
     request, filters: U1AItemFilterSchema = Query(...), year: Optional[int] = None
 ):
-    qs = filters.filter(U1AItem.objects.all())
+    qs = filters.filter(U1AItem.objects.all().select_related("u1a"))
     if year:
         qs = qs.filter(u1a__regnskabsår=year)
 
