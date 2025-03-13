@@ -44,6 +44,9 @@ class UdbytteViewTest(TestCase):
             "noter": "Test notes",
             "by": "Test City",
             "dato": date(2023, 1, 1),  # Use datetime.date to match actual call
+            "dato_udbetaling": date(
+                2023, 1, 1
+            ),  # Use datetime.date to match actual call
             "underskriftsberettiget": "Authorized User",
         }
 

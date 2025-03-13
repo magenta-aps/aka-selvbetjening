@@ -93,6 +93,14 @@ class U1A(models.Model):
         },
     )
 
+    dato_udbetaling = models.DateField(
+        verbose_name=_("Udbetalings dato"),
+        error_messages={
+            "required": "error.required",
+            "invalid": "error.invalid_date",
+        },
+    )
+
     underskriftsberettiget = models.CharField(
         verbose_name=_("Navn på underskriftsberettiget for selskabet"),
         max_length=255,  # Adjust based on the maximum expected length for a name
