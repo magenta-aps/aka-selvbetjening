@@ -34,6 +34,9 @@ msgstr "Qaammat"
 msgid "loentraek.total_amount"
 msgstr "Katinneri"
 
+msgid "loentraek.cvr"
+msgstr "CVR-normu"
+
 msgid "loentraek.cpr"
 msgstr "CPR"
 
