@@ -106,8 +106,8 @@ msgstr "Paasissutissat immikkut ittut"
 msgid "udbytte.dato"
 msgstr "Ulloq"
 
-msgid "udbytte.dato_udbetaling"
-msgstr "Udbetalings dato"
+msgid "udbytte.dato_vedtagelse"
+msgstr "Vedtagelses dato"
 
 msgid "udbytte.underskriftsberettiget"
 msgstr "Selskabemi pisussaasup atsiornera"

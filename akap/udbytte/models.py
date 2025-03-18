@@ -93,8 +93,8 @@ class U1A(models.Model):
         },
     )
 
-    dato_udbetaling = models.DateField(
-        verbose_name=_("Udbetalings dato"),
+    dato_vedtagelse = models.DateField(
+        verbose_name=_("Vedtagelses dato"),
         error_messages={
             "required": "error.required",
             "invalid": "error.invalid_date",
