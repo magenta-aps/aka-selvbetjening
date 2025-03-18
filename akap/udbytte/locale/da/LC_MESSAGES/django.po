@@ -105,8 +105,8 @@ msgstr "Særlige oplysninger"
 msgid "udbytte.dato"
 msgstr "Dato"
 
-msgid "udbytte.dato_udbetaling"
-msgstr "Udbetalings dato"
+msgid "udbytte.dato_vedtagelse"
+msgstr "Vedtagelses dato"
 
 msgid "udbytte.underskriftsberettiget"
 msgstr "Navn på underskriftsberettiget for selskabet"
