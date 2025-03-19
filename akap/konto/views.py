@@ -358,18 +358,17 @@ class DebitorKontoRangeRestricted:
     debitor_group_id_range = (0, sys.maxsize)
 
     def accept_debitor_group_id(self, debitor_group_id: str) -> bool:
-        return True
-        # try:
-        #     debitor_group_id_int = int(debitor_group_id or "0")
-        # except ValueError:
-        #     return False
-        # if (
-        #     self.debitor_group_id_range[0]
-        #     <= debitor_group_id_int
-        #     <= self.debitor_group_id_range[1]
-        # ):
-        #     return True
-        # return False
+        try:
+            debitor_group_id_int = int(debitor_group_id or "0")
+        except ValueError:
+            return False
+        if (
+            self.debitor_group_id_range[0]
+            <= debitor_group_id_int
+            <= self.debitor_group_id_range[1]
+        ):
+            return True
+        return False
 
 
 class AKAKontoView(DebitorKontoRangeRestricted, KontoView):
