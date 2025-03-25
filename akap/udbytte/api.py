@@ -108,7 +108,7 @@ def get_u1a_item_entries(
 ):
     qs = filters.filter(U1AItem.objects.all().select_related("u1a"))
     if year:
-        qs = qs.filter(u1a__regnskabsår=year)
+        qs = qs.filter(u1a__dato_vedtagelse__year=year)
 
     return qs
 
