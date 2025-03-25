@@ -643,3 +643,51 @@ class UdbytteAPITest(TestCase):
                 ],
             },
         )
+
+    def test_get_u1a_items_unique_cprs(self):
+        resp = self.client.get(
+            reverse("udbytte:api-1.0.0:u1a_item_unique_cprs"),
+            HTTP_AUTHORIZATION=f"Bearer {self.api_secret}",
+        )
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(
+            resp.json(),
+            {"count": 3, "items": ["1234567890", "1234567891", "1234567892"]},
+        )
+
+    def test_get_u1a_items_unique_cprs_by_year(self):
+        # YEAR 2000 - does not exist
+        resp = self.client.get(
+            reverse("udbytte:api-1.0.0:u1a_item_unique_cprs"),
+            HTTP_AUTHORIZATION=f"Bearer {self.api_secret}",
+            data={"year": 2000},
+        )
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(
+            resp.json(),
+            {"count": 0, "items": []},
+        )
+
+        # YEAR 2023 - contains 2 CPRs
+        resp = self.client.get(
+            reverse("udbytte:api-1.0.0:u1a_item_unique_cprs"),
+            HTTP_AUTHORIZATION=f"Bearer {self.api_secret}",
+            data={"year": 2023},
+        )
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(
+            resp.json(), {"count": 2, "items": ["1234567890", "1234567891"]}
+        )
+
+        # YEAR 2024 - contains 1 CPR
+        resp = self.client.get(
+            reverse("udbytte:api-1.0.0:u1a_item_unique_cprs"),
+            HTTP_AUTHORIZATION=f"Bearer {self.api_secret}",
+            data={"year": 2024},
+        )
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.json(), {"count": 1, "items": ["1234567892"]})

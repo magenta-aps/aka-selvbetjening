@@ -125,6 +125,6 @@ def get_u1a_items_unique_cprs(
     qs = filters.filter(U1AItem.objects.all())
 
     if year:
-        qs = qs.filter(u1a__regnskabsår=year)
+        qs = qs.filter(u1a__dato_vedtagelse__year=year)
 
     return qs.values_list("cpr_cvr_tin", flat=True).distinct()
