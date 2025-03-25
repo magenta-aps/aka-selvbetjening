@@ -82,9 +82,15 @@ class U1AItemFilterSchema(FilterSchema):
 )
 @paginate()
 def get_u1a_entries(
-    request, filters: U1AFilterSchema = Query(...), cpr: Optional[str] = None
+    request,
+    filters: U1AFilterSchema = Query(...),
+    year: Optional[int] = None,
+    cpr: Optional[str] = None,
 ):
     qs = filters.filter(U1A.objects.all())
+    if year:
+        qs = qs.filter(dato_vedtagelse__year=year)
+
     if cpr:
         qs = qs.filter(u1aitem__cpr_cvr_tin=cpr).distinct()
 

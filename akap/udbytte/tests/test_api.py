@@ -14,6 +14,9 @@ from udbytte.models import U1A, U1AItem
 class UdbytteAPITest(TestCase):
     maxDiff = None
 
+    def setUp(self):
+        self.api_secret = "supersecret"
+
     @classmethod
     def setUpTestData(cls):
         cls.u1a_1 = U1A.objects.create(
@@ -81,9 +84,6 @@ class UdbytteAPITest(TestCase):
             oprettet_af_cvr="12345678",
         )
 
-    def setUp(self):
-        self.api_secret = "supersecret"
-
     def test_get_u1a_entries(self):
         resp = self.client.get(
             reverse("udbytte:api-1.0.0:u1a_list"),
@@ -116,6 +116,95 @@ class UdbytteAPITest(TestCase):
                         "oprettet_af_cpr": "1234567890",
                         "oprettet_af_cvr": "98765432",
                     },
+                ],
+            },
+        )
+
+    def test_get_u1a_entries_by_year(self):
+        # YEAR 2000 - does not exist!
+        resp = self.client.get(
+            reverse("udbytte:api-1.0.0:u1a_list"),
+            HTTP_AUTHORIZATION=f"Bearer {self.api_secret}",
+            data={"year": 2000},
+        )
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(
+            resp.json(),
+            {
+                "count": 0,
+                "items": [],
+            },
+        )
+
+        # YEAR 2023 - exists
+        resp = self.client.get(
+            reverse("udbytte:api-1.0.0:u1a_list"),
+            HTTP_AUTHORIZATION=f"Bearer {self.api_secret}",
+            data={"year": 2023},
+        )
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(
+            resp.json(),
+            {
+                "count": 1,
+                "items": [
+                    {
+                        "id": self.u1a_1.id,
+                        "navn": "John Doe",
+                        "revisionsfirma": "Firm A",
+                        "virksomhedsnavn": "Company A",
+                        "cvr": "12345678",
+                        "email": "john@example.com",
+                        "regnskabsår": 2023,
+                        "u1_udfyldt": True,
+                        "udbytte": "1337.00",
+                        "noter": "Test note",
+                        "by": "City A",
+                        "dato": "2023-01-01",
+                        "dato_vedtagelse": "2023-01-01",
+                        "underskriftsberettiget": "Yes",
+                        "oprettet": ANY,
+                        "oprettet_af_cpr": "1234567890",
+                        "oprettet_af_cvr": "98765432",
+                    },
+                ],
+            },
+        )
+
+    def test_get_u1a_entries_by_cpr(self):
+        resp = self.client.get(
+            reverse("udbytte:api-1.0.0:u1a_list"),
+            HTTP_AUTHORIZATION=f"Bearer {self.api_secret}",
+            data={"cpr": self.u1a_item_1.cpr_cvr_tin},
+        )
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(
+            resp.json(),
+            {
+                "count": 1,
+                "items": [
+                    {
+                        "id": 1,
+                        "by": "City A",
+                        "cvr": "12345678",
+                        "dato": "2023-01-01",
+                        "dato_vedtagelse": "2023-01-01",
+                        "email": "john@example.com",
+                        "navn": "John Doe",
+                        "noter": "Test note",
+                        "oprettet": ANY,
+                        "oprettet_af_cpr": "1234567890",
+                        "oprettet_af_cvr": "12345678",
+                        "regnskabsår": 2023,
+                        "revisionsfirma": "Firm A",
+                        "u1_udfyldt": True,
+                        "udbytte": "1337.00",
+                        "underskriftsberettiget": "Yes",
+                        "virksomhedsnavn": "Company A",
+                    }
                 ],
             },
         )
