@@ -82,9 +82,15 @@ class U1AItemFilterSchema(FilterSchema):
 )
 @paginate()
 def get_u1a_entries(
-    request, filters: U1AFilterSchema = Query(...), cpr: Optional[str] = None
+    request,
+    filters: U1AFilterSchema = Query(...),
+    year: Optional[int] = None,
+    cpr: Optional[str] = None,
 ):
     qs = filters.filter(U1A.objects.all())
+    if year:
+        qs = qs.filter(dato_vedtagelse__year=year)
+
     if cpr:
         qs = qs.filter(u1aitem__cpr_cvr_tin=cpr).distinct()
 
@@ -102,7 +108,7 @@ def get_u1a_item_entries(
 ):
     qs = filters.filter(U1AItem.objects.all().select_related("u1a"))
     if year:
-        qs = qs.filter(u1a__regnskabsår=year)
+        qs = qs.filter(u1a__dato_vedtagelse__year=year)
 
     return qs
 
@@ -119,6 +125,6 @@ def get_u1a_items_unique_cprs(
     qs = filters.filter(U1AItem.objects.all())
 
     if year:
-        qs = qs.filter(u1a__regnskabsår=year)
+        qs = qs.filter(u1a__dato_vedtagelse__year=year)
 
     return qs.values_list("cpr_cvr_tin", flat=True).distinct()
