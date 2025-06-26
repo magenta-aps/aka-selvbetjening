@@ -29,6 +29,7 @@ services:
       - ./log:/log:rw
       - ./dev-environment/cert:/ssl:ro
       - ./akap/mypy.ini:/mypy.ini:ro
+#      - ./akap:/app
     command: gunicorn -b 0.0.0.0:8010 project.wsgi:application --reload -w 1 --access-logfile - --error-logfile - --capture-output   # reload on code changes
     networks:
       - default

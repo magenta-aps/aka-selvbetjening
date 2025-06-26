@@ -14,7 +14,12 @@ from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import TemplateView
 from django.views.i18n import JavaScriptCatalog
-from project.view_mixins import AkaMixin, HasUserMixin, RequireCvrMixin
+from project.view_mixins import (
+    AkaMixin,
+    ErrorHandlerMixin,
+    HasUserMixin,
+    RequireCvrMixin,
+)
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
@@ -77,7 +82,7 @@ class SetLanguageView(View):
         return response
 
 
-class GetPDFView(RequireCvrMixin, View):
+class GetPDFView(ErrorHandlerMixin, RequireCvrMixin, View):
     def get(self, request, *args, **kwargs):
         pdf_id = kwargs["pdf_id"]
         try:
@@ -98,7 +103,7 @@ class GetReceiptView(GetPDFView):
 logger = logging.getLogger(__name__)
 
 
-class IndexTemplateView(HasUserMixin, AkaMixin, TemplateView):
+class IndexTemplateView(ErrorHandlerMixin, HasUserMixin, AkaMixin, TemplateView):
     template_name = "index.html"
 
     @method_decorator(ensure_csrf_cookie)

@@ -13,6 +13,7 @@ from requests import Session
 from requests.auth import HTTPBasicAuth
 from requests_ntlm import HttpNtlmAuth
 from xmltodict import parse as xml_to_dict
+from zeep.exceptions import TransportError
 from zeep.transports import Transport
 
 prisme_settings = settings.PRISME_CONNECT  # type: ignore
@@ -124,6 +125,21 @@ class PrismeException(AkaException):
 
 class PrismeNotFoundException(AkaException):
     pass
+
+
+class PrismeHttpException(AkaException):
+    title = "prisme.httperror"
+
+    def __init__(self, exception):
+        error_code = "prisme.http_error"
+        params = {}
+        if isinstance(exception, TransportError):
+            if exception.status_code in (413, 500):
+                error_code = f"prisme.http_{exception.status_code}"
+            else:
+                error_code = f"HTTP {exception.status_code} {exception.message}"
+            params["message"] = exception.message
+        super().__init__(error_code, **params)
 
 
 class PrismeRequestObject(object):
@@ -746,10 +762,12 @@ class Prisme(object):
                         reply_item.replyCode, reply_item.replyText, context
                     )
             return outputs
+        except TransportError as e:
+            raise PrismeHttpException(e)
         except Exception as e:
             logger.info(
-                "CPR=%s CVR=%s Error in process_service for %s: %s"
-                % (cpr, cvr, request_object.method, str(e))
+                "CPR=%s CVR=%s Error in process_service for %s: %s %s"
+                % (cpr, cvr, request_object.method, str(type(e)), str(e))
             )
             raise e
 
