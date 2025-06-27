@@ -15,12 +15,7 @@ from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic.edit import FormView
-from fordring.forms import (
-    InkassoCoDebitorFormItem,
-    InkassoCoDebitorFormSet,
-    InkassoForm,
-    InkassoUploadForm,
-)
+from fordring.forms import InkassoCoDebitorFormSet, InkassoForm, InkassoUploadForm
 from project.view_mixins import ErrorHandlerMixin, IsContentMixin, RequireCvrMixin
 
 logger = logging.getLogger(__name__)

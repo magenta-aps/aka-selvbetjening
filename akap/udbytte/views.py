@@ -14,7 +14,7 @@ from django.conf import settings
 from django.template.response import TemplateResponse
 from django.views.generic.edit import FormView
 from project.view_mixins import IsContentMixin, PdfRendererMixin
-from udbytte.forms import UdbytteForm, UdbytteFormItem, UdbytteFormSet
+from udbytte.forms import UdbytteForm, UdbytteFormSet
 from udbytte.models import U1A, U1AItem
 
 logger = logging.getLogger(__name__)
@@ -25,7 +25,6 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormView):
     template_name = "udbytte/form.html"
     pdf_template_name = "udbytte/form.html"
     pdf_css_files = ["css/pdf.css"]
-
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(
