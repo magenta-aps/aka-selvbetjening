@@ -10,6 +10,7 @@ from django.core.validators import (
     RegexValidator,
 )
 from django.forms import TextInput, ValidationError
+from django.forms.formsets import formset_factory
 from django.utils.datetime_safe import date
 
 logger = logging.getLogger(__name__)
@@ -232,6 +233,9 @@ class InkassoCoDebitorFormItem(forms.Form):
     cvr = PrependCharField(
         required=False, min_length=8, max_length=8, prepend_char="0", total_length=8
     )
+
+
+InkassoCoDebitorFormSet = formset_factory(form=InkassoCoDebitorFormItem)
 
 
 class InkassoUploadFormRow(InkassoForm):

@@ -7,7 +7,7 @@ import logging
 from aka.widgets import TranslatedSelect
 from django import forms
 from django.core.validators import RegexValidator
-from django.forms import ValidationError
+from django.forms import ValidationError, formset_factory
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 from dynamic_forms import DynamicField, DynamicFormMixin
@@ -153,3 +153,6 @@ class UdbytteFormItem(forms.Form):
             "invalid": "error.number_required",
         },
     )
+
+
+UdbytteFormSet = formset_factory(UdbytteFormItem, can_delete=True)
