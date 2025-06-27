@@ -2,7 +2,6 @@ import logging
 from datetime import date
 
 from aka.clients.prisme import (
-    PrismeException,
     PrismePayrollRequest,
     PrismePayrollRequestLine,
     PrismePayrollResponse,
@@ -295,6 +294,6 @@ class BasicTestCase(TestMixin, TestCase):
         response = self.client.post(self.url, formData)
         self.assertEqual(response.status_code, 200)
         self.assertIn(
-            "Fejl i Prisme: Failed to logon to Microsoft Dynamics AX",
+            "Failed to logon to Microsoft Dynamics AX",
             str(response.content),
         )
