@@ -10,29 +10,38 @@ from aka.clients.prisme import (
 from aka.utils import get_ordereddict_key_index, spreadsheet_col_letter
 from aka.views import GetReceiptView
 from django.core.exceptions import ValidationError
-from django.forms import formset_factory
 from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.datetime_safe import date
 from django.views.generic.edit import FormView
-from extra_views import FormSetView
-from løntræk.forms import LoentraekForm, LoentraekFormItem, LoentraekUploadForm
+from løntræk.forms import (
+    LoentraekForm,
+    LoentraekFormItem,
+    LoentraekFormSet,
+    LoentraekUploadForm,
+)
 from project.view_mixins import IsContentMixin, RequireCvrMixin
 
 logger = logging.getLogger(__name__)
 
 
 # 6.2
-class LoentraekView(RequireCvrMixin, IsContentMixin, FormSetView, FormView):
+class LoentraekView(RequireCvrMixin, IsContentMixin, FormView):
     form_class = LoentraekForm
     template_name = "løntræk/form.html"
 
     def get_formset(self):
-        return formset_factory(LoentraekFormItem, **self.get_factory_kwargs())
+        return LoentraekFormSet(**self.get_form_kwargs())
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**{
+            **kwargs,
+            "formset": self.get_formset(),
+        })
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        formset = self.construct_formset()
+        formset = self.get_formset()
         if form.is_valid() and formset.is_valid() and form.check_sum(formset, True):
             return self.form_valid(form, formset)
         return self.form_invalid(form, formset)

@@ -270,5 +270,5 @@ class BasicTestCase(TestMixin, TestCase):
             erroritems = root.xpath(
                 "//div[@data-field='id_%s']//ul[@class='errorlist']/li" % field
             )
-            self.assertEqual(1, len(erroritems))
-            self.assertEqual(message, erroritems[0].attrib.get("data-trans"))
+            self.assertEqual(1, len(erroritems), field)
+            self.assertEqual(message, erroritems[0].attrib.get("data-trans"), field)

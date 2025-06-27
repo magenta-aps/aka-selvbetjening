@@ -11,33 +11,29 @@ from io import StringIO
 
 from aka.utils import AKAJSONEncoder, gettext_lang, omit, send_mail
 from django.conf import settings
-from django.forms import formset_factory
 from django.template.response import TemplateResponse
 from django.views.generic.edit import FormView
-from extra_views import FormSetView
 from project.view_mixins import IsContentMixin, PdfRendererMixin
-from udbytte.forms import UdbytteForm, UdbytteFormItem
+from udbytte.forms import UdbytteForm, UdbytteFormItem, UdbytteFormSet
 from udbytte.models import U1A, U1AItem
 
 logger = logging.getLogger(__name__)
 
 
-class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
+class UdbytteView(IsContentMixin, PdfRendererMixin, FormView):
     form_class = UdbytteForm
     template_name = "udbytte/form.html"
     pdf_template_name = "udbytte/form.html"
     pdf_css_files = ["css/pdf.css"]
 
-    factory_kwargs = {
-        "extra": 1,
-        "max_num": None,
-        "can_order": False,
-        "can_delete": True,
-    }
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(
-            **{**kwargs, "u1_url_wrapped": json.dumps({"url": settings.TAX_FORM_U1})}
+            **{
+                **kwargs,
+                "u1_url_wrapped": json.dumps({"url": settings.TAX_FORM_U1}),
+                "formset": self.get_formset(),
+            }
         )
 
     def get_form_kwargs(self):
@@ -49,12 +45,15 @@ class UdbytteView(IsContentMixin, PdfRendererMixin, FormSetView, FormView):
         }
         return kwargs
 
+    def get_formset_kwargs(self):
+        return super().get_form_kwargs()
+
     def get_formset(self):
-        return formset_factory(UdbytteFormItem, **self.get_factory_kwargs())
+        return UdbytteFormSet(**self.get_formset_kwargs())
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        formset = self.construct_formset()
+        formset = self.get_formset()
         # Trigger form cleaning of both form and formset
         # This ensures that:
         # * we have cleaned_data for the cross-check in clean_with_formset, which validates data across both forms,

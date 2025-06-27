@@ -8,7 +8,6 @@ from aka.data.fordringsgruppe import groups
 from aka.utils import flatten
 from aka.views import GetReceiptView
 from django.core.exceptions import ValidationError
-from django.forms import formset_factory
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from django.utils import timezone
@@ -16,25 +15,35 @@ from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic.edit import FormView
-from extra_views import FormSetView
-from fordring.forms import InkassoCoDebitorFormItem, InkassoForm, InkassoUploadForm
+from fordring.forms import (
+    InkassoCoDebitorFormItem,
+    InkassoCoDebitorFormSet,
+    InkassoForm,
+    InkassoUploadForm,
+)
 from project.view_mixins import ErrorHandlerMixin, IsContentMixin, RequireCvrMixin
 
 logger = logging.getLogger(__name__)
 
 
 class InkassoSagView(
-    RequireCvrMixin, ErrorHandlerMixin, IsContentMixin, FormSetView, FormView
+    ErrorHandlerMixin, RequireCvrMixin, IsContentMixin, FormView
 ):
     form_class = InkassoForm
     template_name = "fordring/form.html"
 
     def get_formset(self):
-        return formset_factory(InkassoCoDebitorFormItem, **self.get_factory_kwargs())
+        return InkassoCoDebitorFormSet(**self.get_form_kwargs())
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**{
+            **kwargs,
+            "formset": self.get_formset(),
+        })
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        formset = self.construct_formset()
+        formset = self.get_formset()
         if form.is_valid() and formset.is_valid():
             return self.form_valid(form, formset)
         return self.form_invalid(form, formset)
