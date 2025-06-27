@@ -774,7 +774,7 @@ class Prisme(object):
         except TransportError as e:
             raise PrismeHttpException(e)
         except Fault as e:
-            raise PrismeException(code="generic", text=e.message, context=context)
+            raise PrismeServerException(e)
         except Exception as e:
             logger.info(
                 "CPR=%s CVR=%s Error in process_service for %s: %s %s"
