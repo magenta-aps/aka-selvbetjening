@@ -2,14 +2,17 @@ import logging
 from datetime import date
 
 from aka.clients.prisme import (
+    PrismeException,
     PrismePayrollRequest,
     PrismePayrollRequestLine,
     PrismePayrollResponse,
+    PrismeServerException,
 )
 from aka.tests.mixins import TestMixin
 from django.test import TestCase
 from lxml import etree
 from xmltodict import parse as xml_to_dict
+from zeep.exceptions import Fault
 
 
 class BasicTestCase(TestMixin, TestCase):
@@ -284,3 +287,14 @@ class BasicTestCase(TestMixin, TestCase):
         response = self.client.post(self.url, formData)
         self.assertEqual(response.status_code, 200)
         self.assertIn("prisme.http_500", str(response.content))
+
+        self.prisme_http_error = None
+        self.prisme_exception = PrismeServerException(
+            Fault("Failed to logon to Microsoft Dynamics AX")
+        )
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(
+            "Fejl i Prisme: Failed to logon to Microsoft Dynamics AX",
+            str(response.content),
+        )

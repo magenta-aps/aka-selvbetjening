@@ -13,7 +13,7 @@ from requests import Session
 from requests.auth import HTTPBasicAuth
 from requests_ntlm import HttpNtlmAuth
 from xmltodict import parse as xml_to_dict
-from zeep.exceptions import TransportError, Fault
+from zeep.exceptions import Fault, TransportError
 from zeep.transports import Transport
 
 prisme_settings = settings.PRISME_CONNECT  # type: ignore
@@ -128,7 +128,7 @@ class PrismeNotFoundException(AkaException):
 
 
 class PrismeHttpException(AkaException):
-    title = "prisme.httperror"
+    title = "prisme.http_error"
 
     def __init__(self, exception):
         error_code = "prisme.http_error"
@@ -139,6 +139,15 @@ class PrismeHttpException(AkaException):
             else:
                 error_code = f"HTTP {exception.status_code} {exception.message}"
             params["message"] = exception.message
+        super().__init__(error_code, **params)
+
+
+class PrismeServerException(AkaException):
+    title = "prisme.generic_error"
+
+    def __init__(self, exception):
+        error_code = "prisme.generic_error"
+        params = {"message": exception.message}
         super().__init__(error_code, **params)
 
 

@@ -123,8 +123,8 @@ msgstr "Indsendelsen er for stor for Prisme"
 msgid "prisme.http_500"
 msgstr "Intern fejl i Prisme"
 
-msgid "prisme.error_generic"
-msgstr "Fejl i Prisme: {text}"
+msgid "prisme.generic_error"
+msgstr "Fejl i Prisme: {message}"
 
 msgid "common.dato"
 msgstr "Dato"
