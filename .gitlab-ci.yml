@@ -130,7 +130,7 @@ Unittest:
   script:
     - cd akap
     - coverage run --source='.' --omit=manage.py,project/wsgi.py,*/admin.py manage.py test
-    - coverage report --show-missing --fail-under=74
+    - coverage report --show-missing --fail-under=78
     - coverage xml
   coverage: '/^TOTAL.+?(\d+\%)$/'
   artifacts:

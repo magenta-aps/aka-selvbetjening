@@ -13,14 +13,14 @@ from aka.utils import AKAJSONEncoder, gettext_lang, omit, send_mail
 from django.conf import settings
 from django.template.response import TemplateResponse
 from django.views.generic.edit import FormView
-from project.view_mixins import IsContentMixin, PdfRendererMixin
+from project.view_mixins import ErrorHandlerMixin, IsContentMixin, PdfRendererMixin
 from udbytte.forms import UdbytteForm, UdbytteFormSet
 from udbytte.models import U1A, U1AItem
 
 logger = logging.getLogger(__name__)
 
 
-class UdbytteView(IsContentMixin, PdfRendererMixin, FormView):
+class UdbytteView(IsContentMixin, ErrorHandlerMixin, PdfRendererMixin, FormView):
     form_class = UdbytteForm
     template_name = "udbytte/form.html"
     pdf_template_name = "udbytte/form.html"

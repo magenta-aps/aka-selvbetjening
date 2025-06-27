@@ -8,10 +8,12 @@ from django.urls import reverse
 from django.views.generic import FormView, UpdateView
 from obligatorisk_pension.forms import ObligatoriskPensionForm, SkatteårForm
 from obligatorisk_pension.models import ObligatoriskPension
-from project.view_mixins import HasUserMixin, IsContentMixin
+from project.view_mixins import ErrorHandlerMixin, HasUserMixin, IsContentMixin
 
 
-class ObligatoriskPensionSkatteårView(IsContentMixin, HasUserMixin, FormView):
+class ObligatoriskPensionSkatteårView(
+    ErrorHandlerMixin, IsContentMixin, HasUserMixin, FormView
+):
     form_class = SkatteårForm
     template_name = "pension/skatteår.html"
 
@@ -21,7 +23,9 @@ class ObligatoriskPensionSkatteårView(IsContentMixin, HasUserMixin, FormView):
         )
 
 
-class ObligatoriskPensionCreateView(IsContentMixin, HasUserMixin, UpdateView):
+class ObligatoriskPensionCreateView(
+    ErrorHandlerMixin, IsContentMixin, HasUserMixin, UpdateView
+):
     form_class = ObligatoriskPensionForm
     template_name = "pension/form.html"
     model = ObligatoriskPension

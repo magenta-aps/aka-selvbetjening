@@ -20,6 +20,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from konto.forms import KontoForm
 from project.view_mixins import (
+    ErrorHandlerMixin,
     HasUserMixin,
     IsContentMixin,
     JsonRendererMixin,
@@ -31,6 +32,7 @@ from project.view_mixins import (
 
 @method_decorator(csrf_exempt, name="dispatch")
 class KontoView(
+    ErrorHandlerMixin,
     HasUserMixin,
     SimpleGetFormMixin,
     PdfRendererMixin,
