@@ -10,6 +10,7 @@ from django.core.validators import (
     RegexValidator,
 )
 from django.forms import TextInput, ValidationError
+from django.forms.formsets import formset_factory
 from django.utils.datetime_safe import date
 from dynamic_forms import DynamicField, DynamicFormMixin
 
@@ -116,6 +117,9 @@ class LoentraekFormItem(forms.Form):
         for validator in self.fields["cpr"].validators:
             if isinstance(validator, (MinLengthValidator, MaxLengthValidator)):
                 validator.message = "error.invalid_cpr"
+
+
+LoentraekFormSet = formset_factory(form=LoentraekFormItem)
 
 
 class LoentraekUploadForm(CsvUploadMixin, LoentraekForm):

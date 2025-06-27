@@ -1,5 +1,4 @@
 django==4.2.11
-django-extra-views>=0.14.0
 requests==2.31.0
 requests[socks]==2.31.0
 pysocks==1.7.1
