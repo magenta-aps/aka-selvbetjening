@@ -1,10 +1,20 @@
 from unittest.mock import patch
 
-from aka.clients.prisme import PrismeCvrCheckRequest, PrismeCvrCheckResponse
+from aka.clients.prisme import (
+    PrismeCvrCheckRequest,
+    PrismeCvrCheckResponse,
+    PrismeHttpException,
+)
+from zeep.exceptions import TransportError
 
 
 class TestMixin(object):
+
     def process_service_mock(self, prisme_request, *args):
+        if self.prisme_http_error is not None:
+            raise PrismeHttpException(
+                TransportError(status_code=self.prisme_http_error)
+            )
         if prisme_request.__class__ == PrismeCvrCheckRequest:
             return [
                 PrismeCvrCheckResponse(
@@ -18,6 +28,7 @@ class TestMixin(object):
                 return response
 
     def setUp(self):
+        self.prisme_http_error = None
         self.prisme_return = {}
         self.url = "/inkassosag/"
         self.service_mock = self.mock("aka.clients.prisme.Prisme.process_service")

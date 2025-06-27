@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from project.view_mixins import (
+    ErrorHandlerMixin,
     IsContentMixin,
     JsonRendererMixin,
     PdfRendererMixin,
@@ -22,6 +23,7 @@ from rentenota.forms import InterestNoteForm
 # NY18
 @method_decorator(csrf_exempt, name="dispatch")
 class RenteNotaView(
+    ErrorHandlerMixin,
     RequireCvrMixin,
     IsContentMixin,
     SimpleGetFormMixin,

@@ -113,6 +113,15 @@ msgstr "{text}"
 msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-normu {cvr} naassarineqanngilaq"
 
+msgid "prisme.httperror"
+msgstr "Problem ved kommunikation med Prisme"
+
+msgid "prisme.http_413"
+msgstr "Indsendelsen er for stor for Prisme"
+
+msgid "prisme.http_500"
+msgstr "Intern fejl i Prisme"
+
 msgid "common.dato"
 msgstr "Ulloq"
 
