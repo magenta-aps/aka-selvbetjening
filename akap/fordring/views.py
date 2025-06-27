@@ -21,9 +21,7 @@ from project.view_mixins import ErrorHandlerMixin, IsContentMixin, RequireCvrMix
 logger = logging.getLogger(__name__)
 
 
-class InkassoSagView(
-    ErrorHandlerMixin, RequireCvrMixin, IsContentMixin, FormView
-):
+class InkassoSagView(ErrorHandlerMixin, RequireCvrMixin, IsContentMixin, FormView):
     form_class = InkassoForm
     template_name = "fordring/form.html"
 
@@ -31,10 +29,12 @@ class InkassoSagView(
         return InkassoCoDebitorFormSet(**self.get_form_kwargs())
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data(**{
-            **kwargs,
-            "formset": self.get_formset(),
-        })
+        return super().get_context_data(
+            **{
+                **kwargs,
+                "formset": self.get_formset(),
+            }
+        )
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()

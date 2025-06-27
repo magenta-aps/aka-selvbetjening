@@ -29,10 +29,12 @@ class LoentraekView(RequireCvrMixin, IsContentMixin, FormView):
         return LoentraekFormSet(**self.get_form_kwargs())
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data(**{
-            **kwargs,
-            "formset": self.get_formset(),
-        })
+        return super().get_context_data(
+            **{
+                **kwargs,
+                "formset": self.get_formset(),
+            }
+        )
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
