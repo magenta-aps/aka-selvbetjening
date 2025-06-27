@@ -12,7 +12,9 @@ class TestMixin(object):
 
     def process_service_mock(self, prisme_request, *args):
         if self.prisme_http_error is not None:
-            raise PrismeHttpException(TransportError(status_code=self.prisme_http_error))
+            raise PrismeHttpException(
+                TransportError(status_code=self.prisme_http_error)
+            )
         if prisme_request.__class__ == PrismeCvrCheckRequest:
             return [
                 PrismeCvrCheckResponse(

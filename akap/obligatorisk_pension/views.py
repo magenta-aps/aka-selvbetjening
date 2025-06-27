@@ -11,7 +11,9 @@ from obligatorisk_pension.models import ObligatoriskPension
 from project.view_mixins import ErrorHandlerMixin, HasUserMixin, IsContentMixin
 
 
-class ObligatoriskPensionSkatteårView(ErrorHandlerMixin, IsContentMixin, HasUserMixin, FormView):
+class ObligatoriskPensionSkatteårView(
+    ErrorHandlerMixin, IsContentMixin, HasUserMixin, FormView
+):
     form_class = SkatteårForm
     template_name = "pension/skatteår.html"
 
@@ -21,7 +23,9 @@ class ObligatoriskPensionSkatteårView(ErrorHandlerMixin, IsContentMixin, HasUse
         )
 
 
-class ObligatoriskPensionCreateView(ErrorHandlerMixin, IsContentMixin, HasUserMixin, UpdateView):
+class ObligatoriskPensionCreateView(
+    ErrorHandlerMixin, IsContentMixin, HasUserMixin, UpdateView
+):
     form_class = ObligatoriskPensionForm
     template_name = "pension/form.html"
     model = ObligatoriskPension
