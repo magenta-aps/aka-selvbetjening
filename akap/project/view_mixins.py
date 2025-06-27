@@ -5,11 +5,7 @@ from io import BytesIO
 
 import pandas as pd
 from aka.clients.dafo import Dafo
-from aka.clients.prisme import (
-    Prisme,
-    PrismeCvrCheckRequest,
-    PrismeNotFoundException,
-)
+from aka.clients.prisme import Prisme, PrismeCvrCheckRequest, PrismeNotFoundException
 from aka.exceptions import AkaException
 from aka.models import PrismeDown
 from aka.utils import flatten, render_pdf
@@ -109,7 +105,6 @@ class HasUserMixin(object):
                 pass
 
     def obtain_cvr(self, request):
-        print("obtain_cvr")
         if (
             self.cpr
             and not self.cvr
@@ -140,7 +135,7 @@ class HasUserMixin(object):
                 self.cvr = request.session["user_info"].get("CVR", None)
             self.claimant_ids = self.get_claimants(request)
             self.company = self.get_company(request)
-        except (KeyError, TypeError, AttributeError, ValueError) as e:
+        except (KeyError, TypeError, AttributeError, ValueError):
             pass
 
         if not self.cvr and settings.DEFAULT_CVR:
