@@ -278,9 +278,9 @@ class BasicTestCase(TestMixin, TestCase):
         }
         response = self.client.post(self.url, formData)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Indsendelsen er for stor for Prisme", str(response.content))
+        self.assertIn("prisme.http_413", str(response.content))
 
         self.prisme_http_error = 500
         response = self.client.post(self.url, formData)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Intern fejl i Prisme", str(response.content))
+        self.assertIn("prisme.http_500", str(response.content))

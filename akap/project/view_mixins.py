@@ -27,14 +27,6 @@ class ErrorHandlerMixin(object):
         try:
             return super().dispatch(request, *args, **kwargs)
         except AkaException as e:
-            print(
-                {
-                    "header": e.title,
-                    "message": e.message,
-                    "error_code": e.error_code,
-                    "params": e.params,
-                }
-            )
             return TemplateResponse(
                 request=request,
                 template="aka/util/error.html",
