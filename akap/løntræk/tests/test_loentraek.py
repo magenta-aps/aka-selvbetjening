@@ -247,3 +247,40 @@ class BasicTestCase(TestMixin, TestCase):
         self.assertEqual(
             "loentraek.sum_mismatch", erroritems[0].attrib.get("data-trans")
         )
+
+    def test_payroll_prisme_error(self):
+        self.prisme_http_error = 413
+        # Contains just the required fields
+        formData = {
+            "year": 2019,
+            "month": 11,
+            "total_amount": "1000",
+            "form-0-cpr": "1234567890",
+            "form-0-agreement_number": "1",
+            "form-0-amount": 200,
+            "form-0-net_salary": 40000,
+            "form-1-cpr": "1234567891",
+            "form-1-agreement_number": "2",
+            "form-1-amount": 200,
+            "form-1-net_salary": 40000,
+            "form-2-cpr": "1234567891",
+            "form-2-agreement_number": "3",
+            "form-2-amount": 200,
+            "form-2-net_salary": 40000,
+            "form-3-cpr": "1234567891",
+            "form-3-agreement_number": "4",
+            "form-3-amount": 400,
+            "form-3-net_salary": 40000,
+            "form-TOTAL_FORMS": 4,
+            "form-INITIAL_FORMS": 0,
+            "form-MIN_NUM_FORMS": 0,
+            "form-MAX_NUM_FORMS": 1000,
+        }
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Indsendelsen er for stor for Prisme", str(response.content))
+
+        self.prisme_http_error = 500
+        response = self.client.post(self.url, formData)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Intern fejl i Prisme", str(response.content))

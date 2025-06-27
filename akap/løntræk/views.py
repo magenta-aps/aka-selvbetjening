@@ -15,13 +15,13 @@ from django.utils import timezone
 from django.utils.datetime_safe import date
 from django.views.generic.edit import FormView
 from løntræk.forms import LoentraekForm, LoentraekFormSet, LoentraekUploadForm
-from project.view_mixins import IsContentMixin, RequireCvrMixin
+from project.view_mixins import ErrorHandlerMixin, IsContentMixin, RequireCvrMixin
 
 logger = logging.getLogger(__name__)
 
 
 # 6.2
-class LoentraekView(RequireCvrMixin, IsContentMixin, FormView):
+class LoentraekView(ErrorHandlerMixin, RequireCvrMixin, IsContentMixin, FormView):
     form_class = LoentraekForm
     template_name = "løntræk/form.html"
 
@@ -46,35 +46,32 @@ class LoentraekView(RequireCvrMixin, IsContentMixin, FormView):
     def form_valid(self, form, formset):
         prisme = Prisme()
         try:
-            if prisme.mock:
-                rec_ids = ["1234"]
-            else:
-                payroll = PrismePayrollRequest(
-                    cvr=self.cvr,
-                    date=date(
-                        int(form.cleaned_data["year"]),
-                        int(form.cleaned_data["month"]),
-                        1,
-                    ),
-                    received_date=date.today(),
-                    amount=form.cleaned_data["total_amount"],
-                    lines=[
-                        PrismePayrollRequestLine(
-                            subform.cleaned_data.get("cpr"),
-                            subform.cleaned_data.get("agreement_number"),
-                            subform.cleaned_data.get("amount"),
-                            subform.cleaned_data.get("net_salary"),
-                        )
-                        for subform in formset
-                        if subform.cleaned_data
-                    ],
-                )
-                rec_ids = [
-                    x.rec_id
-                    for x in prisme.process_service(
-                        payroll, "loentraek", self.cpr, self.cvr
+            payroll = PrismePayrollRequest(
+                cvr=self.cvr,
+                date=date(
+                    int(form.cleaned_data["year"]),
+                    int(form.cleaned_data["month"]),
+                    1,
+                ),
+                received_date=date.today(),
+                amount=form.cleaned_data["total_amount"],
+                lines=[
+                    PrismePayrollRequestLine(
+                        subform.cleaned_data.get("cpr"),
+                        subform.cleaned_data.get("agreement_number"),
+                        subform.cleaned_data.get("amount"),
+                        subform.cleaned_data.get("net_salary"),
                     )
-                ]
+                    for subform in formset
+                    if subform.cleaned_data
+                ],
+            )
+            rec_ids = [
+                x.rec_id
+                for x in prisme.process_service(
+                    payroll, "loentraek", self.cpr, self.cvr
+                )
+            ]
             if rec_ids:
                 pdf_id = self.store_pdf_context(
                     form.cleaned_data,
