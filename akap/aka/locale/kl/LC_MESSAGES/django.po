@@ -113,7 +113,7 @@ msgstr "{text}"
 msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-normu {cvr} naassarineqanngilaq"
 
-msgid "prisme.httperror"
+msgid "prisme.http_error"
 msgstr "Problem ved kommunikation med Prisme"
 
 msgid "prisme.http_413"

@@ -114,7 +114,7 @@ msgstr "{text}"
 msgid "prisme.cvrcheck_no_result"
 msgstr "CVR-nummeret {cvr} blev ikke fundet i systemet"
 
-msgid "prisme.httperror"
+msgid "prisme.http_error"
 msgstr "Problem ved kommunikation med Prisme"
 
 msgid "prisme.http_413"
