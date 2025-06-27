@@ -15,6 +15,8 @@ class TestMixin(object):
             raise PrismeHttpException(
                 TransportError(status_code=self.prisme_http_error)
             )
+        if self.prisme_exception is not None:
+            raise self.prisme_exception
         if prisme_request.__class__ == PrismeCvrCheckRequest:
             return [
                 PrismeCvrCheckResponse(
@@ -29,6 +31,7 @@ class TestMixin(object):
 
     def setUp(self):
         self.prisme_http_error = None
+        self.prisme_exception = None
         self.prisme_return = {}
         self.url = "/inkassosag/"
         self.service_mock = self.mock("aka.clients.prisme.Prisme.process_service")
