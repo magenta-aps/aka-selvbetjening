@@ -7,10 +7,11 @@ import logging
 from aka.widgets import TranslatedSelect
 from django import forms
 from django.core.validators import RegexValidator
-from django.forms import ValidationError, formset_factory
+from django.forms import ModelForm, ValidationError, inlineformset_factory
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 from dynamic_forms import DynamicField, DynamicFormMixin
+from udbytte.models import U1A, U1AItem
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,20 @@ cvrvalidator = RegexValidator(r"^\d{8}$", "error.invalid_cvr")
 cprcvrvalidator = RegexValidator(r"^\d{8}(\d{2})?$", "error.invalid_cpr_cvr")
 
 
-class UdbytteForm(DynamicFormMixin, forms.Form):
+class UdbytteForm(DynamicFormMixin, ModelForm):
+
+    class Meta:
+        model = U1A
+        exclude = ["oprettet_af_cpr"]
+
+    def __init__(self, *args, oprettet_af_cpr=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.oprettet_af_cpr = oprettet_af_cpr
+
+    def save(self, commit=True):
+        self.instance.oprettet_af_cpr = self.oprettet_af_cpr
+        return super().save(commit)
+
     navn = forms.CharField(
         label=_("Navn på udfylder"),
         required=True,
@@ -109,7 +123,11 @@ class UdbytteForm(DynamicFormMixin, forms.Form):
             self.add_error("udbytte", ValidationError("error.udbytte_sum_mismatch"))
 
 
-class UdbytteFormItem(forms.Form):
+class UdbytteFormItem(ModelForm):
+    class Meta:
+        model = U1AItem
+        fields = "__all__"
+
     cpr_cvr_tin = forms.CharField(
         label=_("CPR-nr / CVR-nr / TIN"),
         validators=[cprcvrvalidator],
@@ -155,4 +173,10 @@ class UdbytteFormItem(forms.Form):
     )
 
 
-UdbytteFormSet = formset_factory(UdbytteFormItem, can_delete=True)
+UdbytteFormSet = inlineformset_factory(
+    parent_model=U1A,
+    model=U1AItem,
+    form=UdbytteFormItem,
+    exclude=["id"],
+    can_delete=True,
+)
