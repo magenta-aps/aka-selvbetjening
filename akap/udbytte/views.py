@@ -8,12 +8,15 @@ import json
 import logging
 import os
 from io import StringIO
+from typing import List
 
 from aka.utils import AKAJSONEncoder, gettext_lang, send_mail
 from django.conf import settings
 from django.forms import model_to_dict
 from django.template.response import TemplateResponse
 from django.views.generic.edit import CreateView
+from openpyxl import Workbook, load_workbook
+from project.util import split_postnr_by
 from project.view_mixins import ErrorHandlerMixin, IsContentMixin, PdfRendererMixin
 from udbytte.forms import UdbytteForm, UdbytteFormSet
 from udbytte.models import U1A, U1AItem
@@ -21,11 +24,18 @@ from udbytte.models import U1A, U1AItem
 logger = logging.getLogger(__name__)
 
 
-class UdbytteBaseView(PdfRendererMixin, CreateView):
+class UdbytteCreateView(
+    PdfRendererMixin, IsContentMixin, ErrorHandlerMixin, CreateView
+):
+    model = U1A
+    form_class = UdbytteForm
+    template_name = "udbytte/form.html"
+    pdf_template_name = "udbytte/form.html"
+    pdf_css_files = ["css/pdf.css"]
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.object: U1A | None = None
+        self.object = None
         self.items: U1AItem | None = None
 
     def get_csv(self):
@@ -158,14 +168,6 @@ class UdbytteBaseView(PdfRendererMixin, CreateView):
         with open(f"{folder}/{file_base_name}.json", "w") as file:
             file.write(json.dumps(data, indent=2, cls=AKAJSONEncoder))
 
-
-class UdbytteCreateView(IsContentMixin, ErrorHandlerMixin, UdbytteBaseView):
-    model = U1A
-    form_class = UdbytteForm
-    template_name = "udbytte/form.html"
-    pdf_template_name = "udbytte/form.html"
-    pdf_css_files = ["css/pdf.css"]
-
     def get_context_data(self, **kwargs):
         return super().get_context_data(
             **{
@@ -190,23 +192,29 @@ class UdbytteCreateView(IsContentMixin, ErrorHandlerMixin, UdbytteBaseView):
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form()
-        formset = self.get_formset()
-        # Trigger form cleaning of both form and formset
-        # This ensures that:
-        # * we have cleaned_data for the cross-check in clean_with_formset, which validates data across both forms,
-        # * all errors are collected for display in form_invalid, not just from the first form that fails
         form.full_clean()
-        formset.full_clean()
-        # compares data between form and formset, and adds any errors to form
-        form.clean_with_formset(formset)
-        if form.is_valid() and formset.is_valid():
-            return self.form_valid(form, formset)
+        if form.is_valid():
+            if form.cleaned_data["use_file"]:
+                return self.form_valid(form, None)
+            formset = self.get_formset()
+            # Trigger form cleaning of both form and formset
+            # This ensures that:
+            # * we have cleaned_data for the cross-check in clean_with_formset, which validates data across both forms,
+            # * all errors are collected for display in form_invalid, not just from the first form that fails
+            formset.full_clean()
+            # compares data between form and formset, and adds any errors to form
+            form.clean_with_formset(formset)
+            if formset.is_valid():
+                return self.form_valid(form, formset)
         return self.form_invalid(form, formset)
 
     def form_valid(self, form, formset):
         self.object = form.save(True)
-        formset.instance = self.object
-        self.items = formset.save()
+        if form.cleaned_data["use_file"]:
+            self.items = self.load_file(form.cleaned_data["file"], self.object)
+        elif formset is not None:
+            formset.instance = self.object
+            self.items = formset.save()
 
         # PDF handling
         pdf_data = self.render_filled_form()
@@ -228,3 +236,57 @@ class UdbytteCreateView(IsContentMixin, ErrorHandlerMixin, UdbytteBaseView):
         return self.render_to_response(
             self.get_context_data(form=form, formset=formset)
         )
+
+    def load_file(self, file, object: U1A) -> List[U1AItem]:
+        workbook: Workbook = load_workbook(file)
+        items = []
+        for sheetname in workbook.sheetnames:
+            sheet = workbook[sheetname]
+            required_headers = {
+                "generalforsamlingsdato",
+                "udbetalingsdato",
+                "identifikation",
+                "navn",
+                "c/o",
+                "adresse",
+                "postnr.",
+                "land",
+                "bruttoudbytte",
+            }
+            headers: List[str] = []
+            for row in sheet.iter_rows():
+                data = [cell.value for cell in row]
+                if len(headers) == 0:
+                    pruned_data = [
+                        str(x).strip().lower() for x in data if x is not None
+                    ]
+                    if required_headers.issubset(set(pruned_data)):
+                        headers = pruned_data
+                else:
+                    d = dict(zip(headers, data))
+                    if d["identifikation"] in (None, ""):
+                        continue
+                    postnr_by = split_postnr_by(d["postnr."])
+                    if postnr_by is None:
+                        postnr = ""
+                        by = d["postnr."]
+                    else:
+                        postnr, by = postnr_by
+                    items.append(
+                        U1AItem.objects.create(
+                            u1a=object,
+                            cpr_cvr_tin=d["identifikation"],
+                            navn=d["navn"],
+                            adresse=d["adresse"],
+                            postnummer=postnr,
+                            by=by,
+                            land=d["land"],
+                            udbytte=d["bruttoudbytte"],
+                            oprettet=d["udbetalingsdato"],
+                        )
+                    )
+            if len(headers) == 0:
+                print(
+                    f"Did not find a row that contains all required headers ({required_headers})"
+                )
+        return items

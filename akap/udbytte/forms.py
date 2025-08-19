@@ -4,10 +4,11 @@
 
 import logging
 
+from aka.forms import FileField
 from aka.widgets import TranslatedSelect
 from django import forms
-from django.core.validators import RegexValidator
-from django.forms import ModelForm, ValidationError, inlineformset_factory
+from django.core.validators import FileExtensionValidator, RegexValidator
+from django.forms import BooleanField, ModelForm, ValidationError, inlineformset_factory
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 from dynamic_forms import DynamicField, DynamicFormMixin
@@ -116,6 +117,19 @@ class UdbytteForm(DynamicFormMixin, ModelForm):
         error_messages={"required": "error.required"},
     )
 
+    use_file = BooleanField(
+        required=False,
+    )
+
+    file = FileField(
+        required=False,
+        validators=[FileExtensionValidator(["xlsx"], code="error.invalid_extension")],
+        accept=[
+            ".xlsx",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        ],
+    )
+
     def clean_with_formset(self, formset):
         formset_sum = sum([item.cleaned_data.get("udbytte", 0) for item in formset])
         form_udbytte = self.cleaned_data["udbytte"]
@@ -180,3 +194,15 @@ UdbytteFormSet = inlineformset_factory(
     exclude=["id"],
     can_delete=True,
 )
+
+
+class UdbytteUploadForm(forms.Form):
+
+    file = FileField(
+        required=True,
+        validators=[FileExtensionValidator(["xlsx"], code="error.invalid_extension")],
+        accept=[
+            ".xlsx",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        ],
+    )

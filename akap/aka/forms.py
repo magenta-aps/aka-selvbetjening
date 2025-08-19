@@ -162,3 +162,14 @@ class FileInput(forms.FileInput):
 
 class FileField(forms.FileField):
     widget = FileInput
+    accept: List[str] | None = None
+
+    def __init__(self, *args, accept=None, **kwargs):
+        self.accept = accept
+        super().__init__(*args, **kwargs)
+
+    def widget_attrs(self, widget):
+        attrs = {}
+        if self.accept is not None:
+            attrs["accept"] = ",".join(self.accept)
+        return attrs
