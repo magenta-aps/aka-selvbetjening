@@ -8,10 +8,11 @@ import json
 import logging
 import os
 from io import StringIO
-from typing import List
+from typing import Dict, List, Tuple
 
 from aka.utils import AKAJSONEncoder, gettext_lang, send_mail
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.forms import model_to_dict
 from django.template.response import TemplateResponse
 from django.views.generic.edit import CreateView
@@ -32,6 +33,14 @@ class UdbytteCreateView(
     template_name = "udbytte/form.html"
     pdf_template_name = "udbytte/form.html"
     pdf_css_files = ["css/pdf.css"]
+
+    class FileLoadMessage:
+        msg: str
+        params: Dict[str, str | int]
+
+        def __init__(self, msg: str, params: Dict[str, str | int]):
+            self.msg = msg
+            self.params = params
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -211,10 +220,21 @@ class UdbytteCreateView(
     def form_valid(self, form, formset):
         self.object = form.save(True)
         if form.cleaned_data["use_file"]:
-            self.items = self.load_file(form.cleaned_data["file"], self.object)
+            self.items, messages, errors = self.load_file(
+                form.cleaned_data["file"], self.object
+            )
+            if len(errors):
+                form.add_error("file", errors)
+                return self.form_invalid(form, formset)
+            for item in self.items:
+                item.save()
         elif formset is not None:
             formset.instance = self.object
             self.items = formset.save()
+            messages = []
+        else:
+            form.add_error("__all__", "udbytte.no_data")
+            return self.form_invalid(form, formset)
 
         # PDF handling
         pdf_data = self.render_filled_form()
@@ -228,7 +248,7 @@ class UdbytteCreateView(
         return TemplateResponse(
             request=self.request,
             template="udbytte/success.html",
-            context={},
+            context={"messages": messages, "count": len(self.items)},
             using=self.template_engine,
         )
 
@@ -237,9 +257,13 @@ class UdbytteCreateView(
             self.get_context_data(form=form, formset=formset)
         )
 
-    def load_file(self, file, object: U1A) -> List[U1AItem]:
+    def load_file(
+        self, file, object: U1A
+    ) -> Tuple[List[U1AItem], List[FileLoadMessage], List[ValidationError]]:
         workbook: Workbook = load_workbook(file)
         items = []
+        messages = []
+        errors = []
         for sheetname in workbook.sheetnames:
             sheet = workbook[sheetname]
             required_headers = {
@@ -249,31 +273,48 @@ class UdbytteCreateView(
                 "navn",
                 "c/o",
                 "adresse",
-                "postnr.",
+                "postnr",
                 "land",
                 "bruttoudbytte",
             }
             headers: List[str] = []
-            for row in sheet.iter_rows():
+            for i, row in enumerate(sheet.iter_rows(), 1):
                 data = [cell.value for cell in row]
                 if len(headers) == 0:
                     pruned_data = [
-                        str(x).strip().lower() for x in data if x is not None
+                        str(x).strip(" \t.").lower() for x in data if x is not None
                     ]
                     if required_headers.issubset(set(pruned_data)):
                         headers = pruned_data
                 else:
                     d = dict(zip(headers, data))
                     if d["identifikation"] in (None, ""):
+                        messages.append(
+                            UdbytteCreateView.FileLoadMessage(
+                                "udbytte.skiprow_noident",
+                                {"sheet": sheetname, "row": i},
+                            )
+                        )
                         continue
-                    postnr_by = split_postnr_by(d["postnr."])
+                    postnr_by = split_postnr_by(d["postnr"])
                     if postnr_by is None:
                         postnr = ""
-                        by = d["postnr."]
+                        by = d["postnr"]
+                        errors.append(
+                            ValidationError(
+                                "udbytte.split_postcode_fail",
+                                code="udbytte.split_postcode_fail",
+                                params={
+                                    "sheet": sheetname,
+                                    "row": i,
+                                    "postno": d["postnr."],
+                                },
+                            )
+                        )
                     else:
                         postnr, by = postnr_by
                     items.append(
-                        U1AItem.objects.create(
+                        U1AItem(
                             u1a=object,
                             cpr_cvr_tin=d["identifikation"],
                             navn=d["navn"],
@@ -286,7 +327,14 @@ class UdbytteCreateView(
                         )
                     )
             if len(headers) == 0:
-                print(
-                    f"Did not find a row that contains all required headers ({required_headers})"
+                errors.append(
+                    ValidationError(
+                        "udbytte.header_fail",
+                        code="udbytte.header_fail",
+                        params={
+                            "sheet": sheetname,
+                            "required": ", ".join(required_headers),
+                        },
+                    )
                 )
-        return items
+        return items, messages, errors

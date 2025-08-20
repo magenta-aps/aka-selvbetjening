@@ -26,6 +26,7 @@ services:
       - MAKE_MIGRATIONS=true
       - RUN_MIGRATIONS=true
     volumes:
+#      - ./akap:/app
       - ./log:/log:rw
       - ./dev-environment/cert:/ssl:ro
       - ./akap/mypy.ini:/mypy.ini:ro

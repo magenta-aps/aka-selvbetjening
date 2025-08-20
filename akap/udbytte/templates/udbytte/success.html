@@ -12,6 +12,13 @@
 
         <div class="row block">
             <p class="page-header" data-trans="udbytte.success_body">{% translate 'udbytte.success_body' %}</p>
+            {% if messages %}
+            <ul class="messages">
+            {% for message in messages %}
+            <li data-trans="{{ message.msg }}" data-trans-params="{{ message.params|json }}">{{ message.msg|format:message.params }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
             <div class="col-12">
                 <a href="{% url 'aka:index' %}" class="btn btn-primary" data-trans="common.forside">{% translate 'common.forside' %}</a>
             </div>
