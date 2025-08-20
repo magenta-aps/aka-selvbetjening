@@ -10,14 +10,14 @@ import os
 from io import StringIO
 from typing import Dict, List, Tuple
 
-from aka.utils import AKAJSONEncoder, gettext_lang, send_mail
+from aka.utils import AKAJSONEncoder, gettext_lang, send_mail, split_postnr_by
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.files.base import File
 from django.forms import model_to_dict
 from django.template.response import TemplateResponse
 from django.views.generic.edit import CreateView
 from openpyxl import Workbook, load_workbook
-from project.util import split_postnr_by
 from project.view_mixins import ErrorHandlerMixin, IsContentMixin, PdfRendererMixin
 from udbytte.forms import UdbytteForm, UdbytteFormSet
 from udbytte.models import U1A, U1AItem
@@ -218,7 +218,7 @@ class UdbytteCreateView(
         return self.form_invalid(form, formset)
 
     def form_valid(self, form, formset):
-        self.object = form.save(True)
+        self.object = form.save(False)
         if form.cleaned_data["use_file"]:
             self.items, messages, errors = self.load_file(
                 form.cleaned_data["file"], self.object
@@ -226,9 +226,11 @@ class UdbytteCreateView(
             if len(errors):
                 form.add_error("file", errors)
                 return self.form_invalid(form, formset)
+            self.object.save()
             for item in self.items:
                 item.save()
         elif formset is not None:
+            self.object.save()
             formset.instance = self.object
             self.items = formset.save()
             messages = []
@@ -258,7 +260,7 @@ class UdbytteCreateView(
         )
 
     def load_file(
-        self, file, object: U1A
+        self, file: File, object: U1A
     ) -> Tuple[List[U1AItem], List[FileLoadMessage], List[ValidationError]]:
         workbook: Workbook = load_workbook(file)
         items = []
@@ -288,6 +290,10 @@ class UdbytteCreateView(
                         headers = pruned_data
                 else:
                     d = dict(zip(headers, data))
+                    if not list(
+                        filter(lambda value: value not in (None, ""), d.values())
+                    ):
+                        continue
                     if d["identifikation"] in (None, ""):
                         messages.append(
                             UdbytteCreateView.FileLoadMessage(
@@ -307,7 +313,7 @@ class UdbytteCreateView(
                                 params={
                                     "sheet": sheetname,
                                     "row": i,
-                                    "postno": d["postnr."],
+                                    "postno": d["postnr"],
                                 },
                             )
                         )
@@ -335,6 +341,14 @@ class UdbytteCreateView(
                             "sheet": sheetname,
                             "required": ", ".join(required_headers),
                         },
+                    )
+                )
+
+            if len(items) == 0:
+                errors.append(
+                    ValidationError(
+                        "udbytte.no_data",
+                        code="udbytte.no_data",
                     )
                 )
         return items, messages, errors

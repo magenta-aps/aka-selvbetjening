@@ -11,6 +11,7 @@ $(function(){
     });
     $(".file-input input[type=file]").change(function () {
         $(".file-input [type=text][data-fileinput="+this.name+"]").val(this.value.replace(/C:\\fakepath\\/i, ""));
+        $(this).parents(".input").find(".err-msg").remove();
     });
     const fileInputContainer = $(".file-input");
     fileInputContainer.on("dragenter", function (event) {

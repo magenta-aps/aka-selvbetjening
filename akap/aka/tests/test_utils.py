@@ -1,6 +1,6 @@
 import datetime
 
-from aka.utils import datefromstring, datetostring, format_filesize
+from aka.utils import datefromstring, datetostring, format_filesize, split_postnr_by
 from django.test import SimpleTestCase
 
 
@@ -55,3 +55,11 @@ class BasicTestCase(SimpleTestCase):
         self.assertEqual("1.5 MiB", format_filesize(1.5 * 1024**2, 1, False))
         self.assertEqual("1.0 GiB", format_filesize(1024**3, SI=False))
         self.assertEqual("1.0 GB", format_filesize(1000**3, SI=True))
+
+    def test_split_postnr_by(self):
+        self.assertEqual(split_postnr_by("1234 TestBy"), ("1234", "TestBy"))
+        self.assertEqual(split_postnr_by("12 34 TestBy Nord"), ("12 34", "TestBy Nord"))
+        self.assertEqual(
+            split_postnr_by("DK-1234 TestBy Nord"), ("DK-1234", "TestBy Nord")
+        )
+        self.assertIsNone(split_postnr_by("TestBy Nord"))

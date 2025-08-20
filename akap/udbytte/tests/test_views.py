@@ -6,6 +6,7 @@ from datetime import date
 from decimal import Decimal
 from unittest.mock import MagicMock, patch
 
+from django.core.files import File
 from django.template.response import TemplateResponse
 from django.test import RequestFactory, TestCase, override_settings
 from udbytte.models import U1A, U1AItem
@@ -50,6 +51,7 @@ class UdbytteViewTest(TestCase):
                 2023, 1, 1
             ),  # Use datetime.date to match actual call
             "underskriftsberettiget": "Authorized User",
+            "use_file": "",
         }
 
         formset_data = {
@@ -106,3 +108,166 @@ class UdbytteViewTest(TestCase):
         mock_get_csv.assert_called_once()
         mock_save_files.assert_called_once()
         mock_send_mail_to_office.assert_called_once_with(b"CSV_DATA", b"PDF_DATA")
+
+    @override_settings(EMAIL_OFFICE_RECIPIENT="office@example.com")
+    @patch(
+        "udbytte.views.UdbytteCreateView.render_filled_form", return_value=b"PDF_DATA"
+    )
+    @patch("udbytte.views.UdbytteCreateView.send_mail_to_submitter")
+    @patch("udbytte.views.UdbytteCreateView.get_csv", return_value=b"CSV_DATA")
+    @patch("udbytte.views.UdbytteCreateView.save_files")
+    @patch("udbytte.views.UdbytteCreateView.send_mail_to_office")
+    def test_upload(
+        self,
+        mock_send_mail_to_office: MagicMock,
+        mock_save_files: MagicMock,
+        mock_get_csv: MagicMock,
+        mock_send_mail_to_submitter: MagicMock,
+        mock_render_filled_form: MagicMock,
+    ):
+        # Create form data
+        form_data = {
+            "navn": "Test User",
+            "email": "test@example.com",
+            "revisionsfirma": "Test Firm",
+            "virksomhedsnavn": "Test Company",
+            "cvr": "12345678",
+            "regnskabsår": "2023",
+            "u1_udfyldt": "0",
+            "udbytte": Decimal("1337.00"),  # Use Decimal to match actual call
+            "noter": "Test notes",
+            "by": "Test City",
+            "dato": date(2023, 1, 1),  # Use datetime.date to match actual call
+            "dato_vedtagelse": date(
+                2023, 1, 1
+            ),  # Use datetime.date to match actual call
+            "underskriftsberettiget": "Authorized User",
+            "use_file": "1",
+            "file": File(open("udbytte/tests/resources/test.xlsx", "rb")),
+        }
+
+        # Set up mock session data
+        session = self.client.session
+        session["user_info"] = {"cpr": "1234567890"}
+        session.save()
+
+        # Make the POST request for the view
+        request = self.factory.post("/udbytte/", {**form_data})
+        request.session = session
+        request.user = MagicMock()
+        response = self.view(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name, "udbytte/success.html")
+        self.assertEqual(U1A.objects.count(), 1)
+        self.assertEqual(U1AItem.objects.count(), 3)
+        items = U1AItem.objects.order_by("id")
+        self.assertEqual(items[0].navn, "Testperson Foobar")
+        self.assertEqual(items[0].cpr_cvr_tin, "1111111111")
+        self.assertEqual(items[0].adresse, "Testvej 1")
+        self.assertEqual(items[0].postnummer, "1234")
+        self.assertEqual(items[0].by, "Testby")
+        self.assertEqual(items[0].land, "GL Greenland")
+        self.assertEqual(items[0].udbytte, Decimal(1200))
+
+        self.assertEqual(items[1].navn, "Tester Testersen")
+        self.assertEqual(items[1].cpr_cvr_tin, "2222222222")
+        self.assertEqual(items[1].adresse, "Testvej 1")
+        self.assertEqual(items[1].postnummer, "12 34")
+        self.assertEqual(items[1].by, "Testby")
+        self.assertEqual(items[1].land, "GL Greenland")
+        self.assertEqual(items[1].udbytte, Decimal(1100))
+
+        self.assertEqual(items[2].navn, "Test Noname")
+        self.assertEqual(items[2].cpr_cvr_tin, "3333333333")
+        self.assertEqual(items[2].adresse, "Testvej 1")
+        self.assertEqual(items[2].postnummer, "DK-1234")
+        self.assertEqual(items[2].by, "Testby Vest")
+        self.assertEqual(items[2].land, "GL Greenland")
+        self.assertEqual(items[2].udbytte, Decimal(400))
+
+        # Verify mocked methods
+        mock_render_filled_form.assert_called_once()
+        mock_send_mail_to_submitter.assert_called_once_with(b"PDF_DATA")
+        mock_get_csv.assert_called_once()
+        mock_save_files.assert_called_once()
+        mock_send_mail_to_office.assert_called_once_with(b"CSV_DATA", b"PDF_DATA")
+
+    @override_settings(EMAIL_OFFICE_RECIPIENT="office@example.com")
+    @patch(
+        "udbytte.views.UdbytteCreateView.render_filled_form", return_value=b"PDF_DATA"
+    )
+    @patch("udbytte.views.UdbytteCreateView.send_mail_to_submitter")
+    @patch("udbytte.views.UdbytteCreateView.get_csv", return_value=b"CSV_DATA")
+    @patch("udbytte.views.UdbytteCreateView.save_files")
+    @patch("udbytte.views.UdbytteCreateView.send_mail_to_office")
+    def test_upload_error(
+        self,
+        mock_send_mail_to_office: MagicMock,
+        mock_save_files: MagicMock,
+        mock_get_csv: MagicMock,
+        mock_send_mail_to_submitter: MagicMock,
+        mock_render_filled_form: MagicMock,
+    ):
+
+        # Set up mock session data
+        session = self.client.session
+        session["user_info"] = {"cpr": "1234567890"}
+        session.save()
+
+        # Create form data
+        form_data = {
+            "navn": "Test User",
+            "email": "test@example.com",
+            "revisionsfirma": "Test Firm",
+            "virksomhedsnavn": "Test Company",
+            "cvr": "12345678",
+            "regnskabsår": "2023",
+            "u1_udfyldt": "0",
+            "udbytte": Decimal("1337.00"),  # Use Decimal to match actual call
+            "noter": "Test notes",
+            "by": "Test City",
+            "dato": date(2023, 1, 1),  # Use datetime.date to match actual call
+            "dato_vedtagelse": date(
+                2023, 1, 1
+            ),  # Use datetime.date to match actual call
+            "underskriftsberettiget": "Authorized User",
+            "use_file": "1",
+            "file": File(open("udbytte/tests/resources/test_with_error.xlsx", "rb")),
+        }
+
+        request = self.factory.post("/udbytte/", {**form_data})
+        request.session = session
+        request.user = MagicMock()
+        response = self.view(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name, ["udbytte/form.html"])
+        self.assertEqual(U1A.objects.count(), 0)
+        self.assertEqual(U1AItem.objects.count(), 0)
+        response.render()
+        self.assertIn("udbytte.split_postcode_fail", str(response.content))
+
+        form_data["file"] = File(
+            open("udbytte/tests/resources/test_with_error_2.xlsx", "rb")
+        )
+        request = self.factory.post("/udbytte/", {**form_data})
+        request.session = session
+        request.user = MagicMock()
+        response = self.view(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name, ["udbytte/form.html"])
+        self.assertEqual(U1A.objects.count(), 0)
+        self.assertEqual(U1AItem.objects.count(), 0)
+        response.render()
+        self.assertIn("udbytte.header_fail", str(response.content))
+
+        form_data["file"] = File(open("udbytte/tests/resources/test_empty.xlsx", "rb"))
+        request = self.factory.post("/udbytte/", {**form_data})
+        request.session = session
+        request.user = MagicMock()
+        response = self.view(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name, ["udbytte/form.html"])
+        self.assertEqual(U1A.objects.count(), 0)
+        self.assertEqual(U1AItem.objects.count(), 0)
+        response.render()
+        self.assertIn("udbytte.no_data", str(response.content))
