@@ -2,7 +2,8 @@ FROM python:3.12
 ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-amd64 \
     SUPERCRONIC=supercronic-linux-amd64 \
     SUPERCRONIC_SHA1SUM=048b95b48b708983effb2e5c935a1ef8483d9e3e \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    XDG_CACHE_HOME=/home/aka/.cache
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -fsSLO https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz && \
@@ -15,7 +16,7 @@ RUN mkdir /app &&  \
     mkdir -p /var/cache/aka && \
     groupadd -g 75080 -r aka && \
     groupadd -g 75100 -r certificate_exporter && \
-    useradd -m -u 75080 --no-log-init -r -g aka -G certificate_exporter aka && \
+    useradd --create-home --uid 75080 --no-log-init --system --gid aka --groups certificate_exporter aka && \
     chown aka:aka /log && \
     chown aka:aka /var/cache/aka && \
     chmod a+w /var/cache/aka && \
@@ -32,6 +33,10 @@ RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main"
     apt-get install -y --no-install-recommends \
         gettext libxmlsec1-dev xmlsec1 gpg libmagic1 nano logrotate postgresql-client-common postgresql-client-16 && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Font cache for pdf generation
+RUN mkdir -p /home/aka/.cache/fontconfig && \
+    chown -R aka /home/aka/.cache
 
 # supercronic
 RUN curl -fsSLO "$SUPERCRONIC_URL" && \
