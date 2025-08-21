@@ -8,11 +8,16 @@ import json
 import logging
 import os
 from io import StringIO
+from typing import Dict, List, Tuple
 
-from aka.utils import AKAJSONEncoder, gettext_lang, omit, send_mail
+from aka.utils import AKAJSONEncoder, gettext_lang, send_mail, split_postnr_by
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.core.files.base import File
+from django.forms import model_to_dict
 from django.template.response import TemplateResponse
-from django.views.generic.edit import FormView
+from django.views.generic.edit import CreateView
+from openpyxl import Workbook, load_workbook
 from project.view_mixins import ErrorHandlerMixin, IsContentMixin, PdfRendererMixin
 from udbytte.forms import UdbytteForm, UdbytteFormSet
 from udbytte.models import U1A, U1AItem
@@ -20,11 +25,157 @@ from udbytte.models import U1A, U1AItem
 logger = logging.getLogger(__name__)
 
 
-class UdbytteView(IsContentMixin, ErrorHandlerMixin, PdfRendererMixin, FormView):
+class UdbytteCreateView(
+    PdfRendererMixin, IsContentMixin, ErrorHandlerMixin, CreateView
+):
+    model = U1A
     form_class = UdbytteForm
     template_name = "udbytte/form.html"
     pdf_template_name = "udbytte/form.html"
     pdf_css_files = ["css/pdf.css"]
+
+    class FileLoadMessage:
+        msg: str
+        params: Dict[str, str | int]
+
+        def __init__(self, msg: str, params: Dict[str, str | int]):
+            self.msg = msg
+            self.params = params
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.object = None
+        self.items: U1AItem | None = None
+
+    def get_csv(self):
+        # Payment Year;"Payer CVR (udbetaler)";"Recipient CPR (modtager)"; Amount
+        csv_io = StringIO()
+        writer = csv.writer(csv_io, delimiter=";")
+        for item in self.items:
+            writer.writerow(
+                [
+                    self.object.regnskabsår,
+                    self.object.cvr,
+                    item.cpr_cvr_tin,
+                    item.udbytte,
+                ]
+            )
+        return csv_io.getvalue()
+
+    def send_mail_to_submitter(self, pdf_data):
+        subject = " / ".join(
+            [
+                gettext_lang("kl", "udbytte.mail1.subject").format(
+                    company_name=self.object.virksomhedsnavn,
+                    year=self.object.regnskabsår,
+                ),
+                gettext_lang("da", "udbytte.mail1.subject").format(
+                    company_name=self.object.virksomhedsnavn,
+                    year=self.object.regnskabsår,
+                ),
+            ]
+        )
+        textbody = [gettext_lang("kl", "udbytte.mail1.textbody")]
+        if not self.object.u1_udfyldt:
+            textbody.append(
+                gettext_lang("kl", "udbytte.mail1.textreminder").format(
+                    url=settings.TAX_FORM_U1
+                )
+            )
+        textbody.append(gettext_lang("da", "udbytte.mail1.textbody"))
+        if not self.object.u1_udfyldt:
+            textbody.append(
+                gettext_lang("da", "udbytte.mail1.textreminder").format(
+                    url=settings.TAX_FORM_U1
+                )
+            )
+
+        htmlbody = ["<html><body>", gettext_lang("kl", "udbytte.mail1.htmlbody")]
+        if not self.object.u1_udfyldt:
+            htmlbody.append(
+                gettext_lang("kl", "udbytte.mail1.htmlreminder").format(
+                    url=settings.TAX_FORM_U1
+                )
+            )
+        htmlbody.append(gettext_lang("da", "udbytte.mail1.htmlbody"))
+        if not self.object.u1_udfyldt:
+            htmlbody.append(
+                gettext_lang("da", "udbytte.mail1.htmlreminder").format(
+                    url=settings.TAX_FORM_U1
+                )
+            )
+        htmlbody.append("</body></html>")
+
+        send_mail(
+            recipient=self.object.email,
+            subject=subject,
+            textbody="\n".join(textbody),
+            htmlbody="\n".join(htmlbody),
+            attachments=(("formulardata.pdf", pdf_data, "application/pdf"),),
+        )
+
+    def send_mail_to_office(self, csv_data, pdf_data):
+        subject = " / ".join(
+            [
+                gettext_lang("kl", "udbytte.mail2.subject").format(
+                    company_name=self.object.virksomhedsnavn,
+                    year=self.object.regnskabsår,
+                ),
+                gettext_lang("da", "udbytte.mail2.subject").format(
+                    company_name=self.object.virksomhedsnavn,
+                    year=self.object.regnskabsår,
+                ),
+            ]
+        )
+        textbody = "\n\n".join(
+            [
+                gettext_lang("kl", "udbytte.mail2.textbody").format(
+                    company_name=self.object.virksomhedsnavn,
+                    csv=csv_data,
+                ),
+                gettext_lang("da", "udbytte.mail2.textbody").format(
+                    company_name=self.object.virksomhedsnavn,
+                    csv=csv_data,
+                ),
+            ]
+        )
+        htmlbody = (
+            "<html><body><p>" + textbody.replace("\n", "<br/>") + "</body></html>"
+        )
+        send_mail(
+            recipient=settings.EMAIL_OFFICE_RECIPIENT,
+            subject=subject,
+            textbody=textbody,
+            htmlbody=htmlbody,
+            attachments=(("formulardata.pdf", pdf_data, "application/pdf"),),
+        )
+
+    def render_filled_form(self):
+        self.is_pdf = True
+        return self.render(
+            context=self.get_context_data(
+                form=UdbytteForm(instance=self.object),
+                formset=UdbytteFormSet(instance=self.object),
+                pdf=True,
+            ),
+            wrap_in_response=False,
+        )
+
+    def save_files(self, csv_data, pdf_data):
+        folder = f"{settings.TAX_FORM_STORAGE}/{self.object.regnskabsår}/{self.object.dato}/{self.object.cvr}"
+        os.makedirs(folder, exist_ok=True)
+        file_base_name = f"{datetime.datetime.now().isoformat()}"
+
+        with open(f"{folder}/{file_base_name}.pdf", "wb") as file:
+            file.write(pdf_data)
+
+        data = {
+            "form": model_to_dict(self.object),
+            "formset": [model_to_dict(item) for item in self.items],
+            "csv": csv_data,
+        }
+        with open(f"{folder}/{file_base_name}.json", "w") as file:
+            file.write(json.dumps(data, indent=2, cls=AKAJSONEncoder))
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(
@@ -37,11 +188,8 @@ class UdbytteView(IsContentMixin, ErrorHandlerMixin, PdfRendererMixin, FormView)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        if "initial" not in kwargs:
-            kwargs["initial"] = {}
-        kwargs["initial"] = {
-            "dato": datetime.date.today().strftime("%d/%m/%Y"),
-        }
+        kwargs["initial"]["dato"] = datetime.date.today().strftime("%d/%m/%Y")
+        kwargs["oprettet_af_cpr"] = self.request.session["user_info"]["cpr"]
         return kwargs
 
     def get_formset_kwargs(self):
@@ -51,183 +199,156 @@ class UdbytteView(IsContentMixin, ErrorHandlerMixin, PdfRendererMixin, FormView)
         return UdbytteFormSet(**self.get_formset_kwargs())
 
     def post(self, request, *args, **kwargs):
+        self.object = None
         form = self.get_form()
-        formset = self.get_formset()
-        # Trigger form cleaning of both form and formset
-        # This ensures that:
-        # * we have cleaned_data for the cross-check in clean_with_formset, which validates data across both forms,
-        # * all errors are collected for display in form_invalid, not just from the first form that fails
         form.full_clean()
-        formset.full_clean()
-        # compares data between form and formset, and adds any errors to form
-        form.clean_with_formset(formset)
-        if form.is_valid() and formset.is_valid():
-            return self.form_valid(form, formset)
+        if form.is_valid():
+            if form.cleaned_data["use_file"]:
+                return self.form_valid(form, None)
+            formset = self.get_formset()
+            # Trigger form cleaning of both form and formset
+            # This ensures that:
+            # * we have cleaned_data for the cross-check in clean_with_formset, which validates data across both forms,
+            # * all errors are collected for display in form_invalid, not just from the first form that fails
+            formset.full_clean()
+            # compares data between form and formset, and adds any errors to form
+            form.clean_with_formset(formset)
+            if formset.is_valid():
+                return self.form_valid(form, formset)
         return self.form_invalid(form, formset)
 
     def form_valid(self, form, formset):
-        oprettet_af_cpr = self.request.session["user_info"]["cpr"]
-
-        # Persist the submitted U1A in the database
-        new_u1a_model = U1A.objects.create(
-            **{**form.cleaned_data, "oprettet_af_cpr": oprettet_af_cpr}
-        )
-        for subform in filter(lambda sf: sf.cleaned_data, formset):
-            U1AItem.objects.create(
-                **{**omit(subform.cleaned_data, "DELETE"), "u1a": new_u1a_model}
+        self.object = form.save(False)
+        if form.cleaned_data["use_file"]:
+            self.items, messages, errors = self.load_file(
+                form.cleaned_data["file"], self.object
             )
+            if len(errors):
+                form.add_error("file", errors)
+                return self.form_invalid(form, formset)
+            self.object.save()
+            for item in self.items:
+                item.save()
+        elif formset is not None:
+            self.object.save()
+            formset.instance = self.object
+            self.items = formset.save()
+            messages = []
+        else:
+            form.add_error("__all__", "udbytte.no_data")
+            return self.form_invalid(form, formset)
 
         # PDF handling
-        pdf_data = self.render_filled_form(form, formset)
-        self.send_mail_to_submitter(
-            form.cleaned_data["email"], pdf_data, form.cleaned_data
-        )
+        pdf_data = self.render_filled_form()
+        self.send_mail_to_submitter(pdf_data)
 
         # CSV handling
-        csv_data = self.get_csv(form, formset)
-        self.save_data(form, formset, csv_data, pdf_data)
-        self.send_mail_to_office(
-            settings.EMAIL_OFFICE_RECIPIENT, csv_data, pdf_data, form.cleaned_data
-        )
+        csv_data = self.get_csv()
+        self.save_files(csv_data, pdf_data)
+        self.send_mail_to_office(csv_data, pdf_data)
 
         return TemplateResponse(
             request=self.request,
             template="udbytte/success.html",
-            context={},
+            context={"messages": messages, "count": len(self.items)},
             using=self.template_engine,
         )
-
-    def render_filled_form(self, form, formset):
-        self.is_pdf = True
-        return self.render(
-            context=self.get_context_data(form=form, formset=formset, pdf=True),
-            wrap_in_response=False,
-        )
-
-    def get_csv(self, form, formset):
-        # Payment Year;"Payer CVR (udbetaler)";"Recipient CPR (modtager)"; Amount
-        csv_io = StringIO()
-        writer = csv.writer(csv_io, delimiter=";")
-        for subform in formset:
-            if subform.cleaned_data:
-                writer.writerow(
-                    [
-                        form.cleaned_data["regnskabsår"],
-                        form.cleaned_data["cvr"],
-                        subform.cleaned_data["cpr_cvr_tin"],
-                        subform.cleaned_data["udbytte"],
-                    ]
-                )
-        return csv_io.getvalue()
 
     def form_invalid(self, form, formset):
         return self.render_to_response(
             self.get_context_data(form=form, formset=formset)
         )
 
-    @staticmethod
-    def send_mail_to_submitter(recipient, pdf_data, formdata):
-        subject = " / ".join(
-            [
-                gettext_lang("kl", "udbytte.mail1.subject").format(
-                    company_name=formdata["virksomhedsnavn"],
-                    year=formdata["regnskabsår"],
-                ),
-                gettext_lang("da", "udbytte.mail1.subject").format(
-                    company_name=formdata["virksomhedsnavn"],
-                    year=formdata["regnskabsår"],
-                ),
-            ]
-        )
-        textbody = [gettext_lang("kl", "udbytte.mail1.textbody")]
-        if not formdata["u1_udfyldt"]:
-            textbody.append(
-                gettext_lang("kl", "udbytte.mail1.textreminder").format(
-                    url=settings.TAX_FORM_U1
+    def load_file(
+        self, file: File, object: U1A
+    ) -> Tuple[List[U1AItem], List[FileLoadMessage], List[ValidationError]]:
+        workbook: Workbook = load_workbook(file)
+        items = []
+        messages = []
+        errors = []
+        for sheetname in workbook.sheetnames:
+            sheet = workbook[sheetname]
+            required_headers = {
+                "generalforsamlingsdato",
+                "udbetalingsdato",
+                "identifikation",
+                "navn",
+                "c/o",
+                "adresse",
+                "postnr",
+                "land",
+                "bruttoudbytte",
+            }
+            headers: List[str] = []
+            for i, row in enumerate(sheet.iter_rows(), 1):
+                data = [cell.value for cell in row]
+                if len(headers) == 0:
+                    pruned_data = [
+                        str(x).strip(" \t.").lower() for x in data if x is not None
+                    ]
+                    if required_headers.issubset(set(pruned_data)):
+                        headers = pruned_data
+                else:
+                    d = dict(zip(headers, data))
+                    if not list(
+                        filter(lambda value: value not in (None, ""), d.values())
+                    ):
+                        continue
+                    if d["identifikation"] in (None, ""):
+                        messages.append(
+                            UdbytteCreateView.FileLoadMessage(
+                                "udbytte.skiprow_noident",
+                                {"sheet": sheetname, "row": i},
+                            )
+                        )
+                        continue
+                    postnr_by = split_postnr_by(d["postnr"])
+                    if postnr_by is None:
+                        postnr = ""
+                        by = d["postnr"]
+                        errors.append(
+                            ValidationError(
+                                "udbytte.split_postcode_fail",
+                                code="udbytte.split_postcode_fail",
+                                params={
+                                    "sheet": sheetname,
+                                    "row": i,
+                                    "postno": d["postnr"],
+                                },
+                            )
+                        )
+                    else:
+                        postnr, by = postnr_by
+                    items.append(
+                        U1AItem(
+                            u1a=object,
+                            cpr_cvr_tin=d["identifikation"],
+                            navn=d["navn"],
+                            adresse=d["adresse"],
+                            postnummer=postnr,
+                            by=by,
+                            land=d["land"],
+                            udbytte=d["bruttoudbytte"],
+                            oprettet=d["udbetalingsdato"],
+                        )
+                    )
+            if len(headers) == 0:
+                errors.append(
+                    ValidationError(
+                        "udbytte.header_fail",
+                        code="udbytte.header_fail",
+                        params={
+                            "sheet": sheetname,
+                            "required": ", ".join(required_headers),
+                        },
+                    )
                 )
-            )
-        textbody.append(gettext_lang("da", "udbytte.mail1.textbody"))
-        if not formdata["u1_udfyldt"]:
-            textbody.append(
-                gettext_lang("da", "udbytte.mail1.textreminder").format(
-                    url=settings.TAX_FORM_U1
+
+            if len(items) == 0:
+                errors.append(
+                    ValidationError(
+                        "udbytte.no_data",
+                        code="udbytte.no_data",
+                    )
                 )
-            )
-
-        htmlbody = ["<html><body>", gettext_lang("kl", "udbytte.mail1.htmlbody")]
-        if not formdata["u1_udfyldt"]:
-            htmlbody.append(
-                gettext_lang("kl", "udbytte.mail1.htmlreminder").format(
-                    url=settings.TAX_FORM_U1
-                )
-            )
-        htmlbody.append(gettext_lang("da", "udbytte.mail1.htmlbody"))
-        if not formdata["u1_udfyldt"]:
-            htmlbody.append(
-                gettext_lang("da", "udbytte.mail1.htmlreminder").format(
-                    url=settings.TAX_FORM_U1
-                )
-            )
-        htmlbody.append("</body></html>")
-
-        send_mail(
-            recipient=recipient,
-            subject=subject,
-            textbody="\n".join(textbody),
-            htmlbody="\n".join(htmlbody),
-            attachments=(("formulardata.pdf", pdf_data, "application/pdf"),),
-        )
-
-    @staticmethod
-    def send_mail_to_office(recipient, csv_data, pdf_data, formdata):
-        subject = " / ".join(
-            [
-                gettext_lang("kl", "udbytte.mail2.subject").format(
-                    company_name=formdata["virksomhedsnavn"],
-                    year=formdata["regnskabsår"],
-                ),
-                gettext_lang("da", "udbytte.mail2.subject").format(
-                    company_name=formdata["virksomhedsnavn"],
-                    year=formdata["regnskabsår"],
-                ),
-            ]
-        )
-        textbody = "\n\n".join(
-            [
-                gettext_lang("kl", "udbytte.mail2.textbody").format(
-                    company_name=formdata["virksomhedsnavn"],
-                    csv=csv_data,
-                ),
-                gettext_lang("da", "udbytte.mail2.textbody").format(
-                    company_name=formdata["virksomhedsnavn"],
-                    csv=csv_data,
-                ),
-            ]
-        )
-        htmlbody = (
-            "<html><body><p>" + textbody.replace("\n", "<br/>") + "</body></html>"
-        )
-        send_mail(
-            recipient=recipient,
-            subject=subject,
-            textbody=textbody,
-            htmlbody=htmlbody,
-            attachments=(("formulardata.pdf", pdf_data, "application/pdf"),),
-        )
-
-    @staticmethod
-    def save_data(form, formset, csv_data, pdf_data):
-        folder = f"{settings.TAX_FORM_STORAGE}/{form.cleaned_data['regnskabsår']}/{form.cleaned_data['dato']}/{form.cleaned_data['cvr']}"
-        os.makedirs(folder, exist_ok=True)
-        file_base_name = f"{datetime.datetime.now().isoformat()}"
-
-        with open(f"{folder}/{file_base_name}.pdf", "wb") as file:
-            file.write(pdf_data)
-
-        data = {
-            "form": form.cleaned_data,
-            "formset": [subform.cleaned_data for subform in formset],
-            "csv": csv_data,
-        }
-        with open(f"{folder}/{file_base_name}.json", "w") as file:
-            file.write(json.dumps(data, indent=2, cls=AKAJSONEncoder))
+        return items, messages, errors

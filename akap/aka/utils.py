@@ -7,6 +7,7 @@ import datetime
 import json
 import logging
 import os
+import re
 from dataclasses import dataclass, field
 from decimal import Decimal
 from math import floor
@@ -321,3 +322,10 @@ def gettext_lang(language, string):
 def omit(items: Dict[str, Any], *keys: Collection[str]) -> Dict[str, Any]:
     k = set(keys)
     return {key: value for key, value in items.items() if key not in k}
+
+
+def split_postnr_by(input: str) -> Tuple[str, str] | None:
+    match = re.match(r"((?:\w+-)?[\d\s]+\d)\s+([\w\s]+)", input)
+    if match is not None:
+        return match.group(1).strip(), match.group(2).strip()
+    return None

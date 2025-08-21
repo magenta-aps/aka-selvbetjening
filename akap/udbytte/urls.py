@@ -4,14 +4,14 @@
 
 from django.urls import path
 from udbytte.api import api
-from udbytte.views import UdbytteView
+from udbytte.views import UdbytteCreateView
 
 app_name = "udbytte"
 
 urlpatterns = [
     path(
         "",
-        UdbytteView.as_view(),
+        UdbytteCreateView.as_view(),
         name="form",
     ),
     path("api/", api.urls),

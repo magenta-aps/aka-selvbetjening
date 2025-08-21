@@ -184,3 +184,15 @@ msgstr ""
 "{company_name} har udfyldt U1a udbytteerklæring, den er vedhæftet denne e-mail.\n\n"
 ""
 "CSV datastring: {csv}"
+
+msgid "udbytte.skiprow_noident"
+msgstr "[Ark {sheet}]: Udelod række {row}, ingen data i kolonnen 'identifikation'"
+
+msgid "udbytte.split_postcode_fail"
+msgstr "[Ark {sheet}]: Kunne ikke splitte postnummer '{postno}' på række {row}"
+
+msgid "udbytte.header_fail"
+msgstr "[Ark {sheet}]: Fandt ikke en række der indeholder alle påkrævede kolonneoverskrifter ({required})"
+
+msgid "udbytte.no_data"
+msgstr "Ingen rækker med data"
