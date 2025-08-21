@@ -100,7 +100,7 @@
                     <div class="col-12-sm">
                         <input type="radio" class="btn-check" name="use_file" id="use_file_0" autocomplete="off" checked value="0">
                         <label class="btn btn-secondary" for="use_file_0">Udfyld rækker</label>
-                        <input type="radio" class="btn-check" name="use_file" id="use_file_1" autocomplete="off" checked value="1">
+                        <input type="radio" class="btn-check" name="use_file" id="use_file_1" autocomplete="off" value="1">
                         <label class="btn btn-secondary" for="use_file_1">Upload fil</label>
                     </div>
                 </div>
@@ -252,7 +252,6 @@
 
     const toggleFile = function () {
         const useFile = $("[name='{{ form.use_file.name }}']:checked").val() === "1";
-        console.log(useFile);
         $("#data_fields").toggle(!useFile);
         $("#data_file").toggle(useFile);
     }
