@@ -52,11 +52,6 @@ class U1A(models.Model):
 
     u1_udfyldt = models.BooleanField(
         verbose_name=_("Har du allerede udfyldt U1?"),
-        choices=[
-            (None, "---------"),
-            ("0", "No"),
-            ("1", "Yes"),
-        ],
         blank=True,
         null=True,
     )

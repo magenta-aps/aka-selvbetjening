@@ -14,10 +14,11 @@
         {{ css|safe }}
     </style>
     {% endif %}
+    {{ form.media }}
 {% endblock %}
 
 {% block content %}
-<form method="post" id="mainform">
+<form method="post" id="mainform" enctype="multipart/form-data">
     {% csrf_token %}
     {{ formset.management_form }}
 
@@ -96,6 +97,16 @@
                 </div>
 
                 <div class="row">
+                    <div class="col-12-sm">
+                        <input type="radio" class="btn-check" name="use_file" id="use_file_0" autocomplete="off" checked value="0">
+                        <label class="btn btn-secondary" for="use_file_0">Udfyld rækker</label>
+                        <input type="radio" class="btn-check" name="use_file" id="use_file_1" autocomplete="off" checked value="1">
+                        <label class="btn btn-secondary" for="use_file_1">Upload fil</label>
+                    </div>
+                </div>
+
+                <div id="data_fields">
+                <div class="row">
                     {% if pdf %}
                         <div class="col-xxl-1 col-sm-1 pe-0" data-trans="udbytte.cpr_cvr_tin"><label>{% translate 'udbytte.cpr_cvr_tin' %}</label></div>
                         <div class="col-xxl-2 col-sm-2 px-0" data-trans="udbytte.navn"><label>{% translate 'udbytte.navn' %}</label></div>
@@ -126,7 +137,11 @@
                     {% endif %}
                 </div>
                 <button type="button" id="add-row" class="btn btn-primary" data-trans="common.add">{% translate 'common.add' %}</button>
+                </div>
 
+                <div class="data_file">
+                    {% include 'aka/util/field.html' with field=form.file upload=True %}
+                </div>
 
                 <div class="row">
                     <div class="col-12-sm">
@@ -233,6 +248,16 @@
     }
     toggleU1Warning();
     u1UdfyldtField.change(toggleU1Warning);
+
+
+    const toggleFile = function () {
+        const useFile = $("[name='{{ form.use_file.name }}']:checked").val() === "1";
+        console.log(useFile);
+        $("#data_fields").toggle(!useFile);
+        $("#data_file").toggle(useFile);
+    }
+    $("[name='{{ form.use_file.name }}']").click(toggleFile);
+    toggleFile();
 
 </script>
 {% endif %}
