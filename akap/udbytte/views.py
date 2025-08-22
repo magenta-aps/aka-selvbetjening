@@ -21,12 +21,13 @@ from openpyxl import Workbook, load_workbook
 from project.view_mixins import ErrorHandlerMixin, IsContentMixin, PdfRendererMixin
 from udbytte.forms import UdbytteForm, UdbytteFormSet
 from udbytte.models import U1A, U1AItem
+from csp_helpers.mixins import CSPViewMixin
 
 logger = logging.getLogger(__name__)
 
 
 class UdbytteCreateView(
-    PdfRendererMixin, IsContentMixin, ErrorHandlerMixin, CreateView
+    PdfRendererMixin, IsContentMixin, ErrorHandlerMixin, CSPViewMixin, CreateView
 ):
     model = U1A
     form_class = UdbytteForm
@@ -193,7 +194,10 @@ class UdbytteCreateView(
         return kwargs
 
     def get_formset_kwargs(self):
-        return super().get_form_kwargs()
+        kwargs = super().get_form_kwargs()
+        if "csp_nonce" in kwargs:
+            del kwargs["csp_nonce"]
+        return kwargs
 
     def get_formset(self):
         return UdbytteFormSet(**self.get_formset_kwargs())
@@ -351,4 +355,6 @@ class UdbytteCreateView(
                         code="udbytte.no_data",
                     )
                 )
+        if object.udbytte != sum([item.udbytte for item in items]):
+            errors.append(ValidationError("error.udbytte_sum_mismatch"))
         return items, messages, errors

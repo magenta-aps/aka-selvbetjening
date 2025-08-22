@@ -8,11 +8,13 @@ from aka.forms import FileField
 from aka.widgets import TranslatedSelect
 from django import forms
 from django.core.validators import FileExtensionValidator, RegexValidator
-from django.forms import BooleanField, ModelForm, ValidationError, inlineformset_factory
+from django.forms import BooleanField, ModelForm, ValidationError, inlineformset_factory, BaseInlineFormSet, RadioSelect
+from django.forms.formsets import BaseFormSet
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 from dynamic_forms import DynamicField, DynamicFormMixin
 from udbytte.models import U1A, U1AItem
+from csp_helpers.mixins import CSPFormMixin
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +24,7 @@ cvrvalidator = RegexValidator(r"^\d{8}$", "error.invalid_cvr")
 cprcvrvalidator = RegexValidator(r"^\d{8}(\d{2})?$", "error.invalid_cpr_cvr")
 
 
-class UdbytteForm(DynamicFormMixin, ModelForm):
+class UdbytteForm(DynamicFormMixin, CSPFormMixin, ModelForm):
 
     class Meta:
         model = U1A
@@ -187,10 +189,14 @@ class UdbytteFormItem(ModelForm):
     )
 
 
+# class UdbytteFormset(CSPFormMixin, BaseInlineFormSet):
+#     pass
+
 UdbytteFormSet = inlineformset_factory(
     parent_model=U1A,
     model=U1AItem,
     form=UdbytteFormItem,
+    # formset=UdbytteFormset,
     exclude=["id"],
     can_delete=True,
 )

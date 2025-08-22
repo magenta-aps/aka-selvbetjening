@@ -83,7 +83,7 @@
                     <div class="col-12-sm">
                         {% include 'udbytte/field.html' with field=form.u1_udfyldt key='udbytte.u1_udfyldt' %}
                     </div>
-                    <div id="u1_warning" class="col-12-sm" class="hidden">
+                    <div id="u1_warning" class="col-12-sm hidden">
                         <p data-trans="udbytte.u1_advarsel" data-trans-params="{{u1_url_wrapped}}">
                             {{ 'udbytte.u1_advarsel'|format:u1_url_wrapped|safe }}
                         </p>
@@ -98,9 +98,10 @@
 
                 <div class="row">
                     <div class="col-12-sm">
-                        <input type="radio" class="btn-check" name="use_file" id="use_file_0" autocomplete="off" checked value="0">
+                    {{ form.use_file.value }}
+                        <input type="radio" class="btn-check" name="use_file" id="use_file_0" autocomplete="off" {% if not form.use_file.value %}checked{% endif %} value="0">
                         <label class="btn btn-secondary" for="use_file_0">Udfyld rækker</label>
-                        <input type="radio" class="btn-check" name="use_file" id="use_file_1" autocomplete="off" value="1">
+                        <input type="radio" class="btn-check" name="use_file" id="use_file_1" autocomplete="off" {% if form.use_file.value %}checked{% endif %} value="1">
                         <label class="btn btn-secondary" for="use_file_1">Upload fil</label>
                     </div>
                 </div>
@@ -139,7 +140,7 @@
                 <button type="button" id="add-row" class="btn btn-primary" data-trans="common.add">{% translate 'common.add' %}</button>
                 </div>
 
-                <div class="data_file">
+                <div id="data_file">
                     {% include 'aka/util/field.html' with field=form.file upload=True %}
                 </div>
 
