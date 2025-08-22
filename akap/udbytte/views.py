@@ -11,6 +11,7 @@ from io import StringIO
 from typing import Dict, List, Tuple
 
 from aka.utils import AKAJSONEncoder, gettext_lang, send_mail, split_postnr_by
+from csp_helpers.mixins import CSPViewMixin
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.base import File
@@ -21,7 +22,6 @@ from openpyxl import Workbook, load_workbook
 from project.view_mixins import ErrorHandlerMixin, IsContentMixin, PdfRendererMixin
 from udbytte.forms import UdbytteForm, UdbytteFormSet
 from udbytte.models import U1A, U1AItem
-from csp_helpers.mixins import CSPViewMixin
 
 logger = logging.getLogger(__name__)
 

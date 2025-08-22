@@ -6,15 +6,14 @@ import logging
 
 from aka.forms import FileField
 from aka.widgets import TranslatedSelect
+from csp_helpers.mixins import CSPFormMixin
 from django import forms
 from django.core.validators import FileExtensionValidator, RegexValidator
-from django.forms import BooleanField, ModelForm, ValidationError, inlineformset_factory, BaseInlineFormSet, RadioSelect
-from django.forms.formsets import BaseFormSet
+from django.forms import BooleanField, ModelForm, ValidationError, inlineformset_factory
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 from dynamic_forms import DynamicField, DynamicFormMixin
 from udbytte.models import U1A, U1AItem
-from csp_helpers.mixins import CSPFormMixin
 
 logger = logging.getLogger(__name__)
 
