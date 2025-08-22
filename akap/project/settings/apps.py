@@ -17,5 +17,5 @@ INSTALLED_APPS = [
     "udbytte",
     "mitid_test",
     "metrics",
-    'csp_helpers',
+    "csp_helpers",
 ]
