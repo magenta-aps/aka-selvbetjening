@@ -188,9 +188,6 @@ class UdbytteFormItem(ModelForm):
     )
 
 
-# class UdbytteFormset(CSPFormMixin, BaseInlineFormSet):
-#     pass
-
 UdbytteFormSet = inlineformset_factory(
     parent_model=U1A,
     model=U1AItem,
