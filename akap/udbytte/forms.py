@@ -125,11 +125,21 @@ class UdbytteForm(DynamicFormMixin, CSPFormMixin, ModelForm):
     file = FileField(
         required=False,
         validators=[FileExtensionValidator(["xlsx"], code="error.invalid_extension")],
+        error_messages={"required": "error.required"},
         accept=[
             ".xlsx",
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         ],
     )
+
+    def clean(self):
+        if self.cleaned_data["use_file"] and not self.cleaned_data["file"]:
+            self.add_error(
+                "file",
+                ValidationError(
+                    self.fields["file"].error_messages["required"], code="required"
+                ),
+            )
 
     def clean_with_formset(self, formset):
         formset_sum = sum([item.cleaned_data.get("udbytte", 0) for item in formset])
