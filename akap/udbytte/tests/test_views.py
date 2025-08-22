@@ -134,7 +134,7 @@ class UdbytteViewTest(TestCase):
             "cvr": "12345678",
             "regnskabsår": "2023",
             "u1_udfyldt": "0",
-            "udbytte": Decimal("1337.00"),  # Use Decimal to match actual call
+            "udbytte": Decimal("2700.00"),  # Use Decimal to match actual call
             "noter": "Test notes",
             "by": "Test City",
             "dato": date(2023, 1, 1),  # Use datetime.date to match actual call

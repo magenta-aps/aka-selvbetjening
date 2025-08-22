@@ -11,6 +11,7 @@ from io import StringIO
 from typing import Dict, List, Tuple
 
 from aka.utils import AKAJSONEncoder, gettext_lang, send_mail, split_postnr_by
+from csp_helpers.mixins import CSPViewMixin
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.base import File
@@ -26,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 
 class UdbytteCreateView(
-    PdfRendererMixin, IsContentMixin, ErrorHandlerMixin, CreateView
+    PdfRendererMixin, IsContentMixin, ErrorHandlerMixin, CSPViewMixin, CreateView
 ):
     model = U1A
     form_class = UdbytteForm
@@ -193,7 +194,10 @@ class UdbytteCreateView(
         return kwargs
 
     def get_formset_kwargs(self):
-        return super().get_form_kwargs()
+        kwargs = super().get_form_kwargs()
+        if "csp_nonce" in kwargs:
+            del kwargs["csp_nonce"]
+        return kwargs
 
     def get_formset(self):
         return UdbytteFormSet(**self.get_formset_kwargs())
@@ -351,4 +355,6 @@ class UdbytteCreateView(
                         code="udbytte.no_data",
                     )
                 )
+        if object.udbytte != sum([item.udbytte for item in items]):
+            errors.append(ValidationError("error.udbytte_sum_mismatch"))
         return items, messages, errors

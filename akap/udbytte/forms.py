@@ -6,6 +6,7 @@ import logging
 
 from aka.forms import FileField
 from aka.widgets import TranslatedSelect
+from csp_helpers.mixins import CSPFormMixin
 from django import forms
 from django.core.validators import FileExtensionValidator, RegexValidator
 from django.forms import BooleanField, ModelForm, ValidationError, inlineformset_factory
@@ -22,7 +23,7 @@ cvrvalidator = RegexValidator(r"^\d{8}$", "error.invalid_cvr")
 cprcvrvalidator = RegexValidator(r"^\d{8}(\d{2})?$", "error.invalid_cpr_cvr")
 
 
-class UdbytteForm(DynamicFormMixin, ModelForm):
+class UdbytteForm(DynamicFormMixin, CSPFormMixin, ModelForm):
 
     class Meta:
         model = U1A
@@ -191,6 +192,7 @@ UdbytteFormSet = inlineformset_factory(
     parent_model=U1A,
     model=U1AItem,
     form=UdbytteFormItem,
+    # formset=UdbytteFormset,
     exclude=["id"],
     can_delete=True,
 )
