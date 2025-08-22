@@ -206,6 +206,7 @@ class UdbytteCreateView(
         self.object = None
         form = self.get_form()
         form.full_clean()
+        formset = None
         if form.is_valid():
             if form.cleaned_data["use_file"]:
                 return self.form_valid(form, None)
