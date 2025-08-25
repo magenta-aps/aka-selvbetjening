@@ -8,46 +8,43 @@
     {% include 'aka/util/calendar_headers.html' %}
     <script type="text/javascript" src="{% static 'js/form.js' %}" nonce="{{request.csp_nonce}}"></script>
     <script type="text/javascript" src="{% static 'js/udbytte.js' %}" nonce="{{request.csp_nonce}}"></script>
+    {{ form.media }}
     {% endif %}
     {% if css %}
     <style nonce="{{request.csp_nonce}}">
         {{ css|safe }}
     </style>
     {% endif %}
-    {{ form.media }}
 {% endblock %}
 
 {% block content %}
 <form method="post" id="mainform" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ formset.management_form }}
 
+    {% if not pdf %}
     <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
     {% include "aka/util/header.html" with key="udbytte.title" %}
     </div>
-
+    {% endif %}
 
     <div class="col-xs-12 col-md-12 col-xl-10 offset-xl-1 col-fluid">
         <div class="row block">
             <div class="col-12">
-                {% if not pdf %}
 
+                {% if not pdf %}
                     <button type="button" class="btn btn-primary collapsed" data-bs-toggle="collapse" data-bs-target="#vejledning">
                         <span class="collapsed-hidden" data-trans="udbytte.vejledning_skjul">{% translate 'udbytte.vejledning_skjul' %}</span>
                         <span class="expanded-hidden" data-trans="udbytte.vejledning_vis">{% translate 'udbytte.vejledning_vis' %}</span>
                     </button>
-
                     <div id="vejledning" class="row collapse collapsed">
                         <div class="col-12-sm" data-trans="udbytte.vejledning">
                             {% translate "udbytte.vejledning" %}
                         </div>
                     </div>
-
                     {% if form.errors or formset.errors %}
                         <p class="err-msg">{% translate 'common.errors_present' %}</p>
                         {% include "aka/util/nonfield_errors.html" with form=form %}
                     {% endif %}
-
                 {% endif %}
 
                 <div class="row">
@@ -70,15 +67,16 @@
                 </div>
                 <div class="row">
                     <div class="col-12-sm">
-                        {% include 'udbytte/field.html' with field=form.cvr key='udbytte.cvr' %}
+                        {% include 'udbytte/field.html' with field=form.cvr key='udbytte.cvr' no_localize=True %}
                         {% include 'udbytte/field.html' with field=form.email key='udbytte.email' %}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12-sm">
-                        {% include 'udbytte/field.html' with field=form.regnskabsår key='udbytte.regnskabsår' %}
+                        {% include 'udbytte/field.html' with field=form.regnskabsår key='udbytte.regnskabsår' no_localize=True %}
                     </div>
                 </div>
+                {% if not pdf %}
                 <div class="row">
                     <div class="col-12-sm">
                         {% include 'udbytte/field.html' with field=form.u1_udfyldt key='udbytte.u1_udfyldt' %}
@@ -89,6 +87,7 @@
                         </p>
                     </div>
                 </div>
+                {% endif %}
 
                 <div class="row">
                     <div class="col-12-sm">
@@ -96,52 +95,78 @@
                     </div>
                 </div>
 
+                {% if not pdf %}
                 <div class="row">
                     <div class="col-12-sm">
-                        <input type="radio" class="btn-check" name="use_file" id="use_file_0" autocomplete="off" {% if not form.use_file.value %}checked{% endif %} value="0">
+                        <input type="radio" class="btn-check" name="use_file" id="use_file_0" autocomplete="off" {% if not form.use_file.value %}checked{% endif %} value="false">
                         <label class="btn btn-secondary" for="use_file_0">Udfyld rækker</label>
-                        <input type="radio" class="btn-check" name="use_file" id="use_file_1" autocomplete="off" {% if form.use_file.value %}checked{% endif %} value="1">
+                        <input type="radio" class="btn-check" name="use_file" id="use_file_1" autocomplete="off" {% if form.use_file.value %}checked{% endif %} value="true">
                         <label class="btn btn-secondary" for="use_file_1">Upload fil</label>
                     </div>
                 </div>
+                {% endif %}
 
                 <div id="data_fields">
-                <div class="row">
                     {% if pdf %}
-                        <div class="col-xxl-1 col-sm-1 pe-0" data-trans="udbytte.cpr_cvr_tin"><label>{% translate 'udbytte.cpr_cvr_tin' %}</label></div>
-                        <div class="col-xxl-2 col-sm-2 px-0" data-trans="udbytte.navn"><label>{% translate 'udbytte.navn' %}</label></div>
-                        <div class="col-xxl-1 col-sm-2 px-0" data-trans="udbytte.adresse"><label>{% translate 'udbytte.adresse' %}</label></div>
-                        <div class="col-xxl-1 col-sm-1 px-0" data-trans="udbytte.postnummer"><label>{% translate 'udbytte.postnummer' %}</label></div>
-                        <div class="col-xxl-1 col-sm-2 px-0" data-trans="udbytte.by"><label>{% translate 'udbytte.by' %}</label></div>
-                        <div class="col-xxl-1 col-sm-1 px-0" data-trans="udbytte.land"><label>{% translate 'udbytte.land' %}</label></div>
-                        <div class="col-xxl-3 col-sm-3 ps-0" data-trans="udbytte.udbytte"><label>{% translate 'udbytte.udbytte' %}</label></div>
-                    {% else %}
-                        <div class="col-xxl-1 col-sm-1 pe-0" data-trans="udbytte.cpr_cvr_tin"><label>{% translate 'udbytte.cpr_cvr_tin' %}</label></div>
-                        <div class="col-xxl-2 col-sm-2 px-0" data-trans="udbytte.navn"><label>{% translate 'udbytte.navn' %}</label></div>
-                        <div class="col-xxl-1 col-sm-2 px-0" data-trans="udbytte.adresse"><label>{% translate 'udbytte.adresse' %}</label></div>
-                        <div class="col-xxl-1 col-sm-1 px-0" data-trans="udbytte.postnummer"><label>{% translate 'udbytte.postnummer' %}</label></div>
-                        <div class="col-xxl-1 col-sm-2 px-0" data-trans="udbytte.by"><label>{% translate 'udbytte.by' %}</label></div>
-                        <div class="col-xxl-1 col-sm-1" data-trans="udbytte.land"><label>{% translate 'udbytte.land' %}</label></div>
-                        <div class="col-xxl-3 col-sm-3 ps-0" data-trans="udbytte.udbytte"><label>{% translate 'udbytte.udbytte' %}</label></div>
-                    {% endif %}
-                </div>
-                <div id="formsetContainer">
-                    {% if pdf %}
+                        <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th data-trans="udbytte.cpr_cvr_tin">{% translate 'udbytte.cpr_cvr_tin' %}</th>
+                            <th data-trans="udbytte.navn">{% translate 'udbytte.navn' %}</th>
+                            <th data-trans="udbytte.adresse">{% translate 'udbytte.adresse' %}</th>
+                            <th data-trans="udbytte.postnummer">{% translate 'udbytte.postnummer' %}</th>
+                            <th data-trans="udbytte.by">{% translate 'udbytte.by' %}</th>
+                            <th data-trans="udbytte.land">{% translate 'udbytte.land' %}</th>
+                            <th data-trans="udbytte.udbytte">{% translate 'udbytte.udbytte' %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
                         {% for subform in formset %}
-                            {% include 'udbytte/subform_pdf.html' with subform=subform %}
+                        <tr>
+                            <td>{{ subform.cpr_cvr_tin.value }}</td>
+                            <td>{{ subform.navn.value }}</td>
+                            <td>{{ subform.adresse.value }}</td>
+                            <td>{{ subform.postnummer.value }}</td>
+                            <td>{{ subform.by.value }}</td>
+                            <td>{{ subform.land.value }}</td>
+                            <td>{{ subform.udbytte.value }}</td>
+                        </tr>
                         {% endfor %}
+                        </tbody>
+                        </table>
+
                     {% else %}
-                        {% for subform in formset %}
-                            {% include 'udbytte/subform.html' with subform=subform %}
-                        {% endfor %}
+
+                        {{ formset.management_form }}
+                        <div class="row">
+                            <div class="col-xxl-1 col-sm-1 pe-0" data-trans="udbytte.cpr_cvr_tin"><label>{% translate 'udbytte.cpr_cvr_tin' %}</label></div>
+                            <div class="col-xxl-2 col-sm-2 px-0" data-trans="udbytte.navn"><label>{% translate 'udbytte.navn' %}</label></div>
+                            <div class="col-xxl-1 col-sm-2 px-0" data-trans="udbytte.adresse"><label>{% translate 'udbytte.adresse' %}</label></div>
+                            <div class="col-xxl-1 col-sm-1 px-0" data-trans="udbytte.postnummer"><label>{% translate 'udbytte.postnummer' %}</label></div>
+                            <div class="col-xxl-1 col-sm-2 px-0" data-trans="udbytte.by"><label>{% translate 'udbytte.by' %}</label></div>
+                            <div class="col-xxl-1 col-sm-1" data-trans="udbytte.land"><label>{% translate 'udbytte.land' %}</label></div>
+                            <div class="col-xxl-3 col-sm-3 ps-0" data-trans="udbytte.udbytte"><label>{% translate 'udbytte.udbytte' %}</label></div>
+                        </div>
+                        <div id="formsetContainer">
+                            {% if pdf %}
+                                {% for subform in formset %}
+                                    {% include 'udbytte/subform_pdf.html' with subform=subform %}
+                                {% endfor %}
+                            {% else %}
+                                {% for subform in formset %}
+                                    {% include 'udbytte/subform.html' with subform=subform %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <button type="button" id="add-row" class="btn btn-primary" data-trans="common.add">{% translate 'common.add' %}</button>
                     {% endif %}
-                </div>
-                <button type="button" id="add-row" class="btn btn-primary" data-trans="common.add">{% translate 'common.add' %}</button>
                 </div>
 
+                {% if not pdf %}
                 <div id="data_file">
                     {% include 'aka/util/field.html' with field=form.file upload=True %}
                 </div>
+                {% endif %}
 
                 <div class="row">
                     <div class="col-12-sm">
@@ -176,9 +201,11 @@
         </div>
         </div>
     </form>
+    {% if not pdf %}
     <div id="formsetPrototype" class="hidden">
         {% include 'udbytte/subform.html' with subform=formset.empty_form %}
     </div>
+    {% endif %}
 
 
 {% if not pdf %}
@@ -251,7 +278,7 @@
 
 
     const toggleFile = function () {
-        const useFile = $("[name='{{ form.use_file.name }}']:checked").val() === "1";
+        const useFile = $("[name='{{ form.use_file.name }}']:checked").val() === "true";
         $("#data_fields").toggle(!useFile);
         $("#data_file").toggle(useFile);
     }

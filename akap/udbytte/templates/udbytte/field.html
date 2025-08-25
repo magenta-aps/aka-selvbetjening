@@ -1,5 +1,12 @@
+{% load l10n %}
 {% if pdf %}
-    <label>{{ field.label }}</label>{{ field.value }}
+    {% if no_localize %}
+        {% localize off %}
+        <label>{{ field.label }}</label>{{ field.value }}
+        {% endlocalize %}
+    {% else %}
+        <label>{{ field.label }}</label>{{ field.value }}
+    {% endif %}
 {%  else %}
     {% include 'aka/util/field.html' with field=field key=key %}
 {% endif %}
