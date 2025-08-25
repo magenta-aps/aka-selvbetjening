@@ -156,7 +156,7 @@ class UdbytteCreateView(
         return self.render(
             context=self.get_context_data(
                 form=UdbytteForm(instance=self.object),
-                formset=UdbytteFormSet(instance=self.object),
+                formset=UdbytteFormSet(instance=self.object, extra=0),
                 pdf=True,
             ),
             wrap_in_response=False,
@@ -179,13 +179,11 @@ class UdbytteCreateView(
             file.write(json.dumps(data, indent=2, cls=AKAJSONEncoder))
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data(
-            **{
-                **kwargs,
-                "u1_url_wrapped": json.dumps({"url": settings.TAX_FORM_U1}),
-                "formset": self.get_formset(),
-            }
-        )
+        context = super().get_context_data(**kwargs)
+        context["u1_url_wrapped"] = json.dumps({"url": settings.TAX_FORM_U1})
+        if "formset" not in context:
+            context["formset"] = self.get_formset()
+        return context
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

@@ -9,7 +9,7 @@ from aka.widgets import TranslatedSelect
 from csp_helpers.mixins import CSPFormMixin
 from django import forms
 from django.core.validators import FileExtensionValidator, RegexValidator
-from django.forms import BooleanField, ModelForm, ValidationError, inlineformset_factory
+from django.forms import BooleanField, ModelForm, ValidationError, inlineformset_factory, BaseInlineFormSet
 from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 from dynamic_forms import DynamicField, DynamicFormMixin
@@ -198,11 +198,17 @@ class UdbytteFormItem(ModelForm):
     )
 
 
+class UdbytteFormsetForm(BaseInlineFormSet):
+    def __init__(self, *args, extra=3, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.extra = extra
+
+
 UdbytteFormSet = inlineformset_factory(
     parent_model=U1A,
     model=U1AItem,
     form=UdbytteFormItem,
-    # formset=UdbytteFormset,
+    formset=UdbytteFormsetForm,
     exclude=["id"],
     can_delete=True,
 )
