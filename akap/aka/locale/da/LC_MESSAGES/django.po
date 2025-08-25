@@ -291,7 +291,7 @@ msgid "index.udbytte"
 msgstr "Udbytteskat"
 
 msgid "index.udbytte.sub"
-msgstr "For at indberette U1-skat"
+msgstr "For at indberette U1a-skat"
 
 msgid "index.udbytte.linktext"
 msgstr "Indberet her"
