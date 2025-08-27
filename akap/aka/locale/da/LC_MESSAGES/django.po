@@ -219,7 +219,7 @@ msgid "error.invalid_email"
 msgstr "Ugyldig email-adresse"
 
 msgid "error.udbytte_sum_mismatch"
-msgstr "Summen af udbytter i tabellen skal passe med det samlede/godskrevne udbytte."
+msgstr "Summen af udbytter i tabellen skal passe med det samlede/godskrevne udbytte ({formset_sum} kontra {form_udbytte})."
 
 
 # Index

@@ -24,6 +24,7 @@
     {% if not pdf %}
     <div class="col-xs-12 col-md-12 col-xl-6 offset-xl-3 col-fluid">
     {% include "aka/util/header.html" with key="udbytte.title" %}
+        <a href="{% static 'xlsx/skabelon.xlsx' %}" data-trans="common.download_template">{% translate 'common.download_template' %}</a>
     </div>
     {% endif %}
 

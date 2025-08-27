@@ -219,7 +219,7 @@ msgid "error.invalid_email"
 msgstr "Email atorsinnaanngilaq"
 
 msgid "error.udbytte_sum_mismatch"
-msgstr "Iluanaarutisiat nalunaarsorneqartut katinnerisa angeqqatigissavaat iluanaarutisiarititat/pisassanngortinneqartut tamarmiusut katinnerat."
+msgstr "Iluanaarutisiat nalunaarsorneqartut katinnerisa angeqqatigissavaat iluanaarutisiarititat/pisassanngortinneqartut tamarmiusut katinnerat. ({formset_sum} != {form_udbytte})"
 
 # Index
 

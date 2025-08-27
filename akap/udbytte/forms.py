@@ -151,7 +151,13 @@ class UdbytteForm(DynamicFormMixin, CSPFormMixin, ModelForm):
         formset_sum = sum([item.cleaned_data.get("udbytte", 0) for item in formset])
         form_udbytte = self.cleaned_data["udbytte"]
         if form_udbytte != formset_sum:
-            self.add_error("udbytte", ValidationError("error.udbytte_sum_mismatch"))
+            self.add_error(
+                "udbytte",
+                ValidationError(
+                    "error.udbytte_sum_mismatch",
+                    params={"formset_sum": formset_sum, "form_udbytte": form_udbytte},
+                ),
+            )
 
 
 class UdbytteFormItem(ModelForm):

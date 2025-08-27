@@ -272,7 +272,6 @@ class UdbytteCreateView(
         for sheetname in workbook.sheetnames:
             sheet = workbook[sheetname]
             required_headers = {
-                "generalforsamlingsdato",
                 "udbetalingsdato",
                 "identifikation",
                 "navn",
@@ -354,6 +353,12 @@ class UdbytteCreateView(
                         code="udbytte.no_data",
                     )
                 )
-        if object.udbytte != sum([item.udbytte for item in items]):
-            errors.append(ValidationError("error.udbytte_sum_mismatch"))
+        formset_sum = sum([item.udbytte for item in items])
+        if object.udbytte != formset_sum:
+            errors.append(
+                ValidationError(
+                    "error.udbytte_sum_mismatch",
+                    params={"formset_sum": formset_sum, "form_udbytte": object.udbytte},
+                )
+            )
         return items, messages, errors
