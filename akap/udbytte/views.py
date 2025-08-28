@@ -19,7 +19,12 @@ from django.forms import model_to_dict
 from django.template.response import TemplateResponse
 from django.views.generic.edit import CreateView
 from openpyxl import Workbook, load_workbook
-from project.view_mixins import ErrorHandlerMixin, IsContentMixin, PdfRendererMixin
+from project.view_mixins import (
+    ErrorHandlerMixin,
+    HasUserMixin,
+    IsContentMixin,
+    PdfRendererMixin,
+)
 from udbytte.forms import UdbytteForm, UdbytteFormSet
 from udbytte.models import U1A, U1AItem
 
@@ -27,7 +32,12 @@ logger = logging.getLogger(__name__)
 
 
 class UdbytteCreateView(
-    PdfRendererMixin, IsContentMixin, ErrorHandlerMixin, CSPViewMixin, CreateView
+    PdfRendererMixin,
+    HasUserMixin,
+    IsContentMixin,
+    ErrorHandlerMixin,
+    CSPViewMixin,
+    CreateView,
 ):
     model = U1A
     form_class = UdbytteForm
