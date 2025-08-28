@@ -6,6 +6,7 @@ from datetime import date
 from decimal import Decimal
 from unittest.mock import MagicMock, patch
 
+from aka.tests.mixins import TestMixin
 from django.core.files import File
 from django.template.response import TemplateResponse
 from django.test import RequestFactory, TestCase, override_settings
@@ -13,10 +14,15 @@ from udbytte.models import U1A, U1AItem
 from udbytte.views import UdbytteCreateView
 
 
-class UdbytteViewTest(TestCase):
+class UdbytteViewTest(TestMixin, TestCase):
     def setUp(self):
+        super(UdbytteViewTest, self).setUp()
         self.factory = RequestFactory()
         self.view = UdbytteCreateView.as_view()
+        session = self.client.session
+        session["user_info"] = {"cpr": "1234567890", "cvr": "12345678"}
+        session["has_checked_cvr"] = True
+        session.save()
 
     @override_settings(EMAIL_OFFICE_RECIPIENT="office@example.com")
     @patch(
@@ -75,13 +81,9 @@ class UdbytteViewTest(TestCase):
             "u1aitem_set-1-udbytte": "837.00",
         }
 
-        # Set up mock session data
-        session = self.client.session
-        session["user_info"] = {"cpr": "1234567890"}
-        session.save()
-
         # Make the POST request for the view
         request = self.factory.post("/udbytte/", {**form_data, **formset_data})
+        session = self.client.session
         request.session = session
         request.user = MagicMock()
 

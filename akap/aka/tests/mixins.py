@@ -37,6 +37,15 @@ class TestMixin(object):
         self.service_mock = self.mock("aka.clients.prisme.Prisme.process_service")
         self.service_mock.side_effect = self.process_service_mock
 
+        self.dafomock = self.mock("aka.clients.dafo.Dafo.lookup_cvr")
+        self.dafomock.return_value = {
+            "navn": "Testfirma",
+            "adresse": "Testvej 42",
+            "postnummer": "1234",
+            "bynavn": "Testby",
+            "landekode": "DK",
+        }
+
     def mock(self, method):
         patch_object = patch(method)
         mock_object = patch_object.start()
