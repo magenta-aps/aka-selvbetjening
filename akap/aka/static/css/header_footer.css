@@ -8,6 +8,7 @@ body {
 .navbar {
     background-color: #4e6b7e;
     padding: 0;
+    color: #fff;
 }
 .navbar-brand img {
     max-width: 100%;
@@ -18,8 +19,18 @@ body {
     margin-bottom: 13px;
     height: 18px;
 }
+.no-icon {
+    height: 81px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
 .nav-item {
     width: 82px;
+}
+.nav-item-wide {
+    width: 120px;
 }
 #locale_flag_change .menu-icon {
     height: 18px;
@@ -47,14 +58,17 @@ body {
 .navbar .navbar-collapse.show ul li:first-child {
     border-top: 1px solid rgba(255, 255, 255, 0.3);
 }
-.navbar ul li a {
-    display: block;
-    color: white;
+.navbar ul li {
+    color: #fff;
     font-size: 12px;
-    text-decoration: none;
-    padding: 19px 10px 10px;
     text-align: center;
     font-family: Helvetica, Arial, sans-serif;
+}
+.navbar ul li a {
+    color: #fff;
+    display: block;
+    text-decoration: none;
+    padding: 19px 10px 10px;
 }
 .navbar ul li a:hover {
     text-decoration: underline;
