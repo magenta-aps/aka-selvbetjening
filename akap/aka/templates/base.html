@@ -71,6 +71,20 @@
                         </button>
                         <div class="collapse navbar-collapse" id="navbarToggler">
                             <ul class="navbar-nav ms-auto mb-lg-0">
+
+                                {% if cpr or cvr %}
+                                <li class="nav-item-wide">
+                                    <div class="no-icon">
+                                        <span>
+                                        {% if cvr %}
+                                            {{ company.navn }}<br/>(CVR: {{ cvr }})
+                                        {% elif cpr %}
+                                            {{ person.navn }}
+                                        {% endif %}
+                                        </span>
+                                    </div>
+                                </li>
+                                {% endif %}
                                 <li class="nav-item">
                                     {% if cpr or cvr %}
                                         <a href="{% url 'login:logout' %}">
