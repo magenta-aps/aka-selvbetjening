@@ -97,6 +97,16 @@ class HasUserMixin(object):
                 pass
 
     def obtain_cvr(self, request):
+        try:
+            self.cvr = request.session["user_info"].get("cvr", None)
+            if self.cvr is None:
+                self.cvr = request.session["user_info"].get("CVR", None)
+            self.claimant_ids = self.get_claimants(request)
+            self.company = self.get_company(request)
+        except (KeyError, TypeError, AttributeError, ValueError):
+            pass
+        print(f"Got CVR from MitID: {self.cvr}")
+
         if (
             self.cpr
             and not self.cvr
@@ -116,19 +126,11 @@ class HasUserMixin(object):
                         )
                     if len(cvrs) == 1:
                         self.cvr = request.session["user_info"]["cvr"] = cvrs[0]
+                    print(f"Got CVR from Dafo: {self.cvr}")
                 request.session["has_checked_cvr"] = True
                 request.session.save()
             except ReadTimeout:
                 pass
-
-        try:
-            self.cvr = request.session["user_info"].get("cvr", None)
-            if self.cvr is None:
-                self.cvr = request.session["user_info"].get("CVR", None)
-            self.claimant_ids = self.get_claimants(request)
-            self.company = self.get_company(request)
-        except (KeyError, TypeError, AttributeError, ValueError):
-            pass
 
         if not self.cvr and settings.DEFAULT_CVR:
             self.cvr = settings.DEFAULT_CVR
