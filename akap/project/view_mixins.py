@@ -134,8 +134,10 @@ class HasUserMixin(object):
             self.cvr = settings.DEFAULT_CVR
 
         if self.cvr:
+            print(f"self.cvr: {self.cvr}")
             self.claimant_ids = self.get_claimants(request)
             self.company = self.get_company(request)
+            print("OK")
 
     def dispatch(self, request, *args, **kwargs):
         if (

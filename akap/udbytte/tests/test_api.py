@@ -100,10 +100,13 @@ class UdbytteAPITest(TestCase):
         )
 
     def test_get_u1a_entries(self):
+        print("test_get_u1a_entries")
         resp = self.client.get(
             reverse("udbytte:api-1.0.0:u1a_list"),
             HTTP_AUTHORIZATION=f"Bearer {self.api_secret}",
         )
+        print("resp:")
+        print(resp)
 
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(
