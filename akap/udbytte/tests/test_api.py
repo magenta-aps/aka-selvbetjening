@@ -106,7 +106,7 @@ class UdbytteAPITest(TestCase):
             HTTP_AUTHORIZATION=f"Bearer {self.api_secret}",
         )
         print("resp:")
-        print(resp)
+        print(resp.content)
 
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(
