@@ -101,8 +101,6 @@ class HasUserMixin(object):
             self.cvr = request.session["user_info"].get("cvr", None)
             if self.cvr is None:
                 self.cvr = request.session["user_info"].get("CVR", None)
-            self.claimant_ids = self.get_claimants(request)
-            self.company = self.get_company(request)
         except (KeyError, TypeError, AttributeError, ValueError):
             pass
         print(f"Got CVR from MitID: {self.cvr}")
@@ -134,6 +132,10 @@ class HasUserMixin(object):
 
         if not self.cvr and settings.DEFAULT_CVR:
             self.cvr = settings.DEFAULT_CVR
+
+        if self.cvr:
+            self.claimant_ids = self.get_claimants(request)
+            self.company = self.get_company(request)
 
     def dispatch(self, request, *args, **kwargs):
         if (
