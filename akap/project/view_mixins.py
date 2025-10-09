@@ -103,7 +103,6 @@ class HasUserMixin(object):
                 self.cvr = request.session["user_info"].get("CVR", None)
         except (KeyError, TypeError, AttributeError, ValueError):
             pass
-        print(f"Got CVR from MitID: {self.cvr}")
 
         if (
             self.cpr
@@ -124,7 +123,6 @@ class HasUserMixin(object):
                         )
                     if len(cvrs) == 1:
                         self.cvr = request.session["user_info"]["cvr"] = cvrs[0]
-                    print(f"Got CVR from Dafo: {self.cvr}")
                 request.session["has_checked_cvr"] = True
                 request.session.save()
             except ReadTimeout:
@@ -134,10 +132,8 @@ class HasUserMixin(object):
             self.cvr = settings.DEFAULT_CVR
 
         if self.cvr:
-            print(f"self.cvr: {self.cvr}")
             self.claimant_ids = self.get_claimants(request)
             self.company = self.get_company(request)
-            print("OK")
 
     def dispatch(self, request, *args, **kwargs):
         if (
