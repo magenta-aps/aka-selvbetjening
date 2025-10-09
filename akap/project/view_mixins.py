@@ -97,6 +97,13 @@ class HasUserMixin(object):
                 pass
 
     def obtain_cvr(self, request):
+        try:
+            self.cvr = request.session["user_info"].get("cvr", None)
+            if self.cvr is None:
+                self.cvr = request.session["user_info"].get("CVR", None)
+        except (KeyError, TypeError, AttributeError, ValueError):
+            pass
+
         if (
             self.cpr
             and not self.cvr
@@ -121,17 +128,12 @@ class HasUserMixin(object):
             except ReadTimeout:
                 pass
 
-        try:
-            self.cvr = request.session["user_info"].get("cvr", None)
-            if self.cvr is None:
-                self.cvr = request.session["user_info"].get("CVR", None)
-            self.claimant_ids = self.get_claimants(request)
-            self.company = self.get_company(request)
-        except (KeyError, TypeError, AttributeError, ValueError):
-            pass
-
         if not self.cvr and settings.DEFAULT_CVR:
             self.cvr = settings.DEFAULT_CVR
+
+        if self.cvr:
+            self.claimant_ids = self.get_claimants(request)
+            self.company = self.get_company(request)
 
     def dispatch(self, request, *args, **kwargs):
         if (
