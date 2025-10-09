@@ -87,6 +87,8 @@ def get_u1a_entries(
     year: Optional[int] = None,
     cpr: Optional[str] = None,
 ):
+    print(f"year: {year}")
+    print(f"cpr: {cpr}")
     qs = filters.filter(U1A.objects.all())
     if year:
         qs = qs.filter(dato_vedtagelse__year=year)
