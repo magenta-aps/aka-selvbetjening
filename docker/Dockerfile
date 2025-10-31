@@ -13,13 +13,13 @@ RUN curl -fsSLO https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.1
 # hadolint ignore=DL3008
 RUN mkdir /app &&  \
     mkdir -p /log && \
-    mkdir -p /var/cache/aka && \
+    mkdir -p /var/cache/idp && \
     groupadd -g 75080 -r aka && \
     groupadd -g 75100 -r certificate_exporter && \
     useradd --create-home --uid 75080 --no-log-init --system --gid aka --groups certificate_exporter aka && \
     chown aka:aka /log && \
-    chown aka:aka /var/cache/aka && \
-    chmod a+w /var/cache/aka && \
+    chown aka:aka /var/cache/idp && \
+    chmod a+w /var/cache/idp && \
     mkdir -p /ssl/sp && \
     mkdir -p /ssl/idp && \
     chmod -R a+w /home && \
@@ -65,7 +65,7 @@ USER aka
 WORKDIR /app
 RUN django-admin compilemessages
 ENV HOME=/home
-VOLUME /var/cache/aka
+VOLUME /var/cache/idp
 EXPOSE 8000
 ENTRYPOINT ["/entrypoint.sh"]
 

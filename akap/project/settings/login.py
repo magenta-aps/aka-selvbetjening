@@ -37,7 +37,7 @@ SAML = {
     "verify_ssl_cert": False,
     "metadata_remote": os.environ.get("SAML_IDP_METADATA"),
     "metadata_remote_container": os.environ.get("SAML_IDP_METADATA_CONTAINER"),
-    "metadata": {"local": ["/var/cache/aka/idp_metadata.xml"]},  # IdP Metadata
+    "metadata": {"local": ["/var/cache/idp/idp_metadata.xml"]},  # IdP Metadata
     "service": {
         "sp": {
             "name": os.environ.get("SAML_NAME") or "AKAP",

@@ -2,13 +2,13 @@
 set -e
 MAKE_MIGRATIONS=${MAKE_MIGRATIONS:=false}
 RUN_MIGRATIONS=${RUN_MIGRATIONS:=true}
-SKIP_IDP_METADATA=${SKIP_IDP_METADATA:=false}
+PULL_IDP_METADATA=${PULL_IDP_METADATA:=false}
 TEST=${TEST:=false}
 PGP_KEY=${PGP_KEY:=false}
 python manage.py wait_for_db
 python manage.py createcachetable
 
-if [ "$SKIP_IDP_METADATA" = false ]; then
+if [ "$PULL_IDP_METADATA" = true ]; then
   echo "Pulling idp metadata"
   python manage.py update_mitid_idp_metadata
 fi
