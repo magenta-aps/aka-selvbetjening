@@ -123,7 +123,7 @@ Lint REUSE compliance:
     SAML_CONTACT_TECHNICAL_EMAIL: test@example.com
     SAML_CONTACT_SUPPORT_NAME: Tester
     SAML_CONTACT_SUPPORT_EMAIL: test@example.com
-    SKIP_IDP_METADATA: "true"
+    PULL_IDP_METADATA: "false"
     PRISME_MOCK: "true"
 
 Unittest:

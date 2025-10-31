@@ -11,6 +11,7 @@ services:
       - database
 
   akap-web:
+    user: "75080:1000"
     container_name: akap-web
     build:
       context: .
@@ -29,6 +30,7 @@ services:
       - ./log:/log:rw
       - ./dev-environment/cert:/ssl:ro
       - ./akap/mypy.ini:/mypy.ini:ro
+      - idp-data:/var/cache/idp:rw
     command: gunicorn -b 0.0.0.0:8010 project.wsgi:application --reload -w 1 --access-logfile - --error-logfile - --capture-output   # reload on code changes
     networks:
       - default
@@ -98,6 +100,7 @@ services:
 
 volumes:
   akap-postgres-data:
+  idp-data:
 
 networks:
   default:
