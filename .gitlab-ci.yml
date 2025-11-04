@@ -96,7 +96,7 @@ Lint REUSE compliance:
   dependencies: []
   image: ${IMAGE_SHA}
   services:
-    - name: postgres:13
+    - name: postgres:16
       alias: db
   variables:
     POSTGRES_USER: selvbetjening
