@@ -2,7 +2,7 @@ services:
 
   akap-db:
     container_name: akap-db
-    image: postgres:13
+    image: postgres:16
     env_file:
       - ./dev-environment/akap.env
     volumes:

@@ -1,5 +1,6 @@
 import logging
 import uuid
+from datetime import date
 
 from aka.clients.prisme import (
     Prisme,
@@ -12,7 +13,6 @@ from aka.views import GetReceiptView
 from django.core.exceptions import ValidationError
 from django.template.response import TemplateResponse
 from django.utils import timezone
-from django.utils.datetime_safe import date
 from django.views.generic.edit import FormView
 from løntræk.forms import LoentraekForm, LoentraekFormSet, LoentraekUploadForm
 from project.view_mixins import ErrorHandlerMixin, IsContentMixin, RequireCvrMixin

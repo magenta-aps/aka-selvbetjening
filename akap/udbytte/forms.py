@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: MPL-2.0
 
 import logging
+from datetime import date
 
 from aka.forms import FileField
 from aka.widgets import TranslatedSelect
@@ -16,7 +17,6 @@ from django.forms import (
     ValidationError,
     inlineformset_factory,
 )
-from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 from dynamic_forms import DynamicField, DynamicFormMixin
 from udbytte.models import U1A, U1AItem

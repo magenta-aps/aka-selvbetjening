@@ -1,5 +1,6 @@
 import logging
 import uuid
+from datetime import date
 from typing import Any, Optional
 
 from aka.clients.prisme import Prisme, PrismeException, PrismeImpairmentRequest
@@ -7,7 +8,6 @@ from aka.views import GetReceiptView
 from django.core.exceptions import ValidationError
 from django.template.response import TemplateResponse
 from django.utils import timezone
-from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import FormView
 from nedskrivning.forms import NedskrivningForm, NedskrivningUploadForm
