@@ -2,10 +2,9 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from datetime import date, datetime
+from datetime import date
 from decimal import Decimal
 from unittest.mock import MagicMock, patch
-from zoneinfo import ZoneInfo
 
 from aka.tests.mixins import TestMixin
 from django.core.files import File
