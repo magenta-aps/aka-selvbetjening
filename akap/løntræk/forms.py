@@ -1,4 +1,5 @@
 import logging
+from datetime import date
 
 from aka.forms import CsvUploadMixin, FileField, PrependCharField
 from aka.widgets import TranslatedSelect
@@ -11,7 +12,6 @@ from django.core.validators import (
 )
 from django.forms import TextInput, ValidationError
 from django.forms.formsets import formset_factory
-from django.utils.datetime_safe import date
 from dynamic_forms import DynamicField, DynamicFormMixin
 
 logger = logging.getLogger(__name__)

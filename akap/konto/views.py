@@ -1,4 +1,5 @@
 import sys
+from datetime import date
 from typing import Iterable, List, Optional
 
 from aka.clients.prisme import (
@@ -12,7 +13,6 @@ from aka.clients.prisme import (
 from aka.utils import Cell, Field, Row, Table, chunks
 from aka.views import logger
 from django.urls import reverse
-from django.utils.datetime_safe import date
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _

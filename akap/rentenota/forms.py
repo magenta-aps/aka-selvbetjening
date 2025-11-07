@@ -1,8 +1,8 @@
 import logging
+from datetime import date
 
 from aka.widgets import TranslatedSelect
 from django import forms
-from django.utils.datetime_safe import date
 from dynamic_forms import DynamicField, DynamicFormMixin
 
 logger = logging.getLogger(__name__)
