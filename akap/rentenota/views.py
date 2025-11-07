@@ -1,9 +1,9 @@
+from datetime import date
 from decimal import Decimal
 from typing import List
 
 from aka.clients.prisme import Prisme, PrismeException, PrismeInterestNoteRequest
 from aka.utils import Cell, Field, Row
-from django.utils.datetime_safe import date
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt

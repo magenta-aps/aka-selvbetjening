@@ -1,9 +1,9 @@
 import posixpath
+from datetime import datetime
 
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.utils.datetime_safe import datetime
 from django.utils.translation import gettext_lazy as _
 
 MUNICIPALITIES = settings.MUNICIPALITIES  # type: ignore

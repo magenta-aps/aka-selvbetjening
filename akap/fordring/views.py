@@ -2,6 +2,7 @@ import json
 import logging
 import re
 import uuid
+from datetime import date
 
 from aka.clients.prisme import Prisme, PrismeClaimRequest, PrismeException
 from aka.data.fordringsgruppe import groups
@@ -11,7 +12,6 @@ from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from django.utils import timezone
-from django.utils.datetime_safe import date
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic.edit import FormView

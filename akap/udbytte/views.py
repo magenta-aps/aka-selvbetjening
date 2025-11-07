@@ -3,10 +3,10 @@
 # SPDX-License-Identifier: MPL-2.0
 
 import csv
-import datetime
 import json
 import logging
 import os
+from datetime import date, datetime
 from io import StringIO
 from typing import Dict, List, Tuple
 
@@ -175,7 +175,7 @@ class UdbytteCreateView(
     def save_files(self, csv_data, pdf_data):
         folder = f"{settings.TAX_FORM_STORAGE}/{self.object.regnskabsår}/{self.object.dato}/{self.object.cvr}"
         os.makedirs(folder, exist_ok=True)
-        file_base_name = f"{datetime.datetime.now().isoformat()}"
+        file_base_name = f"{datetime.now().isoformat()}"
 
         with open(f"{folder}/{file_base_name}.pdf", "wb") as file:
             file.write(pdf_data)
@@ -197,7 +197,7 @@ class UdbytteCreateView(
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["initial"]["dato"] = datetime.date.today().strftime("%d/%m/%Y")
+        kwargs["initial"]["dato"] = date.today().strftime("%d/%m/%Y")
         kwargs["oprettet_af_cpr"] = self.request.session["user_info"]["cpr"]
         return kwargs
 
