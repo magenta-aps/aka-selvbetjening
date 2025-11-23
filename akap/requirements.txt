@@ -16,7 +16,7 @@ chardet==5.2.0
 python-gnupg==0.5.2
 gunicorn==23.0.0
 whitenoise==6.8.2
-psycopg2==2.9.10
+psycopg==3.2.12
 pytest-django==4.9.0
 WeasyPrint==63.0
 python-dateutil==2.9.0.post0
