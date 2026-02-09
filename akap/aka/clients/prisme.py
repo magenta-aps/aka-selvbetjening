@@ -776,7 +776,7 @@ class Prisme(object):
         except Fault as e:
             raise PrismeServerException(e)
         except Exception as e:
-            logger.info(
+            logger.error(
                 "CPR=%s CVR=%s Error in process_service for %s: %s %s"
                 % (cpr, cvr, request_object.method, str(type(e)), str(e))
             )

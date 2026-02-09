@@ -39,7 +39,7 @@ LOGGING: Dict = {
             "propagate": False,
         },
         "aka.clients.prisme": {
-            "level": "DEBUG",
+            "level": "WARNING",
             "handlers": ["console"],
             "propagate": False,
         },
