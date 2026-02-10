@@ -27,4 +27,7 @@ fi
 if [ "${PGP_KEY,,}" != false ]; then
   echo "$PGP_KEY" | gpg --import
 fi
+if [ $ECHO_INTERFACE ]; then
+    echo "Interface: $ECHO_INTERFACE"
+fi
 exec "$@"
