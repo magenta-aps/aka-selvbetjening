@@ -26,6 +26,7 @@ services:
       - TEST=true
       - MAKE_MIGRATIONS=true
       - RUN_MIGRATIONS=true
+      - ECHO_INTERFACE=http://localhost:8010
     volumes:
       - ./log:/log:rw
       - ./dev-environment/cert:/ssl:ro
