@@ -226,7 +226,7 @@ class UdbytteCreateView(
             formset.full_clean()
             # compares data between form and formset, and adds any errors to form
             form.clean_with_formset(formset)
-            if formset.is_valid():
+            if form.is_valid() and formset.is_valid():
                 return self.form_valid(form, formset)
         return self.form_invalid(form, formset)
 
