@@ -1,9 +1,9 @@
 $(function(){
     const management = {
-        total: $('#id_form-TOTAL_FORMS'),
-        initial: $('#id_form-INITIAL_FORMS'),
-        min: $('#id_form-MIN_NUM_FORMS'),
-        max: $('#id_form-MAX_NUM_FORMS')
+        total: $('#id_u1aitem_set-TOTAL_FORMS'),
+        initial: $('#id_u1aitem_set-INITIAL_FORMS'),
+        min: $('#id_u1aitem_set-MIN_NUM_FORMS'),
+        max: $('#id_u1aitem_set-MAX_NUM_FORMS')
     };
     const formContainer = $('#formsetContainer');
     const formPrototype = $('#formsetPrototype').children();
