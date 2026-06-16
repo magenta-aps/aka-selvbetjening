@@ -325,7 +325,7 @@ def omit(items: Dict[str, Any], *keys: Collection[str]) -> Dict[str, Any]:
 
 
 def split_postnr_by(input: str) -> Tuple[str, str] | None:
-    match = re.match(r"((?:\w+-)?[\d\s]+\d)\s+([\w\s]+)", input)
+    match = re.match(r"((?:\w+-)?[\d\s]+\d)\s+(\w[\w\s]*)", input)
     if match is not None:
         return match.group(1).strip(), match.group(2).strip()
     return None
