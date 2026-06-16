@@ -314,7 +314,7 @@ class UdbytteCreateView(
                             )
                         )
                         continue
-                    postnr_by = split_postnr_by(d["postnr"])
+                    postnr_by = split_postnr_by(str(d["postnr"]))
                     if postnr_by is None:
                         postnr = ""
                         by = d["postnr"]

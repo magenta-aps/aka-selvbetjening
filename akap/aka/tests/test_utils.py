@@ -63,3 +63,4 @@ class BasicTestCase(SimpleTestCase):
             split_postnr_by("DK-1234 TestBy Nord"), ("DK-1234", "TestBy Nord")
         )
         self.assertIsNone(split_postnr_by("TestBy Nord"))
+        self.assertIsNone(split_postnr_by("1234"))
