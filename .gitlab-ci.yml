@@ -58,14 +58,17 @@ List release candidate tags:
     - echo "Finding rc-tags less than ${CI_COMMIT_TAG}"
     - export TAGS=`skopeo list-tags --creds=${RELEASE_REGISTRY_USER}:${RELEASE_REGISTRY_PASSWORD} docker://${RELEASE_REGISTRY_IMAGE} | jq -r '.Tags[]'`
     - export CI_COMMIT_TAG
-    - bash -c 'for tag in $TAGS; do
+    - bash -c '
+      if [[ -n "$CI_COMMIT_TAG" ]]; then
+      for tag in $TAGS; do
         if [[ "$tag" == *"-rc"* ]]; then
-          lowest=$(printf "%s\n%s\n" "$tag" "$CI_COMMIT_TAG" | sort -V | head -n1);
+          lowest=$(printf "%s\n%s\n" "$tag" "${CI_COMMIT_TAG}" | sort -V | head -n1);
           if [[ "$lowest" == "$tag" ]]; then
             echo "Should delete $tag";
           fi
         fi
-      done'
+      done
+      fi'
 
 
 # Lint stage
