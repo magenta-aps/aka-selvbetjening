@@ -49,6 +49,7 @@ variables:
   DOCKERFILE: $CI_PROJECT_DIR/docker/Dockerfile
 
 List release candidate tags:
+  image: alpine:3.15
   stage: cleanup
   script:
     skopeo list-tags --creds=${RELEASE_REGISTRY_USER}:${RELEASE_REGISTRY_PASSWORD} docker://index.docker.io/magentaaps/datafordeler | jq -r '.Tags[]'
