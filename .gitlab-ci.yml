@@ -57,7 +57,7 @@ List release candidate tags:
     - export TAGS=`skopeo list-tags --creds=${RELEASE_REGISTRY_USER}:${RELEASE_REGISTRY_PASSWORD} docker://${RELEASE_REGISTRY_IMAGE} | jq -r '.Tags[]'`
     - bash -c 'for tag in $TAGS; do
         if [[ "$tag" == *"-rc"* ]]; then
-          lowest=$(printf "%s\n%s\n" "$tag" "2.6.4" | sort -V | head -n1)
+          lowest=$(printf "%s\n%s\n" "$tag" "2.6.4" | sort -V | head -n1);
           if [[ "$lowest" == "$tag" ]]; then
             echo "Should delete $tag";
           fi
