@@ -51,6 +51,8 @@ variables:
 List release candidate tags:
   image: alpine:3.15
   stage: cleanup
+  before_script:
+    - apk add skopeo=1.23.0 jq==1.8.1
   script:
     skopeo list-tags --creds=${RELEASE_REGISTRY_USER}:${RELEASE_REGISTRY_PASSWORD} docker://index.docker.io/magentaaps/datafordeler | jq -r '.Tags[]'
 
