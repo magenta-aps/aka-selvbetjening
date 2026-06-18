@@ -54,7 +54,7 @@ List release candidate tags:
   before_script:
     - apk add skopeo=1.5.2-r1 jq==1.6-r1
   script:
-    - export TAGS=`skopeo list-tags --creds=${RELEASE_REGISTRY_USER}:${RELEASE_REGISTRY_PASSWORD} docker://${RELEASE_REGISTRY_IMAGE} | jq -r '.Tags[]' | grep "-rc"`
+    - export TAGS=`skopeo list-tags --creds=${RELEASE_REGISTRY_USER}:${RELEASE_REGISTRY_PASSWORD} docker://${RELEASE_REGISTRY_IMAGE} | jq -r '.Tags[]'`
     - bash -c 'for tag in $TAGS; do
         if [[ "$tag" == *"-rc"* ]]; then
           lowest=$(printf "%s\n%s\n" "$tag" "2.6.4" | sort -V | head -n1)
