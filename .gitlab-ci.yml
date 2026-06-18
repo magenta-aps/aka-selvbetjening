@@ -52,7 +52,7 @@ List release candidate tags:
   image: alpine:3.15
   stage: cleanup
   before_script:
-    - apk add skopeo=1.5.2-r1 jq==1.6-r1
+    - apk add bash skopeo=1.5.2-r1 jq==1.6-r1
   script:
     - export TAGS=`skopeo list-tags --creds=${RELEASE_REGISTRY_USER}:${RELEASE_REGISTRY_PASSWORD} docker://${RELEASE_REGISTRY_IMAGE} | jq -r '.Tags[]'`
     - bash -c 'for tag in $TAGS; do
