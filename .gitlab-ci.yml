@@ -55,13 +55,13 @@ List release candidate tags:
     - apk add bash==5.1.16-r0 skopeo=1.5.2-r1 jq==1.6-r1
   script:
     - export TAGS=`skopeo list-tags --creds=${RELEASE_REGISTRY_USER}:${RELEASE_REGISTRY_PASSWORD} docker://${RELEASE_REGISTRY_IMAGE} | jq -r '.Tags[]'`
-    - bash -c 'for tag in $TAGS; do;
-        if [[ "$tag" == *"-rc"* ]]; then;
-          lowest=$(printf "%s\n%s\n" "$tag" "2.6.4" | sort -V | head -n1);
-          if [[ "$lowest" == "$tag" ]]; then;
+    - bash -c 'for tag in $TAGS; do
+        if [[ "$tag" == *"-rc"* ]]; then
+          lowest=$(printf "%s\n%s\n" "$tag" "2.6.4" | sort -V | head -n1)
+          if [[ "$lowest" == "$tag" ]]; then
             echo "Should delete $tag";
-          fi;
-        fi;
+          fi
+        fi
       done'
 
 
