@@ -61,7 +61,7 @@ COPY dev-environment/cert/idp/selfsigned.* /ssl/idp/
 RUN mkdir /app/static && \
     chown -R aka:aka /entrypoint.sh /app/static
 
-USER aka
+USER 75080
 WORKDIR /app
 RUN django-admin compilemessages
 ENV HOME=/home
@@ -74,7 +74,7 @@ COPY --chown=aka:aka ./dev-environment/akap.env /tmp/akap.env
 # hadolint ignore=SC1091
 RUN chown aka:aka /tmp/akap.env && \
     set -a && \
-    source /tmp/akap.env && \
+    . /tmp/akap.env && \
     set +a && \
     python manage.py collectstatic --no-input --clear && \
     rm /tmp/akap.env
