@@ -2,6 +2,7 @@ import json
 import logging
 from io import BytesIO
 
+from aka.forms import AdminLandingForm
 from aka.utils import render_pdf
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -14,7 +15,7 @@ from django.utils.decorators import method_decorator
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.generic import TemplateView, FormView
+from django.views.generic import FormView, TemplateView
 from django.views.i18n import JavaScriptCatalog
 from project.view_mixins import (
     AkaMixin,
@@ -22,8 +23,6 @@ from project.view_mixins import (
     HasUserMixin,
     RequireCvrMixin,
 )
-
-from aka.forms import AdminLandingForm
 
 
 class CustomJavaScriptCatalog(JavaScriptCatalog):
