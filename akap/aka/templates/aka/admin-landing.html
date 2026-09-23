@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load l10n %}
+{% load aka_tags %}
+
+{% block extra_headers %}
+
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">OK</button>
+    </form>
+{% endblock %}
+
