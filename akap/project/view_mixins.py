@@ -97,6 +97,7 @@ class HasUserMixin(object):
                 pass
 
     def obtain_cvr(self, request):
+        print(request.session["user_info"])
         try:
             self.cvr = request.session["user_info"].get("cvr", None)
             if self.cvr is None:
