@@ -141,8 +141,10 @@ class ChooseCvrView(AkaMixin, TemplateView):
 class AdminLandingView(LoginRequiredMixin, UserPassesTestMixin, FormView):
     form_class = AdminLandingForm
     template_name = "aka/admin-landing.html"
+    raise_exception = True
 
     def test_func(self):
+        # User only comes in if this is True, otherwise HTTP 403
         return self.request.user.is_superuser
 
     def form_valid(self, form):
