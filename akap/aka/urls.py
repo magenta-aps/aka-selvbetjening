@@ -50,15 +50,14 @@ urlpatterns = [
     path(
         "downtime", TemplateView.as_view(template_name="downtime.html"), name="downtime"
     ),
-
     path(
         "admin-login",
-        LoginView.as_view(template_name="aka/admin-login.html", next_page="aka:admin-landing"),
+        LoginView.as_view(
+            template_name="aka/admin-login.html", next_page="aka:admin-landing"
+        ),
         name="admin-login",
     ),
     path(
-        "admin-landing",
-        AdminLandingView.as_view(),
-        name="admin-landing"
-    )
+        "admin-landing", AdminLandingView.as_view(), name="admin-landing"
+    ),
 ]
