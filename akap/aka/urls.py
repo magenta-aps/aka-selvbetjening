@@ -57,7 +57,5 @@ urlpatterns = [
         ),
         name="admin-login",
     ),
-    path(
-        "admin-landing", AdminLandingView.as_view(), name="admin-landing"
-    ),
+    path("admin-landing", AdminLandingView.as_view(), name="admin-landing"),
 ]
