@@ -173,3 +173,8 @@ class FileField(forms.FileField):
         if self.accept is not None:
             attrs["accept"] = ",".join(self.accept)
         return attrs
+
+
+class AdminLandingForm(forms.Form):
+    cpr = forms.CharField(required=False)
+    cvr = forms.CharField(required=False)

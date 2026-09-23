@@ -1,0 +1,14 @@
+{# SPDX-FileCopyrightText: 2025 Magenta ApS <info@magenta.dk> #}
+{# SPDX-License-Identifier: MPL-2.0 #}
+
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block content %}
+    <form action="" method="post">
+    {% csrf_token %}
+        {{ form }}
+        <button type="submit">Log ind</button>
+    </form>
+{% endblock %}
