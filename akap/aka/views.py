@@ -5,8 +5,7 @@ from io import BytesIO
 from aka.utils import render_pdf
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.views import LoginView
-from django.http import FileResponse, Http404, HttpResponse, JsonResponse, HttpResponseRedirect
+from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.template import Context, Engine
 from django.urls import reverse
