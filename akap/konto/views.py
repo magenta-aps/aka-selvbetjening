@@ -366,9 +366,7 @@ class DebitorKontoRangeRestricted:
             return False
         range = self.debitor_group_id_range.get(key)
         if range:
-            if (
-                range[0] <= debitor_group_id_int <= range[1]
-            ):
+            if range[0] <= debitor_group_id_int <= range[1]:
                 return True
         return False
 
