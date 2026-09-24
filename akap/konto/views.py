@@ -374,6 +374,10 @@ class DebitorKontoRangeRestricted:
 
 
 class AKAKontoView(DebitorKontoRangeRestricted, KontoView):
+    """
+        Prisme SEL: Debitorgrupper fra 200000 til og med 899999.
+        Prisme AKI: Alle debitorgrupper, der findes i Prisme AKI.
+    """
     available_keys: Iterable[str] = (
         "aki",
         "sel",
@@ -392,6 +396,9 @@ class AKAKontoView(DebitorKontoRangeRestricted, KontoView):
 
 
 class DCRKontoView(DebitorKontoRangeRestricted, KontoView):
+    """
+    Prisme SEL: Debitorgrupper fra 001000 til og med 199999.
+    """
     available_keys: Iterable[str] = ("sel",)
     debitor_group_id_range = {"sel": (1000, 199999)}
     authority = {
