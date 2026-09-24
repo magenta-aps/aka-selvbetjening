@@ -2,20 +2,17 @@ import json
 import logging
 from io import BytesIO
 
-from aka.forms import AdminLandingForm
 from aka.utils import render_pdf
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.template import Context, Engine
-from django.urls import reverse
 from django.utils import translation
 from django.utils.decorators import method_decorator
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.generic import FormView, TemplateView
+from django.views.generic import TemplateView
 from django.views.i18n import JavaScriptCatalog
 from project.view_mixins import (
     AkaMixin,
@@ -134,21 +131,3 @@ class ChooseCvrView(AkaMixin, TemplateView):
             request.session.save()
             return redirect(back)
         return super().get(request, *args, **kwargs)
-
-
-class AdminLandingView(LoginRequiredMixin, UserPassesTestMixin, FormView):
-    form_class = AdminLandingForm
-    template_name = "aka/admin-landing.html"
-    raise_exception = True
-
-    def test_func(self):
-        # User only comes in if this is True, otherwise HTTP 403
-        return self.request.user.is_superuser
-
-    def form_valid(self, form):
-        if "user_info" not in self.request.session:
-            self.request.session["user_info"] = {}
-        self.request.session["user_info"]["cpr"] = form.cleaned_data["cpr"]
-        self.request.session["user_info"]["cvr"] = form.cleaned_data["cvr"]
-        self.request.session.save()
-        return redirect(reverse("aka:index"))
