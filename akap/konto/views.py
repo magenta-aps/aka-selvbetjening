@@ -171,7 +171,7 @@ class KontoView(
                 + str({"cprcvr": cprcvr, "cpr": self.cpr, "cvr": self.cvr})
             )
 
-    def accept_debitor_group_id(self, debitor_group_id: str) -> bool:
+    def accept_debitor_group_id(self, key: str, debitor_group_id: str) -> bool:
         return True
 
     def get_rows_by_key(self, key: str) -> List[Row]:
@@ -195,7 +195,7 @@ class KontoView(
                     return []
                 for entry in prisme_reply[0]:
                     # entry is of type PrismeAccountResponseTransaction
-                    if self.accept_debitor_group_id(entry.debitor_group_id):
+                    if self.accept_debitor_group_id(key, entry.debitor_group_id):
                         row = Row()
                         for field in self.get_fields_by_key(key):
                             value = getattr(entry, field.name)
@@ -357,28 +357,31 @@ class KontoView(
 
 
 class DebitorKontoRangeRestricted:
-    debitor_group_id_range = (0, sys.maxsize)
+    debitor_group_id_range = {"aki": (0, sys.maxsize), "sel": (0, sys.maxsize)}
 
-    def accept_debitor_group_id(self, debitor_group_id: str) -> bool:
+    def accept_debitor_group_id(self, key: str, debitor_group_id: str) -> bool:
         try:
             debitor_group_id_int = int(debitor_group_id or "0")
         except ValueError:
             return False
-        if (
-            self.debitor_group_id_range[0]
-            <= debitor_group_id_int
-            <= self.debitor_group_id_range[1]
-        ):
-            return True
+        range = self.debitor_group_id_range.get(key)
+        if range:
+            if range[0] <= debitor_group_id_int <= range[1]:
+                return True
         return False
 
 
 class AKAKontoView(DebitorKontoRangeRestricted, KontoView):
+    """
+    Prisme SEL: Debitorgrupper fra 200000 til og med 899999.
+    Prisme AKI: Alle debitorgrupper, der findes i Prisme AKI.
+    """
+
     available_keys: Iterable[str] = (
         "aki",
         "sel",
     )
-    debitor_group_id_range = (200000, 999999)
+    debitor_group_id_range = {"aki": (0, sys.maxsize), "sel": (200000, 999999)}
 
     def get_organization_data(self):
         return {
@@ -392,8 +395,12 @@ class AKAKontoView(DebitorKontoRangeRestricted, KontoView):
 
 
 class DCRKontoView(DebitorKontoRangeRestricted, KontoView):
+    """
+    Prisme SEL: Debitorgrupper fra 001000 til og med 199999.
+    """
+
     available_keys: Iterable[str] = ("sel",)
-    debitor_group_id_range = (1000, 199999)
+    debitor_group_id_range = {"sel": (1000, 199999)}
     authority = {
         "title": "Namminersorlutik Oqartussat - Grønlands Selvstyre",
         "lines": [
