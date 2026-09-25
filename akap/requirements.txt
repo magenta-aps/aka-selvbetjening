@@ -21,7 +21,7 @@ pytest-django==4.9.0
 WeasyPrint==63.0
 python-dateutil==2.9.0.post0
 coverage==7.6.4
-gl-mitid==1.6.1
+gl-mitid==1.9.2
 django-session-timeout @ git+https://github.com/Lapeth/django-session-timeout@master
 python-magic==0.4.27
 django-forms-dynamic==1.0.0
