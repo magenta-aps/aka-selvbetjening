@@ -1,11 +1,9 @@
 from aka.views import (
-    AdminLandingView,
     ChooseCvrView,
     CustomJavaScriptCatalog,
     IndexTemplateView,
     SetLanguageView,
 )
-from django.contrib.auth.views import LoginView
 from django.urls import path
 from django.views.generic import TemplateView
 from django_mitid_auth.saml.views import AccessDeniedView
@@ -50,12 +48,4 @@ urlpatterns = [
     path(
         "downtime", TemplateView.as_view(template_name="downtime.html"), name="downtime"
     ),
-    path(
-        "admin-login",
-        LoginView.as_view(
-            template_name="aka/admin-login.html", next_page="aka:admin-landing"
-        ),
-        name="admin-login",
-    ),
-    path("admin-landing", AdminLandingView.as_view(), name="admin-landing"),
 ]

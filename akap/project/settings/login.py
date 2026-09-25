@@ -131,8 +131,6 @@ LOGIN_WHITELISTED_URLS = [
     reverse_lazy("aka:javascript-language-catalog", kwargs={"locale": "kl"}),
     reverse_lazy("aka:set-language"),
     reverse_lazy("aka:downtime"),
-    reverse_lazy("aka:admin-login"),
-    reverse_lazy("aka:admin-landing"),
     LOGIN_URL,
     LOGIN_TIMEOUT_URL,
     LOGIN_REPEATED_URL,
