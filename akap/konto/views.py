@@ -364,10 +364,10 @@ class DebitorKontoRangeRestricted:
             debitor_group_id_int = int(debitor_group_id or "0")
         except ValueError:
             return False
-        ranges: List[Tuple[int, int]] | Tuple[int, int] = (
+        ranges: List[Tuple[int, int]] | Tuple[int, int] | None = (
             self.debitor_group_id_range.get(key)
         )
-        if ranges:
+        if ranges is not None:
             if type(ranges) is not list:
                 ranges = [ranges]
             for subrange in ranges:
@@ -386,7 +386,7 @@ class AKAKontoView(DebitorKontoRangeRestricted, KontoView):
         "aki",
         "sel",
     )
-    debitor_group_id_range = {
+    debitor_group_id_range: List[Tuple[int, int]] | Tuple[int, int] = {
         "aki": [(0, 799999), (810000, 810000)],
         "sel": (200000, 999999),
     }
@@ -408,7 +408,7 @@ class DCRKontoView(DebitorKontoRangeRestricted, KontoView):
     """
 
     available_keys: Iterable[str] = ("sel",)
-    debitor_group_id_range = {"sel": (1000, 199999)}
+    debitor_group_id_range: List[Tuple[int, int]] | Tuple[int, int] = {"sel": (1000, 199999)}
     authority = {
         "title": "Namminersorlutik Oqartussat - Grønlands Selvstyre",
         "lines": [
