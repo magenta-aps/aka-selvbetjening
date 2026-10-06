@@ -364,10 +364,13 @@ class DebitorKontoRangeRestricted:
             debitor_group_id_int = int(debitor_group_id or "0")
         except ValueError:
             return False
-        range = self.debitor_group_id_range.get(key)
-        if range:
-            if range[0] <= debitor_group_id_int <= range[1]:
-                return True
+        ranges = self.debitor_group_id_range.get(key)
+        if ranges:
+            if type(ranges) is not list:
+                ranges = [ranges]
+            for subrange in ranges:
+                if subrange[0] <= debitor_group_id_int <= subrange[1]:
+                    return True
         return False
 
 
@@ -381,7 +384,7 @@ class AKAKontoView(DebitorKontoRangeRestricted, KontoView):
         "aki",
         "sel",
     )
-    debitor_group_id_range = {"aki": (0, sys.maxsize), "sel": (200000, 999999)}
+    debitor_group_id_range = {"aki": [(0, 799999), (810000, 810000)], "sel": (200000, 999999)}
 
     def get_organization_data(self):
         return {
