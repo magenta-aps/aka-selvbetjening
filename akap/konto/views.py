@@ -1,6 +1,6 @@
 import sys
 from datetime import date
-from typing import Iterable, List, Optional, Tuple
+from typing import Iterable, List, Optional, Tuple, Dict
 
 from aka.clients.prisme import (
     Prisme,
@@ -386,7 +386,7 @@ class AKAKontoView(DebitorKontoRangeRestricted, KontoView):
         "aki",
         "sel",
     )
-    debitor_group_id_range: List[Tuple[int, int]] | Tuple[int, int] = {
+    debitor_group_id_range: Dict[str, List[Tuple[int, int]] | Tuple[int, int]] = {
         "aki": [(0, 799999), (810000, 810000)],
         "sel": (200000, 999999),
     }
@@ -408,7 +408,9 @@ class DCRKontoView(DebitorKontoRangeRestricted, KontoView):
     """
 
     available_keys: Iterable[str] = ("sel",)
-    debitor_group_id_range: List[Tuple[int, int]] | Tuple[int, int] = {"sel": (1000, 199999)}
+    debitor_group_id_range: Dict[str, List[Tuple[int, int]] | Tuple[int, int]] = {
+        "sel": (1000, 199999)
+    }
     authority = {
         "title": "Namminersorlutik Oqartussat - Grønlands Selvstyre",
         "lines": [
