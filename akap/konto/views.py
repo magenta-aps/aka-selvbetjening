@@ -1,6 +1,6 @@
 import sys
 from datetime import date
-from typing import Iterable, List, Optional
+from typing import Iterable, List, Optional, Tuple
 
 from aka.clients.prisme import (
     Prisme,
@@ -364,7 +364,7 @@ class DebitorKontoRangeRestricted:
             debitor_group_id_int = int(debitor_group_id or "0")
         except ValueError:
             return False
-        ranges = self.debitor_group_id_range.get(key)
+        ranges: List[Tuple[int, int]] | Tuple[int, int] = self.debitor_group_id_range.get(key)
         if ranges:
             if type(ranges) is not list:
                 ranges = [ranges]
@@ -384,7 +384,10 @@ class AKAKontoView(DebitorKontoRangeRestricted, KontoView):
         "aki",
         "sel",
     )
-    debitor_group_id_range = {"aki": [(0, 799999), (810000, 810000)], "sel": (200000, 999999)}
+    debitor_group_id_range = {
+        "aki": [(0, 799999), (810000, 810000)],
+        "sel": (200000, 999999)
+    }
 
     def get_organization_data(self):
         return {
