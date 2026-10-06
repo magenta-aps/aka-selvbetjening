@@ -1,6 +1,6 @@
 import sys
 from datetime import date
-from typing import Iterable, List, Optional
+from typing import Dict, Iterable, List, Optional, Tuple
 
 from aka.clients.prisme import (
     Prisme,
@@ -357,17 +357,18 @@ class KontoView(
 
 
 class DebitorKontoRangeRestricted:
-    debitor_group_id_range = {"aki": (0, sys.maxsize), "sel": (0, sys.maxsize)}
+    debitor_group_id_range = {"aki": [(0, sys.maxsize)], "sel": [(0, sys.maxsize)]}
 
     def accept_debitor_group_id(self, key: str, debitor_group_id: str) -> bool:
         try:
             debitor_group_id_int = int(debitor_group_id or "0")
         except ValueError:
             return False
-        range = self.debitor_group_id_range.get(key)
-        if range:
-            if range[0] <= debitor_group_id_int <= range[1]:
-                return True
+        ranges: List[Tuple[int, int]] | None = self.debitor_group_id_range.get(key)
+        if ranges is not None:
+            for subrange in ranges:
+                if subrange[0] <= debitor_group_id_int <= subrange[1]:
+                    return True
         return False
 
 
@@ -381,7 +382,10 @@ class AKAKontoView(DebitorKontoRangeRestricted, KontoView):
         "aki",
         "sel",
     )
-    debitor_group_id_range = {"aki": (0, sys.maxsize), "sel": (200000, 999999)}
+    debitor_group_id_range: Dict[str, List[Tuple[int, int]]] = {
+        "aki": [(0, 799999), (810000, 810000)],
+        "sel": [(200000, 999999)],
+    }
 
     def get_organization_data(self):
         return {
@@ -400,7 +404,7 @@ class DCRKontoView(DebitorKontoRangeRestricted, KontoView):
     """
 
     available_keys: Iterable[str] = ("sel",)
-    debitor_group_id_range = {"sel": (1000, 199999)}
+    debitor_group_id_range: Dict[str, List[Tuple[int, int]]] = {"sel": [(1000, 199999)]}
     authority = {
         "title": "Namminersorlutik Oqartussat - Grønlands Selvstyre",
         "lines": [
