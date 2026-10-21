@@ -1,6 +1,7 @@
 import logging
 import os
 import re
+import ssl
 from datetime import date, datetime, time
 from decimal import Decimal
 
@@ -10,6 +11,7 @@ from aka.utils import flatten, get_file_contents_base64
 from dict2xml import dict2xml as dict_to_xml
 from django.conf import settings
 from requests import Session
+from requests.adapters import HTTPAdapter
 from requests.auth import HTTPBasicAuth
 from requests_ntlm import HttpNtlmAuth
 from xmltodict import parse as xml_to_dict
@@ -660,6 +662,16 @@ class PrismeInterestNoteResponseTransaction(object):
         self.data = data
 
 
+class TlsAdapter(HTTPAdapter):
+    def init_poolmanager(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+        ssl_context = ssl.create_default_context()
+        ssl_context.set_ciphers(
+            "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:AES256-SHA:AES128-SHA"
+        )
+        kwargs["ssl_context"] = ssl_context
+        return super().init_poolmanager(*args, **kwargs)
+
+
 class Prisme(object):
     _client = None
 
@@ -672,6 +684,7 @@ class Prisme(object):
         if self._client is None and self.mock is False:
             wsdl = prisme_settings["wsdl_file"]
             session = Session()
+            session.mount("https://", TlsAdapter())
             if "proxy" in prisme_settings:
                 if "socks" in prisme_settings["proxy"]:
                     proxy = f'socks5://{prisme_settings["proxy"]["socks"]}'
