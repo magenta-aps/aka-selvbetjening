@@ -663,7 +663,7 @@ class PrismeInterestNoteResponseTransaction(object):
 
 
 class TlsAdapter(HTTPAdapter):
-    def init_poolmanager(self, *args, **kwargs) -> Any:  # type: ignore[no-untyped-def]
+    def init_poolmanager(self, *args, **kwargs):  # type: ignore[no-untyped-def]
         ssl_context = ssl.create_default_context()
         ssl_context.set_ciphers(
             "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:AES256-SHA:AES128-SHA"
