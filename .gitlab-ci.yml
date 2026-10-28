@@ -217,7 +217,6 @@ Deploy test:
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
   environment:
     name: test
-    url: "https://test.akap.sullissivik.gl"
 
 Deploy production:
   stage: deploy
@@ -231,4 +230,3 @@ Deploy production:
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
   environment:
     name: production
-    url: "https://akap.sullissivik.gl"
